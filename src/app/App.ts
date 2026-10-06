@@ -27,7 +27,7 @@ import { PRESETS, buildPresetTank, presetStock } from './presets';
 import type { CloudSave } from './cloudSave';
 import { TankLibrary } from './tankLibrary';
 import { fetchTank } from './openLibrary';
-import { SHAPE_SIZES, aquascapesFor } from './biotopes';
+import { SHAPE_SIZES, aquascapesFor, tankFromSpec } from './biotopes';
 import { checkStock, suggestStock } from './stockAdvisor';
 import { Tour } from './tour';
 import type { AquascapeInfo, StockCheck, StockSuggestion, TankSpec, TankSummary } from './tankTypes';
@@ -787,23 +787,9 @@ export class App implements AppApi {
   }
 
   createTank(spec: TankSpec): string {
-    const tank = newTank({
-      name: spec.name.trim().slice(0, 80) || undefined,
-      size: spec.size,
-      water: spec.water,
-      substrate: spec.substrate,
-      background: spec.background,
-      cycled: spec.cycled,
-    });
+    // The same construction the stock advisor checked its suggestions against (biotopes.ts).
+    const tank = tankFromSpec(spec);
     tank.id = newId('tank');
-    const h = tank.size.heightCm;
-    if (spec.substrateDepthFrontCm !== undefined) tank.substrateDepthFrontCm = Math.max(0, Math.min(h * 0.4, spec.substrateDepthFrontCm));
-    if (spec.substrateDepthBackCm !== undefined) tank.substrateDepthBackCm = Math.max(0, Math.min(h * 0.5, spec.substrateDepthBackCm));
-    applyChemistry(tank.waterParams, spec.waterParams);
-    if (spec.equipment) {
-      deepMerge(tank.equipment, spec.equipment);
-      if (spec.equipment.heater?.targetC !== undefined && spec.waterParams?.temperatureC === undefined) tank.waterParams.temperatureC = tank.equipment.heater.targetC;
-    }
     const scape = AQUASCAPES.find((a) => a.id === spec.aquascape);
     if (scape) {
       const built = scape.build(tank, this.world.plants, tank.seed);
@@ -811,12 +797,25 @@ export class App implements AppApi {
       tank.plants = built.plants;
       tank.aquascape = scape.id;
     }
-    const stock = spec.stock.filter((q) => q.count > 0 && this.world.species.get(q.speciesId));
+    // Merge repeats of a species; unknown ids are skipped.
+    const counts = new Map<string, number>();
+    for (const q of spec.stock) {
+      const n = Math.round(q.count);
+      if (n > 0 && this.world.species.get(q.speciesId)) counts.set(q.speciesId, (counts.get(q.speciesId) ?? 0) + n);
+    }
+    const planned = [...counts].map(([speciesId, count]) => ({ speciesId, count }));
+    // A fishless cycle means exactly that: the animals wait until the filter has matured.
+    const stock = spec.cycled ? planned : [];
     this.save(true);
     this.openTank(tank, stock);
     const liters = Math.round((tank.size.widthCm * tank.size.heightCm * tank.size.depthCm) / 1000);
     this.journal('info', `Set up “${tank.name}”: ${tank.size.widthCm}×${tank.size.depthCm}×${tank.size.heightCm} cm, ${liters} L ${tank.water}${scape && scape.id !== 'empty' ? `, ${scape.name}` : ''}${spec.cycled ? '' : ' — fishless cycle started'}`);
     for (const q of stock) this.journal('added', `Added ${q.count} × ${this.world.species.get(q.speciesId)!.commonName}`);
+    if (!spec.cycled && planned.length) {
+      const list = planned.map((q) => `${q.count} × ${this.world.species.get(q.speciesId)!.commonName}`).join(', ');
+      this.journal('info', `Planned stock, to add once ammonia and nitrite read zero (usually 4–6 weeks): ${list}`);
+      this.world.events.emit('notify', { message: 'The filter is maturing. Your planned animals are noted in the journal — add them once ammonia and nitrite read zero.', level: 'info' });
+    }
     this.save(true);
     return tank.id;
   }
