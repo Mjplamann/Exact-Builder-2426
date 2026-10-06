@@ -836,3 +836,93 @@ body.aq-idle #tank { cursor: none; }
   .aq-root.is-idle .aq-chrome, .aq-root.is-idle .aq-fishcard { transition: opacity 600ms linear, visibility 0s linear 600ms; }
   .boot-ripple { animation: none; }
 }
+
+/* =============================================================================================
+   v2 · View controls — zoom & tour cluster, follow / tour chip (ViewControls.ts).
+   ============================================================================================= */
+
+/* Cluster: a quiet column at the bottom-right that grows upward, so the whole-tank button
+   appearing on top never moves + or − from under a finger. Fades with the rest of the chrome. */
+.aq-viewctl { position: fixed; right: max(var(--gutter), var(--safe-r)); bottom: max(18px, var(--safe-b)); z-index: 17;
+  display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; }
+.aq-viewctl > * { pointer-events: auto; }
+.aq-viewctl-btn { position: relative; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 12px;
+  background: transparent; color: var(--text-2); transition: background 220ms ease, color 220ms ease, border-color 220ms ease; }
+.aq-viewctl-btn:hover:not(:disabled) { background: var(--glass-hover); color: var(--text); }
+:where(.aq-root) .aq-viewctl-btn:disabled { opacity: 0.32; }
+/* The two free-standing buttons are glass of their own. */
+.aq-viewctl-btn.aq-glass { background: var(--glass); border: 1px solid var(--hair); border-radius: 14px; }
+.aq-viewctl-btn.aq-glass:hover:not(:disabled) { background: rgba(22, 36, 44, 0.68); color: var(--text); }
+.aq-viewctl-reset { animation: aq-in 500ms var(--ease) backwards; }
+.aq-viewctl-tour { width: 44px; height: 50px; grid-template-rows: auto auto; align-content: center; gap: 3px; }
+.aq-viewctl-label { font-size: 10px; line-height: 1; letter-spacing: 0.02em; color: var(--text-3); transition: color 220ms ease; }
+.aq-viewctl-tour.is-on, .aq-viewctl-tour.is-on:hover:not(:disabled) { color: var(--text); background: rgba(40, 72, 70, 0.62); border-color: rgba(143, 216, 198, 0.38); }
+.aq-viewctl-tour.is-on .aq-viewctl-label { color: var(--accent); }
+.aq-viewctl-zoompill { display: flex; flex-direction: column; align-items: center; padding: 3px; border-radius: 15px; }
+.aq-viewctl-zoom { display: grid; place-items: center; height: 18px; min-width: 34px; font-size: 10.5px; font-weight: 500; line-height: 1;
+  color: var(--text-2); font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+.aq-viewctl-zoom:empty::before { content: ""; width: 14px; height: 1px; background: var(--hair-strong); }
+
+/* Tooltips with the shortcut key: beside the cluster, under the chip (pointer devices only). */
+.aq-viewctl-btn::after, .aq-viewchip-btn::after { content: attr(data-tip); position: absolute; padding: 5px 10px; border-radius: 8px;
+  background: rgba(6, 12, 16, 0.88); border: 1px solid var(--hair); color: var(--text); font-size: 12px; font-weight: 400; line-height: 1.45;
+  white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 200ms ease, transform 200ms var(--ease); }
+.aq-viewctl-btn::after { right: calc(100% + 12px); top: 50%; transform: translate(4px, -50%); }
+.aq-viewchip-btn::after { top: calc(100% + 10px); left: 50%; transform: translate(-50%, -4px); }
+.aq-viewctl-btn:hover::after, .aq-viewctl-btn:focus-visible::after { opacity: 1; transform: translate(0, -50%); transition-delay: 350ms; }
+.aq-viewchip-btn:hover::after, .aq-viewchip-btn:focus-visible::after { opacity: 1; transform: translate(-50%, 0); transition-delay: 350ms; }
+
+/* Follow / tour chip (top centre). */
+.aq-viewchip { position: fixed; top: max(16px, var(--safe-t)); left: 50%; transform: translateX(-50%); z-index: 21;
+  display: flex; align-items: center; gap: 2px; min-height: 40px; padding: 1px 4px 1px 6px; border-radius: 999px; pointer-events: auto;
+  max-width: calc(100vw - 32px - var(--safe-l) - var(--safe-r)); animation: aq-in 600ms var(--ease) backwards; }
+.aq-viewchip-thumb { flex: none; display: grid; place-items: center; width: 44px; height: 28px; color: var(--accent); }
+.aq-viewchip-img { width: 44px; height: 28px; object-fit: contain; opacity: 0.85; transition: opacity 400ms ease; }
+.aq-viewchip-img.is-real { opacity: 1; }
+.aq-viewchip-text { min-width: 0; padding: 0 8px 0 5px; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aq-viewchip-kicker { color: var(--text-3); }
+.aq-viewchip.is-tour .aq-viewchip-kicker { color: var(--accent); }
+.aq-viewchip-name { color: var(--text); font-weight: 500; }
+.aq-viewchip-btn { position: relative; flex: none; width: 32px; height: 32px; display: grid; place-items: center; padding: 0; border: 0;
+  border-radius: 999px; background: transparent; color: var(--text-2); transition: background 200ms ease, color 200ms ease; }
+.aq-viewchip-btn:hover:not(:disabled) { background: var(--glass-hover); color: var(--text); }
+:where(.aq-root) .aq-viewchip-btn:disabled { opacity: 0.32; }
+/* A side panel is open: centre the chip in the free space beside it; while feeding, sit below the hint. */
+.aq-root.has-panel:not(.is-mobile) .aq-viewchip { left: calc((100vw - var(--panel-w) - max(14px, var(--safe-r))) / 2);
+  max-width: calc(100vw - var(--panel-w) - 48px - var(--safe-l)); }
+.aq-root[data-mode="feed"] .aq-viewchip { top: calc(max(16px, var(--safe-t)) + 52px); }
+
+/* The cluster steps aside wherever a panel would crowd it; on wide screens it slides along. */
+@media (max-width: 1319px) {
+  .aq-root.has-panel .aq-viewctl { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 300ms ease, visibility 0s linear 300ms; }
+}
+@media (min-width: 1320px) {
+  .aq-root.has-panel:not(.is-mobile) .aq-viewctl { transform: translateX(calc(-1 * (var(--panel-w) + 8px))); }
+}
+/* Narrower screens: the chip sits below the tank name rather than beside it. */
+@media (max-width: 1099px), (max-height: 520px) {
+  .aq-viewchip { top: calc(max(12px, var(--safe-t)) + 56px); }
+}
+@media (max-width: 640px) {
+  /* Thumb-reachable, just above the dock; the animal's card takes that space while it is open. */
+  .aq-viewctl { right: max(8px, var(--safe-r)); bottom: calc(max(8px, var(--safe-b)) + var(--dock-space) + 10px); gap: 8px; }
+  .aq-root.is-mobile .aq-viewctl.has-card { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 300ms ease, visibility 0s linear 300ms; }
+  .aq-viewchip { max-width: calc(100vw - 16px - var(--safe-l) - var(--safe-r)); }
+}
+@media (max-width: 640px), (max-height: 520px) {
+  /* The feeding hint already sits below the name: go below it. */
+  .aq-root[data-mode="feed"] .aq-viewchip { top: calc(max(12px, var(--safe-t)) + 116px); }
+}
+@media (hover: none) {
+  .aq-viewctl-btn::after, .aq-viewchip-btn::after { display: none; }
+}
+@media (pointer: coarse) {
+  .aq-viewctl-btn { width: 44px; height: 44px; }
+  .aq-viewctl-tour { width: 48px; height: 54px; }
+  .aq-viewchip { padding: 1px 2px 1px 6px; }
+  .aq-viewchip-btn { width: 44px; height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aq-viewchip, .aq-viewctl-reset { animation: none !important; }
+  .aq-viewctl-btn::after, .aq-viewchip-btn::after { transition: opacity 150ms linear; }
+}

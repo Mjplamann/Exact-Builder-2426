@@ -1,18 +1,26 @@
 /**
  * Pointer, wheel and touch handling on the tank canvas, routed by the current tool:
- *  - view:  click a fish → info card; click empty water → deselect & stop following;
- *           double-click/tap on the glass → a gentle tap (fish startle);
+ *  - view:  click a fish → info card (during a tour the camera stays with it); click empty water
+ *           → deselect (following carries on: the chip at the top stops it);
+ *           double-click/tap on the glass → a gentle tap (fish startle); on an animal → follow it;
  *  - feed:  click → drop a pinch at the surface above that point;
  *  - scape: delegated to ScapeTool (place, select, drag, rotate, resize).
- * In every mode: wheel / pinch zoom; drag pans the view (one finger or left-drag on empty water,
- * right/middle-drag, two-finger drag) with a gentle glide on release — in portrait on a phone
- * the tank is much wider than the screen, so a swipe is how you look along it.
+ * In every mode: wheel / trackpad pinch zoom toward the cursor; two fingers pinch-zoom toward
+ * their centre and pan together; a quick two-finger tap returns to the whole tank; drag pans the
+ * view (one finger or left-drag on empty water, right/middle-drag) with a gentle glide on release
+ * — in portrait on a phone the tank is much wider than the screen, so a swipe is how you look
+ * along it. Every view change goes through the ViewRouter (follow / tour aware).
+ *
+ * A double-tap stays "tap the glass" rather than a zoom: it is the one way to interact with the
+ * fish physically, and a double-tap zoom would fire on every knock. Pinch, the + / − buttons and
+ * the two-finger tap cover zooming instead.
  */
 import { Plane, Vector3 } from 'three';
 import { tankBounds } from '../core/tankGeometry';
 import type { UIHost } from './context';
 import { setClass } from './dom';
 import type { ScapeTool } from './ScapeTool';
+import { pinchMove, wheelSteps, ZOOM_STEP_RATIO, type PinchMove, type PinchPoints, type ViewRouter } from './ViewControls';
 
 export type Mode = 'view' | 'feed' | 'scape';
 
@@ -28,8 +36,21 @@ const TOUCH_SLOP = 10;
 const CLICK_MS = 600;
 const DOUBLE_TAP_MS = 320;
 /** Glide after a released swipe: velocity decays with this time constant (s); below MIN it stops. */
-const GLIDE_TAU = 0.32;
+const GLIDE_TAU = 0.3;
 const GLIDE_MIN_PX_S = 40;
+/** A flick never coasts faster than this (px/s): the glide stays a soft drift, even zoomed in. */
+const GLIDE_MAX_PX_S = 1800;
+/** Two fingers down and up this quickly, without travelling, are a tap (back to the whole tank). */
+const TWO_FINGER_TAP_MS = 280;
+/** …and their centre and spread together drift less than this (px). */
+const TWO_FINGER_TAP_SLOP = 20;
+
+/** A Safari trackpad pinch (WebKit GestureEvent). */
+interface GestureLike extends UIEvent {
+  scale: number;
+  clientX: number;
+  clientY: number;
+}
 
 export class CanvasInput {
   mode: Mode = 'view';
@@ -41,7 +62,14 @@ export class CanvasInput {
   private glide = { vx: 0, vy: 0 };
   /** When the last touch tap ended (a browser dblclick right after a manual double-tap is a duplicate). */
   private lastTouchUp = 0;
-  private pinch: { d: number; mx: number; my: number } | null = null;
+  /** Two-finger gesture: the pair's ids, their last positions, when it began and how far it travelled (px). */
+  private pinch: { a: number; b: number; prev: PinchPoints; t0: number; travel: number } | null = null;
+  private pinchCur: PinchPoints = { ax: 0, ay: 0, bx: 0, by: 0 };
+  private pinchOut: PinchMove = { steps: 0, cx: 0, cy: 0, dx: 0, dy: 0, ds: 0 };
+  /** Safari trackpad pinch in progress: its last cumulative scale. */
+  private gesture: number | null = null;
+  /** Last touch/pen activity (ms): WebKit also reports touch pinches as gesture events — ignore those. */
+  private lastTouchAt = -1e9;
   private lastTap = { t: 0, x: 0, y: 0 };
   private hoverTimer = 0;
   private hoverPos = { x: 0, y: 0 };
@@ -53,6 +81,7 @@ export class CanvasInput {
   constructor(
     private host: UIHost,
     private scape: ScapeTool,
+    private view: ViewRouter,
   ) {
     this.canvas = host.app.engine.renderer.domElement;
     const c = this.canvas;
@@ -62,6 +91,11 @@ export class CanvasInput {
     c.addEventListener('pointercancel', (e) => this.onCancel(e));
     c.addEventListener('pointerleave', () => this.setCursor('default'));
     c.addEventListener('wheel', (e) => this.onWheel(e), { passive: false });
+    // Safari (macOS) reports trackpad pinches as gesture events rather than ctrl+wheel.
+    const nonPassive = { passive: false } as AddEventListenerOptions;
+    c.addEventListener('gesturestart', (e) => this.onGesture(e as GestureLike, true), nonPassive);
+    c.addEventListener('gesturechange', (e) => this.onGesture(e as GestureLike, false), nonPassive);
+    c.addEventListener('gestureend', () => (this.gesture = null));
     c.addEventListener('dblclick', (e) => {
       // Touch double-taps are handled in onUp; ignore the browser's duplicate.
       if (performance.now() - this.lastTouchUp < 700) return;
@@ -88,6 +122,7 @@ export class CanvasInput {
 
   private onDown(e: PointerEvent): void {
     this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: e.pointerType });
+    if (e.pointerType !== 'mouse') this.lastTouchAt = performance.now();
     this.glide.vx = this.glide.vy = 0;
     if (this.pointers.size === 2) {
       // Second finger: switch to pinch/pan; cancel any pending tap, swipe or item drag.
@@ -122,6 +157,7 @@ export class CanvasInput {
     if (p) {
       p.x = e.clientX;
       p.y = e.clientY;
+      if (e.pointerType !== 'mouse') this.lastTouchAt = performance.now();
     }
     if (this.pinch && this.pointers.size >= 2) return this.movePinch();
     const pn = this.panning;
@@ -164,8 +200,23 @@ export class CanvasInput {
 
   private onUp(e: PointerEvent): void {
     this.pointers.delete(e.pointerId);
-    if (this.pinch) {
-      if (this.pointers.size < 2) this.pinch = null;
+    const pc = this.pinch;
+    if (pc) {
+      if (e.pointerId !== pc.a && e.pointerId !== pc.b) return;
+      if (this.pointers.size >= 2) {
+        // A third finger was down: carry on with the remaining pair.
+        this.startPinch();
+        return;
+      }
+      this.pinch = null;
+      if (performance.now() - pc.t0 < TWO_FINGER_TAP_MS && pc.travel < TWO_FINGER_TAP_SLOP) {
+        // A quick two-finger tap: back to the whole tank.
+        if (this.view.isClose()) this.view.reset();
+        return;
+      }
+      // One finger stays down: it keeps looking around.
+      const rest = this.pointers.entries().next().value;
+      if (rest) this.startPan(rest[0], rest[1].x, rest[1].y, true);
       return;
     }
     const pn = this.panning;
@@ -174,8 +225,10 @@ export class CanvasInput {
       this.setCursor('default');
       // Let a swipe coast to a stop — unless the finger rested before lifting.
       if (pn.glide && performance.now() - pn.t < 90) {
-        this.glide.vx = pn.vx;
-        this.glide.vy = pn.vy;
+        const v = Math.hypot(pn.vx, pn.vy);
+        const k = v > GLIDE_MAX_PX_S ? GLIDE_MAX_PX_S / v : 1;
+        this.glide.vx = pn.vx * k;
+        this.glide.vy = pn.vy * k;
       }
       return;
     }
@@ -204,7 +257,7 @@ export class CanvasInput {
 
   private onCancel(e: PointerEvent): void {
     this.pointers.delete(e.pointerId);
-    if (this.pointers.size < 2) this.pinch = null;
+    if (this.pinch && this.pointers.size < 2) this.pinch = null;
     if (this.panning?.id === e.pointerId) this.panning = null;
     if (this.down?.id === e.pointerId) {
       if (this.down.scapeDrag) this.scape.pointerUp(e);
@@ -232,17 +285,26 @@ export class CanvasInput {
     }
     const hit = app.pickAt(x, y);
     if (hit.kind === 'fish') {
-      this.host.showFish(hit.id);
-    } else {
-      if (app.world.follow) app.follow(null);
-      if (app.world.selection.fishId || app.world.selection.decorId || app.world.selection.plantId) app.select({});
+      // Picking an animal during a tour hands the camera to it.
+      this.view.picked(hit.id);
+      // The second tap of a double-tap must not replay the card's entrance.
+      if (app.world.selection.fishId !== hit.id || this.host.openPanelId) this.host.showFish(hit.id);
+    } else if (app.world.selection.fishId || app.world.selection.decorId || app.world.selection.plantId) {
+      // Tapping the water puts the card away; it never stops the camera (a tap may only be meant
+      // to bring the controls back).
+      app.select({});
     }
   }
 
-  /** Double-click / double-tap: a gentle knock on the front glass. */
+  /** Double-click / double-tap: on an animal, follow it; elsewhere a gentle knock on the front glass. */
   private onDouble(x: number, y: number): void {
     if (this.mode !== 'view') return;
     const app = this.host.app;
+    const hit = app.pickAt(x, y);
+    if (hit.kind === 'fish') {
+      this.view.follow(hit.id);
+      return;
+    }
     const b = tankBounds(app.world.tank);
     const ray = app.engine.rayFromScreen(x, y);
     this.plane.set(this.plane.normal.set(0, 0, 1), -b.halfD);
@@ -306,45 +368,59 @@ export class CanvasInput {
   private onWheel(e: WheelEvent): void {
     e.preventDefault();
     if (this.mode === 'scape' && !e.ctrlKey && this.scape.wheel(e)) return;
-    // Engine.nudgeView zoom is in wheel "notches" (≈12 % each). A mouse notch is ~100 px of
-    // deltaY; trackpads send many small deltas (smooth zoom); a trackpad pinch arrives as
-    // ctrl+wheel with deltas of a few px.
-    const unit = e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1;
-    const px = e.deltaY * unit;
-    const notches = e.ctrlKey ? -px * 0.025 : -px / 100;
-    const dz = Math.max(-2, Math.min(2, notches));
-    if (dz) this.host.app.engine.nudgeView(0, 0, dz);
+    // Safari may echo its own pinch gesture as ctrl+wheel; the gesture handler has it.
+    if (this.gesture !== null) return;
+    const steps = wheelSteps(e);
+    if (steps) this.view.zoom(steps, e.clientX, e.clientY);
   }
 
-  /**
-   * Screen-pixel drag → view pan. nudgeView takes fractions of the visible half-size, positive =
-   * camera right/up; the camera moves opposite to the drag so the content follows the pointer.
-   */
+  /** Safari trackpad pinch: `scale` is cumulative since the gesture began. */
+  private onGesture(e: GestureLike, start: boolean): void {
+    e.preventDefault();
+    // On touch screens WebKit fires these alongside the pointers the pinch code already follows.
+    if (this.pointers.size || performance.now() - this.lastTouchAt < 600) return;
+    const s = e.scale > 0 ? e.scale : 1;
+    if (start || this.gesture === null) {
+      this.gesture = s;
+      return;
+    }
+    const steps = Math.log(s / this.gesture) / Math.log(ZOOM_STEP_RATIO);
+    this.gesture = s;
+    if (Number.isFinite(steps) && Math.abs(steps) > 1e-3) this.view.zoom(steps, e.clientX, e.clientY);
+  }
+
+  /** Screen-pixel drag → view pan (the tank follows the pointer). */
   private pan(dxPx: number, dyPx: number): void {
-    const halfW = (window.innerWidth || 2) / 2;
-    const halfH = (window.innerHeight || 2) / 2;
-    this.host.app.engine.nudgeView(-dxPx / halfW, dyPx / halfH, 0);
+    this.view.pan(dxPx, dyPx);
   }
 
   private startPinch(): void {
-    const [a, b] = [...this.pointers.values()];
-    this.pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+    const it = this.pointers.entries();
+    const [a, pa] = it.next().value as [number, Pt];
+    const [b, pb] = it.next().value as [number, Pt];
+    // A pair that changes mid-gesture (a third finger) is no longer a tap.
+    const t0 = this.pinch ? -Infinity : performance.now();
+    this.pinch = { a, b, prev: { ax: pa.x, ay: pa.y, bx: pb.x, by: pb.y }, t0, travel: 0 };
   }
 
+  /** Two fingers: pan with their centre, then zoom about it so the tank stays under them. */
   private movePinch(): void {
-    const it = this.pointers.values();
-    const a = it.next().value as Pt;
-    const b = it.next().value as Pt;
     const p = this.pinch!;
-    const d = Math.hypot(a.x - b.x, a.y - b.y) || 1;
-    const mx = (a.x + b.x) / 2;
-    const my = (a.y + b.y) / 2;
-    // Spread ratio → notches of 12 % so the content stays under the fingers.
-    const dz = Math.log(d / p.d) / Math.log(1.12);
-    if (Math.abs(dz) > 0.001) this.host.app.engine.nudgeView(0, 0, Math.max(-2, Math.min(2, dz)));
-    this.pan(mx - p.mx, my - p.my);
-    p.d = d;
-    p.mx = mx;
-    p.my = my;
+    const a = this.pointers.get(p.a);
+    const b = this.pointers.get(p.b);
+    if (!a || !b) return;
+    const cur = this.pinchCur;
+    cur.ax = a.x;
+    cur.ay = a.y;
+    cur.bx = b.x;
+    cur.by = b.y;
+    const m = pinchMove(p.prev, cur, this.pinchOut);
+    p.travel += Math.abs(m.dx) + Math.abs(m.dy) + Math.abs(m.ds);
+    if (m.dx || m.dy) this.pan(m.dx, m.dy);
+    if (Math.abs(m.steps) > 1e-3) this.view.zoom(Math.max(-3, Math.min(3, m.steps)), m.cx, m.cy);
+    p.prev.ax = cur.ax;
+    p.prev.ay = cur.ay;
+    p.prev.bx = cur.bx;
+    p.prev.by = cur.by;
   }
 }

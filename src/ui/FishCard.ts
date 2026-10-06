@@ -2,13 +2,17 @@
  * The small floating card for a selected animal: its name (click to rename), species, sex, age,
  * size against its adult size, lineage if born in the tank, hunger/health/stress as soft bars,
  * what it is doing right now, and Follow / Rehome. Refreshed ~4 Hz while visible.
+ *
+ * Follow hands the animal to the close-up camera; closing the card leaves the camera on it (the
+ * chip at the top stops following).
  */
 import type { FishEntity } from '../core/types';
 import type { UIHost } from './context';
 import { button, confirmButton, iconButton } from './controls';
-import { h, setClass, setStyle, setText } from './dom';
+import { h, setAttr, setClass, setStyle, setText } from './dom';
 import { aName, formatAge, formatLength, humanActivity } from './format';
 import { icon } from './icons';
+import { FOLLOW_FILL } from './ViewControls';
 
 interface Bar {
   fill: HTMLElement;
@@ -28,6 +32,7 @@ export class FishCard {
   private activityEl: HTMLElement;
   private bars: { hunger: Bar; health: Bar; stress: Bar };
   private followBtn: HTMLButtonElement;
+  private followLabel: HTMLElement;
   private renaming = false;
 
   constructor(
@@ -71,16 +76,16 @@ export class FishCard {
     this.followBtn = button('Follow', () => {
       const id = this.fishId;
       if (!id) return;
-      app.follow(app.world.follow === id ? null : id);
+      // During a tour this takes the camera over (it stays with this animal).
+      const on = app.world.follow === id && !app.isTouring();
+      app.follow(on ? null : id, { fill: FOLLOW_FILL.initial });
       this.refresh();
-    }, { icon: 'follow', cls: 'aq-btn-small' });
+    }, { icon: 'follow', cls: 'aq-btn-small', title: host.isTouch ? undefined : 'Follow it with the camera  ·  F' });
+    this.followLabel = this.followBtn.querySelector('span')!;
     const rehome = confirmButton('Rehome', 'Confirm rehome', () => {
       if (this.fishId) app.removeFish(this.fishId);
     }, { icon: 'rehome', cls: 'aq-btn-small', variant: 'quiet', title: 'Pass this animal on to another keeper' });
-    const close = iconButton('close', 'Close', () => {
-      app.follow(null);
-      app.select({});
-    }, 'aq-icon-btn aq-card-close');
+    const close = iconButton('close', 'Close', () => app.select({}), 'aq-icon-btn aq-card-close');
 
     this.el = h(
       'aside',
@@ -103,6 +108,7 @@ export class FishCard {
     ev.on('fish-removed', ({ fishId }) => gone(fishId));
     ev.on('fish-died', ({ fish }) => gone(fish.state.id));
     ev.on('tank-reset', () => this.show(null));
+    ev.on('view-changed', () => this.visible && this.refreshFollow());
   }
 
   get visible(): boolean {
@@ -164,10 +170,16 @@ export class FishCard {
     this.paintBar(this.bars.stress, s.stress, s.stress < 0.35 ? 'good' : s.stress < 0.7 ? 'caution' : 'bad', s.stress < 0.15 ? 'Calm' : s.stress < 0.35 ? 'Relaxed' : s.stress < 0.7 ? 'Uneasy' : 'Stressed');
 
     setText(this.activityEl, humanActivity(f.kin.activity));
-    const following = app.world.follow === s.id;
-    setText(this.followBtn.querySelector('span')!, following ? 'Following' : 'Follow');
+    this.refreshFollow();
+  }
+
+  /** "Following" while the camera stays with this animal (a tour passing by doesn't count). */
+  private refreshFollow(): void {
+    const app = this.host.app;
+    const following = !!this.fishId && app.world.follow === this.fishId && !app.isTouring();
+    setText(this.followLabel, following ? 'Following' : 'Follow');
     setClass(this.followBtn, 'is-on', following);
-    this.followBtn.setAttribute('aria-pressed', String(following));
+    setAttr(this.followBtn, 'aria-pressed', String(following));
   }
 
   private paintBar(b: Bar, v: number, level: 'good' | 'caution' | 'bad', word: string): void {

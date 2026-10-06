@@ -22,6 +22,7 @@ import { TimePanel } from './panels/TimePanel';
 import { ScapeTool } from './ScapeTool';
 import { ThumbnailLoader } from './thumbs';
 import { Toasts, type ToastLevel } from './Toasts';
+import { ViewControls } from './ViewControls';
 import { assessWater, computeNeeds, healthLabel, type TankNeeds, type WaterAssessment } from './waterHealth';
 
 /**
@@ -70,9 +71,13 @@ const SHORTCUTS: [string, string][] = [
   ['1 – 4', 'Speed of time'],
   ['H', 'Hide the interface'],
   ['Esc', 'Close, stop, deselect'],
+  ['+  −', 'Look closer / wider'],
+  ['0', 'Back to the whole tank'],
+  ['T', 'Tour: the camera drifts between animals'],
+  ['F', 'Follow the selected animal (otherwise feed)'],
   ['Scroll', 'Zoom (rotate in Aquascape)'],
-  ['Drag', 'Look around once zoomed in'],
-  ['Double-click', 'Tap on the glass'],
+  ['Drag  ←  →', 'Look around once zoomed in'],
+  ['Double-click', 'Tap on the glass · on an animal: follow it'],
   ['R  [  ]  N  Del', 'Rotate, resize, reshape, remove (Aquascape)'],
   ['?', 'This list'],
 ];
@@ -97,6 +102,7 @@ export class UI implements UIHost {
   private card: FishCard;
   private scape: ScapeTool;
   private input: CanvasInput;
+  private view: ViewControls;
 
   // Chrome
   private topLeft!: HTMLElement;
@@ -172,7 +178,8 @@ export class UI implements UIHost {
     this.notifier = new Notifier(app.world, (m, l) => this.toast(m, l));
     this.scape = new ScapeTool(this, this.layer);
     this.card = new FishCard(this, this.layer);
-    this.input = new CanvasInput(this, this.scape);
+    this.view = new ViewControls(this, this.layer);
+    this.input = new CanvasInput(this, this.scape, this.view.router);
     this.input.onFeedAt = (x, y) => this.ripple(x, y);
 
     this.wireEvents();
@@ -758,6 +765,11 @@ export class UI implements UIHost {
       e.preventDefault();
       return;
     }
+    // + − 0 T arrows, and F while an animal is selected (follow it; otherwise F feeds below).
+    if (this.view.key(e)) {
+      e.preventDefault();
+      return;
+    }
     const k = e.key;
     const onControl = (e.target as HTMLElement | null)?.closest?.('button, [role="radio"], [role="tab"], [role="switch"], a');
     switch (k) {
@@ -821,7 +833,8 @@ export class UI implements UIHost {
       this.openPanel(null);
       return;
     }
-    if (app.world.follow) return app.follow(null);
+    // Then the camera: leave the tour, else stop following.
+    if (this.view.escape()) return;
     const s = app.world.selection;
     if (s.fishId || s.decorId || s.plantId) app.select({});
   }
@@ -865,6 +878,7 @@ export class UI implements UIHost {
     }
     if (this.input.mode === 'scape') this.scape.frame();
     this.input.frame(dt);
+    this.view.update(dt);
 
     this.t4 += dt;
     if (this.t4 >= 0.25) {
