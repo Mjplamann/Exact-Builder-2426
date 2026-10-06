@@ -2,7 +2,7 @@ import type { PlantForm, PlantSpecies, TankState } from '../core/types';
 import type { World } from '../core/world';
 import { tankBounds } from '../core/tankGeometry';
 import { MS_PER_DAY } from '../core/clock';
-import { clamp, clamp01, relax, smoothstep } from './simMath';
+import { clamp, clamp01, relaxFast, smoothstep } from './simMath';
 
 /**
  * Plants, corals and algae on the sim clock, plus the "aufwuchs" food pools that grazers live on.
@@ -50,6 +50,50 @@ const ALGAE_STOCK_MG_M2 = 300;
 const BIOFILM_GLASS = 8;
 const BIOFILM_SURFACE = 25;
 
+/** Per-species plant constants used every step. */
+interface PlantStatic {
+  water: PlantSpecies['water'];
+  isCoral: boolean;
+  floating: boolean;
+  calcifier: boolean;
+  sps: boolean;
+  rooted: boolean;
+  palatable: boolean;
+  trimmable: boolean;
+  lightNeed: number;
+  co2K: number;
+  /** Normalizes CO₂ limitation so 25 mg/L (injected) = 1. */
+  co2Norm: number;
+  refuge: number;
+  /** Fraction of mature size gained per week in ideal conditions. */
+  ratePerWeek: number;
+  /** Biomass proxy at full size (a 20 cm × 10 cm plant = 1). */
+  sizeB: number;
+  /** Footprint (m²). */
+  area: number;
+}
+
+function plantStatic(ps: PlantSpecies): PlantStatic {
+  const k = CO2_K[ps.light] ?? 3;
+  return {
+    water: ps.water,
+    isCoral: CORAL_FORMS.has(ps.form),
+    floating: ps.form === 'floating',
+    calcifier: ps.form === 'sps-coral' || ps.form === 'lps-coral',
+    sps: ps.form === 'sps-coral',
+    rooted: ps.placement !== 'floating' && ps.placement !== 'epiphyte',
+    palatable: !!ps.palatable,
+    trimmable: TRIMMABLE.has(ps.form),
+    lightNeed: LIGHT_NEED[ps.light] ?? 0.5,
+    co2K: k,
+    co2Norm: (25 + k) / 25,
+    refuge: REFUGE[ps.form] ?? 0.6,
+    ratePerWeek: Math.max(0, ps.growthCmPerWeek) / Math.max(0.5, ps.maxHeightCm),
+    sizeB: clamp((ps.maxHeightCm / 20) * (ps.spreadCm / 10), 0.02, 12),
+    area: (ps.spreadCm / 100) * (ps.spreadCm / 100),
+  };
+}
+
 export interface FloraInputs {
   /** Daily light dose (see environment.dailyLightDose). */
   dose: number;
@@ -62,6 +106,8 @@ export interface FloraInputs {
   /** Fish digestion this step (mg/day) → detritus for detritivores. */
   detritusMgDay: number;
   zen: boolean;
+  /** Track per-plant visual size changes (live mode) for throttled `plants-changed` events. */
+  trackVisual: boolean;
 }
 
 /** Results & food-pool state, reused every step. */
@@ -94,6 +140,23 @@ export class Flora {
   /** Largest plant growth change since the renderer was last told (for throttled plants-changed). */
   pendingVisualChange = 0;
   private lastVisual = new Map<string, number>();
+  private statics = new Map<string, PlantStatic | null>();
+  private staticsFor: unknown = null;
+
+  /** Cached per-species constants (plant JSON shapes vary; keep the per-plant loop monomorphic). */
+  private staticFor(world: World, speciesId: string): PlantStatic | null {
+    if (this.staticsFor !== world.plants) {
+      this.statics.clear();
+      this.staticsFor = world.plants;
+    }
+    let st = this.statics.get(speciesId);
+    if (st === undefined) {
+      const ps = world.plants.get(speciesId);
+      st = ps ? plantStatic(ps) : null;
+      this.statics.set(speciesId, st);
+    }
+    return st;
+  }
 
   /** Start a fish loop: zero the demand accumulators (shares from `step` stay valid). */
   resetDemand(): void {
@@ -122,10 +185,11 @@ export class Flora {
     // ---------------------------------------------------------------- plants & corals ----------
     let uptake = 0, photo = 0, leaf = 0, cover = 0, bio = 0, pal = 0, coral = 0, over = 0, count = 0;
     let floating = 0;
+    const plants = tank.plants;
     // Floating plants shade everything beneath them (pass 1: their coverage).
-    for (const p of tank.plants) {
-      const ps = world.plants.get(p.speciesId);
-      if (ps?.form === 'floating') floating += ((ps.spreadCm / 100) ** 2) * p.growth;
+    for (let i = 0; i < plants.length; i++) {
+      const ps = this.staticFor(world, plants[i].speciesId);
+      if (ps && ps.floating) floating += ps.area * plants[i].growth;
     }
     const shade = 1 - 0.45 * clamp01(floating / Math.max(0.01, floorArea));
 
@@ -135,86 +199,88 @@ export class Flora {
     const palBefore = Math.max(1e-6, this.palatable);
     const coralBefore = Math.max(1e-6, this.corals);
 
+    // Conditions shared by every plant this step.
+    const T = wp.temperatureC;
+    const brackishFw = tank.water === 'brackish' && wp.salinitySG < 1.006;
+    const brackishMarine = tank.water === 'brackish' && wp.salinitySG > 1.015;
+    const tfPlant = smoothstep(12, 18, T) * (1 - smoothstep(29, 34, T));
+    const tfCoral = (1 - smoothstep(28.5, 31.5, T)) * smoothstep(19, 23, T);
+    const calcOk = smoothstep(5, 7, wp.kh) * (1 - 0.5 * smoothstep(12, 16, wp.kh));
+    const nfPlant = 0.3 + 0.7 * smoothstep(0, 10, no3 + 15 * tan);
+    const reefN = 0.7 + 0.3 * smoothstep(0, 2, no3);
+    const nfCoral = (1 - 0.6 * smoothstep(10, 45, no3)) * reefN;
+    const nfSps = (1 - 0.6 * smoothstep(10, 45, no3 * 1.6)) * reefN;
+    const soilBonus = tank.substrate === 'aqua-soil' ? 0.25 : 0;
+    const smother = 1 - 0.45 * smoothstep(0.5, 0.95, wp.surfaceAlgae);
+    const co2 = inp.co2;
+    const relaxDown = relaxFast(days, 10);
+    const relaxUp = relaxFast(days, 7);
+    const plantBiteFrac = plantBite > 0 ? plantBite / (palBefore * PLANT_MG_PER_B) : 0;
+    const coralBiteFrac = coralBite > 0 ? coralBite / (coralBefore * PLANT_MG_PER_B) : 0;
+
     let maxVisual = this.pendingVisualChange;
-    for (const p of tank.plants) {
-      const ps = world.plants.get(p.speciesId);
+    for (let i = 0; i < plants.length; i++) {
+      const p = plants[i];
+      const ps = this.staticFor(world, p.speciesId);
       if (!ps) continue;
       count++;
-      const isCoral = CORAL_FORMS.has(ps.form);
       const waterOk =
-        ps.water === tank.water ||
-        (tank.water === 'brackish' && ps.water === 'freshwater' && wp.salinitySG < 1.006) ||
-        (tank.water === 'brackish' && ps.water === 'marine' && wp.salinitySG > 1.015);
-      const doseHere = ps.form === 'floating' ? light : light * shade;
-      const lightRatio = doseHere / LIGHT_NEED[ps.light];
+        ps.water === tank.water || (brackishFw && ps.water === 'freshwater') || (brackishMarine && ps.water === 'marine');
+      const lightRatio = (ps.floating ? light : light * shade) / ps.lightNeed;
       const lf = Math.min(1.25, lightRatio);
       let co2f = 1;
-      if (!isCoral && ps.form !== 'floating' && !marine) {
-        const k = CO2_K[ps.light];
-        co2f = inp.co2 / (inp.co2 + k) / (25 / (25 + k));
-        co2f = clamp(co2f, 0.15, 1.1);
-      }
-      const T = wp.temperatureC;
-      let tf: number;
-      let chemOk = 1;
-      let nf: number;
-      if (isCoral) {
+      if (!ps.isCoral && !ps.floating && !marine) co2f = clamp((co2 / (co2 + ps.co2K)) * ps.co2Norm, 0.15, 1.1);
+      let tf: number, chemOk: number, nf: number;
+      if (ps.isCoral) {
         // Bleaching above ~29 °C, sluggish below 22 °C; calcifiers need alkalinity; low-nutrient
         // reef water is ideal but not zero (zooxanthellae need some N).
-        tf = (1 - smoothstep(28.5, 31.5, T)) * smoothstep(19, 23, T);
-        const kh = wp.kh;
-        const calcifier = ps.form === 'sps-coral' || ps.form === 'lps-coral';
-        chemOk = calcifier ? smoothstep(5, 7, kh) * (1 - 0.5 * smoothstep(12, 16, kh)) : 1;
-        const sens = ps.form === 'sps-coral' ? 1.6 : 1;
-        nf = (1 - 0.6 * smoothstep(10, 45, no3 * sens)) * (0.7 + 0.3 * smoothstep(0, 2, no3));
+        tf = tfCoral;
+        chemOk = ps.calcifier ? calcOk : 1;
+        nf = ps.sps ? nfSps : nfCoral;
       } else {
-        tf = smoothstep(12, 18, T) * (1 - smoothstep(29, 34, T));
-        const rooted = ps.placement !== 'floating' && ps.placement !== 'epiphyte';
-        const soil = rooted && tank.substrate === 'aqua-soil' ? 0.25 : 0;
-        nf = Math.min(1, 0.3 + 0.7 * smoothstep(0, 10, no3 + 15 * tan) + soil);
+        tf = tfPlant;
+        chemOk = 1;
+        nf = Math.min(1, nfPlant + (ps.rooted ? soilBonus : 0));
       }
       // Health target: light starvation below ~55% of need melts plants; algae smothers leaves.
-      const smother = 1 - 0.45 * smoothstep(0.5, 0.95, wp.surfaceAlgae);
       const target = waterOk ? clamp01(lightRatio / 0.55) * clamp01(tf * 1.4) * chemOk * smother : 0;
       const h0 = p.health;
-      p.health = clamp01(h0 + (target - h0) * relax(days, target < h0 ? 10 : 7));
+      p.health = clamp01(h0 + (target - h0) * (target < h0 ? relaxDown : relaxUp));
 
       const vigor = lf * co2f * tf * p.health;
-      const cmPerWeek = Math.max(0, ps.growthCmPerWeek);
-      const rate = (cmPerWeek / Math.max(0.5, ps.maxHeightCm)) * vigor * nf;
-      const g0 = p.growth;
-      let g = Math.min(1, g0 + rate * weeks);
-
-      const sizeB = clamp((ps.maxHeightCm / 20) * (ps.spreadCm / 10), 0.02, 12);
-      const B = g * sizeB;
+      let g = Math.min(1, p.growth + ps.ratePerWeek * vigor * nf * weeks);
       // Grazing damage spreads in proportion to biomass: growth falls by bite / standing mass.
-      if (isCoral && coralBite > 0) {
-        g -= g * (coralBite / (coralBefore * PLANT_MG_PER_B));
-        p.health = clamp01(p.health - (coralBite / (coralBefore * PLANT_MG_PER_B)) * 0.5);
-      } else if (!isCoral && ps.palatable && plantBite > 0) {
-        g -= g * (plantBite / (palBefore * PLANT_MG_PER_B));
-        p.health = clamp01(p.health - (plantBite / (palBefore * PLANT_MG_PER_B)) * 0.3);
+      if (ps.isCoral && coralBiteFrac > 0) {
+        g -= g * coralBiteFrac;
+        p.health = clamp01(p.health - coralBiteFrac * 0.5);
+      } else if (!ps.isCoral && ps.palatable && plantBiteFrac > 0) {
+        g -= g * plantBiteFrac;
+        p.health = clamp01(p.health - plantBiteFrac * 0.3);
       }
-      p.growth = clamp(g, 0.03, 1);
+      g = clamp(g, 0.03, 1);
+      p.growth = g;
 
-      if (isCoral) {
+      const B = g * ps.sizeB;
+      if (ps.isCoral) {
         coral += B;
         uptake += 0.035 * B * vigor;
         photo += 12 * B * vigor;
       } else {
         bio += B;
         if (ps.palatable) pal += B;
-        uptake += 0.35 * B * vigor * (ps.form === 'floating' ? 2.5 : 1);
-        photo += 25 * B * vigor * (ps.form === 'floating' ? 0.3 : 1);
+        uptake += 0.35 * B * vigor * (ps.floating ? 2.5 : 1);
+        photo += 25 * B * vigor * (ps.floating ? 0.3 : 1);
         leaf += 0.03 * B;
       }
-      cover += (REFUGE[ps.form] ?? 0.6) * (ps.spreadCm / 100) ** 2 * (0.3 + 0.7 * p.growth);
-      if (TRIMMABLE.has(ps.form) && p.growth > 0.92) over++;
+      cover += ps.refuge * ps.area * (0.3 + 0.7 * g);
+      if (ps.trimmable && g > 0.92) over++;
 
-      // Remember visible size changes so LifeSim can tell the renderer occasionally.
-      const last = this.lastVisual.get(p.id);
-      if (last === undefined) this.lastVisual.set(p.id, p.growth);
-      else maxVisual = Math.max(maxVisual, Math.abs(p.growth - last));
+      // Remember visible size changes so LifeSim can tell the renderer occasionally (live only).
+      if (inp.trackVisual) {
+        const last = this.lastVisual.get(p.id);
+        if (last === undefined) this.lastVisual.set(p.id, g);
+        else if (Math.abs(g - last) > maxVisual) maxVisual = Math.abs(g - last);
+      }
     }
     this.pendingVisualChange = maxVisual;
     this.plantUptakeN = uptake;

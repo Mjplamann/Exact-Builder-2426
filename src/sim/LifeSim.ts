@@ -143,7 +143,7 @@ export class LifeSim implements BreedHost {
   private chem = new Chemistry();
   private flora = new Flora();
   private chemIn = newChemInputs();
-  private floraIn: FloraInputs = { dose: 1, co2: 3, loadN: 1, decorArea: 0, detritusMgDay: 0, zen: false };
+  private floraIn: FloraInputs = { dose: 1, co2: 3, loadN: 1, decorArea: 0, detritusMgDay: 0, zen: false, trackVisual: false };
   private tankRef: TankState | null = null;
   private pending = 0;
   private floraPending = 0;
@@ -364,6 +364,7 @@ export class LifeSim implements BreedHost {
       fi.decorArea = this.chem.decorInfo.area;
       fi.detritusMgDay = this.detritusMgDay;
       fi.zen = zen;
+      fi.trackVisual = live;
       this.flora.step(world, this.floraPending, fi);
       this.floraPending = 0;
     }
