@@ -58,7 +58,10 @@ const STYLE_TANK_NAMES: Record<string, string> = {
   goldfish: 'Goldfish Tank',
   nature: 'Nature Aquarium',
   reef: 'Coral Reef',
+  'nano-reef': 'Nano Reef',
+  fowlr: 'Live Rock Reef',
   mangrove: 'Mangrove Estuary',
+  'brackish-rock': 'Estuary Stones',
 };
 const WATER_TANK_NAMES: Record<WaterType, string> = { freshwater: 'My Aquarium', brackish: 'My Estuary', marine: 'My Reef' };
 

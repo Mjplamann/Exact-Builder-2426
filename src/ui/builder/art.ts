@@ -304,7 +304,7 @@ function floaters(w: number): string {
   return d;
 }
 
-type Motif = 'amazon' | 'iwagumi' | 'dutch' | 'rocks' | 'blackwater' | 'shrimp' | 'goldfish' | 'nature' | 'reef' | 'mangrove' | 'seagrass' | 'shells' | 'stream' | 'empty' | 'planted';
+type Motif = 'amazon' | 'iwagumi' | 'dutch' | 'rocks' | 'blackwater' | 'shrimp' | 'goldfish' | 'nature' | 'reef' | 'liverock' | 'mangrove' | 'seagrass' | 'shells' | 'stream' | 'empty' | 'planted';
 
 /** Which drawing suits a style (known ids first, then hints in the id/name, then the water). */
 export function motifFor(id: string, name: string, water: WaterType): Motif {
@@ -318,6 +318,10 @@ export function motifFor(id: string, name: string, water: WaterType): Motif {
     goldfish: 'goldfish',
     nature: 'nature',
     reef: 'reef',
+    'nano-reef': 'reef',
+    fowlr: 'liverock',
+    mangrove: 'mangrove',
+    'brackish-rock': 'shells',
     empty: 'empty',
   };
   if (known[id]) return known[id];
@@ -325,6 +329,7 @@ export function motifFor(id: string, name: string, water: WaterType): Motif {
   if (/mangrove|estuar|delta/.test(t)) return 'mangrove';
   if (/seagrass|lagoon|grass bed|meadow/.test(t)) return 'seagrass';
   if (/tanganyika|shell/.test(t)) return 'shells';
+  if (/fowlr|fish.only|live.rock/.test(t)) return 'liverock';
   if (/reef|coral|soft/.test(t)) return 'reef';
   if (/amazon|sword|flooded/.test(t)) return 'amazon';
   if (/nature|tree/.test(t)) return 'nature';
@@ -373,6 +378,12 @@ export function styleVignette(id: string, name: string, water: WaterType): strin
       break;
     case 'reef':
       b += sand(W, H, 82, '#e6ddc9') + corals(52, 82) + corals(118, 84) + clownfish(84, 34, 0.9);
+      break;
+    case 'liverock':
+      b +=
+        sand(W, H, 82, '#e6ddc9') +
+        `<path d="M8 84c4-22 20-34 38-30 10-14 30-14 40 0 14-6 28 2 30 14 10 0 18 8 20 16z" fill="#a07a66"/><path d="M58 84c2-12 8-18 16-18s14 6 16 18z" fill="#0b2541" opacity=".85"/>` +
+        `<g transform="translate(96 30)"><path d="M0 0c6-8 16-9 22-2-6 7-16 8-22 2z" fill="#3b78c8"/><path d="M6-5c3-6 9-8 12-6M6 5c3 6 9 8 12 6" stroke="#f2c84a" stroke-width="1.6" fill="none"/><path d="M21.5-.5l5-4v8z" fill="#f2c84a"/><circle cx="3.6" cy="-1" r=".9" fill="#111"/></g>`;
       break;
     case 'seagrass':
       b += sand(W, H, 80, '#ddd2b8') + ribbons(10, 80, 44, '#4f9a5a', 8) + ribbons(58, 80, 38, '#5aa864', 7) + ribbons(106, 80, 46, '#4f9a5a', 8) + clownfish(70, 30, 0.6);

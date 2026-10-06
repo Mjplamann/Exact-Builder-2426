@@ -27,7 +27,14 @@ export function reviewStep(env: StepEnv): StepView {
   const bg = BACKGROUNDS.find((x) => x.value === s.background)?.label ?? s.background;
   const slope = s.substrate === 'bare' ? 'bare glass' : `${formatLength(s.substrateDepthFrontCm ?? 0, units)} at the front, ${formatLength(s.substrateDepthBackCm ?? 0, units)} at the back`;
   const species = new Set(s.stock.map((q) => q.speciesId)).size;
-  const animals = s.stock.length ? `${animalsLabel(m.animals)} of ${species} ${plural(species, 'species', 'species')}` : s.cycled ? 'None yet — add them from the Fish panel' : 'None while the filter cycles';
+  const planned = `${animalsLabel(m.animals)} of ${species} ${plural(species, 'species', 'species')}`;
+  const animals = s.stock.length
+    ? s.cycled
+      ? planned
+      : `${planned} — planned: noted in the journal, to add once the cycle is complete`
+    : s.cycled
+      ? 'None yet — add them from the Fish panel'
+      : 'None while the filter cycles';
   const rows: [StepId, string, string][] = [
     ['water', 'Water', waterLabel(s.water)],
     ['size', 'Size', `${formatDims(s.size, units)} · ${formatVolumeBoth(m.liters, units)}`],

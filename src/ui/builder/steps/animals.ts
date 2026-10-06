@@ -3,7 +3,7 @@
  * (best first), each usable as it is; or a compact species picker with count steppers. The
  * hand-picked list is checked against the planned tank as it changes. Both calls run off the
  * input path (after a frame / debounced) behind a soft placeholder. A fishless cycle starts
- * without animals — they can be planned here and added later from the Fish panel.
+ * without animals — any planned here are noted in the journal, to add once the filter matures.
  */
 import type { Species } from '../../../core/types';
 import type { StockCheck, StockSuggestion } from '../../../app/tankTypes';
@@ -62,7 +62,7 @@ export function animalsStep(env: StepEnv): StepView {
         'div',
         { class: 'aqb-callout' },
         icon('calendar', 18),
-        h('p', null, 'Your filter will be cycling, so the tank starts without animals. When ammonia and nitrite both test at zero — in about 4–6 weeks — add them from the Fish panel. You can still plan (or add) a community now.'),
+        h('p', null, 'Your filter will be cycling, so the tank starts without animals. When ammonia and nitrite both test at zero — in about 4–6 weeks — add them from the Fish panel. Anything you plan here waits in the journal until then.'),
       );
 
   // --- The chosen animals & their check --------------------------------------------------------
@@ -123,8 +123,9 @@ export function animalsStep(env: StepEnv): StepView {
     const name = (id: string) => species.get(id)?.commonName ?? id;
     checkBox.replaceChildren(
       h('div', { class: 'aq-compat-head' }, h('span', { class: `aq-compat-dot${res.level === 'good' ? '' : ` is-${res.level}`}` }), h('strong', null, CHECK_WORDS[res.level])),
-      stockingBar(res.stocking),
     );
+    // A load too small to show (or not yet known) needs no bar.
+    if (res.stocking >= 0.005) checkBox.append(stockingBar(res.stocking));
     if (res.issues.length) checkBox.append(h('ul', { class: 'aq-compat-issues' }, ...res.issues.slice(0, 6).map((i) => h('li', null, `${name(i.speciesId)}: ${localizeUnits(i.text, units)}`))));
   };
   const debouncedCheck = debounce(runCheck, 260);

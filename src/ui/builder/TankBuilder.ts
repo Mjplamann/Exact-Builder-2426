@@ -204,7 +204,13 @@ export class TankBuilder {
       void this.create();
       return;
     }
-    this.show(STEPS[STEPS.indexOf(this.step) + 1], 1);
+    // Editing one choice from the review: straight back to it.
+    this.show(this.backToReview ? 'review' : STEPS[STEPS.indexOf(this.step) + 1], 1);
+  }
+
+  /** The review has been seen and the keeper is changing one earlier choice. */
+  private get backToReview(): boolean {
+    return this.reached === STEPS.indexOf('review') && this.step !== 'review' && this.step !== 'start';
   }
 
   private back(): void {
@@ -234,7 +240,7 @@ export class TankBuilder {
 
     setText(this.backBtn, this.step === 'start' ? 'Cancel' : 'Back');
     const preset = this.step === 'start' && this.env.cache.startMode === 'preset';
-    setText(this.nextText, this.step === 'review' ? 'Create tank' : preset ? 'Pick a tank above' : this.step === 'start' ? 'Begin' : 'Next');
+    setText(this.nextText, this.step === 'review' ? 'Create tank' : preset ? 'Pick a tank above' : this.step === 'start' ? 'Begin' : this.backToReview ? 'Back to review' : 'Next');
     this.nextBtn.disabled = preset;
     setClass(this.nextBtn, 'is-create', this.step === 'review');
     const issue = stepIssue(this.step, this.model.spec);
@@ -261,7 +267,7 @@ export class TankBuilder {
       case 'cycle':
         return s.cycled ? 'Mature filter' : 'Fishless cycle';
       case 'animals':
-        return animalsLabel(m.animals);
+        return s.cycled || !m.animals ? animalsLabel(m.animals) : `${m.animals} planned`;
       default:
         return '';
     }
@@ -404,7 +410,8 @@ export class TankBuilder {
     e.stopPropagation();
     if (e.key !== 'Enter' || e.isComposing || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || this.confirmEl) return;
     const t = e.target as HTMLElement;
-    if (t.closest('button, a, select, textarea, [role="radio"], [role="switch"], [contenteditable="true"]')) return;
+    // As in a form, Enter on a chosen option moves on (arrow keys choose); other controls keep it.
+    if (!t.closest('[role="radio"]') && t.closest('button, a, select, textarea, [role="switch"], [contenteditable="true"]')) return;
     if (t instanceof HTMLInputElement) {
       if (t.dataset.enter === 'ignore') return;
       // Settle a typed number before moving on.
