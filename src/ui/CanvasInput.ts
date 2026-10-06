@@ -138,11 +138,10 @@ export class CanvasInput {
     this.down = null;
     if (!d || d.id !== e.pointerId) return;
     if (d.scapeDrag) {
-      const dragged = this.scape.isDragging();
+      // A press on an item already selected it (pointer-down); a drag moved it. No click either way.
       this.scape.pointerUp(e);
       this.setCursor('grab');
-      if (dragged) return;
-      return; // a press on an item selects it (done on pointer-down)
+      return;
     }
     const moved = Math.hypot(e.clientX - d.x, e.clientY - d.y);
     if (moved > CLICK_SLOP || performance.now() - d.t > CLICK_MS) return;
@@ -232,19 +231,24 @@ export class CanvasInput {
   private onWheel(e: WheelEvent): void {
     e.preventDefault();
     if (this.mode === 'scape' && !e.ctrlKey && this.scape.wheel(e)) return;
-    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1;
-    const dy = e.deltaY * unit;
-    // Trackpad pinch arrives as ctrl+wheel with small deltas.
-    const k = e.ctrlKey ? 0.01 : 0.0012;
-    const dz = Math.max(-0.3, Math.min(0.3, -dy * k));
+    // Engine.nudgeView zoom is in wheel "notches" (≈12 % each). A mouse notch is ~100 px of
+    // deltaY; trackpads send many small deltas (smooth zoom); a trackpad pinch arrives as
+    // ctrl+wheel with deltas of a few px.
+    const unit = e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1;
+    const px = e.deltaY * unit;
+    const notches = e.ctrlKey ? -px * 0.025 : -px / 100;
+    const dz = Math.max(-2, Math.min(2, notches));
     if (dz) this.host.app.engine.nudgeView(0, 0, dz);
   }
 
-  /** Screen-pixel drag → view pan in viewport fractions (content follows the pointer). */
+  /**
+   * Screen-pixel drag → view pan. nudgeView takes fractions of the visible half-size, positive =
+   * camera right/up; the camera moves opposite to the drag so the content follows the pointer.
+   */
   private pan(dxPx: number, dyPx: number): void {
-    const w = window.innerWidth || 1;
-    const h = window.innerHeight || 1;
-    this.host.app.engine.nudgeView((-dxPx / w) * 2, (dyPx / h) * 2, 0);
+    const halfW = (window.innerWidth || 2) / 2;
+    const halfH = (window.innerHeight || 2) / 2;
+    this.host.app.engine.nudgeView(-dxPx / halfW, dyPx / halfH, 0);
   }
 
   private startPinch(): void {
@@ -260,8 +264,9 @@ export class CanvasInput {
     const d = Math.hypot(a.x - b.x, a.y - b.y) || 1;
     const mx = (a.x + b.x) / 2;
     const my = (a.y + b.y) / 2;
-    const dz = (d / p.d - 1) * 1.5;
-    if (Math.abs(dz) > 0.001) this.host.app.engine.nudgeView(0, 0, Math.max(-0.3, Math.min(0.3, dz)));
+    // Spread ratio → notches of 12 % so the content stays under the fingers.
+    const dz = Math.log(d / p.d) / Math.log(1.12);
+    if (Math.abs(dz) > 0.001) this.host.app.engine.nudgeView(0, 0, Math.max(-2, Math.min(2, dz)));
     this.pan(mx - p.mx, my - p.my);
     p.d = d;
     p.mx = mx;

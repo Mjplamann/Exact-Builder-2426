@@ -127,7 +127,8 @@ export class UI implements UIHost {
   private fpsT0 = performance.now();
   private fps = 0;
   private needsDirty = true;
-  private firstUpdate = true;
+  /** Updates seen so far (the idle clock starts after the first frame has been presented). */
+  private updates = 0;
 
   constructor(
     private root: HTMLElement,
@@ -215,16 +216,15 @@ export class UI implements UIHost {
     if (this.shortcutsEl) return this.hideShortcuts();
     const close = iconButton('close', 'Close', () => this.hideShortcuts(), 'aq-icon-btn aq-shortcuts-close');
     const list = h('dl', { class: 'aq-shortcuts-list' }, ...SHORTCUTS.map(([k, v]) => h('div', { class: 'aq-shortcut' }, h('dt', null, ...k.split(/\s{2}/).map((x) => h('kbd', { class: 'aq-kbd' }, x))), h('dd', null, v))));
-    const el = h('div', { class: 'aq-shortcuts', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Keyboard shortcuts' },
-      h('div', { class: 'aq-shortcuts-card aq-glass' }, h('div', { class: 'aq-shortcuts-head' }, h('h2', null, 'Keyboard shortcuts'), close), list),
-    );
+    const card = h('div', { class: 'aq-shortcuts-card aq-glass', tabindex: '-1' }, h('div', { class: 'aq-shortcuts-head' }, h('h2', null, 'Keyboard shortcuts'), close), list);
+    const el = h('div', { class: 'aq-shortcuts', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Keyboard shortcuts' }, card);
     el.addEventListener('pointerdown', (e) => {
       if (e.target === el) this.hideShortcuts();
     });
     this.layer.append(el);
     this.shortcutsEl = el;
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-in')));
-    close.focus();
+    card.focus({ preventScroll: true });
   }
 
   private hideShortcuts(): void {
@@ -640,10 +640,11 @@ export class UI implements UIHost {
     // FPS from wall-clock frame count (dt is clamped by the app).
     this.frames++;
     const now = performance.now();
-    if (this.firstUpdate) {
-      // First impression: let the controls be seen for a little longer once the tank appears.
-      this.firstUpdate = false;
-      this.lastActivity = now + 2500;
+    if (this.updates < 2) {
+      // The very first frame can take seconds (shader compilation). Start the idle countdown
+      // once the tank is actually on screen, so the controls are always seen on arrival.
+      this.updates++;
+      this.lastActivity = now;
     }
     if (now - this.fpsT0 >= 1000) {
       this.fps = (this.frames * 1000) / (now - this.fpsT0);

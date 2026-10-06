@@ -3210,7 +3210,7 @@
       {
        "type": "spots",
        "color": "#f2c230",
-       "density": 11.666666666666666,
+       "density": 12,
        "size": 0.08
       }
      ]
@@ -3224,7 +3224,7 @@
       {
        "type": "spots",
        "color": "#f2c230",
-       "density": 11.666666666666666,
+       "density": 12,
        "size": 0.08
       }
      ]
@@ -3236,7 +3236,7 @@
       {
        "type": "spots",
        "color": "#f2c230",
-       "density": 8.75,
+       "density": 9,
        "size": 0.08
       }
      ]
@@ -3352,7 +3352,7 @@
       {
        "type": "spots",
        "color": "#f2c230",
-       "density": 22.5,
+       "density": 22,
        "size": 0.04
       }
      ]
@@ -4942,7 +4942,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Rio Xingu, Pará, Brazil",
-  "description": "A large, spiny charcoal-grey loricariid with blood-red fins; its species name borrows 'pirarara', the Brazilian name of the redtail catfish. It eats meaty foods and is notoriously aggressive toward other plecos.",
+  "description": "A large, spiny charcoal-grey loricariid whose fins carry broad scarlet margins; its species name borrows 'pirarara', the Brazilian name of the redtail catfish. It eats meaty foods and is notoriously aggressive toward other plecos.",
   "adultLengthCm": 35,
   "birthLengthCm": 1,
   "maturityMonths": 48,
@@ -4994,7 +4994,7 @@
    "base": "#2a2b2d",
    "dorsal": "#242527",
    "ventral": "#46474a",
-   "fin": "#d43e22",
+   "fin": "#2e2f31",
    "finOpacity": 0.9,
    "eye": "#262626",
    "patterns": [
@@ -5006,20 +5006,28 @@
    ],
    "fins": {
     "dorsal": {
-     "color": "#d43e22",
-     "opacity": 0.9
+     "color": "#2e2f31",
+     "opacity": 0.9,
+     "edge": "#d43e22",
+     "edgeWidth": 0.35
     },
     "caudal": {
-     "color": "#d43e22",
-     "opacity": 0.9
+     "color": "#2e2f31",
+     "opacity": 0.9,
+     "edge": "#d43e22",
+     "edgeWidth": 0.35
     },
     "pectoral": {
-     "color": "#c23a22",
-     "opacity": 0.9
+     "color": "#2e2f31",
+     "opacity": 0.9,
+     "edge": "#c23a22",
+     "edgeWidth": 0.25
     },
     "pelvic": {
-     "color": "#c23a22",
-     "opacity": 0.9
+     "color": "#2e2f31",
+     "opacity": 0.9,
+     "edge": "#c23a22",
+     "edgeWidth": 0.25
     }
    }
   },
@@ -5455,7 +5463,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Amazon & Orinoco basins",
-  "description": "A large sailfin pleco with a tall dorsal fin and a raised bony ridge on the nape; its tan body is covered in a dark brown honeycomb of spots. A heavy-bodied grazer of algae and detritus for very large tanks.",
+  "description": "A large sailfin pleco with a tall dorsal fin and a raised bony ridge on the nape; its body is covered in close-set dark brown spots separated by a pale golden honeycomb. A heavy-bodied grazer of algae and detritus for very large tanks.",
   "adultLengthCm": 45,
   "birthLengthCm": 1,
   "maturityMonths": 36,
@@ -5511,54 +5519,54 @@
    "hump": 0.3
   },
   "look": {
-   "base": "#b5a07a",
-   "dorsal": "#9e8a64",
-   "ventral": "#d4c6a6",
-   "fin": "#a89470",
+   "base": "#5a4430",
+   "dorsal": "#4a3826",
+   "ventral": "#b8a27e",
+   "fin": "#5e4a34",
    "finOpacity": 0.9,
    "eye": "#262626",
    "patterns": [
     {
      "type": "reticulate",
-     "color": "#2c2218",
+     "color": "#d2b884",
      "scale": 6,
-     "thickness": 0.45
+     "thickness": 0.25
     }
    ],
    "fins": {
     "dorsal": {
-     "color": "#a89470",
+     "color": "#5e4a34",
      "opacity": 0.9,
      "patterns": [
       {
-       "type": "spots",
-       "color": "#2c2218",
-       "density": 30,
-       "size": 0.07
+       "type": "reticulate",
+       "color": "#d2b884",
+       "scale": 4,
+       "thickness": 0.25
       }
      ]
     },
     "caudal": {
-     "color": "#a89470",
+     "color": "#5e4a34",
      "opacity": 0.9,
      "patterns": [
       {
-       "type": "spots",
-       "color": "#2c2218",
-       "density": 30,
-       "size": 0.07
+       "type": "reticulate",
+       "color": "#d2b884",
+       "scale": 4,
+       "thickness": 0.25
       }
      ]
     },
     "pectoral": {
-     "color": "#a89470",
+     "color": "#5e4a34",
      "opacity": 0.9,
      "patterns": [
       {
-       "type": "spots",
-       "color": "#2c2218",
-       "density": 20,
-       "size": 0.07
+       "type": "reticulate",
+       "color": "#d2b884",
+       "scale": 4,
+       "thickness": 0.25
       }
      ]
     }
@@ -6213,7 +6221,7 @@
   "family": "Loricariidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Uruguay & Paraná basins, Argentina & Brazil",
+  "region": "Rio Uruguay basin, Argentina & Brazil",
   "description": "A golden-yellow Hypostomus from the subtropical Rio Uruguay, prized for its unusual colour and happiest in cooler water than most plecos. A large grazer of algae and biofilm.",
   "adultLengthCm": 30,
   "birthLengthCm": 1,
@@ -6780,7 +6788,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Amazon & Paraguay basins, Bolivia, Brazil, Paraguay & Peru",
-  "description": "A reddish-brown whiptail with dark saddles and a long whip-like upper caudal ray. Like other Rineloricaria, the male cleans a tube or cave and fans the eggs until they hatch.",
+  "description": "A light brown whiptail with five or six dark saddles and a long, whip-like upper caudal ray. Like other Rineloricaria, the male cleans a tube or cave and fans the eggs until they hatch.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.6,
   "maturityMonths": 12,
@@ -6857,10 +6865,10 @@
    }
   },
   "look": {
-   "base": "#8a6a4a",
-   "dorsal": "#74583c",
-   "ventral": "#cdb89c",
-   "fin": "#86664a",
+   "base": "#9c8a6c",
+   "dorsal": "#83725a",
+   "ventral": "#d8ccb6",
+   "fin": "#9a8a70",
    "finOpacity": 0.6,
    "eye": "#2a2a2a",
    "patterns": [
@@ -6882,7 +6890,7 @@
    ],
    "fins": {
     "caudal": {
-     "color": "#86664a",
+     "color": "#9a8a70",
      "opacity": 0.6,
      "patterns": [
       {
@@ -7148,7 +7156,7 @@
   "family": "Loricariidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Panama, Colombia & Ecuador (Pacific & Caribbean slopes)",
+  "region": "Panama, Colombia & Ecuador",
   "description": "A slender, high-finned loricariid (formerly Sturisoma panamense) with long filaments on both caudal lobes. Males grow a beard of cheek odontodes and guard eggs laid in rows on glass or wood.",
   "adultLengthCm": 20,
   "birthLengthCm": 0.7,
@@ -7863,7 +7871,7 @@
   ],
   "minTankLiters": 100,
   "temperament": "peaceful",
-  "zone": "bottom",
+  "zone": "all",
   "social": "shoal",
   "groupSize": 5,
   "diet": "omnivore",
@@ -9359,7 +9367,7 @@
   "family": "Mochokidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Pool Malebo region of the Congo, DR Congo & Republic of the Congo",
+  "region": "Congo basin, DR Congo & Republic of the Congo",
   "description": "A small Congo squeaker with a broad, blunt snout that, like S. nigriventris, often swims belly-up and has a darker belly than back. Peaceful and happiest in a small group.",
   "adultLengthCm": 10,
   "birthLengthCm": 0.4,
@@ -9866,7 +9874,7 @@
   ],
   "minTankLiters": 300,
   "temperament": "peaceful",
-  "zone": "bottom",
+  "zone": "all",
   "social": "shoal",
   "groupSize": 3,
   "diet": "omnivore",
@@ -10802,7 +10810,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Amazon basin & the Guianas",
-  "description": "A huge thorny catfish with tall, hooked lateral scutes, known in the trade as the 'mother of snails' for its mollusc-crushing diet. It exceeds half a metre and is a gentle giant for public aquaria and very large tanks.",
+  "description": "A huge thorny catfish with tall, hooked lateral scutes that feeds heavily on snails and other molluscs as well as fruit and seeds. It exceeds half a metre and is a gentle giant for public aquaria and very large tanks.",
   "adultLengthCm": 55,
   "birthLengthCm": 0.4,
   "maturityMonths": 48,
@@ -10886,7 +10894,7 @@
   "family": "Doradidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Amazon, Orinoco, Essequibo & Paraná basins",
+  "region": "Amazon & Essequibo basins, South America",
   "description": "One of the largest doradids, named for the saw-like row of scutes along its flanks. It sucks up mud and sand to sift out invertebrates and detritus—a gentle but enormous fish for public aquaria.",
   "adultLengthCm": 60,
   "birthLengthCm": 0.4,
@@ -11718,7 +11726,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Amazon & Orinoco basins, Colombia, Peru & Venezuela",
-  "description": "A restless, silver, black-spotted pimelodid whose barbels reach past its tail fin, active mainly at night in groups. Its sharp, venomous fin spines snag in nets, and it will eat neon-sized tankmates.",
+  "description": "A restless, silver, black-spotted pimelodid whose maxillary barbels reach back to its tail, active mainly at night in groups. Its sharp, venomous fin spines snag in nets, and it will eat neon-sized tankmates.",
   "adultLengthCm": 11,
   "birthLengthCm": 0.3,
   "maturityMonths": 18,
@@ -12056,7 +12064,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Amazon & Orinoco basins",
-  "description": "A big pimelodid with a tall, sail-like dorsal fin and bold dark marbling on tan. A nocturnal predator suited to public aquaria or giant tanks.",
+  "description": "A big pimelodid with a tall, sail-like dorsal fin and bold dark marbling on tan. A nocturnal, opportunistic feeder on fish, invertebrates and fallen fruit, suited to public aquaria or giant tanks.",
   "adultLengthCm": 60,
   "birthLengthCm": 0.4,
   "maturityMonths": 48,
@@ -12078,7 +12086,7 @@
   "zone": "bottom",
   "social": "solitary",
   "groupSize": 1,
-  "diet": "piscivore",
+  "diet": "carnivore",
   "activity": "nocturnal",
   "reproduction": "none",
   "locomotion": "subcarangiform",
@@ -12254,8 +12262,8 @@
   "family": "Pimelodidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Amazon & Orinoco basins & the Guianas",
-  "description": "A long, flat-headed predator with dark vertical bars and spots over grey above a white belly. A prized food and sport fish that grows far too large for home aquaria.",
+  "region": "Rivers of the Guianas (Essequibo to French Guiana)",
+  "description": "A long, flat-headed predator with dark vertical bars and spots over grey above a white belly. Since a 2007 revision the name is restricted to the Guianas, the Amazonian 'tiger shovelnose' being P. punctifer; all grow far too large for home aquaria.",
   "adultLengthCm": 80,
   "birthLengthCm": 0.3,
   "maturityMonths": 36,
@@ -12367,7 +12375,7 @@
   "family": "Pimelodidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Amazon & Orinoco basins",
+  "region": "Amazon basin, Brazil, Peru, Colombia & Bolivia",
   "description": "Resembles the barred sorubim, but its dark bands form loops and wavy lines rather than straight bars. A powerful nocturnal predator for public aquaria and very large tanks.",
   "adultLengthCm": 80,
   "birthLengthCm": 0.3,
@@ -12911,7 +12919,7 @@
   "family": "Siluridae",
   "group": "fish",
   "water": "freshwater",
-  "region": "South & Southeast Asia (India to Indochina & Java)",
+  "region": "South & Southeast Asia (Pakistan & India to Indochina)",
   "description": "A silvery, compressed silurid with a dark shoulder spot that swims in mid-water with a long, rippling anal fin. Valued as a food fish in South Asia, it eats small fish in aquaria.",
   "adultLengthCm": 25,
   "birthLengthCm": 0.3,
@@ -14286,30 +14294,30 @@
    }
   },
   "look": {
-   "base": "#c2a878",
-   "dorsal": "#a88e5e",
-   "ventral": "#ece2cc",
-   "fin": "#b89e70",
+   "base": "#6e5232",
+   "dorsal": "#5a4228",
+   "ventral": "#e6dcc4",
+   "fin": "#7a5e3c",
    "finOpacity": 0.85,
    "eye": "#2a2a2a",
    "patterns": [
     {
      "type": "reticulate",
-     "color": "#4a3622",
+     "color": "#d8c08a",
      "scale": 4,
-     "thickness": 0.5
+     "thickness": 0.25
     }
    ],
    "fins": {
     "caudal": {
-     "color": "#b89e70",
+     "color": "#7a5e3c",
      "opacity": 0.85,
      "patterns": [
       {
        "type": "spots",
-       "color": "#4a3622",
+       "color": "#d8c08a",
        "density": 20,
-       "size": 0.08
+       "size": 0.06
       }
      ]
     }
@@ -14518,7 +14526,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Rocky rivers of South & Southeast Asia (Indus to Mekong)",
-  "description": "A huge sisorid of fast, rocky rivers with a flattened head, mottled saddles and a sharply forked tail. Occasionally shown in public aquaria, it can exceed 2 m and is notorious in Himalayan rivers for its size.",
+  "description": "A huge sisorid of fast, rocky rivers with a flattened head, mottled saddles and a sharply forked tail. Occasionally shown in public aquaria, it can reach about 2 m and is notorious in Himalayan rivers for its size.",
   "adultLengthCm": 120,
   "birthLengthCm": 0.5,
   "maturityMonths": 48,

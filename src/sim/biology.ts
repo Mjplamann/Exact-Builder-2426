@@ -178,7 +178,7 @@ export function stomachCapacityMg(w: number): number {
  * size, digest more slowly and survive starvation longer (metabolic rate ∝ W^0.8).
  */
 export function sizeRateScale(w: number): number {
-  return Math.pow(Math.max(1e-5, w) / REF_MASS_G, -0.2);
+  return Math.exp(-0.2 * Math.log(Math.max(1e-5, w) / REF_MASS_G));
 }
 
 /**

@@ -1,8 +1,8 @@
-import type { CareMode, FishEntity, Reproduction, Species, WaterParams } from '../core/types';
+import type { CareMode, FishEntity, Reproduction, WaterParams } from '../core/types';
 import type { Rng } from '../core/rng';
 import { MS_PER_DAY } from '../core/clock';
-import { ageMonths, asymptoticLength } from './biology';
-import type { Census, SpeciesStats } from './census';
+import { MS_PER_MONTH } from './biology';
+import { linfOf, type Census, type SpeciesStats } from './census';
 import { clamp, clamp01, outside, poisson, smoothstep } from './simMath';
 
 /**
@@ -187,14 +187,10 @@ export function breedingTick(
   days: number,
   capacityRatio: number,
 ): void {
-  const sp = f.species;
-  const mode = sp.reproduction;
+  const mode = st.reproduction;
   if (mode === 'none' || mode === 'annual') return;
   const s = f.state;
-  const isCarrier =
-    mode === 'pouch-brooder'
-      ? s.sex === 'male'
-      : s.sex === 'female' || (s.sex === 'unknown' && sp.group === 'snail');
+  const isCarrier = mode === 'pouch-brooder' ? s.sex === 'male' : s.sex === 'female' || (s.sex === 'unknown' && st.isSnail);
   if (!isCarrier) return;
   const wp = host.water;
 
@@ -216,7 +212,7 @@ export function breedingTick(
       if (mode === 'egg-carrier') mean *= 0.9;
       mean *= populationScale(host.census, capacityRatio);
       // In gentle/zen modes nothing is eaten on screen: only the fry that would have made it are born.
-      if (host.careMode !== 'realistic') mean *= expectedEarlySurvival(host, sp);
+      if (host.careMode !== 'realistic') mean *= expectedEarlySurvival(host, st.birthLengthCm);
       const count = Math.min(MAX_BROOD, poisson(mean, () => host.rng.next()));
       s.gravidSince = undefined;
       s.lastSpawnAt = now;
@@ -228,8 +224,8 @@ export function breedingTick(
   }
 
   // --- ready to breed? -----------------------------------------------------------------------
-  const age = ageMonths(s, now);
-  if (age < sp.maturityMonths || s.lengthCm < 0.6 * asymptoticLength(sp, s)) return;
+  const age = (now - s.bornAt) / MS_PER_MONTH;
+  if (age < st.maturityMonths || s.lengthCm < 0.6 * linfOf(st, s)) return;
   if (s.lastSpawnAt !== undefined && now - s.lastSpawnAt < refractoryDays(mode) * MS_PER_DAY) return;
 
   const g = st.group;
@@ -243,14 +239,14 @@ export function breedingTick(
   if (!partner) return;
 
   // Condition: healthy, fed, calm, in temperature, not senescent.
-  const dT = outside(wp.temperatureC, sp.tempC[0], sp.tempC[1]);
+  const dT = outside(wp.temperatureC, st.tempLo, st.tempHi);
   if (dT > 0.5) return;
   const q =
     smoothstep(0.55, 0.85, s.health) *
     (1 - smoothstep(0.35, 0.65, s.hunger)) *
     (1 - smoothstep(0.3, 0.6, s.stress)) *
-    (age / 12 > 0.85 * sp.lifespanYears ? 0.3 : 1) *
-    (outside(wp.ph, sp.ph[0], sp.ph[1]) > 0.3 ? 0.3 : 1);
+    (age / 12 > 0.85 * st.lifespanYears ? 0.3 : 1) *
+    (outside(wp.ph, st.phLo, st.phHi) > 0.3 ? 0.3 : 1);
   if (q <= 0.01) return;
 
   let rate = spawnRate(mode) * q * (sperm && g.matureMales === 0 ? 0.35 : 1);
@@ -301,7 +297,7 @@ function eggSurvival(host: BreedHost, st: SpeciesStats, mode: Reproduction, expe
 }
 
 /** For gentle/zen: the share of live-born young that would survive their first weeks. */
-function expectedEarlySurvival(host: BreedHost, sp: Species): number {
-  const h = fryPredationHazard(host.census, sp.birthLengthCm, host.cover);
+function expectedEarlySurvival(host: BreedHost, birthLengthCm: number): number {
+  const h = fryPredationHazard(host.census, birthLengthCm, host.cover);
   return Math.exp(-h * 18);
 }

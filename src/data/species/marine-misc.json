@@ -262,8 +262,7 @@
   "burstSpeed": 0.6,
   "traits": [
    "bold",
-   "perches",
-   "pair-bonding"
+   "perches"
   ],
   "body": {
    "archetype": "seahorse",
@@ -1573,7 +1572,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Red Sea & Indian Ocean to the Andaman Sea",
-  "description": "Has many more and narrower red rings than its relatives—often 60 or more—and a red tail with a white margin. It hovers in caves and under overhangs on Red Sea and Indian Ocean reefs.",
+  "description": "Has many more and narrower red rings than its relatives, and a red tail with a white margin. It hovers in caves and under overhangs on Red Sea and Indian Ocean reefs.",
   "adultLengthCm": 15,
   "birthLengthCm": 0.6,
   "maturityMonths": 8,
@@ -5424,6 +5423,14 @@
     {
      "type": "blotch",
      "color": "#1a1010",
+     "x": 0.9,
+     "y": 0.88,
+     "rx": 0.025,
+     "ry": 0.06
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1010",
      "x": 0.04,
      "y": -0.45,
      "rx": 0.02,
@@ -8674,13 +8681,44 @@
      "contrast": 0.45
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#3a8ad0",
-     "count": 6,
-     "width": 0.08,
-     "wavy": 0.6,
-     "y0": -0.6,
-     "y1": 0.6
+     "y": 0.35,
+     "width": 0.035,
+     "x0": 0.02,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#e8c040",
+     "y": 0.18,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.29
+    },
+    {
+     "type": "stripe",
+     "color": "#3a8ad0",
+     "y": 0,
+     "width": 0.035,
+     "x0": 0.03,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#e8c040",
+     "y": -0.18,
+     "width": 0.03,
+     "x0": 0.04,
+     "x1": 0.28
+    },
+    {
+     "type": "stripe",
+     "color": "#3a8ad0",
+     "y": -0.36,
+     "width": 0.035,
+     "x0": 0.05,
+     "x1": 0.27
     }
    ]
   },
@@ -8694,7 +8732,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-West Pacific — Red Sea & East Africa to New Caledonia & Japan",
-  "description": "Juveniles are white with three bold dark red bands and sometimes shelter among sea urchin spines; adults turn uniformly pinkish red and can exceed a meter. It is long-lived, reaching over 30 years in the wild.",
+  "description": "Juveniles are white with three bold dark red bands and sometimes shelter among sea urchin spines; adults turn pinkish red as the bands fade, and can exceed a meter. It is long-lived, reaching over 30 years in the wild.",
   "adultLengthCm": 60,
   "birthLengthCm": 0.15,
   "maturityMonths": 36,
@@ -11880,7 +11918,6 @@
   "traits": [
    "territorial",
    "invert-eater",
-   "coral-nipper",
    "digger"
   ],
   "body": {
@@ -14704,9 +14741,9 @@
   "availability": "uncommon"
  },
  {
-  "id": "ostracion-solorense",
+  "id": "ostracion-solorensis",
   "commonName": "Reticulate Boxfish",
-  "scientificName": "Ostracion solorense",
+  "scientificName": "Ostracion solorensis",
   "family": "Ostraciidae",
   "group": "fish",
   "water": "marine",
@@ -16835,7 +16872,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-West Pacific — India to Japan & Indonesia",
-  "description": "Brown with dark bands and numerous small white spots, it is the bamboo shark most often bred in aquaria. Captive females have produced young by parthenogenesis, without a male.",
+  "description": "Brown with dark bands and numerous small white spots, it is one of the bamboo sharks most often bred in aquaria. Captive females have produced young by parthenogenesis, without a male.",
   "adultLengthCm": 85,
   "birthLengthCm": 14,
   "maturityMonths": 36,
@@ -17128,7 +17165,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Eastern Pacific — California to the Gulf of California",
-  "description": "A blunt-headed, slow-moving shark with a spine in front of each dorsal fin that crushes sea urchins and crabs with molar-like teeth. Females wedge spiral-flanged egg cases into rock crevices.",
+  "description": "A blunt-headed, slow-moving shark with a spine in front of each dorsal fin; it crushes sea urchins and crabs with flat, molar-like rear teeth. Females wedge spiral-flanged egg cases into rock crevices.",
   "adultLengthCm": 90,
   "birthLengthCm": 15,
   "maturityMonths": 72,

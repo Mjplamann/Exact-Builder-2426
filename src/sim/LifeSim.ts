@@ -22,13 +22,14 @@ import {
   vbLength,
 } from './biology';
 import { breedingTick, fryPredationHazard, type BirthKind, type BreedHost } from './breeding';
-import { Census, type SpeciesStats } from './census';
+import { Census, linfOf, type SpeciesStats } from './census';
 import { Chemistry, newChemInputs } from './chemistry';
 import { compatibilityReport, stockingReport } from './compatibility';
 import { dailyLightDose, lightScheduleLevel, localHour, localMs } from './environment';
 import { feedDirect } from './feeding';
+import { canonicalFishState, canonicalizeWorldFish } from './fishState';
 import { Flora, trimPlants as trimTankPlants, type FloraInputs } from './flora';
-import { clamp, clamp01, relax, smoothstep } from './simMath';
+import { clamp, clamp01, relaxFast, smoothstep } from './simMath';
 import {
   capitalize,
   countOf,
@@ -70,10 +71,15 @@ export interface StockingReport {
 const LIVE_MIN_STEP_S = 2;
 /** Longest single integration step (sim s); longer frames are split. */
 const MAX_STEP_S = 900;
-/** Catch-up aims for about this many steps, each between 5 min and 2 h of sim time. */
-const CATCHUP_TARGET_STEPS = 4000;
+/**
+ * Catch-up aims for about this many steps, each between 5 min and 4 h of sim time. Every per-fish
+ * integrator is exact or implicit, so a year in 4-hour steps matches minute-by-minute biology.
+ */
+const CATCHUP_TARGET_STEPS = 2200;
 const CATCHUP_MIN_STEP_S = 300;
-const CATCHUP_MAX_STEP_S = 7200;
+const CATCHUP_MAX_STEP_S = 4 * 3600;
+/** Plants and algae change over days: integrate them at most hourly. */
+const FLORA_STEP_S = 3600;
 /** Of a meal's satiety, this share is felt at once (gut distension); the rest as it digests. */
 const IMMEDIATE_SATIETY = 0.6;
 /**
@@ -140,6 +146,7 @@ export class LifeSim implements BreedHost {
   private floraIn: FloraInputs = { dose: 1, co2: 3, loadN: 1, decorArea: 0, detritusMgDay: 0, zen: false };
   private tankRef: TankState | null = null;
   private pending = 0;
+  private floraPending = 0;
   private catchingUp = false;
 
   // Per-step accumulators.
@@ -243,6 +250,7 @@ export class LifeSim implements BreedHost {
     this.careModeNow = world.settings.careMode;
     if (world.tank === this.tankRef) return;
     this.tankRef = world.tank;
+    canonicalizeWorldFish(world);
     this.rng = new Rng((world.tank.seed ^ 0x5bd1e995) >>> 0);
     this.census.reset();
     this.flora.reset();
@@ -347,14 +355,18 @@ export class LifeSim implements BreedHost {
     this.autoFeed(world, now - dt * 1000, now, live);
     this.census.build(world, now, this.chem.co2, zen);
     this.capacityRatio = this.census.ratio;
-    const fi = this.floraIn;
-    fi.dose = dailyLightDose(lights);
-    fi.co2 = this.chem.co2;
-    fi.loadN = this.chem.loadN;
-    fi.decorArea = this.chem.decorInfo.area;
-    fi.detritusMgDay = this.detritusMgDay;
-    fi.zen = zen;
-    this.flora.step(world, dt, fi);
+    this.floraPending += dt;
+    if (this.floraPending >= FLORA_STEP_S || !live) {
+      const fi = this.floraIn;
+      fi.dose = dailyLightDose(lights);
+      fi.co2 = this.chem.co2;
+      fi.loadN = this.chem.loadN;
+      fi.decorArea = this.chem.decorInfo.area;
+      fi.detritusMgDay = this.detritusMgDay;
+      fi.zen = zen;
+      this.flora.step(world, this.floraPending, fi);
+      this.floraPending = 0;
+    }
     this.flora.resetDemand();
 
     this.fishLoop(world, dt, now, live);
@@ -460,11 +472,11 @@ export class LifeSim implements BreedHost {
       const hungerStress = 0.35 * smoothstep(0.6, 1, s.hunger);
       const target =
         1 - (1 - st.envStress) * (1 - st.toxStress) * (1 - st.socialStress) * (1 - crowd) * (1 - hungerStress);
-      s.stress = clamp01(s.stress + (target - s.stress) * relax(days, target > s.stress ? 0.25 : 1.5));
+      s.stress = clamp01(s.stress + (target - s.stress) * relaxFast(days, target > s.stress ? 0.25 : 1.5));
 
       // --- health: chronic stress sets the condition, toxins & starvation do direct harm -----
       const healthTarget = 1 - smoothstep(0.3, 0.95, s.stress);
-      let hp = s.health + (healthTarget - s.health) * relax(days, healthTarget < s.health ? 12 : 10);
+      let hp = s.health + (healthTarget - s.health) * relaxFast(days, healthTarget < s.health ? 12 : 10);
       const starve = smoothstep(0.85, 1, s.hunger) * (scale / STARVE_DAYS_REF);
       hp -= (st.acute + starve) * days;
       if (mode === 'gentle') hp = Math.max(hp, 0.05);
@@ -472,7 +484,7 @@ export class LifeSim implements BreedHost {
       s.health = clamp01(hp);
 
       // --- growth: von Bertalanffy, slowed by hunger, stress, cold, poor water, cramped tank --
-      const linf = asymptoticLength(sp, s) * st.stunt;
+      const linf = linfOf(st, s) * st.stunt;
       if (L < linf) {
         const f =
           (1 - smoothstep(0.35, 0.85, s.hunger)) *
@@ -482,7 +494,7 @@ export class LifeSim implements BreedHost {
           st.stuntRate *
           (0.5 + 0.5 * s.health);
         if (f > 0) {
-          const nl = linf - (linf - L) * Math.exp(-growthK(sp) * f * years);
+          const nl = linf - (linf - L) * Math.exp(-st.k * f * years);
           s.lengthCm = nl;
           if (s.name || st.group.count <= 2) this.milestones(world, f0Months(s, t0), sp, s, L, nl, linf, now);
         }
@@ -503,8 +515,8 @@ export class LifeSim implements BreedHost {
       }
       if (mode !== 'zen') {
         const ageY1 = (now - s.bornAt) / MS_PER_YEAR;
-        if (ageY1 > 0.25 * sp.lifespanYears) {
-          const p = oldAgeDeathProbability(sp.lifespanYears, Math.max(0, ageY1 - years), ageY1);
+        if (ageY1 > 0.25 * st.lifespanYears) {
+          const p = oldAgeDeathProbability(st.lifespanYears, Math.max(0, ageY1 - years), ageY1);
           if (this.rng.next() < p) {
             this.markDead(f, 'old age');
             continue;
@@ -519,7 +531,7 @@ export class LifeSim implements BreedHost {
       // Only young born here: store-bought juveniles are already past the most vulnerable size,
       // and adult predation risk is surfaced by `compatibility` rather than staged as carnage.
       // Prey approaching the biggest mouth in the tank is increasingly hard to catch.
-      if (realistic && s.generation > 0 && L < maxGape && sp.group !== 'snail' && (now - s.bornAt) / MS_PER_MONTH < sp.maturityMonths) {
+      if (realistic && s.generation > 0 && L < maxGape && !st.isSnail && (now - s.bornAt) / MS_PER_MONTH < st.maturityMonths) {
         const hz = fryPredationHazard(census, L, cover) * (1 - smoothstep(0.3, 1, L / maxGape));
         if (hz > 0 && this.rng.next() < 1 - Math.exp(-hz * days)) {
           if (this.eatenCount < this.eaten.length) this.eaten[this.eatenCount] = f;
@@ -929,7 +941,7 @@ export class LifeSim implements BreedHost {
       lengthCm = opts.lengthCm ?? vbLength(linf, sp.birthLengthCm, growthK(sp), (now - bornAt) / MS_PER_YEAR);
     }
     const id = opts.newborn ? `fish_${Math.floor(now).toString(36)}_${Math.floor(rng.next() * 2 ** 31).toString(36)}` : newId('fish');
-    const state: FishState = {
+    const state: FishState = canonicalFishState({
       id,
       speciesId,
       name: opts.name,
@@ -944,9 +956,9 @@ export class LifeSim implements BreedHost {
       stress: opts.newborn ? 0.1 : 0.35,
       stomach: opts.newborn ? 0.6 : 0.15,
       generation: opts.generation ?? 0,
-    };
-    if (opts.parents) state.parents = opts.parents;
-    if (opts.pos) state.pos = opts.pos;
+      parents: opts.parents,
+      pos: opts.pos,
+    });
     // Store-bought adult female livebearers are very often already pregnant.
     if (!opts.newborn && sp.reproduction === 'livebearer' && sex === 'female' && ageMonths(state, now) >= sp.maturityMonths && rng.chance(0.6)) {
       state.gravidSince = now - rng.range(0, 20) * MS_PER_DAY;

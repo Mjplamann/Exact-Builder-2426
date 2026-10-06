@@ -1,4 +1,4 @@
-import type { FishEntity, FoodKind, FoodType, Zone } from '../core/types';
+import type { FishEntity, FoodKind, FoodType, Species, Zone } from '../core/types';
 import type { World } from '../core/world';
 import { FOODS } from '../data/foods';
 import { FOOD_DRY_MG, massG, stomachCapacityMg } from './biology';
@@ -45,6 +45,24 @@ function mouthAccess(f: FishEntity, food: FoodType): number {
 const weights: number[] = [];
 const room: number[] = [];
 
+/** Per-species feeding temperament (cached: trait lookups are too slow for every fish & feed). */
+interface FeedTraits {
+  bold: number;
+  scavenger: boolean;
+}
+const traitCache = new WeakMap<Species, FeedTraits>();
+function feedTraits(sp: Species): FeedTraits {
+  let t = traitCache.get(sp);
+  if (!t) {
+    t = {
+      bold: sp.traits.includes('bold') ? 1.25 : sp.traits.includes('shy') ? 0.7 : 1,
+      scavenger: sp.traits.includes('scavenger') || sp.group !== 'fish',
+    };
+    traitCache.set(sp, t);
+  }
+  return t;
+}
+
 /**
  * Share `pinches` of `kind` among the animals. `ingest(fish, mg)` adds food to a stomach and
  * returns the mg actually swallowed. Returns the mg nobody ate.
@@ -68,8 +86,9 @@ export function feedDirect(
     for (let i = 0; i < fish.length; i++) {
       const f = fish[i];
       const sp = f.species;
+      const ft = feedTraits(sp);
       let aff = food.affinity[sp.diet] ?? 0;
-      if (round === 1 && (sp.traits.includes('scavenger') || sp.group !== 'fish')) aff = Math.max(aff, 0.5);
+      if (round === 1 && ft.scavenger) aff = Math.max(aff, 0.5);
       const w = massG(sp, f.state.lengthCm);
       const r = Math.max(0, 1 - f.state.stomach) * stomachCapacityMg(w);
       room[i] = r;
@@ -78,8 +97,7 @@ export function feedDirect(
         continue;
       }
       const appetite = 0.15 + f.state.hunger;
-      const bold = sp.traits.includes('bold') ? 1.25 : sp.traits.includes('shy') ? 0.7 : 1;
-      weights[i] = aff * zoneAccess(sp.zone, food.buoyancy) * mouthAccess(f, food) * appetite * bold * Math.pow(w, 0.25) * Math.min(1, r);
+      weights[i] = aff * zoneAccess(sp.zone, food.buoyancy) * mouthAccess(f, food) * appetite * ft.bold * Math.sqrt(Math.sqrt(w)) * Math.min(1, r);
       total += weights[i];
     }
     if (total <= 0) break;

@@ -76,6 +76,7 @@ export class AquascapePanel implements Panel {
     this.tab = t;
     this.tabBar.set(t);
     for (const k of Object.keys(this.views) as Tab[]) this.views[k].hidden = k !== t;
+    this.hint.hidden = t === 'tank';
     if (t === 'tank') this.tool.arm(null);
   }
 
@@ -120,7 +121,7 @@ export class AquascapePanel implements Panel {
       const grid = h('div', { class: 'aq-pal-grid' });
       for (const d of list) {
         const notes: string[] = [];
-        if (d.tannins) notes.push('releases tannins');
+        if (d.tannins) notes.push('tints water');
         if (d.buffersPh) notes.push('raises pH');
         grid.append(
           this.paletteItem(`d:${d.kind}:${d.variant}`, decorGlyph(d.kind, decorColor(d.kind, d.variant)), d.name, `~${formatLength(d.size * 100, units)}${notes.length ? ` · ${notes.join(', ')}` : ''}`, d.description, () => {

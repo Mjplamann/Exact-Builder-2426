@@ -25,6 +25,16 @@ export function relax(dt: number, tau: number): number {
   return tau <= 0 ? 1 : 1 - Math.exp(-dt / tau);
 }
 
+/**
+ * Fast 1 − e^(−x) for x ≥ 0 via a cubic Taylor denominator: 1 − 1/(1 + x + x²/2 + x³/6).
+ * Within 0.3% for x ≤ 1, monotonic and → 1 for large x — ideal for slow relaxations.
+ */
+export function relaxFast(dt: number, tau: number): number {
+  if (tau <= 0) return 1;
+  const x = dt / tau;
+  return 1 - 1 / (1 + x * (1 + x * (0.5 + x * (1 / 6))));
+}
+
 /** Combine independent 0..1 stress/probability factors: 1 − Π(1 − sᵢ). */
 export function combine2(a: number, b: number): number {
   return 1 - (1 - a) * (1 - b);

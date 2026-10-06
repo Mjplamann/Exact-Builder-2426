@@ -1,13 +1,13 @@
-import type { Species, WaterParams } from '../core/types';
+import type { FishState, Reproduction, Species, WaterParams } from '../core/types';
 import type { World } from '../core/world';
 import { waterLiters } from '../core/tankGeometry';
 import {
-  ageMonths,
-  asymptoticLength,
+  MS_PER_MONTH,
   bioloadUnits,
   conspecificKey,
   gapeRatio,
   grazingWeights,
+  growthK,
   growthTempFactor,
   isFighter,
   isInvertEater,
@@ -16,6 +16,7 @@ import {
   isPredator,
   massCoefficient,
   metabolicFactor,
+  sexLengthScale,
 } from './biology';
 import { freeAmmoniaFraction } from './chemistry';
 import { clamp, clamp01, outside, smoothstep } from './simMath';
@@ -57,6 +58,21 @@ export interface SpeciesStats {
   grazeSurface: number;
   plantEater: boolean;
   coralNipper: boolean;
+  /** Hot species fields copied here so per-fish loops stay monomorphic (species JSON shapes vary). */
+  adultMale: number;
+  adultFemale: number;
+  adultOther: number;
+  k: number;
+  maturityMonths: number;
+  lifespanYears: number;
+  birthLengthCm: number;
+  tempLo: number;
+  tempHi: number;
+  phLo: number;
+  phHi: number;
+  reproduction: Reproduction;
+  isSnail: boolean;
+  isFish: boolean;
   // --- per step ---
   /** Metabolic temperature factor (Q10 vs 25 °C). */
   metabolic: number;
@@ -78,6 +94,11 @@ export interface SpeciesStats {
 
 const SOCIAL_GROUPS = new Set(['school', 'shoal', 'colony', 'harem']);
 
+/** Asymptotic length L∞ (cm, before stunting) of an individual, from the cached species stats. */
+export function linfOf(st: SpeciesStats, s: Pick<FishState, 'sex' | 'sizeFactor'>): number {
+  return (s.sex === 'male' ? st.adultMale : s.sex === 'female' ? st.adultFemale : st.adultOther) * (s.sizeFactor || 1);
+}
+
 export class Census {
   stamp = 0;
   fishCount = 0;
@@ -90,9 +111,11 @@ export class Census {
   /** Species present this step: `active[0..activeCount)`. */
   active: SpeciesStats[] = [];
   activeCount = 0;
-  /** Sorted (ascending) gapes (cm) of every animal that can eat small prey; `Infinity` padding. */
+  /** Gapes (cm) of every animal that can eat small prey; sorted lazily on first query. */
   private gapes = new Float64Array(512);
   gapeCount = 0;
+  private gapesSorted = true;
+  private gapeMax = 0;
   private bySpecies = new Map<string, SpeciesStats>();
   private byGroup = new Map<string, GroupStats>();
   private socialRoster = -1;
@@ -155,6 +178,20 @@ export class Census {
       grazeSurface: g.surface,
       plantEater: sp.traits.includes('plant-eater'),
       coralNipper: sp.traits.includes('coral-nipper'),
+      adultMale: sp.adultLengthCm * sexLengthScale(sp, 'male'),
+      adultFemale: sp.adultLengthCm * sexLengthScale(sp, 'female'),
+      adultOther: sp.adultLengthCm,
+      k: growthK(sp),
+      maturityMonths: sp.maturityMonths,
+      lifespanYears: sp.lifespanYears,
+      birthLengthCm: sp.birthLengthCm,
+      tempLo: sp.tempC[0],
+      tempHi: sp.tempC[1],
+      phLo: sp.ph[0],
+      phHi: sp.ph[1],
+      reproduction: sp.reproduction,
+      isSnail: sp.group === 'snail',
+      isFish: sp.group === 'fish',
       metabolic: 1,
       growthTemp: 1,
       stunt: 1,
@@ -191,6 +228,8 @@ export class Census {
     this.liters = waterLiters(world.tank);
     this.activeCount = 0;
     this.gapeCount = 0;
+    this.gapeMax = 0;
+    this.gapesSorted = false;
     this.bioload = 0;
     let gapes = this.gapes;
     const fish = world.fish;
@@ -215,8 +254,7 @@ export class Census {
       g.count++;
       const s = f.state;
       if (s.sex === 'male') g.males++;
-      const sp = f.species;
-      if (ageMonths(s, now) >= sp.maturityMonths && s.lengthCm >= 0.6 * asymptoticLength(sp, s)) {
+      if ((now - s.bornAt) / MS_PER_MONTH >= st.maturityMonths && s.lengthCm >= 0.6 * linfOf(st, s)) {
         if (s.sex === 'male') g.matureMales++;
         else if (s.sex === 'female') g.matureFemales++;
         else g.matureUnknown++;
@@ -229,10 +267,9 @@ export class Census {
           gapes = this.gapes = bigger;
         }
         gapes[this.gapeCount++] = gape;
+        if (gape > this.gapeMax) this.gapeMax = gape;
       }
     }
-    gapes.fill(Infinity, this.gapeCount);
-    gapes.sort();
 
     // Stocking & crowding.
     this.capacity = stockingCapacity(world);
@@ -252,7 +289,12 @@ export class Census {
 
   /** Number of animals that could swallow prey of total length `lengthCm`. */
   predatorsFor(lengthCm: number): number {
-    // Upper bound: first gape > lengthCm in the sorted array.
+    if (lengthCm >= this.gapeMax) return 0;
+    if (!this.gapesSorted) {
+      this.gapes.subarray(0, this.gapeCount).sort();
+      this.gapesSorted = true;
+    }
+    // Upper bound: first gape > lengthCm in the sorted prefix.
     let lo = 0, hi = this.gapeCount;
     while (lo < hi) {
       const mid = (lo + hi) >>> 1;
@@ -264,7 +306,7 @@ export class Census {
 
   /** Largest gape in the tank (cm). */
   get maxGape(): number {
-    return this.gapeCount > 0 ? this.gapes[this.gapeCount - 1] : 0;
+    return this.gapeMax;
   }
 
   // ------------------------------------------------------------------------------------------

@@ -6,7 +6,6 @@ import {
   type Texture,
 } from 'three';
 import type { FishEntity, Sex, Species } from '../../core/types';
-import { hashString } from '../../core/rng';
 import { resolveBody, resolveLook, type ResolvedBody } from './archetypes';
 import { buildFishGeometry, lodFor, type FishGeometryInfo } from './fishGeometry';
 import { createFishMaterials, swimUniforms, type FishMaterials } from './fishMaterial';
@@ -76,11 +75,11 @@ export class FishVariant {
       const elongated = body.depth < 0.13 || species.locomotion === 'anguilliform';
       const g = buildFishGeometry(body, lodFor(adult, elongated, opts.thumbnail ? 'thumb' : 'tank'));
       shape = { geoBody: g.body, geoFins: g.fins, info: g.info };
-      tex = paintFishAtlas(species, body, look, g.info.profile, N, { night });
+      tex = paintFishAtlas(species, body, look, g.info.profile!, N, { night });
     } else if (body.kind === 'seahorse') {
       const g = buildSeahorse(body, opts.thumbnail ? 1.3 : adult < 8 ? 0.8 : 1);
       shape = { geoBody: g.body, geoFins: g.fins, info: g.info };
-      tex = paintFishAtlas(species, body, look, g.info.profile, N, { night });
+      tex = paintFishAtlas(species, body, look, g.info.profile!, N, { night });
     } else {
       const g = buildInvertebrate(species, body, look, opts.thumbnail ? 1.3 : adult < 3 ? 0.75 : 1);
       shape = { geoBody: g.body, geoFins: g.fins, info: g.info };
@@ -152,7 +151,9 @@ export class FishVariant {
 
   /** Stable per-individual look jitter from the color seed (hue, value, saturation). */
   static individual(colorSeed: number, out: Float32Array, o: number): void {
-    const h = hashString(String(colorSeed));
+    let h = Math.imul((colorSeed | 0) ^ 0x9e3779b9, 0x85ebca6b);
+    h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+    h = (h ^ (h >>> 16)) >>> 0;
     const r1 = ((h & 1023) / 1023) * 2 - 1;
     const r2 = (((h >>> 10) & 1023) / 1023) * 2 - 1;
     const r3 = (((h >>> 20) & 1023) / 1023) * 2 - 1;

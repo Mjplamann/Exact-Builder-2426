@@ -127,12 +127,13 @@ export function formatDuration(ms: number): string {
   return formatAge(ms);
 }
 
-/** Clock time for a fractional hour: 9.5 → "09:30". */
+let hourFmt: Intl.DateTimeFormat | null = null;
+
+/** Clock time for a fractional hour in the viewer's locale: 9.5 → "9:30 AM" / "09:30". */
 export function formatHour(h: number): string {
   const total = Math.round((((h % 24) + 24) % 24) * 60);
-  const hh = Math.floor(total / 60) % 24;
-  const mm = total % 60;
-  return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  hourFmt ??= new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
+  return hourFmt.format(new Date(2000, 0, 1, Math.floor(total / 60) % 24, total % 60));
 }
 
 let dateFmt: Intl.DateTimeFormat | null = null;

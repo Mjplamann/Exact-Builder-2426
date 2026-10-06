@@ -104,15 +104,16 @@ export class FeedPanel implements Panel {
       const tags = h('span', { class: 'aq-food-tags' }, h('span', { class: 'aq-tag' }, buoyancyLabel(f)));
       if (f.buoyancy === 'live-swimming') tags.append(h('span', { class: 'aq-tag aq-tag-live' }, 'Triggers hunting'));
       if (f.sizeM >= 0.02) tags.append(h('span', { class: 'aq-tag' }, 'For larger fish'));
-      const fans = m.fans.length
-        ? h('span', { class: 'aq-food-fans' }, `Relished by your ${m.fans.slice(0, 2).map((n) => pluralName(n)).join(' and ')}${m.fans.length > 2 ? ' and others' : ''}`)
-        : null;
+      const suits = m.score >= 0.55;
+      const fans =
+        suits && m.fans.length
+          ? h('span', { class: 'aq-food-fans' }, `A favorite of your ${m.fans.slice(0, 2).map((n) => pluralName(n)).join(' and ')}`)
+          : null;
       const btn = h(
         'button',
-        { type: 'button', class: 'aq-food', role: 'option', 'aria-selected': 'false', 'data-food': f.kind },
+        { type: 'button', class: 'aq-food', role: 'option', 'aria-selected': 'false', 'data-food': f.kind, title: fish.length ? `Suits about ${Math.round(m.score * 100)}% of your animals` : undefined },
         foodIcon(f),
         h('span', { class: 'aq-food-text' }, h('span', { class: 'aq-food-name' }, f.name), h('span', { class: 'aq-food-desc' }, f.description), tags, fans),
-        h('span', { class: 'aq-food-meter', title: `Suits ${Math.round(m.score * 100)}% of your animals`, 'aria-hidden': 'true' }, h('span', { style: { transform: `scaleX(${Math.max(0.02, m.score).toFixed(3)})` } })),
       );
       btn.addEventListener('click', () => this.choose(f.kind));
       this.items.set(f.kind, btn);

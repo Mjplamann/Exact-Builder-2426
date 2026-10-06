@@ -17,6 +17,7 @@ import { DEFAULT_SETTINGS } from '../core/world';
 import { hashString } from '../core/rng';
 import { FOODS } from '../data/foods';
 import { defaultEquipment, defaultWaterParams } from './tankFactory';
+import { canonicalFishState } from './fishState';
 
 /**
  * Save/load the tank and settings (localStorage), and JSON export/import with migration.
@@ -370,7 +371,7 @@ function sanitizeFish(r: unknown, simTime: number): FishState | null {
   if (typeof r.heading === 'number' && Number.isFinite(r.heading)) f.heading = r.heading;
   const home = vec3(r.home);
   if (home) f.home = home;
-  return f;
+  return canonicalFishState(f);
 }
 
 // ---------------------------------------------------------------------------------------------

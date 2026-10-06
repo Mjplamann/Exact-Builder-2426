@@ -235,7 +235,7 @@ export class Engine {
     GLOBALS.uTime.value += dt;
     GLOBALS.uDaylight.value = day;
     GLOBALS.uMoonlight.value = moon;
-    GLOBALS.uLightColor.value.setRGB(env.lightColor[0], env.lightColor[1], env.lightColor[2]);
+    GLOBALS.uLightColor.value.copy(this.lighting.color);
     GLOBALS.uWaterTint.value.setRGB(env.waterTint[0], env.waterTint[1], env.waterTint[2]);
     GLOBALS.uTurbidity.value = env.turbidity;
     GLOBALS.uSurfaceY.value = env.surfaceY || b.surfaceY;
@@ -289,7 +289,9 @@ export class Engine {
     // Exposure: a little eye adaptation so a moonlit tank is dark but readable.
     const level = this.lighting.level;
     const target = MathUtils.clamp(Math.pow(0.12 + 0.88 * Math.min(1, level), -0.33), 1, 2.0);
+    if (this.firstUpdate) this.exposure = target;
     this.exposure += (target - this.exposure) * (1 - Math.exp(-dt / 2.5));
+    this.firstUpdate = false;
     this.renderer.toneMappingExposure = this.exposure;
 
     // Shadow casting for contents (see class doc), refreshed a few times per second.
@@ -301,6 +303,7 @@ export class Engine {
   }
 
   private causticAgitation = 1;
+  private firstUpdate = true;
 
   private enableShadow = (o: Object3D): void => {
     if ((o as Mesh).isMesh && o.userData.castShadow !== false && !o.castShadow) o.castShadow = true;

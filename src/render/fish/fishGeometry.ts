@@ -46,7 +46,8 @@ export interface FishGeometryInfo {
   caudalLen: number;
   /** Bounding half-extents (local) for picking. */
   half: [number, number, number];
-  profile: BodyProfile;
+  /** Fish & seahorse only (drives the texture painter's anatomy). */
+  profile?: BodyProfile;
 }
 
 export interface FishGeometry {
@@ -286,7 +287,7 @@ function tube(
     for (let j = 0; j < sides; j++) {
       const a = v0 + i * sides + j, b = v0 + i * sides + ((j + 1) % sides);
       const c = a + sides, d = b + sides;
-      gb.quad(a, c, d, b);
+      gb.quad(a, b, d, c);
     }
   }
   // Cap the tip.
@@ -425,7 +426,7 @@ function buildExtras(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): voi
       const a = (i / seg) * Math.PI * 2;
       gb.v(cx + Math.cos(a) * rx, cy + 0.004, Math.sin(a) * rz, uv[0], uv[1], cx, PART.body);
     }
-    for (let i = 0; i < seg; i++) gb.tri(c, v0 + 1 + ((i + 1) % seg), v0 + 1 + i);
+    for (let i = 0; i < seg; i++) gb.tri(c, v0 + 1 + i, v0 + 1 + ((i + 1) % seg));
     gb.smoothNormals(idx0, v0);
   }
 }
@@ -434,7 +435,7 @@ function buildExtras(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): voi
  * Move from SL coordinates (x tailward, z = fish's left) to local render space (TL = 1,
  * +X forward, +Z the fish's right, centered). A 180° turn about Y keeps triangle winding.
  */
-function finalize(gb: GeoBuilder, x0: number, cy: number, k: number): void {
+export function finalize(gb: GeoBuilder, x0: number, cy: number, k: number): void {
   const p = gb.pos, n = gb.nor, f = gb.fin, s = gb.spine;
   for (let i = 0, vi = 0; i < p.length; i += 3, vi++) {
     p[i] = (x0 - p[i]) * k;
@@ -460,13 +461,10 @@ function finalize(gb: GeoBuilder, x0: number, cy: number, k: number): void {
   }
 }
 
-export function buildFishGeometry(body: ResolvedBody, lod: FishLod): FishGeometry {
+/** Build body + fin geometry in SL coordinates (before the move to local render space). */
+export function buildFishParts(body: ResolvedBody, lod: FishLod): { gb: GeoBuilder; fb: GeoBuilder; prof: BodyProfile; cLen: number } {
   const prof = new BodyProfile(body);
   const cLen = caudalWebLength(body.caudal.shape, body.caudal.size);
-  const tlSL = 1 + cLen;
-  const k = 1 / tlSL;
-  const x0 = 0.5 * (1 + Math.min(cLen, 0.4));
-  const cy = prof.centerY;
 
   // ---- opaque: body, eyes, barbels, extras ----
   const gb = new GeoBuilder();
@@ -474,19 +472,19 @@ export function buildFishGeometry(body: ResolvedBody, lod: FishLod): FishGeometr
   buildEyes(gb, prof, lod);
   buildBarbels(gb, prof, body);
   buildExtras(gb, prof, body);
-  finalize(gb, x0, cy, k);
 
   // ---- translucent fins ----
   const fb = new GeoBuilder();
   const fo = { nu: lod.finU, nw: lod.finW };
-  if (body.dorsal) buildMedianFin(fb, prof, body.dorsal, PART.dorsal, ATLAS.dorsal, false, { nu: Math.max(4, Math.round(fo.nu * clamp((body.dorsal.end - body.dorsal.start) * 4 + 0.5, 0.6, 1.6))), nw: fo.nw });
+  const nuFor = (f: { start: number; end: number }) => Math.max(4, Math.round(fo.nu * clamp((f.end - f.start) * 4 + 0.5, 0.6, 1.6)));
+  if (body.dorsal) buildMedianFin(fb, prof, body.dorsal, PART.dorsal, ATLAS.dorsal, false, { nu: nuFor(body.dorsal), nw: fo.nw });
   if (body.dorsal2) buildMedianFin(fb, prof, body.dorsal2, PART.dorsal2, ATLAS.dorsal2, false, fo);
   if (body.anal) {
     if (body.gonopodium) {
       const g = { start: body.anal.start - 0.04, end: body.anal.start, height: 0.2, shape: 'pointed' as const, trail: 0 };
       buildMedianFin(fb, prof, g, PART.anal, ATLAS.anal, true, { nu: 3, nw: fo.nw }, { rake: 0.75, flow: 0.05 });
     } else {
-      buildMedianFin(fb, prof, body.anal, PART.anal, ATLAS.anal, true, { nu: Math.max(4, Math.round(fo.nu * clamp((body.anal.end - body.anal.start) * 4 + 0.5, 0.6, 1.6))), nw: fo.nw }, { twin: body.twinAnal });
+      buildMedianFin(fb, prof, body.anal, PART.anal, ATLAS.anal, true, { nu: nuFor(body.anal), nw: fo.nw }, { twin: body.twinAnal });
     }
   }
   if (body.adipose && (!body.dorsal || body.dorsal.end < 0.8)) {
@@ -496,7 +494,16 @@ export function buildFishGeometry(body: ResolvedBody, lod: FishLod): FishGeometr
   buildCaudalFin(fb, prof, body, { nu: fo.nu + 4, nw: fo.nw + 1 });
   if (body.pectoral) buildPairedFins(fb, prof, body, body.pectoral, 'pectoral', fo);
   if (body.pelvic) buildPairedFins(fb, prof, body, body.pelvic, 'pelvic', fo);
-  // Rays have no pelvic/pectoral for some archetypes: nothing to add.
+  return { gb, fb, prof, cLen };
+}
+
+export function buildFishGeometry(body: ResolvedBody, lod: FishLod): FishGeometry {
+  const { gb, fb, prof, cLen } = buildFishParts(body, lod);
+  const tlSL = 1 + cLen;
+  const k = 1 / tlSL;
+  const x0 = 0.5 * (1 + Math.min(cLen, 0.4));
+  const cy = prof.centerY;
+  finalize(gb, x0, cy, k);
   finalize(fb, x0, cy, k);
 
   // Picking half-extents (local): body depth + some of the fins.

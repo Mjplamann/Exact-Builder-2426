@@ -41,7 +41,7 @@ export interface FishTextures {
 
 const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
 
-interface Bufs {
+export interface Bufs {
   W: number;
   H: number;
   col: Float32Array;
@@ -55,7 +55,7 @@ interface Bufs {
 }
 
 let scratch: Bufs | null = null;
-function bufs(N: number): Bufs {
+export function bufs(N: number): Bufs {
   const W = 2 * N, H = N, n = W * H;
   if (!scratch || scratch.W !== W) {
     scratch = {
@@ -82,12 +82,12 @@ function bufs(N: number): Bufs {
 }
 
 /** Pixel rect of a cell. */
-function rect(c: Cell, W: number, H: number): [number, number, number, number] {
+export function rect(c: Cell, W: number, H: number): [number, number, number, number] {
   return [Math.round(c.x * W), Math.round(c.y * H), Math.round(c.w * W), Math.round(c.h * H)];
 }
 
 /** Build a Surface over a cell rect: px/py from the cell-local mapping. */
-function cellSurface(c: Cell, W: number, H: number, toX: (lx: number) => number, toY: (ly: number) => number, hd: (x: number) => number, seed: number, fin: boolean): { s: Surface; x0: number; y0: number } {
+export function cellSurface(c: Cell, W: number, H: number, toX: (lx: number) => number, toY: (ly: number) => number, hd: (x: number) => number, seed: number, fin: boolean): { s: Surface; x0: number; y0: number } {
   const [x0, y0, w, h] = rect(c, W, H);
   const px = new Float32Array(w), py = new Float32Array(h), hdA = new Float32Array(w);
   const tmp: [number, number] = [0, 0];
@@ -104,7 +104,7 @@ function cellSurface(c: Cell, W: number, H: number, toX: (lx: number) => number,
 }
 
 /** Composite `color` over a sub-rect of the atlas through the region-local mask. */
-function composite(b: Bufs, s: Surface, x0: number, y0: number, color: RGB, alphaBoost = 0, strength = 1): void {
+export function composite(b: Bufs, s: Surface, x0: number, y0: number, color: RGB, alphaBoost = 0, strength = 1): void {
   const { W, col, alpha, mask } = b;
   for (let r = 0; r < s.h; r++) {
     for (let c = 0; c < s.w; c++) {
@@ -119,7 +119,7 @@ function composite(b: Bufs, s: Surface, x0: number, y0: number, color: RGB, alph
   }
 }
 
-function clearMask(b: Bufs, s: Surface): void {
+export function clearMask(b: Bufs, s: Surface): void {
   b.mask.fill(0, 0, s.w * s.h);
 }
 
@@ -466,7 +466,6 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
         const op = opX - hl * 0.22 * (y + 0.1) * (y + 0.1);
         const d = (x - op - 0.004) / 0.003;
         const g = Math.exp(-d * d) * 0.25;
-        tint = tint ?? null;
         col[i * 3] += (0.45 - col[i * 3]) * g;
         col[i * 3 + 1] += (0.1 - col[i * 3 + 1]) * g;
         col[i * 3 + 2] += (0.1 - col[i * 3 + 2]) * g;
@@ -793,6 +792,22 @@ export function atlasSizeFor(adultLengthCm: number, forThumb = false): number {
   if (forThumb) return 128;
   if (adultLengthCm >= 14) return 512;
   return 256;
+}
+
+/** Pack the painted buffers into textures (no night map). */
+export function packAtlas(b: Bufs, N: number, normalStrength: number): FishTextures {
+  const map = tex(packColor(b), b.W, b.H, SRGBColorSpace);
+  const normal = tex(packNormal(b, normalStrength * (N / 256)), b.W, b.H, NoColorSpace);
+  const orm = tex(packOrm(b), b.W, b.H, NoColorSpace);
+  const em = packEmissive(b);
+  const emissive = em.any ? tex(em.data, b.W, b.H, SRGBColorSpace) : blackTexture();
+  const all = [map, normal, orm, em.any ? emissive : null];
+  return {
+    N, map, normal, orm, emissive, night: null, hasGlow: em.any,
+    dispose() {
+      for (const t of all) t?.dispose();
+    },
+  };
 }
 
 export function paintFishAtlas(sp: Species, body: ResolvedBody, look: Appearance, prof: BodyProfile, N: number, opts: { night?: boolean } = {}): FishTextures {

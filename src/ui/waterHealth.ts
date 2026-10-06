@@ -53,6 +53,13 @@ export interface SpeciesTolerance {
   dGH?: [number, number];
 }
 
+export interface RangePair {
+  /** Species with the lowest upper limit. */
+  low: { name: string; max: number };
+  /** Species with the highest lower limit. */
+  high: { name: string; min: number };
+}
+
 export interface TankNeeds {
   species: SpeciesTolerance[];
   /** Intersection of every inhabitant's range, or a sensible default when empty/conflicting. */
@@ -62,6 +69,9 @@ export interface TankNeeds {
   /** Tolerances don't overlap — someone will always be outside their comfort zone. */
   tempConflict: boolean;
   phConflict: boolean;
+  /** When ranges conflict: the species wanting it coolest/most acidic vs warmest/most alkaline. */
+  tempPair?: RangePair;
+  phPair?: RangePair;
   /** Reef tank (corals present) — stricter nitrate. */
   reef: boolean;
   animals: number;
@@ -100,6 +110,16 @@ export function computeNeeds(fish: readonly FishEntity[], water: WaterType, reef
   const species = [...byId.values()].sort((a, b) => b.count - a.count);
   const tI = intersect(species.map((s) => s.tempC));
   const pI = intersect(species.map((s) => s.ph));
+  const pair = (get: (s: SpeciesTolerance) => [number, number]): RangePair | undefined => {
+    if (!species.length) return undefined;
+    let low = species[0];
+    let high = species[0];
+    for (const s of species) {
+      if (get(s)[1] < get(low)[1]) low = s;
+      if (get(s)[0] > get(high)[0]) high = s;
+    }
+    return { low: { name: low.name, max: get(low)[1] }, high: { name: high.name, min: get(high)[0] } };
+  };
   const gI = intersect(species.filter((s) => s.dGH).map((s) => s.dGH as [number, number]));
   return {
     species,
@@ -108,6 +128,8 @@ export function computeNeeds(fish: readonly FishEntity[], water: WaterType, reef
     dGH: gI,
     tempConflict: species.length > 0 && !tI,
     phConflict: species.length > 0 && !pI,
+    tempPair: !tI ? pair((s) => s.tempC) : undefined,
+    phPair: !pI ? pair((s) => s.ph) : undefined,
     reef,
     animals: fish.length,
   };
@@ -213,8 +235,8 @@ export function assessWater(wp: WaterParams, water: WaterType, needs: TankNeeds)
   if (!cycled && needs.animals > 0) push('cycle', cycleLevel, 'The filter is still cycling — feed lightly and test often');
 
   const params: Record<ParamKey, ParamStatus> = {
-    temperature: { level: temp, ideal: needs.tempC, note: needs.tempConflict ? 'Inhabitants’ ranges don’t overlap' : undefined },
-    ph: { level: ph, ideal: needs.ph, note: needs.phConflict ? 'Inhabitants’ ranges don’t overlap' : undefined },
+    temperature: { level: temp, ideal: needs.tempC },
+    ph: { level: ph, ideal: needs.ph },
     ammonia: { level: ammonia, ideal: [0, 0.25], note: `free NH₃ ${nh3 < 0.001 ? '< 0.001' : nh3.toFixed(3)} mg/L` },
     nitrite: { level: nitrite, ideal: [0, salty ? 0.5 : 0.1] },
     nitrate: { level: nitrate, ideal: [0, needs.reef ? 10 : 25] },

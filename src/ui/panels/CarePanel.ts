@@ -102,14 +102,22 @@ export class CarePanel implements Panel {
       let note = '';
       let hidden = false;
       switch (t.key) {
-        case 'temperature':
+        case 'temperature': {
           v = formatTemp(wp.temperatureC, units);
-          note = p.note ?? ideal('temperature', (r) => formatTempRange(r, units));
+          const tp = this.host.needs.tempPair;
+          note = tp
+            ? `${tp.low.name} ≤ ${formatTemp(tp.low.max, units, 0)} · ${tp.high.name} ≥ ${formatTemp(tp.high.min, units, 0)}`
+            : ideal('temperature', (r) => (r[0] === r[1] ? formatTemp(r[0], units, 0) : formatTempRange(r, units)));
           break;
-        case 'ph':
+        }
+        case 'ph': {
           v = wp.ph.toFixed(1);
-          note = p.note ?? ideal('ph', (r) => formatRange(r));
+          const pp = this.host.needs.phPair;
+          note = pp
+            ? `${pp.low.name} ≤ ${pp.low.max} · ${pp.high.name} ≥ ${pp.high.min}`
+            : ideal('ph', (r) => (r[0] === r[1] ? r[0].toFixed(1) : formatRange(r)));
           break;
+        }
         case 'ammonia':
           v = `${wp.ammonia.toFixed(2)} mg/L`;
           note = p.note ?? '';
@@ -239,7 +247,7 @@ export class CarePanel implements Panel {
       value: e.heater.targetC,
       format: (v) => formatTemp(v, units()),
       onInput: (v) => this.setEquip({ heater: { targetC: v } }),
-      hint: this.host.needs.animals ? `Your animals are comfortable at ${formatTempRange(this.host.needs.tempC, units())}` : undefined,
+      hint: this.heaterHint(),
     });
     this.syncers.push(() => {
       heaterOn.set(eq().heater.on);
@@ -273,7 +281,7 @@ export class CarePanel implements Panel {
     const l = e.lights;
     const onH = slider({ label: 'Lights on', min: 4, max: 14, step: 0.25, value: l.onHour, format: formatHour, onInput: (v) => this.setEquip({ lights: { onHour: v } }) });
     const offH = slider({ label: 'Lights off', min: 14, max: 24, step: 0.25, value: l.offHour, format: formatHour, onInput: (v) => this.setEquip({ lights: { offHour: v } }) });
-    const photo = h('span', { class: 'aq-hint' });
+    const photo = h('div', { class: 'aq-hint aq-field-note' });
     const paintPhoto = () => {
       const L = eq().lights;
       const hrs = Math.max(0, L.offHour - L.onHour);
@@ -320,7 +328,7 @@ export class CarePanel implements Panel {
     const afOn = toggle('Auto-feeder', af.enabled, (v) => app.setEquipment({ autoFeeder: { enabled: v } }), 'Feeds on schedule, even while you’re away');
     const foods = FOOD_LIST.filter((f) => f.buoyancy !== 'live-swimming' && f.buoyancy !== 'clip').map((f) => ({ value: f.kind, label: f.name }));
     const afFood = select<FoodKind>('Auto-feeder food', foods, af.food, (v) => app.setEquipment({ autoFeeder: { food: v } }));
-    const afPinches = stepper('pinches', af.pinches, 1, 5, (v) => app.setEquipment({ autoFeeder: { pinches: v } }), (v) => `${v} ${v === 1 ? 'pinch' : 'pinches'}`);
+    const afPinches = stepper('pinches', af.pinches, 1, 20, (v) => app.setEquipment({ autoFeeder: { pinches: v } }), (v) => `${v} ${v === 1 ? 'pinch' : 'pinches'}`);
     const times = h('div', { class: 'aq-times' });
     const renderTimes = () => {
       clear(times);
@@ -359,6 +367,17 @@ export class CarePanel implements Panel {
       section(marine ? 'Extras' : 'Plants', co2.el),
       section('Auto-feeder', afOn.el, h('div', { class: 'aq-field aq-field-inline' }, h('span', { class: 'aq-field-label' }, 'Food'), afFood.el), h('div', { class: 'aq-field aq-field-inline' }, h('span', { class: 'aq-field-label' }, 'Amount'), afPinches.el), h('div', { class: 'aq-field' }, h('span', { class: 'aq-field-label' }, 'Times'), times)),
     );
+  }
+
+  private heaterHint(): string | undefined {
+    const n = this.host.needs;
+    const units = this.host.app.world.settings.units;
+    if (!n.animals) return undefined;
+    if (n.tempPair) {
+      const t = n.tempPair;
+      return `Your animals’ ranges don’t overlap — ${t.low.name} up to ${formatTemp(t.low.max, units, 0)}, ${t.high.name} from ${formatTemp(t.high.min, units, 0)}.`;
+    }
+    return `Your animals are comfortable at ${formatTempRange(n.tempC, units)}`;
   }
 
   refresh(): void {

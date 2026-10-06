@@ -33,7 +33,7 @@ const ROOM_COLOR = new Color(1.0, 0.78, 0.58);
 /** Peak irradiance scale of the main bar at the surface (tuned with ACES exposure 1). */
 const KEY_INTENSITY = 5.0;
 const FILL_INTENSITY = 1.1;
-const MOON_INTENSITY = 0.55;
+const MOON_INTENSITY = 0.7;
 
 export class Lighting {
   readonly key: DirectionalLight;
@@ -133,6 +133,22 @@ export class Lighting {
     this.key.shadow.needsUpdate = true;
   }
 
+  /**
+   * Perceived lamp color: the eye (or a camera's white balance) adapts about halfway to the
+   * lamp, so a 14000 K reef light reads cool white-blue rather than deep blue, and a 2300 K
+   * sunrise warm rather than orange. Partial von Kries adaptation in linear RGB; luminance is
+   * kept (with a floor, since blue-heavy lamps are rated by PAR, not lumens).
+   */
+  static perceivedLightColor(rgb: readonly number[], out: Color, adapt = 0.5): Color {
+    const lum = (r: number, g: number, b: number) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    const L = Math.max(1e-4, lum(rgb[0], rgb[1], rgb[2]));
+    const k = 1 - adapt;
+    const r = Math.pow(rgb[0] / L, k), g = Math.pow(rgb[1] / L, k), b = Math.pow(rgb[2] / L, k);
+    const n = Math.max(1e-4, lum(r, g, b));
+    const target = Math.max(L, 0.88);
+    return out.setRGB((r / n) * target, (g / n) * target, (b / n) * target);
+  }
+
   /** Per frame: drive intensities/colors from the environment. */
   update(env: EnvState, dt: number): void {
     const s = this.smoothed;
@@ -142,7 +158,7 @@ export class Lighting {
     s.moon += (env.moonlight - s.moon) * k;
     s.room += (env.roomLight - s.room) * k;
     const day = s.day, moon = s.moon, room = s.room;
-    this.lightColor.setRGB(env.lightColor[0], env.lightColor[1], env.lightColor[2]);
+    Lighting.perceivedLightColor(env.lightColor, this.lightColor);
 
     // Key: daylight bar crossfades into the blue moon LEDs.
     const keyCol = this.tmpColor.copy(this.lightColor).multiplyScalar(day * KEY_INTENSITY);
