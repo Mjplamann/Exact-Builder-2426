@@ -309,6 +309,8 @@ uniform vec3 uIridColor;
 uniform float uGravidSpot;
 uniform float uFishTime;
 uniform float uTranslucency;
+uniform vec4 uFishSkin;   // wrap (soft terminator), transmission, glint strength, thin-edge rim
+uniform vec4 uFishSkin2;  // scale cells across the body atlas (u, v), saturation, fin (1) / body (0)
 varying vec4 vFishLook;
 varying vec4 vFishState;
 varying vec4 vFishBody;
@@ -321,6 +323,70 @@ vec3 fishHue(vec3 c, float h) {
   vec2 iq = vec2(I * cs - Q * sn, I * sn + Q * cs);
   return vec3(Y + 0.956 * iq.x + 0.621 * iq.y, Y - 0.272 * iq.x - 0.647 * iq.y, Y - 1.106 * iq.x + 1.703 * iq.y);
 }
+float fishHash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+// Per-fragment shading state, set in main() before the light loop and read by RE_Direct_Fish.
+float fishWrap = 0.0;      // soft terminator (light diffusing under the skin)
+float fishTrans = 0.0;     // diffuse transmission of light arriving from behind (fins, thin flesh)
+float fishGlint = 0.0;     // guanine glint strength
+float fishIri = 0.0;       // structural-colour mask
+float fishEyeLens = 0.0;   // 1 on the cornea
+vec3 fishGlintN = vec3(0.0, 0.0, 1.0);
+vec3 fishTransTint = vec3(1.0);
+vec3 fishGuanine = vec3(0.6);
+
+/**
+ * Animal skin under water (replaces RE_Direct_Physical):
+ *  - diffuse with a soft, slightly saturated terminator (subsurface wrap);
+ *  - diffuse transmission through thin tissue lit from behind (fins, translucent fish);
+ *  - the material's own GGX lobe (weak mucus sheen + broad guanine sheen, see main());
+ *  - sparse guanine glints: every scale is a slightly tilted mirror with a tight lobe;
+ *  - a crisp corneal catchlight on the eyes.
+ */
+void RE_Direct_Fish( const in IncidentLight directLight, const in vec3 geometryPosition, const in vec3 geometryNormal, const in vec3 geometryViewDir, const in vec3 geometryClearcoatNormal, const in PhysicalMaterial material, inout ReflectedLight reflectedLight ) {
+  vec3 L = directLight.direction;
+  float nl = dot( geometryNormal, L );
+  float dotNL = saturate( nl );
+  vec3 irradiance = dotNL * directLight.color;
+  vec3 specularBRDF = BRDF_GGX( L, geometryViewDir, geometryNormal, material );
+  reflectedLight.directSpecular += irradiance * specularBRDF * material.multiScatteringCompensation;
+  vec3 halfDir = normalize( L + geometryViewDir );
+  float dotVH = saturate( dot( geometryViewDir, halfDir ) );
+  vec3 F = F_Schlick( material.specularColorBlended, material.specularF90, dotVH );
+  vec3 diff = BRDF_Lambert( material.diffuseContribution ) * ( 1.0 - F );
+  // Soft terminator: light diffuses a little way under the skin before it re-emerges, deepened
+  // in colour by the longer path through pigment.
+  float w = fishWrap;
+  float wrapNL = saturate( ( nl + w ) / ( 1.0 + w ) ) / ( 1.0 + 0.35 * w );
+  float sss = w * smoothstep( -w, 0.0, nl ) * ( 1.0 - smoothstep( 0.0, 0.45, nl ) );
+  reflectedLight.directDiffuse += directLight.color * diff * ( wrapNL + 0.35 * sss * fishTransTint );
+  // Thin tissue transmits light that arrives from behind the surface.
+  if ( fishTrans > 0.0 ) {
+    float back = saturate( -nl );
+    float fwd = pow( saturate( dot( -geometryViewDir, L ) ), 4.0 );
+    reflectedLight.directDiffuse += directLight.color * diff * fishTransTint * fishTrans * ( back + 0.6 * fwd );
+  }
+  // Guanine glints (tight, sparse; fade out once a scale is smaller than a few pixels).
+  if ( fishGlint > 0.001 ) {
+    float nh = saturate( dot( fishGlintN, halfDir ) );
+    float a2 = 0.0035;
+    float dd = nh * nh * ( a2 - 1.0 ) + 1.0;
+    float D = a2 / ( PI * dd * dd );
+    reflectedLight.directSpecular += directLight.color * saturate( dot( fishGlintN, L ) ) * D * fishGlint * fishGuanine * 0.014;
+  }
+  // Clear, bulging cornea: one small, crisp catchlight.
+  if ( fishEyeLens > 0.5 ) {
+    float nh = saturate( dot( geometryNormal, halfDir ) );
+    float a2 = 0.005;
+    float dd = nh * nh * ( a2 - 1.0 ) + 1.0;
+    float D = a2 / ( PI * dd * dd );
+    reflectedLight.directSpecular += irradiance * D * 0.012;
+  }
+}
+#undef RE_Direct
+#define RE_Direct RE_Direct_Fish
 `;
 
 /** After map_fragment: night/rest coloration, individuality, stress pallor, gravid spot. */
@@ -344,7 +410,11 @@ export const FISH_FRAGMENT_COLOR = /* glsl */ `
       }
     #endif
     float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
-    c = max(mix(vec3(l), c, vFishLook.z), 0.0) * vFishLook.y;
+    // Seen through water, real pigment is a little less saturated than authored swatches;
+    // very saturated colours are compressed most.
+    float chroma = max(max(c.r, c.g), c.b) - min(min(c.r, c.g), c.b);
+    float sat = vFishLook.z * uFishSkin2.z * (1.0 - 0.12 * smoothstep(0.35, 0.8, chroma));
+    c = max(mix(vec3(l), c, sat), 0.0) * vFishLook.y;
     // Resting (night) fish pale and dull as chromatophores contract.
     float rest = restK * (1.0 - 0.6 * uNightMix);
     l = dot(c, vec3(0.2126, 0.7152, 0.0722));
@@ -366,6 +436,7 @@ export const FISH_FRAGMENT_IRID = /* glsl */ `
   #ifdef USE_MAP
   {
     float iri = texture2D(uOrmMap, vMapUv).r * uIridescence * (1.0 - 0.7 * vFishState.w);
+    fishIri = iri;
     if (iri > 0.002) {
       vec3 V = normalize(vViewPosition);
       float ndv = clamp(abs(dot(normal, V)), 0.0, 1.0);
@@ -387,7 +458,96 @@ export const FISH_FRAGMENT_IRID = /* glsl */ `
 export const FISH_FRAGMENT_TOPLIGHT = /* glsl */ `
   {
     vec3 fishWN = inverseTransformDirection(normal, viewMatrix);
-    diffuseColor.rgb *= 0.68 + 0.32 * smoothstep(-0.85, 0.55, fishWN.y);
+    diffuseColor.rgb *= 0.48 + 0.52 * smoothstep(-0.9, 0.7, fishWN.y);
+  }
+`;
+
+/**
+ * After lights_physical_fragment: per-fragment skin state for RE_Direct_Fish, and guanine optics.
+ * Guanine reflectors reflect broadband (silver) or their structural colour — not the pigment on
+ * top of them — so the metallic F0 is decoupled from the albedo, and the direct-light lobe of the
+ * reflectors is kept weak and broad (the platelets are not perfectly aligned) while the scales'
+ * glints and environment reflections carry the silver.
+ */
+export const FISH_FRAGMENT_SKIN = /* glsl */ `
+  {
+    float part = vFishBody.z;
+    bool isBody = part < 0.5;
+    bool isEye = part > 0.5 && part < 1.5;
+    float g = metalnessFactor;
+    vec3 silver = vec3(0.62, 0.65, 0.68);
+    fishGuanine = mix(silver, max(diffuseColor.rgb, uIridColor * 0.5), clamp(fishIri, 0.0, 1.0));
+    // The iris's reflectors are tinted by its own pigment (gold, copper, red, silver-blue).
+    if (isEye) fishGuanine = clamp(diffuseColor.rgb * 1.5 + 0.03, 0.0, 0.9);
+    // Env reflections (indirect, metallic path) use the guanine colour as F0.
+    material.diffuseColor = fishGuanine;
+    // Pigment cells sit above the reflectors: the pigment stays visible on silvery fish.
+    material.diffuseContribution = diffuseColor.rgb * (1.0 - 0.7 * g);
+    // Direct lobe: a faint wet sheen plus a weak, broad guanine sheen (never a blown blob).
+    material.specularColorBlended = mix(material.specularColor, fishGuanine * 0.07, g);
+    material.specularF90 = mix(material.specularF90, 0.6, g);
+    fishWrap = uFishSkin.x;
+    float thin = 1.0;
+    #ifdef USE_NORMALMAP
+      thin = texture2D(normalMap, vNormalMapUv).a;
+    #endif
+    fishTrans = uFishSkin.y * thin;
+    fishTransTint = mix(vec3(1.0), clamp(diffuseColor.rgb * 1.6 + vec3(0.12, 0.02, 0.0), 0.0, 1.5), 0.75);
+    fishEyeLens = isEye ? 1.0 : 0.0;
+    if (isEye) {
+      // The cornea mirrors the bright window of the surface above as a small, sharp catchlight.
+      material.roughness = mix(material.roughness, 0.07, 0.85);
+      material.specularColor = vec3(0.07);
+      material.specularColorBlended = mix(vec3(0.07), material.specularColorBlended, g);
+      material.specularF90 = 1.0;
+    }
+    #ifdef USE_MAP
+    if (isBody && uFishSkin2.x > 0.0) {
+      // Scale lattice in atlas space (staggered rows); each scale tilts its reflectors a little.
+      vec2 gc = vec2(vMapUv.x * uFishSkin2.x, vMapUv.y * uFishSkin2.y);
+      float row = floor(gc.y);
+      gc.x += 0.5 * mod(row, 2.0);
+      vec2 cell = floor(gc);
+      vec2 tilt = vec2(fishHash(cell), fishHash(cell + 17.3)) - 0.5;
+      #if defined( USE_NORMALMAP_TANGENTSPACE )
+        fishGlintN = normalize(normal + (tbn[0] * tilt.x + tbn[1] * tilt.y) * 0.95);
+      #else
+        fishGlintN = normal;
+      #endif
+      float fp = max(fwidth(gc.x), fwidth(gc.y));
+      float sparse = step(0.55, fishHash(cell + 3.1));
+      fishGlint = uFishSkin.z * (0.15 + 0.85 * g) * sparse * (1.0 - smoothstep(0.22, 0.6, fp)) * (1.0 - 0.8 * vFishState.w);
+    }
+    #endif
+  }
+`;
+
+/**
+ * Before lights_fragment_end: transmitted sky / environment light through thin tissue, and a
+ * faint bright rim where the light scatters out of the thin edges of small, translucent fish
+ * (it is what separates a 3 cm tetra from a dark background).
+ */
+export const FISH_FRAGMENT_TRANSMIT = /* glsl */ `
+  {
+    vec3 backIrr = vec3(0.0);
+    vec3 skyIrr = vec3(0.0);
+    #if NUM_HEMI_LIGHTS > 0
+      for (int i = 0; i < NUM_HEMI_LIGHTS; i++) {
+        backIrr += getHemisphereLightIrradiance(hemisphereLights[i], -geometryNormal);
+        skyIrr += hemisphereLights[i].skyColor;
+      }
+    #endif
+    #if defined( USE_ENVMAP ) && defined( ENVMAP_TYPE_CUBE_UV )
+      backIrr += getIBLIrradiance(-geometryNormal) * 0.5;
+    #endif
+    // Scattered light in water still comes mostly from above and from the open water in front:
+    // surfaces turning away toward the silhouette receive less of it (soft form shading instead
+    // of the flat, even ambient of a CG studio).
+    if (uFishSkin2.w < 0.5 && fishEyeLens < 0.5) reflectedLight.indirectDiffuse *= 0.55 + 0.45 * saturate(dot(geometryNormal, geometryViewDir));
+    vec3 lam = BRDF_Lambert(material.diffuseContribution);
+    if (fishTrans > 0.0) reflectedLight.indirectDiffuse += backIrr * lam * fishTransTint * fishTrans;
+    float rim = pow(1.0 - saturate(abs(dot(geometryNormal, geometryViewDir))), 3.0) * uFishSkin.w;
+    if (rim > 0.0) reflectedLight.indirectDiffuse += skyIrr * mix(lam * fishTransTint, vec3(0.06), 0.35) * rim;
   }
 `;
 
@@ -437,5 +597,7 @@ export function patchFishFragment(shader: WebGLProgramParametersWithUniforms, wi
   if (withIrid) fs = injectBefore(fs, '#include <emissivemap_fragment>', FISH_FRAGMENT_IRID);
   fs = injectBefore(fs, '#include <emissivemap_fragment>', FISH_FRAGMENT_TOPLIGHT);
   fs = injectAfter(fs, '#include <emissivemap_fragment>', FISH_FRAGMENT_RIM);
+  fs = injectAfter(fs, '#include <lights_physical_fragment>', FISH_FRAGMENT_SKIN);
+  fs = injectBefore(fs, '#include <lights_fragment_end>', FISH_FRAGMENT_TRANSMIT);
   shader.fragmentShader = fs;
 }

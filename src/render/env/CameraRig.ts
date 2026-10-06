@@ -9,10 +9,31 @@ import { substrateHeight, tankBounds } from '../../core/tankGeometry';
  * The camera always looks straight into the tank (along −z) from in front of the front glass,
  * apart from a small aim toward a followed fish, so verticals stay vertical like an
  * architectural photo. Motion uses critically damped springs: eases in and out, never overshoots.
+ *
+ * Optics of looking into water through a flat front pane:
+ *  - Eye height: a seated viewer's eye (or a photographer's lens) sits above the middle of the
+ *    tank, ~2/3 of the way up. The camera is raised by EYE_LIFT of the visible height and the
+ *    frame is re-centred with a lens shift (like a shift lens), so the framing on the front
+ *    glass is unchanged and verticals stay vertical.
+ *  - Refraction: a point at distance d behind a flat water/air interface appears at d/n
+ *    (paraxial, n = 1.333), so a real tank looks shallower than it is and the total-internal-
+ *    reflection band under the surface is a slim strip. For everything behind the glass, the
+ *    view from an eye at distance L in front of the glass through that compression is exactly
+ *    the view from a "virtual eye" n·L in front of the glass with a lens n× longer (tan of the
+ *    half-angle ÷ n): same framing on the glass, same apparent depth. So the rig works out the
+ *    real viewer's pose and then places the three.js camera at that virtual eye with the
+ *    narrower field. Everything stays a standard perspective camera in true world space —
+ *    shading, shadows, caustics, picking (`unproject`, raycasting) and `project()` need no
+ *    special cases, and `camera.position` is the point all in-water lines of sight converge
+ *    on (the right eye for water path lengths and underwater view angles).
  */
 
-/** Vertical field of view (deg): a "normal" lens; distance is derived from it. */
-const FOV = 30;
+/** Vertical field of view (deg): a ~50 mm "normal" lens; distance is derived from it. */
+const FOV = 26;
+/** How far above the frame centre the eye sits, as a fraction of the visible height (≈ eye at 2/3 height). */
+const EYE_LIFT = 0.17;
+/** Refractive index of water (front glass plane = refraction interface). */
+const WATER_N = 1.333;
 /** Drift amplitudes (m) and periods (s): a few cm of slow breathing, never seasick. */
 const DRIFT_AMP = new Vector3(0.012, 0.006, 0.01);
 /** Max user zoom (distance divisor) and the extra dolly when following a fish. */
@@ -82,8 +103,40 @@ export class CameraRig {
   private tmp = new Vector3();
   private tmp2 = new Vector3();
 
+  /** Refractive index of the water behind the front glass (1 = no refraction). */
+  private readonly n = WATER_N;
+  /** Lens shift: tangent of the frame centre's angle below the optical axis (≤ 0). */
+  private shiftTan = 0;
+
   constructor(aspect: number) {
     this.camera = new PerspectiveCamera(FOV, aspect, 0.03, 12);
+  }
+
+  /** Lens-shift term of the projection (element [9]), for cameras that must match this one (the surface mirror). */
+  get projShiftY(): number {
+    return this.shiftTan / Math.tan(MathUtils.degToRad(FOV) / 2);
+  }
+
+  /** True-space point → where it appears through the front glass (z compressed toward the glass). */
+  toApparent(v: Vector3): Vector3 {
+    if (v.z < this.frontZ) v.z = this.frontZ + (v.z - this.frontZ) / this.n;
+    return v;
+  }
+
+  /**
+   * Field of view (refraction: n× longer lens) + lens shift. Idempotent; call after anything
+   * that may have reset the projection (resize).
+   */
+  applyProjection(): void {
+    const cam = this.camera;
+    const fov = MathUtils.radToDeg(2 * Math.atan(Math.tan(MathUtils.degToRad(FOV) / 2) / this.n));
+    if (cam.fov !== fov) cam.fov = fov;
+    cam.updateMatrixWorld();
+    cam.updateProjectionMatrix();
+    // Lens shift: the frame centre sits shiftTan below the axis (same NDC offset for the real
+    // and the virtual eye, both tangents scale by 1/n).
+    cam.projectionMatrix.elements[9] += this.projShiftY;
+    cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();
   }
 
   /** (Re)compute the home framing for a tank and the current aspect. */
@@ -93,7 +146,8 @@ export class CameraRig {
     this.camera.updateProjectionMatrix();
     this.halfW = b.halfW;
     this.frontZ = b.halfD;
-    this.backZ = -b.halfD;
+    // Aim at the middle of the tank as it appears through the glass (depth compressed by n).
+    this.backZ = b.halfD - (2 * b.halfD) / this.n;
     // Front-glass rectangle to cover: from a little below the substrate line (so its
     // cross-section shows at the bottom) to just above the waterline (meniscus at the top).
     let frontSub = 0;
@@ -128,6 +182,7 @@ export class CameraRig {
       this.aimSpring.snap(this.desiredAim);
       this.initialized = true;
     }
+    this.applyProjection();
   }
 
   /** Forget the user's pan/zoom (e.g. a different tank). */
@@ -143,9 +198,10 @@ export class CameraRig {
     this.aimSpring.snap(this.desiredAim);
   }
 
+  /** Follow target in true world space (converted to where it appears through the glass). */
   setFocus(target: Vector3 | null): void {
     if (target) {
-      this.focusTarget.copy(target);
+      this.toApparent(this.focusTarget.copy(target));
       this.hasFocus = true;
     } else {
       this.hasFocus = false;
@@ -259,8 +315,22 @@ export class CameraRig {
     }
     // Never cross the front glass.
     cam.position.z = Math.max(cam.position.z, this.frontZ + MIN_GLASS_GAP);
+    // Raise the eye above the frame centre and shift the lens back down by the same amount on
+    // the glass plane: same framing, seen from ~2/3 of the way up.
+    const glassDist = cam.position.z - this.frontZ;
+    const lift = EYE_LIFT * 2 * glassDist * Math.tan(MathUtils.degToRad(FOV) / 2);
+    cam.position.y += lift;
+    aim.y += lift;
+    this.shiftTan = -lift / glassDist;
+    // Real viewer pose → the equivalent virtual eye n× farther from the glass. Its lens is n×
+    // longer, so an aim tilt keeps the same image shift with its tangent divided by n.
+    const dir = aim.sub(cam.position);
+    dir.x /= this.n;
+    dir.y /= this.n;
+    dir.normalize();
+    cam.position.z = this.frontZ + (cam.position.z - this.frontZ) * this.n;
     cam.up.set(0, 1, 0);
-    cam.lookAt(aim);
-    cam.updateMatrixWorld();
+    cam.lookAt(this.tmp2.copy(cam.position).add(dir));
+    this.applyProjection();
   }
 }

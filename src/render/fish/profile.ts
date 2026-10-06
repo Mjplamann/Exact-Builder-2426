@@ -71,6 +71,15 @@ export class BodyProfile {
   readonly nBot: number;
   /** Widest line as a fraction of the half-depth (−1 bottom … 1 top). */
   readonly wcFrac: number;
+  /**
+   * Lens factor of the upper / lower cross-section (1 = superellipse; ~2 = a lens that thins to
+   * a knife edge at the dorsal / ventral midline, as in discus, angelfish and tangs).
+   */
+  readonly lensTop: number;
+  readonly lensBot: number;
+  /** Knife-edged midlines get a crease (separate normals per flank) instead of a rounded top. */
+  readonly creaseTop: boolean;
+  readonly creaseBot: boolean;
 
   private Tmax: number;
   private Bmax: number;
@@ -89,6 +98,8 @@ export class BodyProfile {
   private tubeW: number;
   private tipW: number;
   private flare: number;
+  /** Short protruding snouts flow into a concave forehead / chin. */
+  private concave: boolean;
 
   constructor(body: ResolvedBody) {
     this.body = body;
@@ -112,7 +123,9 @@ export class BodyProfile {
     // Outline behind the deepest point: a superellipse quadrant — nearly straight taper in
     // slender fish, a round disc in deep-bodied ones (discus, angelfish) — filleted into the
     // peduncle.
-    this.pTail = (1.25 + 0.9 * clamp((D - 0.25) / 0.55, 0, 1)) * (1 - 0.2 * taper);
+    // Deep discs (discus, tangs, angels) taper into the peduncle behind the deepest point while
+    // the long dorsal and anal fins fill the outline out to a round silhouette.
+    this.pTail = (1.25 + 0.9 * clamp((D - 0.25) / 0.55, 0, 1) - 0.6 * smooth(0.45, 0.8, D)) * (1 - 0.2 * taper);
     this.xEnd = this.xPed + 0.05;
     if (b.skin === 'hex') {
       // The rigid carapace ends abruptly where the free peduncle begins.
@@ -137,13 +150,15 @@ export class BodyProfile {
     this.round = sn === 'blunt' ? 0.85 : sn === 'rounded' ? 0.5 : sn === 'beak' ? 0.6 : sn === 'upturned' ? 0.35 : sn === 'tubular' ? 0.4 : 0.18;
     this.tipW = (sn === 'blunt' || sn === 'beak' ? 0.34 : sn === 'rounded' ? 0.24 : 0.15) * (D / Math.max(0.02, b.width) > 3 ? 0.7 : 1);
 
+    this.concave = (sn === 'elongate' || sn === 'tubular') && D > 0.3;
     // Tube / needle / duckbill snout radii.
     if (sL > 0) {
       if (sn === 'duckbill') {
         this.tubeW = 0.045 + 0.1 * b.width;
         this.tubeT = this.tubeB = 0.25 * this.tubeW;
       } else if (sn === 'elongate') {
-        this.tubeW = this.tubeT = this.tubeB = 0.012 + 0.04 * D;
+        // Deep fish with a protruding snout keep a broader snout tip (a mouth, not a needle).
+        this.tubeW = this.tubeT = this.tubeB = 0.012 + 0.04 * D + (this.concave ? 0.05 * D : 0);
       } else {
         this.tubeT = this.tubeB = 0.02 + 0.06 * D;
         this.tubeW = this.tubeT * 0.9;
@@ -201,6 +216,15 @@ export class BodyProfile {
     this.nTop = nTop;
     this.nBot = nBot;
     this.wcFrac = wc;
+    // Lens-shaped sections: compressed fish thin toward the back and belly; very deep, thin
+    // fish (dw ≳ 5) end in a knife edge where the dorsal and anal fins attach.
+    let lens = 1;
+    if (b.section === 'compressed') lens = 1 + 0.95 * clamp((dw - 2) / 4, 0, 1);
+    else if (b.section === 'keeled') lens = 1.15;
+    this.lensTop = b.skin === 'hex' ? 1 : lens;
+    this.lensBot = b.skin === 'hex' ? 1 : b.section === 'keeled' ? 1.9 : 1 + (lens - 1) * (1 - vf);
+    this.creaseTop = this.lensTop > 1.35;
+    this.creaseBot = this.lensBot > 1.35;
 
     // Head landmarks.
     const HL = clamp(b.headLength, 0.06, 0.6);
@@ -258,7 +282,7 @@ export class BodyProfile {
   }
   private rayTail(x: number): number {
     const t = clamp((x - 0.45) / 0.55, 0, 1);
-    return x < 0.4 ? 0 : 0.03 * (1 - 0.85 * t);
+    return x < 0.4 ? 0 : 0.032 * Math.pow(1 - 0.9 * t, 1.6) + 0.0015;
   }
 
   /** Peduncle half-depth band (flares slightly toward the caudal base). */
@@ -270,7 +294,7 @@ export class BodyProfile {
   /** Dorsal outline height at x (SL units, not yet centered). */
   top(x: number): number {
     const b = this.body;
-    if (b.kind === 'ray') return Math.max(this.D * 0.6 * Math.pow(this.rayDisc(x), 0.8), this.rayTail(x) * 0.8, x < 0.02 ? 0 : 0.002);
+    if (b.kind === 'ray') return Math.max(this.D * 0.62 * Math.pow(this.rayDisc(x), 0.6) * (0.75 + 0.25 * bump(x, 0.3, 0.16)), this.rayTail(x) * 0.8, x < 0.02 ? 0 : 0.002);
     const sL = this.head.snoutLen ?? Math.max(0, b.snoutLength);
     const yTip = this.head.yTip ?? 0;
     let y: number;
@@ -281,7 +305,10 @@ export class BodyProfile {
     } else if (x < this.xT) {
       const u = (this.xT - x) / (this.xT - sL);
       const base = yTip + this.tubeT;
-      y = base + (this.Tmax - base) * quadrant(u, sL > 0 ? 1.5 : this.pHead);
+      let f = quadrant(u, sL > 0 ? 1.5 : this.pHead);
+      // A short protruding snout (tangs, butterflyfish, moorish idol) rises into a concave forehead.
+      if (sL > 0 && sL < 0.15 && this.concave) f = f * (1 - u) + Math.pow(1 - u, 1.6) * u;
+      y = base + (this.Tmax - base) * f;
     } else {
       const t = (x - this.xT) / (this.xEnd - this.xT);
       y = smax(this.Tmax * quadrant(t, this.pTail), this.pedBand(x), this.pedHalf * 0.6);
@@ -306,7 +333,9 @@ export class BodyProfile {
     } else if (x < this.xB) {
       const u = (this.xB - x) / (this.xB - sL);
       const base = yTip - this.tubeB;
-      y = base + (-this.Bmax - base) * quadrant(u, sL > 0 ? 1.5 : this.pThroat);
+      let f = quadrant(u, sL > 0 ? 1.5 : this.pThroat);
+      if (sL > 0 && sL < 0.15 && this.concave) f = f * (1 - u) + Math.pow(1 - u, 1.3) * u;
+      y = base + (-this.Bmax - base) * f;
     } else {
       const t = (x - this.xB) / (this.xEnd - this.xB);
       y = -smax(this.Bmax * quadrant(t, this.pTail * 0.95), this.pedBand(x), this.pedHalf * 0.6);
@@ -338,6 +367,9 @@ export class BodyProfile {
       const ped = 0.3 * (1 - 0.5 * clamp(b.tailTaper, 0, 1));
       const e = 0.5 + 0.5 * Math.cos(Math.PI * Math.pow(t, 0.9));
       w = Wm * (ped + (1 - ped) * e);
+      // Boxfish: the rigid box keeps its width to the rear plate, then the free, compressed
+      // caudal peduncle.
+      if (b.skin === 'hex') w = x < 0.78 ? Wm * (0.55 + 0.45 * quadrant(clamp((x - xw) / (0.8 - xw), 0, 1), 2.6)) : Math.min(Wm * 0.5, 0.032) * (1 - 0.3 * smooth(0.8, 1, x)) + Wm * 0.5 * (1 - smooth(0.76, 0.82, x));
     }
     // Never wider than reasonable for a very deep but thin fish near the tail.
     return Math.max(0.0005, w);
@@ -358,14 +390,24 @@ export class BodyProfile {
     const wc = (T + B) / 2 + this.wcFrac * (T - B) / 2;
     const hw = this.halfWidth(x);
     const c = Math.cos(ang), s = Math.sin(ang);
+    if (this.body.kind === 'ray') {
+      // Rays: the head and viscera form a raised central dome on a disc that thins to a knife-
+      // edged margin (the pectoral "wings"); the underside is nearly flat.
+      const zf = Math.abs(s);
+      const k = this.rayDisc(x) > 0.02 ? 1 : 0;
+      out[1] = hw * Math.sign(s) * zf;
+      const dome = Math.pow(Math.max(0, 1 - zf * zf), 1 + 1.4 * k);
+      out[0] = c >= 0 ? wc + (T - wc) * dome : wc - (wc - B) * Math.pow(Math.max(0, 1 - zf * zf), 0.5 + 0.4 * k);
+      return out;
+    }
     if (c >= 0) {
       const e = 2 / this.nTop;
       out[0] = wc + (T - wc) * Math.pow(c, e);
-      out[1] = hw * Math.sign(s) * Math.pow(Math.abs(s), e);
+      out[1] = hw * Math.sign(s) * Math.pow(Math.abs(s), e * this.lensTop);
     } else {
       const e = 2 / this.nBot;
       out[0] = wc - (wc - B) * Math.pow(-c, e);
-      out[1] = hw * Math.sign(s) * Math.pow(Math.abs(s), e);
+      out[1] = hw * Math.sign(s) * Math.pow(Math.abs(s), e * this.lensBot);
     }
     return out;
   }
@@ -375,12 +417,21 @@ export class BodyProfile {
     const T = this.top(x), B = this.bot(x);
     const wc = (T + B) / 2 + this.wcFrac * (T - B) / 2;
     const hw = this.halfWidth(x);
+    if (this.body.kind === 'ray') {
+      const k = this.rayDisc(x) > 0.02 ? 1 : 0;
+      const v = y >= wc ? clamp((y - wc) / Math.max(1e-5, T - wc), 0, 1) : clamp((wc - y) / Math.max(1e-5, wc - B), 0, 1);
+      const e = y >= wc ? 1 + 1.4 * k : 0.5 + 0.4 * k;
+      return hw * Math.sqrt(Math.max(0, 1 - Math.pow(v, 1 / e)));
+    }
+    // Inverse of ringPoint: v = c^(2/n) → c, then |z| = hw · s^(2·lens/n).
     if (y >= wc) {
       const v = clamp((y - wc) / Math.max(1e-5, T - wc), 0, 1);
-      return hw * Math.pow(1 - Math.pow(v, this.nTop), 1 / this.nTop);
+      const c = Math.pow(v, this.nTop / 2);
+      return hw * Math.pow(Math.max(0, 1 - c * c), this.lensTop / this.nTop);
     }
     const v = clamp((wc - y) / Math.max(1e-5, wc - B), 0, 1);
-    return hw * Math.pow(1 - Math.pow(v, this.nBot), 1 / this.nBot);
+    const c = Math.pow(v, this.nBot / 2);
+    return hw * Math.pow(Math.max(0, 1 - c * c), this.lensBot / this.nBot);
   }
 
   /** Approximate outward surface normal of the body at (x, y, z) via finite differences. */

@@ -14,6 +14,7 @@ import {
 import type { BackgroundKind, TankState } from '../../core/types';
 import { substrateHeight, tankBounds } from '../../core/tankGeometry';
 import { applyUnderwater } from '../underwater';
+import { GLOBALS } from '../globals';
 import { NOISE_GLSL, UW_PARS_GLSL, uwUniforms } from './glsl';
 
 /** Render layer for effects that must not appear in the surface reflection. */
@@ -41,10 +42,16 @@ const SHELL_LIGHT_GLSL = /* glsl */ `
 uniform float uRoom;
 const vec3 MOON_RGB = vec3(0.1, 0.24, 1.0);
 // Irradiance (relative) reaching a surface at p inside the water from the lamp/moon/room.
+// Walls are vertical: the light grazes them, so its ripple pattern is a faint play of stretched
+// lines near the top only (deeper down it is smeared out) — never a full-height curtain.
 vec3 shellLight(vec3 p, vec3 n) {
   float depth = uwSurfaceY - p.y;
   vec3 lamp = uwLightColor * uwDaylight * 0.55 + MOON_RGB * uwMoonlight * 0.07;
-  vec3 e = lamp * (depth > 0.0 ? uwDepthAtten(depth) * uwCaustics(p, n) : vec3(1.0));
+  vec3 e = lamp;
+  if (depth > 0.0) {
+    vec3 c = mix(vec3(1.0), uwCaustics(p, n), 0.55 * exp(-depth / 0.1));
+    e *= uwDepthAtten(depth) * c;
+  }
   return e + vec3(1.0, 0.8, 0.62) * uRoom * 0.02;
 }`;
 
@@ -98,11 +105,59 @@ vec3 backdropColor(vec3 p) {
     emit = roomView(vec2(u, v));
   }
   albedo *= 1.0 + film - 0.035;
-  return albedo * shellLight(p, vec3(0.0, 0.0, 1.0)) * 1.4 + emit;
+  vec3 col = albedo * shellLight(p, vec3(0.0, 0.0, 1.0)) * 1.4 + emit;
+  float depth = uwSurfaceY - p.y;
+  vec3 lamp = uwLightColor * uwDaylight + vec3(0.1, 0.24, 1.0) * uwMoonlight * 0.07;
+  if (k == 0 || k == 1 || k == 4) {
+    // Satin film right under the lamp: a soft sheen that fades down the back wall — the
+    // backdrop is never a perfectly uniform void.
+    float sheen = exp(-max(depth, 0.0) / 0.16) * (0.75 + 0.25 * (1.0 - u * u));
+    col += lamp * uwDepthAtten(max(depth, 0.0)) * sheen * (k == 1 ? 0.016 : 0.011);
+  } else if (depth > 0.0) {
+    // Light films/backlights: the surface ripples' light play shows near the top.
+    vec3 c = uwCaustics(p, normalize(vec3(0.0, 0.55, 0.85)));
+    col *= 1.0 + (c - 1.0) * 0.22 * exp(-depth / 0.1) * uwDaylight;
+  }
+  return col;
+}
+
+uniform sampler2D uwPrevFrame;
+uniform float uwGhost;
+uniform mat4 projectionMatrix; // (not predeclared in fragment shaders)
+// Faint mirror image of the tank interior in the back glass (black-backed tanks show the plants
+// again, softly, in the gaps). From the previous frame: the eye ray is reflected at the back pane
+// and assumed to meet the scenery at a typical depth; the result is blurred (out of focus,
+// rippled) and only a few percent strong.
+vec3 backGlassGhost(vec3 B) {
+  if (uwGhost < 0.5) return vec3(0.0);
+  int k = int(uKind + 0.5);
+  float R = k == 0 ? 0.018 : k == 4 ? 0.016 : k == 1 ? 0.012 : k == 5 ? 0.012 : 0.004;
+  vec3 d = normalize(B - uwCameraPos);
+  vec3 r = vec3(d.x, d.y, -d.z);
+  float zRep = -uwTankHalf.z * 0.3;
+  vec3 P = B + r * ((zRep - B.z) / max(r.z, 0.05));
+  vec4 c = projectionMatrix * viewMatrix * vec4(P, 1.0);
+  vec2 uv = c.xy / c.w * 0.5 + 0.5;
+  vec2 o = vec2(0.008, 0.014);
+  vec3 g = texture2D(uwPrevFrame, uv).rgb * 2.0
+         + texture2D(uwPrevFrame, uv + o).rgb + texture2D(uwPrevFrame, uv - o).rgb
+         + texture2D(uwPrevFrame, uv + vec2(o.x, -o.y)).rgb + texture2D(uwPrevFrame, uv - vec2(o.x, -o.y)).rgb;
+  g *= 1.0 / 6.0;
+  float inside = smoothstep(0.0, 0.06, uv.x) * smoothstep(1.0, 0.94, uv.x) * smoothstep(0.0, 0.06, uv.y) * smoothstep(1.0, 0.94, uv.y);
+  // The extra water path (back glass → scenery and back) absorbs a little more.
+  vec3 T = exp(-uwExtinction() * 2.0 * max(zRep - B.z, 0.0));
+  return g * T * R * inside;
 }`;
 
 function backdropUniforms(kind: BackgroundKind) {
-  return { ...uwUniforms(), uKind: { value: BACKGROUND_INDEX[kind] }, uRoom: { value: 0.2 }, uBacklight: { value: 1 } };
+  return {
+    ...uwUniforms(),
+    uKind: { value: BACKGROUND_INDEX[kind] },
+    uRoom: { value: 0.2 },
+    uBacklight: { value: 1 },
+    uwPrevFrame: GLOBALS.uPrevFrame,
+    uwGhost: GLOBALS.uGhost,
+  };
 }
 
 /** Background film/backlight behind the back glass, seen through the water. */
@@ -118,7 +173,7 @@ function backdropMaterial(kind: BackgroundKind): ShaderMaterial {
       ${BACKDROP_GLSL}
       varying vec3 vWorld;
       void main() {
-        vec3 col = uwVeil(backdropColor(vWorld), vWorld);
+        vec3 col = uwVeil(backdropColor(vWorld) + backGlassGhost(vWorld), vWorld);
         gl_FragColor = vec4(col, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
@@ -235,7 +290,11 @@ function frontGlassMaterial(): ShaderMaterial {
   });
 }
 
-/** Meniscus: water climbs ~3 mm up clean glass; seen from below the curved band shines silver. */
+/**
+ * Meniscus: water climbs ~3 mm up clean glass; seen from below the curved band shines silver.
+ * The back one is seen through the whole tank: fainter, and broken up by the ripples so it never
+ * reads as a ruled line.
+ */
 function meniscusMaterial(back: boolean): ShaderMaterial {
   return new ShaderMaterial({
     name: 'env.meniscus',
@@ -243,6 +302,7 @@ function meniscusMaterial(back: boolean): ShaderMaterial {
     vertexShader: WORLD_VERT,
     fragmentShader: /* glsl */ `
       ${UW_PARS_GLSL}
+      ${NOISE_GLSL}
       uniform float uBack;
       varying vec3 vWorld;
       void main() {
@@ -255,6 +315,11 @@ function meniscusMaterial(back: boolean): ShaderMaterial {
         float contact = exp(-pow((t - 1.0) / 0.12, 2.0));      // thin dark line where water meets glass
         vec3 lamp = uwLightColor * uwDaylight + vec3(0.1, 0.24, 1.0) * uwMoonlight * 0.25;
         vec3 silver = uwVeilColor * 6.0 + lamp * 0.45;
+        if (uBack > 0.5) {
+          float vary = 0.35 + 0.65 * smoothstep(0.25, 0.75, uwNoise(vec2(p.x * 9.0 + uwTime * 0.05, uwTime * 0.11)));
+          bright *= 0.4 * vary;
+          contact *= 0.5;
+        }
         vec3 rgb = silver * bright;
         float alpha = clamp(bright * 0.85 + contact * 0.45, 0.0, 1.0);
         if (uBack > 0.5) rgb *= uwTransmittance(p);

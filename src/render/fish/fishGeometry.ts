@@ -1,7 +1,7 @@
 import type { BufferGeometry } from 'three';
 import type { ResolvedBody } from './archetypes';
 import { ATLAS, bodyUV, cellUV } from './atlas';
-import { buildCaudalFin, buildMedianFin, buildPairedFins, caudalWebLength, packSideFlow } from './fins';
+import { buildCaudalFin, buildMedianFin, buildPairedFins, caudalWebLength, finEnvelope, packSideFlow } from './fins';
 import { GeoBuilder, PART } from './geometryBuilder';
 import { BodyProfile } from './profile';
 
@@ -78,7 +78,8 @@ function ringXs(n: number, xEnd: number): number[] {
 function buildBody(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody, lod: FishLod): void {
   const idx0 = gb.idx.length, v0 = gb.vertexCount;
   const H = prof.head;
-  const nr = lod.radial;
+  const nr = lod.radial + (lod.radial % 2);
+  const half = nr / 2;
   const xEnd = 1.0;
   const xs = ringXs(lod.rings, xEnd);
   const flat = clamp((body.width / Math.max(0.03, body.depth) - 0.7) / 0.8, 0, 1);
@@ -86,8 +87,14 @@ function buildBody(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody, lod: F
   const yz: [number, number] = [0, 0];
 
   // Per-ring arc-length parametrisation (for flat-bodied fish the texture follows the surface).
-  const arcY = new Float64Array(nr);
-  const ringY = new Float64Array(nr), ringZ = new Float64Array(nr);
+  const arcY = new Float64Array(nr + 1);
+  const ringY = new Float64Array(nr + 1), ringZ = new Float64Array(nr + 1);
+  // Each ring stores nr + 2 vertices: the left flank k = 0…half (dorsal → ventral midline) and the
+  // right flank k = half+1…nr+1 (ventral → dorsal), so the dorsal / ventral midline vertices exist
+  // once per flank. Knife-edged (lens) sections keep separate normals there — a crease where the
+  // fins attach instead of a rounded, light-catching rim; rounder sections are re-smoothed below.
+  const per = nr + 2;
+  const jOf = (k: number) => (k <= half ? k : k - 1);
 
   // Snout tip pole.
   const tipY = prof.top(0);
@@ -97,25 +104,25 @@ function buildBody(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody, lod: F
   for (const x of xs) {
     // Ring geometry.
     let arc = 0;
-    for (let j = 0; j < nr; j++) {
+    for (let j = 0; j <= nr; j++) {
       const ang = (j / nr) * Math.PI * 2;
       prof.ringPoint(x, ang, yz);
       ringY[j] = yz[0];
-      ringZ[j] = yz[1];
+      ringZ[j] = j === 0 || j === nr || j === half ? 0 : yz[1];
     }
     // Arc length from the top midline down the left (j ∈ [0, nr/2]).
-    const half = nr / 2;
     const cum = new Float64Array(half + 1);
     for (let j = 1; j <= half; j++) {
       arc += Math.hypot(ringY[j] - ringY[j - 1], ringZ[j] - ringZ[j - 1]);
       cum[j] = arc;
     }
-    for (let j = 0; j < nr; j++) {
+    for (let j = 0; j <= nr; j++) {
       const jj = j <= half ? j : nr - j;
       arcY[j] = 1 - (2 * cum[jj]) / Math.max(1e-6, arc);
     }
     ringStart.push(gb.vertexCount);
-    for (let j = 0; j < nr; j++) {
+    for (let k = 0; k < per; k++) {
+      const j = jOf(k);
       const y = ringY[j], z = ringZ[j];
       const py = prof.patternY(x, y);
       const ty = py + (arcY[j] - py) * flat;
@@ -129,21 +136,43 @@ function buildBody(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody, lod: F
   const endY = (prof.top(1) + prof.bot(1)) / 2;
   const end = gb.v(endX, endY, 0, ...bodyUV(1, 0, uv), endX, PART.body, 0, 0, 0);
 
-  // Triangles. Ring winding: j increases from the top over the left flank (+z) to the belly.
-  for (let j = 0; j < nr; j++) {
-    const a = ringStart[0] + j, b = ringStart[0] + ((j + 1) % nr);
-    gb.tri(tip, b, a);
+  // Triangles. Ring winding: k increases from the top over the left flank (+z) to the belly and
+  // back up the right flank; the two midline seams (k = half|half+1, k = nr+1|0) are not bridged.
+  const seam = (k: number) => k === half || k === nr + 1;
+  for (let k = 0; k < per; k++) {
+    if (seam(k)) continue;
+    gb.tri(tip, ringStart[0] + k + 1, ringStart[0] + k);
   }
   for (let r = 0; r < xs.length - 1; r++) {
-    for (let j = 0; j < nr; j++) {
-      const a = ringStart[r] + j, b = ringStart[r] + ((j + 1) % nr);
-      const c = ringStart[r + 1] + j, d = ringStart[r + 1] + ((j + 1) % nr);
+    for (let k = 0; k < per; k++) {
+      if (seam(k)) continue;
+      const a = ringStart[r] + k, b = ringStart[r] + k + 1;
+      const c = ringStart[r + 1] + k, d = ringStart[r + 1] + k + 1;
       gb.quad(a, b, d, c);
     }
   }
   const lr = ringStart[xs.length - 1];
-  for (let j = 0; j < nr; j++) gb.tri(lr + j, lr + ((j + 1) % nr), end);
+  for (let k = 0; k < per; k++) {
+    if (seam(k)) continue;
+    gb.tri(lr + k, lr + k + 1, end);
+  }
   gb.smoothNormals(idx0, v0);
+  // Rounded midlines: average the two flanks' normals (smooth back / belly).
+  const nor = gb.nor;
+  const weld = (a: number, b: number) => {
+    let nx = nor[a * 3] + nor[b * 3], ny = nor[a * 3 + 1] + nor[b * 3 + 1], nz = nor[a * 3 + 2] + nor[b * 3 + 2];
+    const l = Math.hypot(nx, ny, nz) || 1;
+    nx /= l;
+    ny /= l;
+    nz /= l;
+    nor[a * 3] = nor[b * 3] = nx;
+    nor[a * 3 + 1] = nor[b * 3 + 1] = ny;
+    nor[a * 3 + 2] = nor[b * 3 + 2] = nz;
+  };
+  for (const rs of ringStart) {
+    if (!prof.creaseTop) weld(rs, rs + nr + 1);
+    if (!prof.creaseBot) weld(rs + half, rs + half + 1);
+  }
 
   function jawWeight(x: number, y: number): number {
     if (body.mouth === 'inferior' || body.mouth === 'sucker') return 0;
@@ -179,9 +208,9 @@ function buildEyes(gb: GeoBuilder, prof: BodyProfile, lod: FishLod): void {
   const l1 = Math.hypot(t1[0], t1[1], t1[2]) || 1;
   t1 = [t1[0] / l1, t1[1] / l1, t1[2] / l1];
   const t2 = [N[1] * t1[2] - N[2] * t1[1], N[2] * t1[0] - N[0] * t1[2], N[0] * t1[1] - N[1] * t1[0]];
-  // Fish eyes sit nearly flush; only the lens bulges a little through the iris.
-  const cx = H.eyeX + N[0] * -0.16 * R, cy = H.eyeY + N[1] * -0.16 * R, cz = H.eyeZ + N[2] * -0.16 * R;
-  const depthR = 0.46 * R;
+  // Fish eyes sit nearly flush in the socket; the clear cornea bulges over the lens.
+  const cx = H.eyeX + N[0] * -0.22 * R, cy = H.eyeY + N[1] * -0.22 * R, cz = H.eyeZ + N[2] * -0.22 * R;
+  const depthR = 0.58 * R;
   const nLat = lod.eyeLat, nLon = lod.eyeLon;
   const uv: [number, number] = [0, 0];
   for (const side of [1, -1]) {
@@ -296,6 +325,7 @@ function tube(
 
 function buildBarbels(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): void {
   const n = Math.round(clamp(body.barbels, 0, 12));
+  if (n <= 0 || body.barbelLength <= 0) return;
   const H = prof.head;
   const L = clamp(body.barbelLength, 0.01, 1.2);
   const D = body.depth;
@@ -361,15 +391,22 @@ function buildExtras(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): voi
   const H = prof.head;
   // Cowfish horns: a pair above the eyes pointing forward, a pair at the rear of the carapace.
   if (body.horns > 0) {
+    // Long, tapering bony horns: a forward pair over the eyes and a backward pair at the rear
+    // corners of the carapace floor.
     const k = body.horns;
-    const hx = H.eyeX - 0.01, hy = prof.top(hx) - 0.01;
+    const hx = H.eyeX - 0.005, hy = prof.top(hx) - 0.012;
     for (const side of [1, -1]) {
-      const hz = side * prof.halfWidth(hx) * 0.35;
-      tube(gb, hx, hy, hz, -1, 0.35, side * 0.15, 0.11 * k, 0.018, 0.003, 0, 4, 6, PART.body, hx, hx, 0.85, 0.5);
-      const rx = 0.66, ry = prof.bot(rx) + 0.015;
-      const rz = side * prof.halfWidth(rx) * 0.75;
-      tube(gb, rx, ry, rz, 1, -0.15, side * 0.25, 0.1 * k, 0.016, 0.003, 0, 4, 6, PART.body, rx, rx, -0.85, 0.5);
+      const hz = side * prof.halfWidth(hx) * 0.3;
+      tube(gb, hx, hy, hz, -1, 0.22, side * 0.12, 0.17 * k, 0.017, 0.0015, 0, 6, 6, PART.body, hx, hx, 0.85, 0.5);
+      const rx = 0.74, ry = prof.bot(rx) + 0.012;
+      const rz = side * prof.halfWidth(rx) * 0.7;
+      tube(gb, rx, ry, rz, 1, -0.12, side * 0.2, 0.16 * k, 0.015, 0.0015, 0, 6, 6, PART.body, rx, rx, -0.85, 0.5);
     }
+  }
+  // Rays: a serrated venomous spine on top of the tail, pointing back.
+  if (body.kind === 'ray' && body.tailTaper >= 0.9) {
+    const sx = 0.66, sy = prof.top(sx) - 0.001;
+    tube(gb, sx, sy, 0, 1, 0.12, 0, 0.075, 0.0045, 0.0006, 0, 5, 4, PART.body, sx, sx, 0.2, 0.9);
   }
   // Cirri: small fleshy tentacles above the eyes (blennies, hawkfish, lionfish).
   if (body.cirri > 0) {
@@ -475,14 +512,18 @@ export function buildFishParts(body: ResolvedBody, lod: FishLod): { gb: GeoBuild
   const fb = new GeoBuilder();
   const fo = { nu: lod.finU, nw: lod.finW };
   const nuFor = (f: { start: number; end: number }) => Math.max(4, Math.round(fo.nu * clamp((f.end - f.start) * 4 + 0.5, 0.6, 1.6)));
-  if (body.dorsal) buildMedianFin(fb, prof, body.dorsal, PART.dorsal, ATLAS.dorsal, false, { nu: nuFor(body.dorsal), nw: fo.nw });
+  if (body.dorsal) {
+    const envelope = finEnvelope(prof, body, body.dorsal, false) ?? undefined;
+    buildMedianFin(fb, prof, body.dorsal, PART.dorsal, ATLAS.dorsal, false, { nu: nuFor(body.dorsal) + (envelope ? 4 : 0), nw: fo.nw }, { envelope });
+  }
   if (body.dorsal2) buildMedianFin(fb, prof, body.dorsal2, PART.dorsal2, ATLAS.dorsal2, false, fo);
   if (body.anal) {
     if (body.gonopodium) {
       const g = { start: body.anal.start - 0.04, end: body.anal.start, height: 0.2, shape: 'pointed' as const, trail: 0 };
       buildMedianFin(fb, prof, g, PART.anal, ATLAS.anal, true, { nu: 3, nw: fo.nw }, { rake: 0.75, flow: 0.05 });
     } else {
-      buildMedianFin(fb, prof, body.anal, PART.anal, ATLAS.anal, true, { nu: nuFor(body.anal), nw: fo.nw }, { twin: body.twinAnal });
+      const envelope = body.twinAnal ? undefined : finEnvelope(prof, body, body.anal, true) ?? undefined;
+      buildMedianFin(fb, prof, body.anal, PART.anal, ATLAS.anal, true, { nu: nuFor(body.anal) + (envelope ? 4 : 0), nw: fo.nw }, { twin: body.twinAnal, envelope });
     }
   }
   if (body.adipose && (!body.dorsal || body.dorsal.end < 0.8)) {

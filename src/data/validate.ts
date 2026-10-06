@@ -54,6 +54,7 @@ function validatePattern(errs: string[], field: string, p: Pattern) {
   optNum(errs, `${field}.count`, anyP.count, 1, 60);
   optNum(errs, `${field}.scale`, anyP.scale, 0.01, 50);
   optNum(errs, `${field}.slant`, anyP.slant, -1.5, 1.5);
+  optNum(errs, `${field}.curve`, anyP.curve, -1, 1);
   if (anyP.ring !== undefined) color(errs, `${field}.ring`, anyP.ring);
 }
 

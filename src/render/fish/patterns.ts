@@ -21,6 +21,8 @@ export interface Surface {
   /** Body only: eye center in pattern coords (for 'mask'). */
   eyeX?: number;
   eyeY?: number;
+  /** Body only: x of the gill-cover (opercle) rear edge — bars just behind it follow its arc. */
+  opX?: number;
   /** Seed for jitter. */
   seed: number;
   /** True when painting a fin (patterns default to the whole fin). */
@@ -160,6 +162,29 @@ function maxv(m: Float32Array, i: number, v: number): void {
   if (v > m[i]) m[i] = v;
 }
 
+/**
+ * Curvature of a vertical band (bars / full-height regions): the explicit `curve`, or — for a band
+ * spanning the full height on the body — an automatic one: bands just behind the head follow the
+ * convex arc of the gill cover; bands further back bow gently with the body's roundness.
+ */
+export function bandCurve(s: Surface, explicit: number | undefined, xCenter: number, fullHeight: boolean): number {
+  if (explicit !== undefined) return clamp(explicit, -1, 1);
+  if (s.fin || !fullHeight) return 0;
+  const op = s.opX;
+  if (op === undefined) return 0;
+  // Head zone: from mid-cheek to a little behind the opercle.
+  const head = smooth(op + 0.16, op + 0.05, xCenter) * smooth(op - 0.2, op - 0.08, xCenter);
+  return 0.12 + 0.6 * head;
+}
+
+/** Sideways offset (pattern-x units) of a curved band at height y (hd = physical half-height). */
+export function bandOffset(curve: number, y: number, hd: number): number {
+  if (curve === 0) return 0;
+  // Peak slightly below the lateral line, like the opercle's rear margin.
+  const t = (y + 0.08) / 1.08;
+  return curve * 0.32 * hd * (1 - t * t);
+}
+
 /** Soft disc / ellipse splat (rx in x units, ry in y units). */
 function splatEllipse(s: Surface, m: Float32Array, cx: number, cy: number, rx: number, ry: number, soft: number, strength = 1): void {
   if (rx <= 0 || ry <= 0) return;
@@ -218,15 +243,22 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
       const spacing = n > 1 ? (x1 - x0) / (n - 1) : 1;
       const [r0, r1] = rowRange(s, y0 - 0.1, y1 + 0.1);
       const wob = (s.seed % 997) * 0.37;
+      const full = y0 <= -0.85 && y1 >= 0.85;
+      const curves = new Float32Array(n);
+      for (let i = 0; i < n; i++) curves[i] = bandCurve(s, p.curve, n > 1 ? x0 + i * spacing : (x0 + x1) / 2, full);
       for (let r = r0; r <= r1; r++) {
         const y = s.py[r];
         const ey = smooth(y0 - 0.06, y0 + 0.06, y) * (1 - smooth(y1 - 0.06, y1 + 0.06, y));
         if (ey <= 0) continue;
         for (let c = 0; c < W; c++) {
           // Slant is a physical angle: shift x by slant × height above the lateral line.
-          const xs = s.px[c] - slant * y * s.hd[c];
+          let xs = s.px[c] - slant * y * s.hd[c];
           let i = n > 1 ? Math.round((xs - x0) / spacing) : 0;
           i = clamp(i, 0, n - 1);
+          if (curves[i] !== 0) {
+            xs -= bandOffset(curves[i], y, s.hd[c]);
+            i = clamp(n > 1 ? Math.round((xs - x0) / spacing) : 0, 0, n - 1);
+          }
           const cx = n > 1 ? x0 + i * spacing : (x0 + x1) / 2;
           // Natural bars have slightly irregular edges.
           const wobble = 1 + 0.12 * (fastNoise(y * 3 + i * 7.3, wob) - 0.5);
@@ -281,12 +313,15 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
       const sf = Math.max(p.softness ?? 0.02, 0);
       const sx = Math.max(sf, ax * 0.75), sy = Math.max(sf * 2, ay * 0.75);
       const openL = x0 <= 0.001, openR = x1 >= 0.999, openB = y0 <= -0.999, openT = y1 >= 0.999;
+      // A full-height band (both x edges inside the body) may curve with the body.
+      const band = !openL && !openR && x1 - x0 < 0.3;
+      const curve = band ? bandCurve(s, p.curve, (x0 + x1) / 2, y0 <= -0.85 && y1 >= 0.85) : clamp(p.curve ?? 0, -1, 1);
       for (let r = 0; r < Hh; r++) {
         const y = s.py[r];
         const ey = (openB ? 1 : smooth(y0 - sy / 2, y0 + sy / 2, y)) * (openT ? 1 : 1 - smooth(y1 - sy / 2, y1 + sy / 2, y));
         if (ey <= 0) continue;
         for (let c = 0; c < W; c++) {
-          const x = s.px[c];
+          const x = curve !== 0 ? s.px[c] - bandOffset(curve, y, s.hd[c]) : s.px[c];
           const ex = (openL ? 1 : smooth(x0 - sx / 2, x0 + sx / 2, x)) * (openR ? 1 : 1 - smooth(x1 - sx / 2, x1 + sx / 2, x));
           if (ex > 0) maxv(m, r * W + c, ex * ey);
         }

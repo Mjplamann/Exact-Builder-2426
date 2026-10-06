@@ -50,7 +50,8 @@ export class Motes {
           p = lo + mod(p - lo, size);
           vec4 mv = viewMatrix * vec4(p, 1.0);
           gl_Position = projectionMatrix * mv;
-          float dist = -mv.z;
+          // Apparent distance (the projection includes the refraction at the front glass).
+          float dist = gl_Position.w;
           // Physical size 0.05–0.3 mm → sub-pixel; draw ≥1.2 px and spread energy when larger.
           float sizeM = mix(0.00005, 0.0003, aSeed.w * aSeed.w);
           float px = sizeM * uPixelScale / dist;
@@ -61,9 +62,10 @@ export class Motes {
           float energy = max(px, 1.0) * max(px, 1.0) / (ps * ps);
           // Light: catches the shafts; a faint glow from the ambient water light.
           float depth = uwSurfaceY - p.y;
-          float shaft = uwShaft(p, 2.5);
+          // Specks flare where they drift through a light beam (that is what makes beams visible).
+          float beam = uwBeams(p);
           vec3 lamp = uwLightColor * uwDaylight + vec3(0.1, 0.24, 1.0) * uwMoonlight * 0.2;
-          vec3 lit = lamp * uwDepthAtten(depth) * (0.25 + 1.3 * max(shaft - 0.6, 0.0)) + uwVeilColor * 1.5;
+          vec3 lit = lamp * uwDepthAtten(depth) * (0.25 + 2.5 * beam) + uwVeilColor * 1.5;
           // Fade near walls, floor and surface so wrapping is never seen.
           vec3 e = min(p - lo, lo + size - p);
           float edge = smoothstep(0.0, 0.03, min(min(e.x, e.y), e.z));

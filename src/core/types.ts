@@ -236,10 +236,15 @@ export type Color = string;
  */
 export type Pattern =
   | { type: 'stripe'; color: Color; y: number; width: number; x0?: number; x1?: number; glow?: number; iridescent?: boolean }
-  | { type: 'bars'; color: Color; count: number; width: number; x0?: number; x1?: number; slant?: number; y0?: number; y1?: number }
+  /**
+   * `curve` (−1..1, optional): bows the bars sideways along their height so they follow the body's
+   * curvature (+ = the middle bulges toward the tail, like a clownfish head bar following the gill
+   * cover). Bars/regions spanning the full height just behind the head curve automatically.
+   */
+  | { type: 'bars'; color: Color; count: number; width: number; x0?: number; x1?: number; slant?: number; y0?: number; y1?: number; curve?: number }
   | { type: 'spots'; color: Color; density: number; size: number; x0?: number; x1?: number; y0?: number; y1?: number; jitter?: number }
   | { type: 'blotch'; color: Color; x: number; y: number; rx: number; ry: number; ring?: Color }
-  | { type: 'region'; color: Color; x0?: number; x1?: number; y0?: number; y1?: number; softness?: number }
+  | { type: 'region'; color: Color; x0?: number; x1?: number; y0?: number; y1?: number; softness?: number; curve?: number }
   | { type: 'reticulate'; color: Color; scale: number; thickness?: number }
   | { type: 'marble'; color: Color; scale: number; amount: number }
   | { type: 'scales'; color: Color; contrast: number }

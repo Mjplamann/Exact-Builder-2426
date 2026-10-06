@@ -4,7 +4,7 @@ import {
   Group,
   MathUtils,
   Mesh,
-  PCFShadowMap,
+  BasicShadowMap,
   PerspectiveCamera,
   Ray,
   Scene,
@@ -39,17 +39,20 @@ interface QualityPreset {
   bloom: boolean;
   caustics: number;
   motes: number;
+  /** Light beams alive at once. */
   rays: number;
   reflection: number;
   substrateTexture: number;
   frontReflections: boolean;
+  /** Soft-shadow taps: blocker search, filter. */
+  shadowTaps: [number, number];
 }
 
 export const QUALITY_PRESETS: Record<Quality, QualityPreset> = {
-  low: { dpr: 1, shadows: false, shadowMap: 1024, post: false, msaa: 0, bloom: false, caustics: 256, motes: 110, rays: 4, reflection: 0, substrateTexture: 256, frontReflections: false },
-  medium: { dpr: 1, shadows: true, shadowMap: 1024, post: true, msaa: 2, bloom: true, caustics: 512, motes: 220, rays: 6, reflection: 0.35, substrateTexture: 512, frontReflections: true },
-  high: { dpr: 1.5, shadows: true, shadowMap: 2048, post: true, msaa: 4, bloom: true, caustics: 512, motes: 360, rays: 9, reflection: 0.5, substrateTexture: 512, frontReflections: true },
-  ultra: { dpr: 2, shadows: true, shadowMap: 4096, post: true, msaa: 4, bloom: true, caustics: 1024, motes: 600, rays: 13, reflection: 0.75, substrateTexture: 512, frontReflections: true },
+  low: { dpr: 1, shadows: false, shadowMap: 1024, post: false, msaa: 0, bloom: false, caustics: 256, motes: 110, rays: 10, reflection: 0, substrateTexture: 256, frontReflections: false, shadowTaps: [4, 4] },
+  medium: { dpr: 1, shadows: true, shadowMap: 1024, post: true, msaa: 2, bloom: true, caustics: 512, motes: 220, rays: 16, reflection: 0.35, substrateTexture: 512, frontReflections: true, shadowTaps: [6, 8] },
+  high: { dpr: 1.5, shadows: true, shadowMap: 2048, post: true, msaa: 4, bloom: true, caustics: 512, motes: 360, rays: 24, reflection: 0.5, substrateTexture: 512, frontReflections: true, shadowTaps: [10, 14] },
+  ultra: { dpr: 2, shadows: true, shadowMap: 4096, post: true, msaa: 4, bloom: true, caustics: 1024, motes: 600, rays: 32, reflection: 0.75, substrateTexture: 512, frontReflections: true, shadowTaps: [12, 16] },
 };
 
 /** Moonlight LEDs (linear), for the veil color. */
@@ -61,6 +64,10 @@ const MOON = new Color(0.1, 0.24, 1.0);
  * OWNER: environment module. Public API (used by other modules): `scene`, `camera`, `contents`,
  * `renderer`, `globals`, `update`, `render`, `resize`, `rebuildTank`, `setQuality`, `setFocus`,
  * `nudgeView`, `rayFromScreen`.
+ *
+ * The camera is a standard perspective camera placed at the refraction-corrected eye (see
+ * CameraRig): `project()`, `unproject()` and raycasts from it are true world-space lines of sight
+ * through the front glass, so they line up with what is drawn.
  *
  * Conventions for content added under `contents`:
  *  - Meshes cast shadows automatically (the Engine enables `castShadow` on every mesh it finds
@@ -102,6 +109,8 @@ export class Engine {
   /** Surface agitation (flow + air stones) driving how fast caustics evolve. */
   private causticAgitation = 1;
   private shadowScanTimer = 0;
+  /** The post chain has captured at least one frame (back-glass reflection source). */
+  private ghostReady = false;
   private builtFor: { size: TankSize; substrate: SubstrateKind; background: BackgroundKind; depthF: number; depthB: number; seed: number } | null = null;
   private size = new Vector2();
   private tmpColor = new Color();
@@ -115,7 +124,9 @@ export class Engine {
     this.renderer.outputColorSpace = SRGBColorSpace;
     this.renderer.toneMapping = ACESFilmicToneMapping;
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = PCFShadowMap;
+    // Raw depth shadow map: every lit material filters it with the water-aware soft-shadow
+    // lookup injected by applyUnderwater (PCSS; see env/glsl.ts).
+    this.renderer.shadowMap.type = BasicShadowMap;
     // Shadows are re-rendered once per frame by whichever pass renders first (see render()).
     this.renderer.shadowMap.autoUpdate = false;
 
@@ -167,6 +178,7 @@ export class Engine {
     this.rays.build(t);
     this.lighting.fit(t);
     this.bubbles.clear();
+    this.ghostReady = false; // the last frame showed another tank
     this.builtFor = { size: { ...t.size }, substrate: t.substrate, background: t.background, depthF: t.substrateDepthFrontCm, depthB: t.substrateDepthBackCm, seed: t.seed };
     if (sizeChanged) this.rig.resetView();
     this.frameCamera();
@@ -190,6 +202,7 @@ export class Engine {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, p.dpr));
     this.renderer.shadowMap.enabled = p.shadows;
     this.lighting.setShadows(p.shadows, p.shadowMap);
+    GLOBALS.uShadowTaps.value.set(p.shadowTaps[0], p.shadowTaps[1]);
     if (!this.caustics || this.caustics.target.width !== p.caustics) {
       this.caustics?.dispose();
       this.caustics = new Caustics(p.caustics);
@@ -200,6 +213,7 @@ export class Engine {
     if (this.builtFor && prev.substrateTexture !== p.substrateTexture) this.buildSubstrate();
     this.post?.dispose();
     this.post = null;
+    this.ghostReady = false;
     this.resize();
   }
 
@@ -251,13 +265,17 @@ export class Engine {
     GLOBALS.uTankHalf.value.set(b.halfW, b.height, b.halfD);
     const cur = env.current;
     GLOBALS.uCurrent.value.set(cur.dir[0] * cur.speed, cur.dir[2] * cur.speed);
+    // Shadow softness follows the source: the daylight bar is a long, wide emitter (soft,
+    // elongated penumbrae); the moonlight is a couple of small LEDs (crisper, fainter shadows).
+    const dayW = day / Math.max(1e-3, day + moon * 0.6);
+    GLOBALS.uShadowSoft.value.set(MathUtils.lerp(0.1, 0.3, dayW), MathUtils.lerp(0.05, 0.12, dayW), 0.002, MathUtils.lerp(0.8, 0.6, dayW));
 
     // Veil: light scattered toward the eye by the water itself. Its hue is the light after a
     // typical path through the water (red absorbed first), so it reads blue-green — or amber
     // when tannins stain the water.
     const tint = GLOBALS.uWaterTint.value;
     const veil = GLOBALS.uVeilColor.value;
-    veil.copy(GLOBALS.uLightColor.value).multiplyScalar(day * 0.2);
+    veil.copy(GLOBALS.uLightColor.value).multiplyScalar(day * 0.23);
     veil.add(this.tmpColor.copy(MOON).multiplyScalar(moon * 0.03));
     veil.add(this.tmpColor.setRGB(0.9, 0.75, 0.6).multiplyScalar(room * 0.004));
     veil.multiply(this.tmpColor.setRGB(tint.r * tint.r * 0.62, tint.g * tint.g * 0.95, tint.b * tint.b * 1.0));
@@ -273,7 +291,8 @@ export class Engine {
     drift.w += (GLOBALS.uCurrent.value.y * dt) / 0.17 * 0.22 + dt * 0.003;
     this.causticAgitation = agitation;
 
-    // Camera.
+    // Camera. It sits at the refraction-corrected (virtual) eye through which every in-water
+    // line of sight passes (see CameraRig), which is also the eye for water path lengths.
     this.rig.drift = world.settings.cameraDrift;
     this.rig.update(dt);
     GLOBALS.uCameraPos.value.copy(this.camera.position);
@@ -288,7 +307,7 @@ export class Engine {
     this.surface.update(dt, agitation);
     const pixelScale = this.size.y / (2 * Math.tan(MathUtils.degToRad(this.camera.fov) / 2));
     this.bubbles.setPixelScale(pixelScale);
-    const focusDist = this.camera.position.z; // distance to the tank's mid-depth plane
+    const focusDist = this.camera.position.z; // (virtual-eye) distance to the tank's mid-depth plane
     this.motes.update(dt, GLOBALS.uCurrent.value.x, GLOBALS.uCurrent.value.y, t.waterParams.cloudiness ?? 0, pixelScale, focusDist);
     // Backlights (frosted/gradient films) run on the light timer.
     this.shell.update(t, room, Math.max(day, 0.0), this.preset.frontReflections);
@@ -330,27 +349,42 @@ export class Engine {
 
   render(): void {
     const r = this.renderer;
+    // Someone may have reset the projection (resize): re-apply the field of view + lens shift.
+    this.rig.applyProjection();
     this.caustics?.render(r, this.dt, this.causticAgitation);
     r.shadowMap.needsUpdate = true;
+    this.rays.setShadow(this.lighting.key, this.preset.shadows);
     const b = GLOBALS.uTankHalf.value;
-    this.surface.renderReflection(r, this.scene, this.camera, GLOBALS.uSurfaceY.value, b.x, b.z);
-    if (this.post && this.preset.post) {
-      this.post.render(this.exposure, GLOBALS.uTime.value);
+    // The back-glass reflection of the interior samples the previous frame (post chain only, once
+    // one has been captured for this tank); never in the mirrored surface pass, whose screen
+    // mapping differs.
+    GLOBALS.uGhost.value = 0;
+    this.surface.renderReflection(r, this.scene, this.camera, GLOBALS.uSurfaceY.value, b.x, b.z, this.rig.projShiftY);
+    const post = this.preset.post ? this.post : null;
+    if (post) {
+      GLOBALS.uPrevFrame.value = post.prevFrame;
+      GLOBALS.uGhost.value = this.ghostReady ? 1 : 0;
+      post.render(this.exposure, GLOBALS.uTime.value);
     } else {
       r.render(this.scene, this.camera);
     }
+    this.ghostReady = !!post;
   }
 
   // ------------------------------------------------------------------------------------------
   // Camera API
   // ------------------------------------------------------------------------------------------
 
-  /** World-space ray through a point in client (CSS pixel) coordinates. */
+  /**
+   * World-space ray through a point in client (CSS pixel) coordinates: the true path of that
+   * line of sight inside the water (refraction at the front glass included — the camera sits at
+   * the refraction-corrected eye, see CameraRig), so it hits exactly what is drawn there.
+   */
   rayFromScreen(clientX: number, clientY: number): Ray {
     const rect = this.canvas.getBoundingClientRect();
     const nx = ((clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1;
     const ny = -((clientY - rect.top) / Math.max(1, rect.height)) * 2 + 1;
-    this.camera.updateMatrixWorld();
+    this.rig.applyProjection();
     const origin = new Vector3().setFromMatrixPosition(this.camera.matrixWorld);
     const dir = this.tmpV.set(nx, ny, 0.5).unproject(this.camera).sub(origin).normalize();
     return new Ray(origin, dir.clone());

@@ -58,10 +58,12 @@ export class Lighting {
     this.key.name = 'env.key';
     this.key.castShadow = true;
     this.key.shadow.camera.up.set(0, 0, -1); // stable basis for a near-vertical light
-    this.key.shadow.bias = -0.0004;
-    this.key.shadow.normalBias = 0.0015;
+    this.key.shadow.bias = -0.0003;
+    this.key.shadow.normalBias = 0.0012;
     this.key.shadow.radius = 5;
-    this.key.shadow.intensity = 0.92;
+    // Density right under an occluder; the soft-shadow lookup fades it further with occluder
+    // distance (water scattering), see UW_SHADOW_PARS_GLSL.
+    this.key.shadow.intensity = 0.8;
     this.fill = new DirectionalLight(0xffffff, FILL_INTENSITY);
     this.fill.name = 'env.fill';
     this.hemi = new HemisphereLight(0xffffff, 0x886f55, 0.5);
@@ -84,8 +86,7 @@ export class Lighting {
       this.key.shadow.map?.dispose();
       this.key.shadow.map = null;
     }
-    // PCF radius in texels: keep the physical penumbra (~4 mm) independent of resolution.
-    this.key.shadow.radius = Math.max(2, (5 * mapSize) / 2048);
+    // (Penumbrae are computed in meters by the soft-shadow lookup, independent of resolution.)
   }
 
   /** Place lights and fit the shadow frustum tightly around the tank interior. */
@@ -129,6 +130,8 @@ export class Lighting {
     cam.far = maxD + 0.05;
     cam.updateProjectionMatrix();
     this.key.shadow.needsUpdate = true;
+    // Metric frame of the shadow map for the soft-shadow lookup (penumbra in meters → uv).
+    GLOBALS.uShadowFrame.value.set(cam.right - cam.left, cam.top - cam.bottom, cam.far - cam.near, 0.25);
   }
 
   /**

@@ -58,6 +58,22 @@ export interface FishUniforms {
   uIridColor: { value: Color };
   uGravidSpot: { value: number };
   uTranslucency: { value: number };
+  /** Skin optics: wrap (soft terminator), transmission, glint strength, thin-edge rim. */
+  uFishSkin: { value: Vector4 };
+  /** Scale cells across the body atlas (u, v), saturation, 1 = fin sheet material. */
+  uFishSkin2: { value: Vector4 };
+}
+
+/** Optional per-variant skin parameters (scale lattice for glints, animal size). */
+export interface SkinOpts {
+  /** Scale columns along the body (0 = no scale glints: naked skin, plates, invertebrates). */
+  scaleCols: number;
+  /** Max depth / SL (scale rows follow from it). */
+  depth: number;
+  /** Adult total length in cm (small fish get a faint bright rim to read against dark water). */
+  adultCm: number;
+  /** Invertebrate (chitin, shells): no wrap/transmission defaults of fish skin. */
+  invertebrate?: boolean;
 }
 
 export function swimUniforms(swim: SwimParams, info: FishGeometryInfo, halfWidthLocal: number): Pick<FishUniforms, 'uSwimEnv' | 'uSwimWave' | 'uSwimMode' | 'uRibbon' | 'uFinAnim'> {
@@ -76,11 +92,24 @@ export function createFishMaterials(
   tex: FishTextures,
   swim: Pick<FishUniforms, 'uSwimEnv' | 'uSwimWave' | 'uSwimMode' | 'uRibbon' | 'uFinAnim'>,
   envMap: Texture | null,
-  opts: { underwater: boolean; livebearer: boolean; skinGloss?: number },
+  opts: { underwater: boolean; livebearer: boolean; skinGloss?: number; skin?: SkinOpts },
 ): FishMaterials {
   const translucency = Math.min(1, Math.max(0, look.translucency ?? 0));
   const transparentBody = translucency > 0.42;
   const iridC = hex(look.iridescenceColor ?? '#9fd8ff');
+  const sk = opts.skin ?? { scaleCols: 0, depth: 0.3, adultCm: 8 };
+  const smallK = Math.min(1, Math.max(0, (7 - sk.adultCm) / 5));
+  const inv = !!sk.invertebrate;
+  const bodySkin = new Vector4(
+    inv ? 0.12 + 0.3 * translucency : 0.15 + 0.32 * translucency + 0.08 * smallK,
+    inv ? 0.5 * translucency : 0.7 * translucency + 0.08 * smallK,
+    sk.scaleCols > 0 ? 1 : 0,
+    inv ? 0.25 * translucency : 0.3 * smallK + 0.35 * translucency,
+  );
+  const bodySkin2 = new Vector4(sk.scaleCols, 3.125 * sk.depth * sk.scaleCols, inv ? 0.94 : 0.9, 0);
+  // Fins: thin membranes — strongly wrapped and transmitting, no scale glints.
+  const finSkin = new Vector4(inv ? 0.3 : 0.55, inv ? 0.35 : 0.85, 0, 0);
+  const finSkin2 = new Vector4(0, 0, inv ? 0.94 : 0.9, 1);
   const uniforms: FishUniforms = {
     ...swim,
     uNightMap: { value: tex.night ?? blackTexture() },
@@ -90,6 +119,8 @@ export function createFishMaterials(
     uIridColor: { value: new Color(srgbToLinear(iridC[0]), srgbToLinear(iridC[1]), srgbToLinear(iridC[2])) },
     uGravidSpot: { value: opts.livebearer ? 1 : 0 },
     uTranslucency: { value: translucency },
+    uFishSkin: { value: bodySkin },
+    uFishSkin2: { value: bodySkin2 },
   };
 
   const body = new MeshPhysicalMaterial({
@@ -151,8 +182,10 @@ export function createFishMaterials(
     vertexPatch(false)(shader);
     patchFishFragment(shader, true);
   }, -10);
+  const finUniforms = { uFishSkin: { value: finSkin }, uFishSkin2: { value: finSkin2 } };
   addShaderPatch(fins, 'fish-swim', (shader) => {
     vertexPatch(false)(shader);
+    Object.assign(shader.uniforms, finUniforms);
     patchFishFragment(shader, false);
   }, -10);
   addShaderPatch(depth, 'fish-swim-depth', vertexPatch(true), -10);
@@ -162,8 +195,9 @@ export function createFishMaterials(
   }
 
   const glow = tex.hasGlow ? 1 : 0;
-  // Thin fins transmit light: a faint self-lit term in the fin's own color, stronger for clear fins.
-  const finTrans = 0.03 + 0.12 * Math.min(1, look.finOpacity);
+  // (Light through the thin fin membranes is real transmission in the shader now; only a trace
+  // of self-lit fin colour remains so fins never go dead-black against dark water.)
+  const finTrans = 0.015;
   return {
     body,
     fins,

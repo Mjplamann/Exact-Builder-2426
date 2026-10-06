@@ -34,7 +34,7 @@ export interface GalleryOptions {
 
 let raf = 0;
 
-function pickSpecies(app: App, filter: string, limit: number): Species[] {
+export function pickSpecies(app: App, filter: string, limit: number): Species[] {
   const all = app.world.species.all;
   const f = filter.trim().toLowerCase();
   if (f) {
@@ -86,11 +86,14 @@ export function runGallery(app: App, filter: string, opts: GalleryOptions = {}):
   const planeZ = b.halfD * 0.35;
   const cam = app.engine.camera;
   cam.updateMatrixWorld();
+  // Any two NDC depths of a pixel unproject onto the same 3D line, whatever the projection
+  // (the environment uses an off-axis refractive projection), so intersect that line.
   const onPlane = (nx: number, ny: number) => {
-    const p = new Vector3(nx, ny, 0.5).unproject(cam);
-    const d = p.sub(cam.position).normalize();
-    const t = (planeZ - cam.position.z) / (Math.abs(d.z) > 1e-6 ? d.z : -1e-6);
-    return cam.position.clone().addScaledVector(d, t);
+    const p1 = new Vector3(nx, ny, -0.5).unproject(cam);
+    const p2 = new Vector3(nx, ny, 0.5).unproject(cam);
+    const d = p2.sub(p1);
+    const t = (planeZ - p1.z) / (Math.abs(d.z) > 1e-9 ? d.z : 1e-9);
+    return p1.addScaledVector(d, t);
   };
   const lo = onPlane(-1, -1), hi = onPlane(1, 1);
   const left = Math.max(-b.halfW, lo.x), right = Math.min(b.halfW, hi.x);

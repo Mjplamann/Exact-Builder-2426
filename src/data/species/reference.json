@@ -920,17 +920,17 @@
       "dorsal": "#e85a14",
       "ventral": "#f6812f",
       "fin": "#f06a1c",
-      "finOpacity": 0.95,
+      "finOpacity": 0.85,
       "eye": "#e06a1a",
       "metallic": 0.1,
       "patterns": [
-        { "type": "region", "color": "#151515", "x0": 0.19, "x1": 0.31, "y0": -1, "y1": 1, "softness": 0.0 },
-        { "type": "region", "color": "#fbfbf6", "x0": 0.205, "x1": 0.295, "y0": -1, "y1": 1, "softness": 0.0 },
-        { "type": "region", "color": "#151515", "x0": 0.44, "x1": 0.58, "y0": -1, "y1": 1, "softness": 0.0 },
-        { "type": "region", "color": "#fbfbf6", "x0": 0.455, "x1": 0.565, "y0": -1, "y1": 1, "softness": 0.0 },
+        { "type": "region", "color": "#151515", "x0": 0.19, "x1": 0.31, "y0": -1, "y1": 1, "softness": 0.0, "curve": 0.85 },
+        { "type": "region", "color": "#fbfbf6", "x0": 0.205, "x1": 0.295, "y0": -1, "y1": 1, "softness": 0.0, "curve": 0.85 },
+        { "type": "region", "color": "#151515", "x0": 0.44, "x1": 0.58, "y0": -1, "y1": 1, "softness": 0.0, "curve": 0.25 },
+        { "type": "region", "color": "#fbfbf6", "x0": 0.455, "x1": 0.565, "y0": -1, "y1": 1, "softness": 0.0, "curve": 0.25 },
         { "type": "blotch", "color": "#fbfbf6", "x": 0.44, "y": 0.35, "rx": 0.05, "ry": 0.28 },
-        { "type": "region", "color": "#151515", "x0": 0.82, "x1": 0.92, "y0": -1, "y1": 1, "softness": 0.0 },
-        { "type": "region", "color": "#fbfbf6", "x0": 0.835, "x1": 0.905, "y0": -1, "y1": 1, "softness": 0.0 }
+        { "type": "region", "color": "#151515", "x0": 0.82, "x1": 0.92, "y0": -1, "y1": 1, "softness": 0.0, "curve": 0.4 },
+        { "type": "region", "color": "#fbfbf6", "x0": 0.835, "x1": 0.905, "y0": -1, "y1": 1, "softness": 0.0, "curve": 0.4 }
       ],
       "fins": {
         "dorsal": { "edge": "#111111", "edgeWidth": 0.12 },

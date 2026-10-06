@@ -106,7 +106,8 @@ export class Bubbles {
             corner.y *= 1.0 - aParams.w;
           }
           // Sub-pixel bubbles: draw at least ~1.6 px and spread their light (no shimmering).
-          float rpx = r * uPixelScale / max(-mv.z, 0.01);
+          // Apparent distance: clip w (the projection includes refraction at the front glass).
+          float rpx = r * uPixelScale / max((projectionMatrix * mv).w, 0.01);
           float grow = max(1.0, 1.6 / max(rpx, 1e-3));
           vSmall = clamp((3.0 - rpx) / 2.0, 0.0, 1.0);
           vParams.z /= grow; // (not grow²: glints and bloom make tiny bubbles read brighter than their area)

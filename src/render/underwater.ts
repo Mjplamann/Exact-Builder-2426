@@ -1,6 +1,7 @@
 import { Vector2, type Material } from 'three';
 import { addShaderPatch, hasShaderPatch } from './materialPatch';
-import { UW_FUNCTIONS_GLSL, UW_UNIFORMS_GLSL, uwUniforms } from './env/glsl';
+import { GLOBALS } from './globals';
+import { UW_FUNCTIONS_GLSL, UW_SHADOW_MAIN_GLSL, UW_SHADOW_PARS_GLSL, UW_UNIFORMS_GLSL, uwUniforms } from './env/glsl';
 
 export interface UnderwaterOptions {
   /** Project animated caustics onto upward-facing surfaces (default true). */
@@ -59,6 +60,9 @@ export function applyUnderwater(material: Material, opts: UnderwaterOptions = {}
     (shader) => {
       Object.assign(shader.uniforms, uwUniforms());
       shader.uniforms.uwOpts = optsUniform;
+      shader.uniforms.uwShadowFrame = GLOBALS.uShadowFrame;
+      shader.uniforms.uwShadowSoft = GLOBALS.uShadowSoft;
+      shader.uniforms.uwShadowTaps = GLOBALS.uShadowTaps;
 
       // ---- vertex: world position of the final, deformed vertex --------------------------
       let vs = shader.vertexShader;
@@ -72,7 +76,11 @@ export function applyUnderwater(material: Material, opts: UnderwaterOptions = {}
 
       // ---- fragment ----------------------------------------------------------------------
       let fs = shader.fragmentShader;
-      fs = fs.replace('void main() {', `${UW_UNIFORMS_GLSL}\n${UW_FUNCTIONS_GLSL}\nuniform vec2 uwOpts;\nvarying vec3 ${VARYING};\nvoid main() {`);
+      // Soft, water-filled shadows from the key light (see UW_SHADOW_PARS_GLSL).
+      if (fs.includes('#include <shadowmap_pars_fragment>')) {
+        fs = fs.replace('#include <shadowmap_pars_fragment>', `#include <shadowmap_pars_fragment>\n${UW_SHADOW_PARS_GLSL}`);
+      }
+      fs = fs.replace('void main() {', `${UW_UNIFORMS_GLSL}\n${UW_FUNCTIONS_GLSL}\nuniform vec2 uwOpts;\nvarying vec3 ${VARYING};\nvoid main() {\n${UW_SHADOW_MAIN_GLSL}`);
 
       if (fs.includes('#include <lights_fragment_end>')) {
         const lightCode = `

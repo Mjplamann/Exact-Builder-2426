@@ -160,15 +160,24 @@ export class WaterSurface {
           vec3 mirrored;
           if (uHasRefl > 0.5) {
             vec4 rp = uReflMatrix * vec4(p, 1.0);
-            // Ripples smear the mirror image mostly vertically (the band is seen nearly edge-on).
-            vec2 ruv = rp.xy / rp.w + g * vec2(0.02, 0.15);
-            mirrored = texture2D(uRefl, ruv).rgb;
+            // Ripples wobble the mirror image, mostly across the band (it is seen nearly edge-on),
+            // and the micro-rippled film softens it.
+            vec2 ruv = rp.xy / rp.w + g * vec2(0.01, 0.08);
+            vec2 dv = vec2(0.0015, 0.07);
+            mirrored = texture2D(uRefl, ruv).rgb * 0.4
+                     + (texture2D(uRefl, ruv + dv).rgb + texture2D(uRefl, ruv - dv).rgb) * 0.2
+                     + (texture2D(uRefl, ruv + dv * vec2(-1.0, 2.0)).rgb + texture2D(uRefl, ruv - dv * vec2(-1.0, 2.0)).rgb) * 0.1;
           } else {
             // Without a reflection pass: the mirrored upper water column (veil, brighter near the front).
             float near = clamp((p.z + uwTankHalf.z) / (2.0 * uwTankHalf.z), 0.0, 1.0);
             mirrored = uwVeil(uwVeilColor * (0.3 + 0.4 * near) + lamp * 0.012, p);
           }
           mirrored *= clamp(1.0 + tilt * 2.2, 0.7, 1.35);
+          // Silvery sheen: the film scatters a little of the bright, lamp-lit top water toward the
+          // eye, lifting the mirror toward soft silver — most where it is seen most edge-on (front).
+          float front = clamp((p.z + uwTankHalf.z) / (2.0 * uwTankHalf.z), 0.0, 1.0);
+          vec3 silver = T * (uwVeilColor * 1.6 + lamp * 0.016);
+          mirrored = mix(mirrored, mirrored * 0.8 + silver, 0.15 + 0.25 * front);
           // Lamp-lit air through the Snell window (only where steep ripples open it).
           vec3 sky = T * (lamp * 1.6 + uwVeilColor);
           vec3 col = mix(sky, mirrored, refl);
@@ -227,16 +236,27 @@ export class WaterSurface {
 
   /**
    * Render the mirrored scene for the visible band of the surface. Call before the main render;
-   * temporarily moves GLOBALS.uCameraPos to the mirrored eye and lifts uVeilCeiling so materials
-   * compute the full folded water path (object → surface → front glass).
+   * temporarily moves GLOBALS.uCameraPos to the mirrored (virtual) eye and lifts uVeilCeiling so
+   * materials compute the full folded water path (object → surface → front glass).
+   *
+   * `shiftY` is the main camera's lens shift (projection element [9], see CameraRig), which the
+   * mirror camera must reproduce so the rows line up.
    */
-  renderReflection(renderer: WebGLRenderer, scene: Scene, camera: PerspectiveCamera, surfaceY: number, halfW: number, halfD: number): void {
+  renderReflection(
+    renderer: WebGLRenderer,
+    scene: Scene,
+    camera: PerspectiveCamera,
+    surfaceY: number,
+    halfW: number,
+    halfD: number,
+    shiftY = 0,
+  ): void {
     const u = this.material.uniforms;
     if (this.scale <= 0) {
       u.uHasRefl.value = 0;
       return;
     }
-    // Screen rows covered by the surface rectangle.
+    // Screen rows covered by the surface rectangle (the main projection includes the lens shift).
     let yMin = Infinity, yMax = -Infinity;
     for (let i = 0; i < 4; i++) {
       this.ndc.set(i & 1 ? halfW : -halfW, surfaceY, i & 2 ? halfD : -halfD).project(camera);
@@ -279,18 +299,24 @@ export class WaterSurface {
     mc.up.set(0, 1, 0).transformDirection(camera.matrixWorld);
     mc.up.y = -mc.up.y;
     mc.lookAt(mc.position.x + fwd.x, mc.position.y + fwd.y, mc.position.z + fwd.z);
-    mc.setViewOffset(fullW, fullH, 0, topPx, fullW, bandPx);
+    mc.clearViewOffset();
     mc.updateProjectionMatrix();
     mc.updateMatrixWorld();
-
-    this.textureMatrix.set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1);
-    this.textureMatrix.multiply(mc.projectionMatrix).multiply(mc.matrixWorldInverse);
+    const pm = mc.projectionMatrix.elements;
+    // Same lens shift as the main camera (the mirror camera is upside down, so the same sign
+    // keeps the rows aligned), then crop to the band rows: y' = sy·y + ty·w.
+    pm[9] += shiftY;
+    const top = 1 - (2 * topPx) / fullH;
+    const bottom = top - (2 * bandPx) / fullH;
+    const sy = 2 / (top - bottom);
+    const ty = -(top + bottom) / (top - bottom);
+    pm[5] *= sy;
+    pm[9] = sy * pm[9] - ty; // w row is (0, 0, −1, 0)
 
     // Oblique near plane = the water surface (Lengyel), so nothing above it leaks in.
     this.plane.setFromNormalAndCoplanarPoint(this.v3.set(0, -1, 0), this.v3b.set(0, surfaceY, 0));
     this.plane.applyMatrix4(mc.matrixWorldInverse);
     this.clip.set(this.plane.normal.x, this.plane.normal.y, this.plane.normal.z, this.plane.constant);
-    const pm = mc.projectionMatrix.elements;
     this.q.set((Math.sign(this.clip.x) + pm[8]) / pm[0], (Math.sign(this.clip.y) + pm[9]) / pm[5], -1, (1 + pm[10]) / pm[14]);
     this.clip.multiplyScalar(2 / this.clip.dot(this.q));
     pm[2] = this.clip.x;
@@ -299,11 +325,14 @@ export class WaterSurface {
     pm[14] = this.clip.w;
     mc.projectionMatrixInverse.copy(mc.projectionMatrix).invert();
 
-    // Render with the folded-path veil.
+    this.textureMatrix.set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1);
+    this.textureMatrix.multiply(mc.projectionMatrix).multiply(mc.matrixWorldInverse);
+
+    // Render with the folded-path veil, seen from the mirrored eye.
     const camPos = GLOBALS.uCameraPos.value;
     const prevCam = this.v3.copy(camPos);
     const prevCeil = GLOBALS.uVeilCeiling.value;
-    camPos.copy(mc.position);
+    camPos.set(prevCam.x, 2 * surfaceY - prevCam.y, prevCam.z);
     GLOBALS.uVeilCeiling.value = 1e3;
     const prevTarget = renderer.getRenderTarget();
     renderer.setRenderTarget(this.target);

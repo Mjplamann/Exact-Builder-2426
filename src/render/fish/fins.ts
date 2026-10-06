@@ -103,6 +103,33 @@ export interface FinBuildOpts {
   nw: number;
 }
 
+/** Outer envelope (ellipse in SL coordinates) that the rays of a wrapping median fin end on. */
+export interface FinEnvelope {
+  xc: number;
+  yc: number;
+  a: number;
+  b: number;
+}
+
+/**
+ * Envelope for a long dorsal / anal fin of a deep, disc-shaped fish, or null when the fin should
+ * keep its own outline (tall falcate or filamentous fins, short fins, slender fish).
+ */
+export function finEnvelope(prof: BodyProfile, body: ResolvedBody, fin: FinDef, ventral: boolean): FinEnvelope | null {
+  if (body.kind !== 'fish' || body.depth < 0.45) return null;
+  if (fin.end - fin.start < 0.28) return null;
+  if (fin.shape !== 'low' && fin.shape !== 'rounded' && fin.shape !== 'sail') return null;
+  const xc = clamp(body.depthPos, 0.3, 0.6);
+  const T = prof.top(xc), B = prof.bot(xc);
+  const yc = (T + B) / 2;
+  const H = Math.max(0.04, fin.height);
+  const b = (ventral ? yc - B : T - yc) + H;
+  // The rear lobes reach back over the peduncle toward the caudal base.
+  const xRear = Math.min(fin.end + 0.75 * H + 0.03, 1.04);
+  const a = Math.max(0.2, xRear - xc);
+  return { xc, yc, a, b };
+}
+
 /**
  * Dorsal / second dorsal / anal / adipose fin attached along the dorsal or ventral outline.
  * `twin` builds a pair of splayed sheets (fancy-goldfish paired anal fins).
@@ -115,11 +142,12 @@ export function buildMedianFin(
   cell: Cell,
   ventral: boolean,
   opts: FinBuildOpts,
-  extra: { rake?: number; flow?: number; twin?: boolean; adipose?: boolean } = {},
+  extra: { rake?: number; flow?: number; twin?: boolean; adipose?: boolean; envelope?: FinEnvelope } = {},
 ): void {
   const sheets = extra.twin ? [-1, 1] : [0];
   const flow = extra.flow ?? finFlow(fin.shape, fin.trail);
   const ray: [number, number] = [0, 0];
+  const env = extra.envelope;
   for (const sheet of sheets) {
     const idx0 = gb.idx.length, v0 = gb.vertexCount;
     const nu = opts.nu, nw = opts.nw;
@@ -135,11 +163,28 @@ export function buildMedianFin(
       const u = i / nu;
       medianRay(extra.adipose ? 'rounded' : fin.shape, u, fin.height, fin.trail, ray);
       let rake = ray[0] + (extra.rake ?? 0);
-      const len = ray[1];
+      let len = ray[1];
       // Flowing fins: rays curve back progressively (soft rays bend under their own drag).
-      const curve = fin.shape === 'flowing' ? 0.55 : fin.shape === 'filament' ? 0.35 : 0.12;
+      let curve = fin.shape === 'flowing' ? 0.55 : fin.shape === 'filament' ? 0.35 : 0.12;
       if (extra.adipose) rake = 0.9 + 0.5 * u;
       const bx = base[i * 2], by = base[i * 2 + 1];
+      if (env) {
+        // Deep-bodied fish: the rays radiate from the disc and end on one smooth outer envelope,
+        // so body + fins read as one round outline (discus, tangs, angels, butterflyfish).
+        const dx = bx - env.xc, dy = Math.abs(by - env.yc);
+        const a0 = Math.atan2(dx, Math.max(1e-4, dy));
+        rake = a0 + 0.18 + 0.12 * u;
+        const ex = Math.sin(rake), ey = Math.cos(rake);
+        // Ray–ellipse intersection from the base point (inside the envelope).
+        const p = dx / env.a, q = dy / env.b, dp = ex / env.a, dq = ey / env.b;
+        const A = dp * dp + dq * dq, Bq = p * dp + q * dq, Cq = p * p + q * q - 1;
+        const disc = Bq * Bq - A * Cq;
+        const r = disc > 0 ? (-Bq + Math.sqrt(disc)) / A : 0;
+        // Fin height tapers in at the very front and the rays never vanish.
+        // and the trailing edge rounds off into a lobe instead of ending in a straight cut.
+        len = Math.max(r * (0.55 + 0.45 * smooth(0, 0.18, u)) * (1 - 0.45 * Math.pow(smooth(0.72, 1, u), 1.5)), 0.2 * fin.height, 0.006);
+        curve = 0.06;
+      }
       for (let j = 0; j <= nw; j++) {
         const w = j / nw;
         // Integrate along a gently curving ray (midpoint direction is enough).

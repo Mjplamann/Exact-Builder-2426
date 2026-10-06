@@ -1,14 +1,39 @@
-import { HalfFloatType, ShaderMaterial, Vector2, WebGLRenderTarget, type Camera, type Scene, type WebGLRenderer } from 'three';
+import { HalfFloatType, LinearFilter, ShaderMaterial, Vector2, WebGLRenderTarget, type Camera, type Scene, type Texture, type WebGLRenderer } from 'three';
+import { FullScreenQuad, Pass } from 'three/examples/jsm/postprocessing/Pass.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 
 /**
- * Post chain: scene → MSAA HDR target → subtle bloom (only true highlights: bubble rims, the TIR
- * band's glints, wet specular) → final pass (ACES filmic tone map, gentle aquarium grade,
- * vignette, very light animated grain + dither, sRGB).
+ * Post chain: scene → MSAA HDR target → subtle bloom (only genuine light sources: bubble glints,
+ * the TIR band's sparkle) → final pass (ACES filmic tone map, gentle aquarium grade, vignette,
+ * very light animated grain + dither, sRGB).
+ *
+ * Bloom uses a soft-knee threshold that subtracts the threshold (only the energy *above* it
+ * glows, so a brightly lit white fish does not halo) and is set in display terms (it follows
+ * the exposure), so the same things glow by day and by moonlight.
  */
+
+/** Bloom threshold in exposed (pre-tone-map) units: a lit white surface is ≈ 1–2. */
+const BLOOM_THRESHOLD = 4.5;
+/** ACES input gain (exposure / this). */
+const ACES_GAIN_DIV = 0.66;
+
+const SoftKneeHighPass = /* glsl */ `
+  uniform sampler2D tDiffuse;
+  uniform float luminosityThreshold;
+  uniform float smoothWidth;
+  varying vec2 vUv;
+  void main() {
+    vec3 c = texture2D(tDiffuse, vUv).rgb;
+    float br = max(c.r, max(c.g, c.b));
+    float knee = max(smoothWidth, 1e-4);
+    float soft = clamp(br - luminosityThreshold + knee, 0.0, 2.0 * knee);
+    soft = soft * soft / (4.0 * knee);
+    float w = max(soft, br - luminosityThreshold) / max(br, 1e-5);
+    gl_FragColor = vec4(c * w, 1.0);
+  }`;
 const FinalShader = {
   name: 'env.final',
   uniforms: {
@@ -46,7 +71,7 @@ const FinalShader = {
         vec3(1.60475, -0.10208, -0.00327),
         vec3(-0.53108, 1.10813, -0.07276),
         vec3(-0.07367, -0.00605, 1.07602));
-      color *= uExposure / 0.6;
+      color *= uExposure / ${ACES_GAIN_DIV.toFixed(3)};
       color = ACESInputMat * color;
       color = RRTAndODTFit(color);
       color = ACESOutputMat * color;
@@ -79,6 +104,48 @@ const FinalShader = {
     }`,
 };
 
+/**
+ * Copies the rendered HDR scene into a small target (no swap) so the next frame can show a
+ * faint, soft reflection of the tank interior in the back glass.
+ */
+class CapturePass extends Pass {
+  readonly target: WebGLRenderTarget;
+  private quad: FullScreenQuad;
+  private material: ShaderMaterial;
+  constructor() {
+    super();
+    this.needsSwap = false;
+    this.target = new WebGLRenderTarget(16, 16, { type: HalfFloatType, magFilter: LinearFilter, minFilter: LinearFilter, depthBuffer: false, generateMipmaps: false });
+    this.target.texture.name = 'env.prevFrame';
+    this.material = new ShaderMaterial({
+      uniforms: { tDiffuse: { value: null } },
+      vertexShader: /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+      fragmentShader: /* glsl */ `
+        uniform sampler2D tDiffuse;
+        varying vec2 vUv;
+        void main() { gl_FragColor = vec4(texture2D(tDiffuse, vUv).rgb, 1.0); }`,
+      depthTest: false,
+      depthWrite: false,
+    });
+    this.quad = new FullScreenQuad(this.material);
+  }
+  override setSize(width: number, height: number): void {
+    this.target.setSize(Math.max(16, Math.round(width / 4)), Math.max(16, Math.round(height / 4)));
+  }
+  override render(renderer: WebGLRenderer, _writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget): void {
+    this.material.uniforms.tDiffuse.value = readBuffer.texture;
+    const prev = renderer.getRenderTarget();
+    renderer.setRenderTarget(this.target);
+    this.quad.render(renderer);
+    renderer.setRenderTarget(prev);
+  }
+  override dispose(): void {
+    this.target.dispose();
+    this.material.dispose();
+    this.quad.dispose();
+  }
+}
+
 export interface PostSettings {
   msaa: number;
   bloom: boolean;
@@ -89,6 +156,7 @@ export class PostFX {
   private composer: EffectComposer;
   private renderPass: RenderPass;
   private bloom: UnrealBloomPass | null = null;
+  private capture: CapturePass;
   private final: ShaderPass;
   private size = new Vector2();
 
@@ -100,9 +168,13 @@ export class PostFX {
     this.composer.setPixelRatio(1); // target is already in drawing-buffer pixels
     this.renderPass = new RenderPass(scene, camera);
     this.composer.addPass(this.renderPass);
+    this.capture = new CapturePass();
+    this.composer.addPass(this.capture);
     if (settings.bloom) {
       // Threshold in linear HDR: only things brighter than a lit white surface glow.
-      this.bloom = new UnrealBloomPass(new Vector2(this.size.x * settings.bloomScale, this.size.y * settings.bloomScale), 0.22, 0.55, 1.05);
+      this.bloom = new UnrealBloomPass(new Vector2(this.size.x * settings.bloomScale, this.size.y * settings.bloomScale), 0.3, 0.5, 3);
+      this.bloom.materialHighPassFilter.fragmentShader = SoftKneeHighPass;
+      this.bloom.materialHighPassFilter.needsUpdate = true;
       this.composer.addPass(this.bloom);
     }
     this.final = new ShaderPass(FinalShader);
@@ -115,8 +187,18 @@ export class PostFX {
     this.final.uniforms.uRes.value.set(width, height);
   }
 
+  /** Low-res linear HDR copy of the last rendered scene (before bloom). */
+  get prevFrame(): Texture {
+    return this.capture.target.texture;
+  }
+
   render(exposure: number, time: number): void {
     this.final.uniforms.uExposure.value = exposure;
+    if (this.bloom) {
+      // Threshold in linear HDR so that it sits at BLOOM_THRESHOLD after exposure.
+      this.bloom.threshold = (BLOOM_THRESHOLD * ACES_GAIN_DIV) / Math.max(0.05, exposure);
+      (this.bloom.highPassUniforms as Record<string, { value: number }>).smoothWidth.value = this.bloom.threshold * 0.5;
+    }
     this.final.uniforms.uTime.value = time;
     this.composer.render();
   }
@@ -125,6 +207,7 @@ export class PostFX {
     this.composer.renderTarget1.dispose();
     this.composer.renderTarget2.dispose();
     this.bloom?.dispose();
+    this.capture.dispose();
     this.final.dispose();
     this.composer.dispose();
   }

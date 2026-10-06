@@ -510,7 +510,7 @@ export const ARCHETYPE_PRESETS: Record<Archetype, Preset> = {
     caudal: C('pointed', 0.3), scaleSize: 0.45,
   },
   stingray: {
-    kind: 'ray', depth: 0.09, width: 0.9, depthPos: 0.3, widthPos: 0.3, headLength: 0.2, mouth: 'inferior',
+    kind: 'ray', depth: 0.1, width: 0.9, depthPos: 0.3, widthPos: 0.3, headLength: 0.2, mouth: 'inferior',
     eyeSize: 0.25, eyeHeight: 1, dorsal: null, dorsal2: null, anal: null, pectoral: null,
     pelvic: f(0.5, 0.58, 0.08, 'rounded'), caudal: C('none', 0), section: 'depressed', ventralFlat: 1,
     tailTaper: 1, skin: 'naked', scaleSize: 0,
@@ -740,14 +740,14 @@ export const ARCHETYPE_PRESETS: Record<Archetype, Preset> = {
     section: 'round', skin: 'prickly', scaleSize: 0,
   },
   boxfish: {
-    depth: 0.38, width: 0.32, depthPos: 0.45, widthPos: 0.45, headLength: 0.3, snout: 'blunt', mouthSize: 0.12,
-    lips: 0.6, eyeSize: 0.33, eyeHeight: 0.6, peduncle: 0.18, ventralFlat: 1, armored: true,
+    depth: 0.42, width: 0.36, depthPos: 0.45, widthPos: 0.45, headLength: 0.3, snout: 'blunt', mouth: 'subterminal',
+    mouthSize: 0.1, lips: 0.8, eyeSize: 0.36, eyeHeight: 0.62, peduncle: 0.3, ventralFlat: 1, armored: true,
     dorsal: f(0.66, 0.72, 0.1), anal: f(0.7, 0.75, 0.08), pelvic: null, pectoral: f(0.32, 0.36, 0.1, 'fan'),
     pectoralHeight: 0.4, caudal: C('rounded', 0.3), section: 'boxy', skin: 'hex', scaleSize: 0,
   },
   cowfish: {
-    depth: 0.36, width: 0.3, depthPos: 0.45, widthPos: 0.45, headLength: 0.3, snout: 'blunt', mouthSize: 0.12,
-    lips: 0.6, eyeSize: 0.33, eyeHeight: 0.7, peduncle: 0.18, ventralFlat: 1, armored: true, horns: 1,
+    depth: 0.38, width: 0.32, depthPos: 0.45, widthPos: 0.45, headLength: 0.3, snout: 'blunt', mouth: 'subterminal',
+    mouthSize: 0.1, lips: 0.8, eyeSize: 0.36, eyeHeight: 0.7, peduncle: 0.28, ventralFlat: 1, armored: true, horns: 1,
     dorsal: f(0.66, 0.72, 0.1), anal: f(0.7, 0.75, 0.08), pelvic: null, pectoral: f(0.32, 0.36, 0.1, 'fan'),
     pectoralHeight: 0.4, caudal: C('rounded', 0.4), section: 'triangular', skin: 'hex', scaleSize: 0,
   },
@@ -768,8 +768,9 @@ export const ARCHETYPE_PRESETS: Record<Archetype, Preset> = {
     pelvicSpread: 0.8, caudal: C('pointed', 0.3), section: 'round', skin: 'naked', scaleSize: 0, tailTaper: 0.2,
   },
   ray: {
-    kind: 'ray', depth: 0.08, width: 0.75, depthPos: 0.3, widthPos: 0.3, headLength: 0.2, mouth: 'inferior',
-    eyeSize: 0.28, eyeHeight: 1, dorsal: null, dorsal2: null, anal: null, pectoral: null,
+    // Ribbontail rays: raised central body on a thin disc, a ventral fold along the whip tail.
+    kind: 'ray', depth: 0.11, width: 0.52, depthPos: 0.3, widthPos: 0.3, headLength: 0.2, mouth: 'inferior',
+    eyeSize: 0.3, eyeHeight: 1, dorsal: null, dorsal2: null, anal: f(0.7, 0.97, 0.022, 'low'), pectoral: null,
     pelvic: f(0.5, 0.58, 0.08, 'rounded'), caudal: C('none', 0), section: 'depressed', ventralFlat: 1,
     tailTaper: 1, skin: 'naked', scaleSize: 0,
   },
@@ -865,9 +866,40 @@ function applyPlan(out: ResolvedBody, plan: Partial<BodyPlan> | undefined, archF
   }
 }
 
+/** Archetypes whose 'beak' is a true fused-tooth beak (parrotfish, puffers). */
+const BEAKED = new Set<Archetype>(['parrotfish', 'puffer', 'marine-puffer', 'boxfish', 'cowfish', 'triggerfish', 'filefish']);
+
+/**
+ * Snout extension (SL) that goes with a snout shape the species picked itself. An archetype's
+ * own extension (e.g. the needlefish's 0.22 SL jaws) belongs to the archetype's snout and is not
+ * inherited by a species that chose a different shape.
+ */
+function snoutExtension(out: ResolvedBody, presetSnout: SnoutShape, presetLen: number): number {
+  const sn = out.snout;
+  if (sn === presetSnout) return presetLen;
+  const keepPreset = presetLen > 0 && (presetSnout === 'elongate' || presetSnout === 'duckbill' || presetSnout === 'tubular');
+  switch (sn) {
+    case 'elongate':
+      // Long jaws / protruding snout: ~a quarter of the head (long-nosed corys, sturgeons) …
+      // deep-bodied fish (tangs, butterflyfish) only protrude a short, broad snout.
+      if (keepPreset) return presetLen;
+      return out.depth > 0.45 ? clamp(0.15 * out.headLength, 0.03, 0.06) : clamp(0.24 * out.headLength, 0.04, 0.12);
+    case 'tubular':
+      return keepPreset ? presetLen : clamp(0.3 * out.headLength, 0.04, 0.14);
+    case 'duckbill':
+      return keepPreset ? presetLen : clamp(0.3 * out.headLength, 0.05, 0.16);
+    default:
+      return 0;
+  }
+}
+
 /**
  * Archetype preset → species body → sex override (and sex-specific archetype defaults).
  * Always returns a complete, sanitized body plan, even for unusual data.
+ *
+ * Explicit "remove" overrides always win over archetype presets: a fin set to `null`,
+ * `barbels: 0`, `adipose: false`, or a different `snout` (which drops the archetype's snout
+ * extension) are never re-added by archetype or sex defaults.
  */
 export function resolveBody(sp: Species, sex: Sex): ResolvedBody {
   const arch: Archetype = ARCHETYPE_PRESETS[sp.body.archetype] ? sp.body.archetype : 'tetra';
@@ -886,10 +918,27 @@ export function resolveBody(sp: Species, sex: Sex): ResolvedBody {
   if (sex === 'female' && out.caudal.shape === 'sword' && !ov?.body?.caudal) out.caudal = { shape: 'truncate', size: 0.3 };
   // Gonopodium: males' anal fin is a narrow forward rod, unless data defines an anal fin for males.
   if (out.gonopodium && ov?.body?.anal) out.gonopodium = false;
-  // Fish living with their tail continuous with the fins.
+  // Explicit removals (null fins, no barbels, no adipose) always win — re-assert them last.
+  for (const plan of [sp.body, ov?.body]) {
+    if (!plan) continue;
+    for (const k of FIN_KEYS) if (plan[k] === null) out[k] = null;
+    if (plan.barbels === 0) out.barbels = 0;
+    if (plan.adipose === false) out.adipose = false;
+  }
+  // A snout shape chosen by the data replaces the archetype's snout extension.
+  out.snoutLength = snoutExtension(out, base.snout, base.snoutLength);
+  // 'beak' outside the beaked families means long pointed jaws (pike-characins, halfbeaks' upper
+  // jaw): slim, never a parrotfish's bulbous beak.
+  if (out.snout === 'beak' && !BEAKED.has(arch) && out.depth < 0.3) {
+    out.snout = out.lowerJaw > 0.01 ? 'pointed' : 'elongate';
+    out.snoutLength = out.lowerJaw > 0.01 ? 0 : clamp(0.26 * out.headLength, 0.05, 0.12);
+  }
+  // Fish whose tail fin is continuous with the median fins: stretch only fins that already run
+  // to the tail (or that the data left to the archetype) — a featherback's short dorsal stays put.
   if (out.caudal.shape === 'continuous') {
-    if (out.dorsal) out.dorsal.end = Math.max(out.dorsal.end, 1);
-    if (out.anal) out.anal.end = Math.max(out.anal.end, 1);
+    const explicit = (k: 'dorsal' | 'anal') => !!(sp.body[k] || ov?.body?.[k]);
+    if (out.dorsal && (!explicit('dorsal') || out.dorsal.end >= 0.85)) out.dorsal.end = Math.max(out.dorsal.end, 1);
+    if (out.anal && (!explicit('anal') || out.anal.end >= 0.85)) out.anal.end = Math.max(out.anal.end, 1);
   }
   return out;
 }

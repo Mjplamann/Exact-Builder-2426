@@ -60,6 +60,8 @@ interface PartOpts {
   cell?: Cell;
   bodyXY?: [number, number];
   s?: number;
+  /** Sub-range of the cell's x (along the part) covered by this tube (jointed segments). */
+  uvx?: [number, number];
 }
 
 /** Catmull-Rom resample of a polyline into n+1 points. */
@@ -110,7 +112,7 @@ function tube(gb: GeoBuilder, pts: V3[], radii: (t: number) => number, sides: nu
       const ca = Math.cos(a), sa = Math.sin(a) * squash;
       const nn = norm(add(mul(u, Math.cos(a) / 1), mul(w, Math.sin(a) / Math.max(0.05, squash))));
       const p = add(pts[i], add(mul(u, ca * r), mul(w, sa * r)));
-      if (o.cell) cellUV(o.cell, tt, Math.cos(a), uv);
+      if (o.cell) cellUV(o.cell, o.uvx ? o.uvx[0] + (o.uvx[1] - o.uvx[0]) * tt : tt, Math.cos(a), uv);
       else bodyUV(o.bodyXY?.[0] ?? 0.5, o.bodyXY?.[1] ?? 0, uv);
       gb.v(p[0], p[1], p[2], uv[0], uv[1], o.s ?? tt, o.part, o.amp, 0, o.pivot[0], o.pivot[1], o.pivot[2], o.phase, nn[0], nn[1], nn[2]);
     }
@@ -127,7 +129,7 @@ function tube(gb: GeoBuilder, pts: V3[], radii: (t: number) => number, sides: nu
     const last = pts[n - 1];
     const tl = norm(sub(pts[n - 1], pts[n - 2]));
     const tip = add(last, mul(tl, radii(1) * 0.8));
-    if (o.cell) cellUV(o.cell, 1, 0, uv);
+    if (o.cell) cellUV(o.cell, o.uvx ? o.uvx[1] : 1, 0, uv);
     else bodyUV(o.bodyXY?.[0] ?? 0.5, o.bodyXY?.[1] ?? 0, uv);
     const ti = gb.v(tip[0], tip[1], tip[2], uv[0], uv[1], o.s ?? 1, o.part, o.amp, 0, o.pivot[0], o.pivot[1], o.pivot[2], o.phase, tl[0], tl[1], tl[2]);
     const base = v0 + (n - 1) * sides;
@@ -140,14 +142,18 @@ function ellipsoid(
   gb: GeoBuilder, c: V3, ex: V3, ey: V3, ez: V3, r: V3, nLat: number, nLon: number, o: PartOpts,
   uvFn: (th: number, ph: number) => [number, number],
   shape?: (th: number, ph: number) => number,
+  /** Superellipse exponents of the upper / lower half (< 1 flattens the dome); normals are then re-smoothed. */
+  yExp?: [number, number],
 ): void {
-  const v0 = gb.vertexCount;
+  const v0 = gb.vertexCount, i0 = gb.idx.length;
   for (let i = 0; i <= nLat; i++) {
     const th = (i / nLat) * Math.PI;
     for (let j = 0; j <= nLon; j++) {
       const ph = (j / nLon) * Math.PI * 2;
       const k = shape ? shape(th, ph) : 1;
-      const lx = Math.sin(th) * Math.cos(ph), ly = Math.cos(th), lz = Math.sin(th) * Math.sin(ph);
+      const lx = Math.sin(th) * Math.cos(ph), lz = Math.sin(th) * Math.sin(ph);
+      const cy0 = Math.cos(th);
+      const ly = yExp ? Math.sign(cy0) * Math.pow(Math.abs(cy0), cy0 >= 0 ? yExp[0] : yExp[1]) : cy0;
       const p = add(c, add(add(mul(ex, lx * r[0] * k), mul(ey, ly * r[1] * k)), mul(ez, lz * r[2] * k)));
       const nn = norm(add(add(mul(ex, lx / r[0]), mul(ey, ly / r[1])), mul(ez, lz / r[2])));
       const [u, v] = uvFn(th, ph);
@@ -160,6 +166,7 @@ function ellipsoid(
       gb.quad(a, a + 1, b + 1, b);
     }
   }
+  if (yExp) gb.smoothNormals(i0, v0);
 }
 
 /** Flat double-sided blade (swimmerets, tail-fan plates, antennal scales, fans). */
@@ -233,9 +240,42 @@ function loftBody(
   gb.smoothNormals(idx0, v0);
 }
 
-/** Jointed leg: hip → knee → (ankle) → foot, as one tapered tube. */
+/**
+ * Jointed arthropod leg: hip → knee → (ankle) → foot as straight, slightly flattened chitin
+ * segments, each with a knuckle (condyle) at its base and a waist at the joint, ending in a
+ * pointed dactyl — not one smooth tube.
+ */
 function leg(gb: GeoBuilder, pts: V3[], r0: number, r1: number, o: PartOpts, sides = 5, seg = 10): void {
-  tube(gb, spline(pts, seg), (t) => r0 + (r1 - r0) * t, sides, o);
+  const n = pts.length - 1;
+  const lens: number[] = [];
+  let total = 0;
+  for (let i = 0; i < n; i++) {
+    const l = len(sub(pts[i + 1], pts[i]));
+    lens.push(l);
+    total += l;
+  }
+  if (!(total > 1e-6)) return;
+  const steps = Math.max(2, Math.round(seg / n));
+  let acc = 0;
+  for (let i = 0; i < n; i++) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    const ta = acc / total, tb = (acc + lens[i]) / total;
+    acc += lens[i];
+    const ra = r0 + (r1 - r0) * ta, rb = r0 + (r1 - r0) * tb;
+    const last = i === n - 1;
+    // Overlap a little into the next segment so the joint reads closed.
+    const dir = norm(sub(b, a));
+    const b2 = last ? b : add(b, mul(dir, rb * 0.6));
+    const p: V3[] = [];
+    for (let k = 0; k <= steps; k++) p.push(lerp3(a, b2, k / steps));
+    const radius = (t: number) => {
+      const r = ra + (rb - ra) * t;
+      const knuckle = 1 + 0.2 * Math.exp(-(((t - 0.06) / 0.07) ** 2)) - 0.14 * Math.exp(-(((t - 0.95) / 0.06) ** 2));
+      return (last ? r * (1 - 0.8 * smooth(0.55, 1, t)) : r) * knuckle;
+    };
+    tube(gb, p, radius, sides, { ...o, uvx: [ta, tb] }, last, 0.72);
+  }
 }
 
 const eyeUV = (th: number, ph: number): [number, number] => {
@@ -274,16 +314,20 @@ function paintCellSolid(b: Bufs, cell: Cell, color: RGB, alpha: number, rough: n
       const i = (y0 + r) * b.W + x0 + c;
       // Joints / segment rings darken slightly; a lighter top, darker underside.
       const seg = bands > 0 ? Math.exp(-((((x * bands) % 1) - 0.5) ** 2) / 0.004) : 0;
-      const k = (1 - 0.18 * seg) * (1 + 0.06 * y) * (1 + 0.06 * (fastNoise(x * 30 + (seed % 41), y * 6) - 0.5));
-      b.col[i * 3] = color[0] * k;
-      b.col[i * 3 + 1] = color[1] * k;
-      b.col[i * 3 + 2] = color[2] * k;
+      // Chitin: fine granules and a duller underside; claws pale toward the fingertips.
+      const gran = smooth(0.62, 0.9, fastNoise(x * 90 + (seed % 23), y * 14));
+      const k = (1 - 0.18 * seg) * (1 + 0.08 * y) * (1 + 0.08 * (fastNoise(x * 30 + (seed % 41), y * 6) - 0.5)) * (1 - 0.06 * gran);
+      const tipK = cell === ATLAS.pectoral ? smooth(0.78, 0.98, x) * 0.45 : 0;
+      b.col[i * 3] = (color[0] + (0.86 - color[0]) * tipK) * k;
+      b.col[i * 3 + 1] = (color[1] + (0.8 - color[1]) * tipK) * k;
+      b.col[i * 3 + 2] = (color[2] + (0.68 - color[2]) * tipK) * k;
       b.alpha[i] = alpha;
-      b.height[i] = -0.5 * seg;
+      b.height[i] = -0.5 * seg + 0.25 * gran;
       b.rough[i] = rough;
       b.metal[i] = 0;
       b.irid[i] = 0;
       b.spec[i] = 0.35;
+      b.thin[i] = 1 - alpha * 0.7;
     }
   }
   if (fl) {
@@ -387,7 +431,7 @@ function paintInvertAtlas(sp: Species, look: Appearance, spec: PaintSpec, N: num
   // ---- appendage cells ----
   const legA = clamp(1 - transl * 0.75, 0.3, 1);
   const legLook = finLookOf(look, 'pelvic');
-  paintCellSolid(b, ATLAS.pelvic, hex(legLook.color ?? look.fin), clamp(legLook.opacity ?? legA, 0.2, 1), spec.roughness, seed + 1, legLook, 6, 0.08);
+  paintCellSolid(b, ATLAS.pelvic, hex(legLook.color ?? look.fin), clamp(legLook.opacity ?? legA, 0.2, 1), spec.roughness, seed + 1, legLook, 3, 0.08);
   const clawLook = finLookOf(look, 'pectoral');
   paintCellSolid(b, ATLAS.pectoral, hex(clawLook.color ?? look.fin ?? look.base), clamp(clawLook.opacity ?? Math.max(legA, 0.6), 0.25, 1), spec.roughness * 0.85, seed + 2, clawLook, 2, 0.2);
   const tailLook = finLookOf(look, 'caudal');
@@ -397,15 +441,17 @@ function paintInvertAtlas(sp: Species, look: Appearance, spec: PaintSpec, N: num
   paintCellSolid(b, ATLAS.dorsal, hex(spineLook.color ?? look.fin), 1, 0.35, seed + 5, spineLook, 0, 0.06);
   paintCellSolid(b, ATLAS.dorsal2, spec.softBody ?? finC, 1, 0.5, seed + 6, null, 0, 0.3);
   paintCellSolid(b, ATLAS.adipose, hex(look.eye ?? look.fin), 1, 0.35, seed + 7, null, 0, 0.1);
-  // Snail soft body: fine pale speckles.
+  // Snail soft body: fine pale flecks on darker, slightly translucent flesh; a paler sole rim.
   {
     const [sx0, sy0, sw, sh] = rect(ATLAS.dorsal2, b.W, b.H);
     for (let r = 0; r < sh; r++) for (let c = 0; c < sw; c++) {
       const i = (sy0 + r) * b.W + sx0 + c;
-      const sp2 = smooth(0.82, 0.9, hash2(c >> 1, r >> 1, seed));
-      b.col[i * 3] += (0.85 - b.col[i * 3]) * sp2 * 0.5;
-      b.col[i * 3 + 1] += (0.82 - b.col[i * 3 + 1]) * sp2 * 0.5;
-      b.col[i * 3 + 2] += (0.7 - b.col[i * 3 + 2]) * sp2 * 0.5;
+      const sp2 = smooth(0.86, 0.94, hash2(c, r, seed)) * 0.35 + 0.12 * smooth(0.55, 0.8, fastNoise(c * 0.15, r * 0.15));
+      b.col[i * 3] += (0.78 - b.col[i * 3]) * sp2;
+      b.col[i * 3 + 1] += (0.76 - b.col[i * 3 + 1]) * sp2;
+      b.col[i * 3 + 2] += (0.68 - b.col[i * 3 + 2]) * sp2;
+      b.thin[i] = 0.6;
+      b.rough[i] = 0.32;
     }
   }
   // ---- eye ----
@@ -684,17 +730,27 @@ function shrimpLike(sp: Species, body: ResolvedBody, look: Appearance, detail: n
   return finish(gb, fb, sp, look, spec, half);
 }
 
-/** A pincer: palm (propodus) + fixed finger + movable finger (dactyl, part claw). */
+/**
+ * A pincer: a swollen, laterally flattened palm (propodus) with a curved fixed finger below and
+ * the movable finger (dactyl, part claw) above, the two curving toward each other at the tips.
+ */
 function clawMesh(gb: GeoBuilder, wrist: V3, dir: V3, side: number, L: number, R: number, pivot: V3): void {
   const o: PartOpts = { part: PART.claw, pivot, phase: side, amp: 1, cell: ATLAS.pectoral };
   const palmEnd = add(wrist, mul(dir, L * 0.55));
-  tube(gb, spline([wrist, lerp3(wrist, palmEnd, 0.5), palmEnd], 5), (t) => R * (0.75 + 0.35 * Math.sin(Math.PI * (0.2 + 0.7 * t))), 7, o, false, 0.7, [0, 0, 1]);
-  const up: V3 = [0, 1, 0];
-  const fixedTip = add(add(palmEnd, mul(dir, L * 0.45)), mul(up, -R * 0.2));
-  tube(gb, spline([add(palmEnd, mul(up, -R * 0.3)), fixedTip], 4), (t) => R * 0.45 * (1 - 0.8 * t), 5, o, true, 0.8);
-  const dPiv = add(palmEnd, mul(up, R * 0.35));
-  const dTip = add(add(palmEnd, mul(dir, L * 0.45)), mul(up, R * 0.25));
-  tube(gb, spline([dPiv, lerp3(dPiv, dTip, 0.5), dTip], 4), (t) => R * 0.4 * (1 - 0.8 * t), 5, { ...o, pivot: dPiv, amp: 1.2 }, true, 0.8);
+  const up: V3 = norm(sub([0, 1, 0], mul(dir, dot([0, 1, 0], dir))));
+  tube(gb, spline([wrist, lerp3(wrist, palmEnd, 0.5), palmEnd], 6), (t) => R * (0.62 + 0.42 * Math.sin(Math.PI * (0.12 + 0.78 * t))), 9,
+    { ...o, uvx: [0, 0.62] }, false, 0.62, up);
+  const fl = L * 0.47;
+  // Fixed finger: from the lower palm, curving up at the tip.
+  const f0 = add(palmEnd, mul(up, -R * 0.32));
+  const f1 = add(add(f0, mul(dir, fl * 0.55)), mul(up, -R * 0.08));
+  const f2 = add(add(f0, mul(dir, fl)), mul(up, R * 0.18));
+  tube(gb, spline([f0, f1, f2], 6), (t) => R * 0.44 * (1 - 0.82 * t), 6, { ...o, uvx: [0.62, 1] }, true, 0.8, up);
+  // Dactyl: hinged at the upper palm, curving down to meet the fixed finger.
+  const dPiv = add(palmEnd, mul(up, R * 0.34));
+  const d1 = add(add(dPiv, mul(dir, fl * 0.55)), mul(up, R * 0.12));
+  const d2 = add(add(dPiv, mul(dir, fl * 1.02)), mul(up, -R * 0.2));
+  tube(gb, spline([dPiv, d1, d2], 6), (t) => R * 0.4 * (1 - 0.82 * t), 6, { ...o, pivot: dPiv, amp: 1.2, uvx: [0.62, 1] }, true, 0.8, up);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -717,20 +773,25 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
   const cy = bodyBottom + ch * 0.35;
   const o: PartOpts = { part: PART.invBody, pivot: [0, 0, 0], phase: 0, amp: 0 };
   // Carapace: a domed, slightly squared superellipsoid; UV maps x front→back, y over the dome.
-  ellipsoid(gb, [0, cy, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1], [cl / 2, ch * 0.75, cw / 2], Math.round(12 * detail), Math.round(24 * detail), o,
+  ellipsoid(gb, [0, cy, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1], [cl / 2, ch * 0.62, cw / 2], Math.round(14 * detail), Math.round(28 * detail), o,
     (th, ph) => bodyUV(0.5 - 0.5 * Math.sin(th) * Math.cos(ph), clamp(Math.cos(th) * 1.6, -1, 1)),
-    // Squarer outline in plan view (crabs are broad-fronted).
-    (_th, ph) => Math.pow(Math.abs(Math.cos(ph)) ** 3 + Math.abs(Math.sin(ph)) ** 3, -1 / 3) * 0.9);
+    // Squarer outline in plan view (crabs are broad-fronted), a straight front margin.
+    (_th, ph) => Math.pow(Math.abs(Math.cos(ph)) ** 4 + Math.abs(Math.sin(ph)) ** 4, -1 / 4) * 0.88 * (Math.cos(ph) > 0.6 ? 1 - 0.08 * (Math.cos(ph) - 0.6) : 1),
+    // A low, flat-topped dome over a flatter underside.
+    [0.55, 0.8]);
   if (arrow) {
     // Long rostrum spike.
     tube(gb, spline([[cl * 0.45, cy + ch * 0.2, 0], [cl * 0.9, cy + ch * 0.45, 0], [cl * 1.3, cy + ch * 0.6, 0]], 6), (t) => 0.025 * cw * (1 - t), 4, { ...o, bodyXY: [0.02, 0.8] });
   }
-  // Eyes on stalks at the front corners.
+  // Short, stout eyestalks in orbits at the front corners, the dark cornea capping the tip.
   for (const side of [1, -1]) {
-    const a: V3 = [cl * 0.42, cy + ch * 0.25, side * cw * (arrow ? 0.18 : 0.2)];
-    const b: V3 = add(a, [0.03, 0.05, side * 0.02]);
-    tube(gb, [a, lerp3(a, b, 0.5), b], () => 0.016, 5, { part: PART.stalk, pivot: a, phase: side, amp: 0.4, cell: ATLAS.adipose }, false);
-    ellipsoid(gb, b, [1, 0, 0], [0, 1, 0], [0, 0, 1], [0.024, 0.024, 0.024], 5, 8, { part: PART.stalk, pivot: a, phase: side, amp: 0.4 }, eyeUV);
+    const a: V3 = [cl * 0.4, cy + ch * 0.18, side * cw * (arrow ? 0.18 : 0.24)];
+    const b: V3 = add(a, [0.045, 0.035, side * 0.03]);
+    tube(gb, [a, lerp3(a, b, 0.5), b], (t) => 0.022 * (1 - 0.15 * t), 6, { part: PART.stalk, pivot: a, phase: side, amp: 0.4, bodyXY: [0.08, 0.6] }, false);
+    const d = norm(sub(b, a));
+    const e2 = norm(cross(d, [0, 0, 1]));
+    const e3 = cross(d, e2);
+    ellipsoid(gb, add(b, mul(d, 0.008)), e2, d, e3, [0.02, 0.018, 0.02], 5, 8, { part: PART.stalk, pivot: a, phase: side, amp: 0.4 }, eyeUV);
   }
   // Walking legs (4 pairs) radiating from the sides; chelipeds in front.
   const legLen = arrow ? 1.9 : flat ? 0.85 : 0.62;
@@ -778,8 +839,8 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
   rot(fb);
   const spec: PaintSpec = {
     hd: () => 0.5,
-    roughness: 0.38,
-    specular: 0.4,
+    roughness: 0.52,
+    specular: 0.3,
     eye: 'compound',
     normalStrength: 4,
     detail: (x, y, out) => {
@@ -1021,17 +1082,44 @@ function snail(sp: Species, body: ResolvedBody, look: Appearance, detail: number
   const yc = -0.425 * D;
   const width = clamp(body.width, 0.25, 1);
   // Soft body: foot sole on the contact plane, head with tentacles at the front.
-  const footLen = kind === 'cowrie' || kind === 'abalone' ? 1.0 : kind === 'trumpet' ? 0.55 : 0.72;
+  const footLen = kind === 'cowrie' || kind === 'abalone' ? 1.0 : kind === 'trumpet' ? 0.62 : 0.8;
   const footW = Math.min(0.45, width * 0.55) * (kind === 'abalone' ? 1.4 : 1);
-  const footH = 0.08;
+  const footH = 0.11;
   const footO: PartOpts = { part: PART.foot, pivot: [0, 0, 0], phase: 0, amp: 1 };
-  ellipsoid(gb, [0.04, yc + footH * 0.5, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1], [footLen / 2, footH * 0.5, footW / 2], 6, 18, footO,
-    (th, ph) => cellUV(ATLAS.dorsal2, 0.5 + 0.45 * Math.sin(th) * Math.cos(ph), Math.cos(th)),
-    (th) => (th > Math.PI * 0.55 ? 0.95 : 1));
+  // The muscular foot glides on a flat sole: thick under the shell, tapering to a thin tail
+  // behind, and rising at the front into the neck and head.
+  {
+    const i0 = gb.idx.length, v0 = gb.vertexCount;
+    const nS = Math.round(16 * detail), nR = Math.round(14 * detail);
+    const x0 = 0.04 - footLen / 2;
+    for (let i = 0; i <= nS; i++) {
+      const t = i / nS; // tail → front
+      const x = x0 + footLen * t;
+      const env = Math.pow(Math.sin(Math.PI * Math.min(1, t * 1.05)), 0.45);
+      const hw = Math.max(0.004, (footW / 2) * env * (0.55 + 0.45 * smooth(0, 0.35, t)));
+      const h = Math.max(0.004, footH * (0.35 + 0.65 * smooth(0, 0.45, t)) * (0.6 + 0.4 * env));
+      for (let j = 0; j <= nR; j++) {
+        const a = (j / nR) * Math.PI * 2;
+        const ca = Math.cos(a), sa = Math.sin(a);
+        // Flat sole (a < 0 half), domed back; the sole edge flares slightly.
+        const yy = sa >= 0 ? h * Math.pow(sa, 0.8) : -0.004 * Math.pow(-sa, 0.3);
+        const zz = hw * Math.sign(ca) * Math.pow(Math.abs(ca), sa >= 0 ? 0.9 : 0.35);
+        const [u, v] = cellUV(ATLAS.dorsal2, t, sa >= 0 ? ca : 0.9 * ca);
+        gb.v(x, yc + 0.006 + yy, zz, u, v, t, PART.foot, 1, 0, 0, 0, 0, 0);
+      }
+    }
+    for (let i = 0; i < nS; i++) {
+      for (let j = 0; j < nR; j++) {
+        const a = v0 + i * (nR + 1) + j, b = a + nR + 1;
+        gb.quad(a, b, b + 1, a + 1);
+      }
+    }
+    gb.smoothNormals(i0, v0);
+  }
   // Head and tentacles.
-  const head: V3 = [footLen * 0.42 + 0.04, yc + footH * 0.9, 0];
-  ellipsoid(gb, head, [1, 0, 0], [0, 1, 0], [0, 0, 1], [0.07, 0.045, 0.07], 5, 10, { ...footO, part: PART.invBody, amp: 0 },
-    (th, ph) => cellUV(ATLAS.dorsal2, 0.8 + 0.1 * Math.cos(ph), Math.cos(th)));
+  const head: V3 = [0.04 + footLen * 0.48, yc + footH * 0.95, 0];
+  ellipsoid(gb, head, [1, 0, 0], [0, 1, 0], [0, 0, 1], [0.075, 0.05, 0.07], 6, 12, { ...footO, part: PART.invBody, amp: 0 },
+    (th, ph) => cellUV(ATLAS.dorsal2, 0.85 + 0.1 * Math.cos(ph), Math.cos(th)));
   for (const side of [1, -1]) {
     const a: V3 = add(head, [0.03, 0.02, side * 0.035]);
     const tl = kind === 'apple' ? 0.32 : kind === 'trumpet' ? 0.16 : 0.2;
@@ -1074,7 +1162,7 @@ function snail(sp: Species, body: ResolvedBody, look: Appearance, detail: number
     }
     spec = shellPaintSpec(look, P.W, P.T);
   }
-  spec.softBody = mix(hex(look.fin), [0.35, 0.33, 0.3], 0.25);
+  spec.softBody = mix(hex(look.fin), [0.2, 0.19, 0.17], 0.45);
   const half: [number, number, number] = [0.55, D * 0.55, width * 0.55];
   return finish(gb, fb, sp, look, spec, half);
 }

@@ -4,6 +4,9 @@ import type { Sex, Species } from '../src/core/types';
 import { ARCHETYPES } from '../src/core/enums';
 import { ARCHETYPE_PRESETS, resolveBody, resolveLook, sexMatters } from '../src/render/fish/archetypes';
 import { buildFishGeometry, lodFor } from '../src/render/fish/fishGeometry';
+import { PART } from '../src/render/fish/geometryBuilder';
+import { BodyProfile } from '../src/render/fish/profile';
+import { rasterize, type Surface } from '../src/render/fish/patterns';
 import { buildSeahorse } from '../src/render/fish/seahorse';
 import { buildInvertebrate } from '../src/render/fish/invertebrates';
 import { paintFishAtlas } from '../src/render/fish/textures';
@@ -95,5 +98,110 @@ describe('fish renderer', () => {
     expect(box.min.x).toBeGreaterThan(-0.56);
     expect(box.max.x - box.min.x).toBeGreaterThan(0.9);
     expect(box.max.x - box.min.x).toBeLessThan(1.1);
+  });
+});
+
+/** Vertices of one part (PART id) in a built geometry. */
+function partCount(geo: import('three').BufferGeometry, part: number): number {
+  const a = geo.getAttribute('aSpine') as BufferAttribute;
+  let n = 0;
+  for (let i = 0; i < a.count; i++) if (Math.round(a.getY(i)) === part) n++;
+  return n;
+}
+
+/** A minimal valid species (biology copied from the neon) with the given body plan. */
+function withBody(body: Species['body'], extra: Partial<Species> = {}): Species {
+  const base = all.find((s) => s.id === 'paracheirodon-innesi') ?? all[0];
+  return { ...base, id: `test-${body.archetype}`, body, ...extra } as Species;
+}
+
+describe('explicit body overrides beat archetype presets', () => {
+  it('dorsal2: null removes the second dorsal (sturgeons on the shark preset)', () => {
+    const sp = withBody({ archetype: 'shark', dorsal2: null });
+    const body = resolveBody(sp, 'unknown');
+    expect(body.dorsal2).toBeNull();
+    const g = buildFishGeometry(body, lodFor(30, false));
+    expect(partCount(g.fins, PART.dorsal2)).toBe(0);
+    // The archetype default is still there when the data says nothing.
+    expect(resolveBody(withBody({ archetype: 'shark' }), 'unknown').dorsal2).not.toBeNull();
+  });
+
+  it('barbels: 0 removes archetype barbels (leaffish chin barbel)', () => {
+    const sp = withBody({ archetype: 'leaffish', barbels: 0 });
+    const body = resolveBody(sp, 'unknown');
+    expect(body.barbels).toBe(0);
+    expect(partCount(buildFishGeometry(body, lodFor(8, false)).body, PART.barbel)).toBe(0);
+    expect(partCount(buildFishGeometry(resolveBody(withBody({ archetype: 'leaffish' }), 'unknown'), lodFor(8, false)).body, PART.barbel)).toBeGreaterThan(0);
+  });
+
+  it('adipose: false removes the tetra adipose fin', () => {
+    const body = resolveBody(withBody({ archetype: 'tetra', adipose: false }), 'unknown');
+    expect(body.adipose).toBe(false);
+    expect(partCount(buildFishGeometry(body, lodFor(4, false)).fins, PART.adipose)).toBe(0);
+  });
+
+  it('a sex override can remove a fin, and sex defaults never re-add removed parts', () => {
+    const sp = withBody({ archetype: 'rainbowfish' }, { male: { body: { dorsal2: null, barbels: 0 } } });
+    expect(resolveBody(sp, 'male').dorsal2).toBeNull();
+    expect(resolveBody(sp, 'female').dorsal2).not.toBeNull();
+  });
+
+  it("a 'continuous' tail does not stretch an explicit short dorsal (featherbacks)", () => {
+    const sp = withBody({
+      archetype: 'knifefish',
+      caudal: { shape: 'continuous', size: 0.06 },
+      dorsal: { start: 0.46, end: 0.5, height: 0.07, shape: 'pointed' },
+      anal: { start: 0.28, end: 1, height: 0.1, shape: 'low' },
+    });
+    const body = resolveBody(sp, 'unknown');
+    expect(body.dorsal!.end).toBeCloseTo(0.5, 5);
+    expect(body.anal!.end).toBeCloseTo(1, 5);
+  });
+
+  it("a species' own snout drops the archetype's snout extension; 'beak' on slender fish stays slim", () => {
+    const pointed = resolveBody(withBody({ archetype: 'needlefish', snout: 'pointed' }), 'unknown');
+    expect(pointed.snoutLength).toBe(0);
+    const beak = resolveBody(withBody({ archetype: 'pike', snout: 'beak', depth: 0.14 }), 'unknown');
+    expect(beak.snout).not.toBe('beak');
+    const prof = new BodyProfile(beak);
+    // Slim jaws: the head near the tip is far narrower than the body.
+    expect(prof.halfWidth(0.03)).toBeLessThan(0.35 * prof.halfWidth(0.4));
+    expect(resolveBody(withBody({ archetype: 'parrotfish', snout: 'beak' }), 'unknown').snout).toBe('beak');
+  });
+});
+
+describe('pattern DSL: curved bands', () => {
+  const surf = (opX?: number): Surface => {
+    const w = 120, h = 60;
+    const px = new Float32Array(w), py = new Float32Array(h), hd = new Float32Array(w);
+    for (let i = 0; i < w; i++) {
+      px[i] = (i + 0.5) / w;
+      hd[i] = 0.2;
+    }
+    for (let j = 0; j < h; j++) py[j] = 1 - (2 * (j + 0.5)) / h;
+    return { w, h, px, py, hd, seed: 1, opX };
+  };
+  const centreX = (s: Surface, m: Float32Array, row: number) => {
+    let sum = 0, wsum = 0;
+    for (let c = 0; c < s.w; c++) {
+      sum += m[row * s.w + c] * s.px[c];
+      wsum += m[row * s.w + c];
+    }
+    return sum / wsum;
+  };
+  it('curve bows the band toward the tail at mid-height', () => {
+    const s = surf();
+    const m = new Float32Array(s.w * s.h);
+    rasterize({ type: 'region', color: '#ffffff', x0: 0.4, x1: 0.5, y0: -1, y1: 1, curve: 1 }, s, m);
+    expect(centreX(s, m, Math.floor(s.h / 2))).toBeGreaterThan(centreX(s, m, 1) + 0.03);
+  });
+  it('a full-height head bar follows the gill cover automatically', () => {
+    const s = surf(0.28);
+    const m = new Float32Array(s.w * s.h);
+    rasterize({ type: 'bars', color: '#ffffff', count: 1, width: 0.06, x0: 0.25, x1: 0.25 }, s, m);
+    expect(centreX(s, m, Math.floor(s.h / 2))).toBeGreaterThan(centreX(s, m, 1) + 0.02);
+    const flat = new Float32Array(s.w * s.h);
+    rasterize({ type: 'bars', color: '#ffffff', count: 1, width: 0.06, x0: 0.25, x1: 0.25, curve: 0 }, s, flat);
+    expect(Math.abs(centreX(s, flat, Math.floor(s.h / 2)) - centreX(s, flat, 1))).toBeLessThan(0.005);
   });
 });

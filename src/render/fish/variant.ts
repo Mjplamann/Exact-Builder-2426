@@ -90,9 +90,16 @@ export class FishVariant {
     this.tex = tex;
     const swim = swimParams(species, body);
     const discHalf = body.kind === 'ray' ? body.width * 0.5 * shape.info.slLocal : 1;
+    const isFish = body.kind === 'fish' || body.kind === 'seahorse' || body.kind === 'ray';
     this.mats = createFishMaterials(species, look, tex, swimUniforms(swim, shape.info, discHalf), opts.envMap, {
       underwater: opts.underwater,
       livebearer: species.reproduction === 'livebearer' || LIVEBEARER_ARCH.has(body.archetype),
+      skin: {
+        scaleCols: isFish && body.skin === 'scaled' && body.scaleSize > 0.02 ? 62 - 40 * body.scaleSize : 0,
+        depth: body.depth,
+        adultCm: adult,
+        invertebrate: !isFish,
+      },
     });
     this.allocate(4);
   }
