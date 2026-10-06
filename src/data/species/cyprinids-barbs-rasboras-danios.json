@@ -719,7 +719,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Central Myanmar — Chindwin & middle Ayeyarwady basins",
-  "description": "Named after the city of Odessa, where it first turned up in aquaria in the 1970s, it was formally described only in 2008 from central Myanmar. Males carry a broad scarlet band along the flank and black-spotted dorsal fin; both sexes have a dark shoulder spot and tail-stem spot.",
+  "description": "Known for decades in the hobby as the Odessa barb, a name from the former Soviet Union where it surfaced in aquaria in the early 1970s, it was formally described only in 2008 from central Myanmar. Males carry a broad scarlet band along the flank and a black-spotted dorsal fin; both sexes have a dark shoulder spot and tail-stem spot.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -1377,7 +1377,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "South-western Sri Lanka — shaded wet-zone forest streams",
-  "description": "The red-finned \"Cuming’s barb\" kept by aquarists since the 1930s, recognised as a separate species only in 2008 — reval combines the Sinhala words for red and fins. It lives in shaded rainforest streams and grows to only about 3.5 cm standard length.",
+  "description": "The red-finned fish sold for decades as Cuming’s barb, recognised as a separate species only in 2008. It lives in shaded rainforest streams of south-western Sri Lanka and reaches only about 3.5 cm standard length.",
   "adultLengthCm": 4.2,
   "birthLengthCm": 0.25,
   "maturityMonths": 6,
@@ -1600,7 +1600,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Myanmar",
-  "description": "A small silvery barb from Myanmar, described in 2008 and named for the bright red upper lip of males. In courtship the scales gain fine dark edges and the male darkens to an inky blue-grey.",
+  "description": "A small silvery barb from Myanmar, described in 2008; its name means \"red nose\", after the bright red snout of mature males. In courtship the scales gain fine dark edges and the male darkens to an inky blue-grey.",
   "adultLengthCm": 4,
   "birthLengthCm": 0.25,
   "maturityMonths": 6,
@@ -2968,7 +2968,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Peninsular Malaysia & Singapore — forest streams and rivers",
-  "description": "Most \"clown barbs\" in the trade are this Malayan species, long misidentified as the Bornean B. everetti. Juveniles are boldly blotched; adults turn orange-pink with oval dark blotches, a broken mid-flank line and bright red lower fins.",
+  "description": "Many \"clown barbs\" in the trade are this Malayan species, long confused with the Bornean B. everetti. Juveniles are boldly blotched; adults turn orange-pink with oval dark blotches, a broken mid-flank line and bright red lower fins.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.35,
   "maturityMonths": 12,
@@ -3775,35 +3775,7 @@
    }
   },
   "male": {
-   "lengthScale": 0.95,
-   "look": {
-    "patterns": [
-     {
-      "type": "mask",
-      "color": "#141414",
-      "width": 0.06
-     },
-     {
-      "type": "bars",
-      "color": "#141414",
-      "count": 3,
-      "width": 0.075,
-      "x0": 0.26,
-      "x1": 0.9,
-      "y0": -0.75,
-      "y1": 1
-     },
-     {
-      "type": "region",
-      "color": "#e0302a",
-      "x0": 0,
-      "x1": 0.07,
-      "y0": -0.4,
-      "y1": 0.7,
-      "softness": 0.04
-     }
-    ]
-   }
+   "lengthScale": 0.95
   },
   "female": {
    "body": {
@@ -3922,35 +3894,7 @@
    }
   },
   "male": {
-   "lengthScale": 0.95,
-   "look": {
-    "patterns": [
-     {
-      "type": "mask",
-      "color": "#141414",
-      "width": 0.06
-     },
-     {
-      "type": "bars",
-      "color": "#141414",
-      "count": 3,
-      "width": 0.075,
-      "x0": 0.26,
-      "x1": 0.9,
-      "y0": -0.75,
-      "y1": 1
-     },
-     {
-      "type": "region",
-      "color": "#e0302a",
-      "x0": 0,
-      "x1": 0.07,
-      "y0": -0.4,
-      "y1": 0.7,
-      "softness": 0.04
-     }
-    ]
-   }
+   "lengthScale": 0.95
   },
   "female": {
    "body": {
@@ -4472,7 +4416,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Thailand, Cambodia & the Malay Peninsula — streams and swamps",
-  "description": "A smaller wild relative of the tiger barb, told apart by a black spot at the base of the dorsal fin and a mid-body bar that does not reach the belly. It turns up occasionally in the trade alongside farmed tiger barbs.",
+  "description": "A smaller wild relative of the tiger barb, told apart by a black blotch at the base of the dorsal fin and an extra short bar beneath it that does not reach the belly, giving five bars in all counting the eye bar. It turns up occasionally in the trade alongside farmed tiger barbs.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -4548,6 +4492,16 @@
      "x0": 0.5,
      "x1": 0.6,
      "y0": -0.25,
+     "y1": 1
+    },
+    {
+     "type": "bars",
+     "color": "#141414",
+     "count": 1,
+     "width": 0.06,
+     "x0": 0.66,
+     "x1": 0.76,
+     "y0": -0.75,
      "y1": 1
     },
     {
@@ -5567,7 +5521,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "South-western Sri Lanka — Kelani & Nilwala river basins",
-  "description": "A vulnerable Sri Lankan endemic of deep, clear, heavily shaded rainforest streams, with a bold black lateral stripe on golden-silver flanks. In the wild it feeds on filamentous algae, terrestrial insects and detritus.",
+  "description": "A Sri Lankan endemic of deep, clear, heavily shaded rainforest streams, with a bold black lateral stripe on golden-silver flanks. In the wild it feeds on filamentous algae, terrestrial insects and detritus.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.35,
   "maturityMonths": 12,
@@ -6056,13 +6010,13 @@
  },
  {
   "id": "barboides-gracilis",
-  "commonName": "Dwarf Ember Barb",
+  "commonName": "Barboides gracilis",
   "scientificName": "Barboides gracilis",
   "family": "Cyprinidae",
   "group": "fish",
   "water": "freshwater",
   "region": "West-central Africa — still, tannin-stained coastal forest streams of Nigeria & Cameroon",
-  "description": "One of Africa’s smallest cyprinids, under 2 cm long, from still, tannin-stained forest streams. Its translucent body ends in a large black spot at the tail base, with red-orange at the base of the caudal lobes.",
+  "description": "One of Africa’s smallest cyprinids, only about 2 cm long, from still, tannin-stained coastal forest streams. Its translucent body ends in a large black spot at the tail base, with red-orange at the base of the caudal lobes.",
   "adultLengthCm": 2.2,
   "birthLengthCm": 0.15,
   "maturityMonths": 4,
@@ -6773,7 +6727,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred (wild form: India, Bangladesh, Nepal & Pakistan — slow streams and rice paddies)",
-  "description": "A low-melanin strain in which the normally dark-blue stripes show as soft gold-grey bands on a pale golden body, while the eyes stay dark. Care is the same as for the wild zebra danio.",
+  "description": "A low-melanin strain in which the normally dark-blue stripes show as soft gold-grey bands on a pale golden body. Care is the same as for the wild zebra danio.",
   "adultLengthCm": 4.5,
   "birthLengthCm": 0.3,
   "maturityMonths": 3,
@@ -6981,7 +6935,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred (GloFish® line; wild form: India, Bangladesh, Nepal & Pakistan)",
-  "description": "The first GloFish, sold in the United States from 2003: a zebrafish carrying a red fluorescent-protein gene, originally developed in Singapore as a pollution sensor. It glows under blue light and is otherwise an ordinary zebra danio.",
+  "description": "The original GloFish, on sale in the United States since 2004: a zebrafish carrying a red fluorescent-protein gene, originally developed in Singapore as a pollution sensor. It glows under blue light and is otherwise an ordinary zebra danio.",
   "adultLengthCm": 4.5,
   "birthLengthCm": 0.3,
   "maturityMonths": 3,
@@ -7924,13 +7878,13 @@
  },
  {
   "id": "danio-flagrans",
-  "commonName": "Northern Glowlight Danio",
+  "commonName": "Danio flagrans",
   "scientificName": "Danio flagrans",
   "family": "Danionidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Far northern Myanmar — streams of the upper Mali Hka near Putao, Kachin State",
-  "description": "Described in 2012 from a handful of streams near Putao, it resembles the glowlight danio but is redder and lives in cooler water. Like its relatives it is an accomplished jumper that slips through tiny gaps.",
+  "region": "Northern Myanmar — upper Ayeyarwady drainage, Kachin State",
+  "description": "Described in 2012 together with a redescription of its close relative the glowlight danio (D. choprae), from the upper Ayeyarwady drainage of northern Myanmar. Like D. choprae it has dark bars on the front half and a glowing orange-red line along the flank, and it is an accomplished jumper.",
   "adultLengthCm": 4,
   "birthLengthCm": 0.25,
   "maturityMonths": 4,
@@ -8853,8 +8807,8 @@
   "family": "Danionidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Western Myanmar — Rakhine Yoma hill streams",
-  "description": "Described in 2009 and named for its snakeskin-like pattern: six or seven brown vertical bars on the front half and two rows of small spots behind. In sunlight the plain-looking flanks flash many colours.",
+  "region": "South-western Myanmar — coastal hill streams of the Rakhine Yoma",
+  "description": "Described in 2009 and named after Aesculapius, the Roman god of medicine, because its close relative the zebrafish is so important in medical research. The front half of the flank carries dark vertical bars that give way to two rows of small spots towards the tail.",
   "adultLengthCm": 3.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 4,
@@ -8959,7 +8913,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Meghalaya, north-eastern India — hill streams",
-  "description": "A chain danio from hill streams of Meghalaya, with a dark spot behind the gill cover and three distinct horizontal blue stripes that sometimes run together. It grows larger than the zebra danio and needs a long tank.",
+  "description": "A member of the long-barbelled D. dangila group from hill streams of Meghalaya, with a dark spot behind the gill cover and three distinct horizontal blue stripes that sometimes run together. It grows larger than the zebra danio and needs a long tank.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -8997,7 +8951,7 @@
    "width": 0.1,
    "mouth": "superior",
    "barbels": 4,
-   "barbelLength": 0.05,
+   "barbelLength": 0.08,
    "caudal": {
     "shape": "forked",
     "size": 0.3
@@ -12312,7 +12266,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Thailand, Indochina, Malay Peninsula, Sumatra, Java & Borneo — rivers and flooded fields",
-  "description": "A widespread, silvery Sundaland rasbora of rivers that moves into flooded fields in the wet season and feeds largely on algae and small invertebrates. Its scales are finely edged in brown and a silvery band runs along the flank.",
+  "description": "A widespread, silvery Sundaland rasbora of rivers that moves into flooded fields in the wet season, feeding on insects, zooplankton and some plant matter. Its scales are finely edged in brown and a silvery band runs along the flank.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.3,
   "maturityMonths": 10,
@@ -12342,8 +12296,7 @@
   "burstSpeed": 10,
   "traits": [
    "bold",
-   "jumper",
-   "algae-eater"
+   "jumper"
   ],
   "body": {
    "archetype": "rasbora",
@@ -12673,7 +12626,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "West Sumatra, Indonesia — highland streams",
-  "description": "A Sumatran rasbora described in 1999 and named for the fiery orange body of mature males; females are plainer and fuller-bodied. Exporters tend to ship mostly the colourful males.",
+  "description": "A Sumatran highland-stream rasbora described in 1999; mature males develop a fiery orange body, while females are plainer and fuller-bodied.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.25,
   "maturityMonths": 6,
@@ -14118,7 +14071,7 @@
  },
  {
   "id": "paedocypris-progenetica",
-  "commonName": "Sumatran Miniature Cyprinid",
+  "commonName": "Paedocypris progenetica",
   "scientificName": "Paedocypris progenetica",
   "family": "Paedocyprididae",
   "group": "fish",
