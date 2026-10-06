@@ -2,8 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#02070a" />
+    <!-- iOS: full-screen home-screen app, no Safari chrome, content under the Dynamic Island handled via safe-area insets -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Aquarium" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 180 180%22%3E%3Crect width=%22180%22 height=%22180%22 fill=%22%2302070a%22/%3E%3Cpath d=%22M28 92c26-36 78-42 110-10l22-18v56l-22-18c-32 32-84 26-110-10z%22 fill=%22%237fd6c2%22/%3E%3C/svg%3E" />
     <title>Living Aquarium</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cpath d=%22M6 32c10-14 30-16 42-4l10-8v24l-10-8C36 48 16 46 6 32z%22 fill=%22%237fd6c2%22/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="/src/ui/styles.css" />

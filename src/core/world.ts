@@ -39,8 +39,20 @@ export interface World {
   follow: string | null;
 }
 
+/**
+ * Pick a sensible starting quality for the device. Phones and tablets (iPhone, iPad, Android) get
+ * 'medium': high-DPR screens already look crisp, and it keeps the GPU cool on long, calm sessions.
+ */
+export function detectDefaultQuality(): Settings['quality'] {
+  if (typeof navigator === 'undefined') return 'high';
+  const ua = navigator.userAgent || '';
+  const touchMac = /Macintosh/.test(ua) && (navigator.maxTouchPoints ?? 0) > 1; // iPadOS reports as Mac
+  const mobile = /iPhone|iPad|iPod|Android|Mobile/.test(ua) || touchMac;
+  return mobile ? 'medium' : 'high';
+}
+
 export const DEFAULT_SETTINGS: Settings = {
-  quality: 'high',
+  quality: detectDefaultQuality(),
   sound: false,
   volume: 0.5,
   uiAutoHide: true,
