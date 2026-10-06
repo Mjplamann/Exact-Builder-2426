@@ -1,0 +1,29 @@
+{
+  "name": "reef-and-river",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "An ultra-realistic, living aquarium simulator for the browser.",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "build:single": "vite build --mode single",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "validate:data": "vitest run tests/speciesData.test.ts tests/plantData.test.ts",
+    "shot": "node scripts/screenshot.mjs"
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/three": "^0.186.0",
+    "playwright-core": "^1.63.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.3",
+    "vite-plugin-singlefile": "^2.3.3",
+    "vitest": "^5.0.3"
+  }
+}

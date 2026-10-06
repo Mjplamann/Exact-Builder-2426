@@ -1,0 +1,24 @@
+/* Base page styles. OWNER: UI module (extend freely). */
+:root {
+  --bg: #02070a;
+  --panel: rgba(8, 18, 24, 0.72);
+  --panel-border: rgba(160, 210, 230, 0.14);
+  --text: #e6f1f4;
+  --text-dim: #9db3bb;
+  --accent: #7fd6c2;
+  --warn: #f2c46d;
+  --danger: #f08a7a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); overflow: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+#tank { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; touch-action: none; }
+#ui { position: fixed; inset: 0; pointer-events: none; }
+#ui > * { pointer-events: auto; }
+.boot { position: fixed; inset: 0; display: grid; place-content: center; text-align: center; background: var(--bg);
+  color: var(--text-dim); transition: opacity 1.2s ease; z-index: 100; }
+.boot.done { opacity: 0; pointer-events: none; }
+.boot-ripple { width: 48px; height: 48px; margin: 0 auto 16px; border-radius: 50%; border: 2px solid var(--accent);
+  animation: ripple 1.8s ease-out infinite; }
+@keyframes ripple { from { transform: scale(0.4); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
