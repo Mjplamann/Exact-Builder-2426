@@ -326,7 +326,7 @@ export class CameraRig {
   private centreFor(p: Vector3, sx: number, sy: number, lz: number, out: Vector3): Vector3 {
     const z = Math.exp(lz);
     const dist = this.distAt(z);
-    const tan = this.homeH / (2 * z * dist);
+    const tan = this.tanAt(z);
     const lift = EYE_LIFT * 2 * dist * tan;
     const dS = p.z < this.frontZ ? (this.frontZ - p.z) / this.n : 0;
     out.x = p.x - sx * (dist + dS) * tan * this.aspect;
@@ -689,7 +689,7 @@ export class CameraRig {
     const v = this.view.pos;
     const z = Math.exp(v.z);
     const dist = this.distAt(z);
-    const tan = this.homeH / (2 * z * dist);
+    const tan = this.tanAt(z);
     const lift = EYE_LIFT * 2 * dist * tan;
     const p = this.spFast;
     const reach = dist + Math.max(0, this.frontZ - p.z) / this.n;
@@ -751,7 +751,7 @@ export class CameraRig {
     const v = this.view.pos;
     const z = Math.exp(v.z);
     const dist = this.distAt(z);
-    this.tanR = this.homeH / (2 * z * dist);
+    this.tanR = this.tanAt(z);
     const cam = this.camera;
     cam.position.set(v.x, v.y, this.frontZ + dist);
     if (this.drift) {
