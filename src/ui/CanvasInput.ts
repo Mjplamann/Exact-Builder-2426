@@ -403,7 +403,10 @@ export class CanvasInput {
     this.pinch = { a, b, prev: { ax: pa.x, ay: pa.y, bx: pb.x, by: pb.y }, t0, travel: 0 };
   }
 
-  /** Two fingers: pan with their centre, then zoom about it so the tank stays under them. */
+  /**
+   * Two fingers: pan with their centre, then zoom about it so the tank stays under them. While
+   * following, a pinch only reframes the animal (a pan would let go of it).
+   */
   private movePinch(): void {
     const p = this.pinch!;
     const a = this.pointers.get(p.a);
@@ -416,7 +419,7 @@ export class CanvasInput {
     cur.by = b.y;
     const m = pinchMove(p.prev, cur, this.pinchOut);
     p.travel += Math.abs(m.dx) + Math.abs(m.dy) + Math.abs(m.ds);
-    if (m.dx || m.dy) this.pan(m.dx, m.dy);
+    if ((m.dx || m.dy) && !this.host.app.world.follow) this.pan(m.dx, m.dy);
     if (Math.abs(m.steps) > 1e-3) this.view.zoom(Math.max(-3, Math.min(3, m.steps)), m.cx, m.cy);
     p.prev.ax = cur.ax;
     p.prev.ay = cur.ay;

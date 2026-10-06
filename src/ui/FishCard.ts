@@ -12,7 +12,6 @@ import { button, confirmButton, iconButton } from './controls';
 import { h, setAttr, setClass, setStyle, setText } from './dom';
 import { aName, formatAge, formatLength, humanActivity } from './format';
 import { icon } from './icons';
-import { FOLLOW_FILL } from './ViewControls';
 
 interface Bar {
   fill: HTMLElement;
@@ -78,7 +77,7 @@ export class FishCard {
       if (!id) return;
       // During a tour this takes the camera over (it stays with this animal).
       const on = app.world.follow === id && !app.isTouring();
-      app.follow(on ? null : id, { fill: FOLLOW_FILL.initial });
+      app.follow(on ? null : id);
       this.refresh();
     }, { icon: 'follow', cls: 'aq-btn-small', title: host.isTouch ? undefined : 'Follow it with the camera  ·  F' });
     this.followLabel = this.followBtn.querySelector('span')!;

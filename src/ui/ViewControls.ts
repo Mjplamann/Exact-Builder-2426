@@ -2,10 +2,11 @@
  * Close-up camera controls: the quiet zoom cluster (− / readout / + / whole tank, and Tour), the
  * follow / tour chip at the top, and the single place every view gesture is routed through
  * (wheel, pinch, drag, keys, buttons, the fish card), so following, touring and zooming stay
- * consistent:
- *  - zooming while following changes how tightly the animal is framed (`setFollowFill`);
- *  - zooming or picking an animal during a tour takes the camera over (it stays with that animal);
- *  - panning, opening a panel or Esc end a tour; Esc then stops following.
+ * consistent. The App and camera own the mechanics; the router decides what an input means:
+ *  - zooming while following frames the animal tighter or looser (the camera keeps it within
+ *    what the lens can reach); zooming, panning or opening a panel ends a tour on the current shot;
+ *  - picking an animal during a tour hands the camera to it;
+ *  - the chip's ✕ and Esc end the tour and give the view back; Esc then stops following.
  *
  * `ViewRouter` holds the routing (no DOM, unit-tested); `ViewControls` adds the cluster and chip.
  * Everything goes through the AppApi view methods; `app.world` is only read.
@@ -40,9 +41,6 @@ const MAX_WHEEL_STEPS = 2;
 const KEY_PAN = 0.12;
 /** Below this the view counts as the whole tank (the camera eases, so allow a hair of slack). */
 const CLOSE_ZOOM = 1.02;
-
-/** The camera's `fill` while following: fraction of the screen width the animal spans. */
-export const FOLLOW_FILL = { min: 0.08, max: 0.45, initial: 0.2 } as const;
 
 export interface WheelLike {
   deltaY: number;
@@ -106,12 +104,6 @@ export function dragToPan(dxPx: number, dyPx: number, width: number, height: num
   return out;
 }
 
-/** The follow framing `steps` notches closer (+) or wider (−), within the camera's range. */
-export function stepFill(fill: number, steps: number): number {
-  const f = fill * Math.pow(ZOOM_STEP_RATIO, steps);
-  return Number.isFinite(f) ? Math.max(FOLLOW_FILL.min, Math.min(FOLLOW_FILL.max, f)) : FOLLOW_FILL.initial;
-}
-
 /** "3.2×" when zoomed in, '' at the whole-tank view. */
 export function zoomLabel(zoom: number): string {
   if (!(zoom >= 1.05)) return '';
@@ -157,7 +149,7 @@ export function viewKeyAction(key: string, ctx: { close: boolean; fishSelected: 
 // Routing (no DOM)
 // ------------------------------------------------------------------------------------------
 
-export type ViewApp = Pick<AppApi, 'world' | 'follow' | 'setFollowFill' | 'zoomBy' | 'getZoom' | 'panBy' | 'resetView' | 'setTour' | 'isTouring'>;
+export type ViewApp = Pick<AppApi, 'world' | 'follow' | 'zoomBy' | 'getZoom' | 'panBy' | 'resetView' | 'setTour' | 'isTouring'>;
 
 /** Screen size in CSS px (read live; `window` in the app). */
 export interface Viewport {
@@ -166,11 +158,6 @@ export interface Viewport {
 }
 
 export class ViewRouter {
-  /**
-   * The follow framing. Every framing change goes through here (wheel, pinch, keys, buttons), so
-   * the UI knows it without asking the camera; it starts afresh with each new animal.
-   */
-  fill: number = FOLLOW_FILL.initial;
   /** Before a tour starts: clear the stage (close panels, put the card away). */
   onTourStart: () => void = () => {};
   private panOut = { x: 0, y: 0 };
@@ -186,23 +173,16 @@ export class ViewRouter {
     return !!app.world.follow || app.isTouring() || app.getZoom().zoom > CLOSE_ZOOM;
   }
 
-  /** Zoom by wheel-notch steps (+ = closer), toward a screen point when given. */
+  /**
+   * Zoom by wheel-notch steps (+ = closer), toward a screen point when given. While following,
+   * this frames the animal tighter or looser; during a tour it takes over the current shot.
+   */
   zoom(steps: number, clientX?: number, clientY?: number): void {
     if (!steps || !Number.isFinite(steps)) return;
-    const app = this.app;
-    const id = app.world.follow;
-    if (id) {
-      this.fill = stepFill(this.fill, steps);
-      // Reframing during a tour takes the camera over: it stays with this animal.
-      if (app.isTouring()) app.follow(id, { fill: this.fill });
-      else app.setFollowFill(this.fill);
-      return;
-    }
-    if (app.isTouring()) app.setTour(false);
-    app.zoomBy(steps, clientX, clientY);
+    this.app.zoomBy(steps, clientX, clientY);
   }
 
-  /** Look around: a drag of (dx, dy) screen px (ends a tour). */
+  /** Look around: a drag of (dx, dy) screen px. Ends a tour and lets go of a followed animal. */
   pan(dxPx: number, dyPx: number): void {
     if (!dxPx && !dyPx) return;
     const p = dragToPan(dxPx, dyPx, this.viewport.innerWidth, this.viewport.innerHeight, this.panOut);
@@ -214,14 +194,9 @@ export class ViewRouter {
     this.app.resetView();
   }
 
-  /** Follow an animal from a comfortable distance (null = stop). Ends a tour. */
+  /** Follow an animal, framed by the camera to suit its size (null = stop). Ends a tour. */
   follow(fishId: string | null): void {
-    if (!fishId) {
-      this.app.follow(null);
-      return;
-    }
-    this.fill = FOLLOW_FILL.initial;
-    this.app.follow(fishId, { fill: this.fill });
+    this.app.follow(fishId);
   }
 
   /** The Follow button / F: follow this animal, or stop if you already are (a tour hands it over). */
@@ -360,8 +335,6 @@ export class ViewControls {
   private chipStop: HTMLButtonElement;
 
   private t = 0;
-  /** Last followed animal seen (the framing starts afresh with each new one). */
-  private lastFollow: string | null = null;
   private lastPanel: PanelId | null = null;
   private chipSpecies = '';
   /** Zoom readout cache (tenths), so the DOM is only touched when the shown value changes. */
@@ -406,7 +379,7 @@ export class ViewControls {
     );
 
     // Chip: [portrait] Following Neon tetra [−] [+] [✕]
-    this.chipImg = h('img', { class: 'aq-viewchip-img', alt: '', width: 44, height: 28, decoding: 'async' });
+    this.chipImg = h('img', { class: 'aq-viewchip-img', alt: '', width: 50, height: 32, decoding: 'async' });
     this.chipCam = glyph('camera', 18);
     this.chipThumb = h('span', { class: 'aq-viewchip-thumb', 'aria-hidden': 'true' }, this.chipImg);
     this.chipKicker = h('span', { class: 'aq-viewchip-kicker' });
@@ -430,10 +403,7 @@ export class ViewControls {
     ev.on('view-changed', () => this.sync());
     // Phones: the animal's card takes the space above the dock, so the cluster steps aside.
     ev.on('selection-changed', (s) => setClass(this.el, 'has-card', !!s.fishId));
-    ev.on('tank-reset', () => {
-      this.router.fill = FOLLOW_FILL.initial;
-      this.sync();
-    });
+    ev.on('tank-reset', () => this.sync());
     this.sync();
   }
 
@@ -442,10 +412,11 @@ export class ViewControls {
     return this.router.escape();
   }
 
-  /** Global shortcuts (+ − 0 T F arrows). Text fields, panels and their controls keep their keys. */
+  /** Global shortcuts (+ − 0 T F arrows). Menus and dialogs keep their keys; panels keep the arrows. */
   key(e: KeyboardEvent): boolean {
     const t = e.target as HTMLElement | null;
-    if (e.key.startsWith('Arrow') && t?.closest?.('.aq-panel, [role="radio"], [role="tab"], [role="slider"], [role="menu"], [role="listbox"], input, select, textarea')) return false;
+    if (t?.closest?.('[role="menu"], [role="dialog"], [role="listbox"]')) return false;
+    if (e.key.startsWith('Arrow') && t?.closest?.('.aq-panel, [role="radio"], [role="tab"], [role="slider"], input, select, textarea')) return false;
     return this.router.key(e.key);
   }
 
@@ -466,12 +437,8 @@ export class ViewControls {
   private sync(): void {
     const app = this.host.app;
     const id = app.world.follow;
-    // A new animal (yours or the tour's) starts from the default framing.
-    if (id !== this.lastFollow) {
-      this.lastFollow = id;
-      this.router.fill = FOLLOW_FILL.initial;
-    }
     const touring = app.isTouring();
+    // The target zoom (what the camera is heading for); while following, that of the framing.
     const z = app.getZoom();
 
     // Cluster. While an animal is followed, + and − reframe it (see ViewRouter.zoom).
@@ -482,9 +449,8 @@ export class ViewControls {
     }
     const close = !!id || touring || z.zoom > CLOSE_ZOOM;
     if (this.resetBtn.hidden === close) this.resetBtn.hidden = !close;
-    const fill = this.router.fill;
-    const atMax = id ? fill >= FOLLOW_FILL.max - 1e-3 : z.zoom >= z.max - 0.01;
-    const atMin = id ? fill <= FOLLOW_FILL.min + 1e-3 : z.zoom <= z.min + 0.01;
+    const atMax = z.zoom >= z.max - 0.01;
+    const atMin = z.zoom <= z.min + 0.01;
     if (this.zoomIn.disabled !== atMax) this.zoomIn.disabled = atMax;
     if (this.zoomOut.disabled !== atMin) this.zoomOut.disabled = atMin;
     setAttr(this.tourBtn, 'aria-pressed', String(touring));

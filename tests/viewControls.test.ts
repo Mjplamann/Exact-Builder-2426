@@ -1,12 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   BUTTON_STEPS,
-  FOLLOW_FILL,
   ViewRouter,
   ZOOM_STEP_RATIO,
   dragToPan,
   pinchMove,
-  stepFill,
   viewKeyAction,
   wheelSteps,
   zoomLabel,
@@ -88,15 +86,7 @@ describe('dragToPan', () => {
   });
 });
 
-describe('follow framing & readout', () => {
-  it('steps the fill by the zoom ratio and keeps it in range', () => {
-    expect(stepFill(0.2, BUTTON_STEPS)).toBeCloseTo(0.2 * Math.pow(ZOOM_STEP_RATIO, BUTTON_STEPS));
-    expect(stepFill(0.2, -1)).toBeCloseTo(0.2 / ZOOM_STEP_RATIO);
-    expect(stepFill(0.44, 6)).toBe(FOLLOW_FILL.max);
-    expect(stepFill(0.09, -6)).toBe(FOLLOW_FILL.min);
-    expect(stepFill(Number.NaN, 1)).toBe(FOLLOW_FILL.initial);
-  });
-
+describe('zoomLabel', () => {
   it('reads out the zoom only when closer than the whole tank', () => {
     expect(zoomLabel(1)).toBe('');
     expect(zoomLabel(1.04)).toBe('');
@@ -131,30 +121,39 @@ describe('viewKeyAction', () => {
   });
 });
 
-/** A stand-in for the App's view API with the same follow/tour rules (follow and pan end a tour). */
+/**
+ * A stand-in for the App's view API with its rules: following or any hands-on framing ends a tour
+ * on the current shot; a pan lets go of a followed animal; a tour opens on the whole tank.
+ */
 function fakeApp(opts: { zoom?: number } = {}) {
   const state = { zoom: opts.zoom ?? 1, touring: false };
   const world = { follow: null as string | null, selection: {} as { fishId?: string }, fishById: new Map<string, unknown>([['a', {}], ['b', {}]]) };
   const app = {
     world,
-    follow: vi.fn((id: string | null) => {
+    follow: vi.fn((id: string | null): void => {
       state.touring = false;
       world.follow = id;
     }),
-    setFollowFill: vi.fn(),
-    zoomBy: vi.fn(),
+    zoomBy: vi.fn((steps: number, x?: number, y?: number): void => {
+      void steps;
+      void x;
+      void y;
+      state.touring = false;
+    }),
     getZoom: () => ({ zoom: state.zoom, min: 1, max: 8 }),
     panBy: vi.fn((dx: number, dy: number): void => {
       void dx;
       void dy;
       state.touring = false;
+      world.follow = null;
     }),
-    resetView: vi.fn(() => {
+    resetView: vi.fn((): void => {
       state.touring = false;
       world.follow = null;
     }),
     setTour: vi.fn((on: boolean): void => {
       state.touring = on;
+      if (on) world.follow = null;
     }),
     isTouring: () => state.touring,
   };
@@ -162,45 +161,25 @@ function fakeApp(opts: { zoom?: number } = {}) {
 }
 
 describe('ViewRouter', () => {
-  it('zooms the view toward a point when nothing is followed', () => {
-    const { app, router } = fakeApp();
+  it('zooms toward a point, or reframes a followed animal through the same call', () => {
+    const { app, world, router } = fakeApp();
     router.zoom(1.5, 300, 200);
-    expect(app.zoomBy).toHaveBeenCalledWith(1.5, 300, 200);
-    expect(app.setFollowFill).not.toHaveBeenCalled();
+    expect(app.zoomBy).toHaveBeenLastCalledWith(1.5, 300, 200);
+    world.follow = 'a';
+    router.zoom(-BUTTON_STEPS);
+    expect(app.zoomBy).toHaveBeenLastCalledWith(-BUTTON_STEPS, undefined, undefined);
+    expect(world.follow).toBe('a');
     router.zoom(0);
     router.zoom(Number.NaN);
-    expect(app.zoomBy).toHaveBeenCalledTimes(1);
+    expect(app.zoomBy).toHaveBeenCalledTimes(2);
   });
 
-  it('reframes a followed animal instead of zooming', () => {
+  it('lets the camera frame a followed animal to suit its size', () => {
     const { app, router } = fakeApp();
     router.follow('a');
-    expect(app.follow).toHaveBeenLastCalledWith('a', { fill: FOLLOW_FILL.initial });
-    router.zoom(BUTTON_STEPS);
-    expect(app.setFollowFill).toHaveBeenLastCalledWith(stepFill(FOLLOW_FILL.initial, BUTTON_STEPS));
-    router.zoom(-2 * BUTTON_STEPS);
-    expect(router.fill).toBeCloseTo(stepFill(stepFill(FOLLOW_FILL.initial, BUTTON_STEPS), -2 * BUTTON_STEPS));
-    expect(app.zoomBy).not.toHaveBeenCalled();
-    // A new animal starts from the default framing again.
-    router.follow('b');
-    expect(router.fill).toBe(FOLLOW_FILL.initial);
-  });
-
-  it('lets a zoom during a tour take the camera over', () => {
-    const { app, state, world, router } = fakeApp();
-    state.touring = true;
-    world.follow = 'a';
-    router.zoom(1);
-    expect(app.follow).toHaveBeenLastCalledWith('a', { fill: stepFill(FOLLOW_FILL.initial, 1) });
-    expect(state.touring).toBe(false);
-    expect(world.follow).toBe('a');
-
-    // A wide shot of the tour: the tour ends and the view zooms.
-    state.touring = true;
-    world.follow = null;
-    router.zoom(1, 10, 20);
-    expect(app.setTour).toHaveBeenLastCalledWith(false);
-    expect(app.zoomBy).toHaveBeenLastCalledWith(1, 10, 20);
+    expect(app.follow).toHaveBeenLastCalledWith('a');
+    router.follow(null);
+    expect(app.follow).toHaveBeenLastCalledWith(null);
   });
 
   it('pans by drag fractions of the viewport', () => {
@@ -211,7 +190,7 @@ describe('ViewRouter', () => {
     expect(app.panBy).toHaveBeenCalledTimes(1);
   });
 
-  it('clears the stage before a tour, and hands the view back when you end it', () => {
+  it('clears the stage before a tour, and gives the view back when you end it', () => {
     const { app, state, world, router } = fakeApp();
     const order: string[] = [];
     router.onTourStart = () => order.push('clear');
@@ -235,7 +214,8 @@ describe('ViewRouter', () => {
     expect(app.follow).not.toHaveBeenCalled();
     state.touring = true;
     router.picked('a');
-    expect(app.follow).toHaveBeenLastCalledWith('a', { fill: FOLLOW_FILL.initial });
+    expect(app.follow).toHaveBeenLastCalledWith('a');
+    expect(state.touring).toBe(false);
   });
 
   it('toggles following, but takes over (not stops) when the tour is on that animal', () => {
@@ -247,7 +227,8 @@ describe('ViewRouter', () => {
     state.touring = true;
     world.follow = 'a';
     router.toggleFollow('a');
-    expect(app.follow).toHaveBeenLastCalledWith('a', { fill: FOLLOW_FILL.initial });
+    expect(app.follow).toHaveBeenLastCalledWith('a');
+    expect(world.follow).toBe('a');
   });
 
   it('unwinds Esc: tour first, then following, then nothing', () => {
@@ -279,6 +260,7 @@ describe('ViewRouter', () => {
     expect(world.follow).toBe('b');
     expect(router.key('ArrowRight')).toBe(true);
     expect(app.panBy).toHaveBeenLastCalledWith(0.12, 0);
+    state.zoom = 2;
     expect(router.key('ArrowDown')).toBe(true);
     expect(app.panBy).toHaveBeenLastCalledWith(0, -0.12);
     expect(router.key('0')).toBe(true);
@@ -295,6 +277,9 @@ describe('ViewRouter', () => {
     expect(fakeApp({ zoom: 1.5 }).router.isClose()).toBe(true);
     const f = fakeApp();
     f.world.follow = 'a';
+    expect(f.router.isClose()).toBe(true);
+    f.world.follow = null;
+    f.state.touring = true;
     expect(f.router.isClose()).toBe(true);
   });
 });
