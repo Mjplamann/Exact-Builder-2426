@@ -56,8 +56,9 @@ export class App implements AppApi {
   readonly debug = { freezeBehavior: false, freezeLife: false };
 
   constructor(canvas: HTMLCanvasElement, uiRoot: HTMLElement) {
-    const species = loadBundledSpecies({ validate: true });
-    const plants = loadBundledPlants({ validate: true });
+    // Data files are validated by the test suite; re-validate at runtime only in development.
+    const species = loadBundledSpecies({ validate: import.meta.env.DEV });
+    const plants = loadBundledPlants({ validate: import.meta.env.DEV });
     const settings = loadSettings();
 
     let tank = loadTank();

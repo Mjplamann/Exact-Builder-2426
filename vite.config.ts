@@ -5,6 +5,8 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 export default defineConfig(({ mode }) => ({
   base: './',
   plugins: mode === 'single' ? [viteSingleFile()] : [],
+  // Bundle JSON as JSON.parse('…') — much faster to parse than object literals (2,700 species).
+  json: { stringify: true },
   build: {
     outDir: mode === 'single' ? 'dist-single' : 'dist',
     target: 'es2022',
