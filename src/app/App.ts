@@ -552,8 +552,12 @@ export class App implements AppApi {
 
   follow(fishId: string | null, opts: { fill?: number } = {}): void {
     // Choosing an animal yourself ends the tour (the camera stays on your choice).
-    if (this.tour.active) this.tour.stop();
+    const touring = this.tour.active;
+    if (touring) this.tour.stop();
+    const prev = this.world.follow;
     this.followAnimal(fishId, opts.fill);
+    // followAnimal reports a change of animal; the tour ending on the same one must be reported too.
+    if (touring && prev === this.world.follow) this.world.events.emit('view-changed', { following: this.world.follow, touring: false });
   }
 
   /** Follow without touching the tour (the tour itself and housekeeping use this). */
@@ -584,14 +588,27 @@ export class App implements AppApi {
   }
 
   setFollowFill(fill: number): void {
+    // Any hands-on framing ends the tour where it is (the camera stays on the current shot).
+    if (this.tour.active) this.setTour(false);
     this.engine.setFollowFill(fill);
   }
 
   zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number): void {
-    this.engine.zoomBy(steps, anchorClientX, anchorClientY);
+    if (this.tour.active) this.setTour(false);
+    // The anchor is whatever is under the pointer: an animal, a plant, decor (else the engine
+    // uses the substrate and glass). Picked once per gesture by the engine.
+    this.engine.zoomBy(steps, anchorClientX, anchorClientY, (x, y) => {
+      const hit = this.pickAt(x, y);
+      if (hit.kind === 'fish') {
+        const p = this.world.fishById.get(hit.id)?.kin.pos;
+        return p ? new Vector3(p[0], p[1], p[2]) : null;
+      }
+      return hit.kind === 'decor' || hit.kind === 'plant' || hit.kind === 'substrate' ? hit.point : null;
+    });
   }
 
   setZoom(zoom: number): void {
+    if (this.tour.active) this.setTour(false);
     this.engine.setZoom(zoom);
   }
 
@@ -601,6 +618,12 @@ export class App implements AppApi {
 
   panBy(dx: number, dy: number): void {
     if (this.tour.active) this.setTour(false);
+    if (this.world.follow) {
+      // Dragging takes the camera back from the animal: the view stays put and pans from there.
+      this.world.follow = null;
+      this.engine.follow(null, { hold: true });
+      this.world.events.emit('view-changed', { following: null, touring: false });
+    }
     this.engine.panBy(dx, dy);
   }
 
@@ -613,8 +636,15 @@ export class App implements AppApi {
 
   setTour(on: boolean): void {
     if (on === this.tour.active) return;
-    if (on) this.tour.start();
-    else this.tour.stop();
+    if (on) {
+      // Open on the whole tank (a slow pull-back), then drift from animal to animal.
+      this.tour.start();
+      this.followAnimal(null);
+      this.engine.resetView({ gentle: true });
+    } else {
+      // Stopping keeps the current shot; resetView() goes back to the whole tank.
+      this.tour.stop();
+    }
     this.world.events.emit('view-changed', { following: this.world.follow, touring: this.tour.active });
   }
 

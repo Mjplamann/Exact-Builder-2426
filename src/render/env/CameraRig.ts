@@ -4,15 +4,16 @@ import { substrateHeight, tankBounds } from '../../core/tankGeometry';
 
 /**
  * Viewer camera: frames the tank so its interior fills the screen ("eye at the glass"), adds a
- * slow breathing parallax drift, follows a focused fish and accepts gentle user pan/zoom.
+ * slow breathing parallax drift, zooms like a telephoto lens through the front glass and follows
+ * an animal closely like a patient wildlife cameraman.
  *
  * The camera always looks straight into the tank (along −z) from in front of the front glass,
- * apart from a small aim toward a followed fish, so verticals stay vertical like an
+ * apart from a small aim toward a followed animal, so verticals stay vertical like an
  * architectural photo. Motion uses critically damped springs: eases in and out, never overshoots.
  *
  * Optics of looking into water through a flat front pane:
  *  - Eye height: a seated viewer's eye (or a photographer's lens) sits above the middle of the
- *    tank, ~2/3 of the way up. The camera is raised by EYE_LIFT of the visible height and the
+ *    frame, ~2/3 of the way up. The camera is raised by EYE_LIFT of the visible height and the
  *    frame is re-centred with a lens shift (like a shift lens), so the framing on the front
  *    glass is unchanged and verticals stay vertical.
  *  - Refraction: a point at distance d behind a flat water/air interface appears at d/n
@@ -24,41 +25,91 @@ import { substrateHeight, tankBounds } from '../../core/tankGeometry';
  *    real viewer's pose and then places the three.js camera at that virtual eye with the
  *    narrower field. Everything stays a standard perspective camera in true world space —
  *    shading, shadows, caustics, picking (`unproject`, raycasting) and `project()` need no
- *    special cases, and `camera.position` is the point all in-water lines of sight converge
- *    on (the right eye for water path lengths and underwater view angles).
+ *    special cases at any zoom, and `camera.position` is the point all in-water lines of sight
+ *    converge on (the right eye for water path lengths and underwater view angles).
+ *  - Zoom: 1× frames the whole tank with a ~50 mm-equivalent lens. Zooming in walks a little
+ *    closer to the glass (distance ∝ zoom^−DOLLY, never nearer than MIN_GLASS_GAP) and narrows
+ *    the lens for the rest, so at 8× it is a ~200 mm telephoto: compressed perspective and a
+ *    shallow depth of field, like macro aquarium photography rather than a fisheye.
+ *
+ * View state = the frame centre on the front-glass plane (x, y in m) + ln(zoom), smoothed by one
+ * critically damped spring whose rate depends on who moves the camera: direct input settles in
+ * ~0.2 s, framing transitions take 2–4 s, and following tracks with heavy damping on position
+ * (tail beats and darts never shake the camera) and a quicker small aim that keeps the animal
+ * in frame.
  */
 
-/** Vertical field of view (deg): a ~50 mm "normal" lens; distance is derived from it. */
+/** A moving subject for the camera: live arrays read every frame (no per-frame allocation). */
+export interface FollowSubject {
+  pos: [number, number, number];
+  lengthM: number;
+  forward?: [number, number, number];
+}
+
+/** Vertical field of view (deg) at 1×: a ~50 mm "normal" lens; distance is derived from it. */
 const FOV = 26;
 /** How far above the frame centre the eye sits, as a fraction of the visible height (≈ eye at 2/3 height). */
 const EYE_LIFT = 0.17;
 /** Refractive index of water (front glass plane = refraction interface). */
 const WATER_N = 1.333;
-/** Drift amplitudes (m) and periods (s): a few cm of slow breathing, never seasick. */
+/** Drift amplitudes (m) at 1× (scaled by 1/zoom: a long lens is on a steadier tripod). */
 const DRIFT_AMP = new Vector3(0.012, 0.006, 0.01);
-/** Max user zoom (distance divisor) and the extra dolly when following a fish. */
-const MAX_ZOOM = 2.6;
-const FOCUS_ZOOM = 1.65;
+/** Telephoto range: 1× frames the whole tank; 8× ≈ a 200 mm lens on full frame. */
+export const MAX_ZOOM = 8;
+/** One wheel notch / zoom button press. */
+export const ZOOM_STEP = 1.12;
+const LN_STEP = Math.log(ZOOM_STEP);
+const LN_MAX = Math.log(MAX_ZOOM);
+/** Share of the zoom done by walking up to the glass (distance ∝ zoom^−DOLLY); the lens does the rest. */
+const DOLLY = 0.35;
 /** Closest the camera may come to the front glass (m). */
 const MIN_GLASS_GAP = 0.12;
+/** How much of the screen width a followed animal may be asked to span. */
+export const FILL_MIN = 0.05;
+export const FILL_MAX = 0.6;
+
+// Spring rates (1/s) of the critically damped framing (settle to ~2 % in ≈ 5.8/ω).
+/** Direct input (wheel, pinch, drag, buttons). */
+const OMEGA_USER = 22;
+/** "Back to the whole tank". */
+const OMEGA_RESET = 6;
+/** Following: framing position and zoom… */
+const OMEGA_FOLLOW = 1.9;
+/** …a user's change of framing while following… */
+const OMEGA_FILL = 7;
+/** …and the aim, which takes up what the slow framing lags behind. */
+const OMEGA_AIM = 5;
+/** Start of a framing transition (to/between/from animals); ramps up over the transition. */
+const OMEGA_TRANSITION = 1.1;
+/** Free view after a transition back from an animal. */
+const OMEGA_SETTLE = 2.6;
+/** The aim may turn the camera by at most this fraction of the half field (verticals stay vertical). */
+const AIM_MAX = 0.35;
+/** Rule of thirds: the subject sits this far (NDC) from the centre, away from where it is heading. */
+const LEAD = 0.26;
+/** Velocity look-ahead (s) of the framing target: takes up much of the slow spring's lag. */
+const PREDICT = 0.5;
+/**
+ * Depth of field: effective aperture h/(4N) of a full-frame sensor (h = 24 mm) at f/16 (m) — the
+ * stopped-down lens of an aquarium macro photographer.
+ */
+const DOF_APERTURE = 0.024 / (4 * 16);
 
 /** Critically damped spring toward a target (per component). */
 class Spring3 {
   readonly pos = new Vector3();
   readonly vel = new Vector3();
-  constructor(public omega: number) {}
   snap(v: Vector3): void {
     this.pos.copy(v);
     this.vel.set(0, 0, 0);
   }
-  step(target: Vector3, dt: number): void {
-    this.pos.x = this.axis(this.pos.x, target.x, 0, dt);
-    this.pos.y = this.axis(this.pos.y, target.y, 1, dt);
-    this.pos.z = this.axis(this.pos.z, target.z, 2, dt);
+  step(target: Vector3, dt: number, wx: number, wy = wx, wz = wx): void {
+    this.pos.x = this.axis(this.pos.x, target.x, 0, wx, dt);
+    this.pos.y = this.axis(this.pos.y, target.y, 1, wy, dt);
+    this.pos.z = this.axis(this.pos.z, target.z, 2, wz, dt);
   }
   /** Exact solution of x'' = -2ωx' - ω²(x - target) over dt (stable for any dt). */
-  private axis(x: number, target: number, i: 0 | 1 | 2, dt: number): number {
-    const w = this.omega;
+  private axis(x: number, target: number, i: 0 | 1 | 2, w: number, dt: number): number {
     const e = Math.exp(-w * dt);
     const x0 = x - target;
     const v0 = this.vel.getComponent(i);
@@ -68,53 +119,148 @@ class Spring3 {
   }
 }
 
+const smooth01 = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+
+/** Default framing of an animal by size: small fish ~0.22 of the screen width, larger ones ~0.3. */
+export function defaultFill(lengthM: number): number {
+  const t = MathUtils.clamp(Math.log(Math.max(1e-3, lengthM) / 0.03) / Math.log(5), 0, 1);
+  return 0.22 + 0.08 * t;
+}
+
 export class CameraRig {
   readonly camera: PerspectiveCamera;
 
   // Home framing (computed by frame()).
+  /** Real eye–glass distance at 1× (m). */
   private homeDist = 1;
-  private homeCenter = new Vector3();
+  /** Visible height on the front-glass plane at 1× (m). */
+  private homeH = 0.4;
+  private homeY = 0.2;
+  private aspect = 1;
   /** Region of the front glass plane that may be shown: x ∈ [-halfW, halfW], y ∈ [yMin, yMax]. */
   private halfW = 0.5;
   private yMin = 0;
   private yMax = 0.5;
   private frontZ = 0.25;
+  /** Back glass in true space and as it appears through the front glass. */
+  private backTrue = -0.25;
   private backZ = -0.25;
 
-  // User view (pan in meters on the glass plane, zoom = distance divisor).
-  private userPan = new Vector3();
-  private userZoom = 1;
+  // Free view target: frame centre (x, y) on the glass plane and ln(zoom) in z.
+  private free = new Vector3(0, 0.2, 0);
+  private freeOmega = OMEGA_USER;
+  /** True-space depth (z) the lens focuses at when not following (zoom anchor / tank middle). */
+  private freeFocusZ = 0;
 
-  // Focus.
-  private focusTarget = new Vector3();
-  private hasFocus = false;
-  private focusWeight = 0;
-
-  // Smoothed pose.
-  private posSpring = new Spring3(2.4);
-  private aimSpring = new Spring3(2.0);
-  private desiredPos = new Vector3();
-  private desiredAim = new Vector3();
+  // Smoothed framing (x, y, ln zoom) and aim (tangents of the extra yaw/pitch, real space).
+  private view = new Spring3();
+  private aim = new Spring3();
+  private desired = new Vector3();
+  private aimTarget = new Vector3();
   private initialized = false;
+
+  // Following.
+  private subject: FollowSubject | null = null;
+  /** Requested fill (fraction of the screen width), 0 = by size. */
+  private fill = 0;
+  /** Seconds left of quick (user-driven) zoom response while following. */
+  private fillT = 0;
+  /** Filtered subject: framing track, quick aim track, velocity and heading (true space). */
+  private sp = new Vector3();
+  private spFast = new Vector3();
+  private sv = new Vector3();
+  private sf = new Vector3(1, 0, 0);
+  private spPrev = new Vector3();
+  /** Last computed follow target (x, y, ln zoom). */
+  private followTarget = new Vector3();
+  /** 0..1 how much we are following (eased; drives depth of field). */
+  private followW = 0;
+
+  // Framing transition (start/switch/end of a follow): elapsed, length, kind, where it started.
+  private transT = 0;
+  private transDur = 0;
+  private transSwitch = false;
+  private transFrom = new Vector3();
+
+  // Optics this frame.
+  /** Tangent of the real lens's half vertical field. */
+  private tanR = Math.tan(MathUtils.degToRad(FOV) / 2);
+  /** Lens shift: tangent of the frame centre's angle below the optical axis (≤ 0). */
+  private shiftTan = 0;
+  private focusInv = 1;
+  private focusReady = false;
+  private viewDir = new Vector3(0, 0, -1);
 
   drift = true;
   private t = Math.random() * 100;
 
   private tmp = new Vector3();
   private tmp2 = new Vector3();
+  private lim = new Vector3();
+  /** For setFocus(point) callers: a still subject. */
+  private pointSubject: FollowSubject = { pos: [0, 0, 0], lengthM: 0.05 };
 
   /** Refractive index of the water behind the front glass (1 = no refraction). */
   private readonly n = WATER_N;
-  /** Lens shift: tangent of the frame centre's angle below the optical axis (≤ 0). */
-  private shiftTan = 0;
 
   constructor(aspect: number) {
     this.camera = new PerspectiveCamera(FOV, aspect, 0.03, 12);
+    this.aspect = aspect;
   }
+
+  // ------------------------------------------------------------------------------------------
+  // Optics
+  // ------------------------------------------------------------------------------------------
 
   /** Lens-shift term of the projection (element [9]), for cameras that must match this one (the surface mirror). */
   get projShiftY(): number {
-    return this.shiftTan / Math.tan(MathUtils.degToRad(FOV) / 2);
+    return this.shiftTan / this.tanR;
+  }
+
+  /** Current (animated) zoom, 1 … MAX_ZOOM. */
+  get zoom(): number {
+    return Math.exp(this.view.pos.z);
+  }
+
+  /** Target zoom: the free view's, or the framing the followed animal is heading for. */
+  get targetZoom(): number {
+    return Math.exp(this.subject ? this.followTarget.z : this.free.z);
+  }
+
+  get isFollowing(): boolean {
+    return this.subject !== null;
+  }
+
+  /** Requested framing of the followed animal (fraction of the screen width). */
+  get followFill(): number {
+    return this.fill || defaultFill(this.subject?.lengthM ?? 0.03);
+  }
+
+  /** Focus distance (m, along the view axis from `camera.position`, true space — what the depth buffer measures). */
+  get focusDistance(): number {
+    return 1 / this.focusInv;
+  }
+
+  /**
+   * Circle of confusion as a fraction of the frame height per unit of |1/focus − 1/depth|
+   * (depths as in `focusDistance`). Thin lens: c/h = h/(4N·tan²) · |1/s₁ − 1/s₂| for the real
+   * lens; in the virtual-eye space distances are n× and the tangent ÷n, hence the factor n.
+   */
+  get dofScale(): number {
+    return (DOF_APERTURE * this.n) / (this.tanR * this.tanR);
+  }
+
+  /** 0..1 how much depth of field to show: when following, and fading in past ~1.4× zoom. */
+  get dofAmount(): number {
+    return Math.max(this.followW, smooth01((this.zoom - 1.35) / 0.65));
+  }
+
+  /** Distances (as `focusDistance`) to the front and back glass: the depth range that can be in view. */
+  get glassDistance(): number {
+    return Math.max(1e-3, this.camera.position.z - this.frontZ);
+  }
+  get backDistance(): number {
+    return Math.max(1e-3, this.camera.position.z - this.backTrue);
   }
 
   /** True-space point → where it appears through the front glass (z compressed toward the glass). */
@@ -129,7 +275,7 @@ export class CameraRig {
    */
   applyProjection(): void {
     const cam = this.camera;
-    const fov = MathUtils.radToDeg(2 * Math.atan(Math.tan(MathUtils.degToRad(FOV) / 2) / this.n));
+    const fov = MathUtils.radToDeg(2 * Math.atan(this.tanR / this.n));
     if (cam.fov !== fov) cam.fov = fov;
     cam.updateMatrixWorld();
     cam.updateProjectionMatrix();
@@ -139,14 +285,91 @@ export class CameraRig {
     cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();
   }
 
+  /** Real eye–glass distance at zoom z (before drift). */
+  private distAt(z: number): number {
+    return Math.max(MIN_GLASS_GAP, this.homeDist * Math.pow(z, -DOLLY));
+  }
+
+  /** Tangent of the real lens's half vertical field at zoom z (visible height on the glass = homeH / z). */
+  private tanAt(z: number): number {
+    return this.homeH / (2 * z * this.distAt(z));
+  }
+
+  /** Visible width (m) at an apparent depth dS behind the front glass, at ln zoom lz. */
+  private widthAt(lz: number, dS: number): number {
+    const z = Math.exp(lz);
+    return ((this.aspect * this.homeH) / z) * (1 + dS / this.distAt(z));
+  }
+
+  /** ln zoom at which the visible width at apparent depth dS equals `want` (clamped to the lens range). */
+  private solveZoom(want: number, dS: number): number {
+    let lo = 0;
+    let hi = LN_MAX;
+    if (this.widthAt(hi, dS) >= want) return hi;
+    if (this.widthAt(lo, dS) <= want) return lo;
+    for (let i = 0; i < 20; i++) {
+      const m = (lo + hi) / 2;
+      if (this.widthAt(m, dS) > want) lo = m;
+      else hi = m;
+    }
+    return (lo + hi) / 2;
+  }
+
+  /**
+   * Frame centre (x, y on the glass plane) at ln zoom `lz` that shows the true-space point `p` at
+   * screen NDC (sx, sy) — the inverse of the projection with the eye lift and lens shift (no aim,
+   * no drift). Writes x, y of `out`.
+   */
+  private centreFor(p: Vector3, sx: number, sy: number, lz: number, out: Vector3): Vector3 {
+    const z = Math.exp(lz);
+    const dist = this.distAt(z);
+    const tan = this.homeH / (2 * z * dist);
+    const lift = EYE_LIFT * 2 * dist * tan;
+    const dS = p.z < this.frontZ ? (this.frontZ - p.z) / this.n : 0;
+    out.x = p.x - sx * (dist + dS) * tan * this.aspect;
+    out.y = p.y - lift - (sy * tan - lift / dist) * (dist + dS);
+    return out;
+  }
+
+  // ------------------------------------------------------------------------------------------
+  // Framing limits
+  // ------------------------------------------------------------------------------------------
+
+  /** Frame-centre limits at zoom z: max |x|, then the y range — the view never leaves the front glass. */
+  private limits(z: number, out: Vector3): Vector3 {
+    const visH = this.homeH / z;
+    const visW = visH * this.aspect;
+    const mx = Math.max(0, this.halfW * 0.995 - visW / 2 - DRIFT_AMP.x / z);
+    let lo = this.yMin + visH / 2 + DRIFT_AMP.y / z;
+    let hi = this.yMax - visH / 2 - DRIFT_AMP.y / z;
+    if (lo > hi) lo = hi = (lo + hi) / 2;
+    // The home framing is always allowed (it may crop a little differently at 1×).
+    out.set(mx, Math.min(lo, this.homeY), Math.max(hi, this.homeY));
+    return out;
+  }
+
+  /** Clamp a view state (x, y, ln zoom) into the lens range and the glass. Returns true if x/y moved. */
+  private clampView(v: Vector3): boolean {
+    v.z = MathUtils.clamp(v.z, 0, LN_MAX);
+    const lim = this.limits(Math.exp(v.z), this.lim);
+    const x = MathUtils.clamp(v.x, -lim.x, lim.x);
+    const y = MathUtils.clamp(v.y, lim.y, lim.z);
+    const moved = x !== v.x || y !== v.y;
+    v.x = x;
+    v.y = y;
+    return moved;
+  }
+
   /** (Re)compute the home framing for a tank and the current aspect. */
   frame(tank: TankState, aspect: number): void {
     const b = tankBounds(tank);
     this.camera.aspect = aspect;
     this.camera.updateProjectionMatrix();
+    this.aspect = aspect;
     this.halfW = b.halfW;
     this.frontZ = b.halfD;
-    // Aim at the middle of the tank as it appears through the glass (depth compressed by n).
+    this.backTrue = -b.halfD;
+    // The middle of the tank as it appears through the glass (depth compressed by n).
     this.backZ = b.halfD - (2 * b.halfD) / this.n;
     // Front-glass rectangle to cover: from a little below the substrate line (so its
     // cross-section shows at the bottom) to just above the waterline (meniscus at the top).
@@ -173,164 +396,393 @@ export class CameraRig {
       const crop = rectH - visH;
       cy = this.yMax - crop * 0.35 - visH / 2;
     }
+    this.homeH = visH;
     this.homeDist = visH / 2 / tanHalf;
-    this.homeCenter.set(0, cy, 0);
-    this.clampUser();
+    this.homeY = cy;
     if (!this.initialized) {
-      this.computeDesired();
-      this.posSpring.snap(this.desiredPos);
-      this.aimSpring.snap(this.desiredAim);
+      this.free.set(0, cy, 0);
       this.initialized = true;
+      this.clampView(this.free);
+      this.snap();
+    } else {
+      this.clampView(this.free);
     }
     this.applyProjection();
   }
 
-  /** Forget the user's pan/zoom (e.g. a different tank). */
-  resetView(): void {
-    this.userPan.set(0, 0, 0);
-    this.userZoom = 1;
+  // ------------------------------------------------------------------------------------------
+  // Free view (zoom / pan)
+  // ------------------------------------------------------------------------------------------
+
+  /** Back to the whole-tank framing (does not stop a follow). `gentle`: a slow documentary pull-back. */
+  resetView(gentle = false): void {
+    this.free.set(0, this.homeY, 0);
+    this.clampView(this.free);
+    this.freeFocusZ = 0;
+    this.userMoved(gentle ? OMEGA_SETTLE : OMEGA_RESET);
+    if (gentle) this.startTransition(false);
   }
 
   /** Snap to the desired pose (no animation), e.g. after a tank reset. */
   snap(): void {
-    this.computeDesired();
-    this.posSpring.snap(this.desiredPos);
-    this.aimSpring.snap(this.desiredAim);
+    if (this.subject) {
+      const p = this.subject.pos;
+      this.sp.set(p[0], p[1], p[2]);
+      this.spFast.copy(this.sp);
+      this.sv.set(0, 0, 0);
+      this.followTargetFor(this.desired);
+      this.followW = 1;
+    } else {
+      this.desired.copy(this.free);
+      this.followW = 0;
+    }
+    this.view.snap(this.desired);
+    this.aim.snap(this.aimTarget.set(0, 0, 0));
+    this.transDur = 0;
+    this.focusReady = false;
   }
 
-  /** Follow target in true world space (converted to where it appears through the glass). */
+  /**
+   * Zoom by wheel-notch steps (positive = closer; fractional for trackpads and pinch). With an
+   * anchor (screen NDC + the true-space point under it), that point stays under the anchor once
+   * the zoom settles (classic zoom-to-cursor). While following, zoom frames the animal tighter
+   * or looser instead. Steps accumulate into the target, so rapid input never stutters.
+   */
+  zoomBy(steps: number, ndcX?: number, ndcY?: number, anchor?: Vector3 | null): void {
+    if (!Number.isFinite(steps) || steps === 0) return;
+    if (this.subject) {
+      this.scaleFill(Math.pow(ZOOM_STEP, steps));
+      return;
+    }
+    this.zoomTo(this.free.z + steps * LN_STEP, ndcX, ndcY, anchor);
+  }
+
+  /** Absolute zoom (1 = whole tank … MAX_ZOOM). While following, scales the framing to match. */
+  setZoom(zoom: number): void {
+    if (!Number.isFinite(zoom)) return;
+    if (this.subject) {
+      this.scaleFill(MathUtils.clamp(zoom, 1, MAX_ZOOM) / this.targetZoom);
+      return;
+    }
+    this.zoomTo(Math.log(MathUtils.clamp(zoom, 1, MAX_ZOOM)));
+  }
+
+  private zoomTo(lz: number, ndcX?: number, ndcY?: number, anchor?: Vector3 | null): void {
+    const f = this.free;
+    const lz0 = f.z;
+    lz = MathUtils.clamp(lz, 0, LN_MAX);
+    const z0 = Math.exp(lz0);
+    const z1 = Math.exp(lz);
+    if (anchor && ndcX !== undefined && ndcY !== undefined && Number.isFinite(ndcX) && Number.isFinite(ndcY)) {
+      // Keep the anchored point where it is on screen at the new zoom.
+      this.centreFor(anchor, ndcX, ndcY, lz, f);
+      this.freeFocusZ = MathUtils.clamp(anchor.z, this.backTrue, this.frontZ);
+      // Zooming out, drift back toward the home framing as 1× approaches.
+      if (lz < lz0) {
+        const w = smooth01((2 - z1) / 1);
+        f.x += (0 - f.x) * w;
+        f.y += (this.homeY - f.y) * w;
+      }
+    } else if (lz < lz0 && z0 > 1) {
+      // Zooming out about the centre: re-centre proportionally, home exactly at 1×.
+      const r = (1 - 1 / z1) / (1 - 1 / z0);
+      f.x *= r;
+      f.y = this.homeY + (f.y - this.homeY) * r;
+    }
+    if (lz <= 1e-4) this.freeFocusZ = 0;
+    f.z = lz;
+    this.clampView(f);
+    this.userMoved(OMEGA_USER);
+  }
+
+  /**
+   * Pan by (dx, dy) fractions of the visible half-width/height (positive = view moves right/up).
+   * Clamped so the view never leaves the front glass. Ignored while following (the App releases
+   * the animal first).
+   */
+  panBy(dx: number, dy: number): void {
+    if (this.subject || !(Number.isFinite(dx) && Number.isFinite(dy))) return;
+    const z = Math.exp(this.free.z);
+    const visH = this.homeH / z;
+    this.free.x += MathUtils.clamp(dx, -1, 1) * visH * this.aspect * 0.5;
+    this.free.y += MathUtils.clamp(dy, -1, 1) * visH * 0.5;
+    this.clampView(this.free);
+    this.userMoved(OMEGA_USER);
+  }
+
+  /** Old combined API: pan (dx, dy) + zoom dz notches (positive = closer). */
+  nudge(dx: number, dy: number, dz: number): void {
+    if (dx || dy) this.panBy(dx, dy);
+    if (dz) this.zoomBy(MathUtils.clamp(dz, -3, 3));
+  }
+
+  private userMoved(omega: number): void {
+    this.freeOmega = omega;
+    if (!this.subject) this.transDur = 0;
+  }
+
+  // ------------------------------------------------------------------------------------------
+  // Following
+  // ------------------------------------------------------------------------------------------
+
+  /**
+   * Follow a subject (its arrays are read every frame). Calling again — even with the same live
+   * object, now holding another animal — glides to the new subject over 2–4 s. null eases back
+   * to the free view (`hold`: stay where the camera is and make that the free view).
+   */
+  follow(subject: FollowSubject | null, opts: { fill?: number; hold?: boolean } = {}): void {
+    const was = this.subject;
+    if (subject) {
+      this.subject = subject;
+      this.fill = opts.fill !== undefined && Number.isFinite(opts.fill) ? MathUtils.clamp(opts.fill, FILL_MIN, FILL_MAX) : 0;
+      this.fillT = 0;
+      const p = subject.pos;
+      this.sp.set(p[0], p[1], p[2]);
+      this.spFast.copy(this.sp);
+      this.sv.set(0, 0, 0);
+      const f = subject.forward;
+      if (f) this.sf.set(f[0], f[1], f[2]);
+      this.startTransition(was !== null);
+      this.followTargetFor(this.followTarget);
+    } else if (was) {
+      this.subject = null;
+      if (opts.hold) {
+        // Turn the aim into framing (same picture), and make that the free view.
+        const v = this.view.pos;
+        const z = Math.exp(v.z);
+        const reach = this.distAt(z) + Math.max(0, this.frontZ - this.sp.z) / this.n;
+        v.x += this.aim.pos.x * reach;
+        v.y += this.aim.pos.y * reach;
+        this.aim.snap(this.aimTarget.set(0, 0, 0));
+        this.free.copy(v);
+        this.clampView(this.free);
+        this.freeFocusZ = MathUtils.clamp(this.sp.z, this.backTrue, this.frontZ);
+        this.userMoved(OMEGA_USER);
+      } else {
+        this.freeOmega = OMEGA_SETTLE;
+        this.startTransition(false);
+      }
+    }
+  }
+
+  /** Tighter/looser framing of the followed animal (fraction of the screen width, 0.05–0.6). */
+  setFollowFill(fill: number): void {
+    if (!Number.isFinite(fill)) return;
+    this.fill = MathUtils.clamp(fill, FILL_MIN, FILL_MAX);
+    this.fillT = 0.8;
+  }
+
+  /**
+   * Scale the followed animal's framing, within what the lens can reach at its depth (so a pinch
+   * past the end of the range never leaves a dead zone to pinch back through).
+   */
+  private scaleFill(factor: number): void {
+    const s = this.subject!;
+    const dS = Math.max(0, this.frontZ - this.sp.z) / this.n;
+    const len = Math.max(1e-3, s.lengthM);
+    const lo = Math.max(FILL_MIN, len / this.widthAt(0, dS));
+    const hi = Math.min(FILL_MAX, len / this.widthAt(LN_MAX, dS));
+    const cur = MathUtils.clamp(this.followFill, Math.min(lo, hi), Math.max(lo, hi));
+    this.setFollowFill(MathUtils.clamp(cur * factor, Math.min(lo, hi), Math.max(lo, hi)));
+  }
+
+  /** Old API: keep a still point in view (null = back to the free view). */
   setFocus(target: Vector3 | null): void {
+    const s = this.pointSubject;
     if (target) {
-      this.toApparent(this.focusTarget.copy(target));
-      this.hasFocus = true;
-    } else {
-      this.hasFocus = false;
+      s.pos[0] = target.x;
+      s.pos[1] = target.y;
+      s.pos[2] = target.z;
+      if (this.subject !== s) this.follow(s);
+    } else if (this.subject === s) {
+      this.follow(null);
+    }
+  }
+
+  private startTransition(switching: boolean): void {
+    this.transFrom.copy(this.view.pos);
+    this.transT = 0;
+    this.transSwitch = switching;
+    this.transDur = 3;
+  }
+
+  /**
+   * Framing target for the (filtered) subject: zoom so its body spans `fill` of the screen width
+   * at its depth, frame centre so it sits a little behind the middle (room to swim into), a bit
+   * ahead of where it is now (velocity look-ahead), inside the glass. Writes (x, y, ln zoom).
+   */
+  private followTargetFor(out: Vector3): Vector3 {
+    const s = this.subject!;
+    const b = this.tmp2;
+    // Predicted position, kept inside the tank.
+    b.copy(this.sv).multiplyScalar(PREDICT).add(this.sp);
+    b.x = MathUtils.clamp(b.x, -this.halfW, this.halfW);
+    b.z = MathUtils.clamp(b.z, this.backTrue, this.frontZ);
+    const dS = (this.frontZ - b.z) / this.n;
+    let lz = this.solveZoom(Math.max(1e-3, s.lengthM) / this.followFill, dS);
+    // Gliding to a far-off animal: pull back first so both are in view, then push in.
+    if (this.transSwitch && this.transT < this.transDur) {
+      const zT = Math.exp(lz);
+      const visH = this.homeH / zT;
+      const need = Math.max(Math.abs(b.x - this.transFrom.x) + visH * this.aspect, (Math.abs(b.y - this.transFrom.y) + visH) * this.aspect);
+      const span = Math.max(0, Math.log((this.aspect * this.homeH) / need));
+      if (span < lz) lz = MathUtils.lerp(span, lz, smooth01((this.transT / this.transDur - 0.35) / 0.5));
+    }
+    this.leadNdc(this.tmp);
+    this.centreFor(b, this.tmp.x, this.tmp.y, lz, out);
+    out.z = lz;
+    this.clampView(out);
+    return out;
+  }
+
+  /** Where on screen (NDC) the subject should sit: away from its heading (rule of thirds). */
+  private leadNdc(out: Vector3): Vector3 {
+    const f = this.sf;
+    const len = Math.max(0.35, f.length());
+    out.set(-LEAD * MathUtils.clamp(f.x / len, -1, 1), -0.3 * LEAD * MathUtils.clamp(f.y / len, -1, 1), 0);
+    return out;
+  }
+
+  /** Per-frame filters on the subject: quick track for the aim, slow track + velocity + heading for framing. */
+  private trackSubject(dt: number): void {
+    const s = this.subject!;
+    const p = s.pos;
+    if (!(Number.isFinite(p[0]) && Number.isFinite(p[1]) && Number.isFinite(p[2])) || dt <= 0) return;
+    const aF = 1 - Math.exp(-dt / 0.12);
+    this.spFast.x += (p[0] - this.spFast.x) * aF;
+    this.spFast.y += (p[1] - this.spFast.y) * aF;
+    this.spFast.z += (p[2] - this.spFast.z) * aF;
+    this.spPrev.copy(this.sp);
+    const aS = 1 - Math.exp(-dt / 0.3);
+    this.sp.x += (p[0] - this.sp.x) * aS;
+    this.sp.y += (p[1] - this.sp.y) * aS;
+    this.sp.z += (p[2] - this.sp.z) * aS;
+    const aV = 1 - Math.exp(-dt / 0.6);
+    const inv = 1 / dt;
+    this.sv.x += ((this.sp.x - this.spPrev.x) * inv - this.sv.x) * aV;
+    this.sv.y += ((this.sp.y - this.spPrev.y) * inv - this.sv.y) * aV;
+    this.sv.z += ((this.sp.z - this.spPrev.z) * inv - this.sv.z) * aV;
+    const f = s.forward;
+    if (f) {
+      const aH = 1 - Math.exp(-dt / 0.8);
+      this.sf.x += (f[0] - this.sf.x) * aH;
+      this.sf.y += (f[1] - this.sf.y) * aH;
+      this.sf.z += (f[2] - this.sf.z) * aH;
     }
   }
 
   /**
-   * Pan by (dx, dy) fractions of the visible half-width/height (positive = view moves right/up)
-   * and zoom by dz (positive = closer; 1 ≈ one "notch" of ~12%). Clamped so the view never
-   * leaves the front glass.
+   * Aim (tangents of yaw/pitch, real space) that brings the quick subject track to its screen
+   * spot from the current (smoothed) framing: what the slow framing has not caught up with yet.
+   * Small, and never so far that the frame edge would leave the front glass.
    */
-  nudge(dx: number, dy: number, dz: number): void {
-    const dist = this.homeDist / this.userZoom;
-    const tanHalf = Math.tan(MathUtils.degToRad(FOV) / 2);
-    const visH = 2 * dist * tanHalf;
-    const visW = visH * this.camera.aspect;
-    this.userPan.x += MathUtils.clamp(dx, -1, 1) * visW * 0.5;
-    this.userPan.y += MathUtils.clamp(dy, -1, 1) * visH * 0.5;
-    this.userZoom = MathUtils.clamp(this.userZoom * Math.exp(MathUtils.clamp(dz, -3, 3) * 0.12), 1, MAX_ZOOM);
-    this.clampUser();
+  private aimFor(out: Vector3, weight: number): Vector3 {
+    const v = this.view.pos;
+    const z = Math.exp(v.z);
+    const dist = this.distAt(z);
+    const tan = this.homeH / (2 * z * dist);
+    const lift = EYE_LIFT * 2 * dist * tan;
+    const p = this.spFast;
+    const reach = dist + Math.max(0, this.frontZ - p.z) / this.n;
+    // Where the subject appears now (NDC) vs where it should be.
+    const ex = (p.x - v.x) / (reach * tan * this.aspect);
+    const ey = ((p.y - v.y - lift) / reach + lift / dist) / tan;
+    const lead = this.leadNdc(this.tmp);
+    let ax = (ex - lead.x) * tan * this.aspect;
+    let ay = (ey - lead.y) * tan;
+    ax = MathUtils.clamp(ax, -AIM_MAX * tan * this.aspect, AIM_MAX * tan * this.aspect);
+    ay = MathUtils.clamp(ay, -AIM_MAX * tan, AIM_MAX * tan);
+    // Keep the frame on the glass: its centre on the glass moves by dist·tan(aim).
+    const lim = this.limits(z, this.lim);
+    ax = MathUtils.clamp(ax, Math.min(0, (-lim.x - v.x) / dist), Math.max(0, (lim.x - v.x) / dist));
+    ay = MathUtils.clamp(ay, Math.min(0, (lim.y - v.y) / dist), Math.max(0, (lim.z - v.y) / dist));
+    return out.set(ax * weight, ay * weight, 0);
   }
 
-  /** Keep the user's pan inside the region the current zoom allows. */
-  private clampUser(): void {
-    const dist = this.homeDist / this.userZoom;
-    const lim = this.panLimits(dist, this.tmp2);
-    this.userPan.x = MathUtils.clamp(this.userPan.x, -lim.x, lim.x);
-    this.userPan.y = MathUtils.clamp(this.userPan.y, lim.y, lim.z);
-  }
-
-  /** For a camera at `dist` from the glass: max |x| and the y range (as offsets from homeCenter). */
-  private panLimits(dist: number, out: Vector3): Vector3 {
-    const tanHalf = Math.tan(MathUtils.degToRad(FOV) / 2);
-    const visH = 2 * dist * tanHalf;
-    const visW = visH * this.camera.aspect;
-    const mx = Math.max(0, this.halfW * 0.995 - visW / 2 - DRIFT_AMP.x);
-    const lo = this.yMin + visH / 2 + DRIFT_AMP.y - this.homeCenter.y;
-    const hi = this.yMax - visH / 2 - DRIFT_AMP.y - this.homeCenter.y;
-    out.set(mx, Math.min(lo, hi, 0), Math.max(lo, hi, 0));
-    if (lo > hi) out.set(mx, (lo + hi) / 2, (lo + hi) / 2);
-    return out;
-  }
-
-  private computeDesired(): void {
-    // User view.
-    const userDist = this.homeDist / this.userZoom;
-    const ux = this.homeCenter.x + this.userPan.x;
-    const uy = this.homeCenter.y + this.userPan.y;
-    let x = ux, y = uy, dist = userDist;
-    let aimX = ux, aimY = uy;
-    const w = this.focusWeight;
-    if (w > 0) {
-      // Follow: dolly in and center the fish as far as the glass allows; aim a little
-      // toward it when the framing is clamped (e.g. a fish right under the surface).
-      const fd = Math.min(userDist, this.homeDist / FOCUS_ZOOM);
-      const lim = this.panLimits(fd, this.tmp2);
-      const f = this.focusTarget;
-      const fx = MathUtils.clamp(f.x, this.homeCenter.x - lim.x, this.homeCenter.x + lim.x);
-      const fy = MathUtils.clamp(f.y, this.homeCenter.y + lim.y, this.homeCenter.y + lim.z);
-      x = MathUtils.lerp(ux, fx, w);
-      y = MathUtils.lerp(uy, fy, w);
-      dist = MathUtils.lerp(userDist, fd, w);
-      // Aim a little toward the fish (≤ ~5° off-axis) — but never so far that the frame edge
-      // would leave the front glass (no peeking above the waterline or past the side panes).
-      const aimDist = this.frontZ + Math.max(MIN_GLASS_GAP, dist) - (this.frontZ + this.backZ) / 2;
-      const glassDist = Math.max(MIN_GLASS_GAP, dist);
-      const half = MathUtils.degToRad(FOV) / 2;
-      const halfH = Math.atan(Math.tan(half) * this.camera.aspect);
-      const tiltY = MathUtils.clamp(
-        Math.atan2(f.y - y, Math.max(0.05, this.frontZ + glassDist - f.z)),
-        Math.min(0, half - Math.atan2(y - this.yMin - DRIFT_AMP.y, glassDist)),
-        Math.max(0, Math.atan2(this.yMax - DRIFT_AMP.y - y, glassDist) - half),
-      );
-      const tiltX = MathUtils.clamp(
-        Math.atan2(f.x - x, Math.max(0.05, this.frontZ + glassDist - f.z)),
-        Math.min(0, halfH - Math.atan2(x + this.halfW - DRIFT_AMP.x, glassDist)),
-        Math.max(0, Math.atan2(this.halfW - DRIFT_AMP.x - x, glassDist) - halfH),
-      );
-      const maxTilt = MathUtils.degToRad(5);
-      aimX = MathUtils.lerp(ux, x + aimDist * Math.tan(MathUtils.clamp(tiltX, -maxTilt, maxTilt)), w);
-      aimY = MathUtils.lerp(uy, y + aimDist * Math.tan(MathUtils.clamp(tiltY, -maxTilt, maxTilt)), w);
-    }
-    const camZ = this.frontZ + Math.max(MIN_GLASS_GAP, dist);
-    this.desiredPos.set(x, y, camZ);
-    // Aim at the tank's mid-depth so drift pivots there (front glass moves little, back moves opposite).
-    this.desiredAim.set(aimX, aimY, (this.frontZ + this.backZ) / 2);
-  }
+  // ------------------------------------------------------------------------------------------
+  // Per frame
+  // ------------------------------------------------------------------------------------------
 
   private wave(period: number, phase: number): number {
     return Math.sin((this.t * Math.PI * 2) / period + phase);
   }
 
   update(dt: number): void {
+    dt = Math.max(0, dt);
     this.t += dt;
-    // Ease focus weight in/out over ~1.5 s.
-    const target = this.hasFocus ? 1 : 0;
-    this.focusWeight += (target - this.focusWeight) * (1 - Math.exp(-dt * 1.6));
-    if (Math.abs(this.focusWeight - target) < 1e-4) this.focusWeight = target;
-    this.computeDesired();
-    this.posSpring.step(this.desiredPos, dt);
-    this.aimSpring.step(this.desiredAim, dt);
+    this.transT += dt;
+    const k = this.transDur > 0 ? smooth01(this.transT / this.transDur) : 1;
 
+    // Targets and spring rates.
+    if (this.subject) {
+      this.trackSubject(dt);
+      this.followTargetFor(this.followTarget);
+      this.desired.copy(this.followTarget);
+      const w = MathUtils.lerp(OMEGA_TRANSITION, OMEGA_FOLLOW, k);
+      this.fillT = Math.max(0, this.fillT - dt);
+      this.view.step(this.desired, dt, w, w, this.fillT > 0 ? Math.max(w, OMEGA_FILL) : w);
+      if (this.clampView(this.view.pos)) this.view.vel.set(0, 0, this.view.vel.z);
+      // The aim joins in late in a transition, so the camera never whips toward a new animal.
+      this.aimFor(this.aimTarget, this.transDur > 0 ? smooth01((this.transT / this.transDur - 0.25) / 0.75) : 1);
+    } else {
+      this.desired.copy(this.free);
+      const w = k < 1 ? MathUtils.lerp(OMEGA_TRANSITION, this.freeOmega, k) : this.freeOmega;
+      this.view.step(this.desired, dt, w);
+      if (this.clampView(this.view.pos)) this.view.vel.set(0, 0, this.view.vel.z);
+      this.aimTarget.set(0, 0, 0);
+    }
+    this.aim.step(this.aimTarget, dt, OMEGA_AIM);
+    this.followW += ((this.subject ? 1 : 0) - this.followW) * (1 - Math.exp(-dt / 0.8));
+
+    // Pose of the real viewer.
+    const v = this.view.pos;
+    const z = Math.exp(v.z);
+    const dist = this.distAt(z);
+    this.tanR = this.homeH / (2 * z * dist);
     const cam = this.camera;
-    cam.position.copy(this.posSpring.pos);
-    const aim = this.tmp.copy(this.aimSpring.pos);
+    cam.position.set(v.x, v.y, this.frontZ + dist);
     if (this.drift) {
       // Sum of slow incommensurate sines: smooth, never repeating, sub-0.05 Hz.
-      cam.position.x += DRIFT_AMP.x * (0.65 * this.wave(37, 0.3) + 0.35 * this.wave(23.3, 2.1));
-      cam.position.y += DRIFT_AMP.y * (0.6 * this.wave(43, 1.7) + 0.4 * this.wave(29.1, 0.4));
-      cam.position.z += DRIFT_AMP.z * (0.7 * this.wave(53, 2.9) + 0.3 * this.wave(31.7, 1.2));
+      const s = 1 / z;
+      cam.position.x += s * DRIFT_AMP.x * (0.65 * this.wave(37, 0.3) + 0.35 * this.wave(23.3, 2.1));
+      cam.position.y += s * DRIFT_AMP.y * (0.6 * this.wave(43, 1.7) + 0.4 * this.wave(29.1, 0.4));
+      cam.position.z += s * DRIFT_AMP.z * (0.7 * this.wave(53, 2.9) + 0.3 * this.wave(31.7, 1.2));
     }
     // Never cross the front glass.
     cam.position.z = Math.max(cam.position.z, this.frontZ + MIN_GLASS_GAP);
     // Raise the eye above the frame centre and shift the lens back down by the same amount on
     // the glass plane: same framing, seen from ~2/3 of the way up.
     const glassDist = cam.position.z - this.frontZ;
-    const lift = EYE_LIFT * 2 * glassDist * Math.tan(MathUtils.degToRad(FOV) / 2);
+    const lift = EYE_LIFT * 2 * glassDist * this.tanR;
     cam.position.y += lift;
-    aim.y += lift;
     this.shiftTan = -lift / glassDist;
+    // Look at the tank's (apparent) mid-depth, turned by the aim, so drift pivots there (front
+    // glass moves little, back moves opposite).
+    const midZ = (this.frontZ + this.backZ) / 2;
+    const reach = this.frontZ + dist - midZ;
+    const dir = this.tmp.set(v.x + this.aim.pos.x * reach, v.y + lift + this.aim.pos.y * reach, midZ).sub(cam.position);
     // Real viewer pose → the equivalent virtual eye n× farther from the glass. Its lens is n×
     // longer, so an aim tilt keeps the same image shift with its tangent divided by n.
-    const dir = aim.sub(cam.position);
     dir.x /= this.n;
     dir.y /= this.n;
     dir.normalize();
-    cam.position.z = this.frontZ + (cam.position.z - this.frontZ) * this.n;
+    this.viewDir.copy(dir);
+    cam.position.z = this.frontZ + glassDist * this.n;
     cam.up.set(0, 1, 0);
     cam.lookAt(this.tmp2.copy(cam.position).add(dir));
     this.applyProjection();
+
+    // Focus: the followed animal, else the zoom anchor's depth (or the tank middle). Pulled like
+    // a calm autofocus, evenly in diopters.
+    let fd: number;
+    if (this.subject) fd = this.tmp.copy(this.sp).sub(cam.position).dot(this.viewDir);
+    else fd = (cam.position.z - this.freeFocusZ) / Math.max(0.2, -this.viewDir.z);
+    fd = MathUtils.clamp(fd, this.glassDistance + 0.005, this.backDistance + 0.05);
+    if (!this.focusReady) {
+      this.focusInv = 1 / fd;
+      this.focusReady = true;
+    } else {
+      this.focusInv += (1 / fd - this.focusInv) * (1 - Math.exp(-dt / 0.25));
+    }
   }
 }

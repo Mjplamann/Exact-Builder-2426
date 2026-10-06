@@ -1,4 +1,4 @@
-import { HalfFloatType, LinearFilter, ShaderMaterial, Vector2, WebGLRenderTarget, type Camera, type Scene, type Texture, type WebGLRenderer } from 'three';
+import { DepthTexture, HalfFloatType, LinearFilter, ShaderMaterial, Vector2, Vector3, WebGLRenderTarget, type Camera, type Scene, type Texture, type WebGLRenderer } from 'three';
 import { FullScreenQuad, Pass } from 'three/examples/jsm/postprocessing/Pass.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -6,19 +6,38 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 
 /**
- * Post chain: scene → MSAA HDR target → subtle bloom (only genuine light sources: bubble glints,
- * the TIR band's sparkle) → final pass (ACES filmic tone map, gentle aquarium grade, vignette,
- * very light animated grain + dither, sRGB).
+ * Post chain: scene → MSAA HDR target (+ depth texture) → subtle bloom (only genuine light
+ * sources: bubble glints, the TIR band's sparkle) → depth of field for close-ups (half
+ * resolution) → final pass (DOF composite, ACES filmic tone map, gentle aquarium grade,
+ * vignette, very light animated grain + dither, sRGB).
  *
  * Bloom uses a soft-knee threshold that subtracts the threshold (only the energy *above* it
  * glows, so a brightly lit white fish does not halo) and is set in display terms (it follows
  * the exposure), so the same things glow by day and by moonlight.
+ *
+ * Depth of field (telephoto close-ups and following): the circle of confusion comes from the real
+ * thin-lens optics of the rig (focus distance, focal length, aperture — see CameraRig.dofScale)
+ * and the scene's depth buffer. Three cheap half-resolution passes — a CoC-aware downsample, a
+ * disc gather and a small tent — and the composite rides along in the final pass, so there is no
+ * extra full-resolution pass. Depth-aware weights keep the sharp subject's colour out of the blur
+ * (no halo) and the blurred background off the subject, while out-of-focus foreground spreads
+ * over what is behind it like real bokeh.
  */
 
 /** Bloom threshold in exposed (pre-tone-map) units: a lit white surface is ≈ 1–2. */
 const BLOOM_THRESHOLD = 4.5;
 /** ACES input gain (exposure / this). */
 const ACES_GAIN_DIV = 0.66;
+/** Largest circle of confusion (radius) as a fraction of the frame height, and in half-res pixels. */
+const MAX_COC_FRAC = 0.011;
+const MAX_COC_PX = 14;
+
+/** Linear view depth and signed circle of confusion (half-res px; + behind the focus) from the depth buffer. */
+const CocGlsl = /* glsl */ `
+  uniform vec3 uCoc;  // scale (half-res px per 1/m), 1/focus, max radius
+  uniform vec2 uClip; // camera near, far
+  float dofDepth(float d) { return uClip.x * uClip.y / (uClip.y - d * (uClip.y - uClip.x)); }
+  float dofCoc(float d) { return clamp(uCoc.x * (uCoc.y - 1.0 / dofDepth(d)), -uCoc.z, uCoc.z); }`;
 
 const SoftKneeHighPass = /* glsl */ `
   uniform sampler2D tDiffuse;
@@ -43,6 +62,11 @@ const FinalShader = {
     uRes: { value: new Vector2(1, 1) },
     uGrain: { value: 0.012 },
     uVignette: { value: 0.22 },
+    tDof: { value: null },
+    tDepth: { value: null },
+    uDofOn: { value: 0 },
+    uCoc: { value: new Vector3() },
+    uClip: { value: new Vector2(0.03, 12) },
   },
   vertexShader: /* glsl */ `
     varying vec2 vUv;
@@ -54,6 +78,10 @@ const FinalShader = {
     uniform vec2 uRes;
     uniform float uGrain;
     uniform float uVignette;
+    uniform sampler2D tDof;
+    uniform sampler2D tDepth;
+    uniform float uDofOn;
+    ${CocGlsl}
     varying vec2 vUv;
 
     // ACES filmic (same fit as three.js ACESFilmicToneMapping).
@@ -87,6 +115,13 @@ const FinalShader = {
     }
     void main() {
       vec3 c = texture2D(tDiffuse, vUv).rgb;
+      if (uDofOn > 0.5) {
+        // Depth of field: blend toward the half-res blur by this pixel's own circle of confusion
+        // (sharp subject stays full-res sharp), or where out-of-focus foreground spreads over it.
+        float k = dofCoc(texture2D(tDepth, vUv).x);
+        vec4 b = texture2D(tDof, vUv);
+        c = mix(c, b.rgb, max(smoothstep(0.35, 1.25, abs(k)), b.a));
+      }
       c = acesFilmic(c);
       float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
       // Aquarium grade: shadows lean a touch teal, highlights stay neutral-warm; +5% saturation.
@@ -146,10 +181,188 @@ class CapturePass extends Pass {
   }
 }
 
+const QuadVert = /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+
+/** Downsample to half resolution, carrying the signed CoC in alpha. */
+const DofPrefilter = /* glsl */ `
+  uniform sampler2D tColor;
+  uniform sampler2D tDepth;
+  uniform vec2 uTexel; // full-res texel
+  ${CocGlsl}
+  varying vec2 vUv;
+  void main() {
+    vec2 o = 0.5 * uTexel;
+    vec2 uv0 = vUv - o, uv1 = vUv + vec2(o.x, -o.y), uv2 = vUv + vec2(-o.x, o.y), uv3 = vUv + o;
+    float k0 = dofCoc(texture2D(tDepth, uv0).x), k1 = dofCoc(texture2D(tDepth, uv1).x);
+    float k2 = dofCoc(texture2D(tDepth, uv2).x), k3 = dofCoc(texture2D(tDepth, uv3).x);
+    // Defocused taps dominate, so the in-focus subject's colour never smears into the blur.
+    float w0 = 0.02 + smoothstep(0.0, 1.0, abs(k0)), w1 = 0.02 + smoothstep(0.0, 1.0, abs(k1));
+    float w2 = 0.02 + smoothstep(0.0, 1.0, abs(k2)), w3 = 0.02 + smoothstep(0.0, 1.0, abs(k3));
+    vec3 c = texture2D(tColor, uv0).rgb * w0 + texture2D(tColor, uv1).rgb * w1 + texture2D(tColor, uv2).rgb * w2 + texture2D(tColor, uv3).rgb * w3;
+    float kMin = min(min(k0, k1), min(k2, k3));
+    float kMax = max(max(k0, k1), max(k2, k3));
+    gl_FragColor = vec4(c / (w0 + w1 + w2 + w3), -kMin > kMax ? kMin : kMax);
+  }`;
+
+/**
+ * Disc gather over the half-res buffer (golden-angle taps, unrolled). A sample counts where its
+ * own blur reaches this pixel; behind-focus samples cannot spread over a nearer, sharper pixel
+ * (no background bleeding onto the subject), foreground samples spread over anything. Alpha =
+ * how much out-of-focus foreground covers the pixel.
+ */
+function dofGather(taps: number): string {
+  let body = '';
+  for (let i = 0; i < taps; i++) {
+    const r = Math.sqrt((i + 0.5) / taps);
+    const a = i * 2.399963229728653;
+    body += `
+    s = texture2D(tSrc, vUv + vec2(${(r * Math.cos(a)).toFixed(5)}, ${(r * Math.sin(a)).toFixed(5)}) * rad);
+    c = s.a >= 0.0 ? min(s.a, cp) : -s.a;
+    w = clamp(c - ${r.toFixed(5)} * uRadius + 1.0, 0.0, 1.0);
+    acc += s.rgb * w; wsum += w; fg += s.a < 0.0 ? w : 0.0;`;
+  }
+  return /* glsl */ `
+  uniform sampler2D tSrc;
+  uniform vec2 uTexel; // half-res texel
+  uniform float uRadius; // kernel radius (half-res px)
+  varying vec2 vUv;
+  void main() {
+    vec4 ctr = texture2D(tSrc, vUv);
+    float cp = max(ctr.a, 0.0);
+    vec2 rad = uRadius * uTexel;
+    vec3 acc = ctr.rgb;
+    float wsum = 1.0, fg = 0.0, c, w;
+    vec4 s;${body}
+    gl_FragColor = vec4(acc / wsum, min(1.0, fg * ${(3 / taps).toFixed(5)}));
+  }`;
+}
+
+/** 2×2 tent at half resolution: smooths the gather's tap pattern. */
+const DofTent = /* glsl */ `
+  uniform sampler2D tSrc;
+  uniform vec2 uTexel;
+  varying vec2 vUv;
+  void main() {
+    vec2 o = 0.5 * uTexel;
+    gl_FragColor = 0.25 * (texture2D(tSrc, vUv - o) + texture2D(tSrc, vUv + o) + texture2D(tSrc, vUv + vec2(o.x, -o.y)) + texture2D(tSrc, vUv + vec2(-o.x, o.y)));
+  }`;
+
+/** Lens state for the depth of field this frame (from the camera rig). */
+export interface DofParams {
+  /** 0..1 fade (0 = off). */
+  amount: number;
+  /** Focus distance along the view axis (m, true space = what the depth buffer measures). */
+  focus: number;
+  /** CoC as a fraction of the frame height per unit of |1/focus − 1/depth| (already × amount). */
+  scale: number;
+  /** Nearest/farthest depth that can be in view (front and back glass): bounds the kernel. */
+  near: number;
+  far: number;
+  /** Camera clip planes (depth linearisation). */
+  cameraNear: number;
+  cameraFar: number;
+}
+
+/**
+ * Half-resolution depth of field (see the file comment). Reads the scene colour + depth of the
+ * read buffer; writes its result into its own target, which the final pass composites.
+ */
+class DofPass extends Pass {
+  private half: WebGLRenderTarget;
+  private blur: WebGLRenderTarget;
+  private out: WebGLRenderTarget;
+  private quad: FullScreenQuad;
+  private prefilter: ShaderMaterial;
+  private gather: ShaderMaterial;
+  private tent: ShaderMaterial;
+  private final: ShaderPass;
+  private fullTexel = new Vector2(1, 1);
+
+  constructor(taps: number, final: ShaderPass) {
+    super();
+    this.needsSwap = false;
+    this.final = final;
+    const opts = { type: HalfFloatType, magFilter: LinearFilter, minFilter: LinearFilter, depthBuffer: false, generateMipmaps: false } as const;
+    this.half = new WebGLRenderTarget(16, 16, opts);
+    this.blur = new WebGLRenderTarget(16, 16, opts);
+    this.out = new WebGLRenderTarget(16, 16, opts);
+    this.out.texture.name = 'env.dof';
+    const fu = final.uniforms;
+    this.prefilter = new ShaderMaterial({
+      uniforms: { tColor: { value: null }, tDepth: { value: null }, uTexel: { value: this.fullTexel }, uCoc: fu.uCoc, uClip: fu.uClip },
+      vertexShader: QuadVert,
+      fragmentShader: DofPrefilter,
+      depthTest: false,
+      depthWrite: false,
+    });
+    this.gather = new ShaderMaterial({
+      uniforms: { tSrc: { value: this.half.texture }, uTexel: { value: new Vector2(1, 1) }, uRadius: { value: 1 } },
+      vertexShader: QuadVert,
+      fragmentShader: dofGather(taps),
+      depthTest: false,
+      depthWrite: false,
+    });
+    this.tent = new ShaderMaterial({
+      uniforms: { tSrc: { value: this.blur.texture }, uTexel: { value: new Vector2(1, 1) } },
+      vertexShader: QuadVert,
+      fragmentShader: DofTent,
+      depthTest: false,
+      depthWrite: false,
+    });
+    this.quad = new FullScreenQuad(this.prefilter);
+    fu.tDof.value = this.out.texture;
+  }
+
+  /** Kernel radius (half-res px) for this frame. */
+  set radius(r: number) {
+    this.gather.uniforms.uRadius.value = r;
+  }
+
+  override setSize(width: number, height: number): void {
+    const w = Math.max(16, Math.ceil(width / 2));
+    const h = Math.max(16, Math.ceil(height / 2));
+    this.half.setSize(w, h);
+    this.blur.setSize(w, h);
+    this.out.setSize(w, h);
+    this.fullTexel.set(1 / Math.max(1, width), 1 / Math.max(1, height));
+    this.gather.uniforms.uTexel.value.set(1 / w, 1 / h);
+    this.tent.uniforms.uTexel.value.set(1 / w, 1 / h);
+  }
+
+  override render(renderer: WebGLRenderer, _writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget): void {
+    const prev = renderer.getRenderTarget();
+    this.prefilter.uniforms.tColor.value = readBuffer.texture;
+    this.prefilter.uniforms.tDepth.value = readBuffer.depthTexture;
+    this.final.uniforms.tDepth.value = readBuffer.depthTexture;
+    this.quad.material = this.prefilter;
+    renderer.setRenderTarget(this.half);
+    this.quad.render(renderer);
+    this.quad.material = this.gather;
+    renderer.setRenderTarget(this.blur);
+    this.quad.render(renderer);
+    this.quad.material = this.tent;
+    renderer.setRenderTarget(this.out);
+    this.quad.render(renderer);
+    renderer.setRenderTarget(prev);
+  }
+
+  override dispose(): void {
+    this.half.dispose();
+    this.blur.dispose();
+    this.out.dispose();
+    this.prefilter.dispose();
+    this.gather.dispose();
+    this.tent.dispose();
+    this.quad.dispose();
+  }
+}
+
 export interface PostSettings {
   msaa: number;
   bloom: boolean;
   bloomScale: number;
+  /** Depth-of-field gather taps; 0 = no depth of field. */
+  dofTaps?: number;
 }
 
 export class PostFX {
@@ -157,12 +370,19 @@ export class PostFX {
   private renderPass: RenderPass;
   private bloom: UnrealBloomPass | null = null;
   private capture: CapturePass;
+  private dof: DofPass | null = null;
   private final: ShaderPass;
   private size = new Vector2();
 
   constructor(renderer: WebGLRenderer, scene: Scene, camera: Camera, settings: PostSettings) {
     renderer.getDrawingBufferSize(this.size);
-    const target = new WebGLRenderTarget(this.size.x, this.size.y, { type: HalfFloatType, samples: settings.msaa });
+    // The depth texture receives the (already performed) MSAA depth resolve, for depth of field.
+    const dofTaps = settings.dofTaps ?? 0;
+    const target = new WebGLRenderTarget(this.size.x, this.size.y, {
+      type: HalfFloatType,
+      samples: settings.msaa,
+      depthTexture: dofTaps > 0 ? new DepthTexture(this.size.x, this.size.y) : null,
+    });
     target.texture.name = 'env.hdr';
     this.composer = new EffectComposer(renderer, target);
     this.composer.setPixelRatio(1); // target is already in drawing-buffer pixels
@@ -179,11 +399,17 @@ export class PostFX {
     }
     this.final = new ShaderPass(FinalShader);
     (this.final.material as ShaderMaterial).toneMapped = false;
+    if (dofTaps > 0) {
+      this.dof = new DofPass(dofTaps, this.final);
+      this.dof.enabled = false;
+      this.composer.addPass(this.dof);
+    }
     this.composer.addPass(this.final);
   }
 
   setSize(width: number, height: number): void {
     this.composer.setSize(width, height);
+    this.size.set(width, height);
     this.final.uniforms.uRes.value.set(width, height);
   }
 
@@ -192,8 +418,24 @@ export class PostFX {
     return this.capture.target.texture;
   }
 
-  render(exposure: number, time: number): void {
-    this.final.uniforms.uExposure.value = exposure;
+  render(exposure: number, time: number, dof?: DofParams | null): void {
+    const fu = this.final.uniforms;
+    fu.uExposure.value = exposure;
+    // Depth of field: only while it shows (close-ups), so the whole-tank view pays nothing.
+    const dofOn = !!this.dof && !!dof && dof.amount > 0.01 && dof.scale > 0;
+    if (this.dof) this.dof.enabled = dofOn;
+    fu.uDofOn.value = dofOn ? 1 : 0;
+    if (dofOn) {
+      const halfH = this.size.y / 2;
+      const scale = dof!.scale * halfH;
+      const inv = 1 / Math.max(1e-3, dof!.focus);
+      const cap = Math.max(2, Math.min(MAX_COC_PX, MAX_COC_FRAC * halfH));
+      fu.uCoc.value.set(scale, inv, cap);
+      fu.uClip.value.set(dof!.cameraNear, dof!.cameraFar);
+      // Kernel only as wide as the largest blur the tank's depth range can produce.
+      const reach = scale * Math.max(1 / Math.max(1e-3, dof!.near) - inv, inv - 1 / Math.max(1e-3, dof!.far));
+      this.dof!.radius = Math.max(1, Math.min(cap, reach));
+    }
     if (this.bloom) {
       // Threshold in linear HDR so that it sits at BLOOM_THRESHOLD after exposure.
       this.bloom.threshold = (BLOOM_THRESHOLD * ACES_GAIN_DIV) / Math.max(0.05, exposure);
@@ -207,6 +449,7 @@ export class PostFX {
     this.composer.renderTarget1.dispose();
     this.composer.renderTarget2.dispose();
     this.bloom?.dispose();
+    this.dof?.dispose();
     this.capture.dispose();
     this.final.dispose();
     this.composer.dispose();

@@ -16,15 +16,15 @@ import {
 } from 'three';
 import type { BackgroundKind, Quality, SubstrateKind, TankSize } from '../core/types';
 import type { World } from '../core/world';
-import { tankBounds } from '../core/tankGeometry';
+import { substrateHeight, tankBounds } from '../core/tankGeometry';
 import { GLOBALS } from './globals';
 import { Bubbles } from './env/Bubbles';
-import { CameraRig } from './env/CameraRig';
+import { CameraRig, MAX_ZOOM, type FollowSubject } from './env/CameraRig';
 import { Caustics } from './env/Caustics';
 import { GodRays } from './env/GodRays';
 import { Lighting } from './env/Lighting';
 import { Motes } from './env/Motes';
-import { PostFX } from './env/PostFX';
+import { PostFX, type DofParams } from './env/PostFX';
 import { Substrate } from './env/Substrate';
 import { FX_LAYER, TankShell } from './env/TankShell';
 import { WaterSurface } from './env/WaterSurface';
@@ -52,20 +52,17 @@ interface QualityPreset {
    * ~2× while a large desktop monitor stays at ~1× for the same GPU cost.
    */
   maxPixels: number;
+  /** Depth-of-field gather taps (half resolution) for close-ups; 0 = no depth of field. */
+  dofTaps: number;
 }
 
-/** A moving subject for the camera: live arrays read every frame (no per-frame allocation). */
-export interface FollowSubject {
-  pos: [number, number, number];
-  lengthM: number;
-  forward?: [number, number, number];
-}
+export type { FollowSubject };
 
 export const QUALITY_PRESETS: Record<Quality, QualityPreset> = {
-  low: { maxPixels: 1.2e6, dpr: 1.5, shadows: false, shadowMap: 1024, post: false, msaa: 0, bloom: false, caustics: 256, motes: 110, rays: 10, reflection: 0, substrateTexture: 256, frontReflections: false, shadowTaps: [4, 4] },
-  medium: { maxPixels: 2.3e6, dpr: 2, shadows: true, shadowMap: 1024, post: true, msaa: 2, bloom: true, caustics: 512, motes: 220, rays: 16, reflection: 0.35, substrateTexture: 512, frontReflections: true, shadowTaps: [6, 8] },
-  high: { maxPixels: 3.4e6, dpr: 2, shadows: true, shadowMap: 2048, post: true, msaa: 4, bloom: true, caustics: 512, motes: 360, rays: 24, reflection: 0.5, substrateTexture: 512, frontReflections: true, shadowTaps: [10, 14] },
-  ultra: { maxPixels: 6e6, dpr: 3, shadows: true, shadowMap: 4096, post: true, msaa: 4, bloom: true, caustics: 1024, motes: 600, rays: 32, reflection: 0.75, substrateTexture: 512, frontReflections: true, shadowTaps: [12, 16] },
+  low: { maxPixels: 1.2e6, dpr: 1.5, shadows: false, shadowMap: 1024, post: false, msaa: 0, bloom: false, caustics: 256, motes: 110, rays: 10, reflection: 0, substrateTexture: 256, frontReflections: false, shadowTaps: [4, 4], dofTaps: 0 },
+  medium: { maxPixels: 2.3e6, dpr: 2, shadows: true, shadowMap: 1024, post: true, msaa: 2, bloom: true, caustics: 512, motes: 220, rays: 16, reflection: 0.35, substrateTexture: 512, frontReflections: true, shadowTaps: [6, 8], dofTaps: 16 },
+  high: { maxPixels: 3.4e6, dpr: 2, shadows: true, shadowMap: 2048, post: true, msaa: 4, bloom: true, caustics: 512, motes: 360, rays: 24, reflection: 0.5, substrateTexture: 512, frontReflections: true, shadowTaps: [10, 14], dofTaps: 22 },
+  ultra: { maxPixels: 6e6, dpr: 3, shadows: true, shadowMap: 4096, post: true, msaa: 4, bloom: true, caustics: 1024, motes: 600, rays: 32, reflection: 0.75, substrateTexture: 512, frontReflections: true, shadowTaps: [12, 16], dofTaps: 28 },
 };
 
 /** Moonlight LEDs (linear), for the veil color. */
@@ -75,8 +72,9 @@ const MOON = new Color(0.1, 0.24, 1.0);
  * Owns the WebGL renderer, scene, camera, lighting, water/environment effects and post-processing.
  *
  * OWNER: environment module. Public API (used by other modules): `scene`, `camera`, `contents`,
- * `renderer`, `globals`, `update`, `render`, `resize`, `rebuildTank`, `setQuality`, `setFocus`,
- * `nudgeView`, `rayFromScreen`.
+ * `renderer`, `globals`, `update`, `render`, `resize`, `rebuildTank`, `setQuality`,
+ * `rayFromScreen`, and the view API (`follow`, `setFollowFill`, `zoomBy`, `setZoom`, `getZoom`,
+ * `panBy`, `resetView`; `setFocus`/`nudgeView` remain for older callers).
  *
  * The camera is a standard perspective camera placed at the refraction-corrected eye (see
  * CameraRig): `project()`, `unproject()` and raycasts from it are true world-space lines of sight
@@ -128,6 +126,7 @@ export class Engine {
   private size = new Vector2();
   private tmpColor = new Color();
   private tmpV = new Vector3();
+  private dof: DofParams = { amount: 0, focus: 1, scale: 0, near: 0.1, far: 2, cameraNear: 0.03, cameraFar: 12 };
   private unsubscribe: (() => void)[] = [];
 
   constructor(canvas: HTMLCanvasElement, world: World) {
@@ -247,7 +246,7 @@ export class Engine {
     this.renderer.getDrawingBufferSize(this.size);
     if (this.preset.post) {
       if (!this.post) {
-        this.post = new PostFX(this.renderer, this.scene, this.camera, { msaa: this.preset.msaa, bloom: this.preset.bloom, bloomScale: 0.5 });
+        this.post = new PostFX(this.renderer, this.scene, this.camera, { msaa: this.preset.msaa, bloom: this.preset.bloom, bloomScale: 0.5, dofTaps: this.preset.dofTaps });
       }
       this.post.setSize(this.size.x, this.size.y);
     }
@@ -266,7 +265,6 @@ export class Engine {
 
   /** Per-frame environment update (lights by time of day, caustics, particles, bubbles, camera drift). */
   update(world: World, dt: number): void {
-    this.updateSubject();
     if (world !== this.world || this.needsRebuild(world)) this.rebuildTank(world);
     this.dt = dt;
     const env = world.env;
@@ -331,8 +329,8 @@ export class Engine {
     this.surface.update(dt, agitation);
     const pixelScale = this.size.y / (2 * Math.tan(MathUtils.degToRad(this.camera.fov) / 2));
     this.bubbles.setPixelScale(pixelScale);
-    const focusDist = this.camera.position.z; // (virtual-eye) distance to the tank's mid-depth plane
-    this.motes.update(dt, GLOBALS.uCurrent.value.x, GLOBALS.uCurrent.value.y, t.waterParams.cloudiness ?? 0, pixelScale, focusDist);
+    // Motes blur like everything else around the lens's focus (the followed animal, the zoom anchor).
+    this.motes.update(dt, GLOBALS.uCurrent.value.x, GLOBALS.uCurrent.value.y, t.waterParams.cloudiness ?? 0, pixelScale, this.rig.focusDistance);
     // Backlights (frosted/gradient films) run on the light timer.
     this.shell.update(t, room, Math.max(day, 0.0), this.preset.frontReflections);
 
@@ -388,7 +386,17 @@ export class Engine {
     if (post) {
       GLOBALS.uPrevFrame.value = post.prevFrame;
       GLOBALS.uGhost.value = this.ghostReady ? 1 : 0;
-      post.render(this.exposure, GLOBALS.uTime.value);
+      // Depth of field for close-ups: focus, lens and depth range from the rig (see CameraRig).
+      const rig = this.rig;
+      const d = this.dof;
+      d.amount = this.preset.dofTaps > 0 ? rig.dofAmount : 0;
+      d.focus = rig.focusDistance;
+      d.scale = rig.dofScale * d.amount;
+      d.near = rig.glassDistance;
+      d.far = rig.backDistance;
+      d.cameraNear = this.camera.near;
+      d.cameraFar = this.camera.far;
+      post.render(this.exposure, GLOBALS.uTime.value, d);
     } else {
       r.render(this.scene, this.camera);
     }
@@ -415,60 +423,118 @@ export class Engine {
   }
 
   // ------------------------------------------------------------------------------------------
-  // View API (zoom / pan / follow). OWNER: camera module — stubs over the original rig until
-  // the close-up camera lands.
+  // View API (zoom / pan / follow). The optics and motion live in CameraRig.
   // ------------------------------------------------------------------------------------------
 
-  private subject: FollowSubject | null = null;
-  private subjectV = new Vector3();
+  /** Zoom anchor of the current gesture (re-picked when the pointer moves or after a pause). */
+  private anchor = { x: 0, y: 0, time: -1e9, point: new Vector3(), valid: false };
 
   /**
-   * Follow a moving subject (its arrays are read every frame — pass live references, e.g. a
-   * fish's kin.pos/forward). `fill` = fraction of the screen width the subject should span
-   * (≈0.08 distant … 0.45 tight close-up). null returns to the whole-tank view.
+   * Follow a moving subject (its arrays are read every frame — pass live references, refreshed in
+   * place). Calling again glides to the new subject over 2–4 s. `fill` = fraction of the screen
+   * width the subject should span (0.05–0.6; default by size: ~0.22 small fish … ~0.3 larger).
+   * null eases back to the previous free view; `hold` keeps the current framing instead (the
+   * keeper grabbed the view).
    */
-  follow(subject: FollowSubject | null, opts: { fill?: number } = {}): void {
-    void opts;
-    this.subject = subject;
-    if (!subject) this.rig.setFocus(null);
+  follow(subject: FollowSubject | null, opts: { fill?: number; hold?: boolean } = {}): void {
+    this.rig.follow(subject, opts);
   }
 
-  /** Change how tightly the followed subject is framed (pinch/wheel while following). */
+  /** Change how tightly the followed subject is framed (smoothly). */
   setFollowFill(fill: number): void {
-    void fill;
+    this.rig.setFollowFill(fill);
   }
 
-  /** Zoom by wheel-notch steps (+ closer), optionally toward a screen point. */
-  zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number): void {
-    void anchorClientX;
-    void anchorClientY;
-    this.rig.nudge(0, 0, steps);
+  /**
+   * Zoom by wheel-notch steps (+ closer, ×1.12 each; fractional for trackpads and pinch),
+   * optionally toward a screen point: the thing under it stays under it. `pickAnchor` may return
+   * the true-space point under a client position (fish, plant, decor); otherwise the tank's
+   * own geometry is used. While following, zoom frames the subject tighter or looser.
+   */
+  zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number, pickAnchor?: (clientX: number, clientY: number) => Vector3 | null): void {
+    if (anchorClientX === undefined || anchorClientY === undefined || this.rig.isFollowing) {
+      this.rig.zoomBy(steps);
+      return;
+    }
+    const rect = this.canvas.getBoundingClientRect();
+    const nx = ((anchorClientX - rect.left) / Math.max(1, rect.width)) * 2 - 1;
+    const ny = -((anchorClientY - rect.top) / Math.max(1, rect.height)) * 2 + 1;
+    // One pick per gesture: while the pointer stays put, the anchored point stays under it.
+    const a = this.anchor;
+    const now = performance.now();
+    if (!a.valid || now - a.time > 400 || Math.hypot(anchorClientX - a.x, anchorClientY - a.y) > 8) {
+      const picked = pickAnchor?.(anchorClientX, anchorClientY) ?? null;
+      a.valid = picked ? !!a.point.copy(picked) : this.anchorInTank(this.rayFromScreen(anchorClientX, anchorClientY), a.point);
+      a.x = anchorClientX;
+      a.y = anchorClientY;
+    }
+    a.time = now;
+    if (a.valid) this.rig.zoomBy(steps, nx, ny, a.point);
+    else this.rig.zoomBy(steps);
   }
 
+  /**
+   * Where a line of sight first meets the tank's own surfaces (substrate, back/side glass, water
+   * surface): the depth of whatever is under the pointer when nothing else was picked.
+   */
+  private anchorInTank(ray: Ray, out: Vector3): boolean {
+    const tank = this.world.tank;
+    const b = tankBounds(tank);
+    const o = ray.origin;
+    const d = ray.direction;
+    if (d.z >= -1e-6) return false;
+    const t0 = Math.max(0, (b.halfD - o.z) / d.z);
+    let t1 = (-b.halfD - o.z) / d.z;
+    if (d.x > 1e-6) t1 = Math.min(t1, (b.halfW - o.x) / d.x);
+    else if (d.x < -1e-6) t1 = Math.min(t1, (-b.halfW - o.x) / d.x);
+    if (d.y > 1e-6) t1 = Math.min(t1, (b.surfaceY - o.y) / d.y);
+    else if (d.y < -1e-6) t1 = Math.min(t1, -o.y / d.y);
+    if (!(t1 > t0)) return false;
+    const below = (t: number) => o.y + d.y * t <= substrateHeight(tank, o.x + d.x * t, o.z + d.z * t);
+    let lo = t0;
+    let hi = t1;
+    const steps = 48;
+    for (let i = 1; i <= steps; i++) {
+      const t = t0 + ((t1 - t0) * i) / steps;
+      if (below(t)) {
+        hi = t;
+        for (let k = 0; k < 10; k++) {
+          const m = (lo + hi) / 2;
+          if (below(m)) hi = m;
+          else lo = m;
+        }
+        break;
+      }
+      lo = t;
+    }
+    out.copy(d).multiplyScalar(hi).add(o);
+    return true;
+  }
+
+  /** Absolute zoom (1 = whole tank … 8). While following, scales the framing to match. */
   setZoom(zoom: number): void {
-    void zoom;
+    this.rig.setZoom(zoom);
   }
 
-  /** 1 = the whole tank framed; `max` = closest telephoto framing. */
+  /** The TARGET zoom (what the view is heading for): 1 = the whole tank framed; `max` = closest telephoto framing. */
   getZoom(): { zoom: number; min: number; max: number } {
-    return { zoom: 1, min: 1, max: 2.6 };
+    return { zoom: this.rig.targetZoom, min: 1, max: MAX_ZOOM };
   }
 
-  /** Pan by fractions of the visible half-width/height (positive = view moves right/up). */
+  /** Current (animated) zoom, for indicators that follow the motion. */
+  get zoomLevel(): number {
+    return this.rig.zoom;
+  }
+
+  /** Pan by fractions of the visible half-width/height (positive = view moves right/up). Ignored while following. */
   panBy(dx: number, dy: number): void {
-    this.rig.nudge(dx, dy, 0);
+    this.rig.panBy(dx, dy);
   }
 
-  /** Back to the whole-tank view (stops following). */
-  resetView(): void {
-    this.subject = null;
-    this.rig.setFocus(null);
-    this.rig.resetView();
-  }
-
-  /** Called from update(): feed the follow subject to the rig. */
-  private updateSubject(): void {
-    if (this.subject) this.rig.setFocus(this.subjectV.set(this.subject.pos[0], this.subject.pos[1], this.subject.pos[2]));
+  /** Back to the whole-tank view (stops following). `gentle`: a slow documentary pull-back. */
+  resetView(opts: { gentle?: boolean } = {}): void {
+    this.rig.follow(null);
+    this.rig.resetView(!!opts.gentle);
   }
 
   /** Smoothly move the camera to keep `target` in view (fish follow), or back to the tank view when null. */
