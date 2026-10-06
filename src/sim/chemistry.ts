@@ -49,11 +49,21 @@ export function tapWater(water: WaterType): { nitrate: number; kh: number; gh: n
   return { nitrate: 5, kh: 4, gh: 6, salinitySG: 1.0, co2: 8 };
 }
 
-/** Oxygen solubility (mg/L) at temperature °C; marine water holds ~19% less (salting-out at 35‰). */
+/**
+ * Dissolved-oxygen saturation (mg/L) at 1 atm — Benson & Krause (1984), as used by APHA
+ * Standard Methods: 8.26 mg/L at 25 °C fresh, ≈6.7 mg/L in 35‰ seawater.
+ */
 export function oxygenSaturation(tempC: number, water: WaterType): number {
-  const t = clamp(tempC, 0, 40);
-  const fresh = 14.621 - 0.41022 * t + 0.007991 * t * t - 0.000077774 * t * t * t;
-  return fresh * (water === 'marine' ? 0.81 : water === 'brackish' ? 0.93 : 1);
+  const T = clamp(tempC, 0, 40) + 273.15;
+  const salinity = water === 'marine' ? 35 : water === 'brackish' ? 12 : 0;
+  const lnC =
+    -139.34411 +
+    1.575701e5 / T -
+    6.642308e7 / (T * T) +
+    1.2438e10 / (T * T * T) -
+    8.621949e11 / (T * T * T * T) -
+    salinity * (0.017674 - 10.754 / T + 2140.7 / (T * T));
+  return Math.exp(lnC);
 }
 
 /** Fraction of total ammonia present as toxic free NH₃ (Emerson et al. 1975). */

@@ -49,6 +49,8 @@ const room: number[] = [];
 interface FeedTraits {
   bold: number;
   scavenger: boolean;
+  /** Static weight (affinity × zone access × boldness) per food kind, for each round. */
+  weight: [Map<FoodKind, number>, Map<FoodKind, number>];
 }
 const traitCache = new WeakMap<Species, FeedTraits>();
 function feedTraits(sp: Species): FeedTraits {
@@ -57,10 +59,25 @@ function feedTraits(sp: Species): FeedTraits {
     t = {
       bold: sp.traits.includes('bold') ? 1.25 : sp.traits.includes('shy') ? 0.7 : 1,
       scavenger: sp.traits.includes('scavenger') || sp.group !== 'fish',
+      weight: [new Map(), new Map()],
     };
     traitCache.set(sp, t);
   }
   return t;
+}
+
+/** Diet × water-column × temperament weight of a species for a food, per round (cached). */
+function staticWeight(sp: Species, food: FoodType, round: number): number {
+  const ft = feedTraits(sp);
+  const cache = ft.weight[round === 0 ? 0 : 1];
+  let w = cache.get(food.kind);
+  if (w === undefined) {
+    let aff = food.affinity[sp.diet] ?? 0;
+    if (round === 1 && ft.scavenger) aff = Math.max(aff, 0.5);
+    w = aff * zoneAccess(sp.zone, food.buoyancy) * ft.bold;
+    cache.set(food.kind, w);
+  }
+  return w;
 }
 
 /**
@@ -85,19 +102,16 @@ export function feedDirect(
     let total = 0;
     for (let i = 0; i < fish.length; i++) {
       const f = fish[i];
-      const sp = f.species;
-      const ft = feedTraits(sp);
-      let aff = food.affinity[sp.diet] ?? 0;
-      if (round === 1 && ft.scavenger) aff = Math.max(aff, 0.5);
-      const w = massG(sp, f.state.lengthCm);
+      const sw = staticWeight(f.species, food, round);
+      const w = massG(f.species, f.state.lengthCm);
       const r = Math.max(0, 1 - f.state.stomach) * stomachCapacityMg(w);
       room[i] = r;
-      if (aff <= 0 || r <= 0) {
+      if (sw <= 0 || r <= 0) {
         weights[i] = 0;
         continue;
       }
       const appetite = 0.15 + f.state.hunger;
-      weights[i] = aff * zoneAccess(sp.zone, food.buoyancy) * mouthAccess(f, food) * appetite * ft.bold * Math.sqrt(Math.sqrt(w)) * Math.min(1, r);
+      weights[i] = sw * mouthAccess(f, food) * appetite * Math.sqrt(Math.sqrt(w)) * Math.min(1, r);
       total += weights[i];
     }
     if (total <= 0) break;
