@@ -230,7 +230,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred (wild form: upper Amazon basin — Peru, Colombia & Brazil)",
-  "description": "A farmed neon strain carrying extra reflective guanine over the head and nape, giving it a sparkling silvery crown. The blue line is shortened to the rear half of the body, above the usual red.",
+  "description": "A farmed neon strain carrying extra reflective guanine over the head and nape, giving it a sparkling silvery crown. The silver sheen masks the front of the blue line, which shows from behind the gill cover above the usual red rear.",
   "adultLengthCm": 3.5,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -299,7 +299,7 @@
      "color": "#1f8cff",
      "y": 0.16,
      "width": 0.17,
-     "x0": 0.42,
+     "x0": 0.3,
      "x1": 0.82,
      "glow": 0.5,
      "iridescent": true
@@ -2595,7 +2595,7 @@
   "family": "Characidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Rio Tapajós basin, Pará, Brazil",
+  "region": "Rio Tocantins basin, Pará & Tocantins, Brazil",
   "description": "A translucent lemon-yellow tetra whose anal fin carries a bright yellow leading edge bordered in black, beneath an eye ringed red above. Males hold small display stations within the shoal and spread their fins at rivals.",
   "adultLengthCm": 4.5,
   "birthLengthCm": 0.3,
@@ -2962,7 +2962,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Lower Amazon & Tocantins basins, Pará, Brazil",
-  "description": "Named for its three-coloured lateral \"flag\": a red band over a gold line over a black stripe that runs back to the tail. Also sold as the false Ulrey's tetra, after a very similar species that is rarely exported.",
+  "description": "Named for its three-coloured lateral \"flag\": a red band over a gold line over a black stripe that runs back to the tail. It is often sold as Ulrey's tetra, a name that properly belongs to the similar but rarely exported H. ulreyi.",
   "adultLengthCm": 4.5,
   "birthLengthCm": 0.3,
   "maturityMonths": 7,
@@ -3566,7 +3566,7 @@
   "family": "Characidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Essequibo basin, Guyana & rivers of Suriname",
+  "region": "Essequibo River basin, Guyana",
   "description": "A modest golden tetra from the Guiana Shield with a dark spot on the tail base and red-orange tints in the tail and anal fins. It shoals in shaded, slow-moving forest streams.",
   "adultLengthCm": 4,
   "birthLengthCm": 0.3,
@@ -5613,7 +5613,7 @@
   "family": "Characidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Amazon & Paraná basins — Brazil, Peru, Bolivia & Paraguay",
+  "region": "Amazon basin — Brazil, Peru & Bolivia",
   "description": "A glass-clear, surface-loving characin with a blood-red tail base. Males develop a long white filament at the front of the anal fin, displayed during courtship.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.3,
@@ -5726,7 +5726,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Amazon & Orinoco basins and coastal rivers of the Guianas",
-  "description": "Its see-through body reveals the swim bladder and spine, and its dorsal, anal and pelvic fins carry bold yellow, black and white bands. Unusually for a tetra it also lives in slightly brackish coastal waters.",
+  "description": "Its see-through body reveals the swim bladder and spine; a black shoulder spot sits behind the gill cover, and the dorsal, anal and pelvic fins carry bold yellow, black and white bands. Unusually for a tetra it also lives in slightly brackish coastal waters.",
   "adultLengthCm": 4,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -5786,6 +5786,14 @@
      "y": 0.15,
      "rx": 0.13,
      "ry": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1814",
+     "x": 0.27,
+     "y": 0.28,
+     "rx": 0.025,
+     "ry": 0.16
     }
    ],
    "fins": {
@@ -6160,7 +6168,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Rio Aripuanã & upper Rio Madeira basin — Mato Grosso & Amazonas, Brazil",
-  "description": "Also sold as the blue emperor, it is named after INPA, the Brazilian Amazon research institute. Males are violet-blue above a dark lateral band, while females are yellowish-brown with a reddish adipose fin.",
+  "description": "Also sold as the blue emperor; its genus is named after INPA, the Brazilian Amazon research institute, and the species after its director Warwick Kerr. Males are violet-blue above a dark lateral band, while females are yellowish-brown with a reddish adipose fin.",
   "adultLengthCm": 4,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -6447,8 +6455,8 @@
   "family": "Characidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Captive-bred (dark form of a western Colombian species)",
-  "description": "A dark trade form of the emperor tetra in which the black lateral band spreads over most of the body, leaving a blue-violet sheen above and pale fin edges. It shares the territorial habits and trident tail of the normal form.",
+  "region": "Pacific slope of western Colombia; trade fish are captive-bred",
+  "description": "A dark form of the emperor tetra, originally described as Nematobrycon amphiloxus and now treated as the same species, in which the black lateral band spreads over most of the body under a blue-violet sheen. It shares the territorial habits and trident tail of the normal form.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.3,
   "maturityMonths": 8,
@@ -7002,7 +7010,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Paraguay & Guaporé basins — Brazil, Bolivia, Paraguay & Argentina",
-  "description": "Also called the black skirt tetra: two black bars cross the front half of its deep body, and the rear and the skirt-like anal fin are jet black, fading to smoky gray in older fish. Hardy and active, it can nip long-finned tankmates.",
+  "description": "Also called the black skirt tetra: a black bar runs through the eye and two more cross the front half of its deep body, while the rear and the skirt-like anal fin are jet black, fading to smoky gray in older fish. Hardy and active, it can nip long-finned tankmates.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -7086,6 +7094,11 @@
      "x1": 0.42,
      "y0": -0.4,
      "y1": 0.95
+    },
+    {
+     "type": "mask",
+     "color": "#161616",
+     "width": 0.04
     }
    ],
    "fins": {
@@ -7160,7 +7173,7 @@
    "eyeSize": 0.42,
    "adipose": true,
    "caudal": {
-    "shape": "veil",
+    "shape": "deeply-forked",
     "size": 0.55
    },
    "depth": 0.5,
@@ -7214,6 +7227,11 @@
      "x1": 0.42,
      "y0": -0.4,
      "y1": 0.95
+    },
+    {
+     "type": "mask",
+     "color": "#161616",
+     "width": 0.04
     }
    ],
    "fins": {
@@ -8588,7 +8606,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Trinidad, northern Venezuela & Colombia",
-  "description": "Males carry a long, paddle-like extension of the gill cover that they flick in front of females during courtship. Fertilisation is internal: females store sperm and later lay fertilised eggs on their own.",
+  "description": "Males carry a long, paddle-like extension of the gill cover that they flick in front of females during courtship. Insemination is internal: females store sperm and later stick their eggs to the undersides of leaves on their own.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.3,
   "maturityMonths": 6,
@@ -8612,7 +8630,7 @@
   "groupSize": 6,
   "diet": "omnivore",
   "activity": "diurnal",
-  "reproduction": "egg-scatterer",
+  "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1.2,
   "burstSpeed": 10,
@@ -8687,7 +8705,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Southern Brazil, Uruguay, Paraguay & north-eastern Argentina",
-  "description": "A subtropical characin whose males grow huge, wing-like dorsal and anal fins that they spread in courtship displays. As in the swordtail characin, fertilisation is internal and females can store sperm.",
+  "description": "A subtropical characin whose males grow huge, wing-like dorsal and anal fins that they spread in courtship displays. As in the swordtail characin, insemination is internal and females can store sperm to spawn later without a male.",
   "adultLengthCm": 7,
   "birthLengthCm": 0.3,
   "maturityMonths": 7,
@@ -8797,7 +8815,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Atlantic Forest coastal streams of south-eastern Brazil",
-  "description": "A slender, surface-dwelling characin of cool, shaded Atlantic Forest streams; males shimmer blue-green above a dark lateral band. Fertilisation is internal, and males court females with elaborate fin displays.",
+  "description": "A slender, surface-dwelling characin of cool, shaded Atlantic Forest streams; males shimmer blue-green above a dark lateral band. Insemination is internal, and after elaborate fin displays by the male the female lays her eggs alone on submerged leaves.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.3,
   "maturityMonths": 7,
@@ -8821,7 +8839,7 @@
   "groupSize": 8,
   "diet": "omnivore",
   "activity": "diurnal",
-  "reproduction": "egg-scatterer",
+  "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1.3,
   "burstSpeed": 10,
@@ -8877,6 +8895,347 @@
    "look": {
     "iridescence": 0.35,
     "base": "#b8beb0"
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "charax-gibbosus",
+  "commonName": "Glass Headstander",
+  "scientificName": "Charax gibbosus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guianas & lower Amazon basin",
+  "description": "A translucent, hump-backed characin that hangs almost motionless at a head-down angle, then darts forward to snap up small fish and invertebrates. Its glassy body shows a small dark shoulder spot and a very long anal fin.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "head-stander",
+   "ambush"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "width": 0.08,
+   "eyeSize": 0.4,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.28
+   },
+   "depth": 0.4,
+   "depthPos": 0.32,
+   "backArch": 0.6,
+   "headLength": 0.24,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.55,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.45,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#d8d4c4",
+   "dorsal": "#b0a890",
+   "ventral": "#ecebe4",
+   "fin": "#e8e4d8",
+   "finOpacity": 0.2,
+   "eye": "#c8b880",
+   "metallic": 0.3,
+   "translucency": 0.65,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#e8e6dc",
+     "x": 0.38,
+     "y": 0.15,
+     "rx": 0.12,
+     "ry": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#3a3630",
+     "x": 0.3,
+     "y": 0.3,
+     "rx": 0.025,
+     "ry": 0.18
+    }
+   ]
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "exodon-paradoxus",
+  "commonName": "Bucktooth Tetra",
+  "scientificName": "Exodon paradoxus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Tocantins basins and rivers of Guyana",
+  "description": "A golden characin with two large black spots, one mid-flank and one on the tail base, and orange-red fins. It is a lepidophage that tears scales from other fish, so in aquaria it is kept in a large group of its own kind.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 12,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 12,
+  "traits": [
+   "fin-nipper",
+   "predator",
+   "bold"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "width": 0.11,
+   "eyeSize": 0.38,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "depth": 0.36,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.57,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#d4c6a0",
+   "dorsal": "#8a7c58",
+   "ventral": "#efe8d6",
+   "fin": "#d86a3a",
+   "finOpacity": 0.45,
+   "eye": "#c89040",
+   "metallic": 0.55,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#121010",
+     "x": 0.5,
+     "y": 0.05,
+     "rx": 0.07,
+     "ry": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#121010",
+     "x": 0.94,
+     "y": 0,
+     "rx": 0.05,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d87a4a",
+     "opacity": 0.45
+    },
+    "anal": {
+     "color": "#d8603a",
+     "opacity": 0.5
+    },
+    "pelvic": {
+     "color": "#d8603a",
+     "opacity": 0.5
+    },
+    "caudal": {
+     "color": "#d8804a",
+     "opacity": 0.4
+    },
+    "pectoral": {
+     "color": "#e8d8c0",
+     "opacity": 0.2
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "brycon-hilarii",
+  "commonName": "Piraputanga",
+  "scientificName": "Brycon hilarii",
+  "family": "Bryconidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraguay River basin — Pantanal & Bonito region, Brazil",
+  "description": "A large, fast-schooling characin famous from the crystal-clear rivers of Bonito, Brazil, where it leaps for fruit and insects falling from overhanging trees. It spawns during upstream migrations and is shown in large public-aquarium river displays.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   20
+  ],
+  "minTankLiters": 3000,
+  "temperament": "semi-aggressive",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 6,
+  "traits": [
+   "jumper",
+   "bold"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "width": 0.12,
+   "eyeSize": 0.3,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "depth": 0.3,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "scaleSize": 0.4,
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#c4c6c0",
+   "dorsal": "#5e6660",
+   "ventral": "#eef0ec",
+   "fin": "#d8a070",
+   "finOpacity": 0.45,
+   "eye": "#c8b070",
+   "metallic": 0.8,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#1a1a1a",
+     "x": 0.97,
+     "y": 0,
+     "rx": 0.03,
+     "ry": 0.15
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e07a3c",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#121212",
+       "y": 0,
+       "width": 0.18,
+       "x0": 0,
+       "x1": 1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#e08a4a",
+     "opacity": 0.45
+    },
+    "pelvic": {
+     "color": "#e08a4a",
+     "opacity": 0.45
+    },
+    "dorsal": {
+     "color": "#5a5a56",
+     "opacity": 0.5
+    }
    }
   },
   "availability": "rare"
