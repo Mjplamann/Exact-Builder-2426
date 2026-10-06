@@ -20,6 +20,7 @@ import { JournalPanel } from './panels/JournalPanel';
 import { SettingsPanel } from './panels/SettingsPanel';
 import { TimePanel } from './panels/TimePanel';
 import { ScapeTool } from './ScapeTool';
+import { TankMenu } from './TankMenu';
 import { ThumbnailLoader } from './thumbs';
 import { Toasts, type ToastLevel } from './Toasts';
 import { ViewControls } from './ViewControls';
@@ -106,8 +107,7 @@ export class UI implements UIHost {
 
   // Chrome
   private topLeft!: HTMLElement;
-  private nameBtn!: HTMLButtonElement;
-  private nameInput!: HTMLInputElement;
+  private tankMenu!: TankMenu;
   private glyphEl!: HTMLElement;
   private glyphName: IconName | '' = '';
   private dateEl!: HTMLElement;
@@ -305,17 +305,8 @@ export class UI implements UIHost {
   // ------------------------------------------------------------------------------------------
 
   private buildChrome(): void {
-    this.nameBtn = h('button', { type: 'button', class: 'aq-tankname', title: 'Rename the tank' });
-    this.nameBtn.addEventListener('click', () => this.startRenameTank());
-    this.nameInput = h('input', { type: 'text', class: 'aq-tankname-input', maxlength: 40, 'aria-label': 'Tank name', hidden: true });
-    this.nameInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') this.commitRenameTank();
-      else if (e.key === 'Escape') {
-        e.stopPropagation();
-        this.endRenameTank();
-      }
-    });
-    this.nameInput.addEventListener('blur', () => !this.nameInput.hidden && this.commitRenameTank());
+    // The tank name opens the collection: switch, add, rename, duplicate or delete tanks.
+    this.tankMenu = new TankMenu(this, this.layer);
     this.glyphEl = h('span', { class: 'aq-glyph', 'aria-hidden': 'true' });
     this.dateEl = h('span', { class: 'aq-date' });
     this.speedEl = h('button', { type: 'button', class: 'aq-speed', hidden: true, title: 'Change the speed of time' });
@@ -323,8 +314,7 @@ export class UI implements UIHost {
     this.topLeft = h(
       'header',
       { class: 'aq-topleft aq-chrome' },
-      this.nameBtn,
-      this.nameInput,
+      this.tankMenu.el,
       h('div', { class: 'aq-clockline' }, this.glyphEl, this.dateEl, this.speedEl),
     );
 
@@ -367,30 +357,10 @@ export class UI implements UIHost {
     this.layer.append(this.topLeft, topRight, this.dock, this.modeHint);
   }
 
-  private startRenameTank(): void {
-    this.nameInput.value = this.app.world.tank.name;
-    this.nameBtn.hidden = true;
-    this.nameInput.hidden = false;
-    this.nameInput.focus();
-    this.nameInput.select();
-  }
-
-  private commitRenameTank(): void {
-    const v = this.nameInput.value.trim();
-    this.endRenameTank();
-    if (v && v !== this.app.world.tank.name) this.app.setTankLook({ name: v });
-    this.refreshChrome();
-  }
-
-  private endRenameTank(): void {
-    this.nameInput.hidden = true;
-    this.nameBtn.hidden = false;
-  }
-
   /** ~4 Hz: name, date/time, day-night glyph, speed. */
   private refreshChrome(): void {
     const w = this.app.world;
-    setText(this.nameBtn, w.tank.name);
+    this.tankMenu.refresh();
     const t = w.clock.simTime;
     setText(this.dateEl, `${formatSimDate(t)} · ${formatSimClock(t)}`);
     const d = w.env.daylight;
@@ -746,7 +716,7 @@ export class UI implements UIHost {
     const s = this.app.world.settings;
     if (!s.uiAutoHide || this.current || this.shortcutsEl || this.overUI) return false;
     if (this.input.mode !== 'view') return false;
-    if (!this.nameInput.hidden) return false;
+    if (this.tankMenu.busy) return false;
     const a = document.activeElement;
     if (a && a !== document.body && this.layer.contains(a) && isTyping(a)) return false;
     return true;
@@ -825,7 +795,7 @@ export class UI implements UIHost {
     const app = this.app;
     if (this.shortcutsEl) return this.hideShortcuts();
     if (this.card.onEscape()) return;
-    if (!this.nameInput.hidden) return this.endRenameTank();
+    if (this.tankMenu.onEscape()) return;
     if (this.manualHidden) return this.setManualHidden(false);
     if (this.feeding) return this.stopFeeding();
     if (this.current) {

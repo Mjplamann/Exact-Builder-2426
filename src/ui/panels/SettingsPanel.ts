@@ -1,10 +1,12 @@
 /**
  * Settings: display quality, sound, interface behavior, care mode (with plain explanations),
- * units; tank export/import and starting over.
+ * units; exporting the open tank, and importing or building new ones into the collection.
  */
 import type { Quality, Settings } from '../../core/types';
 import type { Panel, UIHost } from '../context';
-import { button, confirmButton, section, segmented, slider, toggle } from '../controls';
+import { button, section, segmented, slider, toggle } from '../controls';
+import { fadeTankChange, openTankBuilder } from '../builder';
+import { importTank as parseTank } from '../../sim/persistence';
 import { h, throttle } from '../dom';
 import { formatCount } from '../format';
 import { CARE_MODES } from '../phrases';
@@ -15,9 +17,10 @@ export class SettingsPanel implements Panel {
   readonly el: HTMLElement;
   private syncers: (() => void)[] = [];
 
+  /** @param _onNewTank kept for the UI shell's call site: "New tank…" now opens the guided builder itself. */
   constructor(
     private host: UIHost,
-    private onNewTank: () => void,
+    _onNewTank?: () => void,
   ) {
     const app = host.app;
     const s = () => app.world.settings;
@@ -67,21 +70,37 @@ export class SettingsPanel implements Panel {
       const file = fileInput.files?.[0];
       fileInput.value = '';
       if (!file) return;
+      let text: string;
       try {
-        const text = await file.text();
-        app.importTank(text);
-        host.toast(`Imported “${app.world.tank.name}”.`, 'success');
+        text = await file.text();
+      } catch {
+        host.toast('That file couldn’t be read.', 'warning');
+        return;
+      }
+      try {
+        parseTank(text);
       } catch (err) {
         host.toast(`That file couldn’t be opened as an aquarium (${err instanceof Error ? err.message : String(err)}).`, 'warning');
+        return;
       }
+      // An import joins the collection as a new tank (nothing is replaced).
+      host.openPanel(null);
+      const ok = await fadeTankChange(() => {
+        app.importTank(text);
+        return true;
+      });
+      if (ok) host.toast(`Imported “${app.world.tank.name}” as a new tank — your other tanks are in the tank menu.`, 'success');
+      else host.toast('That aquarium couldn’t be set up.', 'warning');
     });
     const exportBtn = button('Export tank', () => this.exportTank(), { icon: 'download' });
     const importBtn = button('Import tank…', () => fileInput.click(), { icon: 'upload' });
-    const newBtn = button('Start a new tank…', () => onNewTank(), { icon: 'plusCircle' });
+    const newBtn = button('New tank…', () => openTankBuilder(host, { returnFocus: newBtn }), { icon: 'plusCircle' });
     const presets = app.presets();
-    const reset = confirmButton('Reset to the starter tank', 'This replaces everything — confirm', () => {
-      if (presets[0]) app.loadPreset(presets[0].id);
-    }, { variant: 'quiet' });
+    const starter = button('Add the starter tank again', () => {
+      if (!presets[0]) return;
+      host.openPanel(null);
+      void fadeTankChange(() => app.loadPreset(presets[0].id));
+    }, { variant: 'quiet', title: 'A fresh copy of the starter tank, added as a new tank' });
 
     this.syncers.push(() => {
       quality.set(s().quality);
@@ -102,12 +121,12 @@ export class SettingsPanel implements Panel {
       section('Display', h('div', { class: 'aq-field' }, h('span', { class: 'aq-field-label' }, 'Quality'), quality.el), autoHide.el, drift.el, dayNight.el, stats.el),
       section('Care mode', careGroup),
       section('Units', units.el),
-      section('Your tank', h('div', { class: 'aq-btn-grid' }, exportBtn, importBtn, newBtn), fileInput, h('div', { class: 'aq-btn-row' }, reset)),
+      section('Your tanks', h('div', { class: 'aq-btn-grid' }, exportBtn, importBtn, newBtn), fileInput, h('div', { class: 'aq-btn-row' }, starter)),
       section(
         null,
         h('div', { class: 'aq-about' },
           host.isTouch ? null : button('Keyboard shortcuts', () => host.showShortcuts(), { icon: 'keyboard', variant: 'quiet' }),
-          h('p', { class: 'aq-hint' }, `Living Aquarium · ${formatCount(app.world.species.size)} species, ${formatCount(app.world.plants.all.length)} plants & corals. Your tank is saved automatically.`),
+          h('p', { class: 'aq-hint' }, `Living Aquarium · ${formatCount(app.world.species.size)} species, ${formatCount(app.world.plants.all.length)} plants & corals. Your tanks are saved automatically.`),
         ),
       ),
     );

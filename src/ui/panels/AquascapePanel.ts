@@ -1,18 +1,18 @@
 /**
  * Aquascape: a palette of hardscape and plants/corals for the tank's water (click one, then click
- * the substrate to place it), the substrate & its slope, the background, and starting a new tank
- * (size, water type, or a ready-made preset — with a confirm step, since it replaces the tank).
+ * the substrate to place it), the substrate & its slope, the background, and adding a new tank to
+ * the collection (the guided builder, or a ready-made preset).
  */
 import type { PlantSpecies, WaterType } from '../../core/types';
 import { DECOR_CATALOG, type DecorVariant } from '../../decor/catalog';
-import { TANK_SIZES } from '../../sim/tankFactory';
 import type { Panel, UIHost } from '../context';
-import { confirmButton, section, segmented, slider, tabs } from '../controls';
+import { button, section, slider, tabs } from '../controls';
 import { clear, debounce, h, prefersReducedMotion, setClass, throttle } from '../dom';
-import { formatLength, formatLiters } from '../format';
+import { formatLength } from '../format';
 import { icon } from '../icons';
 import { BACKGROUNDS, SUBSTRATES, decorColor, decorGlyph, plantGlyph } from '../scapeArt';
 import type { ScapeTool } from '../ScapeTool';
+import { fadeTankChange, openTankBuilder } from '../builder';
 
 type Tab = 'hardscape' | 'plants' | 'tank';
 
@@ -275,50 +275,19 @@ export class AquascapePanel implements Panel {
     }
     syncBg();
 
-    // New tank
-    let size = TANK_SIZES.find((s) => s.size.widthCm === t.size.widthCm && s.size.heightCm === t.size.heightCm) ?? TANK_SIZES[2];
-    let water: WaterType = t.water;
-    const sizeGroup = h('div', { class: 'aq-size-list', role: 'radiogroup', 'aria-label': 'Tank size' });
-    const sizeBtns: { id: string; el: HTMLButtonElement }[] = [];
-    const syncSize = () => sizeBtns.forEach((b) => b.el.setAttribute('aria-checked', String(b.id === size.id)));
-    for (const s of TANK_SIZES) {
-      const [name, dims] = s.label.split(' · ');
-      const liters = (s.size.widthCm * s.size.heightCm * s.size.depthCm) / 1000;
-      const dimText = units === 'imperial'
-        ? `${Math.round(s.size.widthCm / 2.54)}×${Math.round(s.size.heightCm / 2.54)}×${Math.round(s.size.depthCm / 2.54)} in`
-        : dims ?? '';
-      const b = h('button', { type: 'button', role: 'radio', class: 'aq-size', 'aria-checked': 'false' },
-        h('span', { class: 'aq-size-name' }, name),
-        h('span', { class: 'aq-size-dims' }, `${dimText} · ${formatLiters(liters, units)}`),
-      );
-      b.addEventListener('click', () => {
-        size = s;
-        syncSize();
-      });
-      sizeBtns.push({ id: s.id, el: b });
-      sizeGroup.append(b);
-    }
-    syncSize();
-    const waterSeg = segmented<WaterType>('Water', [
-      { value: 'freshwater', label: 'Freshwater' },
-      { value: 'brackish', label: 'Brackish' },
-      { value: 'marine', label: 'Marine' },
-    ], water, (w) => (water = w));
-    const create = confirmButton('Set up an empty tank', 'Replace my current tank', () => {
-      app.newTank({ size: size.size, water });
-      this.host.toast('A fresh, empty tank — the filter is already seeded and ready.', 'success');
-    }, { icon: 'plusCircle', variant: 'primary' });
+    // New tank: the guided builder adds one to the collection (this one keeps living).
+    const build = button('Build a new tank…', () => openTankBuilder(this.host, { returnFocus: build }), { icon: 'plusCircle', variant: 'primary' });
 
-    // Presets
+    // Ready-made tanks are added as new tanks too.
     const presets = h('div', { class: 'aq-presets' });
     for (const p of app.presets()) {
-      const load = confirmButton('Set up', 'Replace my tank', () => {
-        app.loadPreset(p.id);
-        this.host.toast(`Welcome to “${p.name}”.`, 'success');
+      const load = button('Add as a new tank', () => {
+        this.host.openPanel(null);
+        void fadeTankChange(() => app.loadPreset(p.id)).then(() => this.host.toast(`Welcome to “${p.name}” — your other tanks keep living in the tank menu.`, 'success'));
       }, { variant: 'ghost', cls: 'aq-btn-small' });
       presets.append(
         h('div', { class: 'aq-preset' },
-          h('div', { class: 'aq-preset-head' }, h('span', { class: 'aq-preset-name' }, p.name), h('span', { class: 'aq-chip' }, p.water === 'marine' ? 'Marine' : p.water === 'brackish' ? 'Brackish' : 'Freshwater')),
+          h('div', { class: 'aq-preset-head' }, h('span', { class: 'aq-preset-name' }, p.name), h('span', { class: 'aq-chip' }, p.water === 'marine' ? 'Saltwater' : p.water === 'brackish' ? 'Brackish' : 'Freshwater')),
           h('p', { class: 'aq-preset-desc' }, p.description),
           load,
         ),
@@ -329,12 +298,12 @@ export class AquascapePanel implements Panel {
       section('Substrate', subGrid),
       section('Slope', front.el, back.el),
       section('Background', bgGrid),
-      section('Ready-made tanks', h('p', { class: 'aq-hint' }, 'Complete aquascapes with their inhabitants. Setting one up replaces your current tank.'), presets),
-      section('New empty tank', sizeGroup, h('div', { class: 'aq-field' }, h('span', { class: 'aq-field-label' }, 'Water'), waterSeg.el), create),
+      section('New tank', h('p', { class: 'aq-hint' }, 'Design another tank step by step: water, size and shape, style, equipment and its first inhabitants. This one keeps living while you are away from it.'), build),
+      section('Ready-made tanks', h('p', { class: 'aq-hint' }, 'Complete aquascapes with their inhabitants, each added as a new tank.'), presets),
     );
   }
 
-  /** Jump straight to the "new tank" controls (from Settings). */
+  /** Jump straight to the "new tank" section (from Settings). */
   showNewTank(): void {
     this.setTab('tank');
     requestAnimationFrame(() => {
