@@ -46,13 +46,19 @@ interface QualityPreset {
   frontReflections: boolean;
   /** Soft-shadow taps: blocker search, filter. */
   shadowTaps: [number, number];
+  /**
+   * Drawing-buffer pixel budget. The effective pixel ratio is the smallest of the device ratio,
+   * `dpr`, and what fits this budget — so a phone (few CSS pixels, 3× screen) renders sharply at
+   * ~2× while a large desktop monitor stays at ~1× for the same GPU cost.
+   */
+  maxPixels: number;
 }
 
 export const QUALITY_PRESETS: Record<Quality, QualityPreset> = {
-  low: { dpr: 1, shadows: false, shadowMap: 1024, post: false, msaa: 0, bloom: false, caustics: 256, motes: 110, rays: 10, reflection: 0, substrateTexture: 256, frontReflections: false, shadowTaps: [4, 4] },
-  medium: { dpr: 1, shadows: true, shadowMap: 1024, post: true, msaa: 2, bloom: true, caustics: 512, motes: 220, rays: 16, reflection: 0.35, substrateTexture: 512, frontReflections: true, shadowTaps: [6, 8] },
-  high: { dpr: 1.5, shadows: true, shadowMap: 2048, post: true, msaa: 4, bloom: true, caustics: 512, motes: 360, rays: 24, reflection: 0.5, substrateTexture: 512, frontReflections: true, shadowTaps: [10, 14] },
-  ultra: { dpr: 2, shadows: true, shadowMap: 4096, post: true, msaa: 4, bloom: true, caustics: 1024, motes: 600, rays: 32, reflection: 0.75, substrateTexture: 512, frontReflections: true, shadowTaps: [12, 16] },
+  low: { maxPixels: 1.2e6, dpr: 1.5, shadows: false, shadowMap: 1024, post: false, msaa: 0, bloom: false, caustics: 256, motes: 110, rays: 10, reflection: 0, substrateTexture: 256, frontReflections: false, shadowTaps: [4, 4] },
+  medium: { maxPixels: 2.3e6, dpr: 2, shadows: true, shadowMap: 1024, post: true, msaa: 2, bloom: true, caustics: 512, motes: 220, rays: 16, reflection: 0.35, substrateTexture: 512, frontReflections: true, shadowTaps: [6, 8] },
+  high: { maxPixels: 3.4e6, dpr: 2, shadows: true, shadowMap: 2048, post: true, msaa: 4, bloom: true, caustics: 512, motes: 360, rays: 24, reflection: 0.5, substrateTexture: 512, frontReflections: true, shadowTaps: [10, 14] },
+  ultra: { maxPixels: 6e6, dpr: 3, shadows: true, shadowMap: 4096, post: true, msaa: 4, bloom: true, caustics: 1024, motes: 600, rays: 32, reflection: 0.75, substrateTexture: 512, frontReflections: true, shadowTaps: [12, 16] },
 };
 
 /** Moonlight LEDs (linear), for the veil color. */
@@ -199,7 +205,7 @@ export class Engine {
     const prev = this.preset;
     this.quality = q;
     this.preset = p;
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, p.dpr));
+    this.applyPixelRatio();
     this.renderer.shadowMap.enabled = p.shadows;
     this.lighting.setShadows(p.shadows, p.shadowMap);
     GLOBALS.uShadowTaps.value.set(p.shadowTaps[0], p.shadowTaps[1]);
@@ -217,9 +223,19 @@ export class Engine {
     this.resize();
   }
 
+  /** Pixel ratio = min(device, preset cap, what fits the preset's pixel budget). */
+  private applyPixelRatio(): void {
+    const w = this.canvas.clientWidth || window.innerWidth;
+    const h = this.canvas.clientHeight || window.innerHeight;
+    const budget = Math.sqrt(this.preset.maxPixels / Math.max(1, w * h));
+    const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, this.preset.dpr, budget));
+    if (Math.abs(this.renderer.getPixelRatio() - dpr) > 0.01) this.renderer.setPixelRatio(dpr);
+  }
+
   resize(): void {
     const w = this.canvas.clientWidth || window.innerWidth;
     const h = this.canvas.clientHeight || window.innerHeight;
+    this.applyPixelRatio();
     this.renderer.setSize(w, h, false);
     this.renderer.getDrawingBufferSize(this.size);
     if (this.preset.post) {
