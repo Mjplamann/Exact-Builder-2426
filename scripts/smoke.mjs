@@ -11,6 +11,7 @@ import { createServer } from 'vite';
 import { chromium } from 'playwright-core';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
 
 const args = process.argv.slice(2);
 const opt = (n, d) => {
@@ -24,27 +25,27 @@ const height = Number(opt('height', '720'));
 mkdirSync(out, { recursive: true });
 
 const exe = [process.env.CHROMIUM_PATH, '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'].filter(Boolean).find((p) => existsSync(p));
-const server = await createServer({ server: { port: 0, host: '127.0.0.1', hmr: false, watch: { ignored: ['**/*'] } }, logLevel: 'error' });
+const server = await createServer({ root: resolve('.'), cacheDir: join(tmpdir(), `vite-smoke-${process.pid}`), server: { port: 0, host: '127.0.0.1', hmr: false, watch: null }, logLevel: 'error' });
 await server.listen();
 const url = server.resolvedUrls.local[0];
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-const page = await browser.newPage({ viewport: { width, height } });
+const page = await (await browser.newContext({ viewport: { width, height } })).newPage();
+page.setDefaultTimeout(900_000);
 
 const errors = [];
 page.on('console', (m) => m.type() === 'error' && errors.push(`[console] ${m.text()}`));
 page.on('pageerror', (e) => errors.push(`[pageerror] ${e.message}`));
 
-await page.goto(url);
-await page.evaluate(() => localStorage.clear());
-await page.goto(url, { waitUntil: 'load' });
-await page.waitForFunction(() => !!window.__app, null, { timeout: 60000 });
+// Fresh browser context = empty storage = first-run preset. Navigate once only.
+await page.goto(url, { waitUntil: 'commit', timeout: 900_000 });
+await page.waitForFunction(() => !!window.__app, null, { timeout: 900_000, polling: 500 });
 await page.evaluate(() => {
   const app = window.__app;
   const d = new Date(app.world.clock.simTime);
   d.setHours(13, 0, 0, 0);
   app.world.clock.simTime = d.getTime();
 });
-await page.waitForTimeout(3000);
+await page.evaluate(() => window.__app.stop());
 
 /** Each step runs in the page; returns a JSON-able note. */
 const STEPS = {
@@ -109,7 +110,7 @@ const STEPS = {
   timeLapse: async () => {
     const app = window.__app;
     app.setTimeScale(10080);
-    await new Promise((r) => setTimeout(r, 6000));
+    app.advance(20); // 20 real s at 1 min = 1 week → ~2.3 sim days
     app.setTimeScale(1);
     return { fish: app.world.fish.length, wp: app.world.tank.waterParams, journal: app.world.tank.journal.slice(-5) };
   },
@@ -136,14 +137,17 @@ const STEPS = {
     app.world.clock.simTime = d.getTime();
     return { fish: app.world.fish.length, decor: app.world.tank.decor.length, plants: app.world.tank.plants.length };
   },
-  presets: async () => {
+  presets: () => {
     const app = window.__app;
     const ids = app.presets().map((p) => p.id);
+    const out = {};
     for (const id of ids) {
+      const t = performance.now();
       app.loadPreset(id);
-      await new Promise((r) => setTimeout(r, 400));
+      app.frame(1 / 30);
+      out[id] = { ms: Math.round(performance.now() - t), fish: app.world.fish.length, decor: app.world.tank.decor.length, plants: app.world.tank.plants.length };
     }
-    return ids;
+    return out;
   },
   resize: () => {
     const app = window.__app;
@@ -170,15 +174,14 @@ for (const name of names) {
   } catch (e) {
     errors.push(`[step ${name}] ${e.message}`);
   }
-  await page.waitForTimeout(2500);
-  const file = join(out, `${name}.png`);
-  await page.screenshot({ path: file });
   const t0 = Date.now();
-  const frameMs = await page.evaluate(() => new Promise((res) => {
-    let n = 0; const s = performance.now();
-    const f = () => (++n >= 10 ? res((performance.now() - s) / n) : requestAnimationFrame(f));
-    requestAnimationFrame(f);
-  }));
+  const frameMs = await page.evaluate(() => {
+    const s = performance.now();
+    for (let i = 0; i < 4; i++) window.__app.frame(1 / 30);
+    return (performance.now() - s) / 4;
+  });
+  const file = join(out, `${name}.png`);
+  await page.screenshot({ path: file, timeout: 900_000 });
   results.push({ step: name, note, newErrors: errors.slice(before), screenshot: file, avgFrameMs: Math.round(frameMs), waitMs: Date.now() - t0 });
 }
 

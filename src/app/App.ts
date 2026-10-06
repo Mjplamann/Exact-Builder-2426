@@ -17,6 +17,8 @@ import { exportTank, importTank, loadSettings, loadTank, saveSettings, saveTank 
 import { newTank, type NewTankOptions } from '../sim/tankFactory';
 import { buildColliders } from '../decor/colliders';
 import { DECOR_CATALOG } from '../decor/catalog';
+import { hostAnchor } from '../decor/shapes';
+import { suggestPlacement } from '../decor/aquascapes';
 import { UI } from '../ui/UI';
 import { Ambience } from '../audio/Ambience';
 import type { AppApi, DeepPartial, PickResult, TankPresetInfo } from './AppApi';
@@ -121,6 +123,11 @@ export class App implements AppApi {
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
+  }
+
+  /** Stop the requestAnimationFrame loop (QA harnesses then drive frames manually via frame()). */
+  stop(): void {
+    this.running = false;
   }
 
   /**
@@ -352,9 +359,7 @@ export class App implements AppApi {
 
   addDecor(kind: DecorKind, variant: string, at?: [number, number]): DecorItem {
     const t = this.world.tank;
-    const b = tankBounds(t);
-    const x = at?.[0] ?? (Math.random() - 0.5) * b.halfW;
-    const z = at?.[1] ?? (Math.random() - 0.7) * b.halfD * 0.6;
+    const [x, z] = at ?? suggestPlacement(t, { decor: { kind, variant } }, this.world.plants).at;
     const item: DecorItem = {
       id: newId('decor'),
       kind,
@@ -399,17 +404,28 @@ export class App implements AppApi {
     if (!sp) return null;
     const t = this.world.tank;
     const b = tankBounds(t);
+    if (!at && !attachTo) {
+      const sug = suggestPlacement(t, { plant: sp }, this.world.plants);
+      at = sug.at;
+      attachTo = sug.attachTo;
+    }
     const x = at?.[0] ?? (Math.random() - 0.5) * b.halfW;
     const z = at?.[1] ?? (Math.random() - 0.6) * b.halfD * 0.6;
     let y = substrateHeight(t, x, z);
     if (sp.placement === 'floating') y = b.surfaceY;
     const host = attachTo ? t.decor.find((d) => d.id === attachTo) : undefined;
-    if (host) y = host.position[1] + 0.05 * host.scale;
+    let px = x;
+    let pz = z;
+    if (host) {
+      // Sit the epiphyte on the host's actual surface (same anchor the renderer and colliders use).
+      const a = hostAnchor(host, x, z);
+      [px, y, pz] = a.p;
+    }
     const plant: PlantInstance = {
       id: newId('plant'),
       speciesId,
       seed: Math.floor(Math.random() * 2 ** 31),
-      position: [x, y, z],
+      position: [px, y, pz],
       rotationY: Math.random() * Math.PI * 2,
       growth: 0.35,
       plantedAt: this.world.clock.simTime,
