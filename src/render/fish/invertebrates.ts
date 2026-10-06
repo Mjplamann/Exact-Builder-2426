@@ -549,7 +549,7 @@ function shrimpLike(sp: Species, body: ResolvedBody, look: Appearance, detail: n
         p = add(p, mul(dir, L / segs));
         pts.push(p);
         // Long antennae sweep outward and back over the body; slight droop.
-        if (long) dir = norm(add(dir, [-0.12, -0.02, side * 0.06]));
+        if (long) dir = norm(add(dir, [-0.07, -0.035, side * 0.04]));
         else dir = norm(add(dir, [0, 0.03, side * 0.05]));
       }
       tube(fb, pts, (t) => (long ? 0.005 : 0.004) * (1 - 0.8 * t) + 0.0006, 4, { part: PART.antenna, pivot: base, phase: rng.next() * 6.28, amp: long ? 1 : 0.6, cell: ATLAS.anal }, false);
@@ -728,7 +728,7 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
     ellipsoid(gb, b, [1, 0, 0], [0, 1, 0], [0, 0, 1], [0.024, 0.024, 0.024], 5, 8, { part: PART.stalk, pivot: a, phase: side, amp: 0.4 }, eyeUV);
   }
   // Walking legs (4 pairs) radiating from the sides; chelipeds in front.
-  const legLen = arrow ? 1.9 : flat ? 0.95 : 0.8;
+  const legLen = arrow ? 1.9 : flat ? 0.85 : 0.62;
   const legR = (arrow ? 0.012 : 0.03) * (flat ? 0.8 : 1);
   for (let i = 0; i < 4; i++) {
     const ang = 0.55 - i * 0.42; // fore/aft angle of each leg pair
@@ -796,13 +796,9 @@ function hermitCrab(sp: Species, body: ResolvedBody, look: Appearance, detail: n
   const yc = -0.425 * D;
   // The borrowed shell (base color): a turban-like coil over the back half, aperture forward.
   const shellLen = 0.68;
-  shellMesh(gb, { W: 3.2, T: 1.5, ka: 0.85, kb: 0.95, whorls: 4.2, apertureFlare: 0.1 }, shellLen, clamp(body.width, 0.4, 0.8) * 0.9, detail, (p) => {
-    // Coil axis tilted back: rotate so the apex points up-back; aperture faces forward-down.
-    const a = -1.1;
-    const x = p[0] * Math.cos(a) - p[1] * Math.sin(a);
-    const y = p[0] * Math.sin(a) + p[1] * Math.cos(a);
-    return [x - 0.12, y + yc + 0.33, p[2]];
-  });
+  // Aperture faces forward (the crab emerges from it); the spire points up and back.
+  orientedShell(gb, { W: 3.2, T: 1.5, ka: 0.85, kb: 0.95, whorls: 4.2, apertureFlare: 0.1 }, shellLen, clamp(body.width, 0.4, 0.8) * 0.9, detail,
+    [-0.85, 0.5, 0.12], [0.6, -1, 0], yc + 0.02, -0.12);
   // Crab front emerging from the aperture.
   const o: PartOpts = { part: PART.invBody, pivot: [0, 0, 0], phase: 0, amp: 0 };
   const hc: V3 = [0.2, yc + 0.17, 0];
@@ -859,8 +855,9 @@ interface ShellParams {
 function shellMesh(gb: GeoBuilder, P: ShellParams, length: number, width: number, detail: number, place: (p: V3) => V3, part: number = PART.invBody): { rMax: number } {
   const idx0 = gb.idx.length, v0 = gb.vertexCount;
   const thMax = P.whorls * Math.PI * 2;
-  const nTh = Math.round(P.whorls * 26 * detail);
-  const nPh = Math.round(14 * detail);
+  const nTh = Math.round(P.whorls * 34 * detail);
+  const nPh = Math.round(20 * detail);
+  const refs: number[] = [];
   const lnW = Math.log(P.W);
   const r = (th: number) => Math.exp(((th - thMax) / (2 * Math.PI)) * lnW);
   // Raw extents to normalise: axial length → `length`, diameter → `width`.
@@ -875,9 +872,12 @@ function shellMesh(gb: GeoBuilder, P: ShellParams, length: number, width: number
   }
   const ySpan = Math.max(1e-4, yMax - yMin);
   const diam = 2 * rMaxRaw;
-  // Axis length vs diameter: scale so the longest dimension = length, the other follows width.
-  const sAx = P.T > 0.2 ? length / ySpan : (width * length) / ySpan;
-  const sRad = P.T > 0.2 ? (width * length) / diam : length / diam;
+  // Uniform scale so the longest dimension equals the shell length; the authored width ratio
+  // then nudges the diameter (±25%) without distorting the coil.
+  const sU = length / Math.max(ySpan, diam);
+  const natW = (diam * sU) / length;
+  const sAx = sU;
+  const sRad = sU * clamp(width / Math.max(0.05, natW), 0.8, 1.25);
   const r0 = r(0), rap = r(thMax);
   const uv: [number, number] = [0, 0];
   for (let i = 0; i <= nTh; i++) {
@@ -891,6 +891,10 @@ function shellMesh(gb: GeoBuilder, P: ShellParams, length: number, width: number
       const yy = -P.T * rr + rr * P.kb * flare * Math.sin(ph);
       const p: V3 = [Math.cos(th) * cr * sRad, (yy - (yMin + yMax) / 2) * sAx, Math.sin(th) * cr * sRad];
       const q = place(p);
+      // Outward reference: from the whorl tube's own center line to this vertex.
+      const cRaw: V3 = [Math.cos(th) * rr * sRad, (-P.T * rr - (yMin + yMax) / 2) * sAx, Math.sin(th) * rr * sRad];
+      const qc = place(cRaw);
+      refs.push(q[0] - qc[0], q[1] - qc[1], q[2] - qc[2]);
       // Across-whorl coordinate: outer face (cos φ = 1) is the middle of the band.
       bodyUV(clamp(ux, 0, 1), Math.sin(ph) * 0.95, uv);
       gb.v(q[0], q[1], q[2], uv[0], uv[1], ux, part, 0, 0, 0, 0, 0, 0);
@@ -903,13 +907,10 @@ function shellMesh(gb: GeoBuilder, P: ShellParams, length: number, width: number
     }
   }
   gb.smoothNormals(idx0, v0);
-  // Coiling handedness can flip the winding after `place`; make normals face away from the axis.
+  // Coiling handedness can flip the winding after `place`; make normals face out of the tube.
   let score = 0;
-  for (let i = v0; i < gb.vertexCount; i += 7) {
-    const p: V3 = [gb.pos[i * 3], gb.pos[i * 3 + 1], gb.pos[i * 3 + 2]];
-    const n: V3 = [gb.nor[i * 3], gb.nor[i * 3 + 1], gb.nor[i * 3 + 2]];
-    const c = place([0, gb.pos[i * 3 + 1] * 0, 0]);
-    score += dot(n, sub(p, c));
+  for (let i = v0, k = 0; i < gb.vertexCount; i++, k += 3) {
+    score += gb.nor[i * 3] * refs[k] + gb.nor[i * 3 + 1] * refs[k + 1] + gb.nor[i * 3 + 2] * refs[k + 2];
   }
   if (score < 0) {
     for (let i = idx0; i < gb.idx.length; i += 3) {
@@ -920,6 +921,43 @@ function shellMesh(gb: GeoBuilder, P: ShellParams, length: number, width: number
     for (let i = v0 * 3; i < gb.nor.length; i++) gb.nor[i] = -gb.nor[i];
   }
   return { rMax: rMaxRaw * sRad };
+}
+
+/**
+ * Coiled shell carried by an animal: the coil axis (apex) points along `apexDir`, the aperture
+ * opening (growth direction at the lip) along `apertureDir`; the shell is then moved so its
+ * lowest point sits at `baseY` and its centre over `centerX`.
+ */
+function orientedShell(
+  gb: GeoBuilder, P: ShellParams, length: number, width: number, detail: number,
+  apexDir: V3, apertureDir: V3, baseY: number, centerX: number,
+): void {
+  const v0 = gb.vertexCount;
+  const thMax = P.whorls * Math.PI * 2;
+  // Raw frame: apex +y, aperture tangent t, third axis b = t × y.
+  const t: V3 = [-Math.sin(thMax), 0, Math.cos(thMax)];
+  const yv: V3 = [0, 1, 0];
+  const b = cross(t, yv);
+  // Target frame (orthonormalised).
+  const A = norm(apexDir);
+  const T = norm(sub(apertureDir, mul(A, dot(apertureDir, A))));
+  const B = cross(T, A);
+  const rot = (p: V3): V3 => {
+    const ct = dot(p, t), cy = dot(p, yv), cb = dot(p, b);
+    return add(add(mul(T, ct), mul(A, cy)), mul(B, cb));
+  };
+  shellMesh(gb, P, length, width, detail, rot);
+  let minY = 1e9, minX = 1e9, maxX = -1e9;
+  for (let i = v0; i < gb.vertexCount; i++) {
+    minY = Math.min(minY, gb.pos[i * 3 + 1]);
+    minX = Math.min(minX, gb.pos[i * 3]);
+    maxX = Math.max(maxX, gb.pos[i * 3]);
+  }
+  const dx = centerX - (minX + maxX) / 2, dy = baseY - minY;
+  for (let i = v0; i < gb.vertexCount; i++) {
+    gb.pos[i * 3] += dx;
+    gb.pos[i * 3 + 1] += dy;
+  }
 }
 
 function shellPaintSpec(look: Appearance, W: number, T: number): PaintSpec {
@@ -976,7 +1014,7 @@ function snail(sp: Species, body: ResolvedBody, look: Appearance, detail: number
   const yc = -0.425 * D;
   const width = clamp(body.width, 0.25, 1);
   // Soft body: foot sole on the contact plane, head with tentacles at the front.
-  const footLen = kind === 'cowrie' || kind === 'abalone' ? 1.05 : kind === 'trumpet' ? 0.6 : 0.85;
+  const footLen = kind === 'cowrie' || kind === 'abalone' ? 1.0 : kind === 'trumpet' ? 0.55 : 0.72;
   const footW = Math.min(0.45, width * 0.55) * (kind === 'abalone' ? 1.4 : 1);
   const footH = 0.08;
   const footO: PartOpts = { part: PART.foot, pivot: [0, 0, 0], phase: 0, amp: 1 };
@@ -1011,21 +1049,21 @@ function snail(sp: Species, body: ResolvedBody, look: Appearance, detail: number
     spec = shellPaintSpec(look, P.W, P.T);
   } else {
     const P = SHELLS[kind];
+    const wid = clamp(width, 0.25, 1);
+    const base = shellTop - 0.02;
     if (kind === 'ramshorn') {
-      // Planispiral: coil axis sideways, disc upright above the foot.
-      shellMesh(gb, P, clamp(D, 0.5, 0.9), 0.5, detail, (p) => [p[0] * 0.9 - 0.08, p[2] * 0.9 + shellTop + 0.36, p[1] * 0.9]);
+      // Planispiral disc carried upright, aperture down-forward over the head.
+      orientedShell(gb, P, clamp(D, 0.5, 0.9), 0.5, detail, [0, 0, 1], [0.35, -1, 0], base, -0.04);
+    } else if (kind === 'trumpet' || kind === 'cone' || kind === 'trochus') {
+      // Tall spires are dragged behind, nearly horizontal; the aperture faces the ground.
+      const lift = kind === 'trumpet' ? 0.38 : 0.62;
+      orientedShell(gb, P, 1, wid, detail, [-1, lift, 0.1], [0.1, -1, 0], base, kind === 'trumpet' ? -0.12 : -0.06);
     } else {
-      const tall = kind === 'trumpet' || kind === 'cone' || kind === 'trochus';
-      // Coil axis tilted back over the foot; tall spires drag behind the animal.
-      const tilt = kind === 'trumpet' ? 1.15 : tall ? 0.75 : kind === 'nerite' ? 0.35 : 0.55;
-      const lenAx = 1;
-      const wid = clamp(width, 0.25, 1);
-      const yLift = kind === 'trumpet' ? 0.14 : kind === 'nerite' ? 0.22 : 0.3;
-      shellMesh(gb, P, lenAx, wid, detail, (p) => {
-        const x = p[0] * Math.cos(tilt) - p[1] * Math.sin(tilt);
-        const y = p[0] * Math.sin(tilt) + p[1] * Math.cos(tilt);
-        return [x - (tall ? 0.18 : 0.05), y * 0.95 + shellTop + yLift * D + 0.05, p[2]];
-      });
+      // Globose shells sit over the foot: apex up and back, aperture down.
+      // The aperture plane contains the coil axis, so the axis is carried low (apex at the back,
+      // leaning to the right in dextral shells) for the aperture to face the substrate.
+      const apex: V3 = kind === 'nerite' ? [-0.95, 0.28, 0.12] : [-0.82, 0.5, 0.15];
+      orientedShell(gb, P, 1, wid, detail, apex, [0.1, -1, 0], base, -0.03);
     }
     spec = shellPaintSpec(look, P.W, P.T);
   }

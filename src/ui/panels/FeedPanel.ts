@@ -17,21 +17,28 @@ interface FoodMatch {
   fans: string[];
 }
 
-/** How well a food suits the current inhabitants (by diet affinity, weighted by headcount). */
-export function foodMatch(food: FoodType, fish: { species: { id: string; commonName: string; diet: keyof FoodType['affinity'] } }[]): FoodMatch {
+type Diner = { species: { id: string; commonName: string; diet: keyof FoodType['affinity'] } };
+
+/**
+ * How well a food suits the current inhabitants (diet affinity, weighted by headcount). `fans` are
+ * the species that relish it, most *specific* first: a species that relishes nearly every food (a
+ * generalist omnivore) ranks below one for which this food is special (otos and algae wafers).
+ */
+export function foodMatch(food: FoodType, fish: Diner[]): FoodMatch {
   if (!fish.length) return { score: 0, fans: [] };
   let sum = 0;
-  const fanCounts = new Map<string, { name: string; n: number }>();
+  const fanCounts = new Map<string, { name: string; n: number; diet: Diner['species']['diet'] }>();
   for (const f of fish) {
     const a = food.affinity[f.species.diet] ?? 0;
     sum += a;
     if (a >= 0.8) {
       const e = fanCounts.get(f.species.id);
       if (e) e.n++;
-      else fanCounts.set(f.species.id, { name: f.species.commonName, n: 1 });
+      else fanCounts.set(f.species.id, { name: f.species.commonName, n: 1, diet: f.species.diet });
     }
   }
-  const fans = [...fanCounts.values()].sort((a, b) => b.n - a.n).map((e) => e.name);
+  const breadth = (diet: Diner['species']['diet']) => FOOD_LIST.reduce((k, x) => k + ((x.affinity[diet] ?? 0) >= 0.8 ? 1 : 0), 0) || 1;
+  const fans = [...fanCounts.values()].sort((a, b) => b.n / breadth(b.diet) - a.n / breadth(a.diet)).map((e) => e.name);
   return { score: sum / fish.length, fans };
 }
 
@@ -95,6 +102,7 @@ export class FeedPanel implements Panel {
       return ga - gb || a.i - b.i;
     });
     let dividerShown = false;
+    const shownFans = new Set<string>();
     if (fish.length && ranked[0].m.score >= 0.55) this.listEl.append(h('h3', { class: 'aq-sec-title' }, 'Suits your animals'));
     for (const { f, m } of ranked) {
       if (fish.length && m.score < 0.55 && !dividerShown) {
@@ -104,11 +112,10 @@ export class FeedPanel implements Panel {
       const tags = h('span', { class: 'aq-food-tags' }, h('span', { class: 'aq-tag' }, buoyancyLabel(f)));
       if (f.buoyancy === 'live-swimming') tags.append(h('span', { class: 'aq-tag aq-tag-live' }, 'Triggers hunting'));
       if (f.sizeM >= 0.02) tags.append(h('span', { class: 'aq-tag' }, 'For larger fish'));
-      const suits = m.score >= 0.55;
-      const fans =
-        suits && m.fans.length
-          ? h('span', { class: 'aq-food-fans' }, `A favorite of your ${m.fans.slice(0, 2).map((n) => pluralName(n)).join(' and ')}`)
-          : null;
+      // Name who relishes it — but only once per distinct line, so the list doesn't chant.
+      const fanText = m.score >= 0.55 && m.fans.length ? `A favorite of your ${m.fans.slice(0, 2).map((n) => pluralName(n)).join(' and ')}` : '';
+      const fans = fanText && !shownFans.has(fanText) ? h('span', { class: 'aq-food-fans' }, fanText) : null;
+      if (fanText) shownFans.add(fanText);
       const btn = h(
         'button',
         { type: 'button', class: 'aq-food', role: 'option', 'aria-selected': 'false', 'data-food': f.kind, title: fish.length ? `Suits about ${Math.round(m.score * 100)}% of your animals` : undefined },

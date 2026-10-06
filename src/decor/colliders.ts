@@ -1,5 +1,6 @@
 import type { Collider, CoverPoint, PlantForm, TankState } from '../core/types';
 import type { PlantIndex } from '../data/plantIndex';
+import { substrateHeight } from '../core/tankGeometry';
 import { decorShape, itemTransform, toWorld, type ItemXf, type V3 } from './shapes';
 import { anemoneDisc, plantMetrics } from './plantMetrics';
 
@@ -43,6 +44,7 @@ export function buildColliders(tank: TankState, plants: PlantIndex): { colliders
   // Crevices between neighbouring rocks: where two rock footprints nearly touch, small animals
   // (shrimp, gobies, blennies, plecos) find a gap at the base.
   const rocks = tank.decor.filter((d) => d.kind === 'rock' || d.kind === 'cave');
+  const crevices: [number, number, number][] = [];
   for (let i = 0; i < rocks.length; i++) {
     for (let j = i + 1; j < rocks.length; j++) {
       const a = rocks[i], b = rocks[j];
@@ -50,14 +52,14 @@ export function buildColliders(tank: TankState, plants: PlantIndex): { colliders
       const dx = b.position[0] - a.position[0], dz = b.position[2] - a.position[2];
       const d = Math.hypot(dx, dz);
       const gap = d - ra - rb;
-      if (gap > -Math.min(ra, rb) * 0.6 && gap < 0.03) {
+      // Only rocks resting on the substrate form a crevice at its level.
+      const onSand = (it: typeof a) => it.position[1] - substrateHeight(tank, it.position[0], it.position[2]) < 0.02;
+      if (gap > -Math.min(ra, rb) * 0.6 && gap < 0.03 && onSand(a) && onSand(b)) {
         const t = ra / (ra + rb || 1);
-        cover.push({
-          position: [a.position[0] + dx * t, Math.min(a.position[1], b.position[1]) + 0.015, a.position[2] + dz * t],
-          radius: Math.max(0.012, Math.min(0.035, (ra + rb) * 0.12)),
-          ownerId: a.id,
-          kind: 'crevice',
-        });
+        const p: [number, number, number] = [a.position[0] + dx * t, Math.min(a.position[1], b.position[1]) + 0.015, a.position[2] + dz * t];
+        if (crevices.some((q) => Math.hypot(q[0] - p[0], q[2] - p[2]) < 0.05)) continue;
+        crevices.push(p);
+        cover.push({ position: p, radius: Math.max(0.012, Math.min(0.035, (ra + rb) * 0.12)), ownerId: a.id, kind: 'crevice' });
       }
     }
   }

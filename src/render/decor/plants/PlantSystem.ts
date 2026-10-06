@@ -24,6 +24,12 @@ interface Built {
   key: string;
   build: PlantBuild;
   speciesId: string;
+  /** Cheap change detection between full syncs (quantized growth/health, transform). */
+  g: number;
+  h: number;
+  x: number;
+  z: number;
+  r: number;
 }
 
 interface Batch {
@@ -32,6 +38,7 @@ interface Batch {
   capacity: number;
   sway: InstancedBufferAttribute;
   leaf: InstancedBufferAttribute;
+  width: InstancedBufferAttribute;
   sel: InstancedBufferAttribute;
   /** plant id → [start, count] within this batch. */
   ranges: Map<string, [number, number]>;
@@ -74,10 +81,8 @@ export class PlantSystem {
       const cur = this.built.get(p.id);
       if (cur && cur.key === key) continue;
       if (cur) this.drop(p.id, cur);
-      const __t = performance.now();
       const build = this.buildPlant(sp, p, tank, quality);
-      console.log('[decor-dbg] plant', sp.id, (performance.now() - __t).toFixed(1));
-      this.built.set(p.id, { key, build, speciesId: sp.id });
+      this.built.set(p.id, { key, build, speciesId: sp.id, g: Math.round(p.growth / GROWTH_STEP), h: Math.round(p.health * 8), x: p.position[0], z: p.position[2], r: p.rotationY });
       for (const k of build.parts.keys()) this.dirtyParts.add(k);
       for (const mesh of build.meshes) {
         mesh.userData.plantId = p.id;
@@ -85,9 +90,7 @@ export class PlantSystem {
       }
     }
     for (const [id, b] of [...this.built]) if (!seen.has(id)) this.drop(id, b);
-    const __f = performance.now();
     this.flush();
-    console.log('[decor-dbg] flush', (performance.now() - __f).toFixed(1));
     if (this.selected) this.applySelection(this.selected, 1);
   }
 
@@ -188,6 +191,7 @@ export class PlantSystem {
       batch.ranges.clear();
       let i = 0;
       const sw = batch.sway.array as Float32Array, lf = batch.leaf.array as Float32Array, se = batch.sel.array as Float32Array;
+      const wd = batch.width.array as Float32Array;
       for (const l of lists) {
         batch.ranges.set(l.id, [i, l.inst.length]);
         for (const it of l.inst) {
@@ -196,6 +200,7 @@ export class PlantSystem {
           batch.mesh.instanceColor!.setXYZ(i, it.c[0], it.c[1], it.c[2]);
           sw.set(it.s, i * 4);
           lf.set(it.l, i * 4);
+          wd[i] = it.w;
           se[i] = 0;
           i++;
         }
@@ -206,6 +211,7 @@ export class PlantSystem {
       batch.mesh.instanceColor!.needsUpdate = true;
       batch.sway.needsUpdate = true;
       batch.leaf.needsUpdate = true;
+      batch.width.needsUpdate = true;
       batch.sel.needsUpdate = true;
     }
     this.dirtyParts.clear();
@@ -216,10 +222,12 @@ export class PlantSystem {
     const geo = def.geometry.clone();
     const sway = new InstancedBufferAttribute(new Float32Array(capacity * 4), 4);
     const leaf = new InstancedBufferAttribute(new Float32Array(capacity * 4), 4);
+    const width = new InstancedBufferAttribute(new Float32Array(capacity).fill(1), 1);
     const sel = new InstancedBufferAttribute(new Float32Array(capacity), 1);
     sel.setUsage(DynamicDrawUsage);
     geo.setAttribute('aSway', sway);
     geo.setAttribute('aLeaf', leaf);
+    geo.setAttribute('aWidth', width);
     geo.setAttribute('aSel', sel);
     const mesh = new InstancedMesh(geo, def.material, capacity);
     mesh.instanceColor = new InstancedBufferAttribute(new Float32Array(capacity * 3), 3);
@@ -230,7 +238,7 @@ export class PlantSystem {
     if (def.depth) mesh.customDepthMaterial = def.depth;
     mesh.name = `plants:${def.key}`;
     this.root.add(mesh);
-    return { def, mesh, capacity, sway, leaf, sel, ranges: new Map() };
+    return { def, mesh, capacity, sway, leaf, width, sel, ranges: new Map() };
   }
 
   /** Re-check growth / health a few times a second (life sim changes them in sim time). */
@@ -238,17 +246,16 @@ export class PlantSystem {
     this.checkTimer -= dt;
     if (this.checkTimer > 0) return;
     this.checkTimer = 0.75;
+    // Growth & health change in sim time (LifeSim); positions change through events (sync).
+    // Allocation-free scan; a full keyed sync only when something actually moved or grew.
     const tank = world.tank;
-    const q = world.settings.quality;
-    let changed = false;
-    for (const p of tank.plants) {
+    let changed = this.built.size !== tank.plants.length;
+    for (let i = 0; i < tank.plants.length && !changed; i++) {
+      const p = tank.plants[i];
       const b = this.built.get(p.id);
-      if (!b || b.key !== this.keyOf(p, tank, q)) {
-        changed = true;
-        break;
-      }
+      changed = !b || b.g !== Math.round(p.growth / GROWTH_STEP) || b.h !== Math.round(p.health * 8) || b.x !== p.position[0] || b.z !== p.position[2] || b.r !== p.rotationY;
     }
-    if (changed || this.built.size !== tank.plants.length) this.sync(world);
+    if (changed) this.sync(world);
   }
 
   setSelected(id: string | null): void {

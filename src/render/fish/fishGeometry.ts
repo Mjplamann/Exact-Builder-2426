@@ -179,8 +179,9 @@ function buildEyes(gb: GeoBuilder, prof: BodyProfile, lod: FishLod): void {
   const l1 = Math.hypot(t1[0], t1[1], t1[2]) || 1;
   t1 = [t1[0] / l1, t1[1] / l1, t1[2] / l1];
   const t2 = [N[1] * t1[2] - N[2] * t1[1], N[2] * t1[0] - N[0] * t1[2], N[0] * t1[1] - N[1] * t1[0]];
-  const cx = H.eyeX + N[0] * -0.12 * R, cy = H.eyeY + N[1] * -0.12 * R, cz = H.eyeZ + N[2] * -0.12 * R;
-  const depthR = 0.62 * R;
+  // Fish eyes sit nearly flush; only the lens bulges a little through the iris.
+  const cx = H.eyeX + N[0] * -0.16 * R, cy = H.eyeY + N[1] * -0.16 * R, cz = H.eyeZ + N[2] * -0.16 * R;
+  const depthR = 0.46 * R;
   const nLat = lod.eyeLat, nLon = lod.eyeLon;
   const uv: [number, number] = [0, 0];
   for (const side of [1, -1]) {
@@ -322,12 +323,13 @@ function buildBarbels(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): vo
     const kind = p % 3;
     let x: number, y: number, dx: number, dy: number, dz: number, len: number;
     if (body.mouth === 'inferior' || body.mouth === 'sucker') {
-      x = H.snoutLen + 0.02 + 0.03 * p;
-      y = prof.bot(x) + 0.004;
-      dx = -0.8;
-      dy = -0.5;
-      dz = 0.45 + 0.2 * p;
-      len = L * (1 - 0.15 * p);
+      // Fleshy barbels hanging from the lips under the snout, feeling the substrate.
+      x = H.snoutLen + 0.025 + 0.025 * p;
+      y = prof.bot(x) + 0.006;
+      dx = -0.45;
+      dy = -0.9;
+      dz = 0.35 + 0.25 * p;
+      len = L * (1 - 0.2 * p);
     } else if (kind === 0) {
       x = Math.max(H.snoutLen + 0.01, H.rictusX - 0.01);
       y = H.yTip - H.gapeDrop;
@@ -354,7 +356,7 @@ function buildBarbels(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): vo
     for (const side of [1, -1]) {
       if (p * 2 + (side > 0 ? 0 : 1) >= n) break;
       const z = side * Math.max(0.002, prof.surfaceZ(x, y) * 0.8);
-      tube(gb, x, y, z, dx, dy, dz * side, len, r0, r0 * 0.25, gravity, len > 0.2 ? 8 : 4, 4, PART.barbel, x, x, -0.6, 0.6);
+      tube(gb, x, y, z, dx, dy, dz * side, len, r0 * 1.25, r0 * 0.4, gravity + 0.1, len > 0.2 ? 8 : 5, 5, PART.barbel, x, x, -0.6, 0.6);
     }
   }
 }

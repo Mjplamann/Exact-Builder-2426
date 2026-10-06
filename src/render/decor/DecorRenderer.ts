@@ -38,6 +38,7 @@ export class DecorRenderer {
   private raycaster = new Raycaster();
   private tankSig = '';
   private polyp = 1;
+  private quality: string | null = null;
 
   constructor(private engine: Engine) {
     this.root.name = 'decor';
@@ -50,6 +51,7 @@ export class DecorRenderer {
   sync(world: World): void {
     const tank = world.tank;
     const quality = world.settings.quality;
+    this.quality = quality;
     const sig = tankSignature(tank);
     const tankChanged = sig !== this.tankSig;
     this.tankSig = sig;
@@ -68,9 +70,7 @@ export class DecorRenderer {
       }
       if (cur) disposeDecor(cur.built);
       try {
-        const __t = performance.now();
         const built = buildDecor(item, { tank, quality });
-        console.log('[decor-dbg] decor', item.kind, item.variant, (performance.now() - __t).toFixed(1));
         this.hardscape.add(built.object);
         this.items.set(item.id, { key, xform, built });
       } catch (err) {
@@ -97,6 +97,8 @@ export class DecorRenderer {
     const k = 1 - Math.exp(-simDt / POLYP_TAU_SIM);
     this.polyp += (target - this.polyp) * Math.min(1, Math.max(k, dt * 0.02));
     DECOR_UNIFORMS.uPolyp.value = this.polyp;
+    // Quality changes arrive as a settings event the App doesn't forward to us: rebuild densities.
+    if (this.quality !== null && world.settings.quality !== this.quality) this.sync(world);
     this.plants.update(world, dt);
   }
 

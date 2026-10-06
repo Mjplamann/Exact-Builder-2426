@@ -4,7 +4,7 @@
  * (textured leaves, tentacles) or shared across species (stems, bulbs, grapes, bubbles).
  */
 import {
-  BufferGeometry, Color, DoubleSide, FrontSide, MeshDepthMaterial, MeshStandardMaterial, RGBADepthPacking,
+  BufferGeometry, Color, DoubleSide, Float32BufferAttribute, FrontSide, MeshDepthMaterial, MeshStandardMaterial, RGBADepthPacking,
   type Material, type Side, type Texture,
 } from 'three';
 import { applyUnderwater } from '../../underwater';
@@ -45,6 +45,7 @@ export interface PlantMatOptions {
   metalness?: number;
   transparent?: boolean;
   opacity?: number;
+  vertexColors?: boolean;
 }
 
 /** A lit plant material with sway/bend/translucency and the underwater look, plus its depth twin. */
@@ -58,6 +59,7 @@ export function plantMaterial(o: PlantMatOptions): { material: MeshStandardMater
     alphaTest: o.map ? o.alphaTest ?? 0.45 : 0,
     transparent: o.transparent ?? false,
     opacity: o.opacity ?? 1,
+    vertexColors: o.vertexColors ?? false,
   });
   if (o.map) m.alphaToCoverage = true;
   if (o.emissive) m.emissive = o.emissive;
@@ -99,11 +101,36 @@ export function spherePart(kind: 'matte' | 'glossy' | 'vesicle'): PartDef {
   });
 }
 
-/** Tentacle / polyp part with an optional tip; fluorescent tips under blue light. */
-export function tentaclePart(key: string, shape: Parameters<typeof tentacle>[0], mat: { transl: number; roughness: number; fluor?: Color; shadow?: boolean }): PartDef {
+/**
+ * Tentacle / polyp part with an optional tip; fluorescent tips under blue light. With `colors`,
+ * a base→tip gradient is baked into the geometry (tips of hammer/torch corals, anemone bulbs).
+ */
+export function tentaclePart(
+  key: string,
+  shape: Parameters<typeof tentacle>[0],
+  mat: { transl: number; roughness: number; fluor?: Color; shadow?: boolean },
+  colors?: { base: [number, number, number]; tip: [number, number, number]; from: number; ring?: [number, number, number] },
+): PartDef {
   return getPart(key, () => {
-    const { material, depth } = plantMaterial({ bend: true, transl: mat.transl, roughness: mat.roughness, fluor: mat.fluor, side: FrontSide });
-    return { geometry: tentacle(shape), material, depth, bend: true, castShadow: mat.shadow ?? false };
+    const geometry = tentacle(shape);
+    if (colors) {
+      const pos = geometry.getAttribute('position');
+      const col = new Float32Array(pos.count * 3);
+      for (let i = 0; i < pos.count; i++) {
+        const y = pos.getY(i);
+        const t = Math.min(1, Math.max(0, (y - colors.from) / Math.max(0.01, 1 - colors.from)));
+        const k = t * t * (3 - 2 * t);
+        let c: [number, number, number] = [colors.base[0] + (colors.tip[0] - colors.base[0]) * k, colors.base[1] + (colors.tip[1] - colors.base[1]) * k, colors.base[2] + (colors.tip[2] - colors.base[2]) * k];
+        if (colors.ring) {
+          const rr = Math.max(0, 1 - Math.abs(y - (colors.from - 0.04)) / 0.05);
+          c = [c[0] + (colors.ring[0] - c[0]) * rr, c[1] + (colors.ring[1] - c[1]) * rr, c[2] + (colors.ring[2] - c[2]) * rr];
+        }
+        col.set(c, i * 3);
+      }
+      geometry.setAttribute('color', new Float32BufferAttribute(col, 3));
+    }
+    const { material, depth } = plantMaterial({ bend: true, transl: mat.transl, roughness: mat.roughness, fluor: mat.fluor, side: FrontSide, vertexColors: !!colors });
+    return { geometry, material, depth, bend: true, castShadow: mat.shadow ?? false };
   });
 }
 

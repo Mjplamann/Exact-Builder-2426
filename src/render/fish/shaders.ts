@@ -281,6 +281,7 @@ export const FISH_VERTEX_NORMAL = /* glsl */ `
   #endif
   vFishLook = iLook;
   vFishState = vec4(iState.x, iState.y, iState.z, iAnimB.w);
+  vFishBody.w = iState.w;
 `;
 
 export const FISH_VERTEX_BEGIN = /* glsl */ `
@@ -333,6 +334,15 @@ export const FISH_FRAGMENT_COLOR = /* glsl */ `
       }
     #endif
     vec3 c = fishHue(diffuseColor.rgb, vFishLook.x);
+    #ifdef USE_MAP
+      // Individuality: faint seed-dependent mottling over the body so no two fish are clones.
+      if (vFishBody.z < 0.5) {
+        float sd = vFishBody.w * 37.0;
+        vec2 q = vMapUv * vec2(9.0, 7.0) + sd;
+        float n = sin(q.x * 2.1 + sin(q.y * 1.7 + sd)) * sin(q.y * 2.6 + sin(q.x * 1.3 - sd));
+        c *= 1.0 + 0.07 * n;
+      }
+    #endif
     float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
     c = max(mix(vec3(l), c, vFishLook.z), 0.0) * vFishLook.y;
     // Resting (night) fish pale and dull as chromatophores contract.
@@ -368,6 +378,17 @@ export const FISH_FRAGMENT_IRID = /* glsl */ `
     }
   }
   #endif
+`;
+
+/**
+ * Before emissivemap_fragment: light under water arrives from above, so undersides sit in the
+ * animal's own shadow (cheap directional occlusion on top of the scene lighting).
+ */
+export const FISH_FRAGMENT_TOPLIGHT = /* glsl */ `
+  {
+    vec3 fishWN = inverseTransformDirection(normal, viewMatrix);
+    diffuseColor.rgb *= 0.68 + 0.32 * smoothstep(-0.85, 0.55, fishWN.y);
+  }
 `;
 
 /** After emissivemap_fragment: soft rim glow for the selected animal. */
@@ -414,6 +435,7 @@ export function patchFishFragment(shader: WebGLProgramParametersWithUniforms, wi
   fs = fs.replace('void main() {', `${FISH_FRAGMENT_HEAD}\nvoid main() {`);
   fs = injectAfter(fs, '#include <map_fragment>', FISH_FRAGMENT_COLOR);
   if (withIrid) fs = injectBefore(fs, '#include <emissivemap_fragment>', FISH_FRAGMENT_IRID);
+  fs = injectBefore(fs, '#include <emissivemap_fragment>', FISH_FRAGMENT_TOPLIGHT);
   fs = injectAfter(fs, '#include <emissivemap_fragment>', FISH_FRAGMENT_RIM);
   shader.fragmentShader = fs;
 }

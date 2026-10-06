@@ -66,12 +66,12 @@ const LOOKS: Record<string, HardscapeLook> = {
   'slate-cave': { roughness: 0.7, detail: { freq: 30, bump: 0.0005, ridge: 0.2, albedoVar: 0.18, vein: { dir: [0, 1, 0], freq: 520, width: 0.25, warp: 0.6, strength: 0.18, color: c('#6c7074'), patchy: 0.8 } } },
   'rock-cave': { roughness: 0.88, detail: { freq: 40, bump: 0.0018, ridge: 0.45, pores: 0.25, albedoVar: 0.28 } },
   coconut: { roughness: 0.9, detail: { freq: 1, bump: 0.0009, ridge: 0.7, albedoVar: 0.3, aniso: [160, 160, 160] } },
-  'clay-tube': { roughness: 0.92, detail: { freq: 120, bump: 0.0003, pores: 0.15, albedoVar: 0.15 } },
+  'clay-tube': { roughness: 0.92, side: 'double', detail: { freq: 120, bump: 0.0003, pores: 0.15, albedoVar: 0.15 } },
   pebbles: { roughness: 0.45, detail: { freq: 60, bump: 0.0002, albedoVar: 0.2 } },
-  shell: { roughness: 0.42, detail: { freq: 1, bump: 0.0003, ridge: 0.3, albedoVar: 0.1, aniso: [1, 1, 1] } },
+  shell: { roughness: 0.42, side: 'double', detail: { freq: 1, bump: 0.0003, ridge: 0.3, albedoVar: 0.1, aniso: [1, 1, 1] } },
   airstone: { roughness: 0.95, detail: { freq: 400, bump: 0.0002, pores: 0.6, albedoVar: 0.12 } },
   plastic: { roughness: 0.35, detail: { freq: 10, bump: 0, albedoVar: 0.02 } },
-  rubble: { roughness: 0.92, detail: { freq: 1, bump: 0.0012, ridge: 0.2, pores: 0.85, albedoVar: 0.15, aniso: [600, 600, 600] } },
+  rubble: { roughness: 0.92, detail: { freq: 1, bump: 0.0009, ridge: 0.2, pores: 0.45, albedoVar: 0.1, aniso: [600, 600, 600] } },
   // Plants (unique meshes with surface relief: marimo, coral skeletons) reuse this path.
   marimo: { roughness: 1.0, detail: { freq: 700, bump: 0.0004, ridge: 0.2, albedoVar: 0.2 } },
 };
@@ -87,13 +87,8 @@ export function hardscapeMaterial(style: string): MeshStandardMaterial {
   const hit = cache.get(style);
   if (hit) return hit;
   const look = hardscapeLook(style);
-  const m = new MeshStandardMaterial({
-    color: 0xffffff,
-    vertexColors: true,
-    roughness: look.roughness,
-    metalness: 0,
-    side: look.side === 'double' ? DoubleSide : undefined,
-  });
+  const m = new MeshStandardMaterial({ color: 0xffffff, vertexColors: true, roughness: look.roughness, metalness: 0 });
+  if (look.side === 'double') m.side = DoubleSide;
   m.name = `decor-${style}`;
   if (look.tubeUv) m.defines = { ...(m.defines ?? {}), DC_TUBE_UV: '' };
   patchSurfaceDetail(m, look.detail);

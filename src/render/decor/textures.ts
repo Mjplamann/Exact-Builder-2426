@@ -3,13 +3,15 @@
  * with midrib, secondary venation, mottling, spots and edge tone. Colors are baked in sRGB per
  * species; per-instance tints add individual variation on top.
  */
-import { CanvasTexture, LinearMipmapLinearFilter, RepeatWrapping, ClampToEdgeWrapping, SRGBColorSpace, type Texture } from 'three';
+import { CanvasTexture, LinearMipmapLinearFilter, ClampToEdgeWrapping, SRGBColorSpace, type Texture } from 'three';
 import { Rng } from '../../core/rng';
+import { Noise3 } from '../../decor/noise';
 
 export type LeafOutline =
   | 'lanceolate' | 'ovate' | 'round' | 'needle' | 'strap' | 'heart' | 'obovate' | 'elliptic' | 'sagittate'
   | 'oak' | 'fan' | 'pinnate' | 'windelov' | 'trident' | 'lobed-hygro' | 'clover4' | 'clover3' | 'lace'
-  | 'feather-whorl' | 'needle-fork' | 'moss' | 'root' | 'feathery-root' | 'squiggle' | 'star-polyp' | 'fern-frond' | 'spoon' | 'grape';
+  | 'feather-whorl' | 'needle-fork' | 'moss' | 'root' | 'feathery-root' | 'squiggle' | 'star-polyp' | 'fern-frond' | 'spoon' | 'grape'
+  | 'carpet-mat';
 
 export interface LeafTexSpec {
   outline: LeafOutline;
@@ -45,12 +47,12 @@ export function leafTexture(spec: LeafTexSpec): Texture {
   const canvas = document.createElement('canvas');
   canvas.width = spec.width;
   canvas.height = spec.height;
-  const ctx = canvas.getContext('2d')!;
+  // CPU-backed canvas: thousands of tiny draw ops are far cheaper than on a GPU canvas.
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
   drawLeaf(ctx, spec);
   const tex = new CanvasTexture(canvas);
   tex.colorSpace = SRGBColorSpace;
-  tex.wrapS = ClampToEdgeWrapping;
-  tex.wrapT = spec.outline === 'strap' || spec.outline === 'needle' ? ClampToEdgeWrapping : ClampToEdgeWrapping;
+  tex.wrapS = tex.wrapT = ClampToEdgeWrapping;
   tex.minFilter = LinearMipmapLinearFilter;
   tex.anisotropy = 4;
   tex.generateMipmaps = true;
@@ -59,7 +61,6 @@ export function leafTexture(spec: LeafTexSpec): Texture {
   return tex;
 }
 
-void RepeatWrapping;
 
 // ---------------------------------------------------------------------------------------------
 
@@ -133,6 +134,8 @@ function drawLeaf(ctx: CanvasRenderingContext2D, s: LeafTexSpec): void {
       return paintStarPolyp(ctx, W, H, base, tip, rng);
     case 'fern-frond':
       return paintFernFrond(ctx, W, H, base, tip, rng);
+    case 'carpet-mat':
+      return paintCarpetMat(ctx, W, H, base, tip, rng);
     default:
       break;
   }
@@ -202,20 +205,6 @@ function drawLeaf(ctx: CanvasRenderingContext2D, s: LeafTexSpec): void {
   mg.addColorStop(1, 'rgba(0,0,0,0.22)');
   ctx.fillStyle = mg;
   ctx.fillRect(0, 0, W, H);
-
-  // Mottling.
-  const mottles = s.dry ? 60 : 26;
-  for (let i = 0; i < mottles; i++) {
-    const x = rng.range(0, W), y = rng.range(0, H);
-    const r = rng.range(W * 0.05, W * (s.dry ? 0.3 : 0.18));
-    const d = s.dry ? rng.range(-0.35, 0.25) : rng.range(-0.08, 0.08);
-    const c = d > 0 ? `rgba(255,235,200,${d})` : `rgba(20,10,0,${-d})`;
-    const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
-    rg.addColorStop(0, c);
-    rg.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = rg;
-    ctx.fillRect(x - r, y - r, r * 2, r * 2);
-  }
 
   if (s.bands) {
     for (let i = 0; i < s.bands.count; i++) {
@@ -298,13 +287,8 @@ function drawLeaf(ctx: CanvasRenderingContext2D, s: LeafTexSpec): void {
     }
   }
 
-  // Speckle for surface texture.
-  const sp = s.dry ? 900 : 350;
-  for (let i = 0; i < sp; i++) {
-    const l = rng.range(-1, 1);
-    ctx.fillStyle = l > 0 ? `rgba(255,255,230,${l * 0.07})` : `rgba(0,0,0,${-l * 0.09})`;
-    ctx.fillRect(rng.range(0, W), rng.range(0, H), rng.range(0.6, 2), rng.range(0.6, 2));
-  }
+  // Mottling and fine speckle in one pixel pass (cell texture, blotches; dry leaves blotchier).
+  mottle(ctx, W, H, s.seed, s.dry ? 0.32 : 0.09, s.dry ? 0.1 : 0.06);
   if (s.sparkle) {
     const sc = hex(s.sparkle);
     for (let i = 0; i < 90; i++) {
@@ -543,6 +527,128 @@ function paintFernFrond(ctx: CanvasRenderingContext2D, W: number, H: number, bas
       ctx.moveTo(cx, y);
       ctx.quadraticCurveTo(cx + side * len * 0.6, y - H * 0.01, cx + side * len, y - H * 0.03);
       ctx.stroke();
+    }
+  }
+}
+
+/** Low-frequency blotches + per-pixel speckle applied to opaque pixels. */
+function mottle(ctx: CanvasRenderingContext2D, W: number, H: number, seed: number, blotch: number, speckle: number): void {
+  const img = ctx.getImageData(0, 0, W, H);
+  const d = img.data;
+  const noise = new Noise3(seed);
+  const fx = 6 / W, fy = 6 / Math.max(W, H * 0.5);
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
+      if (d[i + 3] === 0) continue;
+      const n = noise.fbm(x * fx, y * fy, 0.37, 3);
+      const h = ((Math.imul(x + 1, 374761393) ^ Math.imul(y + 7, 668265263) ^ seed) >>> 0) / 4294967296 - 0.5;
+      const f = 1 + n * blotch * 1.6 + h * speckle * 2;
+      d[i] = Math.min(255, d[i] * f * (n > 0 ? 1 + n * blotch * 0.3 : 1));
+      d[i + 1] = Math.min(255, d[i + 1] * f);
+      d[i + 2] = Math.min(255, d[i + 2] * f * (n > 0 ? 1 - n * blotch * 0.2 : 1));
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+// ---------------------------------------------------------------------------------------------
+// Radial patterns (mushroom corals, zoanthid & anemone oral discs, candy-cane caps)
+// ---------------------------------------------------------------------------------------------
+
+export interface RadialTexSpec {
+  base: string;
+  /** Mouth / center color. */
+  center: string;
+  /** Outer rim color (zoanthid skirt, mushroom margin). */
+  rim?: string;
+  /** Radial stripes (count, darkness 0..1). */
+  stripes?: { count: number; amount: number; color?: string };
+  /** Speckles / spots. */
+  spots?: { color: string; density: number; size: number };
+  /** Concentric ring at a fraction of the radius. */
+  ring?: { at: number; width: number; color: string };
+  size?: number;
+  seed: number;
+}
+
+const radialCache = new Map<string, Texture>();
+
+/** A round, radially patterned texture (uv = planar projection of a unit disc). */
+export function radialTexture(spec: RadialTexSpec): Texture {
+  const key = JSON.stringify(spec);
+  const hit = radialCache.get(key);
+  if (hit) return hit;
+  const N = spec.size ?? 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = N;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
+  const img = ctx.createImageData(N, N);
+  const d = img.data;
+  const base = hex(spec.base), center = hex(spec.center), rim = spec.rim ? hex(spec.rim) : base;
+  const stripeCol = spec.stripes?.color ? hex(spec.stripes.color) : scale(base, 0.6);
+  const noise = new Noise3(spec.seed);
+  const rng = new Rng(spec.seed);
+  const spots: [number, number, number][] = [];
+  if (spec.spots) for (let i = 0; i < spec.spots.density * 80; i++) spots.push([rng.range(-1, 1), rng.range(-1, 1), spec.spots.size * rng.range(0.5, 1.3)]);
+  const spotCol = spec.spots ? hex(spec.spots.color) : base;
+  const ringCol = spec.ring ? hex(spec.ring.color) : base;
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      const u = (x + 0.5) / N * 2 - 1, v = (y + 0.5) / N * 2 - 1;
+      const r = Math.hypot(u, v);
+      const a = Math.atan2(v, u);
+      let c = mix(center, base, Math.min(1, Math.max(0, (r - 0.08) / 0.22)));
+      if (spec.rim) c = mix(c, rim, Math.min(1, Math.max(0, (r - 0.62) / 0.3)));
+      if (spec.ring) c = mix(c, ringCol, Math.max(0, 1 - Math.abs(r - spec.ring.at) / spec.ring.width));
+      if (spec.stripes) {
+        const sline = Math.pow(Math.abs(Math.sin(a * spec.stripes.count * 0.5 + noise.noise(r * 3, a, 0.5) * 0.6)), 6);
+        c = mix(c, stripeCol, sline * spec.stripes.amount * Math.min(1, r * 3));
+      }
+      for (const s of spots) {
+        const dd = Math.hypot(u - s[0], v - s[1]);
+        if (dd < s[2]) c = mix(c, spotCol, Math.min(1, (s[2] - dd) / (s[2] * 0.4)) * 0.85);
+      }
+      const n = noise.fbm(u * 5, v * 5, 0.2, 3);
+      c = scale(c, 1 + n * 0.15);
+      const i = (y * N + x) * 4;
+      d[i] = c[0];
+      d[i + 1] = c[1];
+      d[i + 2] = c[2];
+      d[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  const tex = new CanvasTexture(canvas);
+  tex.colorSpace = SRGBColorSpace;
+  tex.minFilter = LinearMipmapLinearFilter;
+  tex.anisotropy = 4;
+  radialCache.set(key, tex);
+  return tex;
+}
+
+/** A patch of densely packed tiny leaves (carpet underlayer), fading out at a soft round edge. */
+function paintCarpetMat(ctx: CanvasRenderingContext2D, W: number, H: number, base: [number, number, number], tip: [number, number, number], rng: Rng): void {
+  const cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 1;
+  // Shadowed depths of the mat first, then layers of leaves getting lighter toward the top.
+  for (let layer = 0; layer < 3; layer++) {
+    const n = layer === 0 ? 140 : 220;
+    for (let i = 0; i < n; i++) {
+      const a = rng.range(0, Math.PI * 2), r = Math.sqrt(rng.next()) * R * (layer === 0 ? 0.85 : 0.97);
+      const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+      const lr = W * rng.range(0.025, 0.045);
+      const shade = (0.45 + layer * 0.22) * rng.range(0.85, 1.12);
+      const c = mix(base, tip, rng.next() * 0.5);
+      ctx.fillStyle = rgb(scale(c, shade));
+      ctx.beginPath();
+      ctx.ellipse(x, y, lr, lr * rng.range(0.6, 0.9), rng.range(0, Math.PI), 0, Math.PI * 2);
+      ctx.fill();
+      if (layer === 2 && rng.chance(0.5)) {
+        ctx.fillStyle = rgb(scale(c, shade * 1.25), 0.5);
+        ctx.beginPath();
+        ctx.ellipse(x - lr * 0.2, y - lr * 0.2, lr * 0.4, lr * 0.25, 0.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
   }
 }

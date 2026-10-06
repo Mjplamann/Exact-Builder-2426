@@ -82,8 +82,3 @@ export function icon(name: IconName, size = 20, cls = 'aq-icon'): SVGSVGElement 
   }
   return tpl.cloneNode(true) as SVGSVGElement;
 }
-
-/** Raw SVG markup (for CSS cursors / data URLs). */
-export function iconMarkup(name: IconName, color = '#fff', size = 24, strokeWidth = 1.5): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round">${PATHS[name]}</svg>`;
-}

@@ -52,7 +52,6 @@ export class Lighting {
   private m = new Matrix4();
   private v = new Vector3();
   private center = new Vector3();
-  private shadowsOn = true;
 
   constructor(scene: Scene) {
     this.key = new DirectionalLight(0xffffff, KEY_INTENSITY);
@@ -79,7 +78,6 @@ export class Lighting {
   }
 
   setShadows(enabled: boolean, mapSize: number): void {
-    this.shadowsOn = enabled;
     this.key.castShadow = enabled;
     if (this.key.shadow.mapSize.x !== mapSize) {
       this.key.shadow.mapSize.set(mapSize, mapSize);
@@ -175,7 +173,8 @@ export class Lighting {
     const tint = GLOBALS.uWaterTint.value;
     this.hemi.color
       .copy(this.lightColor)
-      .multiply(this.tmpColor2.setRGB(tint.r * 0.8, tint.g * 0.95, tint.b))
+      // Light scattered down by the water is a little greener/bluer than the lamp.
+      .multiply(this.tmpColor2.setRGB(0.55 + 0.4 * tint.r, 0.55 + 0.42 * tint.g, 0.55 + 0.45 * tint.b))
       .multiplyScalar(day * 0.75)
       .add(this.tmpColor.copy(MOON_COLOR).multiplyScalar(moon * 0.16));
     this.hemi.groundColor

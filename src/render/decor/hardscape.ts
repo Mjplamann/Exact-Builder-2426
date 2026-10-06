@@ -4,7 +4,7 @@
  *
  * Geometry is in the item's local space; the returned group carries the item transform.
  */
-import { BufferGeometry, Color, DoubleSide, Group, LatheGeometry, Mesh, MeshStandardMaterial, Vector2, type Object3D } from 'three';
+import { BufferGeometry, Color, DoubleSide, Group, LatheGeometry, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 import type { DecorItem, Quality, TankState } from '../../core/types';
 import { Rng } from '../../core/rng';
 import { substrateHeight, tankBounds } from '../../core/tankGeometry';
@@ -18,7 +18,6 @@ import { surfaceNets } from './surfaceNets';
 import { hardscapeMaterial, tubingMaterial } from './materials';
 import { leafTexture } from './textures';
 import { applyUnderwater } from '../underwater';
-import { patchSurfaceDetail } from './shaders';
 
 export interface BuildCtx {
   tank: TankState;
@@ -72,10 +71,10 @@ const ROCK_DETAIL: Record<string, RockDetail> = {
   slate: { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#383c40', b: '#4a4f54', dark: '#202224' }, film: '#3e4636' },
   'river-stone': { amp: 0.0014, freq: 8, ridged: 0, oct: 2, palette: { a: '#8a8378', b: '#a59c8c', dark: '#4a463f' } },
   'texas-holey': { amp: 0.0034, freq: 20, ridged: 0.6, oct: 3, pits: { count: 55, r: [0.002, 0.006], depth: 0.6 }, palette: { a: '#cfc4a8', b: '#e2d9c3', dark: '#7c705a', accent: '#b4ae9e' }, film: '#9a9468' },
-  'petrified-wood': { amp: 0.0012, freq: 24, ridged: 0.4, oct: 2, palette: { a: '#86664a', b: '#a8875e', dark: '#4a3826', accent: '#8a847a' } },
+  'petrified-wood': { amp: 0.0016, freq: 30, ridged: 0.5, oct: 3, palette: { a: '#86664a', b: '#a8875e', dark: '#4a3826', accent: '#8a847a' } },
   'elephant-skin': { amp: 0.0025, freq: 16, ridged: 0, oct: 2, crack: 0.0045, palette: { a: '#686158', b: '#837a6d', dark: '#34302a' }, film: '#5a5a40' },
   frodo: { amp: 0.0028, freq: 24, ridged: 0.7, oct: 3, strata: { amp: 0.0013, freq: 260 }, palette: { a: '#665c52', b: '#857766', dark: '#2e2924', accent: '#9a6436' }, film: '#5a5a40' },
-  'live-rock': { amp: 0.0055, freq: 17, ridged: 0.35, oct: 3, pits: { count: 90, r: [0.003, 0.009], depth: 0.7 }, palette: { a: '#c6b696', b: '#a89676', dark: '#4a3e2e', accent: '#8a4a8a' } },
+  'live-rock': { amp: 0.0045, freq: 24, ridged: 0.6, oct: 3, pits: { count: 140, r: [0.0025, 0.008], depth: 0.7 }, palette: { a: '#d6d0c2', b: '#bcb3a0', dark: '#4a4238', accent: '#8a4a8a' } },
   'slate-cave': { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#383c40', b: '#4a4f54', dark: '#202224' }, film: '#3e4636' },
   'rock-cave': { amp: 0.0032, freq: 22, ridged: 0.5, oct: 3, pits: { count: 25, r: [0.002, 0.005], depth: 0.5 }, palette: { a: '#6e675e', b: '#8c8476', dark: '#2e2a26' }, film: '#5a5a40' },
   coconut: { amp: 0.0007, freq: 70, ridged: 0.3, oct: 2, palette: { a: '#5a3a24', b: '#7a5232', dark: '#24160c', accent: '#c8a87a' } },
@@ -141,20 +140,41 @@ function sdfRockGeometry(item: DecorItem, shape: DecorShape, quality: Quality): 
       pits.add(p[0], p[1], p[2], r);
     }
   }
-  const band = P.amp * 1.6 + (P.crack ?? 0) + (P.strata?.amp ?? 0) + (P.pits ? P.pits.r[1] : 0) + cell;
+  // Petrified wood: an orthonormal frame around the log axis for the bark fissures.
+  let axisU: V3 | null = null, axisV: V3 | null = null, axisW: V3 | null = null;
+  const axisA = shape.axis?.a;
+  if (shape.axis) {
+    const ax = shape.axis.b[0] - shape.axis.a[0], ay = shape.axis.b[1] - shape.axis.a[1], az = shape.axis.b[2] - shape.axis.a[2];
+    const l = Math.hypot(ax, ay, az) || 1;
+    axisU = [ax / l, ay / l, az / l];
+    const ref: V3 = Math.abs(axisU[1]) > 0.9 ? [1, 0, 0] : [0, 1, 0];
+    const v: V3 = [axisU[1] * ref[2] - axisU[2] * ref[1], axisU[2] * ref[0] - axisU[0] * ref[2], axisU[0] * ref[1] - axisU[1] * ref[0]];
+    const vl = Math.hypot(v[0], v[1], v[2]) || 1;
+    axisV = [v[0] / vl, v[1] / vl, v[2] / vl];
+    axisW = [axisU[1] * axisV[2] - axisU[2] * axisV[1], axisU[2] * axisV[0] - axisU[0] * axisV[2], axisU[0] * axisV[1] - axisU[1] * axisV[0]];
+  }
+  const band = P.amp * 1.6 + (P.crack ?? 0) + (P.strata?.amp ?? 0) + (P.pits ? P.pits.r[1] : 0) + (shape.axis ? 0.0025 : 0) + cell;
   const f = P.freq;
   const field = (x: number, y: number, z: number): number => {
     let d = sdfEval(spec, x, y, z);
     if (d < band && d > -band) {
       const smoothN = noise.fbm(x * f, y * f, z * f, P.oct);
       let n = smoothN;
-      if (P.ridged > 0) n = n * (1 - P.ridged) + (noise.ridged(x * f * 0.8 + 3.1, y * f * 0.8, z * f * 0.8, 3) - 0.55) * 2 * P.ridged;
+      if (P.ridged > 0) n = n * (1 - P.ridged) + (noise.ridged(x * f * 0.8 + 3.1, y * f * 0.8, z * f * 0.8, 2) - 0.55) * 2 * P.ridged;
       d -= n * P.amp;
       if (P.crack) {
         const cn = 1 - Math.abs(noise.noise(x * f * 1.6 + 9.2, y * f * 1.6, z * f * 1.6));
         d += P.crack * Math.pow(cn, 10);
       }
       if (P.strata) d -= P.strata.amp * Math.sin(y * P.strata.freq + smoothN * 3);
+      if (axisU) {
+        // Petrified bark: deep fissures running along the trunk.
+        const px = x - axisA![0], py = y - axisA![1], pz = z - axisA![2];
+        const t = px * axisU[0] + py * axisU[1] + pz * axisU[2];
+        const rx = px - axisU[0] * t, ry = py - axisU[1] * t, rz = pz - axisU[2] * t;
+        const ang = Math.atan2(rx * axisV![0] + ry * axisV![1] + rz * axisV![2], rx * axisW![0] + ry * axisW![1] + rz * axisW![2]);
+        d += 0.0022 * Math.pow(Math.abs(Math.sin(ang * 9 + noise.noise(t * 25, ang, 0.4) * 2.5)), 6);
+      }
       if (pits) {
         const c = pits.carve(x, y, z);
         if (c > -0.01) d = smax(d, c, 0.0012);
@@ -164,7 +184,9 @@ function sdfRockGeometry(item: DecorItem, shape: DecorShape, quality: Quality): 
     return Math.max(d, -0.024 - y);
   };
   const pad = band + cell * 2;
-  const mesh = surfaceNets(field, [b.min[0] - pad, Math.max(b.min[1], -0.03) - pad, b.min[2] - pad], [b.max[0] + pad, b.max[1] + pad, b.max[2] + pad], cell, 2);
+  // Faceted stones get two Newton steps (crisp planes); rounded ones need only one.
+  const faceted = spec.cuts.length > 3 || style === 'slate' || style === 'slate-cave';
+  const mesh = surfaceNets(field, [b.min[0] - pad, Math.max(b.min[1], -0.03) - pad, b.min[2] - pad], [b.max[0] + pad, b.max[1] + pad, b.max[2] + pad], cell, faceted ? 2 : 1);
 
   // Vertex colors: mottled mineral color, veins of accent, ambient occlusion from the field.
   const pal = { a: lin(P.palette.a), b: lin(P.palette.b), dark: lin(P.palette.dark), accent: P.palette.accent ? lin(P.palette.accent) : null };
@@ -179,8 +201,8 @@ function sdfRockGeometry(item: DecorItem, shape: DecorShape, quality: Quality): 
   }
   const colors = new Float32Array(mesh.vertexCount * 3);
   const det = new Float32Array(mesh.vertexCount * 3);
-  const ao = [0.004, 0.009, 0.016, 0.026];
-  const coralline = [lin('#8a4a8e'), lin('#c06a90'), lin('#9c3a76'), lin('#b88ab8')];
+  const ao = [0.005, 0.012, 0.024];
+  const coralline = [lin('#a45aa4'), lin('#cc7aa2'), lin('#b04a8c'), lin('#c09ad0')];
   const axis = shape.axis;
   for (let v = 0; v < mesh.vertexCount; v++) {
     const x = mesh.positions[v * 3], y = mesh.positions[v * 3 + 1], z = mesh.positions[v * 3 + 2];
@@ -227,11 +249,12 @@ function sdfRockGeometry(item: DecorItem, shape: DecorShape, quality: Quality): 
       c = mix3(c, pal.accent!, smoothstep(0.2, 0.6, inward) * 0.8);
     }
     if (film) c = mix3(c, film, clamp01(ny) * smoothstep(0.45, 0.8, noise.fbm(x * 7, y * 7 + 2, z * 7, 2) * 0.5 + 0.5) * 0.28);
-    // Ambient occlusion: how much solid surrounds the point along its normal.
+    // Ambient occlusion: how much solid surrounds the point along its normal (base SDF — the
+    // large-scale shape is what shades crevices; fine relief is handled by the bump shader).
     let occ = 0;
     for (let k = 0; k < ao.length; k++) {
       const s = ao[k];
-      occ += (s - field(x + nx * s, y + ny * s, z + nz * s)) / s * (0.5 / (k + 1));
+      occ += (s - Math.max(sdfEval(spec, x + nx * s, y + ny * s, z + nz * s), -0.024 - (y + ny * s))) / s * (0.55 / (k + 1));
     }
     let a = clamp01(1 - occ * 0.55);
     a = 0.25 + 0.75 * a * a;
@@ -266,13 +289,13 @@ interface WoodLook {
 }
 
 const WOOD_LOOK: Record<string, WoodLook> = {
-  spiderwood: { a: '#8e6c4c', b: '#ae8a62', dark: '#4a3424', gnarl: 0.14, gnarlFreq: 40 },
+  spiderwood: { a: '#9c7a56', b: '#bc9a70', dark: '#5a4430', gnarl: 0.14, gnarlFreq: 40 },
   'redmoor-root': { a: '#6c3e2c', b: '#8c5440', dark: '#3a2016', gnarl: 0.12, gnarlFreq: 45 },
   manzanita: { a: '#6e3a2a', b: '#8e4e38', dark: '#3e2018', gnarl: 0.06, gnarlFreq: 25 },
   mopani: { a: '#3e2618', b: '#4e301e', dark: '#24160c', gnarl: 0.28, gnarlFreq: 14, twoTone: '#a8855a' },
-  malaysian: { a: '#36241a', b: '#4c3424', dark: '#1c120c', gnarl: 0.16, gnarlFreq: 18, grooves: 0.12 },
+  malaysian: { a: '#44301f', b: '#5e422c', dark: '#24180f', gnarl: 0.16, gnarlFreq: 18, grooves: 0.12 },
   cholla: { a: '#a88c64', b: '#c2a67a', dark: '#5e4a32', gnarl: 0.04, gnarlFreq: 20 },
-  branchwood: { a: '#58483a', b: '#76624e', dark: '#30261e', gnarl: 0.09, gnarlFreq: 30 },
+  branchwood: { a: '#7c6650', b: '#9c8468', dark: '#40342a', gnarl: 0.09, gnarlFreq: 30 },
   rubble: { a: '#dcd2bc', b: '#ece4d2', dark: '#9c907a', gnarl: 0.18, gnarlFreq: 60 },
 };
 
@@ -306,8 +329,8 @@ function woodGeometry(item: DecorItem, shape: DecorShape, quality: Quality): Buf
       // Crotches (young branch bases) and undersides are shaded; contact with sand darker still.
       let a = 1;
       if (depth > 0) a *= 0.72 + 0.28 * smoothstep(0, 0.12, t);
-      a *= 0.78 + 0.22 * clamp01(n[1] * 0.5 + 0.6);
-      a *= 0.6 + 0.4 * smoothstep(-0.005, 0.025, p[1]);
+      a *= 0.86 + 0.14 * clamp01(n[1] * 0.5 + 0.6);
+      a *= shape.kind === 'coral-skeleton' ? 0.85 + 0.15 * smoothstep(-0.003, 0.01, p[1]) : 0.6 + 0.4 * smoothstep(-0.005, 0.025, p[1]);
       c = mix3(c, D, (1 - a) * 0.6);
       return mul3(c, 0.75 + 0.25 * a);
     },
@@ -358,9 +381,9 @@ function pebbleGeometry(item: DecorItem, shape: DecorShape): BufferGeometry {
 // ---------------------------------------------------------------------------------------------
 
 const LITTER_TEX: Record<string, { outline: 'obovate' | 'oak' | 'elliptic'; base: string; tip: string; vein: string; aspect: number }> = {
-  catappa: { outline: 'obovate', base: '#6e3a1c', tip: '#8c4c22', vein: '#a8703c', aspect: 0.55 },
-  oak: { outline: 'oak', base: '#6a4424', tip: '#7c5430', vein: '#9a7448', aspect: 0.55 },
-  guava: { outline: 'elliptic', base: '#5a4224', tip: '#6e5230', vein: '#8c6e48', aspect: 0.45 },
+  catappa: { outline: 'obovate', base: '#8a5530', tip: '#9a6236', vein: '#b88656', aspect: 0.55 },
+  oak: { outline: 'oak', base: '#86603a', tip: '#946a42', vein: '#b08a5e', aspect: 0.55 },
+  guava: { outline: 'elliptic', base: '#76603c', tip: '#806842', vein: '#a08a62', aspect: 0.45 },
 };
 
 const litterMats = new Map<string, MeshStandardMaterial>();
@@ -696,10 +719,3 @@ export function disposeDecor(b: BuiltDecor): void {
   b.object.removeFromParent();
 }
 
-/** Marimo-style or coral-skeleton relief material for unique plant meshes. */
-export function reliefMaterial(style: string): MeshStandardMaterial {
-  return hardscapeMaterial(style);
-}
-
-void patchSurfaceDetail;
-export type { Object3D };

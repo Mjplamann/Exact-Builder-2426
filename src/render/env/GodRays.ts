@@ -39,14 +39,15 @@ export class GodRays {
           float depth = uwSurfaceY - p.y;
           float light = uwDaylight + uwMoonlight * 0.05;
           if (depth <= 0.0 || light <= 0.002) discard;
-          float s = uwShaft(p, 1.4);
-          // Streaks: only the brighter part of the field, softly.
-          float streak = pow(max(s - 0.9, 0.0), 1.5);
+          float s = uwShaft(p, 2.1);
+          // Streaks: only the brightest part of the (blurred) field — a few soft, distinct shafts,
+          // not a curtain.
+          float streak = pow(max(s - 1.3, 0.0), 1.6) * 3.0;
           // Shafts come and go in broad patches.
           vec2 sA = uwSurfaceEntry(p, uwLightDir);
-          float patchy = smoothstep(0.25, 0.8, uwNoise(sA * 3.2 + vec2(uwTime * 0.021, -uwTime * 0.013)));
-          // Depth: develop over the first cm, fade over ~30 cm (scattered + spread out).
-          float fade = smoothstep(0.0, 0.02, depth) * exp(-depth / 0.3);
+          float patchy = smoothstep(0.35, 0.85, uwNoise(sA * 2.6 + vec2(uwTime * 0.021, -uwTime * 0.013)));
+          // Depth: develop over the first cm, fade over ~25 cm (scattered + spread out).
+          float fade = smoothstep(0.0, 0.02, depth) * exp(-depth / 0.25);
           // Keep clear of the glass walls.
           float edge = smoothstep(0.0, 0.03, uwTankHalf.x - abs(p.x)) * smoothstep(0.0, 0.02, uwTankHalf.z - abs(p.z));
           float scatter = 0.35 + uwTurbidity * 2.5;

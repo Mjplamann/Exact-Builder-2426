@@ -98,6 +98,9 @@ export class Engine {
   private qualityApplied = false;
   private dt = 1 / 60;
   private exposure = 1;
+  private firstUpdate = true;
+  /** Surface agitation (flow + air stones) driving how fast caustics evolve. */
+  private causticAgitation = 1;
   private shadowScanTimer = 0;
   private builtFor: { size: TankSize; substrate: SubstrateKind; background: BackgroundKind; depthF: number; depthB: number; seed: number } | null = null;
   private size = new Vector2();
@@ -165,6 +168,7 @@ export class Engine {
     this.lighting.fit(t);
     this.bubbles.clear();
     this.builtFor = { size: { ...t.size }, substrate: t.substrate, background: t.background, depthF: t.substrateDepthFrontCm, depthB: t.substrateDepthBackCm, seed: t.seed };
+    if (sizeChanged) this.rig.resetView();
     this.frameCamera();
     if (sizeChanged) this.rig.snap();
   }
@@ -286,7 +290,6 @@ export class Engine {
     this.bubbles.setPixelScale(pixelScale);
     const focusDist = this.camera.position.z; // distance to the tank's mid-depth plane
     this.motes.update(dt, GLOBALS.uCurrent.value.x, GLOBALS.uCurrent.value.y, t.waterParams.cloudiness ?? 0, pixelScale, focusDist);
-    this.rays.setIntensity(1);
     // Backlights (frosted/gradient films) run on the light timer.
     this.shell.update(t, room, Math.max(day, 0.0), this.preset.frontReflections);
 
@@ -305,9 +308,6 @@ export class Engine {
       this.contents.traverse(this.enableShadow);
     }
   }
-
-  private causticAgitation = 1;
-  private firstUpdate = true;
 
   private enableShadow = (o: Object3D): void => {
     if ((o as Mesh).isMesh && o.userData.castShadow !== false && !o.castShadow) o.castShadow = true;
@@ -335,7 +335,6 @@ export class Engine {
     const b = GLOBALS.uTankHalf.value;
     this.surface.renderReflection(r, this.scene, this.camera, GLOBALS.uSurfaceY.value, b.x, b.z);
     if (this.post && this.preset.post) {
-      r.toneMapping = ACESFilmicToneMapping;
       this.post.render(this.exposure, GLOBALS.uTime.value);
     } else {
       r.render(this.scene, this.camera);

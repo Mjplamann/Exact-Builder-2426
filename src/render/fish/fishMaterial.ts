@@ -92,8 +92,9 @@ export function createFishMaterials(
     metalnessMap: tex.orm,
     roughness: 1,
     metalness: 1,
-    clearcoat: 0.55 * gloss,
-    clearcoatRoughness: 0.22,
+    // Thin mucus layer: a soft second specular lobe (sharp clearcoat reads as plastic).
+    clearcoat: 0.22 * gloss,
+    clearcoatRoughness: 0.42,
     emissive: new Color(1, 1, 1),
     emissiveMap: tex.emissive,
     emissiveIntensity: 0,
@@ -150,7 +151,7 @@ export function createFishMaterials(
 
   const glow = tex.hasGlow ? 1 : 0;
   // Thin fins transmit light: a faint self-lit term in the fin's own color, stronger for clear fins.
-  const finTrans = 0.1 + 0.12 * (1 - Math.min(1, look.finOpacity));
+  const finTrans = 0.03 + 0.12 * Math.min(1, look.finOpacity);
   return {
     body,
     fins,

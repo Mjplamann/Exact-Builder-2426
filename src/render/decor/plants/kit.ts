@@ -20,6 +20,8 @@ export interface Inst {
   s: [number, number, number, number];
   /** curvature, twist, glow, extension. */
   l: [number, number, number, number];
+  /** Width / length ratio for bending parts (matrix scale is uniform = length). */
+  w: number;
 }
 
 export interface PartUse {
@@ -107,7 +109,7 @@ export function dirAround(up: V3, yaw: number, pitch: number): { dir: V3; out: V
  * Push an oriented instance: local +y → `dir` scaled by `len`, local +z → (bend hint ⟂ dir)
  * scaled by `depth`, local +x scaled by `width`.
  */
-export function pushInst(list: Inst[], base: V3, dir: V3, bendHint: V3, width: number, len: number, depth: number, c: RGB, s: Inst['s'], l: Inst['l'] = [0, 0, 0, 0]): void {
+export function pushInst(list: Inst[], base: V3, dir: V3, bendHint: V3, width: number, len: number, depth: number, c: RGB, s: Inst['s'], l: Inst['l'] = [0, 0, 0, 0], w = 1): void {
   const y = norm(dir);
   let z = add(bendHint, y, -dot(bendHint, y));
   if (Math.hypot(z[0], z[1], z[2]) < 1e-5) z = basis(y)[0];
@@ -118,7 +120,16 @@ export function pushInst(list: Inst[], base: V3, dir: V3, bendHint: V3, width: n
     c,
     s,
     l,
+    w,
   });
+}
+
+/**
+ * Push a bending leaf/tentacle: uniform scale by length (so the arc and twist are undistorted),
+ * the width enters through the per-instance width ratio.
+ */
+export function pushLeaf(list: Inst[], base: V3, dir: V3, bendHint: V3, width: number, len: number, c: RGB, s: Inst['s'], l: Inst['l'] = [0, 0, 0, 0]): void {
+  pushInst(list, base, dir, bendHint, len, len, len, c, s, l, width / Math.max(1e-6, len));
 }
 
 /** Cylinder segment from a to b (shared stem part, radius r). */

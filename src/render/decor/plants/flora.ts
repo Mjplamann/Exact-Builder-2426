@@ -7,7 +7,7 @@
  * fraction. Leaves are arranged by real phyllotaxy (golden-angle rosettes, decussate pairs,
  * whorls) and age (older outer leaves larger and darker, young leaves paler and smaller).
  */
-import { Color, Mesh, MeshStandardMaterial, type BufferGeometry } from 'three';
+import { Mesh, MeshStandardMaterial, type BufferGeometry } from 'three';
 import type { PlantSpecies } from '../../../core/types';
 import { Rng } from '../../../core/rng';
 import { Noise3, smoothstep } from '../../../decor/noise';
@@ -18,7 +18,7 @@ import { patchPlant, patchSurfaceDetail } from '../shaders';
 import { leafPart, spherePart, stemPart } from './parts';
 import { flexOf, leafLook, tipColored } from './style';
 import {
-  add, basis, dirAround, lin, mixRGB, mulRGB, norm, pushInst, pushSegment, ratio, scl, tint, use,
+  add, basis, dirAround, lin, mixRGB, mulRGB, norm, pushInst, pushLeaf, pushSegment, ratio, scl, tint, use,
   type GenArgs, type Inst, type RGB,
 } from './kit';
 
@@ -34,6 +34,14 @@ function speciesLeaf(sp: PlantSpecies) {
 
 function phase(rng: Rng): number {
   return rng.range(0, Math.PI * 2);
+}
+
+/**
+ * An independent random stream per sub-part (stem, tuft…): when a plant grows and one stem
+ * gains nodes, the other stems keep their exact shape instead of reshuffling.
+ */
+function subRng(seed: number, i: number): Rng {
+  return new Rng((Math.imul(seed ^ 0x9e3779b9, 0x85ebca6b) + Math.imul(i + 1, 0xc2b2ae35)) >>> 0);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -67,7 +75,7 @@ export function genRosette({ sp, p, m, rng, out }: GenArgs): void {
     const base = add(m.anchor, dir, 0.004);
     const curv = rng.range(0.35, 0.8) * (0.55 + 0.7 * (1 - a));
     const c = mulRGB(tint(rng, 0.12, p.health, 0.82 + 0.3 * a), a > 0.85 ? [1.04, 1.06, 0.92] : [1, 1, 1]);
-    pushInst(list, base, dir, bend, W, L, L, c, [sway[0], sway[1], flex, ph + i * 0.37], [curv, rng.range(-0.25, 0.25), 0, 0]);
+    pushLeaf(list, base, dir, bend, W, L, c, [sway[0], sway[1], flex, ph + i * 0.37], [curv, rng.range(-0.25, 0.25), 0, 0]);
   }
 }
 
@@ -96,13 +104,17 @@ export function genRibbon({ sp, p, m, ctx, rng, out }: GenArgs): void {
     for (let i = 0; i < N; i++) {
       const yaw = p.rotationY + i * GOLDEN + rng.range(-0.4, 0.4);
       const outer = i / N;
-      const pitch = rng.range(0.02, 0.1) + outer * (sea ? 0.25 : 0.18);
+      // Buoyant ribbons rise almost vertically; long ones only lean a few degrees and bend
+      // gently (the total bend is limited by length so a metre-long leaf doesn't fan out).
       const L = leafLen * (0.3 + 0.7 * g) * rng.range(0.5, 1.04);
+      const pitch = rng.range(0.01, 0.07) + outer * (sea ? 0.22 : 0.09) * Math.min(1, 0.35 / Math.max(0.1, L));
       const { dir, bend } = dirAround(UP, yaw, pitch);
-      const curv = rng.range(0.08, 0.45) * (sea ? 1.2 : 1);
+      const curv = Math.min(rng.range(0.08, 0.45) * (sea ? 1.2 : 1), 0.13 / Math.max(0.05, L));
       const twist = spiral ? rng.range(0.8, 2.6) * (rng.chance(0.5) ? 1 : -1) : rng.range(-0.5, 0.5);
-      const c = tint(rng, 0.14, p.health, 0.85 + 0.25 * rng.next());
-      pushInst(list, add(base, dir, 0.002), dir, bend, leafW * rng.range(0.85, 1.1), L, L, c, [base[1], H, flex, ph + i * 0.61], [curv, twist, 0, 0]);
+      // Mixed ages: older outer leaves darker, a few yellowing.
+      let c = tint(rng, 0.22, p.health, 0.78 + 0.32 * rng.next());
+      if (rng.chance(0.14)) c = mulRGB(c, [0.92, 0.86, 0.55]);
+      pushLeaf(list, add(base, dir, 0.002), dir, bend, leafW * rng.range(0.85, 1.1), L, c, [base[1], H, flex, ph + i * 0.61], [curv, twist, 0, 0]);
     }
   }
 }
@@ -124,7 +136,6 @@ function whorlCount(sp: PlantSpecies): number {
 
 export function genStem({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const fine = sp.form === 'fine-stem';
-  const look = leafLook(sp);
   const leaves = use(out, speciesLeaf(sp));
   const stems = use(out, stemPart());
   const g = m.growth;
@@ -145,9 +156,8 @@ export function genStem({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const baseCol = lin(sp.color);
   const stemCol: RGB = red ? mixRGB(mulRGB(baseCol, [1.05, 0.8, 0.75]), lin(sp.color2!), 0.35) : mulRGB(baseCol, [0.95, 1.0, 0.8]);
   const ph0 = phase(rng);
-  const density = Math.min(1, Math.max(0.5, out.parts.size ? 1 : 1));
-  void density;
   for (let s = 0; s < nStems; s++) {
+    const rng = subRng(p.seed, s);
     const a0 = rng.range(0, Math.PI * 2);
     const r0 = Math.sqrt(rng.next()) * (sp.spreadCm / 100) * 0.22;
     let pos: V3 = [m.anchor[0] + Math.cos(a0) * r0, 0, m.anchor[2] + Math.sin(a0) * r0];
@@ -173,7 +183,9 @@ export function genStem({ sp, p, m, ctx, rng, out }: GenArgs): void {
         const apex = t > 0.86 ? 1 - ((t - 0.86) / 0.14) * 0.62 : 1;
         const sizeF = apex * (0.92 + 0.08 * Math.min(1, t * 4)) * rng.range(0.88, 1.1);
         const L = leafLen * sizeF;
-        const W = (cabomba ? leafLen : leafW) * sizeF;
+        // Feathery / forked leaf cards carry the whole divided leaf in their texture: the card is
+        // as wide as the leaf's spread, not as its (sub-millimetre) segments.
+        const W = (cabomba ? leafLen : fine ? Math.max(leafW, leafLen * 0.45) : leafW) * sizeF;
         // Lower leaves stand out; leaves near the tip close up around the growing point.
         const pitch = (fine ? (cabomba ? 1.35 : hornwort ? 0.75 : 0.9) : 1.25) - (fine && cabomba ? 0.5 : 0.85) * smoothstep(0.72, 1, t) + rng.range(-0.12, 0.12);
         const [e1, e2] = basis(d);
@@ -185,7 +197,7 @@ export function genStem({ sp, p, m, ctx, rng, out }: GenArgs): void {
           let c = tint(rng, 0.12, p.health, 0.82 + 0.25 * t);
           if (red) c = mulRGB(c, mixRGB([1, 1, 1], red, smoothstep(0.55, 1, t) * (sp.light === 'high' ? 0.9 : 0.7)));
           const curv = cabomba ? rng.range(-0.1, 0.2) : rng.range(0.15, 0.55);
-          pushInst(leaves, next, dir, bend, W, L, L, c, swayS, [curv, rng.range(-0.2, 0.2), 0, 0]);
+          pushLeaf(leaves, next, dir, bend, W, L, c, swayS, [curv, rng.range(-0.2, 0.2), 0, 0]);
         }
       }
       rot += whorl === 2 ? Math.PI / 2 : whorl === 1 ? GOLDEN : Math.PI / whorl;
@@ -195,7 +207,6 @@ export function genStem({ sp, p, m, ctx, rng, out }: GenArgs): void {
       if (node > 400) break;
     }
   }
-  void look;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -226,13 +237,20 @@ export function genEpiphyte({ sp, p, m, rng, out }: GenArgs): void {
   const rpts: V3[] = [];
   for (let i = 0; i <= 4; i++) rpts.push(add(add(rStart, rdir, (rhizL * i) / 4), n, Math.sin(i * 1.7) * rhizR * 0.6));
   for (let i = 0; i < 4; i++) pushSegment(stems, rpts[i], rpts[i + 1], rhizR, mulRGB(rhizCol, tint(rng, 0.1)), [m.anchor[1], 1, 0, 0]);
-  // Wiry dark roots gripping the host.
+  // Wiry roots gripping the host: they run along its surface (two short segments that follow
+  // the surface and dip slightly toward it), dark on ferns, pale green-brown on anubias.
   const roots = fern ? rng.int(5, 9) : rng.int(3, 6);
+  const side = cross3(n, rdir);
   for (let i = 0; i < roots; i++) {
     const a = rpts[rng.int(0, 4)];
-    const dd = norm(add(add(scl(n, -0.6), rdir, rng.range(-0.8, 0.8)), cross3(n, rdir), rng.range(-0.8, 0.8)));
-    const L = rng.range(0.01, 0.03) * (fern ? 1 : 1.4);
-    pushSegment(stems, a, add(a, dd, L), fern ? 0.0005 : 0.0012, fern ? lin('#1e1a12') : lin('#c8c8a8'), [m.anchor[1], 1, 0, 0]);
+    const along = norm(add(add(rdir, side, rng.range(-1.2, 1.2)), n, -0.25));
+    const L = rng.range(0.008, 0.022) * (fern ? 1 : 1.3);
+    const mid = add(a, along, L * 0.5);
+    const end = add(add(mid, along, L * 0.5), n, -0.002);
+    const col = fern ? lin('#1e1a12') : lin('#6e6a46');
+    const r = fern ? 0.0004 : 0.0007;
+    pushSegment(stems, a, mid, r, col, [m.anchor[1], 1, 0, 0]);
+    pushSegment(stems, mid, end, r * 0.8, col, [m.anchor[1], 1, 0, 0]);
   }
   const Nmax = fern ? (has(sp, /bolbitis/) ? 11 : has(sp, /narrow/) ? 16 : 13) : big ? 11 : 14;
   const N = Math.max(2, Math.round((2 + (Nmax - 2) * g) * rng.range(0.85, 1.15)));
@@ -242,13 +260,14 @@ export function genEpiphyte({ sp, p, m, rng, out }: GenArgs): void {
     const side = fern ? rng.range(-1, 1) : i % 2 === 0 ? 1 : -1;
     const lyaw = Math.atan2(dotp(rdir, t2), dotp(rdir, t1)) + Math.PI / 2 * side + rng.range(-0.6, 0.6);
     const age = i / N;
-    const pitch = fern ? rng.range(0.15, 0.85) : rng.range(0.35, 0.95);
+    // Ferns arch outward; anubias hold their blades fairly flat, facing the light.
+    const pitch = fern ? rng.range(0.15, 0.85) : rng.range(0.3, 0.8);
     const { dir, bend } = dirAround(up, lyaw, pitch);
     const size = (0.4 + 0.6 * g) * rng.range(0.6, 1.05) * (age > 0.8 ? 0.7 : 1);
     const L = leafLen * size, W = leafW * size;
-    const curv = fern ? rng.range(0.35, 0.95) : rng.range(0.6, 1.25);
+    const curv = fern ? rng.range(0.35, 0.95) : rng.range(0.3, 0.75);
     const c = tint(rng, 0.12, p.health, 0.8 + 0.3 * (1 - age));
-    pushInst(leaves, at, dir, bend, W, L, L, c, [sway[0], sway[1], flex, ph + i * 0.5], [curv, rng.range(-0.3, 0.3), 0, 0]);
+    pushLeaf(leaves, at, dir, bend, W, L, c, [sway[0], sway[1], flex, ph + i * 0.5], [curv, rng.range(-0.3, 0.3), 0, 0]);
   }
 }
 
@@ -266,11 +285,29 @@ function dotp(a: V3, b: V3): number {
 export function genCarpet({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const list = use(out, speciesLeaf(sp));
   const R = Math.max(0.015, m.spread / 2);
+  // Underlayer: ground-hugging cards painted with densely packed leaves, so the carpet reads
+  // as a closed mat between the individual 3D leaves.
+  const matTex = { outline: 'carpet-mat' as const, width: 128, height: 128, base: sp.color, tip: sp.color2 ?? sp.color, seed: 31 };
+  const mats = use(out, leafPart(`${sp.id}/mat`, matTex, { rows: 1, cols: 2 }, { transl: 0.2, roughness: 0.75, shadow: false }));
+  const tile = 0.032;
+  const nTiles = Math.round(((Math.PI * R * R) / (tile * tile)) * 1.7);
+  const matNoise = new Noise3(p.seed ^ 77);
+  for (let i = 0; i < nTiles; i++) {
+    const a = rng.range(0, Math.PI * 2);
+    const rr = Math.sqrt(rng.next()) * (R - tile * 0.3);
+    const x = m.anchor[0] + Math.cos(a) * rr, z = m.anchor[2] + Math.sin(a) * rr;
+    if (matNoise.noise(x * 40, z * 40, 0.7) < -0.35) continue;
+    const yaw = rng.range(0, Math.PI * 2);
+    const d: V3 = [Math.cos(yaw), 0, Math.sin(yaw)];
+    const s = tile * rng.range(0.85, 1.25);
+    const y = ctx.ground(x, z) + 0.0012 + rng.next() * 0.001;
+    pushLeaf(mats, [x - d[0] * s * 0.5, y, z - d[2] * s * 0.5], d, scl(UP, -1), s, s, tint(rng, 0.1, p.health, 0.9), [m.anchor[1], 0.02, 0, 0], [0, 0, 0, 0]);
+  }
   const leafLen = cm(sp.leafLength, 0.6);
   const leafW = cm(sp.leafWidth, sp.leafLength ?? 0.5);
   const Hc = Math.max(0.006, m.height);
   const area = Math.PI * R * R;
-  const count = Math.min(2600, Math.round((area / (leafLen * leafW)) * 0.9 * ctx.density));
+  const count = Math.min(3000, Math.round((area / (leafLen * leafW)) * 1.1 * ctx.density));
   const noise = new Noise3(p.seed);
   const flex = flexOf(sp);
   const ph = phase(rng);
@@ -293,7 +330,7 @@ export function genCarpet({ sp, p, m, ctx, rng, out }: GenArgs): void {
     const s = rng.range(0.75, 1.15);
     const depthAO = 0.42 + 0.58 * (h / Hc);
     const c = tint(rng, 0.14, p.health, depthAO);
-    pushInst(list, [x, y, z], dir, bend, leafW * s, leafLen * s, leafLen * s, c, [m.anchor[1], Hc + 0.01, flex, ph + x * 30], [rng.range(-0.3, 0.2), rng.range(-0.3, 0.3), 0, 0]);
+    pushLeaf(list, [x, y, z], dir, bend, leafW * s, leafLen * s, c, [m.anchor[1], Hc + 0.01, flex, ph + x * 30], [rng.range(-0.3, 0.2), rng.range(-0.3, 0.3), 0, 0]);
   }
 }
 
@@ -312,6 +349,7 @@ export function genGrass({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const flex = flexOf(sp);
   const water = ctx.surfaceY - m.anchor[1];
   for (let t = 0; t < tufts; t++) {
+    const rng = subRng(p.seed, t);
     const a = rng.range(0, Math.PI * 2);
     const rr = t === 0 ? 0 : Math.sqrt(rng.next()) * R;
     const cx = m.anchor[0] + Math.cos(a) * rr, cz = m.anchor[2] + Math.sin(a) * rr;
@@ -325,7 +363,7 @@ export function genGrass({ sp, p, m, ctx, rng, out }: GenArgs): void {
       const L = leafLen * (0.4 + 0.6 * g) * rng.range(0.55, 1.02);
       const base: V3 = [cx + Math.cos(yaw) * rng.range(0, 0.004), gy - 0.002, cz + Math.sin(yaw) * rng.range(0, 0.004)];
       const c = tint(rng, 0.16, p.health, rng.range(0.78, 1.08));
-      pushInst(list, base, dir, bend, leafW * rng.range(0.85, 1.2), L, L, c, [gy, Math.min(water, Math.max(0.02, L)), flex, ph + i * 0.13], [rng.range(0.15, tall ? 0.5 : 0.95), rng.range(-0.6, 0.6), 0, 0]);
+      pushLeaf(list, base, dir, bend, leafW * rng.range(0.85, 1.2), L, c, [gy, Math.min(water, Math.max(0.02, L)), flex, ph + i * 0.13], [rng.range(0.15, tall ? 0.5 : 0.95), rng.range(-0.6, 0.6), 0, 0]);
     }
   }
 }
@@ -384,7 +422,7 @@ export function genMoss({ sp, p, m, ctx, rng, out }: GenArgs): void {
     const s = rng.range(0.55, 1.25);
     const L = sprig * s * (0.6 + 0.4 * g);
     const c = tint(rng, 0.16, p.health, 0.5 + 0.5 * layer);
-    pushInst(list, base, dir, rnd, L * 0.55, L, L, c, [m.anchor[1] - 0.02, Math.max(0.04, H * 3), flex, ph + layer * 3], [curv, twist, 0, 0]);
+    pushLeaf(list, base, dir, rnd, L * 0.55, L, c, [m.anchor[1] - 0.02, Math.max(0.04, H * 3), flex, ph + layer * 3], [curv, twist, 0, 0]);
   }
 }
 
@@ -413,6 +451,7 @@ export function genFloating({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const flex = flexOf(sp);
   const rootLen = pistia ? 0.12 : lemna ? 0.012 : salvinia ? 0.03 : phyl ? 0.04 : 0.09;
   for (let r = 0; r < rosettes; r++) {
+    const rng = subRng(p.seed, r);
     // Colonies spread as loose clusters.
     const a = rng.range(0, Math.PI * 2);
     const rr = r === 0 ? 0 : Math.min(1, Math.abs(rng.normal(0, 0.5))) * R;
@@ -429,7 +468,7 @@ export function genFloating({ sp, p, m, ctx, rng, out }: GenArgs): void {
       const L = leafLen * s, W = leafW * s;
       const base: V3 = [cx, y - (pistia ? 0.006 : 0), cz];
       const c = tint(rng, 0.12, p.health, rng.range(0.85, 1.1));
-      pushInst(leaves, base, dir, scl(UP, -1), W, L, L, c, [y, 0.05, flex * 0.1, ph], [pistia ? rng.range(-0.6, -0.2) : rng.range(-0.25, 0.05), 0, 0, 0]);
+      pushLeaf(leaves, base, dir, bend, W, L, c, [y, 0.05, flex * 0.1, ph], [pistia ? rng.range(-0.6, -0.2) : rng.range(-0.25, 0.05), 0, 0, 0]);
     }
     if (roots) {
       const nRoots = lemna ? 1 : pistia ? rng.int(8, 14) : salvinia ? rng.int(2, 4) : rng.int(3, 8);
@@ -437,7 +476,7 @@ export function genFloating({ sp, p, m, ctx, rng, out }: GenArgs): void {
         const L = rootLen * (0.4 + 0.6 * g) * rng.range(0.5, 1.1);
         const d = norm([rng.range(-0.15, 0.15), -1, rng.range(-0.15, 0.15)]);
         const base: V3 = [cx + rng.range(-0.004, 0.004), y - 0.001, cz + rng.range(-0.004, 0.004)];
-        pushInst(roots, base, d, [rng.range(-1, 1), 0, rng.range(-1, 1)], L * (salvinia || pistia ? 0.35 : 0.12), L, L, tint(rng, 0.15, 1), [y, -Math.max(0.01, L), 0.9, ph + i], [rng.range(-0.3, 0.3), rng.range(-1, 1), 0, 0]);
+        pushLeaf(roots, base, d, [rng.range(-1, 1), 0, rng.range(-1, 1)], L * (salvinia || pistia ? 0.35 : 0.12), L, tint(rng, 0.15, 1), [y, -Math.max(0.01, L), 0.9, ph + i], [rng.range(-0.3, 0.3), rng.range(-1, 1), 0, 0]);
       }
     }
   }
@@ -478,7 +517,7 @@ export function genLily({ sp, p, m, ctx, rng, out }: GenArgs): void {
     const { dir, bend } = dirAround(UP, yaw, pitch);
     const L = Math.max(leafLen * 1.4, subH * rng.range(0.45, 1.0)) * (0.5 + 0.5 * g);
     const W = leafW * (0.6 + 0.4 * g) * rng.range(0.85, 1.1);
-    pushInst(leaves, add(m.anchor, UP, 0.006), dir, bend, W, L, L, tint(rng, 0.14, p.health, rng.range(0.85, 1.1)), [m.anchor[1], Math.max(0.05, subH), flex, ph + i], [rng.range(0.7, 1.3), rng.range(-0.2, 0.2), 0, 0]);
+    pushLeaf(leaves, add(m.anchor, UP, 0.006), dir, bend, W, L, tint(rng, 0.14, p.health, rng.range(0.85, 1.1)), [m.anchor[1], Math.max(0.05, subH), flex, ph + i], [rng.range(0.7, 1.3), rng.range(-0.2, 0.2), 0, 0]);
   }
   // Floating pads reach the surface on long, thin petioles once the plant is established.
   const pads = g > 0.85 ? 2 : g > 0.55 ? 1 : 0;
@@ -499,7 +538,7 @@ export function genLily({ sp, p, m, ctx, rng, out }: GenArgs): void {
       const yaw = rng.range(0, Math.PI * 2);
       const dir: V3 = [Math.cos(yaw), 0, Math.sin(yaw)];
       const base = add(center, dir, -D / 2);
-      pushInst(padPart, base, dir, scl(UP, -1), D, D, D, tint(rng, 0.1, p.health), sway, [0, 0, 0, 0]);
+      pushLeaf(padPart, base, dir, scl(UP, -1), D, D, tint(rng, 0.1, p.health), sway, [0, 0, 0, 0]);
     }
   }
 }
@@ -527,7 +566,7 @@ export function genBulb({ sp, p, m, ctx, rng, out }: GenArgs): void {
     const pitch = rng.range(0.12, 0.6) + (1 - a) * 0.2;
     const { dir, bend } = dirAround(UP, yaw, pitch);
     const L = leafLen * (0.35 + 0.65 * g) * rng.range(0.6, 1.05);
-    pushInst(leaves, add(m.anchor, UP, 0.006), dir, bend, leafW * rng.range(0.85, 1.1), L, L, tint(rng, 0.12, p.health, 0.85 + 0.25 * a), [m.anchor[1], Math.min(water, Math.max(0.05, m.height)), flex, ph + i * 0.7], [rng.range(0.4, 1.1), rng.range(-0.7, 0.7), 0, 0]);
+    pushLeaf(leaves, add(m.anchor, UP, 0.006), dir, bend, leafW * rng.range(0.85, 1.1), L, tint(rng, 0.12, p.health, 0.85 + 0.25 * a), [m.anchor[1], Math.min(water, Math.max(0.05, m.height)), flex, ph + i * 0.7], [rng.range(0.4, 1.1), rng.range(-0.7, 0.7), 0, 0]);
   }
 }
 
@@ -588,7 +627,7 @@ export function genMacroalgae(args: GenArgs): void {
       const c: V3 = [m.anchor[0] + u[0] * rr * R, m.anchor[1] + H * 0.5 + u[1] * rr * H * 0.5, m.anchor[2] + u[2] * rr * R * 0.8];
       const d = norm([rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)]);
       const L = cm(sp.leafLength, 6) * rng.range(0.6, 1.2);
-      pushInst(list, c, d, [rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)], L, L, L, tint(rng, 0.2, p.health, 0.6 + 0.4 * rr), [m.anchor[1], H, flex * 0.5, ph], [rng.range(-1, 1), rng.range(-1, 1), 0, 0]);
+      pushLeaf(list, c, d, [rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)], L, L, tint(rng, 0.2, p.health, 0.6 + 0.4 * rr), [m.anchor[1], H, flex * 0.5, ph], [rng.range(-1, 1), rng.range(-1, 1), 0, 0]);
     }
     return;
   }
@@ -614,7 +653,7 @@ export function genMacroalgae(args: GenArgs): void {
             const o = norm([rng.range(-1, 1), rng.range(-0.3, 0.6), rng.range(-1, 1)]);
             if (has(sp, /halimeda/)) {
               const L = cm(sp.leafLength, 1.2);
-              pushInst(grapes, add(next, o, 0.003), o, UP, L, L, L, tint(rng, 0.15, p.health), [m.anchor[1], H, flex, ph + i], [0, 0, 0, 0]);
+              pushLeaf(grapes, add(next, o, 0.003), o, UP, L, L, tint(rng, 0.15, p.health), [m.anchor[1], H, flex, ph + i], [0, 0, 0, 0]);
             } else {
               const r = rng.range(0.0022, 0.0034);
               pushInst(grapes, add(next, o, 0.003 + r), UP, [1, 0, 0], r, r, r, mulRGB(col, tint(rng, 0.15, p.health)), [m.anchor[1], H, flex, ph + i]);
@@ -646,7 +685,7 @@ export function genMacroalgae(args: GenArgs): void {
     const yaw = rng.range(0, Math.PI * 2);
     const { dir, bend } = dirAround(m.normal, yaw, rng.range(0.05, runners ? 0.4 : 0.7));
     const L = leafLen * (0.4 + 0.6 * g) * rng.range(0.6, 1.1);
-    pushInst(list, base, dir, bend, leafW * rng.range(0.8, 1.2), L, L, tint(rng, 0.14, p.health), [m.anchor[1], H, flex, ph + i], [rng.range(0.1, 0.6), rng.range(-0.8, 0.8), 0, 0]);
+    pushLeaf(list, base, dir, bend, leafW * rng.range(0.8, 1.2), L, tint(rng, 0.14, p.health), [m.anchor[1], H, flex, ph + i], [rng.range(0.1, 0.6), rng.range(-0.8, 0.8), 0, 0]);
   }
 }
 
@@ -657,8 +696,11 @@ export interface Sprig {
   depth: number;
 }
 
-export function growSprigs(rng: Rng, start: V3, up: V3, opts: { trunks: number; len: number; r0: number; tipR: number; spread: number; branchProb: number; angle: [number, number]; depth: number; wander: number; upBias: number; planar?: V3; step?: number }): Sprig[] {
+export function growSprigs(rng: Rng, start: V3, up: V3, opts: { trunks: number; len: number; r0: number; tipR: number; spread: number; branchProb: number; angle: [number, number]; depth: number; wander: number; upBias: number; planar?: V3; step?: number; maxSprigs?: number }): Sprig[] {
   const out: Sprig[] = [];
+  // Branching is exponential: cap the total so a dense sea plume stays a few thousand triangles.
+  const maxSprigs = opts.maxSprigs ?? 90;
+  let budget = maxSprigs - opts.trunks;
   const grow = (p0: V3, d0: V3, len: number, r0: number, depth: number) => {
     const step = opts.step ?? Math.max(0.004, len / 10);
     const n = Math.max(2, Math.ceil(len / step));
@@ -675,7 +717,8 @@ export function growSprigs(rng: Rng, start: V3, up: V3, opts: { trunks: number; 
       pts.push(p);
       const r = Math.max(opts.tipR, r0 * (1 - 0.6 * t));
       rs.push(r);
-      if (depth < opts.depth && i < n && rng.chance(opts.branchProb)) {
+      if (depth < opts.depth && i < n && budget > 0 && rng.chance(opts.branchProb)) {
+        budget--;
         let axis = norm(cross3(d, [rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)]));
         if (opts.planar) axis = opts.planar;
         const ang = rng.range(opts.angle[0], opts.angle[1]) * (rng.chance(0.5) ? 1 : -1);
@@ -717,11 +760,13 @@ function branchingThallus({ sp, p, m, rng, out }: GenArgs): Mesh[] {
 }
 
 /** Tube mesh for sprigs with per-vertex color and the plant sway attribute. */
-export function sprigMesh(sprigs: Sprig[], color: (t: number, depth: number, around: number) => RGB, sway: [number, number, number, number], radial: number, capTips = true): BufferGeometry {
+export function sprigMesh(sprigs: Sprig[], color: (t: number, depth: number, around: number) => RGB, sway: [number, number, number, number], radialIn: number, capTips = true): BufferGeometry {
   const gb = new GeoBuilder();
   for (const s of sprigs) {
     const n = s.pts.length;
     if (n < 2) continue;
+    // Hair-thin sprigs need fewer sides.
+    const radial = s.r[0] < 0.0015 ? Math.min(radialIn, 3) : s.r[0] < 0.003 ? Math.min(radialIn, 5) : radialIn;
     const T: V3[] = s.pts.map((_, i) => norm([s.pts[Math.min(n - 1, i + 1)][0] - s.pts[Math.max(0, i - 1)][0], s.pts[Math.min(n - 1, i + 1)][1] - s.pts[Math.max(0, i - 1)][1], s.pts[Math.min(n - 1, i + 1)][2] - s.pts[Math.max(0, i - 1)][2]]));
     let N0 = basis(T[0])[0];
     const starts: number[] = [];
@@ -755,4 +800,3 @@ export function sprigMesh(sprigs: Sprig[], color: (t: number, depth: number, aro
   return gb.build();
 }
 
-export { Color };

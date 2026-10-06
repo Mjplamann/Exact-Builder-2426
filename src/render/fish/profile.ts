@@ -46,6 +46,11 @@ const bump = (x: number, c: number, w: number) => {
   return Math.exp(-t * t);
 };
 
+/** Superellipse quadrant: 1 at t = 0 → 0 at t = 1 (p = 2 circle, p → 1 straight line). */
+const quadrant = (t: number, p: number) => (t <= 0 ? 1 : t >= 1 ? 0 : Math.pow(1 - Math.pow(t, p), 1 / p));
+/** Smooth maximum (fillet of radius ~k). */
+const smax = (a: number, b: number, k: number) => 0.5 * (a + b + Math.sqrt((a - b) * (a - b) + k * k));
+
 /** Convex head ease with an optional rounded (√-like) nose. */
 function headEase(t: number, m: number, round: number): number {
   if (t <= 0) return 0;
@@ -73,7 +78,10 @@ export class BodyProfile {
   private xB: number;
   private xPed: number;
   private pedHalf: number;
-  private qTail: number;
+  private pTail: number;
+  private pHead: number;
+  private pThroat: number;
+  private xEnd: number;
   private mTop: number;
   private mBot: number;
   private round: number;
@@ -102,16 +110,34 @@ export class BodyProfile {
     this.xPed = 0.9 + 0.08 * taper;
     this.pedHalf = 0.5 * D * clamp(b.peduncle, 0.08, 1) * (1 - 0.88 * taper);
     this.flare = 1.12 - 0.12 * taper;
-    // Deep, round-bodied fish carry their depth further back before tapering.
-    this.qTail = 0.85 + 0.8 * clamp((D - 0.25) / 0.6, 0, 1);
+    // Outline behind the deepest point: a superellipse quadrant — nearly straight taper in
+    // slender fish, a round disc in deep-bodied ones (discus, angelfish) — filleted into the
+    // peduncle.
+    this.pTail = (1.25 + 0.9 * clamp((D - 0.25) / 0.55, 0, 1)) * (1 - 0.2 * taper);
+    this.xEnd = this.xPed + 0.05;
+    if (b.skin === 'hex') {
+      // The rigid carapace ends abruptly where the free peduncle begins.
+      this.pTail = 3.2;
+      this.xEnd = 0.8;
+    }
 
     // Snout shape → head ease exponents and nose roundness.
     const sn = b.snout;
     this.mTop = sn === 'blunt' ? 3.4 : sn === 'pointed' ? 1.75 : sn === 'upturned' ? 1.6 : sn === 'beak' ? 2.8 : sn === 'elongate' || sn === 'duckbill' ? 1.5 : sn === 'tubular' ? 1.9 : 2.4;
     this.mBot = sn === 'blunt' ? 2.6 : sn === 'pointed' ? 1.7 : sn === 'upturned' ? 2.4 : 2.1;
     this.mTop *= 1 - 0.25 * b.backArch;
+    this.pHead = (sn === 'blunt' ? 2.3 : sn === 'pointed' ? 1.3 : sn === 'upturned' ? 1.45 : sn === 'beak' ? 2.1 : sn === 'rounded' ? 1.85 : 1.6) * (1 + 0.12 * b.backArch);
+    this.pThroat = sn === 'blunt' ? 1.9 : sn === 'pointed' ? 1.35 : 1.6;
+    // Boxfish & cowfish: the carapace is a rounded box in side view too.
+    if (b.section === 'boxy' && b.skin === 'hex') {
+      this.pHead = 3.2;
+      this.pThroat = 3.2;
+    } else if (b.section === 'triangular' && b.skin === 'hex') {
+      this.pHead = 2.6;
+      this.pThroat = 3.4;
+    }
     this.round = sn === 'blunt' ? 0.85 : sn === 'rounded' ? 0.5 : sn === 'beak' ? 0.6 : sn === 'upturned' ? 0.35 : sn === 'tubular' ? 0.4 : 0.18;
-    this.tipW = sn === 'blunt' || sn === 'beak' ? 0.5 : sn === 'rounded' ? 0.32 : 0.2;
+    this.tipW = (sn === 'blunt' || sn === 'beak' ? 0.34 : sn === 'rounded' ? 0.24 : 0.15) * (D / Math.max(0.02, b.width) > 3 ? 0.7 : 1);
 
     // Tube / needle / duckbill snout radii.
     if (sL > 0) {
@@ -226,9 +252,27 @@ export class BodyProfile {
     this.head.eyeNz = n[2] / len;
   }
 
+  /** Rays: a round disc (front ~55% of the length) and a thin whip tail. */
+  private rayDisc(x: number): number {
+    const cx = 0.29, rx = 0.29;
+    const u = (x - cx) / rx;
+    return u >= 1 || u <= -1 ? 0 : Math.pow(1 - u * u, 0.55);
+  }
+  private rayTail(x: number): number {
+    const t = clamp((x - 0.45) / 0.55, 0, 1);
+    return x < 0.4 ? 0 : 0.03 * (1 - 0.85 * t);
+  }
+
+  /** Peduncle half-depth band (flares slightly toward the caudal base). */
+  private pedBand(x: number): number {
+    const t = smooth(this.xPed, 1, x);
+    return 0.93 * this.pedHalf * (1 + (this.flare - 1) * t * t);
+  }
+
   /** Dorsal outline height at x (SL units, not yet centered). */
   top(x: number): number {
     const b = this.body;
+    if (b.kind === 'ray') return Math.max(this.D * 0.6 * Math.pow(this.rayDisc(x), 0.8), this.rayTail(x) * 0.8, x < 0.02 ? 0 : 0.002);
     const sL = this.head.snoutLen ?? Math.max(0, b.snoutLength);
     const yTip = this.head.yTip ?? 0;
     let y: number;
@@ -237,16 +281,12 @@ export class BodyProfile {
       const r = this.tubeT * (this.body.snout === 'elongate' ? Math.min(1, 0.25 + 0.75 * t) : headEase(Math.min(1, t * 6), 2, 0.8));
       y = yTip + r;
     } else if (x < this.xT) {
-      const t = (x - sL) / (this.xT - sL);
+      const u = (this.xT - x) / (this.xT - sL);
       const base = yTip + this.tubeT;
-      y = base + (this.Tmax - base) * headEase(t, this.mTop, sL > 0 ? 0.1 : this.round);
-    } else if (x < this.xPed) {
-      const t = (x - this.xT) / (this.xPed - this.xT);
-      const e = 0.5 + 0.5 * Math.cos(Math.PI * Math.pow(t, this.qTail));
-      y = this.pedHalf + (this.Tmax - this.pedHalf) * e;
+      y = base + (this.Tmax - base) * quadrant(u, sL > 0 ? 1.5 : this.pHead);
     } else {
-      const t = (x - this.xPed) / (1 - this.xPed);
-      y = this.pedHalf * (1 + (this.flare - 1) * t * t);
+      const t = (x - this.xT) / (this.xEnd - this.xT);
+      y = smax(this.Tmax * quadrant(t, this.pTail), this.pedBand(x), this.pedHalf * 0.6);
     }
     // Back arch and nuchal hump.
     y += 0.05 * this.D * b.backArch * bump(x, b.depthPos, 0.22) * smooth(sL, sL + 0.1, x);
@@ -257,6 +297,7 @@ export class BodyProfile {
   /** Ventral outline at x (negative). */
   bot(x: number): number {
     const b = this.body;
+    if (b.kind === 'ray') return -Math.max(this.D * 0.4 * Math.pow(this.rayDisc(x), 0.6), this.rayTail(x) * 0.8, x < 0.02 ? 0 : 0.002);
     const sL = this.head.snoutLen ?? Math.max(0, b.snoutLength);
     const yTip = this.head.yTip ?? 0;
     let y: number;
@@ -265,16 +306,12 @@ export class BodyProfile {
       const r = this.tubeB * (this.body.snout === 'elongate' ? Math.min(1, 0.25 + 0.75 * t) : headEase(Math.min(1, t * 6), 2, 0.8));
       y = yTip - r;
     } else if (x < this.xB) {
-      const t = (x - sL) / (this.xB - sL);
+      const u = (this.xB - x) / (this.xB - sL);
       const base = yTip - this.tubeB;
-      y = base + (-this.Bmax - base) * headEase(t, this.mBot, sL > 0 ? 0.1 : this.round * 0.8);
-    } else if (x < this.xPed) {
-      const t = (x - this.xB) / (this.xPed - this.xB);
-      const e = 0.5 + 0.5 * Math.cos(Math.PI * Math.pow(t, this.qTail * 0.95));
-      y = -this.pedHalf + (-this.Bmax + this.pedHalf) * e;
+      y = base + (-this.Bmax - base) * quadrant(u, sL > 0 ? 1.5 : this.pThroat);
     } else {
-      const t = (x - this.xPed) / (1 - this.xPed);
-      y = -this.pedHalf * (1 + (this.flare - 1) * t * t);
+      const t = (x - this.xB) / (this.xEnd - this.xB);
+      y = -smax(this.Bmax * quadrant(t, this.pTail * 0.95), this.pedBand(x), this.pedHalf * 0.6);
     }
     // Lower jaw extension (halfbeaks) is separate geometry; keep the outline clean here.
     return y;
@@ -283,6 +320,7 @@ export class BodyProfile {
   /** Half width at x. */
   halfWidth(x: number): number {
     const b = this.body;
+    if (b.kind === 'ray') return Math.max(0.5 * b.width * this.rayDisc(x), this.rayTail(x), 0.0005);
     const sL = this.head.snoutLen ?? 0;
     const Wm = 0.5 * b.width;
     const xw = clamp(Math.max(b.widthPos, sL + 0.08), 0.12, 0.6);
@@ -370,6 +408,16 @@ export class BodyProfile {
   heightForPatternY(x: number, py: number): number {
     const T = this.top(x), B = this.bot(x);
     return (T + B) / 2 + (py * (T - B)) / 2;
+  }
+
+  /**
+   * Physical half-height of the texture's y range at x (for round spots): the projected depth for
+   * normal fish, the half arc over the back for flat ones (rays, plecos).
+   */
+  textureHalfHeight(x: number): number {
+    const flat = clamp((this.body.width / Math.max(0.03, this.body.depth) - 0.7) / 0.8, 0, 1);
+    const hd = this.halfDepth(x);
+    return hd * (1 - flat) + (this.halfWidth(x) * 1.2 + hd) * flat;
   }
 
   /** Half the visible depth at x (for aspect-correct texture painting). */

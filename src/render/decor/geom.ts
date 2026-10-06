@@ -344,7 +344,7 @@ export function unitCylinder(radial: number, rows = 1, capTop = false): BufferGe
  * Tentacle / polyp along +y (0..1) with radius `rr` (fraction of length) tapering to the tip, and
  * an optional tip shape. Front normal for bending is +z.
  */
-export function tentacle(opts: { rr: number; taper: number; tip: 'point' | 'bulb' | 'knob' | 'hammer' | 'branched' | 'flat'; rows?: number; radial?: number; tipScale?: number }): BufferGeometry {
+export function tentacle(opts: { rr: number; taper: number; tip: 'point' | 'bulb' | 'knob' | 'hammer' | 'branched' | 'flat'; rows?: number; radial?: number; tipScale?: number; tipDetail?: number }): BufferGeometry {
   const rows = opts.rows ?? 8;
   const radial = opts.radial ?? 6;
   const gb = new GeoBuilder();
@@ -377,20 +377,22 @@ export function tentacle(opts: { rr: number; taper: number; tip: 'point' | 'bulb
     for (let k = 0; k < ico.i.length; k += 3) gb.tri(base + ico.i[k], base + ico.i[k + 1], base + ico.i[k + 2]);
   };
   const rt = rAt(1);
+  // Tip blobs are a few millimetres on screen: low-detail icospheres (detail 1 = 80 triangles).
+  const td = opts.tipDetail ?? 1;
   switch (opts.tip) {
     case 'bulb':
-      blob(0, 1, 0, rt * 2.0 * ts, rt * 2.4 * ts, rt * 2.0 * ts, 2);
+      blob(0, 1, 0, rt * 2.0 * ts, rt * 2.4 * ts, rt * 2.0 * ts, td);
       break;
     case 'knob':
-      blob(0, 1 + rt * 0.6, 0, rt * 1.5 * ts, rt * 1.5 * ts, rt * 1.5 * ts, 1);
+      blob(0, 1 + rt * 0.6, 0, rt * 1.5 * ts, rt * 1.5 * ts, rt * 1.5 * ts, td);
       break;
     case 'hammer':
-      blob(0, 1, 0, rt * 4.5 * ts, rt * 1.4 * ts, rt * 1.6 * ts, 2);
+      blob(0, 1, 0, rt * 4.5 * ts, rt * 1.4 * ts, rt * 1.6 * ts, td);
       break;
     case 'branched':
       for (let b = 0; b < 5; b++) {
         const a = (b / 5) * Math.PI * 2;
-        blob(Math.cos(a) * rt * 1.6 * ts, 1 + (b % 2) * rt, Math.sin(a) * rt * 1.6 * ts, rt * 1.3 * ts, rt * 1.3 * ts, rt * 1.3 * ts, 1);
+        blob(Math.cos(a) * rt * 1.6 * ts, 1 + (b % 2) * rt, Math.sin(a) * rt * 1.6 * ts, rt * 1.3 * ts, rt * 1.3 * ts, rt * 1.3 * ts, 0);
       }
       break;
     case 'flat': {

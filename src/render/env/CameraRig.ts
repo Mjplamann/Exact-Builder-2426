@@ -130,6 +130,12 @@ export class CameraRig {
     }
   }
 
+  /** Forget the user's pan/zoom (e.g. a different tank). */
+  resetView(): void {
+    this.userPan.set(0, 0, 0);
+    this.userZoom = 1;
+  }
+
   /** Snap to the desired pose (no animation), e.g. after a tank reset. */
   snap(): void {
     this.computeDesired();
@@ -202,10 +208,25 @@ export class CameraRig {
       x = MathUtils.lerp(ux, fx, w);
       y = MathUtils.lerp(uy, fy, w);
       dist = MathUtils.lerp(userDist, fd, w);
-      // Aim point: at the fish depth, partly toward the fish (≤ ~5° off-axis).
-      const reach = Math.max(0.05, this.frontZ + dist - f.z) * 0.09;
-      aimX = MathUtils.lerp(ux, x + MathUtils.clamp(f.x - x, -reach, reach), w);
-      aimY = MathUtils.lerp(uy, y + MathUtils.clamp(f.y - y, -reach, reach), w);
+      // Aim a little toward the fish (≤ ~5° off-axis) — but never so far that the frame edge
+      // would leave the front glass (no peeking above the waterline or past the side panes).
+      const aimDist = this.frontZ + Math.max(MIN_GLASS_GAP, dist) - (this.frontZ + this.backZ) / 2;
+      const glassDist = Math.max(MIN_GLASS_GAP, dist);
+      const half = MathUtils.degToRad(FOV) / 2;
+      const halfH = Math.atan(Math.tan(half) * this.camera.aspect);
+      const tiltY = MathUtils.clamp(
+        Math.atan2(f.y - y, Math.max(0.05, this.frontZ + glassDist - f.z)),
+        Math.min(0, half - Math.atan2(y - this.yMin - DRIFT_AMP.y, glassDist)),
+        Math.max(0, Math.atan2(this.yMax - DRIFT_AMP.y - y, glassDist) - half),
+      );
+      const tiltX = MathUtils.clamp(
+        Math.atan2(f.x - x, Math.max(0.05, this.frontZ + glassDist - f.z)),
+        Math.min(0, halfH - Math.atan2(x + this.halfW - DRIFT_AMP.x, glassDist)),
+        Math.max(0, Math.atan2(this.halfW - DRIFT_AMP.x - x, glassDist) - halfH),
+      );
+      const maxTilt = MathUtils.degToRad(5);
+      aimX = MathUtils.lerp(ux, x + aimDist * Math.tan(MathUtils.clamp(tiltX, -maxTilt, maxTilt)), w);
+      aimY = MathUtils.lerp(uy, y + aimDist * Math.tan(MathUtils.clamp(tiltY, -maxTilt, maxTilt)), w);
     }
     const camZ = this.frontZ + Math.max(MIN_GLASS_GAP, dist);
     this.desiredPos.set(x, y, camZ);

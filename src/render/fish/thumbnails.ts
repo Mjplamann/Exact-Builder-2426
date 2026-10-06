@@ -72,6 +72,8 @@ export class ThumbnailRenderer {
     const isFish = kind === 'fish' || kind === 'seahorse' || kind === 'ray';
     const yaw = kind === 'ray' || kind === 'starfish' || kind === 'brittle-star' || kind === 'urchin' ? -0.5 : -0.42;
     const q = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), yaw);
+    // Rays lie flat: tip the disc toward the camera like the gallery does.
+    if (kind === 'ray') q.multiply(new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), 0.95));
     const m = new Matrix4().compose(new Vector3(), q, new Vector3(1, 1, 1));
     v.bodyMesh.setMatrixAt(0, m);
     v.bodyMesh.instanceMatrix.needsUpdate = true;
@@ -89,11 +91,13 @@ export class ThumbnailRenderer {
     // Frame: bounding box of body + fins in the posed orientation.
     v.bodyMesh.geometry.computeBoundingBox();
     v.finMesh.geometry.computeBoundingBox();
-    const box = v.bodyMesh.geometry.boundingBox!.clone().union(v.finMesh.geometry.boundingBox!);
+    // Fish: frame body + fins. Invertebrates: frame the body (antennae may run off the edge).
+    const box = v.bodyMesh.geometry.boundingBox!.clone();
+    if (isFish) box.union(v.finMesh.geometry.boundingBox!);
     box.applyMatrix4(m);
     const c = box.getCenter(new Vector3());
     const sz = box.getSize(new Vector3());
-    const elev = kind === 'starfish' || kind === 'brittle-star' || kind === 'urchin' || kind === 'crab' ? 0.55 : 0.18;
+    const elev = kind === 'starfish' || kind === 'brittle-star' || kind === 'urchin' || kind === 'crab' ? 0.55 : kind === 'ray' ? 0.3 : 0.18;
     const fov = (this.camera.fov * Math.PI) / 180;
     const radius = Math.max(sz.x * 0.55, sz.y * 0.6, sz.z * 0.45, 0.05);
     const dist = (radius / Math.tan(fov / 2)) * 1.08;

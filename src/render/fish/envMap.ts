@@ -33,12 +33,12 @@ export function createUnderwaterEnv(renderer: WebGLRenderer, kind: 'tank' | 'stu
         vec3 d = normalize(vDir);
         float up = d.y;
         // Linear radiance.
-        vec3 sky = vec3(1.25, 1.32, 1.35);
-        vec3 window = vec3(3.2, 3.3, 3.25);
+        vec3 sky = vec3(1.0, 1.06, 1.1);
+        vec3 window = vec3(1.9, 1.95, 1.92);
         vec3 water = mix(vec3(0.16, 0.27, 0.3), vec3(0.32, 0.36, 0.38), uStudio);
         vec3 floorC = mix(vec3(0.09, 0.08, 0.065), vec3(0.18, 0.18, 0.18), uStudio);
         vec3 c = mix(water, sky, smoothstep(0.05, 0.75, up));
-        c = mix(c, window, smoothstep(0.82, 0.97, up));
+        c = mix(c, window, smoothstep(0.7, 0.98, up));
         c = mix(c, floorC, smoothstep(-0.05, -0.45, up));
         // A brighter front side (the room / viewer side of the glass) for a gentle fill.
         c += vec3(0.08, 0.09, 0.1) * smoothstep(0.2, 1.0, d.z) * (1.0 - abs(up));

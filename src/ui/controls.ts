@@ -279,11 +279,6 @@ export function section(title: string | null, ...children: Child[]): HTMLElement
   return h('section', { class: 'aq-sec' }, title ? h('h3', { class: 'aq-sec-title' }, title) : null, ...children);
 }
 
-/** "Label ……… value" row. */
-export function fieldRow(label: string, ...controls: Child[]): HTMLElement {
-  return h('div', { class: 'aq-field aq-field-inline' }, h('span', { class: 'aq-field-label' }, label), h('div', { class: 'aq-field-controls' }, ...controls));
-}
-
 /** Tabs (role=tablist) with arrow-key navigation. Returns the tab bar and a setter. */
 export function tabs<T extends string>(
   aria: string,

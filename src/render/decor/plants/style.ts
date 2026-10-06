@@ -116,7 +116,7 @@ export function leafLook(sp: PlantSpecies): LeafLook {
       petiole = has(sp, /anubias/) ? 0.3 : 0.12;
       rows = 6;
       roughness = 0.32;
-      transl = 0.1;
+      transl = 0.16;
       cup = 0.06;
       if (has(sp, /coffeefolia/)) {
         ruffle = 0.03;

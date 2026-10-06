@@ -44,6 +44,12 @@ export interface SdfSpec {
   shell?: number;
   /** Discard everything below this local y (open-bottomed shells). */
   clipBelow?: number;
+  /**
+   * Low-frequency domain warp (sum of sines): breaks the ellipsoid symmetry so stones look
+   * weathered and irregular instead of egg-shaped. Part of the shared SDF so colliders,
+   * anchors and meshes agree.
+   */
+  warp?: { k: V3; d: V3; a: number; ph: number }[];
 }
 
 export interface Branch {
@@ -246,17 +252,54 @@ export function sdCapsule(px: number, py: number, pz: number, a: V3, b: V3, r: n
   return Math.sqrt(dx * dx + dy * dy + dz * dz) - r;
 }
 
+/** Bounding spheres of the prims (center xyz, radius) — lets sdfEval skip far prims. */
+const primSpheres = new WeakMap<SdfSpec, Float64Array>();
+function spheresOf(spec: SdfSpec): Float64Array {
+  let b = primSpheres.get(spec);
+  if (b && b.length === spec.prims.length * 4) return b;
+  b = new Float64Array(spec.prims.length * 4);
+  spec.prims.forEach((p, i) => {
+    if (p.t === 'ell') b!.set([p.c[0], p.c[1], p.c[2], Math.max(p.r[0], p.r[1], p.r[2])], i * 4);
+    else if (p.t === 'box') b!.set([p.c[0], p.c[1], p.c[2], Math.hypot(p.h[0], p.h[1], p.h[2])], i * 4);
+    else b!.set([(p.a[0] + p.b[0]) / 2, (p.a[1] + p.b[1]) / 2, (p.a[2] + p.b[2]) / 2, Math.hypot(p.b[0] - p.a[0], p.b[1] - p.a[1], p.b[2] - p.a[2]) / 2 + p.r], i * 4);
+  });
+  primSpheres.set(spec, b);
+  return b;
+}
+
 /** Signed distance (m, local space, scale 1) to the solid described by `spec` (no surface noise). */
 export function sdfEval(spec: SdfSpec, x: number, y: number, z: number): number {
+  const warp = spec.warp;
+  if (warp) {
+    let ox = 0, oy = 0, oz = 0;
+    for (let i = 0; i < warp.length; i++) {
+      const w = warp[i];
+      const s = w.a * Math.sin(w.k[0] * x + w.k[1] * y + w.k[2] * z + w.ph);
+      ox += w.d[0] * s;
+      oy += w.d[1] * s;
+      oz += w.d[2] * s;
+    }
+    x += ox;
+    y += oy;
+    z += oz;
+  }
   let d = 1e9;
   const prims = spec.prims;
+  const sph = spheresOf(spec);
+  const k = spec.blend;
   for (let i = 0; i < prims.length; i++) {
+    // A prim can only change a smooth union if its lower-bound distance is within the blend.
+    if (i > 0) {
+      const dx = x - sph[i * 4], dy = y - sph[i * 4 + 1], dz = z - sph[i * 4 + 2];
+      const lower = Math.sqrt(dx * dx + dy * dy + dz * dz) - sph[i * 4 + 3];
+      if (lower > d + k) continue;
+    }
     const p = prims[i];
     let di: number;
     if (p.t === 'ell') di = sdEllipsoid(x, y, z, p.c, p.r, p.m);
     else if (p.t === 'box') di = sdRoundBox(x, y, z, p.c, p.h, p.m, p.round);
     else di = sdCapsule(x, y, z, p.a, p.b, p.r);
-    d = i === 0 ? di : smin(d, di, spec.blend);
+    d = i === 0 ? di : smin(d, di, k);
   }
   const cuts = spec.cuts;
   for (let i = 0; i < cuts.length; i++) {
@@ -373,6 +416,18 @@ function addTunnels(spec: SdfSpec, rng: Rng, count: number, rRange: [number, num
   }
 }
 
+/** Add a 3-term sine domain warp of amplitude `amp` (m) and wavelength ≈ `wl` (m). */
+function addWarp(spec: SdfSpec, rng: Rng, amp: number, wl: number, terms = 3): void {
+  spec.warp = [];
+  for (let i = 0; i < terms; i++) {
+    const kd = randomUnit(rng);
+    const k = (Math.PI * 2) / (wl * rng.range(0.7, 1.4));
+    // Displace perpendicular to the wave vector so the warp shears rather than compresses.
+    const d = vnorm(vcross(kd, randomUnit(rng)));
+    spec.warp.push({ k: [kd[0] * k, kd[1] * k, kd[2] * k], d, a: amp * rng.range(0.6, 1.0) / Math.sqrt(terms), ph: rng.range(0, Math.PI * 2) });
+  }
+}
+
 function newSdf(blend: number): SdfSpec {
   return { prims: [], blend, cuts: [], cutBlend: 0.003, holes: [], holeBlend: 0.004 };
 }
@@ -393,6 +448,7 @@ function rockSeiryu(rng: Rng, S: number): SdfSpec {
   }
   addCuts(spec, rng, rng.int(8, 12), -0.25, [0.7, 0.9]);
   spec.cutBlend = 0.0025;
+  addWarp(spec, rng, S * 0.035, S * 0.8);
   return spec;
 }
 
@@ -407,9 +463,10 @@ function rockDragon(rng: Rng, S: number): SdfSpec {
     const a = rng.range(0, Math.PI * 2);
     spec.prims.push(ell([Math.cos(a) * w * 0.55, h * rng.range(0.2, 0.55) - bury, Math.sin(a) * w * 0.35], [w * rng.range(0.35, 0.55), h * rng.range(0.25, 0.45), w * rng.range(0.3, 0.45)], rng.range(-0.4, 0.4), rng.range(0, 3), rng.range(-0.5, 0.5)));
   }
-  addCuts(spec, rng, rng.int(3, 6), -0.1, [0.82, 0.96]);
+  addCuts(spec, rng, rng.int(5, 8), -0.1, [0.78, 0.94]);
   addPockets(spec, rng, rng.int(6, 11), [S * 0.03, S * 0.075], [0.3, 0.65], [0, h * 0.4 - bury, 0], 0.6);
   spec.holeBlend = 0.006;
+  addWarp(spec, rng, S * 0.07, S * 0.55, 4);
   return spec;
 }
 
@@ -425,6 +482,7 @@ function rockLava(rng: Rng, S: number): SdfSpec {
     spec.prims.push(ell([Math.cos(a) * w * 0.5, h * rng.range(0.25, 0.45) - bury, Math.sin(a) * w * 0.4], [w * rng.range(0.4, 0.6), h * rng.range(0.3, 0.45), w * rng.range(0.35, 0.55)], rng.range(-0.3, 0.3), rng.range(0, 3), 0));
   }
   addPockets(spec, rng, rng.int(3, 6), [S * 0.025, S * 0.05], [0.15, 0.35], [0, h * 0.4 - bury, 0]);
+  addWarp(spec, rng, S * 0.08, S * 0.6, 4);
   return spec;
 }
 
@@ -465,6 +523,7 @@ function rockRiver(rng: Rng, S: number): SdfSpec {
   if (rng.chance(0.25)) {
     spec.prims.push(ell([w * 0.55, h * 0.5, d * 0.3], [w * 0.5, h * 0.7, d * 0.6], 0, rng.range(0, 3), 0));
   }
+  addWarp(spec, rng, S * 0.03, S * 1.2, 2);
   return spec;
 }
 
@@ -483,6 +542,7 @@ function rockTexas(rng: Rng, S: number): SdfSpec {
   addTunnels(spec, rng, rng.int(2, 5), [S * 0.04, S * 0.085], [0, h * 0.4 - bury, 0], w);
   addPockets(spec, rng, rng.int(3, 6), [S * 0.03, S * 0.06], [0.2, 0.45], [0, h * 0.4 - bury, 0]);
   spec.holeBlend = 0.008;
+  addWarp(spec, rng, S * 0.07, S * 0.6, 4);
   return spec;
 }
 
@@ -509,6 +569,7 @@ function rockPetrified(rng: Rng, S: number, shape: DecorShape): SdfSpec {
   }
   addCuts(spec, rng, rng.int(1, 3), 0.1, [0.88, 0.97]);
   spec.cutBlend = 0.003;
+  addWarp(spec, rng, S * 0.02, S * 0.7, 2);
   return spec;
 }
 
@@ -524,6 +585,7 @@ function rockElephant(rng: Rng, S: number): SdfSpec {
   }
   addCuts(spec, rng, rng.int(2, 4), 0, [0.85, 0.95]);
   spec.cutBlend = 0.012;
+  addWarp(spec, rng, S * 0.06, S * 0.7, 3);
   return spec;
 }
 
@@ -538,6 +600,7 @@ function rockFrodo(rng: Rng, S: number): SdfSpec {
     spec.prims.push(ell([Math.cos(a) * w * 0.5, h * rng.range(0.2, 0.4) - bury, Math.sin(a) * w * 0.35], [w * rng.range(0.4, 0.6), h * 0.4, w * 0.45], rng.range(-0.3, 0.3), rng.range(0, 3), rng.range(-0.4, 0.4)));
   }
   addCuts(spec, rng, rng.int(6, 9), -0.15, [0.72, 0.9]);
+  addWarp(spec, rng, S * 0.05, S * 0.6, 3);
   return spec;
 }
 
@@ -548,51 +611,76 @@ export function liveRockForm(seed: number): LiveRockForm {
 }
 
 function rockLive(rng: Rng, S: number, seed: number, shape: DecorShape): SdfSpec {
-  const spec = newSdf(0.035);
+  const spec = newSdf(0.02);
   const form = liveRockForm(seed);
   const w = S * 0.5;
-  const bury = 0.015;
+  const bury = 0.012;
   const blob = (c: V3, r: V3) => spec.prims.push(ell(c, r, rng.range(-0.4, 0.4), rng.range(0, 3), rng.range(-0.4, 0.4)));
-  if (form === 'mound') {
-    const h = S * rng.range(0.45, 0.7);
-    blob([0, h * 0.4 - bury, 0], [w * 0.8, h * 0.55, w * 0.65]);
-    for (let i = 0; i < rng.int(3, 6); i++) {
-      const a = rng.range(0, Math.PI * 2);
-      blob([Math.cos(a) * w * rng.range(0.3, 0.7), h * rng.range(0.25, 0.75) - bury, Math.sin(a) * w * rng.range(0.25, 0.5)], [w * rng.range(0.25, 0.45), h * rng.range(0.2, 0.4), w * rng.range(0.25, 0.4)]);
+  /** Knobs and short branch stubs sticking out of the body (reef rock is knobbly, never smooth). */
+  const knobs = (n: number, c: V3, ext: V3, upOnly = false) => {
+    for (let i = 0; i < n; i++) {
+      let d = randomUnit(rng);
+      if (upOnly || d[1] < -0.3) d = vnorm([d[0], Math.abs(d[1]) * 0.8 + 0.1, d[2]]);
+      const at: V3 = [c[0] + d[0] * ext[0] * 0.8, c[1] + d[1] * ext[1] * 0.8, c[2] + d[2] * ext[2] * 0.8];
+      const len = w * rng.range(0.14, 0.32);
+      const rad = len * rng.range(0.35, 0.6);
+      // Ellipsoid elongated along d: orient its x axis with yaw/pitch of d.
+      const yaw = Math.atan2(-d[2], d[0]);
+      const pitch = Math.asin(Math.max(-1, Math.min(1, d[1])));
+      spec.prims.push({ t: 'ell', c: [at[0] + d[0] * len * 0.4, at[1] + d[1] * len * 0.4, at[2] + d[2] * len * 0.4], r: [len, rad, rad * rng.range(0.8, 1.1)], m: eulerXYZ(0, yaw, pitch) });
     }
+  };
+  if (form === 'mound') {
+    const h = S * rng.range(0.38, 0.55);
+    const body: V3 = [w * 0.75, h * 0.5, w * 0.6];
+    blob([0, h * 0.42 - bury, 0], body);
+    for (let i = 0; i < rng.int(2, 4); i++) {
+      const a = rng.range(0, Math.PI * 2);
+      blob([Math.cos(a) * w * rng.range(0.3, 0.6), h * rng.range(0.2, 0.6) - bury, Math.sin(a) * w * rng.range(0.2, 0.45)], [w * rng.range(0.25, 0.42), h * rng.range(0.22, 0.38), w * rng.range(0.22, 0.36)]);
+    }
+    knobs(rng.int(5, 9), [0, h * 0.42 - bury, 0], body);
   } else if (form === 'shelf') {
-    // A low base with a flat table jutting out — corals sit on top, fish shelter below.
-    const h = S * rng.range(0.4, 0.6);
-    blob([-w * 0.3, h * 0.35 - bury, 0], [w * 0.5, h * 0.5, w * 0.5]);
-    spec.prims.push(ell([w * 0.25, h * 0.75, rng.range(-0.05, 0.05)], [w * 0.75, h * 0.16, w * 0.55], rng.range(-0.08, 0.08), rng.range(-0.3, 0.3), rng.range(-0.12, 0.05)));
-    for (let i = 0; i < rng.int(2, 4); i++) blob([rng.range(-0.6, 0.6) * w, h * rng.range(0.3, 0.8), rng.range(-0.3, 0.3) * w], [w * rng.range(0.2, 0.35), h * rng.range(0.15, 0.3), w * rng.range(0.2, 0.3)]);
+    // A low base with a flat, knobbly table jutting out — corals on top, shade below.
+    const h = S * rng.range(0.35, 0.5);
+    blob([-w * 0.3, h * 0.35 - bury, 0], [w * 0.45, h * 0.48, w * 0.45]);
+    const table: V3 = [w * 0.72, h * 0.15, w * 0.5];
+    spec.prims.push(ell([w * 0.22, h * 0.72, rng.range(-0.03, 0.03)], table, rng.range(-0.08, 0.08), rng.range(-0.3, 0.3), rng.range(-0.1, 0.06)));
+    knobs(rng.int(4, 7), [w * 0.22, h * 0.72, 0], table, true);
+    knobs(rng.int(2, 4), [-w * 0.3, h * 0.35 - bury, 0], [w * 0.45, h * 0.48, w * 0.45]);
   } else if (form === 'pillar') {
-    const h = S * rng.range(0.85, 1.25);
+    const h = S * rng.range(0.6, 0.85);
     let y = -bury;
-    const segs = rng.int(3, 4);
+    const segs = rng.int(2, 3);
     let x = 0, z = 0;
     for (let i = 0; i < segs; i++) {
-      const rr = w * rng.range(0.38, 0.55) * (1 - i * 0.12);
+      const rr = w * rng.range(0.38, 0.52) * (1 - i * 0.12);
       const sh = h / segs;
-      blob([x, y + sh * 0.6, z], [rr, sh * 0.75, rr * rng.range(0.7, 0.95)]);
+      blob([x, y + sh * 0.6, z], [rr, sh * 0.72, rr * rng.range(0.7, 0.95)]);
+      knobs(rng.int(2, 4), [x, y + sh * 0.6, z], [rr, sh * 0.72, rr]);
       y += sh;
       x += rng.range(-0.25, 0.25) * rr;
       z += rng.range(-0.15, 0.15) * rr;
     }
   } else {
     // Arch: two feet joined by a bridge, with a tunnel underneath.
-    const h = S * rng.range(0.55, 0.75);
+    const h = S * rng.range(0.5, 0.65);
     const span = w * rng.range(0.75, 0.95);
     blob([-span, h * 0.4 - bury, 0], [w * 0.38, h * 0.55, w * 0.42]);
     blob([span, h * 0.35 - bury, rng.range(-0.02, 0.02)], [w * 0.35, h * 0.5, w * 0.4]);
-    spec.prims.push(ell([0, h * 0.78, 0], [span * 1.25, h * 0.24, w * 0.38], rng.range(-0.1, 0.1), rng.range(-0.15, 0.15), rng.range(-0.12, 0.12)));
+    const bridge: V3 = [span * 1.25, h * 0.22, w * 0.38];
+    spec.prims.push(ell([0, h * 0.78, 0], bridge, rng.range(-0.1, 0.1), rng.range(-0.15, 0.15), rng.range(-0.12, 0.12)));
+    knobs(rng.int(4, 7), [0, h * 0.8, 0], bridge, true);
     spec.holes.push({ a: [0, h * 0.28, -w * 1.2], b: [0, h * 0.28, w * 1.2], r: Math.min(span * 0.62, h * 0.4) });
     shape.cover.push({ p: [0, h * 0.25, 0], radius: Math.min(span * 0.55, h * 0.3), kind: 'cave' });
   }
-  const center: V3 = [0, S * 0.25, 0];
-  addPockets(spec, rng, rng.int(4, 9), [S * 0.025, S * 0.07], [0.15, 0.45], center);
-  if (form !== 'arch' && rng.chance(0.6)) addTunnels(spec, rng, rng.int(1, 2), [S * 0.04, S * 0.07], center, w * 0.6);
-  spec.holeBlend = 0.01;
+  // Broken faces where the rock was quarried/fractured.
+  addCuts(spec, rng, rng.int(1, 3), 0.05, [0.86, 0.96]);
+  spec.cutBlend = 0.006;
+  const center: V3 = [0, S * 0.22, 0];
+  addPockets(spec, rng, rng.int(6, 12), [S * 0.02, S * 0.06], [0.15, 0.45], center);
+  if (form !== 'arch' && rng.chance(0.6)) addTunnels(spec, rng, rng.int(1, 2), [S * 0.035, S * 0.06], center, w * 0.6);
+  spec.holeBlend = 0.008;
+  addWarp(spec, rng, S * 0.06, S * 0.5, 4);
   return spec;
 }
 
@@ -671,6 +759,7 @@ function caveRock(rng: Rng, S: number, shape: DecorShape): SdfSpec {
   }
   shape.colliders.push({ type: 'capsule', a: [-pillarX * 0.9, h * 0.8, -w * 0.05], b: [pillarX * 0.9, h * 0.8, -w * 0.05], radius: h * 0.22, cover: true });
   shape.cover.push({ p: [0, ty, 0], radius: tunnelR * 0.85, kind: 'cave' });
+  addWarp(spec, rng, S * 0.04, S * 0.6, 3);
   return spec;
 }
 
@@ -725,7 +814,7 @@ interface WoodStyle {
 }
 
 const WOOD: Record<string, WoodStyle> = {
-  spiderwood: { trunks: [5, 8], r0: [0.006, 0.011], len: [0.2, 0.34], elev: [0.35, 1.15], wander: 0.42, upBias: 0.05, arch: 0.25, taper: 0.8, tipR: 0.0014, branchProb: 0.2, branchAngle: [0.35, 0.8], childScale: 0.68, childLen: 0.62, maxDepth: 3, stepLen: 0.012, spiral: 0.4, yawSpread: Math.PI * 2 },
+  spiderwood: { trunks: [4, 6], r0: [0.007, 0.012], len: [0.22, 0.36], elev: [0.35, 1.1], wander: 0.36, upBias: 0.05, arch: 0.25, taper: 0.78, tipR: 0.0018, branchProb: 0.11, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.55, maxDepth: 2, stepLen: 0.014, spiral: 0.35, yawSpread: Math.PI * 2 },
   'redmoor-root': { trunks: [4, 7], r0: [0.006, 0.012], len: [0.2, 0.3], elev: [0.6, 1.3], wander: 0.35, upBias: 0.09, arch: 0.1, taper: 0.82, tipR: 0.0012, branchProb: 0.26, branchAngle: [0.3, 0.7], childScale: 0.66, childLen: 0.6, maxDepth: 3, stepLen: 0.012, spiral: 0.3, yawSpread: Math.PI * 1.4 },
   manzanita: { trunks: [1, 2], r0: [0.018, 0.026], len: [0.26, 0.34], elev: [0.9, 1.35], wander: 0.16, upBias: 0.03, arch: 0.05, taper: 0.72, tipR: 0.0025, branchProb: 0.17, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.62, maxDepth: 3, stepLen: 0.016, spiral: 0.1, yawSpread: 1.2 },
   mopani: { trunks: [1, 2], r0: [0.03, 0.045], len: [0.16, 0.26], elev: [0.05, 0.5], wander: 0.28, upBias: 0.0, arch: 0.15, taper: 0.45, tipR: 0.012, branchProb: 0.1, branchAngle: [0.5, 1.0], childScale: 0.62, childLen: 0.5, maxDepth: 2, stepLen: 0.016, spiral: 0.2, yawSpread: 1.6 },
@@ -900,7 +989,11 @@ function rubble(rng: Rng, S: number): Branch[] {
 // ---------------------------------------------------------------------------------------------
 
 function primColliders(spec: SdfSpec, shape: DecorShape): void {
+  // Knobs and small lobes don't matter for steering; keep the major masses only.
+  const size = (p: SdfPrim) => (p.t === 'ell' ? Math.max(p.r[0], p.r[1], p.r[2]) : p.t === 'box' ? Math.max(p.h[0], p.h[1], p.h[2]) : p.r + Math.hypot(p.b[0] - p.a[0], p.b[1] - p.a[1], p.b[2] - p.a[2]) / 2);
+  const biggest = Math.max(...spec.prims.map(size));
   for (const p of spec.prims) {
+    if (p.t !== 'box' && size(p) < biggest * 0.45) continue;
     if (p.t === 'ell') {
       const r = p.r;
       const order = [0, 1, 2].sort((i, j) => r[j] - r[i]);
@@ -1053,8 +1146,8 @@ function buildShape(item: Pick<DecorItem, 'kind' | 'variant' | 'seed'>): DecorSh
         const mid: V3 = [(a.c[0] + b.c[0]) / 2, Math.max(0.012, Math.min(a.c[1], b.c[1]) * 0.5), (a.c[2] + b.c[2]) / 2 + Math.max(a.r[2], b.r[2]) * 0.6];
         shape.cover.push({ p: mid, radius: Math.min(a.r[0], b.r[0]) * 0.35, kind: 'crevice' });
       }
-      // Holes big enough for small fish are cover too.
-      for (const h of shape.sdf.holes) {
+      // Holes big enough for small fish are cover too (the largest few).
+      for (const h of [...shape.sdf.holes].sort((a, b) => b.r - a.r).slice(0, 3)) {
         if (h.r < 0.012) continue;
         shape.cover.push({ p: [(h.a[0] + h.b[0]) / 2, Math.max(0.01, (h.a[1] + h.b[1]) / 2), (h.a[2] + h.b[2]) / 2], radius: h.r * 0.8, kind: 'crevice' });
       }
@@ -1283,18 +1376,41 @@ export function sampleHostSurface(item: DecorItem, center: V3, radius: number, c
   return out;
 }
 
+/** Local bounding spheres that tightly cover a shape (prims, branch points, small parts). */
+function coverSpheres(shape: DecorShape): { c: V3; r: number }[] {
+  const out: { c: V3; r: number }[] = [];
+  if (shape.sdf) {
+    for (const p of shape.sdf.prims) {
+      if (p.t === 'ell') out.push({ c: p.c, r: Math.max(p.r[0], p.r[1], p.r[2]) });
+      else if (p.t === 'box') out.push({ c: p.c, r: Math.hypot(p.h[0], p.h[1], p.h[2]) });
+      else {
+        const n = 4;
+        for (let i = 0; i <= n; i++) out.push({ c: [p.a[0] + (p.b[0] - p.a[0]) * (i / n), p.a[1] + (p.b[1] - p.a[1]) * (i / n), p.a[2] + (p.b[2] - p.a[2]) * (i / n)], r: p.r });
+      }
+    }
+  }
+  for (const b of shape.branches ?? []) b.pts.forEach((p, i) => out.push({ c: p, r: b.r[i] }));
+  for (const s of shape.pebbles ?? []) out.push({ c: s.c, r: Math.max(s.r[0], s.r[2]) });
+  for (const l of shape.leaves ?? []) out.push({ c: l.c, r: l.len * 0.5 });
+  for (const s of shape.shells ?? []) out.push({ c: s.c, r: s.size * 0.55 });
+  if (!out.length) {
+    const b = shape.bounds;
+    for (let i = 0; i < 8; i++) out.push({ c: [i & 1 ? b.max[0] : b.min[0], i & 2 ? b.max[1] : b.min[1], i & 4 ? b.max[2] : b.min[2]], r: 0 });
+  }
+  return out;
+}
+
 /** World-space axis-aligned bounds of an item (for placement & picking proxies). */
 export function itemWorldBounds(item: DecorItem): { min: V3; max: V3 } {
   const shape = decorShape(item);
   const xf = itemTransform(item);
   const min: V3 = [1e9, 1e9, 1e9], max: V3 = [-1e9, -1e9, -1e9];
-  const b = shape.bounds;
-  for (let i = 0; i < 8; i++) {
-    const p: V3 = [i & 1 ? b.max[0] : b.min[0], i & 2 ? b.max[1] : b.min[1], i & 4 ? b.max[2] : b.min[2]];
-    toWorld(xf, p, _w);
+  for (const s of coverSpheres(shape)) {
+    toWorld(xf, s.c, _w);
+    const r = s.r * xf.s;
     for (let k = 0; k < 3; k++) {
-      min[k] = Math.min(min[k], _w[k]);
-      max[k] = Math.max(max[k], _w[k]);
+      min[k] = Math.min(min[k], _w[k] - r);
+      max[k] = Math.max(max[k], _w[k] + r);
     }
   }
   return { min, max };

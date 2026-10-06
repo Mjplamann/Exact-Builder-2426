@@ -100,6 +100,7 @@ export function patchPlant(material: Material, opts: PlantPatchOptions = {}): vo
     uDaylight: GLOBALS.uDaylight,
     uMoonlight: GLOBALS.uMoonlight,
     uLightColor: GLOBALS.uLightColor,
+    uLightDir: GLOBALS.uLightDir,
     uPolyp: DECOR_UNIFORMS.uPolyp,
     uSwayScale: DECOR_UNIFORMS.uSwayScale,
     uSelColor: DECOR_UNIFORMS.uSelColor,
@@ -107,9 +108,11 @@ export function patchPlant(material: Material, opts: PlantPatchOptions = {}): vo
     uFluor: { value: fluor },
     uSelU: selU ?? { value: 0 },
   };
+  // The patch key must encode every code variant: three caches programs by this key.
+  const variant = `${bend ? 'b' : ''}${opts.depthOnly ? 'd' : ''}${selU ? 'u' : ''}${opts.glowAttr ? 'g' : ''}`;
   addShaderPatch(
     material,
-    'decor-plant',
+    `decor-plant-${variant}`,
     (shader: WebGLProgramParametersWithUniforms) => {
       Object.assign(shader.uniforms, uniforms);
       let vs = shader.vertexShader;
@@ -117,7 +120,7 @@ export function patchPlant(material: Material, opts: PlantPatchOptions = {}): vo
         '#include <common>',
         /* glsl */ `#include <common>
 attribute vec4 aSway;
-${bend ? 'attribute vec4 aLeaf;' : ''}
+${bend ? 'attribute vec4 aLeaf;\nattribute float aWidth;' : ''}
 ${selU || opts.depthOnly ? '' : 'attribute float aSel;'}
 ${opts.glowAttr ? 'attribute float aGlow;' : ''}
 uniform float uTime;
@@ -134,7 +137,10 @@ varying float vAlong;
 vec3 dcLeafBend(vec3 p, inout vec3 n) {
 ${
   bend
-    ? `  float ext = aLeaf.w;
+    ? `  // Leaf matrices scale uniformly by length; the width ratio is applied here so twisting
+  // and bending stay proportional.
+  p.x *= aWidth;
+  float ext = aLeaf.w;
   float sy = 1.0;
   float kMul = 1.0;
   if (ext > 0.0) sy = mix(1.0 - ext, 1.0, uPolyp);
@@ -235,6 +241,7 @@ uniform vec3 uFluor;
 uniform float uDaylight;
 uniform float uMoonlight;
 uniform vec3 uLightColor;
+uniform vec3 uLightDir;
 uniform float uTime;
 uniform vec3 uSelColor;
 varying float vSel;
@@ -245,11 +252,14 @@ varying float vAlong;
       fs = fs.replace(
         '#include <opaque_fragment>',
         /* glsl */ `{
-  vec3 dcUpV = normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz);
   vec3 dcV = normalize(vViewPosition);
-  // Light from above passing through the leaf toward the viewer.
-  float dcBack = clamp(-dot(normal, dcUpV), 0.0, 1.0) * 0.75 + 0.25 * clamp(dot(-dcV, dcUpV) * 2.0, 0.0, 1.0);
-  outgoingLight += diffuseColor.rgb * (0.55 + 0.45 * diffuseColor.rgb) * uTransl * dcBack * uLightColor * (0.12 + 0.88 * uDaylight);
+  // Thin-leaf transmission: when we see the unlit side of a leaf, the key light shines through it
+  // (∝ |N·L|, irradiance ≈ 5·daylight / π), plus light scattered inside the blade. Transmitted
+  // light is deeper and more saturated than reflected light.
+  vec3 dcL = normalize((viewMatrix * vec4(uLightDir, 0.0)).xyz);
+  float dcNL = dot(normal, dcL);
+  vec3 dcTr = diffuseColor.rgb * (0.45 + 0.55 * diffuseColor.rgb / max(max(diffuseColor.r, diffuseColor.g), max(diffuseColor.b, 0.05)));
+  outgoingLight += dcTr * uTransl * (1.6 * uDaylight + 0.15 * uMoonlight) * uLightColor * (max(-dcNL, 0.0) + 0.25);
   // Fluorescence: excited by the blue part of the light (actinic), faint under moonlight.
   float dcActinic = clamp(uLightColor.b / max(uLightColor.r, 0.05), 0.4, 3.0);
   outgoingLight += uFluor * vGlow * dcActinic * (0.22 * uDaylight + 0.35 * uMoonlight);
@@ -305,7 +315,7 @@ export function patchSurfaceDetail(material: Material, d: SurfaceDetail): void {
   };
   addShaderPatch(
     material,
-    'decor-surface',
+    `decor-surface${d.lattice ? '-lattice' : ''}`,
     (shader) => {
       Object.assign(shader.uniforms, uniforms);
       shader.vertexShader = shader.vertexShader

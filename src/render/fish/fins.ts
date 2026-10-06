@@ -148,8 +148,9 @@ export function buildMedianFin(
         const x = bx + Math.sin(rake + curve * w * 0.5) * r;
         const yOff = Math.cos(rake + curve * w * 0.5) * r;
         const y = ventral ? by - yOff : by + yOff;
-        // Twin anal fins splay apart toward their tips.
-        const z = sheet === 0 ? 0 : sheet * (0.004 + yOff * 0.55);
+        // Twin anal fins splay apart toward their tips; flowing fins ripple into pleats.
+        const pleat = fin.shape === 'flowing' ? 0.04 * fin.height * Math.pow(w, 1.5) * Math.sin(u * Math.PI * 5 + 0.4) : 0;
+        const z = (sheet === 0 ? 0 : sheet * (0.004 + yOff * 0.55)) + pleat;
         void a;
         const [uu, vv] = cellUV(cell, w, u * 2 - 1);
         gb.v(x, y, z, uu, vv, x, part, 0, 0, w, u * 2 - 1, packSideFlow(sheet, flow), r);
@@ -308,6 +309,9 @@ export function buildCaudalFin(gb: GeoBuilder, prof: BodyProfile, body: Resolved
   const hb = Math.max(0.006, ((T - B) / 2) * (shape === 'continuous' ? 0.9 : 1.05));
   const flow = caudalFlow(shape, S);
   const droop = caudalDroop(shape);
+  const longTail = shape === 'veil' || shape === 'halfmoon' || shape === 'delta' || shape === 'round-flowing' || shape === 'crowntail' || shape === 'double' || ((shape === 'fan' || shape === 'spade') && S > 0.6);
+  const pleats = longTail ? 0.035 : 0;
+  const pleatN = shape === 'halfmoon' || shape === 'crowntail' ? 9 : 6;
   // Extra rays near the lobe edges so lyre filaments and lobe tips stay crisp.
   const nu = opts.nu + (shape === 'lyre' || shape === 'sword' ? 6 : 0);
   const nw = opts.nw;
@@ -332,8 +336,10 @@ export function buildCaudalFin(gb: GeoBuilder, prof: BodyProfile, body: Resolved
         let y = by + Math.sin(b) * r;
         const p = x - x0;
         y -= droop * p * p;
+        // Long soft tails fall into gentle pleats (ruffles between ray groups).
+        const pleat = pleats > 0 ? pleats * S * Math.pow(w, 1.6) * Math.sin(u * Math.PI * pleatN + 0.7) : 0;
         // Twin tails (fancy goldfish): joined along the top edge, splayed apart below.
-        const z = sheet === 0 ? 0 : sheet * Math.max(0, (by + hb * 0.9 - y)) * 0.6 * (0.3 + 0.7 * w);
+        const z = (sheet === 0 ? 0 : sheet * Math.max(0, (by + hb * 0.9 - y)) * 0.6 * (0.3 + 0.7 * w)) + pleat;
         const [uu, vv] = cellUV(ATLAS.caudal, w, u * 2 - 1);
         gb.v(x, y, z, uu, vv, x, PART.caudal, 0, 0, w, u * 2 - 1, packSideFlow(sheet, flow), r);
       }

@@ -1,6 +1,8 @@
 import type { App } from '../../app/App';
 import type { FishState, Sex, Species } from '../../core/types';
+import { Vector3 } from 'three';
 import { attachFish, makeFishEntity } from '../../core/world';
+import { substrateHeight } from '../../core/tankGeometry';
 import { tankBounds } from '../../core/tankGeometry';
 import reference from '../../data/species/reference.json';
 import { sexMatters } from './archetypes';
@@ -39,6 +41,11 @@ function pickSpecies(app: App, filter: string, limit: number): Species[] {
     const terms = f.split(/[,\s]+/).filter(Boolean);
     const out: Species[] = [];
     for (const t of terms) {
+      const exact = app.world.species.get(t);
+      if (exact) {
+        if (!out.includes(exact)) out.push(exact);
+        continue;
+      }
       for (const s of all) {
         if (out.length >= limit) break;
         if (out.includes(s)) continue;
@@ -74,17 +81,34 @@ export function runGallery(app: App, filter: string, opts: GalleryOptions = {}):
   world.tank.fish = [];
   const b = tankBounds(world.tank);
   const n = Math.max(1, species.length);
-  const W = b.halfW * 2 * 0.92;
-  const floor = 0.06;
-  const H = b.surfaceY - floor - 0.03;
-  const aspect = W / H;
+  // Lay the grid out in the part of the tank the camera actually sees, on a plane toward the
+  // front glass.
+  const planeZ = b.halfD * 0.35;
+  const cam = app.engine.camera;
+  cam.updateMatrixWorld();
+  const onPlane = (nx: number, ny: number) => {
+    const p = new Vector3(nx, ny, 0.5).unproject(cam);
+    const d = p.sub(cam.position).normalize();
+    const t = (planeZ - cam.position.z) / (Math.abs(d.z) > 1e-6 ? d.z : -1e-6);
+    return cam.position.clone().addScaledVector(d, t);
+  };
+  const lo = onPlane(-1, -1), hi = onPlane(1, 1);
+  const left = Math.max(-b.halfW, lo.x), right = Math.min(b.halfW, hi.x);
+  const floor = Math.max(lo.y, substrateHeight(world.tank, 0, planeZ) + 0.02);
+  const top = Math.min(hi.y, b.surfaceY - 0.02);
+  const W = (right - left) * 0.94;
+  const H = (top - floor) * 0.94;
+  const x0 = (left + right) / 2 - W / 2;
+  const yTop = (top + floor) / 2 + H / 2;
+  const aspect = W / Math.max(0.01, H);
   const cols = Math.max(1, Math.round(Math.sqrt(n * aspect * 0.55)));
   const rows = Math.ceil(n / cols);
   const cellW = W / cols, cellH = H / rows;
   const now = world.clock.simTime;
   species.forEach((sp, i) => {
     const c = i % cols, r = Math.floor(i / cols);
-    const sex: Sex = opts.sex ?? (sexMatters(sp, 'male') ? 'male' : sp.female ? 'female' : 'unknown');
+    // The species entry describes the showier sex; a female override marks the duller one.
+    const sex: Sex = opts.sex ?? (sexMatters(sp, 'male') ? 'male' : 'unknown');
     const fit = Math.min(cellW * 0.78, cellH * 1.5) * 100;
     const inv = sp.group !== 'fish';
     const lengthCm = opts.realSize ? sp.adultLengthCm * 0.85 : Math.min(fit * (inv ? 0.7 : 1), 60);
@@ -102,12 +126,18 @@ export function runGallery(app: App, filter: string, opts: GalleryOptions = {}):
       stress: 0,
       stomach: 0.5,
       generation: 0,
-      pos: [-b.halfW * 0.92 + (c + 0.5) * cellW, b.surfaceY - 0.03 - (r + 0.5) * cellH, b.halfD * 0.35],
+      pos: [x0 + (c + 0.5) * cellW, yTop - (r + 0.5) * cellH, planeZ],
       heading: 0,
     };
     const e = makeFishEntity(world, state);
     if (!e) return;
     e.kin.forward = [1, 0, 0];
+    // Flat animals are shown from above (as you'd see them on the bottom), tilted toward the glass.
+    const a = sp.body.archetype;
+    if (a === 'ray' || a === 'stingray' || a === 'starfish' || a === 'brittle-star') {
+      const l = Math.hypot(1, 1.1);
+      e.kin.up = [0, 1 / l, 1.1 / l];
+    }
     e.kin.tailAmp = opts.tailAmp ?? 0.35;
     e.kin.finAmp = 0.35;
     e.kin.tailPhase = i * 1.3;

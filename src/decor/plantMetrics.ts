@@ -76,8 +76,11 @@ export function plantMetrics(sp: PlantSpecies, p: PlantInstance, tank: TankState
   return { anchor: [x, substrateHeight(tank, x, z), z], normal: [0, 1, 0], height, spread, growth: g };
 }
 
-/** Height of an anemone's oral disc above its anchor (fraction of plant height). */
-export const ANEMONE_DISC_FRAC = 0.72;
+/**
+ * Height of an anemone's oral disc above its anchor (fraction of plant height). The column is
+ * mostly hidden in a crevice or the sand; the disc sits close to the rock, tentacles above it.
+ */
+export const ANEMONE_DISC_FRAC = 0.3;
 
 /** World position of an anemone's oral disc center (where clownfish host). */
 export function anemoneDisc(m: PlantMetrics): V3 {

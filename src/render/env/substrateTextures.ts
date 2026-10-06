@@ -128,16 +128,16 @@ export const SUBSTRATE_SPECS: Record<Exclude<SubstrateKind, 'bare'>, SubstrateSp
     ],
   },
   'pea-gravel': {
-    tile: 0.22, creviceDark: 0.55, voidColor: [0.16, 0.14, 0.12], macroAmp: 0.08, macroTint: [1.0, 0.92, 0.82], normalScale: 1.5, undulation: 0.006,
+    tile: 0.22, creviceDark: 0.45, voidColor: [0.2, 0.18, 0.15], macroAmp: 0.08, macroTint: [1.0, 0.92, 0.82], normalScale: 1.5, undulation: 0.006,
     layers: [
       sand([{ c: [0.46, 0.41, 0.34], w: 1 }, { c: [0.36, 0.32, 0.27], w: 1 }], 0.3, 0.7, { coverage: 2.0 }),
       {
         coverage: 2.6, rMin: 2.2, rMax: 4.6, aspect: [1.05, 1.55], rough: 0.1, profile: 'dome', height: 0.8, speckle: 0.07, jitter: 0.06,
         roughness: 0.36,
         palette: [
-          { c: [0.76, 0.61, 0.43], w: 3 }, { c: [0.87, 0.81, 0.7], w: 2.2 }, { c: [0.55, 0.4, 0.28], w: 2 },
-          { c: [0.63, 0.61, 0.58], w: 2 }, { c: [0.68, 0.48, 0.34], w: 1.2 }, { c: [0.36, 0.33, 0.31], w: 1.2 },
-          { c: [0.82, 0.7, 0.5], w: 1.5 },
+          { c: [0.72, 0.6, 0.45], w: 3 }, { c: [0.8, 0.75, 0.66], w: 2.2 }, { c: [0.56, 0.44, 0.33], w: 2 },
+          { c: [0.62, 0.6, 0.57], w: 2 }, { c: [0.66, 0.5, 0.38], w: 1.2 }, { c: [0.45, 0.42, 0.39], w: 1.2 },
+          { c: [0.78, 0.68, 0.52], w: 1.5 },
         ],
       },
     ],

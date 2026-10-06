@@ -161,12 +161,12 @@ export class WaterSurface {
           if (uHasRefl > 0.5) {
             vec4 rp = uReflMatrix * vec4(p, 1.0);
             // Ripples smear the mirror image mostly vertically (the band is seen nearly edge-on).
-            vec2 ruv = rp.xy / rp.w + g * vec2(0.012, 0.09);
+            vec2 ruv = rp.xy / rp.w + g * vec2(0.02, 0.15);
             mirrored = texture2D(uRefl, ruv).rgb;
           } else {
             // Without a reflection pass: the mirrored upper water column (veil, brighter near the front).
             float near = clamp((p.z + uwTankHalf.z) / (2.0 * uwTankHalf.z), 0.0, 1.0);
-            mirrored = uwVeil(uwVeilColor * (0.6 + 0.5 * near) + lamp * 0.02, p);
+            mirrored = uwVeil(uwVeilColor * (0.3 + 0.4 * near) + lamp * 0.012, p);
           }
           mirrored *= clamp(1.0 + tilt * 2.2, 0.7, 1.35);
           // Lamp-lit air through the Snell window (only where steep ripples open it).

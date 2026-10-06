@@ -190,14 +190,14 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
       const half = Math.max(p.width / 2, ay);
       const x0 = p.x0 ?? 0, x1 = p.x1 ?? 1;
       const glow = clamp(p.glow ?? 0, 0, 2);
-      const reach = half * (1.25 + glow * 0.8);
+      const reach = half * (1.3 + glow * 1.6);
       const [c0, c1] = colRange(s, x0 - 0.06, x1 + 0.06);
       const [r0, r1] = rowRange(s, p.y - reach, p.y + reach);
       const edge = Math.max(0.1, ay / half);
       for (let r = r0; r <= r1; r++) {
         const d = Math.abs(s.py[r] - p.y) / half;
         const core = 1 - smooth(1 - edge, 1 + edge, d);
-        const halo = glow > 0 ? glow * 0.28 * Math.exp(-((d - 0.8) * (d - 0.8)) * 2.2) * (d > 0.8 ? 1 : 0) : 0;
+        const halo = glow > 0 ? glow * 0.42 * Math.exp(-((d - 0.85) * (d - 0.85)) * 1.1) * (d > 0.85 ? 1 : 0) : 0;
         const v = Math.max(core, halo);
         if (v <= 0.001) continue;
         for (let c = c0; c <= c1; c++) {
@@ -357,8 +357,8 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
           let y = s.py[r];
           if (wavy > 0) {
             // Vermiculation: sinusoidal + noisy displacement that grows with `wavy`.
-            const k = 2 * Math.PI * (3 + 4 * wavy);
-            y += wavy * spacing * 0.45 * (Math.sin(k * x + y * 3.1) * 0.6 + (fastNoise(x * 9 + (s.seed % 89), y * 4) - 0.5) * 1.6);
+            const k = 2 * Math.PI * (4 + 6 * wavy);
+            y += wavy * spacing * (0.55 * Math.sin(k * x + y * 5.1) + 1.4 * (fastNoise(x * 11 + (s.seed % 89), y * 5) - 0.5));
           }
           let i = n > 1 ? Math.round((y - y0) / spacing) : 0;
           i = clamp(i, 0, n - 1);

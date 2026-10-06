@@ -113,9 +113,15 @@ class Scape {
       rotation: [o.rotX ?? 0, o.rotY ?? this.rng.range(0, Math.PI * 2), o.rotZ ?? 0],
       scale,
     };
-    // Make sure the footprint (after rotation) stays off the glass.
-    const wb = itemWorldBounds(item);
+    // Make sure the footprint (after rotation) stays off the glass: shrink pieces too large for
+    // this tank (a big root in a nano tank), then nudge inward.
     const m = 0.02;
+    let wb = itemWorldBounds(item);
+    const fit = Math.min(1, (this.W - 2 * m) / Math.max(1e-6, wb.max[0] - wb.min[0]), (this.D - 2 * m) / Math.max(1e-6, wb.max[2] - wb.min[2]), (this.H * 0.85) / Math.max(1e-6, wb.max[1] - item.position[1]));
+    if (fit < 1) {
+      item.scale *= Math.max(0.35, fit * 0.97);
+      wb = itemWorldBounds(item);
+    }
     let dx = 0, dz = 0;
     if (wb.min[0] < -this.halfW + m) dx = -this.halfW + m - wb.min[0];
     if (wb.max[0] > this.halfW - m) dx = this.halfW - m - wb.max[0];
@@ -311,11 +317,12 @@ function amazon(tank: TankState, lib: PlantIndex, seed: number) {
     const w = woodPts[Math.floor(s.rng.next() * woodPts.length)];
     s.addPlant(i % 3 === 2 ? bolb : fern, w.p[0], w.p[2], { attachTo: w.host, growth: s.rng.range(0.6, 0.95) });
   }
-  // Frogbit drifting at the surface, mostly over the back and sides, leaving light shafts.
+  // Frogbit drifting at the surface where the flow is calm — toward the sides and corners —
+  // leaving the middle open for light shafts.
   const frog = s.pick('limnobium-laevigatum', 'salvinia-minima', 'phyllanthus-fluitans');
   for (let i = 0; i < Math.round(3 + 3 * k); i++) {
-    const u = s.rng.chance(0.5) ? s.rng.range(0.05, 0.35) : s.rng.range(0.6, 0.95);
-    s.addPlant(frog, s.x(u), s.z(s.rng.range(0.1, 0.55)), { growth: s.rng.range(0.6, 1) });
+    const u = s.rng.chance(0.5) ? s.rng.range(0.04, 0.26) : s.rng.range(0.72, 0.96);
+    s.addPlant(frog, s.x(u), s.z(s.rng.range(0.3, 0.75)), { growth: s.rng.range(0.6, 1) });
   }
   return s.result();
 }
@@ -513,27 +520,55 @@ function nature(tank: TankState, lib: PlantIndex, seed: number) {
 function reef(tank: TankState, lib: PlantIndex, seed: number) {
   const s = new Scape(tank, lib, seed);
   const k = s.k;
+  const rk = Math.min(1.05, Math.max(0.55, k * 0.85));
   const rocks: DecorItem[] = [];
-  const bommie = (u: number, v: number, size: number, arch: boolean) => {
-    const list: DecorItem[] = [];
-    const n = Math.max(2, Math.round(3 * size));
-    for (let i = 0; i < n; i++) {
-      const a = (i / n) * Math.PI * 2 + s.rng.range(-0.4, 0.4);
-      const r = 0.09 * k * size;
-      list.push(s.addDecor('rock', 'live-rock', s.x(u) + Math.cos(a) * r, s.z(v) + Math.sin(a) * r * 0.6, { scale: k * s.rng.range(0.9, 1.25) * Math.sqrt(size), seed: s.liveRockSeed(i === 0 ? 'mound' : s.rng.chance(0.5) ? 'pillar' : 'mound'), sink: 0.015 }));
+  /** Height of existing rock under (x, z), or the sand. */
+  const supportAt = (x: number, z: number, among: DecorItem[]): number => {
+    let y = s.ground(x, z);
+    for (const r of among) {
+      const wb = itemWorldBounds(r);
+      if (x < wb.min[0] || x > wb.max[0] || z < wb.min[2] || z > wb.max[2]) continue;
+      y = Math.max(y, s.topOf(r, x, z));
     }
-    // Stack a shelf or arch on top.
-    const top = list[0];
-    const tx = s.x(u) + s.rng.range(-0.03, 0.03), tz = s.z(v);
-    const ty = Math.max(...list.map((r) => s.topOf(r, tx, tz))) - 0.05 * k;
-    list.push(s.addDecor('rock', 'live-rock', tx, tz, { scale: k * 1.1 * Math.sqrt(size), y: ty, seed: s.liveRockSeed(arch ? 'arch' : 'shelf'), rotY: s.rng.range(-0.4, 0.4) }));
-    void top;
+    return y;
+  };
+  /** A bommie: a base row of rocks, then smaller tiers wedged onto them up to `height` (m). */
+  const bommie = (u: number, v: number, width: number, height: number, arch: boolean): DecorItem[] => {
+    const list: DecorItem[] = [];
+    const cx = s.x(u), cz = s.z(v);
+    const maxY = s.ground(cx, cz) + height;
+    const nBase = Math.max(2, Math.round(width / (0.17 * rk)));
+    for (let i = 0; i < nBase; i++) {
+      const t = nBase > 1 ? i / (nBase - 1) - 0.5 : 0;
+      const x = cx + t * width + s.rng.range(-0.02, 0.02);
+      const z = cz + s.rng.range(-0.05, 0.05) + Math.abs(t) * 0.06;
+      list.push(s.addDecor('rock', 'live-rock', x, z, { scale: rk * s.rng.range(0.8, 1.05), seed: s.liveRockSeed(i % 2 ? 'shelf' : 'mound'), sink: 0.01 }));
+    }
+    // Upper tiers: each rock rests on whatever is below it, slightly bedded in.
+    for (let tier = 1; tier <= 3; tier++) {
+      const n = Math.max(1, nBase - tier);
+      for (let i = 0; i < n; i++) {
+        const t = n > 1 ? i / (n - 1) - 0.5 : s.rng.range(-0.15, 0.15);
+        const x = cx + t * width * (1 - tier * 0.22) + s.rng.range(-0.02, 0.02);
+        const z = cz + s.rng.range(-0.04, 0.02);
+        const y = supportAt(x, z, list) - 0.025 * rk;
+        const sc = rk * (tier === 1 ? s.rng.range(0.75, 0.95) : s.rng.range(0.6, 0.8)) * (1 - (tier - 1) * 0.08);
+        const form: LiveRockForm = tier === 3 || (arch && tier === 2 && i === 0) ? (arch ? 'arch' : 'shelf') : s.rng.chance(0.5) ? 'pillar' : 'mound';
+        const probe: DecorItem = { id: 'probe', kind: 'rock', variant: 'live-rock', seed: s.liveRockSeed(form), position: [x, y, z], rotation: [0, 0, 0], scale: sc };
+        const top = itemWorldBounds(probe).max[1];
+        if (top > maxY) continue;
+        list.push(s.addDecor('rock', 'live-rock', x, z, { scale: sc, y, seed: probe.seed, rotY: s.rng.range(0, Math.PI * 2) }));
+      }
+    }
     rocks.push(...list);
     return list;
   };
-  const main = bommie(1 - PHI, 0.38, 1.6, true);
-  const second = bommie(0.8, 0.42, 1.0, false);
-  if (k > 0.9) bommie(0.08, 0.3, 0.6, false);
+  const H = s.H;
+  const main = bommie(1 - PHI, 0.42, 0.42 * k, H * 0.55, true);
+  const second = bommie(0.8, 0.45, 0.26 * k, H * 0.4, false);
+  if (k > 0.9) bommie(0.1, 0.32, 0.14 * k, H * 0.25, false);
+  // A few loose stones on the sand.
+  for (let i = 0; i < 2; i++) rocks.push(s.addDecor('rock', 'live-rock', s.x(s.rng.range(0.5, 0.65)), s.z(s.rng.range(0.55, 0.7)), { scale: rk * 0.45, seed: s.liveRockSeed('mound'), sink: 0.008 }));
   s.addDecor('coral-skeleton', 'rubble', s.x(0.55), s.z(0.72), { scale: k });
   s.addDecor('coral-skeleton', 'rubble', s.x(0.2), s.z(0.65), { scale: k * 0.8 });
 
