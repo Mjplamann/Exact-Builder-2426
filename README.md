@@ -15,7 +15,7 @@ that swim, school, forage, hide, sleep, breed and grow at their natural rates.
 - **Biology on a sim clock**: von Bertalanffy growth, digestion, health and stress, aging,
   livebearer broods and shrimp colonies, the nitrogen cycle, pH/KH, oxygen, algae, plant and
   coral growth, offline catch-up. Time can run at 1×, 1 min = 1 hour, day or week.
-- **Keeping**: 16 foods, 33 hardscape pieces, 142 plants and corals, nine ready-made aquascapes,
+- **Keeping**: 16 foods, 34 hardscape pieces, 143 plants and corals, nine ready-made aquascapes,
   an aquascape editor, water tests and care, compatibility advice, a journal.
 - Calm, auto-hiding interface that works on desktop and phones (iPhone safe areas, touch).
 
