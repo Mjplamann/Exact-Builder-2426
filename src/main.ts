@@ -1,4 +1,5 @@
 import { App } from './app/App';
+import { CloudSave } from './app/cloudSave';
 
 declare global {
   interface Window {
@@ -6,10 +7,13 @@ declare global {
   }
 }
 
-function boot() {
+async function boot() {
   const canvas = document.getElementById('tank') as HTMLCanvasElement;
   const ui = document.getElementById('ui') as HTMLElement;
-  const app = new App(canvas, ui);
+  // Inside a claude.ai viewer, fetch the person's cloud-saved tank first (resolves at once elsewhere).
+  const cloud = await CloudSave.connect();
+  const cloudTankJson = cloud ? await cloud.load() : null;
+  const app = new App(canvas, ui, { cloud, cloudTankJson });
   window.__app = app;
   app.start();
   // Dev harnesses: ?gallery (species lineup for visual QA).
@@ -24,9 +28,7 @@ function boot() {
   }
 }
 
-try {
-  boot();
-} catch (err) {
+boot().catch((err) => {
   console.error(err);
   const bootEl = document.getElementById('boot');
   if (bootEl) {
@@ -37,4 +39,4 @@ try {
     p.append('Sorry — the aquarium could not start.', document.createElement('br'), small);
     bootEl.replaceChildren(p);
   }
-}
+});

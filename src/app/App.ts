@@ -23,6 +23,7 @@ import { UI } from '../ui/UI';
 import { Ambience } from '../audio/Ambience';
 import type { AppApi, DeepPartial, PickResult, TankPresetInfo } from './AppApi';
 import { PRESETS, buildPresetTank, presetStock } from './presets';
+import type { CloudSave } from './cloudSave';
 
 const AUTOSAVE_SECONDS = 15;
 /** Longest absence we fast-forward (sim time), to keep catch-up bounded. */
@@ -55,13 +56,28 @@ export class App implements AppApi {
   /** Dev/QA switches (gallery mode, screenshots). */
   readonly debug = { freezeBehavior: false, freezeLife: false };
 
-  constructor(canvas: HTMLCanvasElement, uiRoot: HTMLElement) {
+  private cloud: CloudSave | null;
+
+  /**
+   * @param opts.cloud         claude.ai cloud save (null outside a claude.ai viewer)
+   * @param opts.cloudTankJson the tank saved in the cloud, if any — used when newer than the local copy
+   */
+  constructor(canvas: HTMLCanvasElement, uiRoot: HTMLElement, opts: { cloud?: CloudSave | null; cloudTankJson?: string | null } = {}) {
+    this.cloud = opts.cloud ?? null;
     // Data files are validated by the test suite; re-validate at runtime only in development.
     const species = loadBundledSpecies({ validate: import.meta.env.DEV });
     const plants = loadBundledPlants({ validate: import.meta.env.DEV });
     const settings = loadSettings();
 
     let tank = loadTank();
+    if (opts.cloudTankJson) {
+      try {
+        const remote = importTank(opts.cloudTankJson);
+        if (!tank || remote.lastSavedReal > tank.lastSavedReal + 1000) tank = remote;
+      } catch (err) {
+        console.warn('[app] cloud save unreadable — using the local tank', err);
+      }
+    }
     let firstRun = false;
     if (!tank) {
       firstRun = true;
@@ -105,7 +121,7 @@ export class App implements AppApi {
 
     window.addEventListener('resize', () => this.engine.resize());
     document.addEventListener('visibilitychange', () => this.onVisibility());
-    window.addEventListener('pagehide', () => this.save());
+    window.addEventListener('pagehide', () => this.save(true));
   }
 
   // ------------------------------------------------------------------------------------------
@@ -189,7 +205,7 @@ export class App implements AppApi {
   private onVisibility(): void {
     if (document.hidden) {
       this.hiddenAt = Date.now();
-      this.save();
+      this.save(true);
     } else if (this.hiddenAt) {
       this.catchUpSince(this.hiddenAt);
       this.hiddenAt = null;
@@ -252,7 +268,8 @@ export class App implements AppApi {
     this.save();
   }
 
-  save(): void {
+  /** Persist locally (always) and to the cloud (throttled; `force` on leaving the page). */
+  save(force = false): void {
     const w = this.world;
     for (const f of w.fish) {
       f.state.pos = [...f.kin.pos];
@@ -261,6 +278,7 @@ export class App implements AppApi {
     w.tank.simTime = w.clock.simTime;
     w.tank.timeScale = w.clock.timeScale;
     saveTank(w.tank);
+    this.cloud?.save(w.tank, force);
   }
 
   // ------------------------------------------------------------------------------------------
