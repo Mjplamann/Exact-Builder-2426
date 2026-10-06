@@ -466,7 +466,7 @@ export interface CoverPoint {
   position: [number, number, number];
   radius: number;
   ownerId: string;
-  kind: 'cave' | 'overhang' | 'plants' | 'crevice';
+  kind: 'cave' | 'overhang' | 'plants' | 'crevice' | 'anemone' | 'burrow';
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -605,6 +605,14 @@ export interface FishKinematics {
   rest: number;
   /** Behavior label for debugging & the info card. */
   activity: string;
+  /**
+   * Optional body "up" vector (unit). Set for animals oriented to a surface (snails and plecos on
+   * glass, shrimp on wood, upside-down catfish). When absent the renderer uses world up with
+   * pitch/roll applied.
+   */
+  up?: [number, number, number];
+  /** Optional: animal is attached to / walking on a surface (renderer may flatten fins, splay legs). */
+  onSurface?: boolean;
 }
 
 /** A living animal at runtime: persisted state + derived species + transient kinematics. */

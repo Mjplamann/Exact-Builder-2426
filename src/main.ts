@@ -12,6 +12,11 @@ function boot() {
   const app = new App(canvas, ui);
   window.__app = app;
   app.start();
+  // Dev harnesses: ?gallery (species lineup for visual QA).
+  const params = new URLSearchParams(location.search);
+  if (params.has('gallery')) {
+    import('./render/fish/gallery').then((m) => m.runGallery(app, params.get('gallery') ?? '')).catch(console.error);
+  }
   const bootEl = document.getElementById('boot');
   if (bootEl) {
     setTimeout(() => bootEl.classList.add('done'), 300);
