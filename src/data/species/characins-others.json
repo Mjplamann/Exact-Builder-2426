@@ -1,0 +1,8676 @@
+[
+ {
+  "id": "nannostomus-beckfordi",
+  "commonName": "Golden Pencilfish",
+  "scientificName": "Nannostomus beckfordi",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guianas, lower Amazon & Rio Negro — Guyana, Suriname, French Guiana & Brazil",
+  "description": "The hardiest pencilfish, living among dense vegetation in slow streams and floodplain lakes. Males spread their red, white-tipped lower fins at rivals, and at night the bold stripe breaks up into dark blotches.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 45,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.18,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c9a76a",
+   "dorsal": "#7a6236",
+   "ventral": "#efe3c8",
+   "fin": "#e8d9c0",
+   "finOpacity": 0.25,
+   "eye": "#c8502e",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#5d4a2a",
+     "y": 0.58,
+     "width": 0.06,
+     "x0": 0.25,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#e8c470",
+     "y": 0.24,
+     "width": 0.08,
+     "x0": 0.08,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": -0.02,
+     "width": 0.2,
+     "x0": 0,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e0c8a0",
+     "opacity": 0.3,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#16120d",
+       "x0": 0,
+       "x1": 0.3,
+       "y0": -0.25,
+       "y1": 0.25,
+       "softness": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#5d4a2a",
+      "y": 0.58,
+      "width": 0.06,
+      "x0": 0.25,
+      "x1": 0.98
+     },
+     {
+      "type": "stripe",
+      "color": "#e8c470",
+      "y": 0.24,
+      "width": 0.08,
+      "x0": 0.08,
+      "x1": 0.98
+     },
+     {
+      "type": "region",
+      "color": "#c8342a",
+      "x0": 0.3,
+      "x1": 1,
+      "y0": -0.42,
+      "y1": -0.16,
+      "softness": 0.12
+     },
+     {
+      "type": "stripe",
+      "color": "#16120d",
+      "y": -0.02,
+      "width": 0.2,
+      "x0": 0,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d4483a",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#cf3a24",
+      "opacity": 0.75,
+      "edge": "#f2f4f8",
+      "edgeWidth": 0.15
+     },
+     "pelvic": {
+      "color": "#d4402a",
+      "opacity": 0.75,
+      "edge": "#f4f6fa",
+      "edgeWidth": 0.25
+     },
+     "caudal": {
+      "color": "#d8b890",
+      "opacity": 0.4,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#c8342a",
+        "x0": 0,
+        "x1": 0.7,
+        "y0": -1,
+        "y1": -0.25,
+        "softness": 0.3
+       },
+       {
+        "type": "region",
+        "color": "#16120d",
+        "x0": 0,
+        "x1": 0.3,
+        "y0": -0.25,
+        "y1": 0.25,
+        "softness": 0.3
+       }
+      ]
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "nannostomus-eques",
+  "commonName": "Hockeystick Pencilfish",
+  "scientificName": "Nannostomus eques",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin & Rio Negro — Brazil, Colombia & Peru; also Guyana",
+  "description": "Hangs among floating plants at a 45° head-up angle, picking tiny invertebrates from just below the surface. Its dark band sweeps down into the black lower tail lobe, giving the \"hockey stick\" outline; at night it shows dark blotches instead.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 45,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 8,
+  "traits": [
+   "oblique-swimmer",
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.18,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": true,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a89070",
+   "dorsal": "#6a5638",
+   "ventral": "#ece4d6",
+   "fin": "#e4dccb",
+   "finOpacity": 0.22,
+   "eye": "#c9a040",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#d8b86a",
+     "y": 0.22,
+     "width": 0.07,
+     "x0": 0.05,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": -0.06,
+     "width": 0.22,
+     "x0": 0,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e0d8c8",
+     "opacity": 0.3,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#16120d",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.15,
+       "softness": 0.15
+      },
+      {
+       "type": "region",
+       "color": "#b8402a",
+       "x0": 0,
+       "x1": 0.3,
+       "y0": -0.2,
+       "y1": 0.1,
+       "softness": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#c84a32",
+      "opacity": 0.6,
+      "edge": "#f0f0ec",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "nannostomus-unifasciatus",
+  "commonName": "One-lined Pencilfish",
+  "scientificName": "Nannostomus unifasciatus",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Rio Negro & Orinoco basins — Brazil, Colombia, Venezuela & Guyana",
+  "description": "Like the hockeystick pencilfish it rests head-up beneath floating plants. A single black band edged with gold runs from the snout into the lower caudal lobe, which carries a red-and-white blaze in males.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 54,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 8,
+  "traits": [
+   "oblique-swimmer",
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.17,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": true,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8b48a",
+   "dorsal": "#8a7448",
+   "ventral": "#f2ece0",
+   "fin": "#ece6da",
+   "finOpacity": 0.2,
+   "eye": "#d0a040",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#e8cf7a",
+     "y": 0.22,
+     "width": 0.08,
+     "x0": 0.04,
+     "x1": 0.96
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0,
+     "width": 0.18,
+     "x0": 0,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e8e2d6",
+     "opacity": 0.28,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#16120d",
+       "x0": 0,
+       "x1": 0.85,
+       "y0": -0.75,
+       "y1": -0.1,
+       "softness": 0.15
+      },
+      {
+       "type": "region",
+       "color": "#d0382a",
+       "x0": 0,
+       "x1": 0.45,
+       "y0": -0.55,
+       "y1": -0.25,
+       "softness": 0.25
+      }
+     ],
+     "edge": "#f6f6f2",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#cc3a2a",
+      "opacity": 0.75,
+      "edge": "#f6f6f6",
+      "edgeWidth": 0.2,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#16120d",
+        "x0": 0,
+        "x1": 0.35,
+        "y0": -1,
+        "y1": 1,
+        "softness": 0.2
+       }
+      ]
+     },
+     "caudal": {
+      "color": "#e8e2d6",
+      "opacity": 0.3,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#16120d",
+        "x0": 0,
+        "x1": 0.85,
+        "y0": -0.75,
+        "y1": -0.1,
+        "softness": 0.15
+       },
+       {
+        "type": "region",
+        "color": "#e0402c",
+        "x0": 0,
+        "x1": 0.55,
+        "y0": -0.6,
+        "y1": -0.2,
+        "softness": 0.2
+       }
+      ],
+      "edge": "#ffffff",
+      "edgeWidth": 0.1
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "nannostomus-trifasciatus",
+  "commonName": "Three-lined Pencilfish",
+  "scientificName": "Nannostomus trifasciatus",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Rio Negro basins and the Guianas — Brazil, Peru, Colombia & Guyana",
+  "description": "A blackwater species of flooded forest and vegetated margins, marked by three dark lines and red flashes at the base of each fin. A micropredator that needs small live or frozen foods to colour up fully.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   4.5,
+   6.8
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 54,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.18,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": true,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c9ad74",
+   "dorsal": "#6e5a34",
+   "ventral": "#efe6d2",
+   "fin": "#ebe0c8",
+   "finOpacity": 0.22,
+   "eye": "#c04030",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a2c18",
+     "y": 0.52,
+     "width": 0.06,
+     "x0": 0.2,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#ecc865",
+     "y": 0.22,
+     "width": 0.07,
+     "x0": 0.05,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0,
+     "width": 0.18,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2016",
+     "y": -0.46,
+     "width": 0.06,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#cc2a20",
+     "x": 0.28,
+     "y": -0.22,
+     "rx": 0.03,
+     "ry": 0.08
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#ece0c8",
+     "opacity": 0.35,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#d02a22",
+       "x0": 0,
+       "x1": 0.45,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ]
+    },
+    "anal": {
+     "color": "#ece0c8",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#d02a22",
+       "x0": 0,
+       "x1": 0.55,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#d4302a",
+     "opacity": 0.6,
+     "edge": "#f2f2ee",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#e8dcc6",
+     "opacity": 0.28,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#d02a22",
+       "x0": 0,
+       "x1": 0.3,
+       "y0": -0.55,
+       "y1": 0.55,
+       "softness": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "nannostomus-marginatus",
+  "commonName": "Dwarf Pencilfish",
+  "scientificName": "Nannostomus marginatus",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guianas, lower Amazon & Rio Negro — Suriname, Guyana, French Guiana, Brazil, Colombia & Peru",
+  "description": "One of the smallest and stockiest pencilfish, with three black stripes and a ruby-red band. Pairs scatter a few eggs among fine-leaved plants and will eat them if given the chance.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.23,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.38,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 0.6,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8a868",
+   "dorsal": "#7a6236",
+   "ventral": "#eadfc6",
+   "fin": "#e8dcc4",
+   "finOpacity": 0.25,
+   "eye": "#c84a30",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0.44,
+     "width": 0.12,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#d02a22",
+     "y": 0.24,
+     "width": 0.09,
+     "x0": 0.15,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0,
+     "width": 0.18,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": -0.48,
+     "width": 0.1,
+     "x0": 0.25,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8d6b8",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#d02a22",
+       "x0": 0,
+       "x1": 0.75,
+       "y0": -1,
+       "y1": 0.5,
+       "softness": 0.2
+      }
+     ],
+     "edge": "#1a1410",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#d43022",
+     "opacity": 0.7,
+     "edge": "#141010",
+     "edgeWidth": 0.2
+    },
+    "pelvic": {
+     "color": "#d43022",
+     "opacity": 0.7,
+     "edge": "#f0f0f0",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "nannostomus-mortenthaleri",
+  "commonName": "Coral Red Pencilfish",
+  "scientificName": "Nannostomus mortenthaleri",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Peruvian Amazon — Nanay & lower Marañón drainages near Iquitos",
+  "description": "Described in 2001 from fish exported through Iquitos, Peru; males are the most intensely red of all pencilfish. Dominant males hold small spaces among plants and display to each other with spread red, white-tipped fins.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 7,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.21,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8946a",
+   "dorsal": "#7a3c26",
+   "ventral": "#e8ccb4",
+   "fin": "#e0b090",
+   "finOpacity": 0.35,
+   "eye": "#c03028",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c8462e",
+     "x0": 0,
+     "x1": 1,
+     "y0": 0.1,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0,
+     "width": 0.17,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": -0.5,
+     "width": 0.1,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#d89070",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#16120d",
+       "x0": 0,
+       "x1": 0.3,
+       "y0": -0.25,
+       "y1": 0.25,
+       "softness": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "base": "#d8382c",
+    "dorsal": "#a02020",
+    "ventral": "#ea7a5c",
+    "fin": "#e0302a",
+    "finOpacity": 0.75,
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#e0352a",
+      "x0": 0,
+      "x1": 1,
+      "y0": 0.08,
+      "y1": 1,
+      "softness": 0.2
+     },
+     {
+      "type": "region",
+      "color": "#e04030",
+      "x0": 0.1,
+      "x1": 1,
+      "y0": -0.32,
+      "y1": -0.08,
+      "softness": 0.1
+     },
+     {
+      "type": "stripe",
+      "color": "#16120d",
+      "y": 0,
+      "width": 0.17,
+      "x0": 0,
+      "x1": 1
+     },
+     {
+      "type": "stripe",
+      "color": "#16120d",
+      "y": -0.5,
+      "width": 0.1,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#e0302a",
+      "opacity": 0.8
+     },
+     "anal": {
+      "color": "#e0302a",
+      "opacity": 0.8,
+      "edge": "#121010",
+      "edgeWidth": 0.15
+     },
+     "pelvic": {
+      "color": "#e0302a",
+      "opacity": 0.8,
+      "edge": "#f6f6f6",
+      "edgeWidth": 0.25
+     },
+     "caudal": {
+      "color": "#e0302a",
+      "opacity": 0.7,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#16120d",
+        "x0": 0,
+        "x1": 0.3,
+        "y0": -0.25,
+        "y1": 0.25,
+        "softness": 0.3
+       }
+      ]
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "nannostomus-harrisoni",
+  "commonName": "Harrison's Pencilfish",
+  "scientificName": "Nannostomus harrisoni",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guyana, Venezuela, Colombia & Peru",
+  "description": "A slender, comparatively large pencilfish of shaded, slow-flowing streams, with a broad black band edged above in gold and red at the base of the tail. Like its relatives it rests among plants at night in a blotched night livery.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.16,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": true,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c9b07a",
+   "dorsal": "#806a40",
+   "ventral": "#f0e8d6",
+   "fin": "#ece2cc",
+   "finOpacity": 0.22,
+   "eye": "#c8a040",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#5a4626",
+     "y": 0.6,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#ecd07a",
+     "y": 0.24,
+     "width": 0.08,
+     "x0": 0.04,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0,
+     "width": 0.2,
+     "x0": 0,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e8dcc4",
+     "opacity": 0.3,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c83a2a",
+       "x0": 0,
+       "x1": 0.4,
+       "y0": -0.6,
+       "y1": 0.6,
+       "softness": 0.25
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#c8402c",
+      "opacity": 0.6,
+      "edge": "#f4f4f0",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "nannostomus-espei",
+  "commonName": "Barred Pencilfish",
+  "scientificName": "Nannostomus espei",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guyana — Mazaruni River drainage",
+  "description": "Unique among pencilfish in replacing the lateral stripe with five comma-shaped black bars on a golden body. Also called Espe's pencilfish, it lives in tannin-stained forest streams and is a peaceful midwater shoaler.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.2,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#d0a868",
+   "dorsal": "#8a6a3a",
+   "ventral": "#f0e2c6",
+   "fin": "#ead8b8",
+   "finOpacity": 0.25,
+   "eye": "#c8a050",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#f0c860",
+     "y": 0.22,
+     "width": 0.08,
+     "x0": 0.05,
+     "x1": 0.95
+    },
+    {
+     "type": "bars",
+     "color": "#16120d",
+     "count": 5,
+     "width": 0.07,
+     "x0": 0.18,
+     "x1": 0.92,
+     "slant": 0.35,
+     "y0": -0.38,
+     "y1": 0.14
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e8d4b0",
+     "opacity": 0.3,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#2a2016",
+       "x0": 0,
+       "x1": 0.25,
+       "y0": -0.2,
+       "y1": 0.2,
+       "softness": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#c84a2e",
+      "opacity": 0.6,
+      "edge": "#f4f4f0",
+      "edgeWidth": 0.2
+     },
+     "pelvic": {
+      "color": "#d8a080",
+      "opacity": 0.5,
+      "edge": "#f4f4f0",
+      "edgeWidth": 0.25
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "nannostomus-rubrocaudatus",
+  "commonName": "Red-tailed Pencilfish",
+  "scientificName": "Nannostomus rubrocaudatus",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Peruvian Amazon — Loreto",
+  "description": "A small pencilfish from Peruvian forest streams, described in 2009 and named for the bright red tail fin of adults. It shows the classic golden body crossed lengthwise by a bold black band.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.19,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8a46a",
+   "dorsal": "#7a5e36",
+   "ventral": "#eedfc4",
+   "fin": "#e8d4b8",
+   "finOpacity": 0.25,
+   "eye": "#c84a30",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#e8c470",
+     "y": 0.24,
+     "width": 0.07,
+     "x0": 0.06,
+     "x1": 0.96
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0,
+     "width": 0.19,
+     "x0": 0,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#d8342a",
+     "opacity": 0.65,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#16120d",
+       "x0": 0,
+       "x1": 0.25,
+       "y0": -0.25,
+       "y1": 0.25,
+       "softness": 0.3
+      }
+     ]
+    },
+    "anal": {
+     "color": "#d04030",
+     "opacity": 0.5
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "color": "#d06a50",
+      "opacity": 0.45
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "nannostomus-digrammus",
+  "commonName": "Twostripe Pencilfish",
+  "scientificName": "Nannostomus digrammus",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guyana and the Amazon & Rio Negro basins of Brazil",
+  "description": "A small, slender pencilfish with two dark stripes: a broad band along the midline and a narrower one low on the flank. It lives among leaf litter and plants in slow blackwater streams; males show red in the anal and tail fins.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.18,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#cbab72",
+   "dorsal": "#7c6438",
+   "ventral": "#efe6d0",
+   "fin": "#e8dcc2",
+   "finOpacity": 0.22,
+   "eye": "#c86a3a",
+   "metallic": 0.28,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#e8c870",
+     "y": 0.25,
+     "width": 0.06,
+     "x0": 0.06,
+     "x1": 0.96
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0.02,
+     "width": 0.17,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": -0.5,
+     "width": 0.07,
+     "x0": 0.25,
+     "x1": 0.95
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#c83a2a",
+      "opacity": 0.6
+     },
+     "caudal": {
+      "color": "#e8dcc2",
+      "opacity": 0.3,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#c83a2a",
+        "x0": 0,
+        "x1": 0.4,
+        "y0": -0.5,
+        "y1": 0.5,
+        "softness": 0.25
+       }
+      ]
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "nannostomus-bifasciatus",
+  "commonName": "Whiteside Pencilfish",
+  "scientificName": "Nannostomus bifasciatus",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Suriname, Guyana, French Guiana & the lower Amazon, Brazil",
+  "description": "Named for its two black stripes; the lower one runs along the flank above a bright white belly. Males carry red at the base of the tail fin and bluish-white tips on the pelvic fins.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.17,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c9b07c",
+   "dorsal": "#7a6440",
+   "ventral": "#f8f6f0",
+   "fin": "#ece6d8",
+   "finOpacity": 0.2,
+   "eye": "#c8903a",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f8f8f4",
+     "x0": 0.2,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.55,
+     "softness": 0.15
+    },
+    {
+     "type": "stripe",
+     "color": "#ecd080",
+     "y": 0.27,
+     "width": 0.07,
+     "x0": 0.05,
+     "x1": 0.96
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0.05,
+     "width": 0.17,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": -0.45,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.98
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "caudal": {
+      "color": "#ece6d8",
+      "opacity": 0.3,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#c83a2c",
+        "x0": 0,
+        "x1": 0.4,
+        "y0": -0.5,
+        "y1": 0.5,
+        "softness": 0.25
+       }
+      ]
+     },
+     "pelvic": {
+      "color": "#e8e4dc",
+      "opacity": 0.45,
+      "edge": "#d8ecff",
+      "edgeWidth": 0.3
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "nannostomus-anduzei",
+  "commonName": "Anduze's Pencilfish",
+  "scientificName": "Nannostomus anduzei",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro & upper Orinoco — Brazil & Venezuela",
+  "description": "At about 2 cm the smallest pencilfish, found among submerged vegetation in acidic blackwater streams. Males show a bright red anal fin and red below the black lateral stripe.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.2,
+   "width": 0.1,
+   "depthPos": 0.45,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.4,
+   "adipose": false,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.48,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.23,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8a46c",
+   "dorsal": "#7a5c34",
+   "ventral": "#ecd8bc",
+   "fin": "#e8d8c0",
+   "finOpacity": 0.22,
+   "eye": "#c84030",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#e8c070",
+     "y": 0.25,
+     "width": 0.07,
+     "x0": 0.06,
+     "x1": 0.96
+    },
+    {
+     "type": "stripe",
+     "color": "#16120d",
+     "y": 0,
+     "width": 0.2,
+     "x0": 0,
+     "x1": 1
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#e8c070",
+      "y": 0.25,
+      "width": 0.07,
+      "x0": 0.06,
+      "x1": 0.96
+     },
+     {
+      "type": "region",
+      "color": "#e0402c",
+      "x0": 0.3,
+      "x1": 1,
+      "y0": -0.45,
+      "y1": -0.12,
+      "softness": 0.12
+     },
+     {
+      "type": "stripe",
+      "color": "#16120d",
+      "y": 0,
+      "width": 0.2,
+      "x0": 0,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "anal": {
+      "color": "#e03a28",
+      "opacity": 0.85
+     },
+     "pelvic": {
+      "color": "#e05a3a",
+      "opacity": 0.6
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "copella-arnoldi",
+  "commonName": "Splash Tetra",
+  "scientificName": "Copella arnoldi",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guianas & lower Amazon — Guyana, Suriname, French Guiana & Pará, Brazil",
+  "description": "Famous for spawning out of water: a pair leaps together to stick eggs to an overhanging leaf, and the male splashes them with his tail every few minutes until they hatch two to three days later.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 12,
+  "traits": [
+   "jumper",
+   "surface-skimmer"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.2,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8a07a",
+   "dorsal": "#7a6a48",
+   "ventral": "#ecdcc8",
+   "fin": "#e0a078",
+   "finOpacity": 0.35,
+   "eye": "#c8a040",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#8cc8c0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#8a6a4a",
+     "contrast": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#3a2c1c",
+     "y": 0.06,
+     "width": 0.06,
+     "x0": 0,
+     "x1": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0a078",
+     "opacity": 0.45,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141010",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.25,
+       "ry": 0.4
+      }
+     ],
+     "edge": "#f0e8c8",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.12,
+   "body": {
+    "caudal": {
+     "shape": "forked",
+     "size": 0.45
+    },
+    "dorsal": {
+     "start": 0.48,
+     "end": 0.58,
+     "height": 0.24,
+     "shape": "pointed"
+    },
+    "anal": {
+     "start": 0.66,
+     "end": 0.8,
+     "height": 0.13,
+     "shape": "pointed"
+    }
+   },
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#e07850",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#141010",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.25,
+        "ry": 0.4
+       }
+      ],
+      "edge": "#f4e0b0",
+      "edgeWidth": 0.15
+     },
+     "anal": {
+      "color": "#e07850",
+      "opacity": 0.6,
+      "edge": "#f4e0b0",
+      "edgeWidth": 0.15
+     },
+     "pelvic": {
+      "color": "#e07850",
+      "opacity": 0.6
+     },
+     "caudal": {
+      "color": "#e07850",
+      "opacity": 0.55,
+      "edge": "#c84a2a",
+      "edgeWidth": 0.08
+     }
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.5
+   },
+   "look": {
+    "finOpacity": 0.25
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "copella-meinkeni",
+  "commonName": "Spotted Copella",
+  "scientificName": "Copella meinkeni",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guianas & lower Amazon — Guyana, Suriname, French Guiana & Brazil",
+  "description": "A small, peaceful Copella whose scales each carry a reddish-brown spot, forming neat rows along the flank. Unlike the splash tetra it spawns on submerged leaves, where the male guards and fans the eggs.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 45,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.21,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8a888",
+   "dorsal": "#806e50",
+   "ventral": "#eee6d6",
+   "fin": "#d8b898",
+   "finOpacity": 0.3,
+   "eye": "#c8a050",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#9a4a30",
+     "density": 70,
+     "size": 0.025,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": -0.5,
+     "y1": 0.7,
+     "jitter": 0.1
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2418",
+     "y": 0.06,
+     "width": 0.05,
+     "x0": 0,
+     "x1": 0.22
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8b898",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141010",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.22,
+       "ry": 0.38
+      }
+     ],
+     "edge": "#f0ecd8",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "caudal": {
+     "shape": "forked",
+     "size": 0.4
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "color": "#d88c60",
+      "opacity": 0.45
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "copella-nattereri",
+  "commonName": "Spotted Tetra",
+  "scientificName": "Copella nattereri",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Negro & middle Amazon — Brazil, Colombia, Venezuela & Peru",
+  "description": "Each scale on the flank bears a dark red dot, giving the \"beautiful-scaled characin\" look of its other common name. Eggs are laid on a submerged leaf or stone and guarded by the male.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 45,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.21,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b4ae98",
+   "dorsal": "#6e6a52",
+   "ventral": "#ece8de",
+   "fin": "#d8c0a0",
+   "finOpacity": 0.3,
+   "eye": "#c8a050",
+   "metallic": 0.3,
+   "iridescence": 0.3,
+   "iridescenceColor": "#88b8d0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#7a2a20",
+     "density": 80,
+     "size": 0.028,
+     "x0": 0.2,
+     "x1": 0.96,
+     "y0": -0.55,
+     "y1": 0.75,
+     "jitter": 0.08
+    },
+    {
+     "type": "stripe",
+     "color": "#241c14",
+     "y": 0.06,
+     "width": 0.05,
+     "x0": 0,
+     "x1": 0.24
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8c0a0",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141010",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.22,
+       "ry": 0.38
+      }
+     ],
+     "edge": "#f0ecd8",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "caudal": {
+     "shape": "forked",
+     "size": 0.4
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "color": "#d89060",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d89060",
+      "opacity": 0.45
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "copeina-guttata",
+  "commonName": "Red-spotted Copeina",
+  "scientificName": "Copeina guttata",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle & upper Amazon basin — Brazil & Peru",
+  "description": "A robust lebiasinid whose silvery-blue flanks are dotted with a red spot on each scale. Unusually for a characin, the male digs a shallow pit in sand where the eggs are laid, then guards and fans them.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 9,
+  "traits": [
+   "digger",
+   "territorial",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.27,
+   "width": 0.12,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.55,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8b4b8",
+   "dorsal": "#6a7068",
+   "ventral": "#e8e4dc",
+   "fin": "#e8a050",
+   "finOpacity": 0.45,
+   "eye": "#c8a050",
+   "metallic": 0.4,
+   "iridescence": 0.3,
+   "iridescenceColor": "#a0c8ff",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d03028",
+     "density": 90,
+     "size": 0.03,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": -0.5,
+     "y1": 0.6,
+     "jitter": 0.1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e89850",
+     "opacity": 0.45,
+     "edge": "#d04030",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#e07030",
+      "opacity": 0.6,
+      "edge": "#c03020",
+      "edgeWidth": 0.12
+     },
+     "anal": {
+      "color": "#e07030",
+      "opacity": 0.6,
+      "edge": "#c03020",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#e88a40",
+      "opacity": 0.55,
+      "edge": "#c83020",
+      "edgeWidth": 0.1
+     }
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.92,
+   "body": {
+    "belly": 0.5
+   },
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#e0b070",
+      "opacity": 0.45,
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#1a1410",
+        "x": 0.4,
+        "y": 0,
+        "rx": 0.22,
+        "ry": 0.35
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pyrrhulina-rachoviana",
+  "commonName": "Fanning Characin",
+  "scientificName": "Pyrrhulina rachoviana",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Paraná & Uruguay basins — Argentina, Brazil, Paraguay & Uruguay",
+  "description": "Also called Rachow's pyrrhulina, a subtropical species of quiet, vegetated waters. The female lays eggs on a broad leaf the male has cleaned, and he guards the clutch, fanning water over it with his fins.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 45,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.21,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8946e",
+   "dorsal": "#6a5a3c",
+   "ventral": "#e6dcc8",
+   "fin": "#d8b080",
+   "finOpacity": 0.3,
+   "eye": "#c86a3a",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#b8402a",
+     "density": 50,
+     "size": 0.025,
+     "x0": 0.25,
+     "x1": 0.9,
+     "y0": -0.3,
+     "y1": 0.5,
+     "jitter": 0.15
+    },
+    {
+     "type": "stripe",
+     "color": "#241a12",
+     "y": 0.06,
+     "width": 0.06,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8b080",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141010",
+       "x": 0.35,
+       "y": 0,
+       "rx": 0.25,
+       "ry": 0.4
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c89060",
+     "opacity": 0.35
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d06a3a",
+      "opacity": 0.5,
+      "edge": "#c83020",
+      "edgeWidth": 0.1
+     },
+     "pelvic": {
+      "color": "#d06a3a",
+      "opacity": 0.5
+     },
+     "caudal": {
+      "color": "#c89060",
+      "opacity": 0.4,
+      "edge": "#c83020",
+      "edgeWidth": 0.08
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pyrrhulina-australis",
+  "commonName": "Southern Pyrrhulina",
+  "scientificName": "Pyrrhulina australis",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Paraná, Paraguay & Mamoré basins — Bolivia, Brazil, Paraguay & Argentina",
+  "description": "A small, hardy Pyrrhulina often sold as P. rachoviana, with a dark line from the snout through the eye and red-dotted flanks. Males clean a leaf for spawning and guard the eggs until they hatch.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 45,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.21,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#ad9a72",
+   "dorsal": "#6e5c3c",
+   "ventral": "#e8dfcc",
+   "fin": "#d8b488",
+   "finOpacity": 0.3,
+   "eye": "#c86a3a",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#c04a2c",
+     "density": 60,
+     "size": 0.025,
+     "x0": 0.25,
+     "x1": 0.92,
+     "y0": -0.35,
+     "y1": 0.55,
+     "jitter": 0.12
+    },
+    {
+     "type": "stripe",
+     "color": "#201810",
+     "y": 0.06,
+     "width": 0.07,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8b488",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141010",
+       "x": 0.35,
+       "y": 0,
+       "rx": 0.25,
+       "ry": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d4703c",
+      "opacity": 0.5,
+      "edge": "#c43020",
+      "edgeWidth": 0.1
+     },
+     "pelvic": {
+      "color": "#d4703c",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pyrrhulina-spilota",
+  "commonName": "Blotch-fin Pyrrhulina",
+  "scientificName": "Pyrrhulina spilota",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Negro & middle Amazon — Brazil",
+  "description": "Named for the large black blotch in the dorsal fin, this blackwater Pyrrhulina shows rows of red dots along its brownish flanks. Males are territorial around a chosen spawning leaf.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.22,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a08a66",
+   "dorsal": "#5e4e34",
+   "ventral": "#e4d8c2",
+   "fin": "#d4a878",
+   "finOpacity": 0.32,
+   "eye": "#c8603a",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#b83a28",
+     "density": 70,
+     "size": 0.028,
+     "x0": 0.22,
+     "x1": 0.95,
+     "y0": -0.45,
+     "y1": 0.6,
+     "jitter": 0.08
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1610",
+     "y": 0.06,
+     "width": 0.06,
+     "x0": 0,
+     "x1": 0.28
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d4a878",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#0e0c0a",
+       "x": 0.4,
+       "y": 0,
+       "rx": 0.32,
+       "ry": 0.55
+      }
+     ],
+     "edge": "#f0e0c0",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d06a3a",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#c88a5a",
+      "opacity": 0.4,
+      "edge": "#c03020",
+      "edgeWidth": 0.08
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pyrrhulina-brevis",
+  "commonName": "Short-lined Pyrrhulina",
+  "scientificName": "Pyrrhulina brevis",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Rio Negro & Orinoco basins — Brazil, Peru, Colombia & Venezuela",
+  "description": "Its dark line from the snout through the eye stops just behind the gill cover, giving the \"short-lined\" name. It lives in shallow forest streams and floodplain pools, where males guard eggs laid on leaves.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "territorial",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.21,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a49272",
+   "dorsal": "#5e5038",
+   "ventral": "#e6dccb",
+   "fin": "#d0a880",
+   "finOpacity": 0.3,
+   "eye": "#c8603a",
+   "metallic": 0.22,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#a8402c",
+     "density": 55,
+     "size": 0.025,
+     "x0": 0.3,
+     "x1": 0.92,
+     "y0": -0.35,
+     "y1": 0.55,
+     "jitter": 0.12
+    },
+    {
+     "type": "stripe",
+     "color": "#1c1610",
+     "y": 0.06,
+     "width": 0.07,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d0a880",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141010",
+       "x": 0.35,
+       "y": 0,
+       "rx": 0.25,
+       "ry": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d06a3a",
+      "opacity": 0.5,
+      "edge": "#c43020",
+      "edgeWidth": 0.1
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pyrrhulina-laeta",
+  "commonName": "Half-banded Pyrrhulina",
+  "scientificName": "Pyrrhulina laeta",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin & the Guianas — Brazil, Peru, Colombia, Guyana & Suriname",
+  "description": "Recognised by a broad black band from the snout through the eye to about mid-body, and a black spot in the dorsal fin. A shy, slender species of shaded forest streams that spawns on submerged leaves.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.2,
+   "width": 0.11,
+   "depthPos": 0.42,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": false,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a89a7a",
+   "dorsal": "#625640",
+   "ventral": "#e8e0d0",
+   "fin": "#d4b490",
+   "finOpacity": 0.3,
+   "eye": "#c8a050",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#16120e",
+     "y": 0.05,
+     "width": 0.14,
+     "x0": 0,
+     "x1": 0.55
+    },
+    {
+     "type": "spots",
+     "color": "#9a4a30",
+     "density": 35,
+     "size": 0.022,
+     "x0": 0.4,
+     "x1": 0.95,
+     "y0": -0.3,
+     "y1": 0.5,
+     "jitter": 0.15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d4b490",
+     "opacity": 0.45,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#0e0c0a",
+       "x": 0.35,
+       "y": 0,
+       "rx": 0.28,
+       "ry": 0.45
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d08050",
+      "opacity": 0.5
+     },
+     "caudal": {
+      "color": "#d0a070",
+      "opacity": 0.4
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lebiasina-bimaculata",
+  "commonName": "Two-spot Lebiasina",
+  "scientificName": "Lebiasina bimaculata",
+  "family": "Lebiasinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Pacific slope of Ecuador & northern Peru",
+  "description": "A robust lebiasinid from coastal rivers west of the Andes, named for its two dark spots: one behind the gill cover and one at the tail base. Far larger and more predatory than its pencilfish relatives, it hunts insects and small fish.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6.5,
+   7.8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "predator",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pencilfish",
+   "depth": 0.21,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.25,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.54,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.68,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.21,
+    "end": 0.24,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#9a9a80",
+   "dorsal": "#5e5a40",
+   "ventral": "#e4e0cc",
+   "fin": "#c8a070",
+   "finOpacity": 0.35,
+   "eye": "#c8a040",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#c89060",
+     "y": 0.12,
+     "width": 0.06,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1814",
+     "x": 0.32,
+     "y": 0.1,
+     "rx": 0.04,
+     "ry": 0.18
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1814",
+     "x": 0.95,
+     "y": 0.02,
+     "rx": 0.04,
+     "ry": 0.2
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "carnegiella-strigata",
+  "commonName": "Marbled Hatchetfish",
+  "scientificName": "Carnegiella strigata",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin & the Guianas — Peru, Colombia, Brazil, Guyana, Suriname & French Guiana",
+  "description": "Lives right under the surface of forest streams; its deep keel holds the muscles that power wing-like pectoral fins, and startled shoals skitter and leap clear of the water. Feeds almost entirely on insects that fall onto the surface.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 15,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.5,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": false,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.64,
+    "end": 0.72,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.36,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#c8c2a8",
+   "dorsal": "#6a6450",
+   "ventral": "#e8e4d8",
+   "fin": "#e8e6e0",
+   "finOpacity": 0.15,
+   "eye": "#b8b8a8",
+   "metallic": 0.55,
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e2a22",
+     "count": 3,
+     "width": 0.06,
+     "x0": 0.15,
+     "x1": 0.6,
+     "slant": -0.7,
+     "y0": -1,
+     "y1": 0.1
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2620",
+     "y": 0.15,
+     "width": 0.05,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e8e8e4",
+     "opacity": 0.18
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "carnegiella-marthae",
+  "commonName": "Blackwing Hatchetfish",
+  "scientificName": "Carnegiella marthae",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco, Rio Negro & upper Amazon — Venezuela, Colombia, Brazil, Peru & Bolivia",
+  "description": "A blackwater hatchetfish named for the black edge along its keel and the dark bases of its pectoral \"wings\". Like all hatchetfish it hunts insects at the surface and leaps clear of the water when alarmed.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   6.8
+  ],
+  "dGH": [
+   1,
+   6
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 15,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.5,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": false,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.64,
+    "end": 0.72,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.36,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#c8c4b4",
+   "dorsal": "#5a5648",
+   "ventral": "#dcd8cc",
+   "fin": "#e6e6e0",
+   "finOpacity": 0.15,
+   "eye": "#b0b0a4",
+   "metallic": 0.6,
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a3630",
+     "count": 3,
+     "width": 0.05,
+     "x0": 0.2,
+     "x1": 0.6,
+     "slant": -0.6,
+     "y0": -0.85,
+     "y1": 0
+    },
+    {
+     "type": "region",
+     "color": "#141210",
+     "x0": 0.15,
+     "x1": 0.62,
+     "y0": -1,
+     "y1": -0.86,
+     "softness": 0.05
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1c18",
+     "y": 0.12,
+     "width": 0.06,
+     "x0": 0.25,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#d8d8d2",
+     "opacity": 0.22,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141210",
+       "x0": 0,
+       "x1": 0.45,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "carnegiella-myersi",
+  "commonName": "Pygmy Hatchetfish",
+  "scientificName": "Carnegiella myersi",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon — Peru & Bolivia",
+  "description": "The smallest hatchetfish at about 2.5 cm: a translucent, silvery fish of shaded upper Amazon streams. Delicate and very skittish, it needs calm water, floating cover and a tight lid.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 15,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.46,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": false,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.64,
+    "end": 0.72,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.36,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#d0ccbc",
+   "dorsal": "#8a8470",
+   "ventral": "#ece8de",
+   "fin": "#ecece6",
+   "finOpacity": 0.12,
+   "eye": "#c0c0b4",
+   "metallic": 0.5,
+   "translucency": 0.45,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a3428",
+     "y": 0.12,
+     "width": 0.04,
+     "x0": 0.35,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "carnegiella-schereri",
+  "commonName": "Dwarf Marbled Hatchetfish",
+  "scientificName": "Carnegiella schereri",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon — Peru, Colombia, Brazil & Bolivia",
+  "description": "Also called Scherer's hatchetfish, a small, yellowish and translucent species with faint dark marbling on the keel. It shoals beneath floating vegetation in quiet, shaded water.",
+  "adultLengthCm": 2.6,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 15,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.48,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": false,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.64,
+    "end": 0.72,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.36,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#d0c69c",
+   "dorsal": "#8a7c58",
+   "ventral": "#ece6cc",
+   "fin": "#ece8dc",
+   "finOpacity": 0.14,
+   "eye": "#c0b8a0",
+   "metallic": 0.45,
+   "translucency": 0.35,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a4232",
+     "count": 3,
+     "width": 0.04,
+     "x0": 0.18,
+     "x1": 0.58,
+     "slant": -0.6,
+     "y0": -0.95,
+     "y1": 0.05
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3226",
+     "y": 0.12,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "gasteropelecus-sternicla",
+  "commonName": "Common Hatchetfish",
+  "scientificName": "Gasteropelecus sternicla",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guianas & Amazon basin — Guyana, Suriname, Brazil, Peru & Bolivia",
+  "description": "A sturdy silver hatchetfish with a dark midlateral line bordered above by a bright silver one. It shoals just below the surface of rivers and floodplain lakes, snapping up insects and leaping when chased.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 14,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.52,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": true,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.62,
+    "end": 0.7,
+    "height": 0.14,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.36,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#c8ccc8",
+   "dorsal": "#7a8078",
+   "ventral": "#eef0ee",
+   "fin": "#e8eae8",
+   "finOpacity": 0.15,
+   "eye": "#c8c8c0",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#f0f4f4",
+     "y": 0.22,
+     "width": 0.05,
+     "x0": 0.3,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2e2c",
+     "y": 0.12,
+     "width": 0.05,
+     "x0": 0.28,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "gasteropelecus-levis",
+  "commonName": "Silver Hatchetfish",
+  "scientificName": "Gasteropelecus levis",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Amazon basin — Pará, Brazil",
+  "description": "Very like the common hatchetfish but confined to the lower Amazon; a bright silver species with a thin dark line along the flank. Shoals feed on insects trapped in the surface film.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 14,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.5,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": true,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.62,
+    "end": 0.7,
+    "height": 0.14,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.36,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#ccd0cc",
+   "dorsal": "#727a74",
+   "ventral": "#f2f4f2",
+   "fin": "#e8eae8",
+   "finOpacity": 0.15,
+   "eye": "#c8c8c0",
+   "metallic": 0.8,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#f4f8f8",
+     "y": 0.2,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#30322e",
+     "y": 0.12,
+     "width": 0.035,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "gasteropelecus-maculatus",
+  "commonName": "Spotted Hatchetfish",
+  "scientificName": "Gasteropelecus maculatus",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Panama, Colombia & Venezuela — Pacific and Caribbean drainages",
+  "description": "Rows of dark spots and short bars mark its silver-gray body. It ranges further north than other hatchetfish, into Panama, living in slow rivers and swamps on both sides of the isthmus.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 14,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.5,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": true,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.62,
+    "end": 0.7,
+    "height": 0.14,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.36,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#c0c4bc",
+   "dorsal": "#6a6e64",
+   "ventral": "#e6e8e2",
+   "fin": "#e4e4e0",
+   "finOpacity": 0.15,
+   "eye": "#c0c0b4",
+   "metallic": 0.6,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2e302a",
+     "density": 40,
+     "size": 0.035,
+     "x0": 0.15,
+     "x1": 0.9,
+     "y0": -0.6,
+     "y1": 0.4,
+     "jitter": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2c28",
+     "y": 0.12,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "thoracocharax-stellatus",
+  "commonName": "Spotfin Hatchetfish",
+  "scientificName": "Thoracocharax stellatus",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Orinoco & Paraná–Paraguay basins — Venezuela to Argentina",
+  "description": "The deepest-chested hatchetfish, platinum-silver with a black spot at the base of the dorsal fin. Shoals patrol just beneath the surface of rivers and lakes and leap clear of the water when pursued.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 14,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.6,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": true,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.6,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.17,
+    "end": 0.21,
+    "height": 0.4,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#d4d8d8",
+   "dorsal": "#8a9090",
+   "ventral": "#f0f2f2",
+   "fin": "#e8eaea",
+   "finOpacity": 0.15,
+   "eye": "#c8c8c4",
+   "metallic": 0.85,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#5a605e",
+     "y": 0.14,
+     "width": 0.03,
+     "x0": 0.35,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8eaea",
+     "opacity": 0.3,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141210",
+       "x": 0.2,
+       "y": 0,
+       "rx": 0.25,
+       "ry": 0.7
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "thoracocharax-securis",
+  "commonName": "Platinum Hatchetfish",
+  "scientificName": "Thoracocharax securis",
+  "family": "Gasteropelecidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins — Brazil, Peru, Colombia, Venezuela & Bolivia",
+  "description": "The largest hatchetfish, reaching about 9 cm, with a bright platinum body and a deep, blade-like keel. It shoals in open river channels and needs a long tank with plenty of surface swimming room.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 13,
+  "traits": [
+   "surface-skimmer",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hatchetfish",
+   "depth": 0.58,
+   "width": 0.08,
+   "depthPos": 0.32,
+   "headLength": 0.24,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.42,
+   "backArch": -0.9,
+   "belly": 0.9,
+   "adipose": true,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.6,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.92,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.42,
+    "height": 0.03,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.17,
+    "end": 0.21,
+    "height": 0.4,
+    "shape": "falcate"
+   }
+  },
+  "look": {
+   "base": "#d8dcdc",
+   "dorsal": "#848c8c",
+   "ventral": "#f2f4f4",
+   "fin": "#e8eaea",
+   "finOpacity": 0.15,
+   "eye": "#c8c8c4",
+   "metallic": 0.9,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#6a706e",
+     "y": 0.14,
+     "width": 0.03,
+     "x0": 0.35,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "anostomus-anostomus",
+  "commonName": "Striped Headstander",
+  "scientificName": "Anostomus anostomus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins and the Guianas — Brazil, Colombia, Venezuela, Peru, Guyana & Suriname",
+  "description": "A rheophilic headstander of rocky rapids that swims head-down, grazing algae and tiny invertebrates from crevices with its small upturned mouth. Often aggressive toward its own kind unless kept singly or in a sizeable group.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "head-stander",
+   "surface-grazer",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.21,
+   "width": 0.12,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#d8b860",
+   "dorsal": "#6a5428",
+   "ventral": "#eadcb0",
+   "fin": "#d8c8a0",
+   "finOpacity": 0.3,
+   "eye": "#c84a30",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0.62,
+     "width": 0.12,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0,
+     "width": 0.18,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": -0.58,
+     "width": 0.12,
+     "x0": 0.1,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d04030",
+     "opacity": 0.55
+    },
+    "caudal": {
+     "color": "#d8c8a0",
+     "opacity": 0.3,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#d03a2a",
+       "x0": 0,
+       "x1": 0.45,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ]
+    },
+    "anal": {
+     "color": "#d04030",
+     "opacity": 0.5
+    },
+    "pectoral": {
+     "color": "#e0d4b0",
+     "opacity": 0.2
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "anostomus-ternetzi",
+  "commonName": "Ternetz's Anostomus",
+  "scientificName": "Anostomus ternetzi",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco, Essequibo & eastern Amazon tributaries — Venezuela, Guyana & Brazil",
+  "description": "Smaller than the striped headstander, with two broad black bands separated by a golden stripe and fins that lack red at their bases. It grazes algae and biofilm head-down from rocks in clear, flowing water.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "head-stander",
+   "surface-grazer",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.21,
+   "width": 0.12,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e0c870",
+   "dorsal": "#5a4a24",
+   "ventral": "#f0e6c4",
+   "fin": "#e8e0c8",
+   "finOpacity": 0.25,
+   "eye": "#c8a040",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0.58,
+     "width": 0.2,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": -0.02,
+     "width": 0.22,
+     "x0": 0,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "leporinus-fasciatus",
+  "commonName": "Banded Leporinus",
+  "scientificName": "Leporinus fasciatus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins and the Guianas",
+  "description": "A large, active anostomid banded with ten black bars on bright yellow; adults develop an orange-red throat. It eats plants voraciously and is a notorious jumper, needing a heavy lid and a large tank.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 400,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "jumper",
+   "head-stander",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.24,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e8c840",
+   "dorsal": "#a08a30",
+   "ventral": "#f0e0a0",
+   "fin": "#d8c890",
+   "finOpacity": 0.4,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#141210",
+     "count": 10,
+     "width": 0.05,
+     "x0": 0.08,
+     "x1": 0.98
+    },
+    {
+     "type": "region",
+     "color": "#e05a2a",
+     "x0": 0.05,
+     "x1": 0.3,
+     "y0": -1,
+     "y1": -0.4,
+     "softness": 0.25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "leporinus-affinis",
+  "commonName": "Black-banded Leporinus",
+  "scientificName": "Leporinus affinis",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins",
+  "description": "Often sold alongside L. fasciatus, from which it differs in having nine rather than ten black bars on its yellow body. A herbivorous grazer and a powerful jumper.",
+  "adultLengthCm": 22,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 400,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "jumper",
+   "head-stander",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.24,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e4c84c",
+   "dorsal": "#9a8432",
+   "ventral": "#f0e2a8",
+   "fin": "#d8c890",
+   "finOpacity": 0.4,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#141210",
+     "count": 9,
+     "width": 0.055,
+     "x0": 0.08,
+     "x1": 0.98
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "leporinus-striatus",
+  "commonName": "Striped Leporinus",
+  "scientificName": "Leporinus striatus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern & central South America — Orinoco, Amazon & Paraná–Paraguay basins",
+  "description": "Banded lengthwise rather than across, with four black stripes on a cream-yellow body. A boisterous grazer of plants and detritus that shoals in the wild and needs robust tankmates.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "jumper",
+   "head-stander",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.22,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e4d090",
+   "dorsal": "#8a7848",
+   "ventral": "#f2ead0",
+   "fin": "#d8c8a0",
+   "finOpacity": 0.35,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0.62,
+     "width": 0.08,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0.24,
+     "width": 0.1,
+     "x0": 0.02,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": -0.18,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": -0.58,
+     "width": 0.08,
+     "x0": 0.15,
+     "x1": 0.98
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "leporinus-arcus",
+  "commonName": "Lipstick Leporinus",
+  "scientificName": "Leporinus arcus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco & Essequibo basins — Venezuela, Colombia & Guyana",
+  "description": "Named for its red-orange lips and fins, set against a yellow body with three black lengthwise stripes. A large, active grazer that will destroy soft plants.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 400,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "jumper",
+   "head-stander",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.24,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e8cc50",
+   "dorsal": "#7a6430",
+   "ventral": "#f2e4b0",
+   "fin": "#e05a30",
+   "finOpacity": 0.55,
+   "eye": "#c84a30",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0.55,
+     "width": 0.1,
+     "x0": 0.04,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0.04,
+     "width": 0.14,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": -0.5,
+     "width": 0.1,
+     "x0": 0.12,
+     "x1": 0.98
+    },
+    {
+     "type": "region",
+     "color": "#e03a28",
+     "x0": 0,
+     "x1": 0.06,
+     "y0": -0.35,
+     "y1": 0.35,
+     "softness": 0.3
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "leporinus-maculatus",
+  "commonName": "Spotted Leporinus",
+  "scientificName": "Leporinus maculatus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guianas & northern Amazon — Suriname, Guyana, French Guiana & Brazil",
+  "description": "Its yellow-tan flanks carry rows of large, rounded black spots rather than bands. Like other leporinus it grazes plants and algae and often swims slightly head-down.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "jumper",
+   "head-stander",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.23,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e0c878",
+   "dorsal": "#8a7440",
+   "ventral": "#f0e6c8",
+   "fin": "#d8c8a0",
+   "finOpacity": 0.35,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#141210",
+     "density": 22,
+     "size": 0.07,
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": -0.45,
+     "y1": 0.7,
+     "jitter": 0.2
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "leporinus-octofasciatus",
+  "commonName": "Eight-banded Leporinus",
+  "scientificName": "Leporinus octofasciatus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Paraná basin — southeastern Brazil",
+  "description": "A subtropical leporinus from the upper Paraná system, yellow with eight bold black bars. Like its relatives it is a strong jumper and an enthusiastic plant-eater.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "jumper",
+   "head-stander",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.24,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e8c64a",
+   "dorsal": "#9a8436",
+   "ventral": "#f2e4ac",
+   "fin": "#d8c890",
+   "finOpacity": 0.4,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#141210",
+     "count": 8,
+     "width": 0.065,
+     "x0": 0.1,
+     "x1": 0.98
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "abramites-hypselonotus",
+  "commonName": "Marbled Headstander",
+  "scientificName": "Abramites hypselonotus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Orinoco & Paraguay basins — Brazil, Peru, Colombia, Venezuela, Bolivia & Paraguay",
+  "description": "A deep-backed headstander with a high, arched profile and irregular dark bands on gray-yellow. It browses algae, plants and small invertebrates head-down and becomes quarrelsome with its own kind as it matures.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "head-stander",
+   "plant-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.38,
+   "width": 0.12,
+   "depthPos": 0.4,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.48,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "backArch": 0.6
+  },
+  "look": {
+   "base": "#c8b888",
+   "dorsal": "#6a5e40",
+   "ventral": "#e8e0c8",
+   "fin": "#c8b888",
+   "finOpacity": 0.4,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a4030",
+     "scale": 3,
+     "amount": 0.2
+    },
+    {
+     "type": "bars",
+     "color": "#2a241a",
+     "count": 6,
+     "width": 0.07,
+     "x0": 0.1,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2a2418",
+     "opacity": 0.6,
+     "edge": "#d0c090",
+     "edgeWidth": 0.15
+    },
+    "pelvic": {
+     "color": "#1e1a14",
+     "opacity": 0.6
+    },
+    "anal": {
+     "color": "#3a3224",
+     "opacity": 0.5
+    },
+    "caudal": {
+     "color": "#c8b888",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#2a241a",
+       "x0": 0,
+       "x1": 0.3,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "laemolyta-taeniata",
+  "commonName": "Laemolyta",
+  "scientificName": "Laemolyta taeniata",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Rio Negro & Orinoco basins — Brazil, Colombia & Venezuela",
+  "description": "A slender anostomid with a single broad black stripe from snout to tail on a silvery body. It forages head-down along wood and rocks for algae, detritus and small invertebrates.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "head-stander",
+   "surface-grazer"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.2,
+   "width": 0.12,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8c4b0",
+   "dorsal": "#7a7458",
+   "ventral": "#eeeadc",
+   "fin": "#d8d4c4",
+   "finOpacity": 0.3,
+   "eye": "#c8a040",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#141210",
+     "y": 0,
+     "width": 0.2,
+     "x0": 0,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pseudanos-trimaculatus",
+  "commonName": "Three-spot Headstander",
+  "scientificName": "Pseudanos trimaculatus",
+  "family": "Anostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins and the Guianas",
+  "description": "A slender headstander, formerly placed in Anostomus, marked with three round black spots along the flank, the last at the base of the tail. It roots head-down in leaf litter and crevices for small invertebrates and algae.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "head-stander",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.21,
+   "width": 0.12,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.84,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8bea0",
+   "dorsal": "#7a6e50",
+   "ventral": "#ece6d6",
+   "fin": "#ddd4bc",
+   "finOpacity": 0.3,
+   "eye": "#c8a050",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#8a7e60",
+     "contrast": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#141210",
+     "x": 0.42,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.14
+    },
+    {
+     "type": "blotch",
+     "color": "#141210",
+     "x": 0.68,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.14
+    },
+    {
+     "type": "blotch",
+     "color": "#141210",
+     "x": 0.95,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.16
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "chilodus-punctatus",
+  "commonName": "Spotted Headstander",
+  "scientificName": "Chilodus punctatus",
+  "family": "Chilodontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins and the Guianas — Brazil, Peru, Colombia, Venezuela, Guyana & Suriname",
+  "description": "A peaceful headstander that hovers nose-down among plants and roots, picking at algae, detritus and tiny invertebrates. Each scale carries a dark dot, forming neat rows, and a dark band runs from snout to tail.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 7,
+  "traits": [
+   "head-stander",
+   "shy",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "headstander",
+   "depth": 0.28,
+   "width": 0.12,
+   "depthPos": 0.42,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "adipose": true,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.5,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.82,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "backArch": 0.3
+  },
+  "look": {
+   "base": "#c8bc98",
+   "dorsal": "#7a6c48",
+   "ventral": "#ece4d0",
+   "fin": "#e0d4b8",
+   "finOpacity": 0.3,
+   "eye": "#c8402a",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2e1e",
+     "density": 120,
+     "size": 0.022,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.8,
+     "jitter": 0.05
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2016",
+     "y": 0,
+     "width": 0.1,
+     "x0": 0,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0d4b8",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2016",
+       "density": 15,
+       "size": 0.08
+      },
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.7,
+       "x1": 1,
+       "y0": 0.2,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pygocentrus-nattereri",
+  "commonName": "Red-bellied Piranha",
+  "scientificName": "Pygocentrus nattereri",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Essequibo & Paraná–Paraguay basins and coastal rivers of NE Brazil",
+  "description": "Lives in loose shoals that protect it from dolphins, caimans and birds more than they help it hunt; much of its diet is fish fins, scales, insects and carrion. Skittish in aquaria, pairs dig a nest in the substrate and guard the eggs.",
+  "adultLengthCm": 28,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 18,
+  "lifespanYears": 15,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 400,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "substrate-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.55,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8aca4",
+   "dorsal": "#4a5048",
+   "ventral": "#d83a24",
+   "fin": "#3a3c38",
+   "finOpacity": 0.6,
+   "eye": "#c84030",
+   "metallic": 0.55,
+   "iridescence": 0.15,
+   "iridescenceColor": "#c8d8d0",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#e8ecea",
+     "density": 120
+    },
+    {
+     "type": "region",
+     "color": "#d83a24",
+     "x0": 0.12,
+     "x1": 0.8,
+     "y0": -1,
+     "y1": -0.4,
+     "softness": 0.2
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#d03a28",
+     "opacity": 0.75
+    },
+    "pelvic": {
+     "color": "#d03a28",
+     "opacity": 0.7
+    },
+    "caudal": {
+     "color": "#3a3c38",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#121212",
+       "x0": 0,
+       "x1": 0.25,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ],
+     "edge": "#121212",
+     "edgeWidth": 0.12
+    },
+    "pectoral": {
+     "color": "#c8a090",
+     "opacity": 0.3
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "pygocentrus-cariba",
+  "commonName": "Black-spot Piranha",
+  "scientificName": "Pygocentrus cariba",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco basin — Venezuela & Colombia",
+  "description": "The Orinoco's red-bellied piranha, distinguished by a large black spot behind the gill cover. It gathers in big shoals in the seasonally flooded llanos, scavenging and biting chunks from fish and other prey.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 18,
+  "lifespanYears": 15,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 400,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "substrate-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.55,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b0b4a8",
+   "dorsal": "#545848",
+   "ventral": "#e0682c",
+   "fin": "#3a3c38",
+   "finOpacity": 0.6,
+   "eye": "#c84030",
+   "metallic": 0.6,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#eceeea",
+     "density": 120
+    },
+    {
+     "type": "region",
+     "color": "#e05a28",
+     "x0": 0.1,
+     "x1": 0.75,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#121212",
+     "x": 0.3,
+     "y": 0.1,
+     "rx": 0.06,
+     "ry": 0.2
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#d8502a",
+     "opacity": 0.75
+    },
+    "pelvic": {
+     "color": "#d8502a",
+     "opacity": 0.7
+    },
+    "caudal": {
+     "color": "#3a3c38",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#121212",
+       "x0": 0,
+       "x1": 0.25,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ],
+     "edge": "#121212",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pygocentrus-piraya",
+  "commonName": "San Francisco Piranha",
+  "scientificName": "Pygocentrus piraya",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "São Francisco basin — Brazil",
+  "description": "Endemic to Brazil's São Francisco River, the largest Pygocentrus has a yellow-orange throat and belly. Heavier than the red-bellied piranha, it shoals in open river channels and reservoirs.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 15,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 500,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "substrate-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.56,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8ac9c",
+   "dorsal": "#4e5240",
+   "ventral": "#e8a030",
+   "fin": "#3e4036",
+   "finOpacity": 0.55,
+   "eye": "#c86a30",
+   "metallic": 0.55,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#eceee4",
+     "density": 110
+    },
+    {
+     "type": "region",
+     "color": "#e8a030",
+     "x0": 0.05,
+     "x1": 0.7,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#e07a2a",
+     "opacity": 0.7
+    },
+    "pelvic": {
+     "color": "#e8902a",
+     "opacity": 0.7
+    },
+    "caudal": {
+     "color": "#8a8c70",
+     "opacity": 0.5,
+     "edge": "#121212",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "serrasalmus-rhombeus",
+  "commonName": "Redeye Piranha",
+  "scientificName": "Serrasalmus rhombeus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins and the Guianas",
+  "description": "Also sold as the black piranha: the largest Serrasalmus, a solitary ambush hunter whose body darkens almost to black with age and whose eyes are a striking ruby red. It is cannibalistic and must be kept alone.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 30,
+  "lifespanYears": 20,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 500,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "ambush",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.52,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7a7e7c",
+   "dorsal": "#2e3232",
+   "ventral": "#b0aea0",
+   "fin": "#2a2c2c",
+   "finOpacity": 0.6,
+   "eye": "#d8201c",
+   "metallic": 0.45,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#d0d4d2",
+     "density": 80
+    },
+    {
+     "type": "spots",
+     "color": "#2a2c2c",
+     "density": 40,
+     "size": 0.03,
+     "x0": 0.2,
+     "x1": 0.9,
+     "y0": -0.3,
+     "y1": 0.8,
+     "jitter": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#5a5c5a",
+     "opacity": 0.5,
+     "edge": "#0e0e0e",
+     "edgeWidth": 0.18
+    },
+    "anal": {
+     "color": "#3a3a38",
+     "opacity": 0.6,
+     "edge": "#0e0e0e",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "serrasalmus-manueli",
+  "commonName": "Manuel's Piranha",
+  "scientificName": "Serrasalmus manueli",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins — Brazil & Venezuela",
+  "description": "A large, deep-bodied Serrasalmus whose silver flanks are densely flecked with dark spots under an iridescent sheen. Like most Serrasalmus it attacks tankmates and is kept alone.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 500,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "ambush",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.58,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8bcb4",
+   "dorsal": "#5a6058",
+   "ventral": "#dcd8c8",
+   "fin": "#8a8c84",
+   "finOpacity": 0.45,
+   "eye": "#c84a30",
+   "metallic": 0.65,
+   "iridescence": 0.35,
+   "iridescenceColor": "#a8d0c0",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#eef0ee",
+     "density": 100
+    },
+    {
+     "type": "spots",
+     "color": "#2e322e",
+     "density": 70,
+     "size": 0.025,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.5,
+     "y1": 0.85,
+     "jitter": 0.35
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#8a8c84",
+     "opacity": 0.45,
+     "edge": "#121212",
+     "edgeWidth": 0.14
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "serrasalmus-elongatus",
+  "commonName": "Elongate Piranha",
+  "scientificName": "Serrasalmus elongatus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins — Brazil, Peru, Colombia, Venezuela & Bolivia",
+  "description": "An unusually slender, pointed-snouted piranha whose diet is dominated by fins and scales bitten from other fish. Highly aggressive even to its own kind, it is always kept alone.",
+  "adultLengthCm": 22,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 300,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 9,
+  "traits": [
+   "predator",
+   "fin-nipper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.38,
+   "width": 0.13,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b0b4b0",
+   "dorsal": "#5a6058",
+   "ventral": "#e8d8b8",
+   "fin": "#c8b898",
+   "finOpacity": 0.45,
+   "eye": "#c84030",
+   "metallic": 0.6,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#eef0ee",
+     "density": 90
+    },
+    {
+     "type": "spots",
+     "color": "#3a3e3a",
+     "density": 30,
+     "size": 0.025,
+     "x0": 0.25,
+     "x1": 0.85,
+     "y0": -0.2,
+     "y1": 0.7,
+     "jitter": 0.3
+    },
+    {
+     "type": "region",
+     "color": "#e0a050",
+     "x0": 0.1,
+     "x1": 0.5,
+     "y0": -1,
+     "y1": -0.5,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#d8a060",
+     "opacity": 0.55
+    },
+    "caudal": {
+     "color": "#b0aa98",
+     "opacity": 0.45,
+     "edge": "#121212",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "serrasalmus-geryi",
+  "commonName": "Violet-line Piranha",
+  "scientificName": "Serrasalmus geryi",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Tocantins–Araguaia basin — Brazil",
+  "description": "A medium-sized piranha with a violet sheen along the flank and a dark band across the tail fin. Like other Serrasalmus it is aggressive toward its own kind and is kept alone.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 300,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "fin-nipper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.52,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b4b0b8",
+   "dorsal": "#5a5664",
+   "ventral": "#e0d8d8",
+   "fin": "#9a98a0",
+   "finOpacity": 0.45,
+   "eye": "#c84a30",
+   "metallic": 0.55,
+   "iridescence": 0.5,
+   "iridescenceColor": "#9a70d8",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#eceaf0",
+     "density": 90
+    },
+    {
+     "type": "stripe",
+     "color": "#8a60c0",
+     "y": 0.1,
+     "width": 0.12,
+     "x0": 0.25,
+     "x1": 0.95,
+     "iridescent": true
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#b8b6bc",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#121212",
+       "x0": 0.25,
+       "x1": 0.55,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.15
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "serrasalmus-sanchezi",
+  "commonName": "Ruby-red Piranha",
+  "scientificName": "Serrasalmus sanchezi",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon — Peru, Bolivia & western Brazil",
+  "description": "Also called Sanchez's piranha: a small, rhomboid Serrasalmus with a ruby-red throat and red eyes. Despite its modest size it is aggressive and best kept alone.",
+  "adultLengthCm": 16,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 18,
+  "lifespanYears": 12,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 200,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 8,
+  "traits": [
+   "predator",
+   "fin-nipper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.56,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8bab4",
+   "dorsal": "#5c605a",
+   "ventral": "#d8402c",
+   "fin": "#9a9a90",
+   "finOpacity": 0.45,
+   "eye": "#d8201c",
+   "metallic": 0.6,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#eef0ee",
+     "density": 90
+    },
+    {
+     "type": "spots",
+     "color": "#3a3e3a",
+     "density": 40,
+     "size": 0.025,
+     "x0": 0.2,
+     "x1": 0.9,
+     "y0": -0.3,
+     "y1": 0.8,
+     "jitter": 0.3
+    },
+    {
+     "type": "region",
+     "color": "#d83a2a",
+     "x0": 0.1,
+     "x1": 0.55,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#c83a28",
+     "opacity": 0.6
+    },
+    "caudal": {
+     "color": "#9a9a90",
+     "opacity": 0.45,
+     "edge": "#121212",
+     "edgeWidth": 0.14
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pygopristis-denticulata",
+  "commonName": "Lobe-toothed Piranha",
+  "scientificName": "Pygopristis denticulata",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco, Essequibo & Rio Negro — Venezuela, Colombia, Guyana, Suriname & Brazil",
+  "description": "A comparatively mild piranha whose teeth carry five cusps, used for cropping seeds, plants and fins rather than flesh. It shoals with its own kind and has an orange throat and anal fin.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "fin-nipper",
+   "plant-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.55,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.92,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8bcb4",
+   "dorsal": "#5a6058",
+   "ventral": "#e0a080",
+   "fin": "#a8a898",
+   "finOpacity": 0.4,
+   "eye": "#c8a040",
+   "metallic": 0.6,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#eef0ee",
+     "density": 90
+    },
+    {
+     "type": "region",
+     "color": "#e07038",
+     "x0": 0.08,
+     "x1": 0.4,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#e06a38",
+     "opacity": 0.6
+    },
+    "caudal": {
+     "color": "#a8a898",
+     "opacity": 0.4,
+     "edge": "#2a2a28",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "catoprion-mento",
+  "commonName": "Wimple Piranha",
+  "scientificName": "Catoprion mento",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Orinoco & Paraguay basins and the Guianas",
+  "description": "A specialist scale-eater: its strongly protruding lower jaw gapes open to strike the flanks of other fish and knock off scales, which make up most of its diet. Adults develop elongated front rays in the dorsal and anal fins.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 9,
+  "traits": [
+   "fin-nipper",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "piranha",
+   "depth": 0.52,
+   "width": 0.16,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.28,
+   "adipose": true,
+   "scaleSize": 0.15,
+   "belly": 0.5,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.28,
+    "shape": "filament",
+    "trail": 0.1
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.92,
+    "height": 0.16,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c0c4bc",
+   "dorsal": "#5a6058",
+   "ventral": "#e8e4d8",
+   "fin": "#b0aca0",
+   "finOpacity": 0.4,
+   "eye": "#c8a040",
+   "metallic": 0.7,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#f0f2f0",
+     "density": 80
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#b0aca0",
+     "opacity": 0.4,
+     "edge": "#2a2a28",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "metynnis-argenteus",
+  "commonName": "Silver Dollar",
+  "scientificName": "Metynnis argenteus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin & the Guianas",
+  "description": "A disc-shaped, shimmering silver herbivore that schools nervously in open water. Males develop a longer, red-edged anal fin, and a group will strip a planted tank of soft vegetation.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.82,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#d0d4d4",
+   "dorsal": "#7a8484",
+   "ventral": "#f0f2f2",
+   "fin": "#d8dcdc",
+   "finOpacity": 0.25,
+   "eye": "#c8c8c0",
+   "metallic": 0.85,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#6a7070",
+     "x": 0.3,
+     "y": 0.3,
+     "rx": 0.035,
+     "ry": 0.05
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "anal": {
+     "start": 0.58,
+     "end": 0.95,
+     "height": 0.17,
+     "shape": "falcate"
+    }
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d8dcdc",
+      "opacity": 0.45,
+      "edge": "#d03a2a",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "metynnis-hypsauchen",
+  "commonName": "Plain Metynnis",
+  "scientificName": "Metynnis hypsauchen",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Orinoco & Paraguay basins",
+  "description": "Often sold simply as the silver dollar; it has a steeply rising back and plain, bright silver flanks, and males carry a red-edged anal fin. Schools of these herbivores need open swimming space and plenty of greens.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.85,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "backArch": 0.5
+  },
+  "look": {
+   "base": "#d4d8d8",
+   "dorsal": "#76807e",
+   "ventral": "#f2f4f4",
+   "fin": "#d8dcdc",
+   "finOpacity": 0.25,
+   "eye": "#c8c8c0",
+   "metallic": 0.88
+  },
+  "male": {
+   "body": {
+    "anal": {
+     "start": 0.58,
+     "end": 0.95,
+     "height": 0.17,
+     "shape": "falcate"
+    }
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d8dcdc",
+      "opacity": 0.45,
+      "edge": "#d03a2a",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "metynnis-fasciatus",
+  "commonName": "Striped Silver Dollar",
+  "scientificName": "Metynnis fasciatus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin — Brazil",
+  "description": "A silver dollar marked with fine dark vertical bars across its silver flanks. Like its relatives it is a schooling herbivore that eats soft plants.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.8,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#cdd2d2",
+   "dorsal": "#727c7a",
+   "ventral": "#eef0f0",
+   "fin": "#d8dcdc",
+   "finOpacity": 0.25,
+   "eye": "#c8c8c0",
+   "metallic": 0.8,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a4e4e",
+     "count": 10,
+     "width": 0.025,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.9
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "anal": {
+     "start": 0.58,
+     "end": 0.95,
+     "height": 0.17,
+     "shape": "falcate"
+    }
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d8dcdc",
+      "opacity": 0.45,
+      "edge": "#d03a2a",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "metynnis-lippincottianus",
+  "commonName": "Spotted Silver Dollar",
+  "scientificName": "Metynnis lippincottianus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin — Brazil",
+  "description": "A silver dollar speckled with small dark spots over the upper flank, with an orange-red edge on the male's anal fin. It schools in quiet, vegetated waters and feeds largely on plants.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.8,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#ccd0cc",
+   "dorsal": "#727a74",
+   "ventral": "#eef0ee",
+   "fin": "#d4d8d4",
+   "finOpacity": 0.25,
+   "eye": "#c8c8c0",
+   "metallic": 0.8,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3e4440",
+     "density": 60,
+     "size": 0.022,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": -0.2,
+     "y1": 0.9,
+     "jitter": 0.4
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "anal": {
+     "start": 0.58,
+     "end": 0.95,
+     "height": 0.17,
+     "shape": "falcate"
+    }
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d8dcdc",
+      "opacity": 0.45,
+      "edge": "#e0602a",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "metynnis-maculatus",
+  "commonName": "Spotted Metynnis",
+  "scientificName": "Metynnis maculatus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Paraguay basins — Brazil, Bolivia & Paraguay",
+  "description": "Larger, bolder dark spots scattered over the body set this silver dollar apart; breeding males show red in the anal fin. A schooling herbivore that needs a big, open tank.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.8,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8ccc6",
+   "dorsal": "#6e7670",
+   "ventral": "#eceeea",
+   "fin": "#d4d8d4",
+   "finOpacity": 0.25,
+   "eye": "#c8c8c0",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2e3430",
+     "density": 30,
+     "size": 0.04,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.5,
+     "y1": 0.9,
+     "jitter": 0.4
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "anal": {
+     "start": 0.58,
+     "end": 0.95,
+     "height": 0.17,
+     "shape": "falcate"
+    }
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d8dcdc",
+      "opacity": 0.45,
+      "edge": "#d03a2a",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "myloplus-schomburgkii",
+  "commonName": "Black-barred Silver Dollar",
+  "scientificName": "Myloplus schomburgkii",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins — Brazil, Peru, Colombia & Venezuela",
+  "description": "A large silver dollar with a single broad black vertical bar across the middle of its body, the width varying between individuals and populations. Adults are big, fast schooling herbivores that need a very large tank.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 600,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.82,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#d0d4d0",
+   "dorsal": "#7a807c",
+   "ventral": "#eef0ee",
+   "fin": "#c8ccc8",
+   "finOpacity": 0.3,
+   "eye": "#c8c8c0",
+   "metallic": 0.8,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#121212",
+     "count": 1,
+     "width": 0.12,
+     "x0": 0.42,
+     "x1": 0.56,
+     "slant": 0.1
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "anal": {
+     "start": 0.58,
+     "end": 0.95,
+     "height": 0.18,
+     "shape": "falcate"
+    }
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d84030",
+      "opacity": 0.6,
+      "edge": "#121212",
+      "edgeWidth": 0.15
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "myloplus-rubripinnis",
+  "commonName": "Redhook Silver Dollar",
+  "scientificName": "Myloplus rubripinnis",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco & Amazon basins and the Guianas",
+  "description": "Named for the male's red, hook-shaped anal fin edged in black. Adults are silver, often with dark flecks, and form fast-moving schools that devour soft aquarium plants.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 600,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.8,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.95,
+    "height": 0.14,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#d0d4d4",
+   "dorsal": "#7a8282",
+   "ventral": "#eef0f0",
+   "fin": "#c8ccc8",
+   "finOpacity": 0.3,
+   "eye": "#c8c8c0",
+   "metallic": 0.8,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#5a5e5e",
+     "density": 30,
+     "size": 0.02,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.2,
+     "y1": 0.8,
+     "jitter": 0.5
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#e08a70",
+     "opacity": 0.45
+    },
+    "caudal": {
+     "color": "#c8ccc8",
+     "opacity": 0.3,
+     "edge": "#a03a30",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "anal": {
+     "start": 0.56,
+     "end": 0.95,
+     "height": 0.22,
+     "shape": "falcate"
+    }
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d84030",
+      "opacity": 0.7,
+      "edge": "#121212",
+      "edgeWidth": 0.15
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "mylossoma-duriventre",
+  "commonName": "Hard-bellied Silver Dollar",
+  "scientificName": "Mylossoma duriventre",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Orinoco & Paraná–Paraguay basins",
+  "description": "A deep, silvery pacu with a sharply keeled, serrated belly. Large schools migrate through flooded forest feeding on fruits, seeds and plants.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 500,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.78,
+   "width": 0.1,
+   "depthPos": 0.42,
+   "headLength": 0.24,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "belly": 0.3
+  },
+  "look": {
+   "base": "#d4d6d0",
+   "dorsal": "#7a7e76",
+   "ventral": "#f0eee4",
+   "fin": "#d8c8a0",
+   "finOpacity": 0.35,
+   "eye": "#c8c8c0",
+   "metallic": 0.8,
+   "fins": {
+    "anal": {
+     "color": "#e0a050",
+     "opacity": 0.5
+    },
+    "pelvic": {
+     "color": "#e0a050",
+     "opacity": 0.5
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "colossoma-macropomum",
+  "commonName": "Tambaqui",
+  "scientificName": "Colossoma macropomum",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins",
+  "description": "One of the largest characins, feeding on fruit and seeds that drop into flooded forest and on zooplankton strained with its long gill rakers. Juveniles sold as 'black pacu' quickly outgrow home aquaria and suit only public aquaria.",
+  "adultLengthCm": 70,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 48,
+  "lifespanYears": 25,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 8000,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 4,
+  "traits": [
+   "plant-eater",
+   "bold",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.6,
+   "width": 0.18,
+   "depthPos": 0.42,
+   "headLength": 0.3,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.88,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7a7a5a",
+   "dorsal": "#5a5a3a",
+   "ventral": "#1e1e1a",
+   "fin": "#1e201c",
+   "finOpacity": 0.85,
+   "eye": "#b0a070",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#1a1a16",
+     "x0": 0.15,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.2,
+     "softness": 0.4
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "piaractus-brachypomus",
+  "commonName": "Red-bellied Pacu",
+  "scientificName": "Piaractus brachypomus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Orinoco basins",
+  "description": "Juveniles mimic the red-bellied piranha with a bright red chest, but this pacu has flat, molar-like teeth for crushing fruits, nuts and seeds. It grows far too large for home aquaria, reaching well over half a metre.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 36,
+  "lifespanYears": 20,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 6000,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 4,
+  "traits": [
+   "plant-eater",
+   "bold",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.62,
+   "width": 0.17,
+   "depthPos": 0.42,
+   "headLength": 0.28,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.12,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#9a9e98",
+   "dorsal": "#4a4e4a",
+   "ventral": "#d8603a",
+   "fin": "#3a3c3a",
+   "finOpacity": 0.7,
+   "eye": "#b8b0a0",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d84a2c",
+     "x0": 0.1,
+     "x1": 0.75,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#d84a2c",
+     "opacity": 0.75
+    },
+    "pelvic": {
+     "color": "#d84a2c",
+     "opacity": 0.75
+    },
+    "pectoral": {
+     "color": "#d06a4a",
+     "opacity": 0.5
+    },
+    "caudal": {
+     "color": "#2e302e",
+     "opacity": 0.7
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "piaractus-mesopotamicus",
+  "commonName": "Small-scaled Pacu",
+  "scientificName": "Piaractus mesopotamicus",
+  "family": "Serrasalmidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraná–Paraguay & Uruguay basins — Brazil, Paraguay, Bolivia & Argentina",
+  "description": "The pacu of the Pantanal, which eats fruits and seeds that fall into flooded forest and disperses them along the river. Widely farmed, it is shown in public aquaria featuring Pantanal and Paraná fauna.",
+  "adultLengthCm": 50,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 36,
+  "lifespanYears": 20,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 5000,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 4,
+  "traits": [
+   "plant-eater",
+   "bold",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "pacu",
+   "depth": 0.6,
+   "width": 0.17,
+   "depthPos": 0.42,
+   "headLength": 0.28,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "adipose": true,
+   "scaleSize": 0.08,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.48,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8a8e88",
+   "dorsal": "#3e423e",
+   "ventral": "#d8c898",
+   "fin": "#3a3c38",
+   "finOpacity": 0.65,
+   "eye": "#b8b0a0",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8a050",
+     "x0": 0.1,
+     "x1": 0.8,
+     "y0": -1,
+     "y1": -0.4,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#c87a40",
+     "opacity": 0.6
+    },
+    "pelvic": {
+     "color": "#c87a40",
+     "opacity": 0.55
+    }
+   }
+  },
+  "availability": "rare"
+ }
+]

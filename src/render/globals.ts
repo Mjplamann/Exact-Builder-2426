@@ -1,9 +1,23 @@
-import { Color, Vector2, Vector3 } from 'three';
+import { Color, DataTexture, LinearFilter, RepeatWrapping, RGBAFormat, UnsignedByteType, Vector2, Vector3, Vector4, type Texture } from 'three';
+
+/** 1×1 neutral caustic texture used until the Engine's animated caustic target exists. */
+function neutralCausticTexture(): Texture {
+  // R/B ≈ the mean caustic level (so the modulation is ~1), G = mean shaft level.
+  const t = new DataTexture(new Uint8Array([41, 41, 41, 255]), 1, 1, RGBAFormat, UnsignedByteType);
+  t.wrapS = t.wrapT = RepeatWrapping;
+  t.magFilter = t.minFilter = LinearFilter;
+  t.needsUpdate = true;
+  return t;
+}
 
 /**
  * Shared shader uniforms. Every material patched with `applyUnderwater` (and the fish/plant
  * vertex animation) references these exact objects, so the Engine updates them once per frame
  * and every material sees the new values.
+ *
+ * The first block is the cross-module contract. The second block (below `uCameraPos`) is owned
+ * by the environment renderer and used by `applyUnderwater` and the env shaders; other modules
+ * may read them but should not write them (except `uUnderwater`, see its note).
  */
 export const GLOBALS = {
   /** Real seconds since start. */
@@ -26,6 +40,28 @@ export const GLOBALS = {
   uCurrent: { value: new Vector2(0.05, 0) },
   /** Camera position in world space (for water path-length attenuation). */
   uCameraPos: { value: new Vector3(0, 0.25, 2) },
+
+  // ---- environment-renderer internals (additive; see note above) ----------------------------
+
+  /** Unit vector pointing from the scene toward the main (LED) light, world space. */
+  uLightDir: { value: new Vector3(0.08, 1, 0.18).normalize() },
+  /**
+   * Radiance (linear RGB) of light scattered toward the viewer by the water itself — the
+   * blue-green (or tannin-amber) veil that distant objects fade into. Computed per frame from
+   * the light levels and water tint.
+   */
+  uVeilColor: { value: new Color(0.02, 0.05, 0.06) },
+  /** Height above which a view path is in air, not water (the surface; raised while rendering the mirrored surface reflection). */
+  uVeilCeiling: { value: 0.5 },
+  /** Animated, tileable caustic texture: R/B = two caustic layers, G = slow light-shaft layer. */
+  uCausticMap: { value: neutralCausticTexture() as Texture },
+  /** Accumulated drift (tile units) of the two caustic layers with the surface current: xy = layer A, zw = layer B. */
+  uCausticDrift: { value: new Vector4(0, 0, 0, 0) },
+  /**
+   * Master switch for the underwater look in patched materials (1 = on). Set to 0 around an
+   * off-screen render that is not "inside the tank" (e.g. catalog thumbnails), then restore.
+   */
+  uUnderwater: { value: 1 },
 };
 
 export type GlobalUniforms = typeof GLOBALS;

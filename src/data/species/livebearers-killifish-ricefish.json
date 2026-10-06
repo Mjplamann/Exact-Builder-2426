@@ -1,0 +1,9213 @@
+[
+ {
+  "id": "poecilia-reticulata-king-cobra",
+  "commonName": "King Cobra Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "A fancy strain whose males are covered in the \"cobra\" pattern: vertical, snakeskin-like rosettes and bars of black over yellow-green, continuing as heavy spotting through the delta tail. Females show only a faint echo of the pattern in the tail.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#a9a68c",
+   "dorsal": "#6f6c55",
+   "ventral": "#e6e2d2",
+   "fin": "#c9c6b4",
+   "finOpacity": 0.3,
+   "eye": "#c8b88a",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5b5944",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#c2bb6a",
+    "dorsal": "#5d6a2c",
+    "ventral": "#e4dcb0",
+    "iridescence": 0.5,
+    "iridescenceColor": "#7ee08a",
+    "patterns": [
+     {
+      "type": "reticulate",
+      "color": "#2a2a18",
+      "scale": 0.12,
+      "thickness": 0.35
+     },
+     {
+      "type": "bars",
+      "color": "#262614",
+      "count": 9,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.98
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#c9c04a",
+      "opacity": 0.85,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1d1d12",
+        "density": 30,
+        "size": 0.07
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#b8b448",
+      "opacity": 0.75,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1d1d12",
+        "density": 20,
+        "size": 0.08
+       }
+      ]
+     }
+    }
+   }
+  },
+  "female": {
+   "look": {
+    "fins": {
+     "caudal": {
+      "color": "#b8b070",
+      "opacity": 0.45,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#3a3826",
+        "density": 12,
+        "size": 0.06
+       }
+      ]
+     }
+    }
+   }
+  },
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-snakeskin",
+  "commonName": "Snakeskin Guppy (Yellow Lace)",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Males are covered in a chain-link rosette pattern like reptile scales; in \"lace\" snakeskins the same fine black net continues through the dorsal fin and the broad tail.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#a9a68c",
+   "dorsal": "#6f6c55",
+   "ventral": "#e6e2d2",
+   "fin": "#c9c6b4",
+   "finOpacity": 0.3,
+   "eye": "#c8b88a",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5b5944",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#d8c25a",
+    "dorsal": "#7a6a20",
+    "ventral": "#efe2b0",
+    "iridescence": 0.3,
+    "iridescenceColor": "#c8f070",
+    "patterns": [
+     {
+      "type": "reticulate",
+      "color": "#2b2614",
+      "scale": 0.09,
+      "thickness": 0.4
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#e0c040",
+      "opacity": 0.85,
+      "patterns": [
+       {
+        "type": "reticulate",
+        "color": "#2b2614",
+        "scale": 0.12,
+        "thickness": 0.3
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#dcc048",
+      "opacity": 0.8,
+      "patterns": [
+       {
+        "type": "reticulate",
+        "color": "#2b2614",
+        "scale": 0.12,
+        "thickness": 0.3
+       }
+      ]
+     }
+    }
+   }
+  },
+  "female": {
+   "look": {
+    "fins": {
+     "caudal": {
+      "color": "#d8c050",
+      "opacity": 0.5,
+      "patterns": [
+       {
+        "type": "reticulate",
+        "color": "#5a5030",
+        "scale": 0.14,
+        "thickness": 0.2
+       }
+      ]
+     }
+    }
+   }
+  },
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-tuxedo-blue",
+  "commonName": "Tuxedo Guppy (Blue)",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "The tuxedo gene darkens the rear half of the body to near-black while the front stays pale, here set off by a blue tail. Unlike most guppy colors, the tuxedo marking shows in females as well as males.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#c8cfd2",
+   "dorsal": "#7b8794",
+   "ventral": "#eef0ee",
+   "fin": "#9fb6d8",
+   "finOpacity": 0.35,
+   "eye": "#c8b88a",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#15171f",
+     "x0": 0.5,
+     "x1": 1,
+     "y0": -0.75,
+     "y1": 0.9,
+     "softness": 0.12
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#7fa6d8",
+     "opacity": 0.5
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#b8c8d8",
+    "iridescence": 0.6,
+    "iridescenceColor": "#58a8ff",
+    "fins": {
+     "caudal": {
+      "color": "#3f7fd8",
+      "opacity": 0.85,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1a2a5a",
+        "density": 12,
+        "size": 0.06
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#4a86d8",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-half-black-red",
+  "commonName": "Half-Black Red Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "A classic show strain: the rear half of the body is black in both sexes, contrasting with a pale front and a solid red dorsal fin and delta tail.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#d8cdb8",
+   "dorsal": "#8a7a60",
+   "ventral": "#f2ebe0",
+   "fin": "#d03a2a",
+   "finOpacity": 0.45,
+   "eye": "#c8b88a",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#121212",
+     "x0": 0.48,
+     "x1": 1,
+     "y0": -0.8,
+     "y1": 0.9,
+     "softness": 0.12
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#e0cbb0",
+    "fins": {
+     "caudal": {
+      "color": "#d42222",
+      "opacity": 0.92
+     },
+     "dorsal": {
+      "color": "#cc2020",
+      "opacity": 0.85
+     },
+     "anal": {
+      "color": "#b82020",
+      "opacity": 0.7
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-blue-mosaic",
+  "commonName": "Blue Mosaic Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Mosaic guppies have a tail whose inner half is broken into a dark, irregular network over a lighter outer zone. In the blue form the base color is sky to royal blue and the head is darkened.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#a9a68c",
+   "dorsal": "#6f6c55",
+   "ventral": "#e6e2d2",
+   "fin": "#c9c6b4",
+   "finOpacity": 0.3,
+   "eye": "#c8b88a",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5b5944",
+     "contrast": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#7a9cc8",
+     "opacity": 0.45,
+     "patterns": [
+      {
+       "type": "marble",
+       "color": "#2a3046",
+       "scale": 0.3,
+       "amount": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#8fa6c0",
+    "dorsal": "#3e5068",
+    "ventral": "#dfe6ea",
+    "iridescence": 0.7,
+    "iridescenceColor": "#5ab4ff",
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#3a4a60",
+      "contrast": 0.3
+     },
+     {
+      "type": "region",
+      "color": "#2a3550",
+      "x0": 0,
+      "x1": 0.3,
+      "y0": -0.2,
+      "y1": 1,
+      "softness": 0.25
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#4f8fe0",
+      "opacity": 0.9,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#1a2240",
+        "x0": 0,
+        "x1": 0.45,
+        "y0": -1,
+        "y1": 1,
+        "softness": 0.3
+       },
+       {
+        "type": "marble",
+        "color": "#1a2240",
+        "scale": 0.25,
+        "amount": 0.45
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#5a90d8",
+      "opacity": 0.8,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1a2240",
+        "density": 15,
+        "size": 0.1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-koi",
+  "commonName": "Koi Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Bred to resemble koi carp: a white to cream body with red on the head and gill covers (breeders call it \"red ear\") and a solid red tail and dorsal fin.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#ece6dc",
+   "dorsal": "#d8cfc0",
+   "ventral": "#f8f4ee",
+   "fin": "#e44a2a",
+   "finOpacity": 0.45,
+   "eye": "#2a2222",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#e2462a",
+     "x": 0.12,
+     "y": 0.2,
+     "rx": 0.1,
+     "ry": 0.55
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "metallic": 0.45,
+    "fins": {
+     "caudal": {
+      "color": "#e43a24",
+      "opacity": 0.9
+     },
+     "dorsal": {
+      "color": "#e04428",
+      "opacity": 0.85
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-moscow-blue",
+  "commonName": "Moscow Blue Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Moscow guppies, a strain developed by Russian breeders, are solidly colored from head to tail; in the blue form the male is deep steel-blue all over with a metallic gleam on the head and shoulders.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#7a8494",
+   "dorsal": "#4d5666",
+   "ventral": "#c8ccd2",
+   "fin": "#3a5080",
+   "finOpacity": 0.4,
+   "eye": "#c8b88a",
+   "metallic": 0.25
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#2e4c86",
+    "dorsal": "#18284a",
+    "ventral": "#3c5a92",
+    "iridescence": 0.8,
+    "iridescenceColor": "#6a9cff",
+    "metallic": 0.35,
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#8fb4e8",
+      "x0": 0,
+      "x1": 0.25,
+      "y0": 0,
+      "y1": 1,
+      "softness": 0.3
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#24386a",
+      "opacity": 0.95
+     },
+     "dorsal": {
+      "color": "#24386a",
+      "opacity": 0.9
+     },
+     "anal": {
+      "color": "#24386a",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-black-moscow",
+  "commonName": "Black Moscow Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "The darkest Moscow line: males are velvety black over body and fins, with a greenish-blue gleam on the head and shoulders in good light. Females are smoky grey with dark tails.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#4a4c50",
+   "dorsal": "#2a2c30",
+   "ventral": "#9a9a98",
+   "fin": "#202226",
+   "finOpacity": 0.5,
+   "eye": "#c8b88a",
+   "metallic": 0.2
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#16181c",
+    "dorsal": "#0c0d10",
+    "ventral": "#24272c",
+    "iridescence": 0.5,
+    "iridescenceColor": "#3ab89a",
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#3a5a58",
+      "x0": 0,
+      "x1": 0.25,
+      "y0": 0,
+      "y1": 1,
+      "softness": 0.35
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#0e0f12",
+      "opacity": 0.95
+     },
+     "dorsal": {
+      "color": "#0e0f12",
+      "opacity": 0.92
+     },
+     "anal": {
+      "color": "#0e0f12",
+      "opacity": 0.85
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-japan-blue",
+  "commonName": "Japan Blue Guppy (Red Tail)",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Carries the \"Japan blue\" color factor, which lays a metallic sky-blue sheen over the rear of the male's body; this popular combination pairs it with a red delta tail.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#a9a68c",
+   "dorsal": "#6f6c55",
+   "ventral": "#e6e2d2",
+   "fin": "#c9c6b4",
+   "finOpacity": 0.3,
+   "eye": "#c8b88a",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5b5944",
+     "contrast": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e05a3a",
+     "opacity": 0.45
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#9eb2c4",
+    "dorsal": "#56677a",
+    "ventral": "#e4e8ea",
+    "iridescence": 0.9,
+    "iridescenceColor": "#38b8ff",
+    "metallic": 0.4,
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#4aa8f0",
+      "x0": 0.45,
+      "x1": 1,
+      "y0": -0.5,
+      "y1": 0.9,
+      "softness": 0.25
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#e03a28",
+      "opacity": 0.9
+     },
+     "dorsal": {
+      "color": "#d83a2a",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-full-red",
+  "commonName": "Full Red Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Red from snout to tail tip, including the body, with breeders selecting hard against any stray black or blue pigment. Females also carry red fins and a red-tinged body.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#c6806a",
+   "dorsal": "#8c4a3a",
+   "ventral": "#ecc8b8",
+   "fin": "#d8382a",
+   "finOpacity": 0.55,
+   "eye": "#c8b88a",
+   "metallic": 0.15
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#cc2a22",
+    "dorsal": "#8e1612",
+    "ventral": "#e0604a",
+    "fins": {
+     "caudal": {
+      "color": "#d41e18",
+      "opacity": 0.95
+     },
+     "dorsal": {
+      "color": "#d01e18",
+      "opacity": 0.9
+     },
+     "anal": {
+      "color": "#c81e18",
+      "opacity": 0.85
+     },
+     "pelvic": {
+      "color": "#c81e18",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-albino-full-red",
+  "commonName": "Albino Full Red Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "An albino version of the full red: lacking black pigment, it has ruby-red eyes and a paler, pinkish-red body. Albinos see less well, so they do best without boisterous tankmates.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#e6a090",
+   "dorsal": "#c07060",
+   "ventral": "#f6d8cc",
+   "fin": "#e84a3a",
+   "finOpacity": 0.55,
+   "eye": "#d8343c",
+   "metallic": 0.1
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#e04a44",
+    "dorsal": "#b02a26",
+    "ventral": "#f0a090",
+    "fins": {
+     "caudal": {
+      "color": "#e8302a",
+      "opacity": 0.92
+     },
+     "dorsal": {
+      "color": "#e8302a",
+      "opacity": 0.88
+     },
+     "anal": {
+      "color": "#e03a30",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "uncommon"
+ },
+ {
+  "id": "poecilia-reticulata-blue-grass",
+  "commonName": "Blue Grass Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Grass guppies have a large tail evenly sprinkled with small black dots, said to resemble grass seeds. In the blue form the tail is sky blue and the rear of the body carries a blue sheen.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#a9a68c",
+   "dorsal": "#6f6c55",
+   "ventral": "#e6e2d2",
+   "fin": "#c9c6b4",
+   "finOpacity": 0.3,
+   "eye": "#c8b88a",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5b5944",
+     "contrast": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#8ab4e0",
+     "opacity": 0.45,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1a1a24",
+       "density": 40,
+       "size": 0.035
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "base": "#9eacb8",
+    "dorsal": "#56626e",
+    "ventral": "#e2e6e8",
+    "iridescence": 0.6,
+    "iridescenceColor": "#58b0ff",
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#7ab4e8",
+      "x0": 0.55,
+      "x1": 1,
+      "y0": -0.4,
+      "y1": 0.8,
+      "softness": 0.3
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#7fb2ee",
+      "opacity": 0.85,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1a1a24",
+        "density": 60,
+        "size": 0.035
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#8ab8ee",
+      "opacity": 0.75,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1a1a24",
+        "density": 30,
+        "size": 0.04
+       }
+      ]
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-platinum-white",
+  "commonName": "Platinum White Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Platinum guppies carry a dense layer of reflective iridophores that makes the body and fins look pearly white to silver; full platinum lines show the sheen over the whole fish in both sexes.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#e8ebea",
+   "dorsal": "#cfd4d4",
+   "ventral": "#f6f7f6",
+   "fin": "#eef0ee",
+   "finOpacity": 0.5,
+   "eye": "#3a3a3a",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#c4cccc",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    }
+   },
+   "look": {
+    "metallic": 0.85,
+    "iridescence": 0.2,
+    "iridescenceColor": "#dff2ff",
+    "fins": {
+     "caudal": {
+      "color": "#f2f4f2",
+      "opacity": 0.85
+     },
+     "dorsal": {
+      "color": "#f2f4f2",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-reticulata-double-sword",
+  "commonName": "Double Sword Guppy",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "One of the oldest guppy tail types: both the upper and lower edges of the male's tail are drawn out into narrow swords. The shape is close to the wild type, so these males stay quick and agile.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#a9a68c",
+   "dorsal": "#6f6c55",
+   "ventral": "#e6e2d2",
+   "fin": "#c9c6b4",
+   "finOpacity": 0.3,
+   "eye": "#c8b88a",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5b5944",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.26,
+    "caudal": {
+     "shape": "lyre",
+     "size": 0.9
+    },
+    "dorsal": {
+     "start": 0.48,
+     "end": 0.64,
+     "height": 0.26,
+     "shape": "pointed",
+     "trail": 0.1
+    }
+   },
+   "look": {
+    "base": "#a8a68a",
+    "iridescence": 0.6,
+    "iridescenceColor": "#58d0a0",
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#f06a18",
+      "x": 0.5,
+      "y": 0.1,
+      "rx": 0.09,
+      "ry": 0.35
+     },
+     {
+      "type": "blotch",
+      "color": "#111111",
+      "x": 0.64,
+      "y": -0.2,
+      "rx": 0.05,
+      "ry": 0.2
+     },
+     {
+      "type": "blotch",
+      "color": "#2fb6d8",
+      "x": 0.78,
+      "y": 0.25,
+      "rx": 0.06,
+      "ry": 0.25
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#e8c040",
+      "opacity": 0.75,
+      "edge": "#151515",
+      "edgeWidth": 0.12
+     },
+     "dorsal": {
+      "color": "#d8b040",
+      "opacity": 0.7
+     }
+    }
+   }
+  },
+  "female": {},
+  "variantOf": "poecilia-reticulata",
+  "availability": "uncommon"
+ },
+ {
+  "id": "poecilia-reticulata-dumbo-ear-red",
+  "commonName": "Dumbo Ear Guppy (Red)",
+  "scientificName": "Poecilia reticulata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Trinidad, Venezuela, Guyana & northern Brazil)",
+  "description": "Also called elephant-ear or big-ear guppies: a recessive trait hugely enlarges the pectoral fins, which flap like ears and are often pale against the colored body. In this form the tail and dorsal are solid red.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.8,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#e2cfc4",
+   "dorsal": "#b8988a",
+   "ventral": "#f6eee8",
+   "fin": "#d8463a",
+   "finOpacity": 0.45,
+   "eye": "#2a2222",
+   "metallic": 0.3,
+   "fins": {
+    "pectoral": {
+     "color": "#f0e8e2",
+     "opacity": 0.6
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "delta",
+     "size": 1.15
+    },
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.2
+    },
+    "pectoral": {
+     "start": 0.24,
+     "end": 0.3,
+     "height": 0.34,
+     "shape": "fan"
+    }
+   },
+   "look": {
+    "base": "#e8d6cc",
+    "fins": {
+     "caudal": {
+      "color": "#d8281e",
+      "opacity": 0.92
+     },
+     "dorsal": {
+      "color": "#d42a20",
+      "opacity": 0.85
+     },
+     "pectoral": {
+      "color": "#f2ece6",
+      "opacity": 0.75
+     }
+    }
+   }
+  },
+  "female": {
+   "body": {
+    "pectoral": {
+     "start": 0.24,
+     "end": 0.3,
+     "height": 0.22,
+     "shape": "fan"
+    }
+   }
+  },
+  "variantOf": "poecilia-reticulata",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-wingei",
+  "commonName": "Endler's Livebearer",
+  "scientificName": "Poecilia wingei",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Laguna de los Patos & Campoma lagoons, Sucre, NE Venezuela",
+  "description": "Rediscovered by John Endler in 1975 and described as Poecilia wingei in 2005 from warm, hard, algae-rich lagoons near Cumaná. Males are tiny but intensely colored with orange, black and metallic green; the wild habitat is badly degraded, and pure strains survive mainly in aquaria.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 2.5,
+  "lifespanYears": 2,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 12,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.28,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#a8a07e",
+   "dorsal": "#6c6648",
+   "ventral": "#e4dece",
+   "fin": "#d0ccb8",
+   "finOpacity": 0.2,
+   "eye": "#c8b070",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5e5840",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.65,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.25,
+    "caudal": {
+     "shape": "lyre",
+     "size": 0.55
+    },
+    "dorsal": {
+     "start": 0.5,
+     "end": 0.64,
+     "height": 0.18,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "base": "#7e8a6c",
+    "iridescence": 0.85,
+    "iridescenceColor": "#4ae08a",
+    "metallic": 0.3,
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#ff6a10",
+      "x": 0.42,
+      "y": 0.05,
+      "rx": 0.1,
+      "ry": 0.45
+     },
+     {
+      "type": "blotch",
+      "color": "#101010",
+      "x": 0.55,
+      "y": 0.25,
+      "rx": 0.05,
+      "ry": 0.3
+     },
+     {
+      "type": "blotch",
+      "color": "#38e070",
+      "x": 0.7,
+      "y": -0.1,
+      "rx": 0.08,
+      "ry": 0.3
+     },
+     {
+      "type": "blotch",
+      "color": "#ff7a20",
+      "x": 0.82,
+      "y": -0.3,
+      "rx": 0.06,
+      "ry": 0.25
+     },
+     {
+      "type": "blotch",
+      "color": "#101010",
+      "x": 0.93,
+      "y": 0,
+      "rx": 0.03,
+      "ry": 0.35
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#c8b088",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": -0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": 0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": 0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#2a2a22",
+      "opacity": 0.7,
+      "edge": "#ff8a20",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-wingei-black-bar",
+  "commonName": "Endler's Livebearer (Black Bar)",
+  "scientificName": "Poecilia wingei",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: coastal lagoons near Cumaná, NE Venezuela)",
+  "description": "A line selected for a bold, vertical black bar across the middle of the male's flank, set between orange and metallic green patches; males keep the wild-type double-sword tail.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 2.5,
+  "lifespanYears": 2,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 12,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.28,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#a8a07e",
+   "dorsal": "#6c6648",
+   "ventral": "#e4dece",
+   "fin": "#d0ccb8",
+   "finOpacity": 0.2,
+   "eye": "#c8b070",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5e5840",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.65,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.25,
+    "caudal": {
+     "shape": "lyre",
+     "size": 0.55
+    },
+    "dorsal": {
+     "start": 0.5,
+     "end": 0.64,
+     "height": 0.18,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "base": "#7e8a6c",
+    "iridescence": 0.85,
+    "iridescenceColor": "#4ae08a",
+    "metallic": 0.3,
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#ff6a10",
+      "x": 0.38,
+      "y": 0,
+      "rx": 0.1,
+      "ry": 0.5
+     },
+     {
+      "type": "bars",
+      "color": "#0e0e0e",
+      "count": 1,
+      "width": 0.07,
+      "x0": 0.52,
+      "x1": 0.58,
+      "y0": -0.85,
+      "y1": 0.85
+     },
+     {
+      "type": "blotch",
+      "color": "#38e070",
+      "x": 0.72,
+      "y": 0,
+      "rx": 0.1,
+      "ry": 0.45
+     },
+     {
+      "type": "blotch",
+      "color": "#ff7a20",
+      "x": 0.86,
+      "y": -0.3,
+      "rx": 0.05,
+      "ry": 0.25
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#c8b088",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": -0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": 0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": 0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#2a2a22",
+      "opacity": 0.7,
+      "edge": "#ff8a20",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "variantOf": "poecilia-wingei",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-wingei-tiger",
+  "commonName": "Endler's Livebearer (Tiger)",
+  "scientificName": "Poecilia wingei",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: coastal lagoons near Cumaná, NE Venezuela)",
+  "description": "Males show a row of narrow black vertical bars over an orange-and-green body, like tiger stripes, while females remain plain olive-grey.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 2.5,
+  "lifespanYears": 2,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 12,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.28,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#a8a07e",
+   "dorsal": "#6c6648",
+   "ventral": "#e4dece",
+   "fin": "#d0ccb8",
+   "finOpacity": 0.2,
+   "eye": "#c8b070",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5e5840",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.65,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.25,
+    "caudal": {
+     "shape": "lyre",
+     "size": 0.55
+    },
+    "dorsal": {
+     "start": 0.5,
+     "end": 0.64,
+     "height": 0.18,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "base": "#8a8a5c",
+    "iridescence": 0.75,
+    "iridescenceColor": "#4ae08a",
+    "metallic": 0.3,
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#f07a20",
+      "x0": 0.3,
+      "x1": 0.85,
+      "y0": -0.6,
+      "y1": 0.5,
+      "softness": 0.3
+     },
+     {
+      "type": "bars",
+      "color": "#121212",
+      "count": 6,
+      "width": 0.035,
+      "x0": 0.38,
+      "x1": 0.95,
+      "y0": -0.7,
+      "y1": 0.8
+     },
+     {
+      "type": "blotch",
+      "color": "#38e070",
+      "x": 0.62,
+      "y": 0.35,
+      "rx": 0.08,
+      "ry": 0.2
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#c8b088",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": -0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": 0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": 0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#2a2a22",
+      "opacity": 0.7,
+      "edge": "#ff8a20",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "variantOf": "poecilia-wingei",
+  "availability": "uncommon"
+ },
+ {
+  "id": "poecilia-wingei-red-chest",
+  "commonName": "Endler's Livebearer (Red Chest)",
+  "scientificName": "Poecilia wingei",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: coastal lagoons near Cumaná, NE Venezuela)",
+  "description": "Selected for a large red-orange patch on the male's throat, chest and lower flank, ahead of the usual black and metallic green markings.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 2.5,
+  "lifespanYears": 2,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 12,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.28,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#a8a07e",
+   "dorsal": "#6c6648",
+   "ventral": "#e4dece",
+   "fin": "#d0ccb8",
+   "finOpacity": 0.2,
+   "eye": "#c8b070",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5e5840",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.65,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.25,
+    "caudal": {
+     "shape": "lyre",
+     "size": 0.55
+    },
+    "dorsal": {
+     "start": 0.5,
+     "end": 0.64,
+     "height": 0.18,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "base": "#7e8a6c",
+    "iridescence": 0.85,
+    "iridescenceColor": "#4ae08a",
+    "metallic": 0.3,
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#ff4a18",
+      "x0": 0.12,
+      "x1": 0.6,
+      "y0": -1,
+      "y1": -0.05,
+      "softness": 0.25
+     },
+     {
+      "type": "blotch",
+      "color": "#101010",
+      "x": 0.58,
+      "y": 0.3,
+      "rx": 0.05,
+      "ry": 0.3
+     },
+     {
+      "type": "blotch",
+      "color": "#38e070",
+      "x": 0.72,
+      "y": 0.1,
+      "rx": 0.09,
+      "ry": 0.35
+     },
+     {
+      "type": "blotch",
+      "color": "#101010",
+      "x": 0.93,
+      "y": 0,
+      "rx": 0.03,
+      "ry": 0.35
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#c8b088",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": -0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#ff7a10",
+        "y": 0.82,
+        "width": 0.18,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": 0.6,
+        "width": 0.08,
+        "x0": 0.15,
+        "x1": 1
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#2a2a22",
+      "opacity": 0.7,
+      "edge": "#ff8a20",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "variantOf": "poecilia-wingei",
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-maculatus",
+  "commonName": "Southern Platyfish (wild type)",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope from Veracruz, Mexico to northern Belize",
+  "description": "Wild platies are olive-brown with variable black tail-base markings, such as the moon and comet patterns that breeders later fixed, and live in warm, weedy backwaters and ditches. Hybrids with swordtails made it a classic laboratory model for inherited melanoma.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#9a9878",
+   "dorsal": "#5e5a42",
+   "ventral": "#e0dccc",
+   "fin": "#c8c4a8",
+   "finOpacity": 0.3,
+   "eye": "#c09a50",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a5640",
+     "contrast": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1a14",
+     "x": 0.97,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.4
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   },
+   "look": {
+    "iridescence": 0.3,
+    "iridescenceColor": "#7ad0e0",
+    "fins": {
+     "dorsal": {
+      "color": "#b84a2a",
+      "opacity": 0.45
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-variatus",
+  "commonName": "Variable Platyfish (wild type)",
+  "scientificName": "Xiphophorus variatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope of NE Mexico (southern Tamaulipas to northern Veracruz)",
+  "description": "A subtropical platy of clear upland streams that tolerates cooler water than the southern platy. Wild males are highly variable, often with a yellow dorsal fin, red-orange tail and blue-flecked flanks, while females show dark zig-zag lines along the side.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   17,
+   25
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.34,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a09a7a",
+   "dorsal": "#605a40",
+   "ventral": "#e2dece",
+   "fin": "#c8c4a8",
+   "finOpacity": 0.3,
+   "eye": "#c09a50",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a5640",
+     "contrast": 0.3
+    },
+    {
+     "type": "chevrons",
+     "color": "#3a3828",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 0.95
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   },
+   "look": {
+    "base": "#8a9a9a",
+    "iridescence": 0.5,
+    "iridescenceColor": "#58b8e0",
+    "patterns": [
+     {
+      "type": "speckle",
+      "color": "#1a1a1a",
+      "density": 0.35
+     },
+     {
+      "type": "region",
+      "color": "#d8c040",
+      "x0": 0.05,
+      "x1": 0.4,
+      "y0": -0.2,
+      "y1": 1,
+      "softness": 0.3
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#e8d040",
+      "opacity": 0.8
+     },
+     "caudal": {
+      "color": "#e05028",
+      "opacity": 0.75
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-maculatus-coral-red",
+  "commonName": "Red Platy (Coral Red)",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "The classic red platy, selected for solid orange-red to coral-red color over body and fins. Like most trade platies it carries some hybrid ancestry from other Xiphophorus.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e0452a",
+   "dorsal": "#a82a18",
+   "ventral": "#f08a60",
+   "fin": "#e85a30",
+   "finOpacity": 0.6,
+   "eye": "#3a2a20",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#b83018",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-maculatus-red-wag",
+  "commonName": "Red Wagtail Platy",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "A red platy with the wagtail pattern: jet-black fins and often dark lips against a bright red body. The wagtail gene darkens only the fins, leaving the body color untouched.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e04628",
+   "dorsal": "#a82a18",
+   "ventral": "#f09060",
+   "fin": "#141414",
+   "finOpacity": 0.9,
+   "eye": "#3a2a20",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#b83018",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-maculatus-mickey-mouse",
+  "commonName": "Mickey Mouse Platy",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "Named for the black marking at the tail base — a round spot flanked by two smaller dots that resembles a cartoon mouse's head. It is a fixed form of the dark tail-base spots seen in wild platies, here on a golden body.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#f0c030",
+   "dorsal": "#c89820",
+   "ventral": "#f8e8a0",
+   "fin": "#f0d070",
+   "finOpacity": 0.45,
+   "eye": "#3a2a20",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#121212",
+     "x": 0.955,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#121212",
+     "x": 0.975,
+     "y": 0.55,
+     "rx": 0.025,
+     "ry": 0.15
+    },
+    {
+     "type": "blotch",
+     "color": "#121212",
+     "x": 0.975,
+     "y": -0.55,
+     "rx": 0.025,
+     "ry": 0.15
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-maculatus-red-tuxedo",
+  "commonName": "Red Tuxedo Platy",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "A red platy carrying the tuxedo marking: a broad black area covers most of the flank behind the head, leaving the head, back edge and fins red.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e0452a",
+   "dorsal": "#a82a18",
+   "ventral": "#f08a60",
+   "fin": "#e85a30",
+   "finOpacity": 0.6,
+   "eye": "#3a2a20",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": 0.3,
+     "x1": 0.96,
+     "y0": -0.7,
+     "y1": 0.75,
+     "softness": 0.12
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-maculatus-blue-moon",
+  "commonName": "Blue Moon Platy",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "A metallic strain whose iridophores give the flanks a pale silvery-blue sheen over a darker blue-grey back, with smoky, dark-edged fins.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#9ab0c8",
+   "dorsal": "#3e5070",
+   "ventral": "#dfe6ee",
+   "fin": "#4a5468",
+   "finOpacity": 0.55,
+   "eye": "#3a3030",
+   "metallic": 0.5,
+   "iridescence": 0.6,
+   "iridescenceColor": "#78b8ff",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a6a88",
+     "contrast": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#4a5468",
+     "opacity": 0.6,
+     "edge": "#1a1c24",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-maculatus-salt-and-pepper",
+  "commonName": "Salt and Pepper Platy",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "Silvery-white to pale grey with a dense peppering of small black speckles over the body; the fins are often tinted orange.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#dcdcd6",
+   "dorsal": "#a8a8a0",
+   "ventral": "#f2f2ee",
+   "fin": "#e8a060",
+   "finOpacity": 0.45,
+   "eye": "#3a3030",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 70,
+     "size": 0.025,
+     "jitter": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#2a2a2a",
+     "density": 0.4
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-maculatus-bleeding-heart",
+  "commonName": "Bleeding Heart Platy",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "A pale peach to cream platy marked with a red patch over the chest just behind the gills, which gives the strain its name.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#f0d0b0",
+   "dorsal": "#d4a888",
+   "ventral": "#f8ece0",
+   "fin": "#f0c8a0",
+   "finOpacity": 0.4,
+   "eye": "#3a3030",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#d8282a",
+     "x": 0.3,
+     "y": -0.25,
+     "rx": 0.08,
+     "ry": 0.35
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-maculatus-hi-fin-red-wag",
+  "commonName": "Hi-Fin Red Wag Platy",
+  "scientificName": "Xiphophorus maculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to northern Belize)",
+  "description": "A red wagtail platy carrying the hi-fin trait, which enlarges the dorsal fin into a tall, trailing black banner. The long fin is a target for fin-nipping tankmates.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.38,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.66,
+    "height": 0.45,
+    "shape": "flowing",
+    "trail": 0.2
+   }
+  },
+  "look": {
+   "base": "#e04628",
+   "dorsal": "#a82a18",
+   "ventral": "#f09060",
+   "fin": "#141414",
+   "finOpacity": 0.9,
+   "eye": "#3a2a20",
+   "metallic": 0.2
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   }
+  },
+  "variantOf": "xiphophorus-maculatus",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-variatus-sunset",
+  "commonName": "Sunset Variatus Platy",
+  "scientificName": "Xiphophorus variatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope of NE Mexico)",
+  "description": "A popular variatus strain shading from yellow at the head to red-orange over the rear body and tail, like a sunset; males usually show the deepest red in the tail.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.34,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#f0c040",
+   "dorsal": "#c89030",
+   "ventral": "#f8e4a0",
+   "fin": "#f08030",
+   "finOpacity": 0.55,
+   "eye": "#3a2a20",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8602a",
+     "x0": 0.5,
+     "x1": 1,
+     "y0": -0.9,
+     "y1": 0.9,
+     "softness": 0.35
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "color": "#e03a20",
+      "opacity": 0.8
+     },
+     "dorsal": {
+      "color": "#f0b030",
+      "opacity": 0.75
+     }
+    }
+   }
+  },
+  "variantOf": "xiphophorus-variatus",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-variatus-marigold",
+  "commonName": "Marigold Variatus Platy",
+  "scientificName": "Xiphophorus variatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope of NE Mexico)",
+  "description": "Males are golden-yellow to orange with a red-orange tail and a tall yellow dorsal fin, while females are paler yellow; the strain is also widely sold in a hi-fin form.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.34,
+   "width": 0.14,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#f0cc60",
+   "dorsal": "#c8a040",
+   "ventral": "#f8ecc0",
+   "fin": "#f0d080",
+   "finOpacity": 0.4,
+   "eye": "#3a2a20",
+   "metallic": 0.25
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.36
+   },
+   "look": {
+    "base": "#f0b030",
+    "dorsal": "#d08020",
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#e86a20",
+      "x0": 0.6,
+      "x1": 1,
+      "y0": -0.6,
+      "y1": 0.8,
+      "softness": 0.3
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#e04a20",
+      "opacity": 0.85
+     },
+     "dorsal": {
+      "color": "#f0d040",
+      "opacity": 0.85
+     }
+    }
+   }
+  },
+  "variantOf": "xiphophorus-variatus",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-hellerii",
+  "commonName": "Green Swordtail (wild type)",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope from Veracruz, Mexico to NW Honduras",
+  "description": "Wild green swordtails live in clear, flowing streams; the male's \"sword\" is an extension of the lower tail rays, and females prefer males with longer swords. Older females occasionally develop male traits, long misread as a full sex change.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8e9a6a",
+   "dorsal": "#55603a",
+   "ventral": "#e4e2c8",
+   "fin": "#c8c8a8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "iridescence": 0.35,
+   "iridescenceColor": "#6ad0a0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#55603a",
+     "contrast": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#c83a28",
+     "y": 0,
+     "width": 0.07,
+     "x0": 0.12,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a1a",
+     "y": 0.1,
+     "width": 0.03,
+     "x0": 0.15,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a1a",
+     "y": -0.1,
+     "width": 0.03,
+     "x0": 0.15,
+     "x1": 0.98
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.6,
+     "height": 0.22,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#e8c830",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     },
+     "dorsal": {
+      "color": "#c8b080",
+      "opacity": 0.45,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#a83a28",
+        "density": 10,
+        "size": 0.1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-hellerii-red-velvet",
+  "commonName": "Red Velvet Swordtail",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to NW Honduras)",
+  "description": "The classic red swordtail, bred to a deep, velvety red over body and fins; the male's sword is red as well, often with a thin dark rim.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#cc2a1e",
+   "dorsal": "#8e1810",
+   "ventral": "#e8705a",
+   "fin": "#d8382a",
+   "finOpacity": 0.6,
+   "eye": "#5a1a14",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#a01c12",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.6,
+     "height": 0.22,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#d8281c",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#3a0e0a",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#3a0e0a",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "variantOf": "xiphophorus-hellerii",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-hellerii-red-wag",
+  "commonName": "Red Wag Swordtail",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to NW Honduras)",
+  "description": "A red swordtail with the wagtail pattern: all fins, including the male's long sword, are black against a bright red body.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#d83a24",
+   "dorsal": "#981e12",
+   "ventral": "#f0806a",
+   "fin": "#121212",
+   "finOpacity": 0.9,
+   "eye": "#3a1a14",
+   "metallic": 0.2
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.6,
+     "height": 0.22,
+     "shape": "rounded"
+    }
+   }
+  },
+  "variantOf": "xiphophorus-hellerii",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-hellerii-red-tuxedo",
+  "commonName": "Red Tuxedo Swordtail",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to NW Honduras)",
+  "description": "A red swordtail carrying the tuxedo marking: a broad black panel covers the mid- and rear flank, framed by red head, back and fins.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#d8342a",
+   "dorsal": "#981e12",
+   "ventral": "#f0806a",
+   "fin": "#e04030",
+   "finOpacity": 0.6,
+   "eye": "#3a1a14",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": 0.3,
+     "x1": 0.97,
+     "y0": -0.65,
+     "y1": 0.7,
+     "softness": 0.12
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.6,
+     "height": 0.22,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#e04030",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "variantOf": "xiphophorus-hellerii",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-hellerii-pineapple",
+  "commonName": "Pineapple Swordtail",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to NW Honduras)",
+  "description": "A golden-yellow to orange strain whose scales are edged in deeper orange, recalling pineapple skin; males carry a yellow-orange sword with a dark rim.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#f0b438",
+   "dorsal": "#d08828",
+   "ventral": "#f8e2a8",
+   "fin": "#f0a040",
+   "finOpacity": 0.5,
+   "eye": "#3a2a20",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#e06a20",
+     "contrast": 0.45
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.6,
+     "height": 0.22,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#f0a030",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#2a1a10",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#2a1a10",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "variantOf": "xiphophorus-hellerii",
+  "availability": "common"
+ },
+ {
+  "id": "xiphophorus-hellerii-koi",
+  "commonName": "Koi Swordtail",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to NW Honduras)",
+  "description": "A calico-patterned strain with a white to cream body splashed with red-orange and black patches, bred to recall koi carp; no two fish are marked alike.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#efe8dc",
+   "dorsal": "#e0c8b0",
+   "ventral": "#faf6f0",
+   "fin": "#f0e0d0",
+   "finOpacity": 0.45,
+   "eye": "#2a2222",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#e05a28",
+     "scale": 0.35,
+     "amount": 0.45
+    },
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 6,
+     "size": 0.12,
+     "jitter": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.6,
+     "height": 0.22,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#e86a30",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "variantOf": "xiphophorus-hellerii",
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-hellerii-black",
+  "commonName": "Black Swordtail",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to NW Honduras)",
+  "description": "Selected for heavy black pigment so the body appears velvety black with a green sheen on the flanks in good light; the male's sword is black.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1e221e",
+   "dorsal": "#101210",
+   "ventral": "#3a3e38",
+   "fin": "#181a18",
+   "finOpacity": 0.75,
+   "eye": "#c09048",
+   "metallic": 0.2,
+   "iridescence": 0.5,
+   "iridescenceColor": "#3ac890"
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "depth": 0.27,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.6,
+     "height": 0.22,
+     "shape": "rounded"
+    }
+   }
+  },
+  "variantOf": "xiphophorus-hellerii",
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-hellerii-lyretail-red",
+  "commonName": "Red Lyretail Swordtail",
+  "scientificName": "Xiphophorus hellerii",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Atlantic slope from Veracruz, Mexico to NW Honduras)",
+  "description": "Lyretail swordtails have both edges of the tail drawn into long streamers and an enlarged, pointed dorsal fin. Lyretail males also grow an elongated gonopodium and usually cannot mate, so lines are kept through normal-finned males.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.3
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.7
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.62,
+    "height": 0.35,
+    "shape": "flowing",
+    "trail": 0.2
+   }
+  },
+  "look": {
+   "base": "#cc2a1e",
+   "dorsal": "#8e1810",
+   "ventral": "#e8705a",
+   "fin": "#d8382a",
+   "finOpacity": 0.65,
+   "eye": "#5a1a14",
+   "metallic": 0.2
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "lyre",
+     "size": 1.1
+    }
+   }
+  },
+  "variantOf": "xiphophorus-hellerii",
+  "availability": "uncommon"
+ },
+ {
+  "id": "xiphophorus-montezumae",
+  "commonName": "Montezuma Swordtail",
+  "scientificName": "Xiphophorus montezumae",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Pánuco basin, San Luis Potosí & Tamaulipas, Mexico",
+  "description": "Males carry the longest sword in the genus, often longer than the body itself. It lives in clear, spring-fed streams and pools of the Pánuco basin, where dark lateral blotches help it blend with sun-dappled gravel.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.27,
+   "mouth": "terminal",
+   "belly": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#a8a478",
+   "dorsal": "#62603e",
+   "ventral": "#e8e4cc",
+   "fin": "#d0ccaa",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#62603e",
+     "contrast": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3a26",
+     "y": 0.02,
+     "width": 0.06,
+     "x0": 0.15,
+     "x1": 0.98
+    },
+    {
+     "type": "spots",
+     "color": "#2a2a1c",
+     "density": 8,
+     "size": 0.08,
+     "y0": -0.3,
+     "y1": 0.4,
+     "x0": 0.3,
+     "x1": 0.95
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "sword",
+     "size": 1.6
+    }
+   },
+   "look": {
+    "iridescence": 0.35,
+    "iridescenceColor": "#80d0c0",
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#e8c840",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-nezahualcoyotl",
+  "commonName": "Northern Mountain Swordtail",
+  "scientificName": "Xiphophorus nezahualcoyotl",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upland Río Pánuco tributaries, Tamaulipas & San Luis Potosí, Mexico",
+  "description": "Named after Nezahualcóyotl, the 15th-century poet-king of Texcoco, this swordtail lives in cool, clear upland streams. Both sexes show a dark zig-zag midlateral stripe, and males carry a yellow sword edged in black.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "mouth": "terminal",
+   "belly": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#a0a07a",
+   "dorsal": "#5c5e40",
+   "ventral": "#e6e4cc",
+   "fin": "#ccc8a8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5c5e40",
+     "contrast": 0.25
+    },
+    {
+     "type": "chevrons",
+     "color": "#2e2e20",
+     "count": 7,
+     "width": 0.035,
+     "x0": 0.2,
+     "x1": 0.96
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.9
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#e8d040",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-birchmanni",
+  "commonName": "Sheepshead Swordtail",
+  "scientificName": "Xiphophorus birchmanni",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Pánuco basin, Hidalgo & San Luis Potosí, Mexico",
+  "description": "Males have almost no sword; instead they grow a fleshy nuchal hump (\"sheepshead\") and a tall dorsal fin, and show vertical bars. It hybridizes naturally with X. malinche where rivers meet, forming one of the best-studied hybrid zones in fishes.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.3,
+   "mouth": "terminal",
+   "belly": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#b0a878",
+   "dorsal": "#6a6440",
+   "ventral": "#ece6cc",
+   "fin": "#d0c8a0",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a6440",
+     "contrast": 0.25
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.34,
+    "hump": 0.35,
+    "backArch": 0.4,
+    "dorsal": {
+     "start": 0.33,
+     "end": 0.66,
+     "height": 0.35,
+     "shape": "sail"
+    }
+   },
+   "look": {
+    "iridescence": 0.4,
+    "iridescenceColor": "#8ad0e0",
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#6a6440",
+      "contrast": 0.25
+     },
+     {
+      "type": "bars",
+      "color": "#3a3626",
+      "count": 8,
+      "width": 0.035,
+      "x0": 0.25,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8b070",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#2a2418",
+        "density": 14,
+        "size": 0.08
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-pygmaeus",
+  "commonName": "Pygmy Swordtail",
+  "scientificName": "Xiphophorus pygmaeus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Axtla & Río Huichihuayán (Pánuco basin), San Luis Potosí, Mexico",
+  "description": "The smallest swordtail: males have at most a tiny nub of a sword and are silvery with a blue sheen and a fine dark midlateral line. It shoals in clear, flowing water and does best in a group.",
+  "adultLengthCm": 3.8,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 4,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 12,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.26,
+   "mouth": "terminal",
+   "belly": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#c4c2aa",
+   "dorsal": "#7a7a60",
+   "ventral": "#f0eee0",
+   "fin": "#e0dccc",
+   "finOpacity": 0.22,
+   "eye": "#c0a060",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a3a30",
+     "y": 0,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.98
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "iridescence": 0.6,
+    "iridescenceColor": "#6ab8ff"
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-cortezi",
+  "commonName": "Cortez Swordtail",
+  "scientificName": "Xiphophorus cortezi",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Pánuco basin, Hidalgo, Querétaro & San Luis Potosí, Mexico",
+  "description": "Many individuals carry large black \"spotted caudal\" blotches at the tail base, a pigment pattern that can turn into melanoma and is studied for that reason. Males have a moderate sword with black upper and lower edges.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "mouth": "terminal",
+   "belly": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#a8a47c",
+   "dorsal": "#605e40",
+   "ventral": "#e8e4cc",
+   "fin": "#ccc8a8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#605e40",
+     "contrast": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3826",
+     "y": 0.02,
+     "width": 0.05,
+     "x0": 0.15,
+     "x1": 0.98
+    },
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 4,
+     "size": 0.12,
+     "x0": 0.75,
+     "x1": 0.98,
+     "y0": -0.6,
+     "y1": 0.6,
+     "jitter": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.85
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#e0c860",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-alvarezi",
+  "commonName": "Chiapas Swordtail",
+  "scientificName": "Xiphophorus alvarezi",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Río Usumacinta & Grijalva drainages, Chiapas (Mexico) & Guatemala",
+  "description": "A robust relative of the green swordtail from fast, clear highland streams. Both sexes are greenish with reddish zig-zag lines along the flank, and males carry a long sword with black borders.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   21,
+   27
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#8a9a6c",
+   "dorsal": "#4e5c38",
+   "ventral": "#e2e2c8",
+   "fin": "#c8c8a8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "iridescence": 0.35,
+   "iridescenceColor": "#60d0a0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#4e5c38",
+     "contrast": 0.25
+    },
+    {
+     "type": "chevrons",
+     "color": "#b83a30",
+     "count": 8,
+     "width": 0.035,
+     "x0": 0.15,
+     "x1": 0.96
+    },
+    {
+     "type": "stripe",
+     "color": "#b83a30",
+     "y": -0.25,
+     "width": 0.04,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "sword",
+     "size": 1.1
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#d8c070",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-multilineatus",
+  "commonName": "High-backed Pygmy Swordtail",
+  "scientificName": "Xiphophorus multilineatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Coy (Río Pánuco basin), San Luis Potosí, Mexico",
+  "description": "Males come in genetically fixed size classes: large males court with a tall dorsal fin and a short sword, while small \"sneaker\" males chase females instead. Males can darken their vertical bars during displays.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.3,
+   "mouth": "terminal",
+   "belly": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#b8b088",
+   "dorsal": "#6a6448",
+   "ventral": "#ece8d4",
+   "fin": "#d4cca8",
+   "finOpacity": 0.28,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#5a5640",
+     "count": 8,
+     "width": 0.03,
+     "x0": 0.25,
+     "x1": 0.95
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.33,
+    "dorsal": {
+     "start": 0.36,
+     "end": 0.64,
+     "height": 0.3,
+     "shape": "sail"
+    },
+    "caudal": {
+     "shape": "sword",
+     "size": 0.6
+    }
+   },
+   "look": {
+    "iridescence": 0.6,
+    "iridescenceColor": "#5ab0ff",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#1e2230",
+      "count": 9,
+      "width": 0.04,
+      "x0": 0.2,
+      "x1": 0.96
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#3a3a40",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#141418",
+        "density": 12,
+        "size": 0.08
+       }
+      ]
+     },
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#e0d070",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-xiphidium",
+  "commonName": "Spiketail Platyfish",
+  "scientificName": "Xiphophorus xiphidium",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Soto la Marina basin, Tamaulipas, Mexico",
+  "description": "A platy that bridges platies and swordtails: males grow a short, pointed spike on the lower edge of the tail. It lives in clear, warm springs and streams, and many fish carry a dark spot at the tail base.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.34,
+   "mouth": "terminal",
+   "belly": 0.45,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#aaa47c",
+   "dorsal": "#625e40",
+   "ventral": "#e8e4cc",
+   "fin": "#ccc8a8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#625e40",
+     "contrast": 0.25
+    },
+    {
+     "type": "chevrons",
+     "color": "#3a3826",
+     "count": 5,
+     "width": 0.035,
+     "x0": 0.35,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.95,
+     "y": -0.1,
+     "rx": 0.035,
+     "ry": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.55
+    }
+   },
+   "look": {
+    "iridescence": 0.4,
+    "iridescenceColor": "#6ac0e8",
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#d8c890",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "xiphophorus-clemenciae",
+  "commonName": "Yellow Swordtail",
+  "scientificName": "Xiphophorus clemenciae",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Coatzacoalcos basin, Oaxaca & Veracruz, Mexico",
+  "description": "A small southern swordtail named for the male's yellow-orange, dark-edged sword. Genetic studies indicate it arose through ancient hybridization between a platy and a swordtail, driven by female preference for sworded males.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "swordtail",
+   "depth": 0.28,
+   "mouth": "terminal",
+   "belly": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#b4ac80",
+   "dorsal": "#686240",
+   "ventral": "#ece6cc",
+   "fin": "#d4cca8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#686240",
+     "contrast": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#7a4a30",
+     "y": 0,
+     "width": 0.05,
+     "x0": 0.15,
+     "x1": 0.97
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "sword",
+     "size": 0.85
+    }
+   },
+   "look": {
+    "fins": {
+     "caudal": {
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#f0b030",
+        "y": -0.84,
+        "width": 0.16,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.68,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       },
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": -0.99,
+        "width": 0.05,
+        "x0": 0.1,
+        "x1": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "poecilia-sphenops",
+  "commonName": "Short-finned Molly (wild type)",
+  "scientificName": "Poecilia sphenops",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mexico to northern Central America (Atlantic & Pacific slopes)",
+  "description": "Wild short-finned mollies are olive-grey with rows of small dark and orange dots and live in coastal rivers, springs and brackish lagoons. Heavy grazers, they spend much of the day rasping algae from rocks and plants.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.34,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8e9284",
+   "dorsal": "#555a4a",
+   "ventral": "#dcdccc",
+   "fin": "#a8a898",
+   "finOpacity": 0.3,
+   "eye": "#c8a048",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#555a4a",
+     "contrast": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#2e3028",
+     "density": 30,
+     "size": 0.03,
+     "y0": -0.5,
+     "y1": 0.6
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.62,
+     "height": 0.24,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "iridescence": 0.3,
+    "iridescenceColor": "#7ac8d0",
+    "fins": {
+     "dorsal": {
+      "color": "#8a8a7a",
+      "opacity": 0.5,
+      "edge": "#e88a30",
+      "edgeWidth": 0.15
+     },
+     "caudal": {
+      "color": "#9a9888",
+      "opacity": 0.45,
+      "edge": "#e8a030",
+      "edgeWidth": 0.1
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "poecilia-latipinna",
+  "commonName": "Sailfin Molly (wild type)",
+  "scientificName": "Poecilia latipinna",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal SE USA (North Carolina to Texas) & NE Mexico",
+  "description": "Lives in salt marshes, estuaries and coastal fresh water along the Atlantic and Gulf coasts. Dominant males raise a huge, blue-spotted sail of a dorsal fin to court females and face off rivals, while smaller males try to sneak matings.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.32,
+   "width": 0.14,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.64,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8c9478",
+   "dorsal": "#4e5640",
+   "ventral": "#e0e0cc",
+   "fin": "#a8ac98",
+   "finOpacity": 0.3,
+   "eye": "#c8a048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#4e5640",
+     "contrast": 0.3
+    },
+    {
+     "type": "lines",
+     "color": "#3e4234",
+     "count": 6,
+     "width": 0.03,
+     "y0": -0.6,
+     "y1": 0.7
+    },
+    {
+     "type": "spots",
+     "color": "#d8e0c8",
+     "density": 20,
+     "size": 0.025
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.26,
+     "end": 0.72,
+     "height": 0.42,
+     "shape": "sail"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.55
+    }
+   },
+   "look": {
+    "iridescence": 0.5,
+    "iridescenceColor": "#5ac8e8",
+    "fins": {
+     "dorsal": {
+      "color": "#6a8a9a",
+      "opacity": 0.6,
+      "edge": "#e88a30",
+      "edgeWidth": 0.1,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#38a8e8",
+        "density": 25,
+        "size": 0.06
+       },
+       {
+        "type": "spots",
+        "color": "#1a2a30",
+        "density": 12,
+        "size": 0.05
+       }
+      ]
+     },
+     "caudal": {
+      "color": "#7a9aa0",
+      "opacity": 0.55,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#38a8e8",
+        "density": 15,
+        "size": 0.06
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "poecilia-velifera",
+  "commonName": "Yucatán Sailfin Molly",
+  "scientificName": "Poecilia velifera",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal Yucatán Peninsula, Mexico",
+  "description": "The largest sailfin molly, from brackish coastal lagoons and cenote-fed waters of the Yucatán. Its sail carries more rays (about 18–19) than that of P. latipinna and starts further forward, and is edged in orange with rows of iridescent blue-green spots.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.33,
+   "width": 0.14,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.64,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8a9880",
+   "dorsal": "#4a5a46",
+   "ventral": "#e2e6d4",
+   "fin": "#a8b0a0",
+   "finOpacity": 0.3,
+   "eye": "#c8a048",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#4a5a46",
+     "contrast": 0.3
+    },
+    {
+     "type": "lines",
+     "color": "#3a4636",
+     "count": 7,
+     "width": 0.03,
+     "y0": -0.6,
+     "y1": 0.7
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.2,
+     "end": 0.74,
+     "height": 0.5,
+     "shape": "sail"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.6
+    }
+   },
+   "look": {
+    "iridescence": 0.7,
+    "iridescenceColor": "#40e0c0",
+    "fins": {
+     "dorsal": {
+      "color": "#5a8a90",
+      "opacity": 0.65,
+      "edge": "#f08a28",
+      "edgeWidth": 0.12,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#40d8d0",
+        "density": 35,
+        "size": 0.05
+       }
+      ]
+     },
+     "caudal": {
+      "color": "#6a9aa0",
+      "opacity": 0.6,
+      "edge": "#f08a28",
+      "edgeWidth": 0.08,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#40d8d0",
+        "density": 20,
+        "size": 0.05
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "poecilia-mexicana",
+  "commonName": "Atlantic Molly",
+  "scientificName": "Poecilia mexicana",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope from northern Mexico to Costa Rica",
+  "description": "A short-finned molly of rivers, springs and lagoons. Some populations, such as those of the Cueva del Azufre, live in toxic hydrogen-sulfide springs and caves and have evolved larger heads and, in the cave form, reduced eyes and pigment.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.34,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#9a9a86",
+   "dorsal": "#5a5c4a",
+   "ventral": "#e2e0cc",
+   "fin": "#b0ae9a",
+   "finOpacity": 0.3,
+   "eye": "#c8a048",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a5c4a",
+     "contrast": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#3a3a30",
+     "density": 20,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 0.6
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2
+   },
+   "look": {
+    "iridescence": 0.3,
+    "iridescenceColor": "#7ac8d0",
+    "fins": {
+     "dorsal": {
+      "color": "#a8a088",
+      "opacity": 0.5,
+      "edge": "#f0b030",
+      "edgeWidth": 0.15
+     },
+     "caudal": {
+      "color": "#a8a088",
+      "opacity": 0.45,
+      "edge": "#f0b030",
+      "edgeWidth": 0.12
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "poecilia-salvatoris",
+  "commonName": "Liberty Molly",
+  "scientificName": "Poecilia salvatoris",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Pacific slope of El Salvador & Honduras",
+  "description": "Sold as the liberty molly, males show metallic blue flanks peppered with orange-red spots and a dorsal fin banded in red, black and white. Males are notably quarrelsome and nip the fins of slower fish.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "fin-nipper",
+   "territorial",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.34,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8a890",
+   "dorsal": "#62624e",
+   "ventral": "#e6e4d2",
+   "fin": "#c0bca8",
+   "finOpacity": 0.3,
+   "eye": "#c8a048",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#62624e",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.64,
+     "height": 0.28,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "base": "#7a94b0",
+    "dorsal": "#3a4a62",
+    "iridescence": 0.7,
+    "iridescenceColor": "#58a8ff",
+    "patterns": [
+     {
+      "type": "spots",
+      "color": "#e8502a",
+      "density": 35,
+      "size": 0.04,
+      "y0": -0.5,
+      "y1": 0.7
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d83a28",
+      "opacity": 0.85,
+      "edge": "#f4f0e8",
+      "edgeWidth": 0.15,
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": 0,
+        "width": 0.25,
+        "x0": 0.45,
+        "x1": 0.8
+       }
+      ]
+     },
+     "caudal": {
+      "color": "#e8c040",
+      "opacity": 0.7,
+      "edge": "#141414",
+      "edgeWidth": 0.12
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "poecilia-formosa",
+  "commonName": "Amazon Molly",
+  "scientificName": "Poecilia formosa",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Río Grande, S Texas to NE Mexico (Tamaulipas)",
+  "description": "An all-female species born of hybridization between sailfin and Atlantic mollies. Females need sperm from males of those species to trigger embryo development, but the father's genes are discarded (gynogenesis), so daughters are clones of their mother.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.34,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#9a9884",
+   "dorsal": "#5a5a48",
+   "ventral": "#e2e0cc",
+   "fin": "#b0ae9a",
+   "finOpacity": 0.3,
+   "eye": "#c8a048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a5a48",
+     "contrast": 0.3
+    },
+    {
+     "type": "lines",
+     "color": "#44443a",
+     "count": 6,
+     "width": 0.025,
+     "y0": -0.5,
+     "y1": 0.7
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "poecilia-sphenops-black",
+  "commonName": "Black Molly",
+  "scientificName": "Poecilia sphenops",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mexico to northern Central America)",
+  "description": "A fully melanistic line-bred molly, usually of mixed short-finned molly ancestry; its velvety black looks best in hard, warm water, and stressed fish turn blotchy. Males often show a thin orange rim on the dorsal fin.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.34,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1a1b1a",
+   "dorsal": "#0e0f0e",
+   "ventral": "#2c2e2c",
+   "fin": "#141514",
+   "finOpacity": 0.85,
+   "eye": "#c8a048",
+   "metallic": 0.1,
+   "iridescence": 0.2,
+   "iridescenceColor": "#4a7a6a"
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.62,
+     "height": 0.24,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#141514",
+      "opacity": 0.85,
+      "edge": "#e8802a",
+      "edgeWidth": 0.08
+     }
+    }
+   }
+  },
+  "variantOf": "poecilia-sphenops",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-sphenops-black-lyretail",
+  "commonName": "Black Lyretail Molly",
+  "scientificName": "Poecilia sphenops",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mexico to northern Central America)",
+  "description": "A black molly whose upper and lower tail rays are drawn into long points, forming a lyre; males also grow an elongated, pointed dorsal fin.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.34,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.75
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1a1b1a",
+   "dorsal": "#0e0f0e",
+   "ventral": "#2c2e2c",
+   "fin": "#141514",
+   "finOpacity": 0.85,
+   "eye": "#c8a048",
+   "metallic": 0.1,
+   "iridescence": 0.2,
+   "iridescenceColor": "#4a7a6a"
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2,
+    "caudal": {
+     "shape": "lyre",
+     "size": 0.95
+    },
+    "dorsal": {
+     "start": 0.36,
+     "end": 0.64,
+     "height": 0.32,
+     "shape": "pointed",
+     "trail": 0.12
+    }
+   }
+  },
+  "variantOf": "poecilia-sphenops",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-sphenops-gold-dust",
+  "commonName": "Gold Dust Molly",
+  "scientificName": "Poecilia sphenops",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mexico to northern Central America)",
+  "description": "Combines black and gold pigment: the head and front of the body are dusted golden-yellow, fading into black over the rear body and fins.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.34,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1e1e1a",
+   "dorsal": "#141410",
+   "ventral": "#3a3626",
+   "fin": "#181814",
+   "finOpacity": 0.85,
+   "eye": "#c8a048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8b830",
+     "x0": 0,
+     "x1": 0.55,
+     "y0": -0.9,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#e8c040",
+     "density": 0.35
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.2
+   }
+  },
+  "variantOf": "poecilia-sphenops",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-sphenops-balloon-white",
+  "commonName": "White Balloon Molly",
+  "scientificName": "Poecilia sphenops",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mexico to northern Central America)",
+  "description": "Line-bred for a shortened, curved spine that gives a round, pot-bellied body and an arched back. The shape is a skeletal deformity, so balloon mollies swim more clumsily than normal mollies.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 5,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.5,
+   "width": 0.15,
+   "mouth": "superior",
+   "belly": 1,
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.55
+   },
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.62,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "backArch": 0.6
+  },
+  "look": {
+   "base": "#f0eee6",
+   "dorsal": "#dcd8cc",
+   "ventral": "#faf8f2",
+   "fin": "#f2f0ea",
+   "finOpacity": 0.45,
+   "eye": "#2a2222",
+   "metallic": 0.35
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.75
+   }
+  },
+  "variantOf": "poecilia-sphenops",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-latipinna-dalmatian",
+  "commonName": "Dalmatian Molly",
+  "scientificName": "Poecilia latipinna",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: coastal SE USA & NE Mexico)",
+  "description": "White to silver with irregular black spots like a Dalmatian dog; the amount of black varies from sparse dots to heavy marbling. Males of sailfin lines raise a tall, spotted dorsal fin.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.32,
+   "width": 0.14,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.64,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#ecebe4",
+   "dorsal": "#d0cec4",
+   "ventral": "#f6f5f0",
+   "fin": "#e8e6de",
+   "finOpacity": 0.45,
+   "eye": "#2a2222",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 30,
+     "size": 0.07,
+     "jitter": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 15,
+       "size": 0.08
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 12,
+       "size": 0.08
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.26,
+     "end": 0.72,
+     "height": 0.42,
+     "shape": "sail"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.55
+    }
+   }
+  },
+  "variantOf": "poecilia-latipinna",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-latipinna-black-sailfin",
+  "commonName": "Black Sailfin Molly",
+  "scientificName": "Poecilia latipinna",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: coastal SE USA & NE Mexico)",
+  "description": "A melanistic sailfin molly: velvety black over body and fins, with dominant males raising a towering black sail during courtship and rival displays.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.32,
+   "width": 0.14,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.64,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1a1b1a",
+   "dorsal": "#0e0f0e",
+   "ventral": "#2c2e2c",
+   "fin": "#141514",
+   "finOpacity": 0.85,
+   "eye": "#c8a048",
+   "metallic": 0.1,
+   "iridescence": 0.25,
+   "iridescenceColor": "#4a8a7a"
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.26,
+     "end": 0.72,
+     "height": 0.42,
+     "shape": "sail"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.55
+    }
+   }
+  },
+  "variantOf": "poecilia-latipinna",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-latipinna-marble-sailfin",
+  "commonName": "Marble Sailfin Molly",
+  "scientificName": "Poecilia latipinna",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: coastal SE USA & NE Mexico)",
+  "description": "A silvery-white sailfin molly marbled with irregular black patches over body and fins; the black tends to spread with age.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.32,
+   "width": 0.14,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.64,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#dcdcd6",
+   "dorsal": "#a8a8a2",
+   "ventral": "#f0f0ec",
+   "fin": "#c8c8c2",
+   "finOpacity": 0.5,
+   "eye": "#c8a048",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#1a1a1a",
+     "scale": 0.3,
+     "amount": 0.45
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "marble",
+       "color": "#1a1a1a",
+       "scale": 0.3,
+       "amount": 0.4
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "marble",
+       "color": "#1a1a1a",
+       "scale": 0.3,
+       "amount": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.26,
+     "end": 0.72,
+     "height": 0.42,
+     "shape": "sail"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.55
+    }
+   }
+  },
+  "variantOf": "poecilia-latipinna",
+  "availability": "common"
+ },
+ {
+  "id": "poecilia-latipinna-creamsicle",
+  "commonName": "Creamsicle Sailfin Molly",
+  "scientificName": "Poecilia latipinna",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: coastal SE USA & NE Mexico)",
+  "description": "Named after the orange-and-cream ice lolly: a white to cream body washed with orange over the back, head and fins, usually combined with a lyretail. Males raise an orange-tinted sail.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   12,
+   30
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "molly",
+   "depth": 0.32,
+   "width": 0.14,
+   "mouth": "superior",
+   "belly": 0.55,
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.65
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.64,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#f2e8d8",
+   "dorsal": "#f0a050",
+   "ventral": "#faf6ee",
+   "fin": "#f0b070",
+   "finOpacity": 0.55,
+   "eye": "#2a2222",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f09040",
+     "x0": 0,
+     "x1": 1,
+     "y0": 0.2,
+     "y1": 1,
+     "softness": 0.35
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.9,
+   "body": {
+    "belly": 0.2,
+    "dorsal": {
+     "start": 0.26,
+     "end": 0.72,
+     "height": 0.42,
+     "shape": "sail"
+    },
+    "caudal": {
+     "shape": "lyre",
+     "size": 0.85
+    }
+   }
+  },
+  "variantOf": "poecilia-latipinna",
+  "availability": "uncommon"
+ },
+ {
+  "id": "gambusia-affinis",
+  "commonName": "Western Mosquitofish",
+  "scientificName": "Gambusia affinis",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mississippi basin & Gulf slope, USA & NE Mexico (introduced worldwide)",
+  "description": "Stocked around the world to eat mosquito larvae, it has become one of the most invasive freshwater fishes, outcompeting and fin-nipping small native species. Females are far larger than males and show a dark gravid spot.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 2,
+  "lifespanYears": 1.5,
+  "tempC": [
+   12,
+   30
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 12,
+  "traits": [
+   "fin-nipper",
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.26,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#a6a48a",
+   "dorsal": "#6a684e",
+   "ventral": "#e4e2d4",
+   "fin": "#c8c6b4",
+   "finOpacity": 0.25,
+   "eye": "#c0a050",
+   "metallic": 0.3,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a5842",
+     "contrast": 0.4
+    },
+    {
+     "type": "bars",
+     "color": "#3a3828",
+     "count": 1,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.14,
+     "y0": -0.6,
+     "y1": 0.1
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2420",
+     "x": 0.5,
+     "y": -0.45,
+     "rx": 0.06,
+     "ry": 0.25
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.65,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.23
+   },
+   "look": {
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#5a5842",
+      "contrast": 0.4
+     }
+    ]
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "gambusia-holbrooki",
+  "commonName": "Eastern Mosquitofish",
+  "scientificName": "Gambusia holbrooki",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope, New Jersey to Florida & Alabama, USA (introduced worldwide)",
+  "description": "Very similar to the western mosquitofish and long lumped with it; some males carry a black-spotted melanistic coat. Introduced across Europe and Australia for mosquito control, it now threatens many small native fishes.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 2,
+  "lifespanYears": 1.5,
+  "tempC": [
+   12,
+   30
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 12,
+  "traits": [
+   "fin-nipper",
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.26,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#a8a68a",
+   "dorsal": "#6a684e",
+   "ventral": "#e4e2d4",
+   "fin": "#c8c6b4",
+   "finOpacity": 0.25,
+   "eye": "#c0a050",
+   "metallic": 0.3,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a5842",
+     "contrast": 0.4
+    },
+    {
+     "type": "bars",
+     "color": "#3a3828",
+     "count": 1,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.14,
+     "y0": -0.6,
+     "y1": 0.1
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2420",
+     "x": 0.5,
+     "y": -0.45,
+     "rx": 0.06,
+     "ry": 0.25
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.65,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.23
+   },
+   "look": {
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#5a5842",
+      "contrast": 0.4
+     },
+     {
+      "type": "spots",
+      "color": "#141414",
+      "density": 10,
+      "size": 0.06,
+      "jitter": 1
+     }
+    ]
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "heterandria-formosa",
+  "commonName": "Least Killifish",
+  "scientificName": "Heterandria formosa",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "SE USA: North Carolina to Florida & Louisiana",
+  "description": "One of the smallest fishes in North America and, despite its name, a livebearer: a female releases one or two fry a day over a week or more (superfetation) rather than a single brood. It lives among dense vegetation in swamps and slow streams.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 2.5,
+  "lifespanYears": 2,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "shy"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.26,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#b0a882",
+   "dorsal": "#706846",
+   "ventral": "#e8e2cc",
+   "fin": "#d0c8b0",
+   "finOpacity": 0.25,
+   "eye": "#c09048",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.12,
+     "x0": 0.12,
+     "x1": 0.98
+    },
+    {
+     "type": "bars",
+     "color": "#4a4230",
+     "count": 7,
+     "width": 0.025,
+     "x0": 0.3,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141414",
+       "x": 0.35,
+       "y": 0,
+       "rx": 0.18,
+       "ry": 0.4,
+       "ring": "#e05a28"
+      }
+     ]
+    },
+    "anal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#3a2a20",
+       "x": 0.3,
+       "y": 0,
+       "rx": 0.15,
+       "ry": 0.35
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.7,
+   "body": {
+    "belly": 0.15
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "phalloceros-caudimaculatus",
+  "commonName": "One-spot Livebearer",
+  "scientificName": "Phalloceros caudimaculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal drainages of southern Brazil & Uruguay",
+  "description": "A small, hardy livebearer with a single dark blotch on the mid-flank; a golden form peppered with black flecks (\"reticulatus\") is common in the hobby. It tolerates cool water and has been introduced to Western Australia and elsewhere.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2.5,
+  "tempC": [
+   16,
+   26
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#c8b070",
+   "dorsal": "#8a7440",
+   "ventral": "#f0e6c8",
+   "fin": "#e0d0a0",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#8a7440",
+     "contrast": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.55,
+     "y": 0.05,
+     "rx": 0.05,
+     "ry": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#1a1a14",
+     "density": 18,
+     "size": 0.03,
+     "jitter": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.6,
+   "body": {
+    "belly": 0.15
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "limia-melanogaster",
+  "commonName": "Blue Limia",
+  "scientificName": "Limia melanogaster",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Jamaica",
+  "description": "Endemic to Jamaica; males are iridescent blue with black vertical bars on the rear body and a yellow-orange dorsal fin and tail edged in black. Females carry a large black gravid patch on the belly, the source of the name \"melanogaster\".",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.33,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#b0b096",
+   "dorsal": "#6a6a54",
+   "ventral": "#e4e4d4",
+   "fin": "#d0ccb0",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a6a54",
+     "contrast": 0.3
+    },
+    {
+     "type": "region",
+     "color": "#1a1a1a",
+     "x0": 0.35,
+     "x1": 0.6,
+     "y0": -0.95,
+     "y1": -0.35,
+     "softness": 0.2
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.7,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.3
+   },
+   "look": {
+    "base": "#7898b0",
+    "dorsal": "#3a4a5a",
+    "iridescence": 0.8,
+    "iridescenceColor": "#4ab0ff",
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#3a4a5a",
+      "contrast": 0.3
+     },
+     {
+      "type": "bars",
+      "color": "#141818",
+      "count": 5,
+      "width": 0.04,
+      "x0": 0.55,
+      "x1": 0.97
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b030",
+      "opacity": 0.8,
+      "edge": "#141414",
+      "edgeWidth": 0.15
+     },
+     "caudal": {
+      "color": "#e8b040",
+      "opacity": 0.7,
+      "edge": "#141414",
+      "edgeWidth": 0.12
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "limia-nigrofasciata",
+  "commonName": "Humpbacked Limia",
+  "scientificName": "Limia nigrofasciata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Miragoâne basin, Haiti",
+  "description": "From the area around Lake Miragoâne in Haiti; mature males develop a humped back, an enlarged, fan-like dorsal fin and bolder black bars as they age. A peaceful grazer that picks algae from every surface.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.36,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#c8c09a",
+   "dorsal": "#7a7258",
+   "ventral": "#f0ecda",
+   "fin": "#d8d2b8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1e1e1a",
+     "count": 9,
+     "width": 0.035,
+     "x0": 0.25,
+     "x1": 0.97
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.15,
+    "depth": 0.4,
+    "hump": 0.25,
+    "backArch": 0.45,
+    "dorsal": {
+     "start": 0.38,
+     "end": 0.66,
+     "height": 0.3,
+     "shape": "fan"
+    }
+   },
+   "look": {
+    "iridescence": 0.4,
+    "iridescenceColor": "#8ac8e0",
+    "fins": {
+     "dorsal": {
+      "color": "#c8b070",
+      "opacity": 0.6,
+      "edge": "#141414",
+      "edgeWidth": 0.12,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1a1a1a",
+        "density": 10,
+        "size": 0.08
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "limia-perugiae",
+  "commonName": "Perugia's Limia",
+  "scientificName": "Limia perugiae",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern Dominican Republic, Hispaniola",
+  "description": "A sturdy algae grazer of Hispaniola's springs and coastal streams. Males show a bright yellow-orange dorsal fin with a black border, blue-sheened flanks and dark barring on the rear body.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.34,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#b8b092",
+   "dorsal": "#6e6850",
+   "ventral": "#e8e4d2",
+   "fin": "#d4ccb0",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6e6850",
+     "contrast": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2420",
+     "x": 0.5,
+     "y": -0.5,
+     "rx": 0.06,
+     "ry": 0.25
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.15,
+    "dorsal": {
+     "start": 0.4,
+     "end": 0.64,
+     "height": 0.26,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "base": "#8a9aa8",
+    "iridescence": 0.7,
+    "iridescenceColor": "#5ab0f0",
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#4a5a68",
+      "contrast": 0.3
+     },
+     {
+      "type": "bars",
+      "color": "#1e2228",
+      "count": 6,
+      "width": 0.04,
+      "x0": 0.5,
+      "x1": 0.97
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#f4b020",
+      "opacity": 0.85,
+      "edge": "#141414",
+      "edgeWidth": 0.15
+     },
+     "caudal": {
+      "color": "#c8a050",
+      "opacity": 0.6,
+      "edge": "#2a2420",
+      "edgeWidth": 0.1
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "limia-vittata",
+  "commonName": "Cuban Limia",
+  "scientificName": "Limia vittata",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Cuba & Isla de la Juventud",
+  "description": "Lives in fresh and brackish coastal waters across Cuba. Yellowish with irregular black spots scattered along the flank; males are smaller with black-and-orange markings in the dorsal fin.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.32,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#d0c490",
+   "dorsal": "#8a7e54",
+   "ventral": "#f2ecd0",
+   "fin": "#e0d4a8",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1a1a14",
+     "density": 16,
+     "size": 0.06,
+     "y0": -0.4,
+     "y1": 0.5,
+     "jitter": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.7,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#f0a030",
+      "opacity": 0.75,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#141414",
+        "density": 8,
+        "size": 0.12
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "girardinus-metallicus",
+  "commonName": "Metallic Livebearer",
+  "scientificName": "Girardinus metallicus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Cuba",
+  "description": "Females are silvery with a metallic sheen and fine vertical bars; males are much smaller, and in many lines have a black throat and belly running back to the long gonopodium. It lives in weedy streams and ditches across Cuba.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.27,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#c8c8b8",
+   "dorsal": "#86866e",
+   "ventral": "#f0f0e6",
+   "fin": "#e0ded0",
+   "finOpacity": 0.22,
+   "eye": "#c0a060",
+   "metallic": 0.6,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#6a6a58",
+     "count": 10,
+     "width": 0.02,
+     "x0": 0.3,
+     "x1": 0.97
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.6,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6a58",
+      "count": 10,
+      "width": 0.02,
+      "x0": 0.3,
+      "x1": 0.97
+     },
+     {
+      "type": "region",
+      "color": "#141414",
+      "x0": 0.1,
+      "x1": 0.62,
+      "y0": -1,
+      "y1": -0.45,
+      "softness": 0.15
+     }
+    ]
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "girardinus-falcatus",
+  "commonName": "Goldbelly Topminnow",
+  "scientificName": "Girardinus falcatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Cuba",
+  "description": "Named for the golden-yellow belly and lower flanks; males are much smaller than females and carry a very long, hooked gonopodium. A peaceful livebearer of Cuban streams and ponds.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.27,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#c8c09e",
+   "dorsal": "#7e785c",
+   "ventral": "#f0d060",
+   "fin": "#e0d8b8",
+   "finOpacity": 0.25,
+   "eye": "#c0a060",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8c040",
+     "x0": 0.15,
+     "x1": 0.85,
+     "y0": -1,
+     "y1": -0.15,
+     "softness": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.6,
+   "body": {
+    "belly": 0.15
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "brachyrhaphis-episcopi",
+  "commonName": "Bishop Livebearer",
+  "scientificName": "Brachyrhaphis episcopi",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central Panama (Canal-zone streams, both slopes)",
+  "description": "A lively, somewhat aggressive livebearer of clear forest streams; populations living with predators mature earlier and produce more, smaller young than those in predator-free headwaters. Males show orange, black-edged fins and a blue-gold sheen.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 12,
+  "traits": [
+   "jumper",
+   "fin-nipper"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.26,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#b4ac80",
+   "dorsal": "#6e6644",
+   "ventral": "#ece6cc",
+   "fin": "#d8cca0",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6e6644",
+     "contrast": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#4a4430",
+     "count": 6,
+     "width": 0.03,
+     "x0": 0.25,
+     "x1": 0.7,
+     "y0": -0.2,
+     "y1": 0.8
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.7,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "iridescence": 0.5,
+    "iridescenceColor": "#68b8e8",
+    "fins": {
+     "dorsal": {
+      "color": "#f08a20",
+      "opacity": 0.8,
+      "edge": "#141414",
+      "edgeWidth": 0.15
+     },
+     "caudal": {
+      "color": "#e8a040",
+      "opacity": 0.55
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "brachyrhaphis-roseni",
+  "commonName": "Rosen's Bishop",
+  "scientificName": "Brachyrhaphis roseni",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Pacific slope of Costa Rica & western Panama",
+  "description": "A larger, predatory Brachyrhaphis of lowland streams that readily eats small fish and fry. Males have orange-tinted dorsal and tail fins with dark margins.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 12,
+  "traits": [
+   "predator",
+   "jumper",
+   "fin-nipper"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.25,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#b0a888",
+   "dorsal": "#6a6448",
+   "ventral": "#e8e4d0",
+   "fin": "#d4c8a4",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a6448",
+     "contrast": 0.35
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.7,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "iridescence": 0.4,
+    "iridescenceColor": "#88c8d8",
+    "fins": {
+     "dorsal": {
+      "color": "#e88030",
+      "opacity": 0.75,
+      "edge": "#1a1a1a",
+      "edgeWidth": 0.15
+     },
+     "caudal": {
+      "color": "#e09040",
+      "opacity": 0.6,
+      "edge": "#1a1a1a",
+      "edgeWidth": 0.1
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "micropoecilia-picta",
+  "commonName": "Swamp Guppy",
+  "scientificName": "Micropoecilia picta",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal NE South America (Venezuela to Brazil) & Trinidad",
+  "description": "Lives in coastal swamps and brackish ditches. Males are red-orange with black blotches and pale blue spots and a black-edged dorsal fin, while the plain grey females carry a dark spot in the dorsal fin. Formerly Poecilia picta.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2.5,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.3,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#a8a690",
+   "dorsal": "#6a6852",
+   "ventral": "#e6e4d6",
+   "fin": "#d0ccb8",
+   "finOpacity": 0.25,
+   "eye": "#c09048",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a6852",
+     "contrast": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141414",
+       "x": 0.4,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.45
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.65,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "base": "#d8502a",
+    "dorsal": "#8a2a18",
+    "iridescence": 0.3,
+    "iridescenceColor": "#6ac0ff",
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#141414",
+      "x": 0.42,
+      "y": 0.1,
+      "rx": 0.08,
+      "ry": 0.35
+     },
+     {
+      "type": "blotch",
+      "color": "#141414",
+      "x": 0.7,
+      "y": 0.2,
+      "rx": 0.06,
+      "ry": 0.3
+     },
+     {
+      "type": "spots",
+      "color": "#a8d8f0",
+      "density": 10,
+      "size": 0.04
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#e05030",
+      "opacity": 0.75,
+      "edge": "#141414",
+      "edgeWidth": 0.2
+     },
+     "caudal": {
+      "color": "#e06030",
+      "opacity": 0.65,
+      "edge": "#141414",
+      "edgeWidth": 0.1
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "micropoecilia-parae",
+  "commonName": "Two-spot Guppy (Melanzona)",
+  "scientificName": "Micropoecilia parae",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal Guyana, Suriname, French Guiana & northern Brazil",
+  "description": "Males occur in several genetically fixed color morphs within the same population: plain \"immaculata\", blue-barred \"parae\", and red or yellow \"melanzona\" with a bold black lateral stripe (shown here). Sensitive and rarely kept outside specialist circles.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 3,
+  "lifespanYears": 2.5,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.28,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#aaa690",
+   "dorsal": "#6a6852",
+   "ventral": "#e6e4d6",
+   "fin": "#d0ccb8",
+   "finOpacity": 0.25,
+   "eye": "#c09048",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a6852",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.7,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "base": "#c8b8a0",
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#e03a20",
+      "x0": 0.15,
+      "x1": 0.95,
+      "y0": 0.1,
+      "y1": 0.9,
+      "softness": 0.2
+     },
+     {
+      "type": "stripe",
+      "color": "#141414",
+      "y": -0.05,
+      "width": 0.22,
+      "x0": 0.12,
+      "x1": 0.98
+     },
+     {
+      "type": "blotch",
+      "color": "#141414",
+      "x": 0.97,
+      "y": 0.4,
+      "rx": 0.03,
+      "ry": 0.15
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#d8c8b0",
+      "opacity": 0.45,
+      "patterns": [
+       {
+        "type": "stripe",
+        "color": "#141414",
+        "y": 0,
+        "width": 0.15,
+        "x0": 0,
+        "x1": 0.8
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "poeciliopsis-gracilis",
+  "commonName": "Porthole Livebearer",
+  "scientificName": "Poeciliopsis gracilis",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern Mexico to Honduras (Atlantic & Pacific slopes)",
+  "description": "Named for the row of round black spots along the flank, like portholes. A slender, hardy livebearer of rivers and lagoons that carries embryos at several stages at once and gives birth to small broods every few days.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.25,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#b8b496",
+   "dorsal": "#726e52",
+   "ventral": "#ecead8",
+   "fin": "#d6d2bc",
+   "finOpacity": 0.25,
+   "eye": "#c09048",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#726e52",
+     "contrast": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.35,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.18
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.48,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.18
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.61,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.18
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.74,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.18
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.87,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.18
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.7,
+   "body": {
+    "belly": 0.15
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "alfaro-cultratus",
+  "commonName": "Knife Livebearer",
+  "scientificName": "Alfaro cultratus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope of Nicaragua, Costa Rica & Panama",
+  "description": "Named for the sharp keel of enlarged scales along the underside of the tail, which gives the rear body a blade-like edge. A shy, fast stream fish with a translucent amber body, blue iridescence and a yellow-orange tail.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 12,
+  "traits": [
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.24,
+   "width": 0.09,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.45
+   },
+   "dorsal": {
+    "start": 0.55,
+    "end": 0.66,
+    "height": 0.14,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8b07a",
+   "dorsal": "#86704a",
+   "ventral": "#f0e6cc",
+   "fin": "#e8c070",
+   "finOpacity": 0.35,
+   "eye": "#c0a060",
+   "metallic": 0.35,
+   "iridescence": 0.5,
+   "iridescenceColor": "#5ab8f0",
+   "translucency": 0.3,
+   "fins": {
+    "caudal": {
+     "color": "#f0a840",
+     "opacity": 0.55
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.75,
+   "body": {
+    "belly": 0.15
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "belonesox-belizanus",
+  "commonName": "Pike Topminnow",
+  "scientificName": "Belonesox belizanus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope from southern Mexico to Costa Rica (introduced in Florida)",
+  "description": "The largest poeciliid: a pike-shaped ambush predator with long, toothed jaws that hangs among plants near the surface and darts at small fish. Females are much bigger than males, cannibalistic, and give birth to large fry that hunt from day one.",
+  "adultLengthCm": 16,
+  "birthLengthCm": 2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "top",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 10,
+  "traits": [
+   "predator",
+   "ambush"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.18,
+   "width": 0.11,
+   "headLength": 0.3,
+   "snout": "elongate",
+   "mouth": "terminal",
+   "belly": 0.35,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.4
+   },
+   "dorsal": {
+    "start": 0.62,
+    "end": 0.72,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.7,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8a07a",
+   "dorsal": "#625a3e",
+   "ventral": "#ece6cc",
+   "fin": "#c8c09a",
+   "finOpacity": 0.35,
+   "eye": "#d0b060",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#625a3e",
+     "contrast": 0.25
+    },
+    {
+     "type": "lines",
+     "color": "#3a3626",
+     "count": 5,
+     "width": 0.02,
+     "y0": -0.4,
+     "y1": 0.5
+    },
+    {
+     "type": "blotch",
+     "color": "#141414",
+     "x": 0.95,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.6,
+   "body": {
+    "belly": 0.2
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "priapella-intermedia",
+  "commonName": "Blue-eyed Livebearer",
+  "scientificName": "Priapella intermedia",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Coatzacoalcos basin, Oaxaca & Veracruz, Mexico",
+  "description": "Named for its brilliant turquoise-blue iris, it is a slender, active shoaler of clear forest streams. Easily startled, it jumps readily and needs a covered tank.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   27
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 12,
+  "traits": [
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.24,
+   "width": 0.1,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#c8c4a8",
+   "dorsal": "#86826a",
+   "ventral": "#f2f0e6",
+   "fin": "#e8e0c0",
+   "finOpacity": 0.25,
+   "eye": "#3ac8f0",
+   "metallic": 0.5,
+   "translucency": 0.15,
+   "fins": {
+    "anal": {
+     "color": "#f0d070",
+     "opacity": 0.45
+    },
+    "caudal": {
+     "color": "#e8d8a0",
+     "opacity": 0.3
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "iridescence": 0.4,
+    "iridescenceColor": "#9ad8ff"
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "phallichthys-amates",
+  "commonName": "Merry Widow",
+  "scientificName": "Phallichthys amates",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope of Guatemala & Honduras",
+  "description": "Females are pale olive with thin dark vertical bars; males are much smaller, with a very long gonopodium and a black-edged dorsal fin. A peaceful livebearer of slow, weedy waters.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 4,
+  "lifespanYears": 2.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.33,
+   "width": 0.12,
+   "mouth": "superior",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   }
+  },
+  "look": {
+   "base": "#c0b890",
+   "dorsal": "#7a7254",
+   "ventral": "#eeead6",
+   "fin": "#dcd6b8",
+   "finOpacity": 0.28,
+   "eye": "#c09048",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#5a5640",
+     "count": 9,
+     "width": 0.02,
+     "x0": 0.3,
+     "x1": 0.96
+    },
+    {
+     "type": "bars",
+     "color": "#3a3628",
+     "count": 1,
+     "width": 0.035,
+     "x0": 0.12,
+     "x1": 0.14,
+     "y0": -0.7,
+     "y1": 0.2
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.55,
+   "body": {
+    "belly": 0.15
+   },
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#e8d8a0",
+      "opacity": 0.5,
+      "edge": "#141414",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudoxiphophorus-bimaculatus",
+  "commonName": "Two-spot Livebearer",
+  "scientificName": "Pseudoxiphophorus bimaculatus",
+  "family": "Poeciliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope of southern Mexico to Nicaragua",
+  "description": "A robust, predatory livebearer named for the dark spots on the shoulder and at the tail base; large females readily eat any fish that fits their mouth. Formerly classified as Heterandria bimaculata.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 1,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 120,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "predator",
+   "bold"
+  ],
+  "body": {
+   "archetype": "livebearer",
+   "depth": 0.27,
+   "width": 0.12,
+   "mouth": "terminal",
+   "belly": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.42
+   }
+  },
+  "look": {
+   "base": "#b0a888",
+   "dorsal": "#6a6448",
+   "ventral": "#ece6d0",
+   "fin": "#d4c8a4",
+   "finOpacity": 0.3,
+   "eye": "#c09048",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a6448",
+     "contrast": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1a14",
+     "x": 0.36,
+     "y": 0.2,
+     "rx": 0.04,
+     "ry": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1a14",
+     "x": 0.94,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0b060",
+     "opacity": 0.45
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.6,
+   "body": {
+    "belly": 0.2
+   },
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#f0a040",
+      "opacity": 0.6
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ }
+]

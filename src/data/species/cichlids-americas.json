@@ -1,0 +1,8066 @@
+[
+ {
+  "id": "apistogramma-agassizii",
+  "commonName": "Agassiz's Dwarf Cichlid",
+  "scientificName": "Apistogramma agassizii",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin floodplains — Peru, Brazil & Bolivia",
+  "description": "A dwarf cichlid of leaf-litter shallows along the Amazon's floodplain lakes and creeks, the male recognised by his spade-shaped tail edged in red and blue. One male's territory spans several females' caves, and each female guards her own brood alone.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.34,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.22,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#9fb0b0",
+   "dorsal": "#6d7a66",
+   "ventral": "#e4cf7c",
+   "fin": "#93aab8",
+   "finOpacity": 0.6,
+   "eye": "#d0602a",
+   "metallic": 0.2,
+   "iridescence": 0.5,
+   "iridescenceColor": "#6fd0ff",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a6a68",
+     "contrast": 0.2
+    },
+    {
+     "type": "lines",
+     "color": "#7a7650",
+     "count": 3,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a26",
+     "y": 0.04,
+     "width": 0.1,
+     "x0": 0.2,
+     "x1": 0.98
+    },
+    {
+     "type": "mask",
+     "color": "#2a2a26",
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#5fd0f0",
+     "density": 40,
+     "size": 0.015,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#9ab0c0",
+     "opacity": 0.65,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.75,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a0c0d0",
+     "opacity": 0.7,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#1e2a30",
+       "x0": 0.7,
+       "x1": 0.86,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      },
+      {
+       "type": "spots",
+       "color": "#e8f4ff",
+       "density": 25,
+       "size": 0.04,
+       "x0": 0,
+       "x1": 0.65
+      }
+     ]
+    },
+    "anal": {
+     "color": "#9ab0c0",
+     "opacity": 0.65,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#c4d4dc",
+     "opacity": 0.6,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.62,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-agassizii-double-red",
+  "commonName": "Agassiz's Dwarf Cichlid 'Double Red'",
+  "scientificName": "Apistogramma agassizii",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A German-bred line of Agassiz's dwarf cichlid in which the male's dorsal fin and spade-shaped tail are flooded with deep red. Behaviour and care are those of the wild species, including the harem breeding system.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.34,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.22,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#9aa8b4",
+   "dorsal": "#6a766e",
+   "ventral": "#e0c870",
+   "fin": "#d63a2a",
+   "finOpacity": 0.8,
+   "eye": "#d0502a",
+   "metallic": 0.2,
+   "iridescence": 0.55,
+   "iridescenceColor": "#70c8ff",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a6672",
+     "contrast": 0.2
+    },
+    {
+     "type": "stripe",
+     "color": "#2c2c2a",
+     "y": 0.04,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#2c2c2a",
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#62d0f2",
+     "density": 40,
+     "size": 0.015,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8382a",
+     "opacity": 0.85,
+     "edge": "#f2683a",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#d63828",
+     "opacity": 0.85,
+     "edge": "#f2683a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#8ab8d4",
+       "x0": 0,
+       "x1": 0.25,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.3
+      }
+     ]
+    },
+    "anal": {
+     "color": "#cc3a2c",
+     "opacity": 0.8
+    },
+    "pelvic": {
+     "color": "#d0543a",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.62,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "variantOf": "apistogramma-agassizii",
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-agassizii-fire-red",
+  "commonName": "Agassiz's Dwarf Cichlid 'Fire Red'",
+  "scientificName": "Apistogramma agassizii",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred strain whose males wear an orange-red wash over body and fins, strongest on the face, belly and tail. It shares the wild species' biology and harem breeding.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.34,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.22,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#d27040",
+   "dorsal": "#9a4e2c",
+   "ventral": "#e8a052",
+   "fin": "#e0442a",
+   "finOpacity": 0.8,
+   "eye": "#d8402a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#ffb070",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e0502e",
+     "x0": 0,
+     "x1": 0.32,
+     "y0": -1,
+     "y1": 0.3,
+     "softness": 0.4
+    },
+    {
+     "type": "stripe",
+     "color": "#5a2a1c",
+     "y": 0.04,
+     "width": 0.07,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#4a2418",
+     "width": 0.035
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0442a",
+     "opacity": 0.85,
+     "edge": "#ff7a40",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#e0442a",
+     "opacity": 0.85,
+     "edge": "#ff7a40",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#da442c",
+     "opacity": 0.8
+    },
+    "pelvic": {
+     "color": "#e05a34",
+     "opacity": 0.75
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.62,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "variantOf": "apistogramma-agassizii",
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-agassizii-super-red",
+  "commonName": "Agassiz's Dwarf Cichlid 'Super Red'",
+  "scientificName": "Apistogramma agassizii",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A strain selected for the most intense red in the males' unpaired fins, the spade tail almost solid crimson with only a narrow pale base. Females remain yellow with a black band.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.34,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.22,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#a2a8b8",
+   "dorsal": "#6e7280",
+   "ventral": "#e2c070",
+   "fin": "#c8221e",
+   "finOpacity": 0.9,
+   "eye": "#d0402a",
+   "metallic": 0.2,
+   "iridescence": 0.5,
+   "iridescenceColor": "#7ac0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c84a3a",
+     "x0": 0,
+     "x1": 0.22,
+     "y0": -1,
+     "y1": -0.1,
+     "softness": 0.4
+    },
+    {
+     "type": "stripe",
+     "color": "#2c2a2c",
+     "y": 0.04,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#2c2a2c",
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#d84a3a",
+     "density": 30,
+     "size": 0.018,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.6
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8221e",
+     "opacity": 0.9,
+     "edge": "#ff5a3a",
+     "edgeWidth": 0.06
+    },
+    "caudal": {
+     "color": "#c8221e",
+     "opacity": 0.92,
+     "edge": "#ff5a3a",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#90a8c0",
+       "x0": 0,
+       "x1": 0.12,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.3
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c8221e",
+     "opacity": 0.88
+    },
+    "pelvic": {
+     "color": "#d0302a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.62,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "variantOf": "apistogramma-agassizii",
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-cacatuoides",
+  "commonName": "Cockatoo Dwarf Cichlid",
+  "scientificName": "Apistogramma cacatuoides",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon — Peru, Colombia & Brazil",
+  "description": "Named for the crest of elongated front dorsal spines that the big-mouthed male raises in display. One of the hardiest Apistogramma, it lives in small, often stagnant forest creeks and pools and keeps a harem of females, each spawning in her own cave.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.88,
+    "height": 0.24,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.32,
+    "end": 0.36,
+    "height": 0.26,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.38
+   },
+   "headLength": 0.32
+  },
+  "look": {
+   "base": "#c8b882",
+   "dorsal": "#7d7a5a",
+   "ventral": "#e8d898",
+   "fin": "#c8b070",
+   "finOpacity": 0.6,
+   "eye": "#c8402a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#7ad8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#262420",
+     "y": 0.04,
+     "width": 0.09,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "lines",
+     "color": "#3a3020",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    },
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.05
+    },
+    {
+     "type": "spots",
+     "color": "#6ad8e8",
+     "density": 30,
+     "size": 0.014,
+     "x0": 0.02,
+     "x1": 0.28,
+     "y0": -0.6,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d0a050",
+     "opacity": 0.7,
+     "edge": "#e8502a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.65,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#d8b468",
+     "opacity": 0.65,
+     "edge": "#e8502a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e04a2a",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c8a050",
+     "opacity": 0.65,
+     "edge": "#e8502a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e04a2a",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e0b040",
+     "opacity": 0.8,
+     "edge": "#161512",
+     "edgeWidth": 0.25
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.55,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     },
+     {
+      "type": "lines",
+      "color": "#161512",
+      "count": 3,
+      "width": 0.03,
+      "y0": -0.8,
+      "y1": -0.25
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-cacatuoides-double-red",
+  "commonName": "Cockatoo Dwarf Cichlid 'Double Red'",
+  "scientificName": "Apistogramma cacatuoides",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred cockatoo cichlid whose males carry solid red in both the crested dorsal fin and the lyre-shaped tail. It has the wild species' hardiness and harem breeding.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.88,
+    "height": 0.24,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.32,
+    "end": 0.36,
+    "height": 0.26,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.38
+   },
+   "headLength": 0.32
+  },
+  "look": {
+   "base": "#c8b882",
+   "dorsal": "#7d7a5a",
+   "ventral": "#e8d898",
+   "fin": "#c8b070",
+   "finOpacity": 0.6,
+   "eye": "#c8402a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#7ad8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#262420",
+     "y": 0.04,
+     "width": 0.09,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "lines",
+     "color": "#3a3020",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    },
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.05
+    },
+    {
+     "type": "spots",
+     "color": "#6ad8e8",
+     "density": 30,
+     "size": 0.014,
+     "x0": 0.02,
+     "x1": 0.28,
+     "y0": -0.6,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e03a24",
+     "opacity": 0.85,
+     "edge": "#ff6a3a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.75,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e03a24",
+     "opacity": 0.85,
+     "edge": "#ff6a3a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#d8c080",
+       "x0": 0,
+       "x1": 0.2,
+       "y0": -0.5,
+       "y1": 0.5,
+       "softness": 0.4
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c8a050",
+     "opacity": 0.65,
+     "edge": "#e8502a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e0b040",
+     "opacity": 0.8,
+     "edge": "#161512",
+     "edgeWidth": 0.25
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.55,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     },
+     {
+      "type": "lines",
+      "color": "#161512",
+      "count": 3,
+      "width": 0.03,
+      "y0": -0.8,
+      "y1": -0.25
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "variantOf": "apistogramma-cacatuoides",
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-cacatuoides-triple-red",
+  "commonName": "Cockatoo Dwarf Cichlid 'Triple Red'",
+  "scientificName": "Apistogramma cacatuoides",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred strain in which the dorsal, caudal and anal fins of males are all solid red, the most intensely coloured of the cockatoo cichlid forms. Females stay yellow with black markings.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.88,
+    "height": 0.24,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.32,
+    "end": 0.36,
+    "height": 0.26,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.38
+   },
+   "headLength": 0.32
+  },
+  "look": {
+   "base": "#ccb27e",
+   "dorsal": "#7d7a5a",
+   "ventral": "#e8c890",
+   "fin": "#c8b070",
+   "finOpacity": 0.6,
+   "eye": "#c8402a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#7ad8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#262420",
+     "y": 0.04,
+     "width": 0.09,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "lines",
+     "color": "#3a3020",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    },
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.05
+    },
+    {
+     "type": "spots",
+     "color": "#6ad8e8",
+     "density": 30,
+     "size": 0.014,
+     "x0": 0.02,
+     "x1": 0.28,
+     "y0": -0.6,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0321f",
+     "opacity": 0.9,
+     "edge": "#ff6a3a",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.8,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e0321f",
+     "opacity": 0.9,
+     "edge": "#ff6a3a",
+     "edgeWidth": 0.06
+    },
+    "anal": {
+     "color": "#e0321f",
+     "opacity": 0.88,
+     "edge": "#ff6a3a",
+     "edgeWidth": 0.06
+    },
+    "pelvic": {
+     "color": "#e05a30",
+     "opacity": 0.8,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.55,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     },
+     {
+      "type": "lines",
+      "color": "#161512",
+      "count": 3,
+      "width": 0.03,
+      "y0": -0.8,
+      "y1": -0.25
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "variantOf": "apistogramma-cacatuoides",
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-cacatuoides-orange-flash",
+  "commonName": "Cockatoo Dwarf Cichlid 'Orange Flash'",
+  "scientificName": "Apistogramma cacatuoides",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A popular strain whose males show bright orange bands through the dorsal fin and the upper and lower edges of the lyre tail, with an orange flush on the lower flank. Care and behaviour match the wild species.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.88,
+    "height": 0.24,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.9,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.32,
+    "end": 0.36,
+    "height": 0.26,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.38
+   },
+   "headLength": 0.32
+  },
+  "look": {
+   "base": "#c8b882",
+   "dorsal": "#7d7a5a",
+   "ventral": "#e8d898",
+   "fin": "#c8b070",
+   "finOpacity": 0.6,
+   "eye": "#c8402a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#7ad8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#262420",
+     "y": 0.04,
+     "width": 0.09,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "lines",
+     "color": "#3a3020",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    },
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.05
+    },
+    {
+     "type": "spots",
+     "color": "#6ad8e8",
+     "density": 30,
+     "size": 0.014,
+     "x0": 0.02,
+     "x1": 0.28,
+     "y0": -0.6,
+     "y1": 0.3
+    },
+    {
+     "type": "region",
+     "color": "#f08a3a",
+     "x0": 0.2,
+     "x1": 0.85,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8a868",
+     "opacity": 0.7,
+     "edge": "#ff8a2a",
+     "edgeWidth": 0.2,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.7,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8b07a",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#ff8a2a",
+       "y": 0.75,
+       "width": 0.25
+      },
+      {
+       "type": "stripe",
+       "color": "#ff8a2a",
+       "y": -0.75,
+       "width": 0.25
+      },
+      {
+       "type": "spots",
+       "color": "#f07a2a",
+       "density": 15,
+       "size": 0.05,
+       "y0": -0.4,
+       "y1": 0.4
+      }
+     ]
+    },
+    "anal": {
+     "color": "#e08040",
+     "opacity": 0.7,
+     "edge": "#ff8a2a",
+     "edgeWidth": 0.15
+    },
+    "pelvic": {
+     "color": "#f09030",
+     "opacity": 0.8,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.55,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     },
+     {
+      "type": "lines",
+      "color": "#161512",
+      "count": 3,
+      "width": 0.03,
+      "y0": -0.8,
+      "y1": -0.25
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "variantOf": "apistogramma-cacatuoides",
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-borellii",
+  "commonName": "Umbrella Dwarf Cichlid",
+  "scientificName": "Apistogramma borellii",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraguay–Paraná basin — Brazil, Paraguay, Bolivia & Argentina",
+  "description": "A small, comparatively peaceful Apistogramma from shallow, plant-filled marshes of the Pantanal and Chaco, tolerating cooler water than most of its genus. Males have a yellow head and spread a tall \"umbrella\" dorsal fin in display.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   21,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.36,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.86,
+    "height": 0.3,
+    "shape": "sail"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#bcc8c0",
+   "dorsal": "#8a9070",
+   "ventral": "#e8d870",
+   "fin": "#d8c860",
+   "finOpacity": 0.6,
+   "eye": "#c8502a",
+   "metallic": 0.2,
+   "iridescence": 0.6,
+   "iridescenceColor": "#80d0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e6cf4a",
+     "x0": 0,
+     "x1": 0.32,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.35
+    },
+    {
+     "type": "stripe",
+     "color": "#4a4a40",
+     "y": 0.04,
+     "width": 0.06,
+     "x0": 0.3,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#3a3a30",
+     "width": 0.035
+    },
+    {
+     "type": "spots",
+     "color": "#4ac0f0",
+     "density": 25,
+     "size": 0.016,
+     "x0": 0.05,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0cc58",
+     "opacity": 0.7,
+     "edge": "#4a90c0",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#5aa8d8",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8c0d0",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e0cc58",
+       "density": 25,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#a8c0d0",
+     "opacity": 0.55,
+     "edge": "#e0cc58",
+     "edgeWidth": 0.15
+    },
+    "pelvic": {
+     "color": "#e8d050",
+     "opacity": 0.8,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.68,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "blotch",
+      "color": "#161512",
+      "x": 0.5,
+      "y": 0.05,
+      "rx": 0.05,
+      "ry": 0.15
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-borellii-opal",
+  "commonName": "Umbrella Dwarf Cichlid 'Opal'",
+  "scientificName": "Apistogramma borellii",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred umbrella cichlid in which the blue sheen of the male spreads over the whole body as an opalescent glow behind a golden head. It keeps the cool-tolerant, peaceful nature of the wild form.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   21,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.36,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.86,
+    "height": 0.3,
+    "shape": "sail"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#b4d0e4",
+   "dorsal": "#88a8c0",
+   "ventral": "#e0e0c8",
+   "fin": "#b8d4e8",
+   "finOpacity": 0.6,
+   "eye": "#c8502a",
+   "metallic": 0.35,
+   "iridescence": 0.85,
+   "iridescenceColor": "#a0e4ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8c848",
+     "x0": 0,
+     "x1": 0.28,
+     "y0": -0.6,
+     "y1": 1,
+     "softness": 0.4
+    },
+    {
+     "type": "mask",
+     "color": "#4a4a40",
+     "width": 0.03
+    },
+    {
+     "type": "speckle",
+     "color": "#d8f0ff",
+     "density": 60
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8dcec",
+     "opacity": 0.7,
+     "edge": "#e8c848",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#b8d4e8",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8f6ff",
+       "density": 25,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#b8d4e8",
+     "opacity": 0.6
+    },
+    "pelvic": {
+     "color": "#e8d050",
+     "opacity": 0.75,
+     "edge": "#161512",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.68,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "blotch",
+      "color": "#161512",
+      "x": 0.5,
+      "y": 0.05,
+      "rx": 0.05,
+      "ry": 0.15
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "variantOf": "apistogramma-borellii",
+  "availability": "common"
+ },
+ {
+  "id": "apistogramma-macmasteri",
+  "commonName": "Villavicencio Dwarf Cichlid",
+  "scientificName": "Apistogramma macmasteri",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Meta basin around Villavicencio, Colombia (upper Orinoco)",
+  "description": "A robust Apistogramma of clear and blackwater llanos streams, the male's tail framed by a broad red seam above a dark submarginal band. Females spawn in caves and lead their fry over the leaf litter.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.36,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a8a888",
+   "dorsal": "#6a6a50",
+   "ventral": "#e0c890",
+   "fin": "#a8aca8",
+   "finOpacity": 0.6,
+   "eye": "#d84a2a",
+   "metallic": 0.15,
+   "iridescence": 0.4,
+   "iridescenceColor": "#6fd8f0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a4838",
+     "count": 7,
+     "width": 0.035,
+     "x0": 0.25,
+     "x1": 0.92
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a22",
+     "y": 0.04,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1e18",
+     "x": 0.55,
+     "y": 0.04,
+     "rx": 0.045,
+     "ry": 0.13
+    },
+    {
+     "type": "mask",
+     "color": "#2a2a22",
+     "width": 0.045
+    },
+    {
+     "type": "spots",
+     "color": "#5ad0f0",
+     "density": 30,
+     "size": 0.015,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a8aca8",
+     "opacity": 0.65,
+     "edge": "#d83020",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.75,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#b0b8b8",
+     "opacity": 0.65,
+     "edge": "#d83020",
+     "edgeWidth": 0.22,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#2a2a2a",
+       "x0": 0.62,
+       "x1": 0.78,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.15
+      }
+     ]
+    },
+    "anal": {
+     "color": "#a8aca8",
+     "opacity": 0.6,
+     "edge": "#d83020",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#3a3a3a",
+     "opacity": 0.8,
+     "edge": "#d83020",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.68,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-hongsloi",
+  "commonName": "Hongslo's Dwarf Cichlid",
+  "scientificName": "Apistogramma hongsloi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco basin llanos — Colombia & Venezuela",
+  "description": "A slender dwarf cichlid of shallow savanna creeks; males have red streaks across the cheeks and red-striped dorsal and tail fins over a greenish-blue body. It needs soft, acidic water to breed.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   6
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.24,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#b8c09a",
+   "dorsal": "#78805a",
+   "ventral": "#e8d070",
+   "fin": "#b8b8a0",
+   "finOpacity": 0.6,
+   "eye": "#d84a2a",
+   "metallic": 0.15,
+   "iridescence": 0.6,
+   "iridescenceColor": "#60d0e8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#262620",
+     "y": 0.04,
+     "width": 0.085,
+     "x0": 0.2,
+     "x1": 0.9
+    },
+    {
+     "type": "mask",
+     "color": "#262620",
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#e04028",
+     "density": 25,
+     "size": 0.02,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.7,
+     "y1": 0.2
+    },
+    {
+     "type": "spots",
+     "color": "#62d6ee",
+     "density": 40,
+     "size": 0.014,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.7
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8b860",
+     "opacity": 0.7,
+     "edge": "#e04028",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#e04028",
+       "count": 3,
+       "width": 0.08
+      },
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.8,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#b0b8a8",
+     "opacity": 0.65,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#d84028",
+       "count": 4,
+       "width": 0.06
+      }
+     ]
+    },
+    "anal": {
+     "color": "#b8b8a0",
+     "opacity": 0.6,
+     "edge": "#e04028",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#d8502a",
+     "opacity": 0.75,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.7,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-viejita",
+  "commonName": "Viejita Dwarf Cichlid",
+  "scientificName": "Apistogramma viejita",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Meta basin, Colombia (Orinoco)",
+  "description": "A steep-headed dwarf cichlid from Colombian llanos streams whose males flush red over the throat and lower face. Like its relative A. macmasteri it is a harem-polygynous cave spawner of soft, warm water.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.37,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a8b0b8",
+   "dorsal": "#707a70",
+   "ventral": "#e0b090",
+   "fin": "#a8b0b8",
+   "finOpacity": 0.6,
+   "eye": "#d84a2a",
+   "metallic": 0.15,
+   "iridescence": 0.5,
+   "iridescenceColor": "#70c8f0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d84a3a",
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -1,
+     "y1": -0.15,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#4a4a42",
+     "count": 6,
+     "width": 0.035,
+     "x0": 0.28,
+     "x1": 0.92
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a26",
+     "y": 0.04,
+     "width": 0.07,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1e1a",
+     "x": 0.55,
+     "y": 0.05,
+     "rx": 0.045,
+     "ry": 0.13
+    },
+    {
+     "type": "mask",
+     "color": "#2a2a26",
+     "width": 0.045
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a8b4c0",
+     "opacity": 0.65,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.75,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8b8c8",
+     "opacity": 0.6,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#5ab8e8",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#a8b4c0",
+     "opacity": 0.6,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#3a3a3a",
+     "opacity": 0.8,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.7,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-trifasciata",
+  "commonName": "Three-striped Dwarf Cichlid",
+  "scientificName": "Apistogramma trifasciata",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraguay & Guaporé basins — Brazil, Bolivia, Paraguay & Argentina",
+  "description": "A small, blue-sheened dwarf cichlid of shallow, vegetated marshes, marked by a lateral band plus a second dark stripe angling from the pectoral fin toward the belly. Males raise strongly elongated front dorsal spines when displaying.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.26,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.32,
+    "shape": "filament",
+    "trail": 0.08
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a8c0c8",
+   "dorsal": "#6a7a7a",
+   "ventral": "#e4dcb0",
+   "fin": "#a0b8c0",
+   "finOpacity": 0.6,
+   "eye": "#c84030",
+   "metallic": 0.2,
+   "iridescence": 0.7,
+   "iridescenceColor": "#60c8ff",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1e1e",
+     "y": 0.02,
+     "width": 0.075,
+     "x0": 0.15,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1e1e",
+     "y": -0.45,
+     "width": 0.055,
+     "x0": 0.3,
+     "x1": 0.68
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a2a",
+     "y": 0.72,
+     "width": 0.045,
+     "x0": 0.32,
+     "x1": 0.85
+    },
+    {
+     "type": "mask",
+     "color": "#1e1e1e",
+     "width": 0.04
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a8bcc4",
+     "opacity": 0.65,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.6,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8c0c8",
+     "opacity": 0.6,
+     "edge": "#d86a3a",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#a0b8c0",
+     "opacity": 0.6,
+     "edge": "#d86a3a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#c0d0d8",
+     "opacity": 0.65,
+     "edge": "#161512",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.72,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": -0.45,
+      "width": 0.05,
+      "x0": 0.3,
+      "x1": 0.65
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-bitaeniata",
+  "commonName": "Two-striped Dwarf Cichlid",
+  "scientificName": "Apistogramma bitaeniata",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon — Peru, Colombia & Brazil",
+  "description": "Males of this slender species carry the most extravagantly extended front dorsal membranes in the genus, raised like a crest in display. Its two parallel dark stripes run along the flank and lower side, over leaf-litter shallows of forest streams.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   6
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.32,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.3,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#c0c098",
+   "dorsal": "#7a7a5a",
+   "ventral": "#e8d888",
+   "fin": "#c0b890",
+   "finOpacity": 0.6,
+   "eye": "#d84a2a",
+   "metallic": 0.15,
+   "iridescence": 0.55,
+   "iridescenceColor": "#60d0f0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#222220",
+     "y": 0.05,
+     "width": 0.07,
+     "x0": 0.2,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a24",
+     "y": -0.45,
+     "width": 0.05,
+     "x0": 0.3,
+     "x1": 0.85
+    },
+    {
+     "type": "mask",
+     "color": "#222220",
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#5ad0f0",
+     "density": 35,
+     "size": 0.015,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8b060",
+     "opacity": 0.7,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.6,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8b880",
+     "opacity": 0.6,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#5ab8e8",
+       "density": 15,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c0b080",
+     "opacity": 0.6,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e0c060",
+     "opacity": 0.75,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.7,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": -0.45,
+      "width": 0.045,
+      "x0": 0.3,
+      "x1": 0.8
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-nijsseni",
+  "commonName": "Panda Dwarf Cichlid",
+  "scientificName": "Apistogramma nijsseni",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Ucayali basin near Jenaro Herrera, Peru",
+  "description": "Brooding females turn lemon-yellow with three bold black panda blotches on eye, flank and tail base, far more striking than the blue-grey, red-tailed males. A blackwater species that breeds only in very soft, acidic water.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.37,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.32
+   }
+  },
+  "look": {
+   "base": "#a8b0c2",
+   "dorsal": "#707888",
+   "ventral": "#d8cca4",
+   "fin": "#a0a8b8",
+   "finOpacity": 0.6,
+   "eye": "#c84030",
+   "metallic": 0.2,
+   "iridescence": 0.5,
+   "iridescenceColor": "#90b0ff",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#3a3a48",
+     "x": 0.5,
+     "y": 0.1,
+     "rx": 0.05,
+     "ry": 0.15
+    },
+    {
+     "type": "mask",
+     "color": "#3a3a48",
+     "width": 0.035
+    },
+    {
+     "type": "scales",
+     "color": "#6a7080",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#9aa4b8",
+     "opacity": 0.65,
+     "edge": "#d8302a",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#a0a8bc",
+     "opacity": 0.7,
+     "edge": "#d8302a",
+     "edgeWidth": 0.18
+    },
+    "anal": {
+     "color": "#9aa4b8",
+     "opacity": 0.6,
+     "edge": "#d8302a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#2a3040",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.7,
+   "look": {
+    "base": "#f0d830",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "blotch",
+      "color": "#161512",
+      "x": 0.5,
+      "y": 0.1,
+      "rx": 0.08,
+      "ry": 0.25
+     },
+     {
+      "type": "blotch",
+      "color": "#161512",
+      "x": 0.95,
+      "y": 0.02,
+      "rx": 0.04,
+      "ry": 0.13
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-panduro",
+  "commonName": "Panduro Dwarf Cichlid",
+  "scientificName": "Apistogramma panduro",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Ucayali basin near Pucallpa, Peru",
+  "description": "A close relative of the panda dwarf cichlid: males are pale blue-grey with a smoky tail ringed in red, and brooding females turn yellow with black blotches. It inhabits soft, tannin-stained forest streams.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.36,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.33
+   }
+  },
+  "look": {
+   "base": "#c0c8d2",
+   "dorsal": "#8890a0",
+   "ventral": "#e0d8c0",
+   "fin": "#a8b0c0",
+   "finOpacity": 0.6,
+   "eye": "#c84030",
+   "metallic": 0.25,
+   "iridescence": 0.45,
+   "iridescenceColor": "#90c0ff",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#5a6070",
+     "y": 0.04,
+     "width": 0.06,
+     "x0": 0.25,
+     "x1": 0.85
+    },
+    {
+     "type": "mask",
+     "color": "#4a5060",
+     "width": 0.035
+    },
+    {
+     "type": "scales",
+     "color": "#7a8292",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8a92a8",
+     "opacity": 0.7,
+     "edge": "#e03028",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#3a3a46",
+     "opacity": 0.85,
+     "edge": "#e03028",
+     "edgeWidth": 0.18,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#8a92a8",
+       "x0": 0,
+       "x1": 0.2,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.3
+      }
+     ]
+    },
+    "anal": {
+     "color": "#3a3a46",
+     "opacity": 0.75,
+     "edge": "#e03028",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#1e1e26",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.7,
+   "look": {
+    "base": "#f0d830",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "blotch",
+      "color": "#161512",
+      "x": 0.5,
+      "y": 0.1,
+      "rx": 0.08,
+      "ry": 0.25
+     },
+     {
+      "type": "blotch",
+      "color": "#161512",
+      "x": 0.95,
+      "y": 0.02,
+      "rx": 0.04,
+      "ry": 0.13
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-baenschi",
+  "commonName": "Inca Dwarf Cichlid",
+  "scientificName": "Apistogramma baenschi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Huallaga basin, Peru",
+  "description": "Long known in the trade as Apistogramma sp. 'Inca 50', this species pairs a yellow body and black lateral band with turquoise streaks across the male's face. It lives in clear, slow forest streams of the Peruvian Andean foothills.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.35,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#d4c058",
+   "dorsal": "#8a8050",
+   "ventral": "#f0d870",
+   "fin": "#c8c080",
+   "finOpacity": 0.6,
+   "eye": "#d8502a",
+   "metallic": 0.15,
+   "iridescence": 0.5,
+   "iridescenceColor": "#50c8f0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#7ab0c8",
+     "x0": 0,
+     "x1": 0.28,
+     "y0": -0.7,
+     "y1": 0.6,
+     "softness": 0.4
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1c18",
+     "y": 0.04,
+     "width": 0.085,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#1e1c18",
+     "width": 0.045
+    },
+    {
+     "type": "spots",
+     "color": "#4ab8f0",
+     "density": 35,
+     "size": 0.016,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d0c070",
+     "opacity": 0.65,
+     "edge": "#4aa0d0",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.75,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8c090",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#5aa8d0",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#b8c0a0",
+     "opacity": 0.55,
+     "edge": "#4aa0d0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e0c850",
+     "opacity": 0.8,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.72,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-elizabethae",
+  "commonName": "Elizabeth's Dwarf Cichlid",
+  "scientificName": "Apistogramma elizabethae",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro basin, Brazil",
+  "description": "A blackwater dwarf cichlid whose males combine a sail-like dorsal fin with an orange-red throat and cheeks over a greenish body. It needs very soft, acidic water and is shy among roots and leaf litter.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   4
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer",
+   "shy"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.36,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.88,
+    "height": 0.3,
+    "shape": "sail"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.32
+   }
+  },
+  "look": {
+   "base": "#b0b890",
+   "dorsal": "#707858",
+   "ventral": "#e09060",
+   "fin": "#a8b8a0",
+   "finOpacity": 0.6,
+   "eye": "#d84a2a",
+   "metallic": 0.15,
+   "iridescence": 0.5,
+   "iridescenceColor": "#70e0d0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e0603a",
+     "x0": 0.04,
+     "x1": 0.36,
+     "y0": -1,
+     "y1": -0.1,
+     "softness": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3a30",
+     "y": 0.04,
+     "width": 0.06,
+     "x0": 0.3,
+     "x1": 0.85
+    },
+    {
+     "type": "mask",
+     "color": "#2a2a24",
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#70e0d8",
+     "density": 35,
+     "size": 0.015,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.7
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a8b8a0",
+     "opacity": 0.7,
+     "edge": "#e0502a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#60c8e0",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8b8a8",
+     "opacity": 0.6,
+     "edge": "#e0502a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#60c8e0",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c09070",
+     "opacity": 0.6,
+     "edge": "#e0502a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e07040",
+     "opacity": 0.75
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.68,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "apistogramma-mendezi",
+  "commonName": "Mendez's Dwarf Cichlid",
+  "scientificName": "Apistogramma mendezi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Rio Negro around Barcelos, Brazil",
+  "description": "A blackwater specialist of the Rio Negro whose males show turquoise sheen, elongated dorsal lappets and red lines in the unpaired fins. It is among the most demanding Apistogramma, breeding only in extremely soft, acidic water.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   4.5,
+   6
+  ],
+  "dGH": [
+   0,
+   3
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer",
+   "shy"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.35,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.26,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.32
+   }
+  },
+  "look": {
+   "base": "#a8b0a0",
+   "dorsal": "#6a7060",
+   "ventral": "#d8c8a0",
+   "fin": "#a8a8a0",
+   "finOpacity": 0.6,
+   "eye": "#d04a2a",
+   "metallic": 0.15,
+   "iridescence": 0.65,
+   "iridescenceColor": "#60d8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2a24",
+     "y": 0.04,
+     "width": 0.075,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#2a2a24",
+     "width": 0.04
+    },
+    {
+     "type": "lines",
+     "color": "#5ac8e8",
+     "count": 6,
+     "width": 0.025,
+     "wavy": 0.5,
+     "y0": -0.6,
+     "y1": 0.6
+    },
+    {
+     "type": "spots",
+     "color": "#d85a3a",
+     "density": 20,
+     "size": 0.016,
+     "x0": 0.02,
+     "x1": 0.28,
+     "y0": -0.7,
+     "y1": 0.1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a8a8a0",
+     "opacity": 0.65,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#d84a2a",
+       "count": 3,
+       "width": 0.07
+      },
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.7,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8b0a8",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#d84a2a",
+       "count": 5,
+       "width": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "color": "#a8a8a0",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#d84a2a",
+       "count": 2,
+       "width": 0.08
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#5a8ab0",
+     "opacity": 0.7,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.68,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "apistogramma-diplotaenia",
+  "commonName": "Double-band Dwarf Cichlid",
+  "scientificName": "Apistogramma diplotaenia",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Rio Negro basin, Brazil",
+  "description": "A tiny, slender Apistogramma of Rio Negro blackwater, named for the two parallel dark bands along its flank. It lives among leaf litter in extremely soft, acidic water and is one of the smallest members of the genus.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   4.5,
+   6
+  ],
+  "dGH": [
+   0,
+   3
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.28,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#c8b888",
+   "dorsal": "#7e7058",
+   "ventral": "#e8dcb8",
+   "fin": "#c8c0a8",
+   "finOpacity": 0.45,
+   "eye": "#c86a3a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#80d0e8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1c18",
+     "y": 0.12,
+     "width": 0.07,
+     "x0": 0.18,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1c18",
+     "y": -0.32,
+     "width": 0.06,
+     "x0": 0.25,
+     "x1": 0.92
+    },
+    {
+     "type": "mask",
+     "color": "#1e1c18",
+     "width": 0.04
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8c0a8",
+     "opacity": 0.5,
+     "edge": "#d87040",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#c8c0a8",
+     "opacity": 0.45
+    },
+    "pelvic": {
+     "color": "#d8c890",
+     "opacity": 0.6,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.12,
+      "width": 0.07,
+      "x0": 0.18,
+      "x1": 0.95
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": -0.32,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.9
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "apistogramma-eunotus",
+  "commonName": "Eunotus Dwarf Cichlid",
+  "scientificName": "Apistogramma eunotus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon — Peru, Brazil & Colombia",
+  "description": "A comparatively large, slender Apistogramma of clear and whitewater forest streams in the upper Amazon, with a dark lateral band and red-edged unpaired fins in males. Each female spawns in her own cave and guards the brood.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 70,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.32,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.32
+   }
+  },
+  "look": {
+   "base": "#b8b8a0",
+   "dorsal": "#7a7860",
+   "ventral": "#e0d098",
+   "fin": "#b0b0a0",
+   "finOpacity": 0.55,
+   "eye": "#d0502a",
+   "metallic": 0.15,
+   "iridescence": 0.45,
+   "iridescenceColor": "#70c8e8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#262420",
+     "y": 0.04,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.97
+    },
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.04
+    },
+    {
+     "type": "lines",
+     "color": "#6a6040",
+     "count": 3,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    },
+    {
+     "type": "spots",
+     "color": "#5ac8e8",
+     "density": 30,
+     "size": 0.015,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b0b0a0",
+     "opacity": 0.6,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#b0b8b0",
+     "opacity": 0.6,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.14,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#6ab0d8",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#b0b0a0",
+     "opacity": 0.55,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#d8c070",
+     "opacity": 0.7,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.68,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-steindachneri",
+  "commonName": "Steindachner's Dwarf Cichlid",
+  "scientificName": "Apistogramma steindachneri",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of Guyana & Suriname",
+  "description": "One of the largest Apistogramma, from Guiana Shield rivers; males grow a lyre-shaped tail and greenish iridescence over the head. It is hardier than most of its genus and tolerates near-neutral water.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.35,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.24,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#b8b08a",
+   "dorsal": "#6e6a50",
+   "ventral": "#e0cc90",
+   "fin": "#b8b090",
+   "finOpacity": 0.6,
+   "eye": "#d0502a",
+   "metallic": 0.15,
+   "iridescence": 0.55,
+   "iridescenceColor": "#60e0c0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2822",
+     "y": 0.04,
+     "width": 0.085,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#2a2822",
+     "width": 0.05
+    },
+    {
+     "type": "spots",
+     "color": "#60e0c8",
+     "density": 40,
+     "size": 0.016,
+     "x0": 0.02,
+     "x1": 0.32,
+     "y0": -0.6,
+     "y1": 0.5
+    },
+    {
+     "type": "lines",
+     "color": "#6a6040",
+     "count": 3,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b8b090",
+     "opacity": 0.65,
+     "edge": "#e0602a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.7,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c0b890",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#e8702a",
+       "y": 0.8,
+       "width": 0.25
+      },
+      {
+       "type": "stripe",
+       "color": "#e8702a",
+       "y": -0.8,
+       "width": 0.25
+      },
+      {
+       "type": "spots",
+       "color": "#70c8e0",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#b8b090",
+     "opacity": 0.6,
+     "edge": "#e0602a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#d8c070",
+     "opacity": 0.7,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.62,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "apistogramma-pertensis",
+  "commonName": "Pertensis Dwarf Cichlid",
+  "scientificName": "Apistogramma pertensis",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Rio Negro & Amazon near Manaus, Brazil",
+  "description": "A small, slim Apistogramma of blackwater leaf-litter banks around the Rio Negro mouth; males have elongated front dorsal spines and a dark lateral band over a pale yellowish body. It is shy and best kept with very small, peaceful fishes.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.29,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.22,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#ccc0a0",
+   "dorsal": "#8a7e62",
+   "ventral": "#e8dcc0",
+   "fin": "#c8c0b0",
+   "finOpacity": 0.5,
+   "eye": "#c86a3a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#80d0e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#24221e",
+     "y": 0.04,
+     "width": 0.075,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#24221e",
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#70c8e0",
+     "density": 20,
+     "size": 0.014,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8c0b0",
+     "opacity": 0.55,
+     "edge": "#d87a3a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.7,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8c0b0",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d88a50",
+       "density": 15,
+       "size": 0.04
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#d8c890",
+     "opacity": 0.6,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.75,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "apistogramma-regani",
+  "commonName": "Regan's Dwarf Cichlid",
+  "scientificName": "Apistogramma regani",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Amazon & lower Rio Negro, Brazil",
+  "description": "A small, yellowish Apistogramma with a dark lateral band ending in a spot at the tail base, found in shallow, leaf-strewn forest streams. Males are only modestly larger and more colourful than females.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.34,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#c8b880",
+   "dorsal": "#7e7258",
+   "ventral": "#e8d8a0",
+   "fin": "#c0b890",
+   "finOpacity": 0.5,
+   "eye": "#c86a3a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#70d0e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#262420",
+     "y": 0.04,
+     "width": 0.07,
+     "x0": 0.2,
+     "x1": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1814",
+     "x": 0.96,
+     "y": 0.02,
+     "rx": 0.03,
+     "ry": 0.12
+    },
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.04
+    },
+    {
+     "type": "lines",
+     "color": "#6a6040",
+     "count": 3,
+     "width": 0.03,
+     "y0": -0.8,
+     "y1": -0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c0b890",
+     "opacity": 0.55,
+     "edge": "#d8703a",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#c8bc90",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e08a40",
+       "density": 15,
+       "size": 0.04
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e0c860",
+     "opacity": 0.65,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     },
+     {
+      "type": "blotch",
+      "color": "#161512",
+      "x": 0.96,
+      "y": 0.02,
+      "rx": 0.03,
+      "ry": 0.12
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "apistogramma-commbrae",
+  "commonName": "Corumbá Dwarf Cichlid",
+  "scientificName": "Apistogramma commbrae",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Paraguay basin & Pantanal — Brazil, Bolivia & Paraguay",
+  "description": "A small, peaceful Apistogramma of shallow, vegetated Pantanal waters; males show turquoise streaks on the face and a row of dark blotches along the flank. It tolerates cooler, harder water than its Amazonian relatives.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.36,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.22,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#b8b890",
+   "dorsal": "#76765a",
+   "ventral": "#e8dca0",
+   "fin": "#c0c0a0",
+   "finOpacity": 0.55,
+   "eye": "#c8502a",
+   "metallic": 0.15,
+   "iridescence": 0.55,
+   "iridescenceColor": "#50d8d8",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a2a22",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.92,
+     "y0": -0.2,
+     "y1": 0.3
+    },
+    {
+     "type": "mask",
+     "color": "#2a2a22",
+     "width": 0.045
+    },
+    {
+     "type": "lines",
+     "color": "#4ad0e0",
+     "count": 3,
+     "width": 0.03,
+     "wavy": 0.4,
+     "y0": -0.6,
+     "y1": 0.1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c0c0a0",
+     "opacity": 0.6,
+     "edge": "#e07a3a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161512",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.7,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#b8c0b0",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#60b8d8",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e0c860",
+     "opacity": 0.7,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.75,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "bars",
+      "color": "#161512",
+      "count": 6,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.92,
+      "y0": -0.2,
+      "y1": 0.3
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "apistogramma-barlowi",
+  "commonName": "Barlow's Dwarf Cichlid",
+  "scientificName": "Apistogramma barlowi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Peruvian Amazon (Loreto)",
+  "description": "Described in 2008, this was the first Apistogramma found to mouthbrood: after spawning in a cave the female may take eggs and larvae into her mouth. Both sexes have the large heads and mouths that suit the habit.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   0,
+   8
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "territorial",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.35,
+   "width": 0.13,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   },
+   "headLength": 0.34
+  },
+  "look": {
+   "base": "#b0a888",
+   "dorsal": "#6a6650",
+   "ventral": "#e0d0a0",
+   "fin": "#b0aa98",
+   "finOpacity": 0.55,
+   "eye": "#c8602a",
+   "metallic": 0.15,
+   "iridescence": 0.4,
+   "iridescenceColor": "#70c8e0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a463a",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 0.92
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2822",
+     "y": 0.04,
+     "width": 0.075,
+     "x0": 0.2,
+     "x1": 0.96
+    },
+    {
+     "type": "mask",
+     "color": "#2a2822",
+     "width": 0.05
+    },
+    {
+     "type": "spots",
+     "color": "#6ac8e0",
+     "density": 25,
+     "size": 0.016,
+     "x0": 0.02,
+     "x1": 0.32,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b0aa98",
+     "opacity": 0.6,
+     "edge": "#d8703a",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#b0aa98",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#6ab0d8",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#d0c080",
+     "opacity": 0.6,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.75,
+   "look": {
+    "base": "#e2c23a",
+    "dorsal": "#a8902e",
+    "ventral": "#f0d870",
+    "fin": "#d8b840",
+    "finOpacity": 0.55,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.09,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b840",
+      "opacity": 0.6,
+      "edge": "#161512",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "color": "#d0b44a",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#d8b840",
+      "opacity": 0.55
+     },
+     "pelvic": {
+      "color": "#e2c23a",
+      "opacity": 0.8,
+      "edge": "#161512",
+      "edgeWidth": 0.35
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.88,
+     "height": 0.15,
+     "shape": "spiny"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "mikrogeophagus-altispinosus",
+  "commonName": "Bolivian Ram",
+  "scientificName": "Mikrogeophagus altispinosus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mamoré & Guaporé basins — Bolivia & Brazil",
+  "description": "The ram's larger, hardier cousin from the Bolivian and Brazilian lowlands, with black-tipped front dorsal spines and a red-fringed tail with trailing tips. Pairs sift sand together and spawn on a flat stone, both parents guarding the fry.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "pair-bonding",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.4,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.22,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.35
+   },
+   "pelvic": {
+    "start": 0.32,
+    "end": 0.36,
+    "height": 0.25,
+    "shape": "filament",
+    "trail": 0.05
+   }
+  },
+  "look": {
+   "base": "#d4c070",
+   "dorsal": "#8a8460",
+   "ventral": "#f0b494",
+   "fin": "#c8b890",
+   "finOpacity": 0.55,
+   "eye": "#d8302a",
+   "metallic": 0.2,
+   "iridescence": 0.45,
+   "iridescenceColor": "#70d0f0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f08a50",
+     "x0": 0.1,
+     "x1": 0.5,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.4
+    },
+    {
+     "type": "mask",
+     "color": "#151515",
+     "width": 0.05
+    },
+    {
+     "type": "blotch",
+     "color": "#151515",
+     "x": 0.5,
+     "y": 0.05,
+     "rx": 0.05,
+     "ry": 0.14
+    },
+    {
+     "type": "spots",
+     "color": "#9ae0f8",
+     "density": 40,
+     "size": 0.015,
+     "x0": 0.2,
+     "x1": 1,
+     "y0": -0.4,
+     "y1": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8c0a0",
+     "opacity": 0.6,
+     "edge": "#e0402a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151515",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.72,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8c0a0",
+     "opacity": 0.55,
+     "edge": "#e0402a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#80d0f0",
+       "density": 25,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c8b890",
+     "opacity": 0.55,
+     "edge": "#e0402a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e8604a",
+     "opacity": 0.75,
+     "edge": "#5ad0f0",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "mikrogeophagus-ramirezi-electric-blue",
+  "commonName": "Electric Blue Ram",
+  "scientificName": "Mikrogeophagus ramirezi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred ram in which the blue spangling has spread into a solid electric-blue body, usually with a golden forehead. It needs the same warm, soft water as the wild type but is generally less robust.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "pair-bonding",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.42,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   }
+  },
+  "look": {
+   "base": "#2a7ad8",
+   "dorsal": "#1f5aa8",
+   "ventral": "#5aa0e8",
+   "fin": "#3a88d8",
+   "finOpacity": 0.65,
+   "eye": "#d8202a",
+   "metallic": 0.45,
+   "iridescence": 0.9,
+   "iridescenceColor": "#40c0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8a040",
+     "x0": 0,
+     "x1": 0.28,
+     "y0": 0,
+     "y1": 1,
+     "softness": 0.5
+    },
+    {
+     "type": "mask",
+     "color": "#1a2a4a",
+     "width": 0.05
+    },
+    {
+     "type": "blotch",
+     "color": "#1a2a4a",
+     "x": 0.5,
+     "y": 0.2,
+     "rx": 0.04,
+     "ry": 0.1
+    },
+    {
+     "type": "spots",
+     "color": "#9ae4ff",
+     "density": 90,
+     "size": 0.02,
+     "x0": 0.15,
+     "x1": 1,
+     "y0": -0.6,
+     "y1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a88d8",
+     "opacity": 0.7,
+     "edge": "#e8603a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151a30",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": -0.7,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#3a88d8",
+     "opacity": 0.65,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#9ae4ff",
+       "density": 40,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#3a88d8",
+     "opacity": 0.65,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#9ae4ff",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#2a6ac0",
+     "opacity": 0.75,
+     "edge": "#e8603a",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "variantOf": "mikrogeophagus-ramirezi",
+  "availability": "common"
+ },
+ {
+  "id": "mikrogeophagus-ramirezi-gold",
+  "commonName": "Gold Ram",
+  "scientificName": "Mikrogeophagus ramirezi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A xanthistic line-bred ram with the black pigment largely suppressed, leaving a golden body, orange-red head and faint blue spangles. Its biology and breeding match the wild species.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "pair-bonding",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.42,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   }
+  },
+  "look": {
+   "base": "#e8c040",
+   "dorsal": "#d8a030",
+   "ventral": "#f0d478",
+   "fin": "#e8c460",
+   "finOpacity": 0.55,
+   "eye": "#d8202a",
+   "metallic": 0.3,
+   "iridescence": 0.4,
+   "iridescenceColor": "#a0e0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f07a3a",
+     "x0": 0,
+     "x1": 0.32,
+     "y0": -0.6,
+     "y1": 1,
+     "softness": 0.45
+    },
+    {
+     "type": "spots",
+     "color": "#c8ecff",
+     "density": 50,
+     "size": 0.016,
+     "x0": 0.25,
+     "x1": 1,
+     "y0": -0.5,
+     "y1": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0c050",
+     "opacity": 0.6,
+     "edge": "#e8402a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#e8c460",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c8ecff",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#e8c460",
+     "opacity": 0.55
+    },
+    "pelvic": {
+     "color": "#f08040",
+     "opacity": 0.7
+    }
+   }
+  },
+  "variantOf": "mikrogeophagus-ramirezi",
+  "availability": "common"
+ },
+ {
+  "id": "mikrogeophagus-ramirezi-balloon",
+  "commonName": "Balloon Ram",
+  "scientificName": "Mikrogeophagus ramirezi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred ram with a genetically shortened, compressed spine that gives a rounded, balloon-like body. It keeps the German blue colouring but swims less efficiently than the wild form.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.45,
+  "burstSpeed": 4,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "pair-bonding",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.56,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.2,
+    "shape": "spiny"
+   },
+   "belly": 0.75,
+   "backArch": 0.6,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.32
+   }
+  },
+  "look": {
+   "base": "#c7b25a",
+   "dorsal": "#8a8a52",
+   "ventral": "#e8865a",
+   "fin": "#c0a860",
+   "finOpacity": 0.6,
+   "eye": "#d8202a",
+   "metallic": 0.35,
+   "iridescence": 0.75,
+   "iridescenceColor": "#3cc2ff",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151515",
+     "width": 0.07
+    },
+    {
+     "type": "blotch",
+     "color": "#151515",
+     "x": 0.5,
+     "y": 0.2,
+     "rx": 0.05,
+     "ry": 0.12
+    },
+    {
+     "type": "spots",
+     "color": "#3fb6ff",
+     "density": 90,
+     "size": 0.02,
+     "x0": 0.15,
+     "x1": 1,
+     "y0": -0.6,
+     "y1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151515",
+       "x0": 0,
+       "x1": 1,
+       "y0": -1,
+       "y1": 1
+      },
+      {
+       "type": "spots",
+       "color": "#3fb6ff",
+       "density": 30,
+       "size": 0.05
+      }
+     ],
+     "edge": "#e0402a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3fb6ff",
+       "density": 40,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3fb6ff",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "mikrogeophagus-ramirezi",
+  "availability": "common"
+ },
+ {
+  "id": "nannacara-anomala",
+  "commonName": "Golden Dwarf Cichlid",
+  "scientificName": "Nannacara anomala",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of Guyana, Suriname & French Guiana",
+  "description": "A metallic green-gold dwarf cichlid of slow, shaded Guianan creeks. In brood dress the female turns yellow with a bold black checkerboard and drives off every intruder, including the much larger male.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "territorial",
+   "hoverer",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.4,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#7ea888",
+   "dorsal": "#5a7058",
+   "ventral": "#c8c898",
+   "fin": "#88a090",
+   "finOpacity": 0.6,
+   "eye": "#c84a2a",
+   "metallic": 0.35,
+   "iridescence": 0.75,
+   "iridescenceColor": "#60e0c0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#2a3a2a",
+     "contrast": 0.45
+    },
+    {
+     "type": "region",
+     "color": "#c8b860",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.4,
+     "y1": 1,
+     "softness": 0.5
+    },
+    {
+     "type": "mask",
+     "color": "#3a4038",
+     "width": 0.03
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8aa890",
+     "opacity": 0.65,
+     "edge": "#e0582a",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#88a8a0",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#9ae0d0",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#88a090",
+     "opacity": 0.6,
+     "edge": "#5ad0e0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#5a7068",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.6,
+   "look": {
+    "base": "#d8c070",
+    "dorsal": "#9a8a50",
+    "ventral": "#ecdca0",
+    "fin": "#c8b880",
+    "finOpacity": 0.5,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#161512",
+      "count": 6,
+      "width": 0.06,
+      "x0": 0.25,
+      "x1": 0.95,
+      "y0": -0.6,
+      "y1": 0.7
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.1,
+      "x0": 0.15,
+      "x1": 0.95
+     },
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8b880",
+      "opacity": 0.55,
+      "edge": "#161512",
+      "edgeWidth": 0.15
+     },
+     "pelvic": {
+      "color": "#2a2a2a",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "nannacara-aureocephalus",
+  "commonName": "Golden-head Dwarf Cichlid",
+  "scientificName": "Nannacara aureocephalus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal creeks of French Guiana",
+  "description": "Named for the golden head of the male, this Nannacara has a metallic blue-green body with dark-edged scales. As in its relatives, the brooding female turns pale with a dark checkerboard and guards the fry alone.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "territorial",
+   "hoverer",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.38,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#6a90a0",
+   "dorsal": "#4a6070",
+   "ventral": "#b8c0b0",
+   "fin": "#7a98a8",
+   "finOpacity": 0.6,
+   "eye": "#c84a2a",
+   "metallic": 0.35,
+   "iridescence": 0.75,
+   "iridescenceColor": "#60c8f0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#22323a",
+     "contrast": 0.45
+    },
+    {
+     "type": "region",
+     "color": "#e0b840",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.5,
+     "y1": 1,
+     "softness": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#22323a",
+     "x": 0.5,
+     "y": 0.05,
+     "rx": 0.04,
+     "ry": 0.12
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#7a98a8",
+     "opacity": 0.65,
+     "edge": "#e8a040",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#7a98a8",
+     "opacity": 0.6
+    },
+    "anal": {
+     "color": "#7a98a8",
+     "opacity": 0.6
+    },
+    "pelvic": {
+     "color": "#4a6070",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.65,
+   "look": {
+    "base": "#d8c070",
+    "dorsal": "#9a8a50",
+    "ventral": "#ecdca0",
+    "fin": "#c8b880",
+    "finOpacity": 0.5,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#161512",
+      "count": 6,
+      "width": 0.06,
+      "x0": 0.25,
+      "x1": 0.95,
+      "y0": -0.6,
+      "y1": 0.7
+     },
+     {
+      "type": "stripe",
+      "color": "#161512",
+      "y": 0.05,
+      "width": 0.1,
+      "x0": 0.15,
+      "x1": 0.95
+     },
+     {
+      "type": "mask",
+      "color": "#161512",
+      "width": 0.05
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8b880",
+      "opacity": 0.55,
+      "edge": "#161512",
+      "edgeWidth": 0.15
+     },
+     "pelvic": {
+      "color": "#2a2a2a",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "ivanacara-adoketa",
+  "commonName": "Zebra Acara",
+  "scientificName": "Ivanacara adoketa",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro basin, Brazil",
+  "description": "A rare dwarf acara of the blackwater upper Rio Negro, cream-coloured with bold black bars and a red-fringed dorsal fin. Pairs share brood care and need extremely soft, acidic water.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 9,
+  "lifespanYears": 6,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   4
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "pair-bonding",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.42,
+   "width": 0.13,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e0dcc8",
+   "dorsal": "#a8a088",
+   "ventral": "#f0ece0",
+   "fin": "#d0ccb8",
+   "finOpacity": 0.55,
+   "eye": "#c8402a",
+   "metallic": 0.2,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0e0f0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1e1e1a",
+     "count": 5,
+     "width": 0.07,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "mask",
+     "color": "#1e1e1a",
+     "width": 0.06
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d0ccb8",
+     "opacity": 0.65,
+     "edge": "#e0402a",
+     "edgeWidth": 0.14,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1e1e1a",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#d0ccb8",
+     "opacity": 0.55,
+     "edge": "#e0402a",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#d0ccb8",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1e1e1a",
+       "count": 2,
+       "width": 0.12
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#1e1e1a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.75
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "laetacara-curviceps",
+  "commonName": "Flag Acara",
+  "scientificName": "Laetacara curviceps",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle & lower Amazon basin, Brazil",
+  "description": "A peaceful little acara of shallow, vegetated Amazonian backwaters, named for its steeply curved head and wearing a blue-spangled face. Pairs spawn on a cleaned leaf or stone and both parents guard the fry.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "pair-bonding",
+   "shy"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.44,
+   "width": 0.13,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a8b8b0",
+   "dorsal": "#6a7a70",
+   "ventral": "#e8d8a0",
+   "fin": "#b0b8a0",
+   "finOpacity": 0.55,
+   "eye": "#c84030",
+   "metallic": 0.2,
+   "iridescence": 0.55,
+   "iridescenceColor": "#60c0f0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8d088",
+     "x0": 0.15,
+     "x1": 0.8,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#24282a",
+     "x": 0.5,
+     "y": 0.02,
+     "rx": 0.05,
+     "ry": 0.13
+    },
+    {
+     "type": "bars",
+     "color": "#5a6a68",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.92,
+     "y0": -0.3,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#6ad0f0",
+     "density": 40,
+     "size": 0.016,
+     "x0": 0.02,
+     "x1": 0.35,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b0b8a0",
+     "opacity": 0.6,
+     "edge": "#e8a040",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#6ab8e0",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#b0b8a8",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#6ab8e0",
+       "density": 25,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c0b890",
+     "opacity": 0.55,
+     "edge": "#e8a040",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e8c070",
+     "opacity": 0.65
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "laetacara-dorsigera",
+  "commonName": "Red-breast Acara",
+  "scientificName": "Laetacara dorsigera",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraguay & Guaporé basins — Brazil, Bolivia, Paraguay & Argentina",
+  "description": "A small acara of marshy Pantanal and Chaco waters; in breeding dress the throat and breast flush deep red and a black spot shows in the front of the dorsal fin. Pairs spawn on stones and guard the brood together.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "pair-bonding",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.42,
+   "width": 0.13,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a8a090",
+   "dorsal": "#6a6050",
+   "ventral": "#d88878",
+   "fin": "#b0a890",
+   "finOpacity": 0.55,
+   "eye": "#c84030",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#80d0e0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8504a",
+     "x0": 0.08,
+     "x1": 0.5,
+     "y0": -1,
+     "y1": -0.2,
+     "softness": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#24221e",
+     "x": 0.52,
+     "y": 0.02,
+     "rx": 0.05,
+     "ry": 0.13
+    },
+    {
+     "type": "bars",
+     "color": "#5a5446",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.92,
+     "y0": -0.2,
+     "y1": 1
+    },
+    {
+     "type": "mask",
+     "color": "#3a3630",
+     "width": 0.04
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b0a890",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1a1814",
+       "x": 0.45,
+       "y": -0.55,
+       "rx": 0.3,
+       "ry": 0.22
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#b0a890",
+     "opacity": 0.5
+    },
+    "anal": {
+     "color": "#c09080",
+     "opacity": 0.55
+    },
+    "pelvic": {
+     "color": "#d06a5a",
+     "opacity": 0.6
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "dicrossus-filamentosus",
+  "commonName": "Checkerboard Cichlid",
+  "scientificName": "Dicrossus filamentosus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Negro & upper Orinoco — Brazil, Colombia & Venezuela",
+  "description": "A dwarf cichlid of acid blackwater creeks patterned with two rows of dark rectangular blotches; males grow lyre-shaped tails with long trailing filaments. Females spawn on leaves and guard the brood alone.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 4,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   4
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "hoverer",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.32,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.45
+   },
+   "pelvic": {
+    "start": 0.32,
+    "end": 0.36,
+    "height": 0.25,
+    "shape": "filament",
+    "trail": 0.06
+   }
+  },
+  "look": {
+   "base": "#d8d0b8",
+   "dorsal": "#a09878",
+   "ventral": "#e8e0d0",
+   "fin": "#c0c8d0",
+   "finOpacity": 0.55,
+   "eye": "#c8603a",
+   "metallic": 0.2,
+   "iridescence": 0.5,
+   "iridescenceColor": "#70d8ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1e1e1a",
+     "count": 7,
+     "width": 0.045,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.05,
+     "y1": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#1e1e1a",
+     "count": 7,
+     "width": 0.045,
+     "x0": 0.21,
+     "x1": 1.01,
+     "y0": -0.5,
+     "y1": -0.1
+    },
+    {
+     "type": "mask",
+     "color": "#1e1e1a",
+     "width": 0.035
+    },
+    {
+     "type": "spots",
+     "color": "#6ad8f8",
+     "density": 35,
+     "size": 0.015,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8c8c0",
+     "opacity": 0.6,
+     "edge": "#e03a2a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#5ac0f0",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8c8c8",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e04a3a",
+       "density": 30,
+       "size": 0.04
+      },
+      {
+       "type": "stripe",
+       "color": "#e03a2a",
+       "y": 0.85,
+       "width": 0.2
+      },
+      {
+       "type": "stripe",
+       "color": "#e03a2a",
+       "y": -0.85,
+       "width": 0.2
+      }
+     ]
+    },
+    "anal": {
+     "color": "#d0c0c0",
+     "opacity": 0.6,
+     "edge": "#e03a2a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#5ac0f0",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e0402a",
+     "opacity": 0.75,
+     "edge": "#5ad0f0",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.65,
+   "look": {
+    "base": "#d8ccb0",
+    "fin": "#c8c0b0",
+    "finOpacity": 0.45,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#141412",
+      "count": 7,
+      "width": 0.045,
+      "x0": 0.15,
+      "x1": 0.95,
+      "y0": -0.05,
+      "y1": 0.35
+     },
+     {
+      "type": "bars",
+      "color": "#141412",
+      "count": 7,
+      "width": 0.045,
+      "x0": 0.21,
+      "x1": 1.01,
+      "y0": -0.5,
+      "y1": -0.1
+     },
+     {
+      "type": "mask",
+      "color": "#141412",
+      "width": 0.04
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8c0b0",
+      "opacity": 0.5,
+      "edge": "#141412",
+      "edgeWidth": 0.1
+     },
+     "pelvic": {
+      "color": "#d8402a",
+      "opacity": 0.7,
+      "edge": "#141412",
+      "edgeWidth": 0.2
+     }
+    }
+   },
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.28
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "dicrossus-maculatus",
+  "commonName": "Spotted Checkerboard Cichlid",
+  "scientificName": "Dicrossus maculatus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Amazon basin, Brazil",
+  "description": "A checkerboard cichlid of the lower Amazon that lacks the lyre tail of D. filamentosus; males instead show broad, red-edged and spotted unpaired fins. It needs soft, acidic water and peaceful company.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 4,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "hoverer",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.34,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#d4ccb4",
+   "dorsal": "#9c9476",
+   "ventral": "#e8e0cc",
+   "fin": "#c8c4c0",
+   "finOpacity": 0.55,
+   "eye": "#c8603a",
+   "metallic": 0.2,
+   "iridescence": 0.45,
+   "iridescenceColor": "#70d8ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1e1e1a",
+     "count": 7,
+     "width": 0.045,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.05,
+     "y1": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#1e1e1a",
+     "count": 7,
+     "width": 0.045,
+     "x0": 0.21,
+     "x1": 1.01,
+     "y0": -0.5,
+     "y1": -0.1
+    },
+    {
+     "type": "mask",
+     "color": "#1e1e1a",
+     "width": 0.035
+    },
+    {
+     "type": "spots",
+     "color": "#6ad8f8",
+     "density": 30,
+     "size": 0.015,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d0c4c0",
+     "opacity": 0.65,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.15,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e05a3a",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8c4c0",
+     "opacity": 0.6,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e05a3a",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#d0c4c0",
+     "opacity": 0.6,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#e0402a",
+     "opacity": 0.75
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.7,
+   "look": {
+    "base": "#d8ccb0",
+    "fin": "#c8c0b0",
+    "finOpacity": 0.45,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#141412",
+      "count": 7,
+      "width": 0.045,
+      "x0": 0.15,
+      "x1": 0.95,
+      "y0": -0.05,
+      "y1": 0.35
+     },
+     {
+      "type": "bars",
+      "color": "#141412",
+      "count": 7,
+      "width": 0.045,
+      "x0": 0.21,
+      "x1": 1.01,
+      "y0": -0.5,
+      "y1": -0.1
+     },
+     {
+      "type": "mask",
+      "color": "#141412",
+      "width": 0.04
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8c0b0",
+      "opacity": 0.5,
+      "edge": "#141412",
+      "edgeWidth": 0.1
+     },
+     "pelvic": {
+      "color": "#d8402a",
+      "opacity": 0.7,
+      "edge": "#141412",
+      "edgeWidth": 0.2
+     }
+    }
+   },
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.28
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "crenicara-punctulatum",
+  "commonName": "Hexagon Cichlid",
+  "scientificName": "Crenicara punctulatum",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin (Peru, Ecuador, Colombia & Brazil) & Essequibo, Guyana",
+  "description": "A protogynous hermaphrodite: fish mature as checkerboard-patterned females, and dominant ones later change sex into larger males covered in a red-and-blue hexagonal mosaic. It lives over sand and leaf litter in soft Amazonian streams.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "hoverer",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.31,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.32
+   }
+  },
+  "look": {
+   "base": "#c8a878",
+   "dorsal": "#8a7050",
+   "ventral": "#e8cca8",
+   "fin": "#c8a888",
+   "finOpacity": 0.6,
+   "eye": "#c84a2a",
+   "metallic": 0.2,
+   "iridescence": 0.6,
+   "iridescenceColor": "#40a8f0",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#3a90d0",
+     "scale": 10,
+     "thickness": 0.35
+    },
+    {
+     "type": "spots",
+     "color": "#e0602a",
+     "density": 60,
+     "size": 0.02,
+     "x0": 0.15,
+     "x1": 1,
+     "y0": -0.7,
+     "y1": 0.8
+    },
+    {
+     "type": "mask",
+     "color": "#3a2a20",
+     "width": 0.035
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d08050",
+     "opacity": 0.65,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4aa8e8",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c89070",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4aa8e8",
+       "density": 30,
+       "size": 0.04
+      },
+      {
+       "type": "spots",
+       "color": "#e0502a",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#d08050",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4aa8e8",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e05a3a",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.7,
+   "look": {
+    "base": "#d4c4a4",
+    "dorsal": "#9a8a68",
+    "ventral": "#ece0c8",
+    "fin": "#c8c0b0",
+    "finOpacity": 0.45,
+    "iridescence": 0.1,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#1a1814",
+      "count": 7,
+      "width": 0.045,
+      "x0": 0.15,
+      "x1": 0.95,
+      "y0": -0.05,
+      "y1": 0.35
+     },
+     {
+      "type": "bars",
+      "color": "#1a1814",
+      "count": 7,
+      "width": 0.045,
+      "x0": 0.21,
+      "x1": 1.01,
+      "y0": -0.5,
+      "y1": -0.1
+     },
+     {
+      "type": "mask",
+      "color": "#1a1814",
+      "width": 0.035
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8c0b0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#e05a3a",
+      "opacity": 0.7
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "taeniacara-candidi",
+  "commonName": "Torpedo Dwarf Cichlid",
+  "scientificName": "Taeniacara candidi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Amazon & lower Rio Negro, Brazil",
+  "description": "A slender, torpedo-shaped dwarf cichlid of blackwater leaf litter, closely related to Apistogramma. Males have a pointed, lance-shaped tail; females spawn in tiny caves and guard the brood alone.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   25,
+   30
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "cave-dweller",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "dwarf-cichlid",
+   "depth": 0.24,
+   "width": 0.12,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.9,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.88,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.38
+   }
+  },
+  "look": {
+   "base": "#c8b890",
+   "dorsal": "#7a6a50",
+   "ventral": "#e0d0a8",
+   "fin": "#c0b8a0",
+   "finOpacity": 0.5,
+   "eye": "#c86a3a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#70c8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1a14",
+     "y": 0,
+     "width": 0.12,
+     "x0": 0.05,
+     "x1": 0.98
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3228",
+     "y": 0.55,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "spots",
+     "color": "#60c8e8",
+     "density": 25,
+     "size": 0.014,
+     "x0": 0.02,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c0b8a0",
+     "opacity": 0.55,
+     "edge": "#e06a3a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#c0b8a0",
+     "opacity": 0.55,
+     "edge": "#e06a3a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#6ab8e0",
+       "density": 15,
+       "size": 0.04
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#d8c890",
+     "opacity": 0.6,
+     "edge": "#161512",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.65,
+   "look": {
+    "base": "#d8c070",
+    "ventral": "#ecdca0",
+    "finOpacity": 0.45
+   },
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.26
+    }
+   }
+  },
+  "availability": "rare"
+ }
+]

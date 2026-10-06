@@ -1,0 +1,1949 @@
+[
+ {
+  "id": "lysmata-amboinensis",
+  "commonName": "Pacific Cleaner Shrimp",
+  "scientificName": "Lysmata amboinensis",
+  "family": "Lysmatidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-Pacific & Red Sea",
+  "description": "Runs cleaning stations on the reef, climbing onto visiting fish to pick off parasites and dead skin, and will even groom a diver's hand. Adults are simultaneous hermaphrodites, so any two can pair and both carry eggs, which hatch as planktonic larvae at night.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "cleaner",
+   "scavenger",
+   "bold",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.24,
+   "width": 0.16,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.6
+  },
+  "look": {
+   "base": "#f0b22c",
+   "dorsal": "#cc1f2a",
+   "ventral": "#f6d270",
+   "fin": "#f4d27a",
+   "finOpacity": 0.6,
+   "eye": "#2a0f0a",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#cc1f2a",
+     "x0": 0.02,
+     "x1": 0.97,
+     "y0": 0.45,
+     "y1": 1,
+     "softness": 0.15
+    },
+    {
+     "type": "stripe",
+     "color": "#fbfaf4",
+     "y": 0.96,
+     "width": 0.1,
+     "x0": 0.02,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#cc1f2a",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fbfaf4",
+       "density": 6,
+       "size": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#f6e8b0",
+     "opacity": 0.75
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "lysmata-grabhami",
+  "commonName": "Atlantic Cleaner Shrimp",
+  "scientificName": "Lysmata grabhami",
+  "family": "Lysmatidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Tropical Atlantic — Caribbean, Brazil & eastern Atlantic islands",
+  "description": "The Atlantic twin of the Pacific cleaner shrimp, told apart by its white back stripe running unbroken onto the tail fan, which lacks the Pacific species' white spots. It sets up cleaning stations in crevices and, like its relative, is a simultaneous hermaphrodite.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "cleaner",
+   "scavenger",
+   "bold",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.24,
+   "width": 0.16,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.6
+  },
+  "look": {
+   "base": "#f2b830",
+   "dorsal": "#c81e28",
+   "ventral": "#f6d474",
+   "fin": "#f4d47e",
+   "finOpacity": 0.6,
+   "eye": "#2a0f0a",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c81e28",
+     "x0": 0.02,
+     "x1": 1,
+     "y0": 0.45,
+     "y1": 1,
+     "softness": 0.15
+    },
+    {
+     "type": "stripe",
+     "color": "#fbfaf4",
+     "y": 0.96,
+     "width": 0.1,
+     "x0": 0.02,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c81e28",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#fbfaf4",
+       "y": 0,
+       "width": 0.2
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#f6e8b0",
+     "opacity": 0.75
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "lysmata-debelius",
+  "commonName": "Fire Shrimp",
+  "scientificName": "Lysmata debelius",
+  "family": "Lysmatidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-Pacific — Indian Ocean to Indonesia & the Philippines",
+  "description": "A blood-red cleaner shrimp sprinkled with white spots, with white legs and antennae, that lives in pairs in caves and overhangs on deeper reef slopes. It is shyer than the skunk cleaners and does most of its foraging after dark.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "cleaner",
+   "shy",
+   "scavenger",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.25,
+   "width": 0.16,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.5
+  },
+  "look": {
+   "base": "#b8121e",
+   "dorsal": "#a00e1a",
+   "ventral": "#c8262c",
+   "fin": "#f6f2ec",
+   "finOpacity": 0.85,
+   "eye": "#1a0a0a",
+   "translucency": 0.1,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#fbf6f0",
+     "density": 14,
+     "size": 0.03,
+     "x0": 0.05,
+     "x1": 0.85,
+     "y0": -0.3,
+     "y1": 0.9
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c01a22",
+     "opacity": 0.9
+    },
+    "pectoral": {
+     "color": "#f6f2ec",
+     "opacity": 0.9
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "lysmata-wurdemanni",
+  "commonName": "Peppermint Shrimp",
+  "scientificName": "Lysmata wurdemanni",
+  "family": "Lysmatidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Western Atlantic — Florida, Gulf of Mexico & Caribbean",
+  "description": "A translucent shrimp candy-striped with thin red lines that reef keepers buy to eat the pest anemone Aiptasia. Groups forage at night, and unlike most marine shrimp its larvae can be raised in captivity.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.23,
+   "width": 0.15,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.2
+  },
+  "look": {
+   "base": "#f0d8c8",
+   "ventral": "#f6e6da",
+   "fin": "#e8b4a0",
+   "finOpacity": 0.35,
+   "eye": "#1e1410",
+   "translucency": 0.6,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#c42a24",
+     "count": 9,
+     "width": 0.018,
+     "wavy": 0.05
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e8a090",
+     "opacity": 0.4,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#c42a24",
+       "count": 4,
+       "width": 0.03
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#ecc0b0",
+     "opacity": 0.4
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "lysmata-boggessi",
+  "commonName": "Boggess' Peppermint Shrimp",
+  "scientificName": "Lysmata boggessi",
+  "family": "Lysmatidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Eastern Gulf of Mexico — west coast of Florida",
+  "description": "Described only in 2006, this Florida Gulf-coast species is the peppermint shrimp most often collected for the trade and long passed as L. wurdemanni. It is a dependable eater of Aiptasia anemones and, like its relatives, its larvae have been reared in captivity.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.23,
+   "width": 0.15,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.2
+  },
+  "look": {
+   "base": "#eecabc",
+   "ventral": "#f4dccf",
+   "fin": "#e4a490",
+   "finOpacity": 0.4,
+   "eye": "#1e1410",
+   "translucency": 0.5,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#c0241e",
+     "count": 11,
+     "width": 0.025,
+     "wavy": 0.05
+    },
+    {
+     "type": "speckle",
+     "color": "#d84a3a",
+     "density": 25
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e09080",
+     "opacity": 0.45,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#c0241e",
+       "count": 4,
+       "width": 0.04
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#eab8a8",
+     "opacity": 0.45
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "lysmata-californica",
+  "commonName": "Red Rock Shrimp",
+  "scientificName": "Lysmata californica",
+  "family": "Lysmatidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Eastern Pacific — central California to Baja California",
+  "description": "A temperate relative of the peppermint shrimp that crowds into rocky crevices by the hundreds and cleans fish such as moray eels. Its translucent body is lined with red stripes; it is a staple of cold-water public aquarium displays.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 10,
+  "lifespanYears": 3,
+  "tempC": [
+   12,
+   20
+  ],
+  "ph": [
+   7.9,
+   8.3
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "cleaner",
+   "scavenger",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.23,
+   "width": 0.15,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.3
+  },
+  "look": {
+   "base": "#e8cfc0",
+   "ventral": "#f2e2d6",
+   "fin": "#e0a898",
+   "finOpacity": 0.35,
+   "eye": "#1e1410",
+   "translucency": 0.55,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#b82020",
+     "count": 7,
+     "width": 0.03
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#d88878",
+     "opacity": 0.45
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "stenopus-hispidus",
+  "commonName": "Banded Coral Shrimp",
+  "scientificName": "Stenopus hispidus",
+  "family": "Stenopodidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Circumtropical — Indo-Pacific, Red Sea & tropical Atlantic",
+  "description": "A spiny cleaner shrimp with red-and-white banded claws and very long white antennae, usually found as a mated pair that holds the same crevice for years. Pairs are faithful to each other but fight other members of their species to the death.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 8,
+  "traits": [
+   "cleaner",
+   "territorial",
+   "pair-bonding",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.2,
+   "width": 0.14,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 2
+  },
+  "look": {
+   "base": "#f4eee6",
+   "dorsal": "#f0e6dc",
+   "fin": "#f2ece4",
+   "finOpacity": 0.55,
+   "eye": "#2a1410",
+   "translucency": 0.35,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#c41e2a",
+     "count": 4,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f4ece4",
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#c41e2a",
+       "count": 4,
+       "width": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f4ece4",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c41e2a",
+       "x0": 0.3,
+       "x1": 0.7,
+       "softness": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "stenopus-tenuirostris",
+  "commonName": "Blue Coral Banded Shrimp",
+  "scientificName": "Stenopus tenuirostris",
+  "family": "Stenopodidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-West Pacific — Indonesia & the Philippines",
+  "description": "A small banded coral shrimp whose carapace is a vivid blue-violet in front of a red-and-white banded abdomen and claws. Like its larger relative it lives in mated pairs in reef crevices and is intolerant of others of its kind.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 8,
+  "traits": [
+   "cleaner",
+   "territorial",
+   "pair-bonding",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.2,
+   "width": 0.14,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 2
+  },
+  "look": {
+   "base": "#f2ece6",
+   "fin": "#f2ece6",
+   "finOpacity": 0.55,
+   "eye": "#2a1410",
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#3c5cc8",
+     "x0": 0,
+     "x1": 0.38,
+     "y0": -0.6,
+     "y1": 1,
+     "softness": 0.1
+    },
+    {
+     "type": "bars",
+     "color": "#c41e2a",
+     "count": 3,
+     "width": 0.09,
+     "x0": 0.42,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f2ece6",
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#c41e2a",
+       "count": 4,
+       "width": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f2ece6",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c41e2a",
+       "x0": 0.3,
+       "x1": 0.7,
+       "softness": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "stenopus-scutellatus",
+  "commonName": "Golden Coral Banded Shrimp",
+  "scientificName": "Stenopus scutellatus",
+  "family": "Stenopodidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Western Atlantic — Florida, Bahamas & Caribbean",
+  "description": "The Caribbean's golden banded coral shrimp: a yellow body crossed by red bands, with red-and-white banded claws and white antennae. Pairs hold a crevice and clean passing fish, and are as intolerant of their own kind as the common banded coral shrimp.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 8,
+  "traits": [
+   "cleaner",
+   "territorial",
+   "pair-bonding",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.2,
+   "width": 0.14,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 2
+  },
+  "look": {
+   "base": "#eec436",
+   "dorsal": "#e8b82a",
+   "ventral": "#f4d870",
+   "fin": "#f0d060",
+   "finOpacity": 0.6,
+   "eye": "#2a1410",
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#c8282a",
+     "count": 4,
+     "width": 0.08,
+     "x0": 0.05,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f6eee0",
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#c8282a",
+       "count": 4,
+       "width": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#eec436",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c8282a",
+       "x0": 0.35,
+       "x1": 0.65,
+       "softness": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "thor-amboinensis",
+  "commonName": "Sexy Shrimp",
+  "scientificName": "Thor amboinensis",
+  "family": "Thoridae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Circumtropical — Indo-Pacific & Caribbean",
+  "description": "A tiny orange-brown shrimp with blue-rimmed white saddles that sways its upturned tail almost constantly, hence its trade name. Small groups live among the tentacles of sea anemones, mushroom corals and other cnidarians.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 12,
+  "traits": [
+   "anemone-host",
+   "bold",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.34,
+   "width": 0.2,
+   "backArch": 0.6,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 0.6
+  },
+  "look": {
+   "base": "#a6501c",
+   "dorsal": "#b85a20",
+   "ventral": "#c8783a",
+   "fin": "#c07040",
+   "finOpacity": 0.5,
+   "eye": "#2a1a0a",
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#f4f0ea",
+     "x": 0.2,
+     "y": 0.7,
+     "rx": 0.08,
+     "ry": 0.25,
+     "ring": "#3a6ad0"
+    },
+    {
+     "type": "blotch",
+     "color": "#f4f0ea",
+     "x": 0.5,
+     "y": 0.75,
+     "rx": 0.07,
+     "ry": 0.25,
+     "ring": "#3a6ad0"
+    },
+    {
+     "type": "blotch",
+     "color": "#f4f0ea",
+     "x": 0.76,
+     "y": 0.6,
+     "rx": 0.06,
+     "ry": 0.2,
+     "ring": "#3a6ad0"
+    },
+    {
+     "type": "spots",
+     "color": "#f4f0ea",
+     "density": 8,
+     "size": 0.04,
+     "y0": -0.6,
+     "y1": 0.2
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#b85a20",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f4f0ea",
+       "x": 0.6,
+       "y": 0,
+       "rx": 0.25,
+       "ry": 0.4,
+       "ring": "#3a6ad0"
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "ancylomenes-pedersoni",
+  "commonName": "Pederson's Cleaner Shrimp",
+  "scientificName": "Ancylomenes pedersoni",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Caribbean, Bahamas & Florida",
+  "description": "A glass-clear Caribbean cleaner with violet-banded legs that lives among the tentacles of corkscrew and giant anemones, whipping its white antennae to advertise its services to passing fish. It is one of the most important cleaners on Caribbean reefs.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "cleaner",
+   "anemone-host",
+   "bold",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.22,
+   "width": 0.14,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.6
+  },
+  "look": {
+   "base": "#e6ecef",
+   "fin": "#e0e4ec",
+   "finOpacity": 0.25,
+   "eye": "#3a2a50",
+   "translucency": 0.85,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#f8f8fc",
+     "count": 5,
+     "width": 0.02,
+     "y0": -0.2,
+     "y1": 0.9
+    },
+    {
+     "type": "spots",
+     "color": "#7a46b8",
+     "density": 10,
+     "size": 0.035,
+     "x0": 0.45,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e8e4f2",
+     "opacity": 0.45,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#7a46b8",
+       "count": 4,
+       "width": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e8e4f2",
+     "opacity": 0.35,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#7a46b8",
+       "density": 6,
+       "size": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ancylomenes-holthuisi",
+  "commonName": "Holthuis' Anemone Shrimp",
+  "scientificName": "Ancylomenes holthuisi",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "An almost transparent shrimp with a white-and-yellow V-shaped patch on its humped abdomen and white legs tipped with blue-violet. It lives on sea anemones, large-polyp corals and even jellyfish, and cleans fish that visit its host.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "anemone-host",
+   "cleaner",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.24,
+   "width": 0.14,
+   "backArch": 0.4,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.2
+  },
+  "look": {
+   "base": "#e8ecf0",
+   "fin": "#f2f2f6",
+   "finOpacity": 0.45,
+   "eye": "#2a2a30",
+   "translucency": 0.85,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#7a4a8a",
+     "density": 10,
+     "size": 0.025,
+     "x0": 0.15,
+     "x1": 0.45,
+     "y0": 0,
+     "y1": 1
+    },
+    {
+     "type": "chevrons",
+     "color": "#f6f0d8",
+     "count": 1,
+     "width": 0.07,
+     "x0": 0.52,
+     "x1": 0.66
+    },
+    {
+     "type": "blotch",
+     "color": "#f0d860",
+     "x": 0.6,
+     "y": 0.85,
+     "rx": 0.04,
+     "ry": 0.15
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f4f4f8",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#6a5ac8",
+       "x0": 0.8,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f4f4f8",
+     "opacity": 0.5,
+     "edge": "#6a5ac8",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ancylomenes-magnificus",
+  "commonName": "Magnificent Anemone Shrimp",
+  "scientificName": "Ancylomenes magnificus",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Western Pacific",
+  "description": "A glassy shrimp whose carapace and abdomen carry bands of white specks outlined in red, with a white tail and hump and pale turquoise claws that it rocks from side to side. It lives on sea anemones and large-polyp corals and cleans fish.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "anemone-host",
+   "cleaner",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.24,
+   "width": 0.14,
+   "backArch": 0.4,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.2
+  },
+  "look": {
+   "base": "#e8eef0",
+   "fin": "#d8eef0",
+   "finOpacity": 0.35,
+   "eye": "#2a2a30",
+   "translucency": 0.85,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#d0383a",
+     "count": 4,
+     "width": 0.07,
+     "x0": 0.15,
+     "x1": 0.75,
+     "y0": -0.2,
+     "y1": 1
+    },
+    {
+     "type": "bars",
+     "color": "#f6f4ee",
+     "count": 4,
+     "width": 0.05,
+     "x0": 0.15,
+     "x1": 0.75,
+     "y0": -0.1,
+     "y1": 0.95
+    },
+    {
+     "type": "region",
+     "color": "#f6f4ee",
+     "x0": 0.8,
+     "x1": 1,
+     "y0": -0.2,
+     "y1": 1,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#8ad4d0",
+     "opacity": 0.75
+    },
+    "caudal": {
+     "color": "#f6f4ee",
+     "opacity": 0.8
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "periclimenes-brevicarpalis",
+  "commonName": "Peacock-tail Anemone Shrimp",
+  "scientificName": "Periclimenes brevicarpalis",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-West Pacific & Red Sea",
+  "description": "Lives in carpet and other large anemones, where a big female often shares the host with a much smaller male. It is named for the row of orange-ringed white eyespots along the edge of its tail fan.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 9,
+  "traits": [
+   "anemone-host",
+   "pair-bonding",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.26,
+   "width": 0.16,
+   "backArch": 0.3,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1
+  },
+  "look": {
+   "base": "#eef2f2",
+   "fin": "#f0f0ec",
+   "finOpacity": 0.4,
+   "eye": "#2a2a2a",
+   "translucency": 0.85,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#f8f6ee",
+     "x": 0.22,
+     "y": 0.6,
+     "rx": 0.1,
+     "ry": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#f8f6ee",
+     "x": 0.5,
+     "y": 0.7,
+     "rx": 0.08,
+     "ry": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#f8f6ee",
+     "x": 0.72,
+     "y": 0.5,
+     "rx": 0.07,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#f0f0ec",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f8f6ee",
+       "x": 0.8,
+       "y": -0.6,
+       "rx": 0.12,
+       "ry": 0.18,
+       "ring": "#f08a1e"
+      },
+      {
+       "type": "blotch",
+       "color": "#f8f6ee",
+       "x": 0.85,
+       "y": 0,
+       "rx": 0.12,
+       "ry": 0.18,
+       "ring": "#f08a1e"
+      },
+      {
+       "type": "blotch",
+       "color": "#f8f6ee",
+       "x": 0.8,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.18,
+       "ring": "#f08a1e"
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.55
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "periclimenes-yucatanicus",
+  "commonName": "Spotted Cleaner Shrimp",
+  "scientificName": "Periclimenes yucatanicus",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Caribbean, Bahamas & southern Florida",
+  "description": "A transparent shrimp with brown-and-white saddle markings, boldly red-purple-and-white striped legs and black-banded white antennae. It lives among the tentacles of Caribbean anemones and sways to attract fish to clean.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "anemone-host",
+   "cleaner",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.24,
+   "width": 0.14,
+   "backArch": 0.3,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1.5
+  },
+  "look": {
+   "base": "#e8ecec",
+   "fin": "#f2eef0",
+   "finOpacity": 0.5,
+   "eye": "#2a2a2a",
+   "translucency": 0.85,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#8a5a2a",
+     "x": 0.25,
+     "y": 0.75,
+     "rx": 0.08,
+     "ry": 0.3,
+     "ring": "#f6f2e8"
+    },
+    {
+     "type": "blotch",
+     "color": "#8a5a2a",
+     "x": 0.5,
+     "y": 0.8,
+     "rx": 0.08,
+     "ry": 0.3,
+     "ring": "#f6f2e8"
+    },
+    {
+     "type": "blotch",
+     "color": "#8a5a2a",
+     "x": 0.72,
+     "y": 0.65,
+     "rx": 0.07,
+     "ry": 0.25,
+     "ring": "#f6f2e8"
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f6f2f4",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#8a3a8a",
+       "count": 5,
+       "width": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#f6f2f4",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#a8306a",
+       "count": 4,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "urocaridella-antonbruunii",
+  "commonName": "Clear Cleaner Shrimp",
+  "scientificName": "Urocaridella antonbruunii",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "Groups hover in caves and holes on the reef, beating their swimmerets to drift toward fish that come to be cleaned. The glassy body is dotted with red and yellow, with a red spot behind a white one at the sharp bend of the abdomen.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "cleaner",
+   "shy",
+   "hoverer",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.22,
+   "width": 0.13,
+   "backArch": 0.7,
+   "snout": "upturned",
+   "barbels": 4,
+   "barbelLength": 1.4
+  },
+  "look": {
+   "base": "#e8eef0",
+   "fin": "#f2eaea",
+   "finOpacity": 0.4,
+   "eye": "#2a2020",
+   "translucency": 0.88,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d02a1e",
+     "density": 18,
+     "size": 0.025
+    },
+    {
+     "type": "spots",
+     "color": "#f0c838",
+     "density": 8,
+     "size": 0.02
+    },
+    {
+     "type": "blotch",
+     "color": "#f8f6f2",
+     "x": 0.55,
+     "y": 0.75,
+     "rx": 0.04,
+     "ry": 0.18
+    },
+    {
+     "type": "blotch",
+     "color": "#d02a1e",
+     "x": 0.62,
+     "y": 0.75,
+     "rx": 0.04,
+     "ry": 0.18
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#f4eeee",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d02a1e",
+       "count": 4,
+       "width": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f4eeee",
+     "opacity": 0.4
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hymenocera-picta",
+  "commonName": "Harlequin Shrimp",
+  "scientificName": "Hymenocera picta",
+  "family": "Hymenoceridae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to Hawaii",
+  "description": "Eats nothing but starfish: a pair flips a sea star over, drags it to their lair and feeds on it alive for days, starting with the tube feet. Its huge flattened claws and petal-like antennae are covered in blue- or purple-edged pink spots.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 4,
+  "traits": [
+   "invert-eater",
+   "pair-bonding",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.3,
+   "width": 0.22,
+   "eyeSize": 0.3,
+   "snout": "blunt",
+   "barbels": 2,
+   "barbelLength": 0.25
+  },
+  "look": {
+   "base": "#f6f2ea",
+   "dorsal": "#f2ece0",
+   "fin": "#f4eee6",
+   "finOpacity": 0.85,
+   "eye": "#2a2a3a",
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#d0549e",
+     "x": 0.2,
+     "y": 0.4,
+     "rx": 0.09,
+     "ry": 0.4,
+     "ring": "#4a3aa0"
+    },
+    {
+     "type": "blotch",
+     "color": "#d0549e",
+     "x": 0.45,
+     "y": 0.5,
+     "rx": 0.08,
+     "ry": 0.35,
+     "ring": "#4a3aa0"
+    },
+    {
+     "type": "blotch",
+     "color": "#d0549e",
+     "x": 0.68,
+     "y": 0.3,
+     "rx": 0.07,
+     "ry": 0.3,
+     "ring": "#4a3aa0"
+    },
+    {
+     "type": "spots",
+     "color": "#d0549e",
+     "density": 8,
+     "size": 0.05,
+     "y0": -0.8,
+     "y1": 0
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f6f0e8",
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d0549e",
+       "density": 10,
+       "size": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f6f0e8",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d0549e",
+       "density": 5,
+       "size": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "gnathophyllum-americanum",
+  "commonName": "Bumblebee Shrimp",
+  "scientificName": "Gnathophyllum americanum",
+  "family": "Gnathophyllidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Circumtropical — Caribbean & Indo-Pacific",
+  "description": "A stout little shrimp banded dark brown and cream like a bumblebee, with blue and orange highlights on its legs and tail. In the wild it feeds on the tube feet of sea urchins and sea stars, hiding under rubble by day.",
+  "adultLengthCm": 1.8,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 5,
+  "traits": [
+   "invert-eater",
+   "shy",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.34,
+   "width": 0.24,
+   "snout": "blunt",
+   "barbels": 4,
+   "barbelLength": 0.5
+  },
+  "look": {
+   "base": "#2c1e1a",
+   "dorsal": "#241814",
+   "ventral": "#3a2a22",
+   "fin": "#3a2a22",
+   "finOpacity": 0.75,
+   "eye": "#2a2a2a",
+   "translucency": 0,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#efe2b8",
+     "count": 10,
+     "width": 0.025,
+     "x0": 0.04,
+     "x1": 0.96
+    },
+    {
+     "type": "spots",
+     "color": "#5a8ad0",
+     "density": 6,
+     "size": 0.02,
+     "y0": -0.6,
+     "y1": 0.2
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#2c1e1a",
+     "opacity": 0.9,
+     "edge": "#e8862a",
+     "edgeWidth": 0.2
+    },
+    "pelvic": {
+     "color": "#3a2a22",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#4a7ad0",
+       "x0": 0.75,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "rhynchocinetes-durbanensis",
+  "commonName": "Camel Shrimp",
+  "scientificName": "Rhynchocinetes durbanensis",
+  "family": "Rhynchocinetidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-West Pacific — Red Sea & East Africa to Indonesia & Japan",
+  "description": "Named for its sharply humped abdomen, this red shrimp with white-edged stripes has a hinged beak (rostrum) it can tilt up and down. Groups shelter in crevices by day and come out at night to scavenge — including zoanthid and soft-coral polyps.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "coral-nipper",
+   "scavenger",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.3,
+   "width": 0.15,
+   "backArch": 0.85,
+   "eyeSize": 0.45,
+   "snout": "elongate",
+   "barbels": 4,
+   "barbelLength": 1.2
+  },
+  "look": {
+   "base": "#c43422",
+   "dorsal": "#b02a1c",
+   "ventral": "#d84a32",
+   "fin": "#d04a34",
+   "finOpacity": 0.6,
+   "eye": "#1e1a14",
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#f4ece4",
+     "count": 6,
+     "width": 0.025,
+     "wavy": 0.4
+    },
+    {
+     "type": "spots",
+     "color": "#f4ece4",
+     "density": 10,
+     "size": 0.035
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c43422",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f4ece4",
+       "density": 4,
+       "size": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "saron-marmoratus",
+  "commonName": "Marbled Shrimp",
+  "scientificName": "Saron marmoratus",
+  "family": "Thoridae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-Pacific & Red Sea",
+  "description": "A mottled green, brown and red shrimp dotted with white and fringed with tufts of setae that camouflage it on reef rubble; males grow extraordinarily long first claws. It hides deep in the rockwork by day and scavenges at night.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 8,
+  "lifespanYears": 2.5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 9,
+  "traits": [
+   "nocturnal-hider",
+   "shy",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.3,
+   "width": 0.18,
+   "backArch": 0.4,
+   "snout": "pointed",
+   "barbels": 4,
+   "barbelLength": 1
+  },
+  "look": {
+   "base": "#5e6a3a",
+   "dorsal": "#4e5a30",
+   "ventral": "#8a8a5a",
+   "fin": "#7a6a4a",
+   "finOpacity": 0.7,
+   "eye": "#3a2a1a",
+   "translucency": 0.1,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#8a3a2a",
+     "scale": 3,
+     "amount": 0.5
+    },
+    {
+     "type": "speckle",
+     "color": "#2a3a1a",
+     "density": 40
+    },
+    {
+     "type": "spots",
+     "color": "#f2eedc",
+     "density": 30,
+     "size": 0.02
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#6a5a3a",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#a04a2a",
+       "count": 5,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ }
+]

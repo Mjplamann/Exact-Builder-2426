@@ -1,0 +1,4713 @@
+[
+ {
+  "id": "neocaridina-davidi",
+  "commonName": "Wild-type Neocaridina Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Taiwan, eastern China & Korea — slow streams, ponds and ditches",
+  "description": "The wild form of the cherry shrimp: mottled, see-through olive to brown, often with a pale stripe down the back, camouflaged on plants and leaf litter. Females carry 20–30 eggs under the abdomen for 3–4 weeks, and the young hatch as miniature shrimp with no larval stage.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#7c7656",
+   "dorsal": "#5b573c",
+   "ventral": "#a8a488",
+   "fin": "#8d876a",
+   "finOpacity": 0.45,
+   "eye": "#121212",
+   "translucency": 0.55,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4b4630",
+     "scale": 3,
+     "amount": 0.35
+    },
+    {
+     "type": "speckle",
+     "color": "#2e2a1c",
+     "density": 50
+    },
+    {
+     "type": "stripe",
+     "color": "#d4cba4",
+     "y": 0.95,
+     "width": 0.1,
+     "x0": 0.08,
+     "x1": 0.98
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "translucency": 0.7
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "neocaridina-davidi-blue-dream",
+  "commonName": "Blue Dream Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A line-bred Neocaridina selected for a deep, even cobalt blue from rostrum to tail fan, with the best animals blue on the legs as well. Crossed with other color lines, its offspring soon revert toward brownish wild-type colors.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#1c3e8e",
+   "dorsal": "#14306f",
+   "ventral": "#2c4f9c",
+   "fin": "#2a4c9a",
+   "finOpacity": 0.7,
+   "translucency": 0.12,
+   "iridescence": 0.15,
+   "iridescenceColor": "#3a6ad8",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#0f235a",
+     "density": 30
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#4a68aa",
+    "translucency": 0.35
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-blue-velvet",
+  "commonName": "Blue Velvet Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A blue Neocaridina line with a lighter, more matte cobalt color than Blue Dream. Color intensity varies with grade, and like all Neocaridina colors it looks deeper on a dark substrate.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#3762b2",
+   "dorsal": "#2b52a0",
+   "ventral": "#4a72bc",
+   "fin": "#4a72bc",
+   "finOpacity": 0.6,
+   "translucency": 0.2,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#1d3b7e",
+     "density": 35
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#7a94c4",
+    "translucency": 0.45
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-blue-jelly",
+  "commonName": "Blue Jelly Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A Neocaridina line whose sky-to-deep-blue color sits over a glassy, semi-translucent body, giving the \"jelly\" look rather than a solid opaque blue. Females color up far more strongly than males.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#4f7cc8",
+   "dorsal": "#3a64b4",
+   "ventral": "#7a9ad0",
+   "fin": "#7a9ad0",
+   "finOpacity": 0.45,
+   "translucency": 0.45,
+   "iridescence": 0.1,
+   "iridescenceColor": "#6a9ae8",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2a4a8e",
+     "density": 20
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9cb4dc",
+    "translucency": 0.6
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "neocaridina-davidi-blue-rili",
+  "commonName": "Blue Rili Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A Rili-pattern Neocaridina: blue on the head and tail with a clear, colorless band across the middle of the abdomen. Grading rewards a cleanly defined clear section, and each brood includes young with more or less blue.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#d9dcd8",
+   "fin": "#2f58a8",
+   "finOpacity": 0.5,
+   "translucency": 0.75,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#2f58a8",
+     "x0": -0.05,
+     "x1": 0.44,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.06
+    },
+    {
+     "type": "region",
+     "color": "#2f58a8",
+     "x0": 0.8,
+     "x1": 1.05,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.05
+    },
+    {
+     "type": "speckle",
+     "color": "#1a3470",
+     "density": 20
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#2f58a8",
+     "opacity": 0.85
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "translucency": 0.85
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "neocaridina-davidi-red-rili",
+  "commonName": "Red Rili Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A Rili-pattern form of the cherry shrimp with a red head and tail and a clear, colorless band across the middle of the abdomen. It is as hardy as other Neocaridina colors and breeds freely in a planted tank.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#d9dcd8",
+   "fin": "#c8202a",
+   "finOpacity": 0.5,
+   "translucency": 0.75,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c8202a",
+     "x0": -0.05,
+     "x1": 0.44,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.06
+    },
+    {
+     "type": "region",
+     "color": "#c8202a",
+     "x0": 0.8,
+     "x1": 1.05,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.05
+    },
+    {
+     "type": "speckle",
+     "color": "#8a0c14",
+     "density": 20
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c8202a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "translucency": 0.85
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-yellow-golden-back",
+  "commonName": "Yellow Golden Back Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A yellow Neocaridina with an opaque, metallic golden-yellow stripe running the length of its back. As in other yellow lines, females are much more intensely colored than the paler males.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#e6c020",
+   "dorsal": "#f0d040",
+   "ventral": "#e8cc58",
+   "fin": "#e8cc50",
+   "finOpacity": 0.55,
+   "translucency": 0.2,
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#b8920e",
+     "density": 25
+    },
+    {
+     "type": "stripe",
+     "color": "#f7e27a",
+     "y": 0.92,
+     "width": 0.2,
+     "x0": 0.05,
+     "x1": 0.98,
+     "glow": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#ecd878",
+    "translucency": 0.45
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-orange-sunkist",
+  "commonName": "Orange Sunkist Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A solid, bright orange color line of Neocaridina davidi. Like other color lines, it is most intense in mature females and fades when the shrimp is stressed or kept over pale sand.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#f0781a",
+   "dorsal": "#f28a2a",
+   "ventral": "#f29a4a",
+   "fin": "#f09040",
+   "finOpacity": 0.6,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#c25808",
+     "density": 30
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#f2a868",
+    "translucency": 0.4
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-green-jade",
+  "commonName": "Green Jade Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A green Neocaridina line ranging from olive to bright jade, one of the newer and less stable colors. Good lines are evenly green over the body and legs.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#4e8a32",
+   "dorsal": "#3e7426",
+   "ventral": "#6aa04a",
+   "fin": "#6aa04a",
+   "finOpacity": 0.55,
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2e5a1c",
+     "density": 30
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#86ae6a",
+    "translucency": 0.45
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "neocaridina-davidi-black-rose",
+  "commonName": "Black Rose Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A solid black Neocaridina with a glossy, near-opaque shell. Juveniles hatch lighter and darken as they grow, and males stay a little duller than females.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#141414",
+   "dorsal": "#0c0c0c",
+   "ventral": "#262626",
+   "fin": "#2a2a2a",
+   "finOpacity": 0.75,
+   "translucency": 0.05,
+   "iridescence": 0.1,
+   "iridescenceColor": "#3a3a52",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#050505",
+     "density": 20
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#2e2e2e",
+    "translucency": 0.2
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-chocolate",
+  "commonName": "Chocolate Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A solid chocolate-brown color line of Neocaridina davidi, opaque from rostrum to tail fan. Males and juveniles are a lighter brown.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#4a2614",
+   "dorsal": "#3a1c0e",
+   "ventral": "#5e3622",
+   "fin": "#5a3420",
+   "finOpacity": 0.7,
+   "translucency": 0.08,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2a140a",
+     "density": 30
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#6e4a34",
+    "translucency": 0.3
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "neocaridina-davidi-bloody-mary",
+  "commonName": "Bloody Mary Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A deep, glossy crimson Neocaridina developed in Taiwan. Its red is carried in the body tissue rather than in shell chromatophores, so the shrimp looks lacquered and slightly see-through rather than chalky.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#8e0a14",
+   "dorsal": "#7a0610",
+   "ventral": "#a01822",
+   "fin": "#a01822",
+   "finOpacity": 0.6,
+   "translucency": 0.3,
+   "iridescence": 0.1,
+   "iridescenceColor": "#c02030",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#5a0008",
+     "density": 15
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#a8323a",
+    "translucency": 0.45
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-fire-red",
+  "commonName": "Fire Red Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A high grade of red Neocaridina, above Cherry and Sakura, in which body and legs are a solid, opaque red with no clear patches. The very best are sold as Painted Fire Red.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#c8101a",
+   "dorsal": "#d01c22",
+   "ventral": "#c42028",
+   "fin": "#c81a1e",
+   "finOpacity": 0.85,
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#9a0810",
+     "density": 20
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#d0484a",
+    "translucency": 0.25
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "common"
+ },
+ {
+  "id": "neocaridina-davidi-snowball",
+  "commonName": "Snowball Shrimp",
+  "scientificName": "Neocaridina davidi",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Taiwan, eastern China & Korea)",
+  "description": "A pale, whitish-translucent Neocaridina named for its round white egg clutches, which look like tiny snowballs under the female’s tail. It is among the hardiest color forms but shows little color.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   14
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#121212",
+   "base": "#e4e2da",
+   "dorsal": "#f0eee8",
+   "ventral": "#ecebe4",
+   "fin": "#ecebe4",
+   "finOpacity": 0.4,
+   "translucency": 0.45,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#c8c4b8",
+     "density": 20
+    },
+    {
+     "type": "stripe",
+     "color": "#f6f5f0",
+     "y": 0.95,
+     "width": 0.12,
+     "x0": 0.08,
+     "x1": 0.98
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.8,
+   "look": {
+    "translucency": 0.6
+   }
+  },
+  "variantOf": "neocaridina-davidi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-logemanni",
+  "commonName": "Bee Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Southern China — cool hill streams in Guangdong & around Hong Kong",
+  "description": "The wild ancestor of the crystal shrimps, banded black and white like a bee and living among leaf litter in cool, soft hill streams. Long traded as Caridina cantonensis, it was described as a separate species in 2014; its eggs hatch directly into tiny shrimp.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#e6e4dc",
+   "dorsal": "#eeede6",
+   "ventral": "#d8d6ce",
+   "fin": "#d8d6d0",
+   "finOpacity": 0.4,
+   "eye": "#101010",
+   "translucency": 0.35,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#161616",
+     "x0": -0.05,
+     "x1": 0.36,
+     "y0": -0.4,
+     "y1": 1.1,
+     "softness": 0.05
+    },
+    {
+     "type": "region",
+     "color": "#161616",
+     "x0": 0.54,
+     "x1": 0.66,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    },
+    {
+     "type": "region",
+     "color": "#161616",
+     "x0": 0.85,
+     "x1": 1.05,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    },
+    {
+     "type": "speckle",
+     "color": "#3a3a3a",
+     "density": 25
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#1c1c1c",
+     "opacity": 0.7,
+     "edge": "#e8e8e4",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-logemanni-crystal-red",
+  "commonName": "Crystal Red Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern China — Guangdong & Hong Kong)",
+  "description": "A red-and-white form of the bee shrimp, bred in Japan by Hisayasu Suzuki from a red mutant he found in the early 1990s. Grading rewards dense, opaque white and sharply defined red bands; it needs the same cool, soft, acidic water as its wild ancestor.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#101010",
+   "base": "#f2f0ea",
+   "dorsal": "#f6f4ee",
+   "ventral": "#ece8e0",
+   "fin": "#e6dcd8",
+   "finOpacity": 0.5,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c41a28",
+     "x0": -0.05,
+     "x1": 0.36,
+     "y0": -0.4,
+     "y1": 1.1,
+     "softness": 0.05
+    },
+    {
+     "type": "region",
+     "color": "#c41a28",
+     "x0": 0.54,
+     "x1": 0.66,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    },
+    {
+     "type": "region",
+     "color": "#c41a28",
+     "x0": 0.85,
+     "x1": 1.05,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c41a28",
+     "opacity": 0.9,
+     "edge": "#f2f0ea",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "variantOf": "caridina-logemanni",
+  "availability": "common"
+ },
+ {
+  "id": "caridina-logemanni-crystal-black",
+  "commonName": "Crystal Black Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern China — Guangdong & Hong Kong)",
+  "description": "The black-and-white counterpart of the Crystal Red: a selectively bred bee shrimp with bright, opaque white and jet-black bands. Black is dominant over red, so crossing the two gives black young that carry the red gene.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#101010",
+   "base": "#f2f0ea",
+   "dorsal": "#f6f4ee",
+   "ventral": "#ece8e0",
+   "fin": "#dcdad6",
+   "finOpacity": 0.5,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": -0.05,
+     "x1": 0.36,
+     "y0": -0.4,
+     "y1": 1.1,
+     "softness": 0.05
+    },
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": 0.54,
+     "x1": 0.66,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    },
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": 0.85,
+     "x1": 1.05,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#141414",
+     "opacity": 0.9,
+     "edge": "#f2f0ea",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "variantOf": "caridina-logemanni",
+  "availability": "common"
+ },
+ {
+  "id": "caridina-logemanni-golden-bee",
+  "commonName": "Golden Bee Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern China — Guangdong & Hong Kong)",
+  "description": "A solid, opaque white form of the bee shrimp, also sold as Snow White, in which the white pigment covers the whole body and hides the bands. Breeders have used it to strengthen the white in crystal red lines.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#101010",
+   "base": "#f3eedd",
+   "dorsal": "#f7f2e4",
+   "ventral": "#ece4d0",
+   "fin": "#ece6d8",
+   "finOpacity": 0.6,
+   "translucency": 0.08,
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#e0d4b8",
+     "density": 15
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "variantOf": "caridina-logemanni",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-logemanni-king-kong",
+  "commonName": "Black King Kong Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred, Taiwan (wild form: southern China — Guangdong & Hong Kong)",
+  "description": "A Taiwan Bee variety: a solid, glossy blue-black bee shrimp without white bands, sometimes with a small white spot on the head. Taiwan Bees arose from crystal-shrimp breeding in Taiwan and need the same cool, very soft water.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#101010",
+   "base": "#0e0e14",
+   "dorsal": "#08080c",
+   "ventral": "#1a1a22",
+   "fin": "#1c1c24",
+   "finOpacity": 0.75,
+   "translucency": 0.04,
+   "iridescence": 0.2,
+   "iridescenceColor": "#28304a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#000000",
+     "density": 10
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "variantOf": "caridina-logemanni",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-logemanni-panda",
+  "commonName": "Black Panda Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred, Taiwan (wild form: southern China — Guangdong & Hong Kong)",
+  "description": "A Taiwan Bee variety with broad, solid black bands on a bright white body, bolder and more opaque than a Crystal Black. It is bred and graded alongside King Kong and Blue Bolt in very soft, acidic water.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#101010",
+   "base": "#f4f2ec",
+   "dorsal": "#f6f4ee",
+   "ventral": "#ece8e2",
+   "fin": "#dedcd8",
+   "finOpacity": 0.55,
+   "translucency": 0.08,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#0c0c10",
+     "x0": -0.05,
+     "x1": 0.4,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    },
+    {
+     "type": "region",
+     "color": "#0c0c10",
+     "x0": 0.5,
+     "x1": 0.7,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    },
+    {
+     "type": "region",
+     "color": "#0c0c10",
+     "x0": 0.82,
+     "x1": 1.05,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.04
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#0c0c10",
+     "opacity": 0.95,
+     "edge": "#f4f2ec",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "variantOf": "caridina-logemanni",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-logemanni-blue-bolt",
+  "commonName": "Blue Bolt Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred, Taiwan (wild form: southern China — Guangdong & Hong Kong)",
+  "description": "A Taiwan Bee variety colored an opaque sky blue to icy blue-white. High grades carry the blue evenly from rostrum to tail fan, including the legs.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#101010",
+   "base": "#8fb3d8",
+   "dorsal": "#a4c4e4",
+   "ventral": "#88a8cc",
+   "fin": "#8aaed4",
+   "finOpacity": 0.6,
+   "translucency": 0.1,
+   "iridescence": 0.25,
+   "iridescenceColor": "#6a9ae0",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#6a8ec0",
+     "density": 15
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "variantOf": "caridina-logemanni",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-logemanni-wine-red",
+  "commonName": "Wine Red Shrimp",
+  "scientificName": "Caridina logemanni",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred, Taiwan (wild form: southern China — Guangdong & Hong Kong)",
+  "description": "A Taiwan Bee variety colored a solid, deep wine red without white bands, the red counterpart of the Black King Kong. Like other Taiwan Bees it is kept in soft, acidic water over an active soil.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   5.8,
+   7
+  ],
+  "dGH": [
+   3,
+   6
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "eye": "#101010",
+   "base": "#6e0e1a",
+   "dorsal": "#5a0a14",
+   "ventral": "#7e1a26",
+   "fin": "#7a1a24",
+   "finOpacity": 0.75,
+   "translucency": 0.05,
+   "iridescence": 0.1,
+   "iridescenceColor": "#8a2040",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a0008",
+     "density": 12
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "variantOf": "caridina-logemanni",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-mariae",
+  "commonName": "Tiger Shrimp",
+  "scientificName": "Caridina mariae",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Southern China — hill streams in Guangdong",
+  "description": "A stream shrimp with a clear to amber body crossed by thin black \"tiger\" stripes along the abdomen. Long traded as a form of Caridina cantonensis, it was described as a separate species in 2014; the young hatch as miniature shrimp.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   10
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#c4ae86",
+   "dorsal": "#a8926a",
+   "ventral": "#d8ccb4",
+   "fin": "#c8bca4",
+   "finOpacity": 0.35,
+   "eye": "#121212",
+   "translucency": 0.55,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2018",
+     "density": 25,
+     "size": 0.02,
+     "x0": 0.05,
+     "x1": 0.38
+    },
+    {
+     "type": "bars",
+     "color": "#141414",
+     "count": 9,
+     "width": 0.018,
+     "x0": 0.4,
+     "x1": 0.98,
+     "y0": -0.6,
+     "y1": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "look": {
+    "translucency": 0.7
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-mariae-orange-eyed-blue-tiger",
+  "commonName": "Orange Eyed Blue Tiger Shrimp",
+  "scientificName": "Caridina mariae",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern China — Guangdong)",
+  "description": "A captive-bred tiger shrimp line with a deep blue body, fine black tiger stripes and bright orange eyes. Only part of each brood colors up fully blue; the rest are paler or wild-colored.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   10
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#1f3f8a",
+   "dorsal": "#173273",
+   "ventral": "#2c4f98",
+   "fin": "#2c4f98",
+   "finOpacity": 0.6,
+   "eye": "#f07a12",
+   "translucency": 0.12,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#10204a",
+     "density": 20
+    },
+    {
+     "type": "bars",
+     "color": "#0a0f22",
+     "count": 9,
+     "width": 0.018,
+     "x0": 0.4,
+     "x1": 0.98,
+     "y0": -0.6,
+     "y1": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#4a68a8",
+    "translucency": 0.3
+   }
+  },
+  "variantOf": "caridina-mariae",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-mariae-black-tiger",
+  "commonName": "Black Tiger Shrimp",
+  "scientificName": "Caridina mariae",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern China — Guangdong)",
+  "description": "A captive-bred tiger shrimp line whose body darkens to near-solid black, so the stripes show only faintly. It is sold with either black or orange eyes; orange-eyed animals are the more sought after.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   10
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#141418",
+   "dorsal": "#0c0c10",
+   "ventral": "#24242a",
+   "fin": "#2a2a30",
+   "finOpacity": 0.7,
+   "eye": "#e06a10",
+   "translucency": 0.06,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#000000",
+     "count": 9,
+     "width": 0.018,
+     "x0": 0.4,
+     "x1": 0.98,
+     "y0": -0.6,
+     "y1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#050505",
+     "density": 10
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#2a2a30",
+    "translucency": 0.2
+   }
+  },
+  "variantOf": "caridina-mariae",
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-serrata",
+  "commonName": "Tangerine Tiger Shrimp",
+  "scientificName": "Caridina serrata",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Southern China — Hong Kong & Guangdong hill streams",
+  "description": "An orange stream shrimp with fine dark tiger stripes along the abdomen, sold under the name Caridina serrata. Trade stock is now mostly captive-bred, ranges from yellow-orange to deep tangerine, and breeds readily in soft to moderately hard water.",
+  "adultLengthCm": 2.8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   10
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#f08a1e",
+   "dorsal": "#e4781a",
+   "ventral": "#f4a858",
+   "fin": "#f0a050",
+   "finOpacity": 0.5,
+   "eye": "#121212",
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#5a2a10",
+     "density": 15,
+     "size": 0.02,
+     "x0": 0.05,
+     "x1": 0.38
+    },
+    {
+     "type": "bars",
+     "color": "#3a1c0a",
+     "count": 9,
+     "width": 0.016,
+     "x0": 0.4,
+     "x1": 0.98,
+     "y0": -0.6,
+     "y1": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#f2b070",
+    "translucency": 0.45
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "caridina-babaulti",
+  "commonName": "Green Babaulti Shrimp",
+  "scientificName": "Caridina babaulti",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "India — streams and ponds",
+  "description": "A small Indian stream shrimp found in green, brown and striped forms, able to lighten or darken with its surroundings and diet. It breeds in fresh water, and the eggs hatch directly into miniature shrimp.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.5,
+   7.8
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#5c8a3e",
+   "dorsal": "#4a7630",
+   "ventral": "#8aac6e",
+   "fin": "#7a9c60",
+   "finOpacity": 0.4,
+   "eye": "#121212",
+   "translucency": 0.45,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2e4a1c",
+     "density": 30
+    },
+    {
+     "type": "stripe",
+     "color": "#cfe0a0",
+     "y": 0.95,
+     "width": 0.08,
+     "x0": 0.08,
+     "x1": 0.98
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85,
+   "look": {
+    "translucency": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-gracilirostris",
+  "commonName": "Red Nose Shrimp",
+  "scientificName": "Caridina gracilirostris",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Indo-West Pacific — lower courses of coastal rivers, India & Sri Lanka to Indonesia & the Philippines",
+  "description": "A slender, glassy shrimp with a long, upturned red rostrum, also called the Pinocchio shrimp. It lives in the lower reaches of coastal rivers and its larvae need brackish water, so it does not breed in a freshwater aquarium.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "jumper",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.18,
+   "width": 0.12,
+   "snout": "elongate",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#dcdcd2",
+   "dorsal": "#e8e6dc",
+   "ventral": "#e4e2da",
+   "fin": "#e2e0d8",
+   "finOpacity": 0.3,
+   "eye": "#151515",
+   "translucency": 0.8,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8241e",
+     "x0": -0.2,
+     "x1": 0.12,
+     "y0": -0.4,
+     "y1": 1.1,
+     "softness": 0.04
+    },
+    {
+     "type": "speckle",
+     "color": "#b8b4a8",
+     "density": 10
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-serratirostris",
+  "commonName": "Ninja Shrimp",
+  "scientificName": "Caridina serratirostris",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Indo-West Pacific — coastal island streams from the Ryukyus & Taiwan to Indonesia & the Pacific islands",
+  "description": "A stocky, short-nosed shrimp that can change color within minutes, from red to brown, green or near-black, often with a pale stripe down the back. It is amphidromous: the larvae drift out to sea, so it does not breed in fresh water.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 8,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.26,
+   "width": 0.18,
+   "snout": "blunt",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#8a2a1e",
+   "dorsal": "#7a2216",
+   "ventral": "#a24a3a",
+   "fin": "#9a4434",
+   "finOpacity": 0.5,
+   "eye": "#121212",
+   "translucency": 0.2,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a1410",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#f0d8c0",
+     "density": 15
+    },
+    {
+     "type": "stripe",
+     "color": "#e8c8a8",
+     "y": 0.95,
+     "width": 0.12,
+     "x0": 0.1,
+     "x1": 0.95
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-dennerli",
+  "commonName": "Cardinal Sulawesi Shrimp",
+  "scientificName": "Caridina dennerli",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Sulawesi, Indonesia — Lake Matano (endemic)",
+  "description": "Endemic to ancient Lake Matano, where it grazes biofilm on rocks from the shallows down to about 10 m. Its cardinal-red body is dotted with white and its legs are tipped white; it needs warm, alkaline water and produces only small broods.",
+  "adultLengthCm": 2.2,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   8
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 8,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 7,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#a81c2c",
+   "dorsal": "#981626",
+   "ventral": "#b8303e",
+   "fin": "#d8c8c8",
+   "finOpacity": 0.5,
+   "eye": "#121212",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#7a0c18",
+     "density": 20
+    },
+    {
+     "type": "spots",
+     "color": "#f4f0f0",
+     "density": 35,
+     "size": 0.03,
+     "jitter": 0.6
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-spinata",
+  "commonName": "Yellow Nose Shrimp",
+  "scientificName": "Caridina spinata",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Sulawesi, Indonesia — Lake Towuti (endemic)",
+  "description": "Endemic to Lake Towuti, where adults live on rocky bottoms around 3–5 m deep. Its dark, partly translucent red-brown body carries bright yellow patches on the rostrum and cheeks, hence the trade names Yellow Nose, Yellow Cheek and Yellow Goldflake.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   8
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 8,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 7,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#6a3a2c",
+   "dorsal": "#5a2e22",
+   "ventral": "#8a5a46",
+   "fin": "#b89a7a",
+   "finOpacity": 0.35,
+   "eye": "#121212",
+   "translucency": 0.4,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a1c14",
+     "density": 20
+    },
+    {
+     "type": "spots",
+     "color": "#e8c41a",
+     "density": 12,
+     "size": 0.025,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#f0cc1c",
+     "x": 0.22,
+     "y": -0.1,
+     "rx": 0.06,
+     "ry": 0.18
+    },
+    {
+     "type": "region",
+     "color": "#f2d020",
+     "x0": -0.2,
+     "x1": 0.14,
+     "y0": -0.2,
+     "y1": 1.1,
+     "softness": 0.04
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "caridina-glaubrechti",
+  "commonName": "Red Orchid Shrimp",
+  "scientificName": "Caridina glaubrechti",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Sulawesi, Indonesia — western Lake Towuti (endemic)",
+  "description": "A critically endangered endemic of western Lake Towuti, living on rocks in shallow water. It is brown to red with white patches and a conspicuous white band across the abdomen, and was sold as Caridina sp. \"Red Orchid\" before its description in 2009.",
+  "adultLengthCm": 2.2,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 5,
+  "lifespanYears": 2,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   8
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 8,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 7,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#8a3424",
+   "dorsal": "#7a2a1c",
+   "ventral": "#a24a36",
+   "fin": "#c8b4a8",
+   "finOpacity": 0.3,
+   "eye": "#121212",
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#c42a1e",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#f2ece6",
+     "density": 15,
+     "size": 0.035,
+     "x0": 0.05,
+     "x1": 0.5
+    },
+    {
+     "type": "region",
+     "color": "#f2ece6",
+     "x0": 0.56,
+     "x1": 0.64,
+     "y0": -1.1,
+     "y1": 1.1,
+     "softness": 0.03
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "caridina-spongicola",
+  "commonName": "Sulawesi Harlequin Shrimp",
+  "scientificName": "Caridina spongicola",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Sulawesi, Indonesia — northwestern arm of Lake Towuti (endemic)",
+  "description": "A tiny shrimp that lives only on a freshwater sponge in the northwest arm of Lake Towuti, one of very few freshwater shrimps known to live as a commensal. Its whitish, partly clear body is patterned with red-brown bands and spots that blend with the sponge.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 5,
+  "lifespanYears": 1.5,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   8
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 8,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 7,
+  "traits": [
+   "scavenger",
+   "climbs",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#ecebe4",
+   "dorsal": "#f2f0ea",
+   "ventral": "#e4e2da",
+   "fin": "#e8e4dc",
+   "finOpacity": 0.3,
+   "eye": "#121212",
+   "translucency": 0.45,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#a0321e",
+     "density": 25,
+     "size": 0.03
+    },
+    {
+     "type": "bars",
+     "color": "#8a2a1e",
+     "count": 4,
+     "width": 0.04,
+     "x0": 0.35,
+     "x1": 0.95
+    },
+    {
+     "type": "speckle",
+     "color": "#ffffff",
+     "density": 15
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "atyopsis-moluccensis",
+  "commonName": "Bamboo Shrimp",
+  "scientificName": "Atyopsis moluccensis",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Southeast Asia — rivers and streams from Thailand & Malaysia to Indonesia & the Philippines",
+  "description": "A filter-feeding shrimp that perches in strong current and opens four fan-like brushes on its front legs to catch drifting particles, sweeping them to its mouth. It is amphidromous, with larvae that need brackish water, so it is not bred in home aquaria.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 9,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   29
+  ],
+  "ph": [
+   6.5,
+   7.8
+  ],
+  "dGH": [
+   3,
+   15
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 2,
+  "diet": "filter-feeder",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 6,
+  "traits": [
+   "perches",
+   "climbs",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.3,
+   "width": 0.22,
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#7a4a32",
+   "dorsal": "#6a3e28",
+   "ventral": "#9a6a4e",
+   "fin": "#8a5a3e",
+   "finOpacity": 0.6,
+   "eye": "#1a1a1a",
+   "translucency": 0.1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a2a18",
+     "density": 30
+    },
+    {
+     "type": "stripe",
+     "color": "#dcbf92",
+     "y": 0.97,
+     "width": 0.12,
+     "x0": 0.05,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "atya-gabonensis",
+  "commonName": "Vampire Shrimp",
+  "scientificName": "Atya gabonensis",
+  "family": "Atyidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "West & Central Africa and northeastern South America — rivers",
+  "description": "Despite its name a harmless filter feeder, it stands in the current with its fan-tipped front legs spread to strain food from the water, and picks over the bottom when the flow is weak. Its color can shift between molts from cream or pinkish brown to blue-grey; it does not breed in fresh water.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   29
+  ],
+  "ph": [
+   6.5,
+   7.8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 2,
+  "diet": "filter-feeder",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.08,
+  "burstSpeed": 5,
+  "traits": [
+   "perches",
+   "shy",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.33,
+   "width": 0.26,
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#7d8fa0",
+   "dorsal": "#62748a",
+   "ventral": "#a8b4bc",
+   "fin": "#8a9aa8",
+   "finOpacity": 0.75,
+   "eye": "#1a1a1a",
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a5a6a",
+     "density": 40
+    },
+    {
+     "type": "stripe",
+     "color": "#c8d0d4",
+     "y": 0.95,
+     "width": 0.08,
+     "x0": 0.1,
+     "x1": 0.95
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "macrobrachium-rosenbergii",
+  "commonName": "Giant River Prawn",
+  "scientificName": "Macrobrachium rosenbergii",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "South & Southeast Asia to northern Australia — rivers, lakes & estuaries",
+  "description": "One of the largest freshwater prawns and farmed across the tropics; dominant males grow enormous blue claws longer than their body. It is a nocturnal predator that will catch sleeping fish, and its larvae need brackish water.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   31
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 5,
+  "traits": [
+   "predator",
+   "territorial",
+   "nocturnal-hider",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.24,
+   "width": 0.2,
+   "snout": "elongate",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#4c6070",
+   "dorsal": "#3a4e5e",
+   "ventral": "#8a9a9e",
+   "fin": "#2f5da8",
+   "finOpacity": 0.85,
+   "eye": "#141414",
+   "translucency": 0.1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2a3a44",
+     "density": 25
+    },
+    {
+     "type": "bars",
+     "color": "#2a3a48",
+     "count": 6,
+     "width": 0.03,
+     "x0": 0.45,
+     "x1": 0.98
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.15,
+   "look": {
+    "fin": "#1e4aa0"
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "fin": "#5a7080"
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "macrobrachium-lanchesteri",
+  "commonName": "Asian Glass Shrimp",
+  "scientificName": "Macrobrachium lanchesteri",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Thailand, Malay Peninsula & Myanmar — ponds, ditches and rice fields",
+  "description": "An almost completely transparent prawn with a few dark lines on the head, common in still and slow waters of mainland Southeast Asia. Unlike many prawns it breeds in fresh water, and adults will catch small shrimp and fish fry.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "semi-aggressive",
+  "zone": "all",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "invert-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.2,
+   "width": 0.14,
+   "snout": "elongate",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#e0e0d8",
+   "dorsal": "#e6e6de",
+   "ventral": "#ecece6",
+   "fin": "#e8e8e0",
+   "finOpacity": 0.2,
+   "eye": "#151515",
+   "translucency": 0.9,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a3a3a",
+     "y": 0.3,
+     "width": 0.025,
+     "x0": 0.05,
+     "x1": 0.38
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3a3a",
+     "y": -0.2,
+     "width": 0.025,
+     "x0": 0.08,
+     "x1": 0.38
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "palaemonetes-paludosus",
+  "commonName": "Ghost Shrimp",
+  "scientificName": "Palaemonetes paludosus",
+  "family": "Palaemonidae",
+  "group": "shrimp",
+  "water": "freshwater",
+  "region": "Eastern USA — coastal-plain lakes, swamps and slow streams, New Jersey to Texas",
+  "description": "A nearly transparent grass shrimp of fresh coastal-plain waters, sold in vast numbers as feeder and clean-up shrimp. Females carry greenish eggs that hatch into tiny free-swimming larvae, which can be raised in fresh water.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 4,
+  "lifespanYears": 1,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 12,
+  "traits": [
+   "scavenger",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.2,
+   "width": 0.13,
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#e2e0d6",
+   "dorsal": "#e8e6dc",
+   "ventral": "#ecebe4",
+   "fin": "#ecebe4",
+   "finOpacity": 0.2,
+   "eye": "#141414",
+   "translucency": 0.9,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#8a8a80",
+     "density": 10
+    },
+    {
+     "type": "spots",
+     "color": "#e07a2a",
+     "density": 6,
+     "size": 0.02,
+     "x0": 0.85,
+     "x1": 1
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cambarellus-patzcuarensis",
+  "commonName": "Pátzcuaro Dwarf Crayfish",
+  "scientificName": "Cambarellus patzcuarensis",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Mexico — Lake Pátzcuaro, Michoacán (endemic)",
+  "description": "A dwarf crayfish known only from the highland Lake Pátzcuaro basin in Michoacán, where wild animals are mottled grey-brown. Females carry a few dozen eggs under the tail for three to four weeks, and the young hatch as miniature crayfish.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 4,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "territorial",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#7a6a52",
+   "dorsal": "#5e523e",
+   "ventral": "#a49478",
+   "fin": "#8a7a5e",
+   "finOpacity": 0.85,
+   "eye": "#141414",
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#463a2a",
+     "scale": 3,
+     "amount": 0.4
+    },
+    {
+     "type": "speckle",
+     "color": "#2e261a",
+     "density": 30
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.95
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cambarellus-patzcuarensis-orange",
+  "commonName": "Orange Dwarf Crayfish (CPO)",
+  "scientificName": "Cambarellus patzcuarensis",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Lake Pátzcuaro, Mexico)",
+  "description": "A captive-selected orange form of the Pátzcuaro dwarf crayfish and the most popular nano crayfish. It largely ignores healthy plants and adult fish, but will catch shrimplets and sleeping small fish.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 4,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   26
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "territorial",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#ef7a1a",
+   "dorsal": "#e66a10",
+   "ventral": "#f4a050",
+   "fin": "#f08a2a",
+   "finOpacity": 0.9,
+   "eye": "#141414",
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#d86010",
+     "scale": 3,
+     "amount": 0.25
+    },
+    {
+     "type": "speckle",
+     "color": "#c05008",
+     "density": 25
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.95
+  },
+  "variantOf": "cambarellus-patzcuarensis",
+  "availability": "common"
+ },
+ {
+  "id": "cambarellus-shufeldtii",
+  "commonName": "Cajun Dwarf Crayfish",
+  "scientificName": "Cambarellus shufeldtii",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "USA — lower Mississippi Valley & Gulf coastal plain swamps and ditches",
+  "description": "A small swamp crayfish of the lower Mississippi and Gulf coast, grey to rust-brown with a dark wavy band along each side of the abdomen. It is short-lived but breeds readily, females carrying a few dozen eggs.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 3,
+  "lifespanYears": 1.5,
+  "tempC": [
+   15,
+   26
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "territorial",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#7f7466",
+   "dorsal": "#6a6054",
+   "ventral": "#a49a8a",
+   "fin": "#8a8070",
+   "finOpacity": 0.85,
+   "eye": "#141414",
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a3028",
+     "density": 25
+    },
+    {
+     "type": "lines",
+     "color": "#2e2620",
+     "count": 2,
+     "width": 0.03,
+     "wavy": 0.5,
+     "y0": 0.2,
+     "y1": 0.7
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.9
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cambarellus-montezumae",
+  "commonName": "Montezuma Dwarf Crayfish",
+  "scientificName": "Cambarellus montezumae",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Central Mexico — highland lakes, canals and ditches",
+  "description": "A robust dwarf crayfish of central Mexico’s highland waters, mottled grey-brown to olive with dark speckling. Females grow a little larger than males, to about 3.7 cm.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 4,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "territorial",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#6e6a58",
+   "dorsal": "#5a5646",
+   "ventral": "#9a947e",
+   "fin": "#7e7a66",
+   "finOpacity": 0.85,
+   "eye": "#141414",
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#3e3a2c",
+     "scale": 3,
+     "amount": 0.35
+    },
+    {
+     "type": "speckle",
+     "color": "#2a2820",
+     "density": 35
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 0.85
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cambarellus-diminutus",
+  "commonName": "Least Dwarf Crayfish",
+  "scientificName": "Cambarellus diminutus",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "USA — southern Alabama & Mississippi, vegetated streams and swamps",
+  "description": "The smallest crayfish in the hobby, barely 2.5 cm long and marbled in brown, tan and bluish tones. It is the most peaceful of the dwarf crayfish and generally leaves fish and adult shrimp alone.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   18,
+   26
+  ],
+  "ph": [
+   6.5,
+   7.8
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 10,
+  "traits": [
+   "scavenger",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#8a7a62",
+   "dorsal": "#6e604c",
+   "ventral": "#b0a28a",
+   "fin": "#94866e",
+   "finOpacity": 0.85,
+   "eye": "#141414",
+   "translucency": 0.05,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#5a6a7a",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#3a3024",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "procambarus-clarkii",
+  "commonName": "Red Swamp Crayfish",
+  "scientificName": "Procambarus clarkii",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "South-central USA & northeastern Mexico — swamps, ditches and rivers (invasive worldwide)",
+  "description": "The crayfish of Louisiana crawfish boils, now invasive across Europe, Asia, Africa and South America. In aquaria it uproots and eats plants, burrows, and catches fish, so it is best kept alone.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 5,
+  "lifespanYears": 3,
+  "tempC": [
+   15,
+   28
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 8,
+  "traits": [
+   "digger",
+   "burrower",
+   "territorial",
+   "plant-eater",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "width": 0.24,
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#8a1e14",
+   "dorsal": "#5a120c",
+   "ventral": "#b4402a",
+   "fin": "#a8261a",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d02818",
+     "density": 30,
+     "size": 0.02,
+     "x0": 0.05,
+     "x1": 0.4
+    },
+    {
+     "type": "stripe",
+     "color": "#1a0e0a",
+     "y": 0.95,
+     "width": 0.2,
+     "x0": 0.45,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#b02a1a",
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e03a22",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05
+  },
+  "availability": "common"
+ },
+ {
+  "id": "procambarus-alleni",
+  "commonName": "Everglades Crayfish",
+  "scientificName": "Procambarus alleni",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "USA — southern Florida wetlands & the Everglades",
+  "description": "A crayfish of Florida’s seasonally flooded marshes that survives the dry season in burrows. Wild animals are usually brown with dark spots; the vivid blue aquarium form was bred from rare naturally blue individuals.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 8,
+  "traits": [
+   "digger",
+   "burrower",
+   "territorial",
+   "plant-eater",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#6a5a48",
+   "dorsal": "#4e4234",
+   "ventral": "#9a8a72",
+   "fin": "#6e604c",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a3026",
+     "density": 25
+    },
+    {
+     "type": "spots",
+     "color": "#2a2018",
+     "density": 40,
+     "size": 0.02
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "procambarus-alleni-blue",
+  "commonName": "Electric Blue Crayfish",
+  "scientificName": "Procambarus alleni",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern Florida)",
+  "description": "A captive-selected, intensely blue line of the Everglades crayfish and one of the most popular aquarium crayfish. Like the wild form it is territorial, uproots plants and will catch fish.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 8,
+  "traits": [
+   "digger",
+   "burrower",
+   "territorial",
+   "plant-eater",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#1e5fc8",
+   "dorsal": "#1650b0",
+   "ventral": "#4a80d8",
+   "fin": "#2a68d0",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "iridescence": 0.1,
+   "iridescenceColor": "#4a90f0",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#0a2a6a",
+     "density": 15
+    },
+    {
+     "type": "spots",
+     "color": "#0e2e7a",
+     "density": 30,
+     "size": 0.018
+    }
+   ]
+  },
+  "variantOf": "procambarus-alleni",
+  "availability": "common"
+ },
+ {
+  "id": "procambarus-virginalis",
+  "commonName": "Marbled Crayfish",
+  "scientificName": "Procambarus virginalis",
+  "family": "Cambaridae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Captive origin — German aquarium trade, 1990s (invasive in Europe & Madagascar)",
+  "description": "An all-female crayfish that reproduces by parthenogenesis, every animal a genetic clone of its mother; it arose from the slough crayfish Procambarus fallax and was first noticed in the German aquarium trade in the 1990s. Released animals have formed invasive populations in Europe and Madagascar.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 2.5,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 8,
+  "traits": [
+   "plant-eater",
+   "scavenger",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#6f6a4a",
+   "dorsal": "#55513a",
+   "ventral": "#9a9472",
+   "fin": "#7a7454",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2f2c1e",
+     "scale": 3,
+     "amount": 0.5
+    },
+    {
+     "type": "speckle",
+     "color": "#a8a080",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cherax-quadricarinatus",
+  "commonName": "Redclaw Crayfish",
+  "scientificName": "Cherax quadricarinatus",
+  "family": "Parastacidae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Northern Australia & southern New Guinea — rivers and billabongs",
+  "description": "A large, comparatively placid tropical crayfish farmed for food; mature males carry a bright red patch on the outer edge of each claw. It feeds mostly on detritus and plants but will catch slow fish at night.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 6,
+  "traits": [
+   "plant-eater",
+   "scavenger",
+   "territorial",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#2f5f7a",
+   "dorsal": "#244c64",
+   "ventral": "#8a9a8a",
+   "fin": "#3a6a84",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#1e3a4c",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#d8d0a8",
+     "density": 25
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.1,
+   "look": {
+    "fins": {
+     "pectoral": {
+      "edge": "#c8321e",
+      "edgeWidth": 0.25
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cherax-destructor",
+  "commonName": "Common Yabby",
+  "scientificName": "Cherax destructor",
+  "family": "Parastacidae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Southeastern Australia — Murray–Darling basin rivers, farm dams and swamps",
+  "description": "A hardy burrowing crayfish that survives drought by digging deep into drying farm dams and creek beds. Its color varies widely, from olive-brown to black or blue, and it tolerates cooler water than tropical Cherax.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   15,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 120,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 7,
+  "traits": [
+   "burrower",
+   "digger",
+   "territorial",
+   "plant-eater",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#4e5038",
+   "dorsal": "#3a3c2a",
+   "ventral": "#7a7a5a",
+   "fin": "#545640",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#3a4a5a",
+     "scale": 3,
+     "amount": 0.2
+    },
+    {
+     "type": "speckle",
+     "color": "#2a2c1e",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cherax-holthuisi",
+  "commonName": "Apricot Crayfish",
+  "scientificName": "Cherax holthuisi",
+  "family": "Parastacidae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Western New Guinea (West Papua), Indonesia — streams",
+  "description": "A mid-sized Cherax from western New Guinea, described in 2006, whose whole body is an even apricot to salmon orange. As in other Cherax, females carry the hatched young under the tail until they are ready to forage alone.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 7,
+  "traits": [
+   "scavenger",
+   "territorial",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#e8945a",
+   "dorsal": "#d8804a",
+   "ventral": "#f0b080",
+   "fin": "#e89a60",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#f4c8a0",
+     "scale": 3,
+     "amount": 0.15
+    },
+    {
+     "type": "speckle",
+     "color": "#c06a34",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cherax-peknyi",
+  "commonName": "Zebra Crayfish",
+  "scientificName": "Cherax peknyi",
+  "family": "Parastacidae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "Papua New Guinea — Fly River drainage",
+  "description": "A New Guinea crayfish with dark and pale bands across the head-shield and tail, which gives it the trade name Zebra. It hides for much of the day and feeds largely on dead leaves and detritus.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 7,
+  "traits": [
+   "nocturnal-hider",
+   "shy",
+   "scavenger",
+   "territorial",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#c8c0a8",
+   "dorsal": "#b0a890",
+   "ventral": "#ddd6c4",
+   "fin": "#3a4a6a",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1e2232",
+     "count": 10,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.98
+    },
+    {
+     "type": "speckle",
+     "color": "#6a6656",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cherax-pulcher",
+  "commonName": "Hoa Creek Crayfish",
+  "scientificName": "Cherax pulcher",
+  "family": "Parastacidae",
+  "group": "crayfish",
+  "water": "freshwater",
+  "region": "West Papua, Indonesia — streams",
+  "description": "One of the most colorful crayfish, with a pink head-shield shading to greenish grey, a dark blue-black tail edged in cream, and blue claws with pale margins. It was described in 2015 from animals already sold as \"Hoa Creek\" or \"Blue Moon\".",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 7,
+  "traits": [
+   "scavenger",
+   "territorial",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crayfish",
+   "caudal": {
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#7a8a84",
+   "dorsal": "#6a7a76",
+   "ventral": "#a8b0a8",
+   "fin": "#2a4ab0",
+   "finOpacity": 0.95,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d88aa0",
+     "x0": -0.05,
+     "x1": 0.42,
+     "y0": 0.05,
+     "y1": 1.1,
+     "softness": 0.12
+    },
+    {
+     "type": "region",
+     "color": "#141c3a",
+     "x0": 0.42,
+     "x1": 1.05,
+     "y0": -0.5,
+     "y1": 1.1,
+     "softness": 0.05
+    },
+    {
+     "type": "stripe",
+     "color": "#e8dcc8",
+     "y": -0.6,
+     "width": 0.08,
+     "x0": 0.44,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#2a4ab0",
+     "edge": "#ece4d4",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "geosesarma-dennerle",
+  "commonName": "Vampire Crab",
+  "scientificName": "Geosesarma dennerle",
+  "family": "Sesarmidae",
+  "group": "crab",
+  "water": "freshwater",
+  "region": "Central Java, Indonesia — forest streams",
+  "description": "A small semi-terrestrial crab from central Java with a purple body and legs, pale claws and glowing yellow eyes, sold for years before it was described in 2015. Females carry their eggs until they hatch directly as tiny crabs, so there is no sea-going larval stage; it needs a paludarium with land.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   4,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 4,
+  "traits": [
+   "climbs",
+   "shy",
+   "nocturnal-hider",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "caudal": {
+    "shape": "none"
+   }
+  },
+  "look": {
+   "base": "#5a2a6e",
+   "dorsal": "#4a2060",
+   "ventral": "#7a4a8a",
+   "fin": "#6a3a7a",
+   "finOpacity": 0.95,
+   "eye": "#f2d21a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a1448",
+     "density": 20
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e8dcc8"
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "geosesarma-hagen",
+  "commonName": "Red Devil Crab",
+  "scientificName": "Geosesarma hagen",
+  "family": "Sesarmidae",
+  "group": "crab",
+  "water": "freshwater",
+  "region": "Central Java, Indonesia — forest streams",
+  "description": "A Javan vampire crab with a dark, almost black carapace, red-orange legs and claws and yellow eyes, described in 2015 together with G. dennerle. It spends most of its time on land near water, and the young hatch as miniature crabs.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   4,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 4,
+  "traits": [
+   "climbs",
+   "shy",
+   "nocturnal-hider",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "caudal": {
+    "shape": "none"
+   }
+  },
+  "look": {
+   "base": "#2a1416",
+   "dorsal": "#1e0e10",
+   "ventral": "#4a2422",
+   "fin": "#c0261e",
+   "finOpacity": 0.95,
+   "eye": "#f2c81a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#100808",
+     "density": 20
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#d0361e"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "limnopilos-naiyanetri",
+  "commonName": "Thai Micro Crab",
+  "scientificName": "Limnopilos naiyanetri",
+  "family": "Hymenosomatidae",
+  "group": "crab",
+  "water": "freshwater",
+  "region": "Central Thailand — Tachin River basin, among roots of floating plants",
+  "description": "One of the smallest freshwater crabs, with a carapace under 1 cm, living among the dangling roots of floating water hyacinth. Fully aquatic and shy, it filters and picks fine particles with its hairy legs and rarely breeds in aquaria.",
+  "adultLengthCm": 0.8,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 4,
+  "lifespanYears": 1,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   4,
+   12
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "filter-feeder",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 3,
+  "traits": [
+   "shy",
+   "climbs",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "depth": 0.4,
+   "caudal": {
+    "shape": "none"
+   }
+  },
+  "look": {
+   "base": "#8a8070",
+   "dorsal": "#7a7060",
+   "ventral": "#a8a090",
+   "fin": "#9a9282",
+   "finOpacity": 0.6,
+   "eye": "#1a1a1a",
+   "translucency": 0.45,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a4236",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "parathelphusa-pantherina",
+  "commonName": "Panther Crab",
+  "scientificName": "Parathelphusa pantherina",
+  "family": "Gecarcinucidae",
+  "group": "crab",
+  "water": "freshwater",
+  "region": "Sulawesi, Indonesia — Malili lakes (Matano, Mahalona & Towuti)",
+  "description": "A fully aquatic crab from the ancient Malili lakes of Sulawesi, cream to orange-tan with bold black leopard spots. It is territorial and will catch fish and shrimp, so it is best kept singly or in a large species tank.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   10
+  ],
+  "minTankLiters": 100,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 4,
+  "traits": [
+   "territorial",
+   "predator",
+   "nocturnal-hider",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "caudal": {
+    "shape": "none"
+   }
+  },
+  "look": {
+   "base": "#c79a52",
+   "dorsal": "#b88a46",
+   "ventral": "#e0c08a",
+   "fin": "#d0a660",
+   "finOpacity": 0.95,
+   "eye": "#2a2a1a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a1a10",
+     "density": 50,
+     "size": 0.05,
+     "jitter": 0.6
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#d0a660",
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a1a10",
+       "density": 30,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "syntripsa-matannensis",
+  "commonName": "Purple Matano Crab",
+  "scientificName": "Syntripsa matannensis",
+  "family": "Gecarcinucidae",
+  "group": "crab",
+  "water": "freshwater",
+  "region": "Sulawesi, Indonesia — Lake Matano (endemic)",
+  "description": "Endemic to Lake Matano, this deep purple crab specializes in crushing the lake’s endemic snails but also scavenges carrion and plant debris. It is very territorial, and a single pair needs a tank at least a meter long.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   10
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 4,
+  "traits": [
+   "invert-eater",
+   "territorial",
+   "nocturnal-hider",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "caudal": {
+    "shape": "none"
+   }
+  },
+  "look": {
+   "base": "#5a2a6a",
+   "dorsal": "#4a1e5a",
+   "ventral": "#7a4a86",
+   "fin": "#6a3a7a",
+   "finOpacity": 0.95,
+   "eye": "#2a2a1e",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a1446",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "platythelphusa-armata",
+  "commonName": "Tanganyika Crab",
+  "scientificName": "Platythelphusa armata",
+  "family": "Potamonautidae",
+  "group": "crab",
+  "water": "freshwater",
+  "region": "Lake Tanganyika (endemic) — rocky shores at 5–30 m",
+  "description": "The largest crab endemic to Lake Tanganyika, living among rocks at 5–30 m; its heavy claws crush the lake’s thick-shelled snails, and juveniles shelter in empty snail shells. It is kept singly, often alongside Tanganyikan cichlids.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   27
+  ],
+  "ph": [
+   8,
+   9
+  ],
+  "dGH": [
+   10,
+   20
+  ],
+  "minTankLiters": 120,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-carrier",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 4,
+  "traits": [
+   "invert-eater",
+   "territorial",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "caudal": {
+    "shape": "none"
+   }
+  },
+  "look": {
+   "base": "#6a4a4e",
+   "dorsal": "#523a3e",
+   "ventral": "#9a8078",
+   "fin": "#5e4446",
+   "finOpacity": 0.95,
+   "eye": "#2a2420",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a2a2c",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "perisesarma-bidens",
+  "commonName": "Red Claw Crab",
+  "scientificName": "Perisesarma bidens",
+  "family": "Sesarmidae",
+  "group": "crab",
+  "water": "brackish",
+  "region": "Indo-West Pacific — mangroves and estuaries, India to Japan & Indonesia",
+  "description": "A semi-terrestrial mangrove crab, olive to purplish brown with bright red claws, often sold as a freshwater crab although it does best in slightly brackish water with a land area. Its larvae develop in the sea, so it is not bred in aquaria.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   10,
+   20
+  ],
+  "minTankLiters": 40,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 5,
+  "traits": [
+   "territorial",
+   "climbs",
+   "nocturnal-hider",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "caudal": {
+    "shape": "none"
+   }
+  },
+  "look": {
+   "base": "#5a4a3a",
+   "dorsal": "#4a3c30",
+   "ventral": "#8a7a62",
+   "fin": "#7a4434",
+   "finOpacity": 0.95,
+   "eye": "#1a1a14",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a2e24",
+     "density": 25
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#d0321e"
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "pectoral": {
+      "color": "#e0281a"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ }
+]

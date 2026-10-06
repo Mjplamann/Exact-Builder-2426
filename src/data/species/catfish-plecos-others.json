@@ -1,0 +1,4488 @@
+[
+ {
+  "id": "hypancistrus-zebra",
+  "commonName": "Zebra Pleco (L046)",
+  "scientificName": "Hypancistrus zebra",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Volta Grande of the Rio Xingu, Pará, Brazil",
+  "description": "Endemic to the rocky rapids of the Rio Xingu's Volta Grande, where it hides in crevices between boulders; the male guards the large eggs and wrigglers inside his cave. Brazil banned its export in 2004, so the hobby now relies largely on captive-bred fish.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#f2f1ec",
+   "dorsal": "#e9e8e1",
+   "ventral": "#f7f6f2",
+   "fin": "#f1f0ea",
+   "finOpacity": 0.9,
+   "eye": "#3d5d78",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#141414",
+     "width": 0.07
+    },
+    {
+     "type": "stripe",
+     "color": "#141414",
+     "y": 0.2,
+     "width": 0.1,
+     "x0": 0.06,
+     "x1": 0.4
+    },
+    {
+     "type": "bars",
+     "color": "#141414",
+     "count": 5,
+     "width": 0.06,
+     "x0": 0.14,
+     "x1": 0.98,
+     "slant": 0.35,
+     "y0": -0.7,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f1f0ea",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#141414",
+       "count": 2,
+       "width": 0.18,
+       "slant": 0.4
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f1f0ea",
+     "opacity": 0.9,
+     "edge": "#141414",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#141414",
+       "count": 1,
+       "width": 0.25,
+       "x0": 0.3,
+       "x1": 0.6
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#f1f0ea",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#141414",
+       "count": 2,
+       "width": 0.2
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#f1f0ea",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#141414",
+       "count": 1,
+       "width": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hypancistrus-sp-l066",
+  "commonName": "King Tiger Pleco (L066)",
+  "scientificName": "Hypancistrus sp. (L066)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu, Pará, Brazil",
+  "description": "A Rio Xingu Hypancistrus whose cream-and-black tiger markings break into wavy lines that differ in every fish. One of the easier Hypancistrus to spawn: the male fans the egg clump in a narrow cave until the fry leave.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1f1c19",
+   "dorsal": "#1a1715",
+   "ventral": "#cfc6ae",
+   "fin": "#1f1c19",
+   "finOpacity": 0.9,
+   "eye": "#2a2a2a",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#e9dfc4",
+     "count": 7,
+     "width": 0.06,
+     "wavy": 0.7,
+     "y0": -0.6,
+     "y1": 1
+    },
+    {
+     "type": "bars",
+     "color": "#e9dfc4",
+     "count": 4,
+     "width": 0.04,
+     "x0": 0.2,
+     "x1": 0.95,
+     "slant": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1f1c19",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e9dfc4",
+       "count": 3,
+       "width": 0.12,
+       "slant": 0.3
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1f1c19",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e9dfc4",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#1f1c19",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e9dfc4",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hypancistrus-sp-l333",
+  "commonName": "Yellow King Tiger Pleco (L333)",
+  "scientificName": "Hypancistrus sp. (L333)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu, Pará, Brazil",
+  "description": "A Rio Xingu Hypancistrus with bold yellow-to-white worm-like lines on black that vary from fish to fish. It is prolific in captivity, and breeding males defend their cave vigorously.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#191613",
+   "dorsal": "#151210",
+   "ventral": "#c9bb94",
+   "fin": "#191613",
+   "finOpacity": 0.9,
+   "eye": "#2a2a2a",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#e8c96a",
+     "count": 9,
+     "width": 0.045,
+     "wavy": 0.9,
+     "y0": -0.6,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#e8c96a",
+     "density": 30,
+     "size": 0.02
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#191613",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e8c96a",
+       "count": 3,
+       "width": 0.1,
+       "slant": 0.3
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#191613",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e8c96a",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#191613",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e8c96a",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hypancistrus-sp-l236",
+  "commonName": "L236 Pleco",
+  "scientificName": "Hypancistrus sp. (L236)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu, Pará, Brazil",
+  "description": "A rare and costly Xingu Hypancistrus whose white body is broken by irregular black blotches unique to each fish. Its relationship to the zebra and king tiger plecos is still unresolved.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#efede6",
+   "dorsal": "#e7e4db",
+   "ventral": "#f6f4ef",
+   "fin": "#efede6",
+   "finOpacity": 0.9,
+   "eye": "#2e3b48",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#17171a",
+     "scale": 2.5,
+     "amount": 0.45
+    },
+    {
+     "type": "spots",
+     "color": "#17171a",
+     "density": 20,
+     "size": 0.03
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#efede6",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#17171a",
+       "density": 15,
+       "size": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#efede6",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#17171a",
+       "density": 15,
+       "size": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#efede6",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#17171a",
+       "density": 10,
+       "size": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "hypancistrus-sp-l260",
+  "commonName": "Queen Arabesque Pleco (L260)",
+  "scientificName": "Hypancistrus sp. (L260)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Rio Tapajós, Pará, Brazil",
+  "description": "A small Hypancistrus from the lower Rio Tapajós covered in a fine white maze ('arabesque') on black. Males guard eggs in caves and spawn readily in warm, soft, well-oxygenated water.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 30,
+  "lifespanYears": 12,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1a1919",
+   "dorsal": "#161515",
+   "ventral": "#bdb9ae",
+   "fin": "#1a1919",
+   "finOpacity": 0.9,
+   "eye": "#2a2a2a",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#eceae2",
+     "count": 14,
+     "width": 0.025,
+     "wavy": 0.9,
+     "y0": -0.7,
+     "y1": 1
+    },
+    {
+     "type": "mask",
+     "color": "#eceae2",
+     "width": 0.02
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1a1919",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#eceae2",
+       "count": 5,
+       "width": 0.06,
+       "wavy": 0.6
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1a1919",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#eceae2",
+       "count": 5,
+       "width": 0.06,
+       "wavy": 0.6
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#1a1919",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#eceae2",
+       "count": 4,
+       "width": 0.06,
+       "wavy": 0.6
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hypancistrus-inspector",
+  "commonName": "Snowball Pleco (L102)",
+  "scientificName": "Hypancistrus inspector",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Casiquiare & upper Rio Negro, Venezuela & Brazil",
+  "description": "Described from the Casiquiare canal that links the Orinoco and Rio Negro, it is dark grey to black with large white spots. It grows larger than most Hypancistrus and males are quarrelsome over caves.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 1,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   5.5,
+   7.2
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1c1c20",
+   "dorsal": "#18181b",
+   "ventral": "#3a3a3e",
+   "fin": "#1c1c20",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f1f1ee",
+     "density": 45,
+     "size": 0.035,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1c1c20",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f1f1ee",
+       "density": 20,
+       "size": 0.07
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1c1c20",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f1f1ee",
+       "density": 20,
+       "size": 0.07
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#1c1c20",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f1f1ee",
+       "density": 15,
+       "size": 0.07
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hypancistrus-sp-l201",
+  "commonName": "Orinoco Angel Pleco (L201)",
+  "scientificName": "Hypancistrus sp. (L201)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Orinoco, Venezuela",
+  "description": "An Orinoco Hypancistrus sprinkled with small white spots and trimmed with white on the dorsal and caudal fins. Spot size varies between collecting sites, giving several trade forms.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#1b1b1d",
+   "dorsal": "#171719",
+   "ventral": "#38383b",
+   "fin": "#1b1b1d",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f4f4f0",
+     "density": 90,
+     "size": 0.02,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1b1b1d",
+     "opacity": 0.9,
+     "edge": "#f4f4f0",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f4f4f0",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1b1b1d",
+     "opacity": 0.9,
+     "edge": "#f4f4f0",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f4f4f0",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#1b1b1d",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f4f4f0",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hypancistrus-debilittera",
+  "commonName": "Colombian Zebra Pleco (L129)",
+  "scientificName": "Hypancistrus debilittera",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco basin, Colombia & Venezuela",
+  "description": "Exported from the Colombian Orinoco drainage as the 'Colombian zebra', this small Hypancistrus was named H. debilittera in 2007. Its pale, broken bands on dark brown are far less regular than the true zebra's.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 30,
+  "lifespanYears": 12,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#2b2520",
+   "dorsal": "#241f1b",
+   "ventral": "#bfb294",
+   "fin": "#2b2520",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#d6c59a",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.12,
+     "x1": 0.98,
+     "slant": 0.3
+    },
+    {
+     "type": "lines",
+     "color": "#d6c59a",
+     "count": 5,
+     "width": 0.03,
+     "wavy": 0.7,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2b2520",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d6c59a",
+       "count": 3,
+       "width": 0.1,
+       "slant": 0.3
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#2b2520",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d6c59a",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hypancistrus-sp-l174",
+  "commonName": "L174 Pleco",
+  "scientificName": "Hypancistrus sp. (L174)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu, Pará, Brazil",
+  "description": "A small, rarely exported Hypancistrus from the Rio Xingu, dark with fine pale dots. Like its relatives it is a cave-spawning male brooder that prefers meaty foods to algae.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 30,
+  "lifespanYears": 12,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "cave-dweller",
+   "clings",
+   "nocturnal-hider",
+   "territorial",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.52,
+    "height": 0.2,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#2a2622",
+   "dorsal": "#24201d",
+   "ventral": "#5a544b",
+   "fin": "#2a2622",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e3d6a0",
+     "density": 120,
+     "size": 0.012,
+     "jitter": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2a2622",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e3d6a0",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#2a2622",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e3d6a0",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "headLength": 0.36,
+    "width": 0.3
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "ancistrus-dolichopterus",
+  "commonName": "Starlight Bristlenose Pleco (L183)",
+  "scientificName": "Ancistrus dolichopterus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Negro & central Amazon, Brazil",
+  "description": "A blackwater bristlenose that is jet black with tiny white dots and white seams on the dorsal and caudal fins, boldest in young fish. Males grow branched snout tentacles and guard eggs in caves.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   4.5,
+   6.8
+  ],
+  "dGH": [
+   0,
+   8
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "truncate"
+   }
+  },
+  "look": {
+   "base": "#1a1a1d",
+   "dorsal": "#151517",
+   "ventral": "#2c2c30",
+   "fin": "#18181a",
+   "finOpacity": 0.9,
+   "eye": "#1e1e1e",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#eeeeea",
+     "density": 80,
+     "size": 0.017,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#18181a",
+     "opacity": 0.9,
+     "edge": "#f2f2ee",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#eeeeea",
+       "density": 15,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#18181a",
+     "opacity": 0.9,
+     "edge": "#f2f2ee",
+     "edgeWidth": 0.15,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#eeeeea",
+       "density": 15,
+       "size": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ancistrus-ranunculus",
+  "commonName": "Medusa Pleco (L034)",
+  "scientificName": "Ancistrus ranunculus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu & Rio Tocantins, Brazil",
+  "description": "A jet-black bristlenose from fast, rocky stretches of the Xingu and Tocantins. Unlike other Ancistrus, both sexes wear a dense 'medusa' mane of branched tentacles around the snout, and it needs strong current and plenty of oxygen.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "cave-dweller",
+   "shy",
+   "nocturnal-hider",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.18,
+   "width": 0.32,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "barbels": 12,
+   "barbelLength": 0.12
+  },
+  "look": {
+   "base": "#151515",
+   "dorsal": "#121212",
+   "ventral": "#262626",
+   "fin": "#151515",
+   "finOpacity": 0.9,
+   "eye": "#1c1c1c"
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.14
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ancistrus-hoplogenys",
+  "commonName": "Spotted Bristlenose Pleco (L059)",
+  "scientificName": "Ancistrus hoplogenys",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin & Guiana Shield",
+  "description": "A widespread bristlenose whose dark body carries fewer, larger pale spots than the common bristlenose. Populations differ in spot size, and several L-numbers, including L059, belong to this species.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "truncate"
+   }
+  },
+  "look": {
+   "base": "#222226",
+   "dorsal": "#1c1c20",
+   "ventral": "#45454a",
+   "fin": "#222226",
+   "finOpacity": 0.9,
+   "eye": "#1e1e1e",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e8e6df",
+     "density": 40,
+     "size": 0.03,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#222226",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8e6df",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#222226",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8e6df",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ancistrus-sp-l144",
+  "commonName": "Lemon Bristlenose Pleco (L144)",
+  "scientificName": "Ancistrus sp. (L144)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraguay basin (wild form); mostly captive-bred",
+  "description": "A xanthic, lemon-yellow Ancistrus first collected in Paraguay; the captive strain sold as L144a has dark blue eyes, which separates it from red-eyed albino bristlenose. Males grow snout bristles and guard eggs in caves.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "truncate"
+   }
+  },
+  "look": {
+   "base": "#f3d64a",
+   "dorsal": "#ecc93a",
+   "ventral": "#f8e88a",
+   "fin": "#f2d65a",
+   "finOpacity": 0.7,
+   "eye": "#34497e"
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "ancistrus-cirrhosus-albino",
+  "commonName": "Albino Bristlenose Pleco",
+  "scientificName": "Ancistrus cirrhosus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A long-established albino strain of the common bristlenose: pinkish-yellow with faint pale spots and red eyes. It behaves and breeds exactly like the wild form, the male guarding the eggs in a cave.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.8,
+   7.8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "truncate"
+   }
+  },
+  "look": {
+   "base": "#f1d8a6",
+   "dorsal": "#e9c88e",
+   "ventral": "#f8ead0",
+   "fin": "#f3dcb0",
+   "finOpacity": 0.6,
+   "eye": "#c42b2b",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#fff4de",
+     "density": 55,
+     "size": 0.025,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fff4de",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fff4de",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "variantOf": "ancistrus-cirrhosus",
+  "availability": "common"
+ },
+ {
+  "id": "ancistrus-cirrhosus-longfin",
+  "commonName": "Long-fin Bristlenose Pleco",
+  "scientificName": "Ancistrus cirrhosus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A captive-bred bristlenose line with greatly elongated, flowing fins. The long fins tear more easily, so it is best kept away from fin-nipping tankmates.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.8,
+   7.8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "veil",
+    "size": 1.6
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.6,
+    "height": 0.42,
+    "shape": "flowing",
+    "trail": 0.15
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.25,
+    "height": 0.36,
+    "shape": "flowing",
+    "trail": 0.08
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.26,
+    "shape": "flowing"
+   }
+  },
+  "look": {
+   "base": "#4a4636",
+   "dorsal": "#3c3a2c",
+   "ventral": "#7b7560",
+   "fin": "#3f3c2f",
+   "finOpacity": 0.85,
+   "eye": "#202020",
+   "metallic": 0.05,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d9d4bf",
+     "density": 70,
+     "size": 0.025,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d9d4bf",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d9d4bf",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "variantOf": "ancistrus-cirrhosus",
+  "availability": "common"
+ },
+ {
+  "id": "ancistrus-cirrhosus-longfin-albino",
+  "commonName": "Long-fin Albino Bristlenose Pleco",
+  "scientificName": "Ancistrus cirrhosus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "Combines the albino and long-fin bristlenose traits: a pale yellow-pink fish with red eyes and veil-like fins. Like other bristlenose it rasps algae and biofilm and spawns in caves.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.8,
+   7.8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "veil",
+    "size": 1.6
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.6,
+    "height": 0.42,
+    "shape": "flowing",
+    "trail": 0.15
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.25,
+    "height": 0.36,
+    "shape": "flowing",
+    "trail": 0.08
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.26,
+    "shape": "flowing"
+   }
+  },
+  "look": {
+   "base": "#f1d8a6",
+   "dorsal": "#e9c88e",
+   "ventral": "#f8ead0",
+   "fin": "#f3dcb0",
+   "finOpacity": 0.6,
+   "eye": "#c42b2b",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#fff4de",
+     "density": 55,
+     "size": 0.025,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fff4de",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fff4de",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "variantOf": "ancistrus-cirrhosus",
+  "availability": "common"
+ },
+ {
+  "id": "ancistrus-cirrhosus-super-red",
+  "commonName": "Super Red Bristlenose Pleco",
+  "scientificName": "Ancistrus cirrhosus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred bristlenose selected for an intense orange-red body and fins. Colour is strongest in well-fed adults; care and breeding match the wild form.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.8,
+   7.8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "truncate"
+   }
+  },
+  "look": {
+   "base": "#d0582c",
+   "dorsal": "#bf4a22",
+   "ventral": "#e48a5a",
+   "fin": "#d6643a",
+   "finOpacity": 0.75,
+   "eye": "#3a1c14",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#b23f1c",
+     "density": 20
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "variantOf": "ancistrus-cirrhosus",
+  "availability": "common"
+ },
+ {
+  "id": "ancistrus-cirrhosus-calico",
+  "commonName": "Calico Bristlenose Pleco",
+  "scientificName": "Ancistrus cirrhosus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A captive-bred bristlenose with an orange-to-yellow body blotched irregularly with black, so no two fish look alike. Biology and care match the wild-type bristlenose.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.8,
+   7.8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "cave-dweller",
+   "wood-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.22,
+   "caudal": {
+    "shape": "truncate"
+   }
+  },
+  "look": {
+   "base": "#e2a24a",
+   "dorsal": "#d38f3a",
+   "ventral": "#ecc98a",
+   "fin": "#c88a40",
+   "finOpacity": 0.75,
+   "eye": "#2a1d14",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#1d1a17",
+     "scale": 2,
+     "amount": 0.5
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1d1a17",
+       "density": 10,
+       "size": 0.15
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1d1a17",
+       "density": 10,
+       "size": 0.15
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "body": {
+    "barbels": 12,
+    "barbelLength": 0.07
+   }
+  },
+  "variantOf": "ancistrus-cirrhosus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "peckoltia-vittata",
+  "commonName": "Candy Striped Pleco (L015)",
+  "scientificName": "Peckoltia vittata",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin, Brazil",
+  "description": "A small, sturdy pleco with dark brown saddles over a tan-yellow body. It grazes biofilm and soft wood and spawns in caves, the male guarding the eggs.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "cave-dweller",
+   "wood-eater",
+   "shy",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#c9b07a",
+   "dorsal": "#a88f5c",
+   "ventral": "#e5d8b8",
+   "fin": "#c4ab78",
+   "finOpacity": 0.85,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2c2318",
+     "count": 4,
+     "width": 0.08,
+     "x0": 0.25,
+     "x1": 0.98,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "lines",
+     "color": "#2c2318",
+     "count": 4,
+     "width": 0.025,
+     "wavy": 0.5,
+     "y0": 0.2,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c4ab78",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2c2318",
+       "count": 2,
+       "width": 0.15
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c4ab78",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2c2318",
+       "count": 2,
+       "width": 0.18
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#c4ab78",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2c2318",
+       "count": 2,
+       "width": 0.15
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "peckoltia-compta",
+  "commonName": "Leopard Frog Pleco (L134)",
+  "scientificName": "Peckoltia compta",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Tapajós, Pará, Brazil",
+  "description": "Known for years only as L134, the Leopard Frog Pleco was formally described in 2010 from the Rio Tapajós; its black bands on bright yellow are boldest in juveniles. It stays small and breeds readily in caves.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "cave-dweller",
+   "wood-eater",
+   "shy",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.21,
+   "width": 0.27,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.24,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#e6c84e",
+   "dorsal": "#d2b13e",
+   "ventral": "#efe0a0",
+   "fin": "#e2c450",
+   "finOpacity": 0.85,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1a1712",
+     "count": 5,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.98,
+     "slant": 0.2
+    },
+    {
+     "type": "lines",
+     "color": "#1a1712",
+     "count": 5,
+     "width": 0.025,
+     "wavy": 0.6,
+     "y0": -0.2,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e2c450",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1a1712",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e2c450",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1a1712",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#e2c450",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1a1712",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "peckoltia-sabaji",
+  "commonName": "Sabaj's Pleco (L075)",
+  "scientificName": "Peckoltia sabaji",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Essequibo basins, Brazil & Guyana",
+  "description": "Larger and more boldly spotted than most Peckoltia, it is a widespread species sold under several L-numbers (L075, L124, L301). It rasps wood and biofilm and readily takes meaty foods.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "cave-dweller",
+   "wood-eater",
+   "territorial",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.22,
+   "width": 0.28,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#a99660",
+   "dorsal": "#8c7b4c",
+   "ventral": "#d7cca8",
+   "fin": "#a28f5c",
+   "finOpacity": 0.85,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a241a",
+     "density": 70,
+     "size": 0.03,
+     "jitter": 0.8
+    },
+    {
+     "type": "lines",
+     "color": "#2a241a",
+     "count": 4,
+     "width": 0.025,
+     "wavy": 0.8,
+     "y0": 0.2,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a28f5c",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a241a",
+       "density": 25,
+       "size": 0.07
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a28f5c",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a241a",
+       "density": 25,
+       "size": 0.07
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#a28f5c",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a241a",
+       "density": 20,
+       "size": 0.07
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "panaque-nigrolineatus",
+  "commonName": "Royal Pleco (L190)",
+  "scientificName": "Panaque nigrolineatus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco & Amazon basins, Venezuela, Colombia & Brazil",
+  "description": "One of the few fishes that feeds on wood itself: it gouges driftwood with spoon-shaped teeth, and the shavings make up much of its diet. Wild fish show thin black lines on grey and often red eyes, and adults are intolerant of other large plecos.",
+  "adultLengthCm": 38,
+  "birthLengthCm": 1,
+  "maturityMonths": 48,
+  "lifespanYears": 20,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 4,
+  "traits": [
+   "wood-eater",
+   "clings",
+   "territorial",
+   "cave-dweller",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.3,
+   "width": 0.32,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.17,
+   "caudal": {
+    "shape": "lyre",
+    "size": 1.1
+   },
+   "headLength": 0.36,
+   "snout": "blunt",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.55,
+    "height": 0.28,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#7a7766",
+   "dorsal": "#6a6858",
+   "ventral": "#9a9785",
+   "fin": "#5e5c4f",
+   "finOpacity": 0.9,
+   "eye": "#a8301e",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#1a1a18",
+     "count": 14,
+     "width": 0.025,
+     "wavy": 0.15,
+     "y0": -0.8,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#5e5c4f",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#1a1a18",
+       "count": 4,
+       "width": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#5e5c4f",
+     "opacity": 0.9,
+     "edge": "#d8d4c4",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#1a1a18",
+       "count": 4,
+       "width": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "panaque-armbrusteri",
+  "commonName": "Thunder Royal Pleco (L027)",
+  "scientificName": "Panaque armbrusteri",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Tocantins, Araguaia, Xingu & Tapajós basins, Brazil",
+  "description": "A large wood-eating Panaque from the clear-water rivers of the Brazilian Shield, sold under the L027 group with names such as 'thunder' and 'platinum' royal. Juveniles show fine dark lines that fade toward a plain grey-gold in adults, which grow long caudal filaments.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 1,
+  "maturityMonths": 48,
+  "lifespanYears": 20,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 450,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 4,
+  "traits": [
+   "wood-eater",
+   "clings",
+   "territorial",
+   "cave-dweller",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.3,
+   "width": 0.32,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.17,
+   "caudal": {
+    "shape": "lyre",
+    "size": 1.3
+   },
+   "headLength": 0.36,
+   "snout": "blunt",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.55,
+    "height": 0.28,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#867a62",
+   "dorsal": "#74694f",
+   "ventral": "#b3a88c",
+   "fin": "#6c624d",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a3329",
+     "count": 10,
+     "width": 0.02,
+     "wavy": 0.3,
+     "y0": -0.6,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#6c624d",
+     "opacity": 0.9,
+     "edge": "#c9bea0",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "panaque-cochliodon",
+  "commonName": "Blue-eyed Pleco",
+  "scientificName": "Panaque cochliodon",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Magdalena & Cauca basins, Colombia",
+  "description": "The blue-eyed panaque of Colombia's Magdalena and Cauca rivers: a plain grey-black wood eater with striking turquoise-blue eyes. It tolerates cooler water than the Amazonian Panaque but still needs driftwood to rasp.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 1,
+  "maturityMonths": 48,
+  "lifespanYears": 20,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 400,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 4,
+  "traits": [
+   "wood-eater",
+   "clings",
+   "territorial",
+   "cave-dweller",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.3,
+   "width": 0.32,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.17,
+   "caudal": {
+    "shape": "lyre",
+    "size": 1.1
+   },
+   "headLength": 0.36,
+   "snout": "blunt",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.55,
+    "height": 0.28,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#4e5352",
+   "dorsal": "#3d4140",
+   "ventral": "#6a706e",
+   "fin": "#3a3e3d",
+   "finOpacity": 0.9,
+   "eye": "#4a95c4",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2c302f",
+     "density": 20
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "panaqolus-maccus",
+  "commonName": "Clown Pleco (L104)",
+  "scientificName": "Panaqolus maccus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco basin, Venezuela & Colombia",
+  "description": "A small loricariid whose dark body is crossed by irregular orange-tan bands; it rasps soft driftwood, which forms a real part of its diet. Males guard the eggs in tight caves.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "wood-eater",
+   "clings",
+   "cave-dweller",
+   "shy",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.23,
+   "width": 0.28,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "emarginate"
+   },
+   "snout": "blunt"
+  },
+  "look": {
+   "base": "#2a2420",
+   "dorsal": "#221d1a",
+   "ventral": "#5a4e40",
+   "fin": "#2a2420",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#d8b06a",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.15,
+     "x1": 0.98,
+     "slant": 0.2
+    },
+    {
+     "type": "lines",
+     "color": "#d8b06a",
+     "count": 3,
+     "width": 0.03,
+     "wavy": 0.8,
+     "y0": 0,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2a2420",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d8b06a",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#2a2420",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d8b06a",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#2a2420",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d8b06a",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "panaqolus-albivermis",
+  "commonName": "Flash Pleco (L204)",
+  "scientificName": "Panaqolus albivermis",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon (Marañón & Ucayali), Peru",
+  "description": "The 'flash pleco' of Peru's upper Amazon, black with bright white worm-like lines; it was described in 2013, the name meaning 'white worm'. Like all Panaqolus it needs driftwood to rasp.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "wood-eater",
+   "clings",
+   "cave-dweller",
+   "shy",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.23,
+   "width": 0.28,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "emarginate"
+   },
+   "snout": "blunt"
+  },
+  "look": {
+   "base": "#1c1b1a",
+   "dorsal": "#181716",
+   "ventral": "#4a4744",
+   "fin": "#1c1b1a",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#ece8dc",
+     "count": 9,
+     "width": 0.03,
+     "wavy": 0.85,
+     "y0": -0.6,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1c1b1a",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#ece8dc",
+       "count": 4,
+       "width": 0.06,
+       "wavy": 0.5
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1c1b1a",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#ece8dc",
+       "count": 4,
+       "width": 0.06,
+       "wavy": 0.5
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "panaqolus-sp-l002",
+  "commonName": "Tiger Pleco (L002)",
+  "scientificName": "Panaqolus sp. (L002)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Tocantins, Brazil",
+  "description": "A tiger-banded Panaqolus from the Rio Tocantins, tan with numerous dark brown bars, and one of the very first fishes to receive an L-number. It rasps wood and spawns in caves.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "wood-eater",
+   "clings",
+   "cave-dweller",
+   "shy",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.23,
+   "width": 0.28,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "emarginate"
+   },
+   "snout": "blunt"
+  },
+  "look": {
+   "base": "#b28d5a",
+   "dorsal": "#9a784a",
+   "ventral": "#d9c39c",
+   "fin": "#a8854f",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a2018",
+     "count": 7,
+     "width": 0.05,
+     "x0": 0.12,
+     "x1": 0.98,
+     "slant": 0.15
+    },
+    {
+     "type": "lines",
+     "color": "#2a2018",
+     "count": 3,
+     "width": 0.03,
+     "wavy": 0.6,
+     "y0": 0.3,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a8854f",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a2018",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8854f",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a2018",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#a8854f",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a2018",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "baryancistrus-xanthellus",
+  "commonName": "Gold Nugget Pleco (L018)",
+  "scientificName": "Baryancistrus xanthellus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu, Pará, Brazil",
+  "description": "The Gold Nugget Pleco grazes aufwuchs on sunlit rocks in the Rio Xingu; its black body carries golden spots, and the dorsal and caudal fins have broad yellow seams. L018 is the large-spotted form, and adults become quarrelsome with other plecos.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 1,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#151515",
+   "dorsal": "#111111",
+   "ventral": "#2c2c2c",
+   "fin": "#151515",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f2c230",
+     "density": 35,
+     "size": 0.04,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2c230",
+     "edgeWidth": 0.2,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 11.666666666666666,
+       "size": 0.08
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2c230",
+     "edgeWidth": 0.2,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 11.666666666666666,
+       "size": 0.08
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 8.75,
+       "size": 0.08
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "baryancistrus-xanthellus-l081",
+  "commonName": "Gold Nugget Pleco (L081, small spot)",
+  "scientificName": "Baryancistrus xanthellus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu, Pará, Brazil",
+  "description": "A small-spotted population of the Gold Nugget Pleco traded as L081. It is the same species as L018 and needs the same warm, fast, oxygen-rich water and algae-rich diet.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 1,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#151515",
+   "dorsal": "#111111",
+   "ventral": "#2c2c2c",
+   "fin": "#151515",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f2c230",
+     "density": 90,
+     "size": 0.02,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2c230",
+     "edgeWidth": 0.18,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2c230",
+     "edgeWidth": 0.18,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 22.5,
+       "size": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "baryancistrus-xanthellus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "baryancistrus-xanthellus-l177",
+  "commonName": "Iriri Gold Nugget Pleco (L177)",
+  "scientificName": "Baryancistrus xanthellus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Iriri (Xingu basin), Pará, Brazil",
+  "description": "The Rio Iriri population of the Gold Nugget Pleco, with finer spots than L018 and L081. Like the other forms it grazes aufwuchs and turns territorial toward other plecos as it matures.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 1,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#151515",
+   "dorsal": "#111111",
+   "ventral": "#2c2c2c",
+   "fin": "#151515",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f2c230",
+     "density": 120,
+     "size": 0.015,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2c230",
+     "edgeWidth": 0.14,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 40,
+       "size": 0.03
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2c230",
+     "edgeWidth": 0.14,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 40,
+       "size": 0.03
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2c230",
+       "density": 30,
+       "size": 0.03
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "baryancistrus-xanthellus",
+  "availability": "rare"
+ },
+ {
+  "id": "baryancistrus-niveatus",
+  "commonName": "Big White Spot Pleco (L142)",
+  "scientificName": "Baryancistrus niveatus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Amazon tributaries (Xingu, Tocantins), Brazil",
+  "description": "A large, heavy-bodied Baryancistrus from clear-water tributaries of the lower Amazon, black with sharp white spots; it is sold under L026 and L142. It grazes algae and grows too big for most home aquaria.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 1,
+  "maturityMonths": 48,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#1b1c1e",
+   "dorsal": "#17181a",
+   "ventral": "#36373a",
+   "fin": "#1b1c1e",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f0f0ec",
+     "density": 40,
+     "size": 0.035,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1b1c1e",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0f0ec",
+       "density": 15,
+       "size": 0.07
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1b1c1e",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0f0ec",
+       "density": 15,
+       "size": 0.07
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#1b1c1e",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0f0ec",
+       "density": 12,
+       "size": 0.07
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "baryancistrus-demantoides",
+  "commonName": "Green Phantom Pleco (L200 low-fin)",
+  "scientificName": "Baryancistrus demantoides",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Orinoco & Río Ventuari, Venezuela",
+  "description": "The low-finned 'L200': an olive-green Baryancistrus densely dotted with lime-yellow, from the clear, fast Río Ventuari and upper Orinoco. It needs strong current, high oxygen and a vegetable-rich diet.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 1,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#5c6a3a",
+   "dorsal": "#4d5a30",
+   "ventral": "#8a9660",
+   "fin": "#56633a",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e2e47a",
+     "density": 70,
+     "size": 0.022,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#56633a",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e2e47a",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#56633a",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e2e47a",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "baryancistrus-beggini",
+  "commonName": "Blue Panaque (L239)",
+  "scientificName": "Baryancistrus beggini",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Orinoco & Río Ventuari, Venezuela",
+  "description": "Sold as the 'blue panaque', this Baryancistrus is a nearly uniform blue-grey with an orange seam along the dorsal fin. It was described in 2009 from the upper Orinoco, where it grazes aufwuchs on rocks in fast water.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 1,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#30404e",
+   "dorsal": "#2a3844",
+   "ventral": "#556472",
+   "fin": "#2e3d4a",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#5a6c7c",
+     "density": 25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2e3d4a",
+     "opacity": 0.9,
+     "edge": "#e8862a",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#2e3d4a",
+     "opacity": 0.9,
+     "edge": "#e8862a",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hemiancistrus-subviridis",
+  "commonName": "Green Phantom Pleco (L200 high-fin)",
+  "scientificName": "Hemiancistrus subviridis",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Orinoco & Río Ventuari, Venezuela",
+  "description": "The high-finned 'L200': a lime-spotted green pleco with a taller dorsal fin than the look-alike Baryancistrus demantoides, with which it shares the Río Ventuari. It needs fast, warm, oxygen-rich water and plenty of vegetable food.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 1,
+  "maturityMonths": 30,
+  "lifespanYears": 12,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.56,
+    "height": 0.3,
+    "shape": "sail"
+   }
+  },
+  "look": {
+   "base": "#6b7a3c",
+   "dorsal": "#5b6932",
+   "ventral": "#9aa46a",
+   "fin": "#63713a",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e6e070",
+     "density": 60,
+     "size": 0.025,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#63713a",
+     "opacity": 0.9,
+     "edge": "#e6e070",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e6e070",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#63713a",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e6e070",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hemiancistrus-sp-l128",
+  "commonName": "Blue Phantom Pleco (L128)",
+  "scientificName": "Hemiancistrus sp. (L128)",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco basin, Venezuela",
+  "description": "The 'blue phantom' is a slate-blue loricariid peppered with small pale spots, exported from the Venezuelan Orinoco; spot size varies between imports. It eats both meaty foods and vegetable matter and defends its patch from rivals.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 1,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   25,
+   29
+  ],
+  "ph": [
+   5.5,
+   7.2
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.2,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#2e3a46",
+   "dorsal": "#26313b",
+   "ventral": "#4b5662",
+   "fin": "#2b3741",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d6e4ee",
+     "density": 70,
+     "size": 0.02,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2b3741",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d6e4ee",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#2b3741",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d6e4ee",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "scobinancistrus-aureatus",
+  "commonName": "Sunshine Pleco (L014)",
+  "scientificName": "Scobinancistrus aureatus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu, Pará, Brazil",
+  "description": "The Sunshine Pleco of the Rio Xingu is black with golden spots and wide yellow-orange fin margins. Its few, large spoon-shaped teeth are adapted for cracking snails and other invertebrates, and adults are territorial.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 1,
+  "maturityMonths": 48,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "invert-eater",
+   "territorial",
+   "clings",
+   "cave-dweller",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.22,
+   "width": 0.28,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#151515",
+   "dorsal": "#121212",
+   "ventral": "#2c2c2c",
+   "fin": "#151515",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f0c22c",
+     "density": 40,
+     "size": 0.035,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2b81f",
+     "edgeWidth": 0.25,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0c22c",
+       "density": 12,
+       "size": 0.07
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2b81f",
+     "edgeWidth": 0.22,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0c22c",
+       "density": 12,
+       "size": 0.07
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#151515",
+     "opacity": 0.9,
+     "edge": "#f2b81f",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "scobinancistrus-pariolispos",
+  "commonName": "Tapajós Sunshine Pleco (L048)",
+  "scientificName": "Scobinancistrus pariolispos",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Tapajós, Pará, Brazil",
+  "description": "The Tapajós counterpart of the sunshine pleco, with smaller and denser golden spots than S. aureatus; it is also traded as L133. A large snail-eating loricariid that needs a big, warm, fast-flowing tank.",
+  "adultLengthCm": 28,
+  "birthLengthCm": 1,
+  "maturityMonths": 48,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "invert-eater",
+   "territorial",
+   "clings",
+   "cave-dweller",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.22,
+   "width": 0.28,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#1c1915",
+   "dorsal": "#171512",
+   "ventral": "#34302a",
+   "fin": "#1c1915",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#eebd36",
+     "density": 90,
+     "size": 0.02,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1c1915",
+     "opacity": 0.9,
+     "edge": "#ea9e24",
+     "edgeWidth": 0.18,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#eebd36",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1c1915",
+     "opacity": 0.9,
+     "edge": "#ea9e24",
+     "edgeWidth": 0.15,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#eebd36",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "spectracanthicus-punctatissimus",
+  "commonName": "White Spotted Pleco (L030)",
+  "scientificName": "Spectracanthicus punctatissimus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu & Rio Tocantins, Brazil",
+  "description": "Formerly placed in Oligancistrus, this loricariid is black and densely peppered with tiny white spots. It lives in rock crevices in strong current and feeds on biofilm, algae and small invertebrates.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 30,
+  "lifespanYears": 12,
+  "tempC": [
+   26,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "cave-dweller",
+   "shy",
+   "nocturnal-hider",
+   "glass-grazer"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.19,
+   "width": 0.3,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#1c1d1f",
+   "dorsal": "#18191b",
+   "ventral": "#38393c",
+   "fin": "#1c1d1f",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f2f2ee",
+     "density": 140,
+     "size": 0.012,
+     "jitter": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1c1d1f",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2f2ee",
+       "density": 40,
+       "size": 0.03
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#1c1d1f",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2f2ee",
+       "density": 40,
+       "size": 0.03
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "parancistrus-aurantiacus",
+  "commonName": "Orange Pleco (L056)",
+  "scientificName": "Parancistrus aurantiacus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Xingu & Rio Tocantins, Brazil",
+  "description": "A broad, flat loricariid of rocky Xingu and Tocantins rapids, known for switching between slate-grey and patchy or complete orange-yellow colouring. It grazes algae and biofilm with a wide sucker mouth and needs strong current.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 1,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   27,
+   31
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "clings",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.16,
+   "width": 0.34,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.17,
+   "caudal": {
+    "shape": "emarginate"
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.62,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#3a3c3d",
+   "dorsal": "#313334",
+   "ventral": "#5b5d5e",
+   "fin": "#36383a",
+   "finOpacity": 0.9,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#d9822a",
+     "scale": 2,
+     "amount": 0.15
+    },
+    {
+     "type": "speckle",
+     "color": "#2a2c2d",
+     "density": 20
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "dekeyseria-pulchra",
+  "commonName": "Butterfly Pleco",
+  "scientificName": "Dekeyseria pulchra",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Negro & upper Orinoco, Brazil & Venezuela",
+  "description": "A very flat blackwater pleco banded in brown and cream, its depressed body letting it cling to wood and rock in current. Breeding males develop bristly odontodes along the head and pectoral spines.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "pleco",
+   "depth": 0.15,
+   "width": 0.34,
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true,
+   "eyeSize": 0.18,
+   "caudal": {
+    "shape": "emarginate"
+   }
+  },
+  "look": {
+   "base": "#6e5a3e",
+   "dorsal": "#5c4a32",
+   "ventral": "#b6a582",
+   "fin": "#6a573c",
+   "finOpacity": 0.85,
+   "eye": "#262626",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#c7aa72",
+     "count": 4,
+     "width": 0.07,
+     "x0": 0.2,
+     "x1": 0.98
+    },
+    {
+     "type": "speckle",
+     "color": "#3a2e20",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#6a573c",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#c7aa72",
+       "count": 2,
+       "width": 0.15
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#6a573c",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#c7aa72",
+       "count": 2,
+       "width": 0.18
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#6a573c",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#c7aa72",
+       "count": 2,
+       "width": 0.15
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ }
+]

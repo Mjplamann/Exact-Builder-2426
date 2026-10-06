@@ -1,0 +1,8047 @@
+[
+ {
+  "id": "chindongo-demasoni",
+  "commonName": "Demasoni",
+  "scientificName": "Chindongo demasoni",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Pombo Rocks & nearby reefs, Tanzanian shore of Lake Malawi",
+  "description": "A tiny but fiercely territorial mbuna banded in electric and navy blue, endemic to a short stretch of rocky Tanzanian shore. Best kept in large groups so aggression is diluted; long sold as Pseudotropheus demasoni.",
+  "adultLengthCm": 7.5,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 12,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.3,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#3f86ec",
+   "dorsal": "#2a58b8",
+   "ventral": "#5b9cf0",
+   "fin": "#1a2a6a",
+   "finOpacity": 0.85,
+   "eye": "#c8a028",
+   "iridescence": 0.5,
+   "iridescenceColor": "#7cc4ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#0e1640",
+     "count": 6,
+     "width": 0.075,
+     "x0": 0.22,
+     "x1": 0.96
+    },
+    {
+     "type": "bars",
+     "color": "#0e1640",
+     "count": 2,
+     "width": 0.05,
+     "x0": 0.03,
+     "x1": 0.2,
+     "y0": 0.2,
+     "y1": 1
+    },
+    {
+     "type": "region",
+     "color": "#0e1640",
+     "x0": 0.02,
+     "x1": 0.26,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1a2a6a",
+     "edge": "#8fd0ff",
+     "edgeWidth": 0.16,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#0b1030",
+       "x0": 0,
+       "x1": 1,
+       "y0": 0.1,
+       "y1": 0.7,
+       "softness": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#0e1640",
+     "edge": "#8fd0ff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#16245a",
+     "edge": "#8fd0ff",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f0b420",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f0b420",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#2a4fa8",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#0e1640",
+       "count": 3,
+       "width": 0.12,
+       "x0": 0.1,
+       "x1": 0.9
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05
+  },
+  "female": {
+   "lengthScale": 0.92
+  },
+  "availability": "common"
+ },
+ {
+  "id": "chindongo-saulosi",
+  "commonName": "Saulosi",
+  "scientificName": "Chindongo saulosi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Taiwan Reef, northern Lake Malawi (Malawi)",
+  "description": "A small mbuna from a single reef with striking dichromatism: dominant males turn powder blue with black bars while females and juveniles stay bright yellow. Formerly Pseudotropheus saulosi; heavily exported and now bred widely in captivity.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 8,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.3,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f4c41c",
+   "dorsal": "#e4aa18",
+   "ventral": "#f8dc58",
+   "fin": "#f2c020",
+   "finOpacity": 0.85,
+   "eye": "#c89a30",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#d9a514",
+     "contrast": 0.15
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#f2c020",
+     "edge": "#fff2a8",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "look": {
+    "base": "#5b92e0",
+    "dorsal": "#2f56a0",
+    "ventral": "#78aae8",
+    "fin": "#141a34",
+    "finOpacity": 0.9,
+    "iridescence": 0.35,
+    "iridescenceColor": "#a8d8ff",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#121830",
+      "count": 7,
+      "width": 0.07,
+      "x0": 0.2,
+      "x1": 0.96
+     },
+     {
+      "type": "region",
+      "color": "#121830",
+      "x0": 0.02,
+      "x1": 0.26,
+      "y0": -1,
+      "y1": -0.45,
+      "softness": 0.25
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#141a34",
+      "edge": "#a8d8ff",
+      "edgeWidth": 0.16
+     },
+     "pelvic": {
+      "color": "#121830",
+      "edge": "#a8d8ff",
+      "edgeWidth": 0.2
+     },
+     "anal": {
+      "color": "#141a34",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f2b41e",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2b41e",
+        "x": 0.53,
+        "y": 0.24999999999999997,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2b41e",
+        "x": 0.45,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       }
+      ]
+     },
+     "caudal": {
+      "color": "#25386e",
+      "opacity": 0.85
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "chindongo-socolofi",
+  "commonName": "Pindani (Powder Blue Cichlid)",
+  "scientificName": "Chindongo socolofi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of the Mozambique coast, Lake Malawi",
+  "description": "A powder-blue mbuna whose dorsal fin carries a black submarginal band under a pale edge; both sexes look alike. One of the milder Pseudotropheus-type mbuna, and the source of the widely bred albino form.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.3,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#86b4ea",
+   "dorsal": "#6492d4",
+   "ventral": "#b0cef0",
+   "fin": "#7eaae2",
+   "finOpacity": 0.75,
+   "eye": "#c8a038",
+   "iridescence": 0.3,
+   "iridescenceColor": "#c8e4ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#6c94cc",
+     "count": 6,
+     "width": 0.045,
+     "x0": 0.25,
+     "x1": 0.9
+    },
+    {
+     "type": "scales",
+     "color": "#6c94cc",
+     "contrast": 0.1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#7eaae2",
+     "edge": "#e2f0ff",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#121a30",
+       "x0": 0,
+       "x1": 1,
+       "y0": 0.45,
+       "y1": 0.8,
+       "softness": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#121a30",
+     "edge": "#e2f0ff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#5e86c4",
+     "edge": "#121a30",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f0c020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff2c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f0c020",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff2c8"
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05
+  },
+  "availability": "common"
+ },
+ {
+  "id": "chindongo-socolofi-albino",
+  "commonName": "Albino Pindani",
+  "scientificName": "Chindongo socolofi 'Albino'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred albino of the powder-blue Pindani: pinkish-white with ruby eyes and only a ghost of the dark dorsal band. Same mild-for-an-mbuna temperament as the wild form.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.3,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f4ecea",
+   "dorsal": "#ece0dc",
+   "ventral": "#faf4f2",
+   "fin": "#f2e8e6",
+   "finOpacity": 0.6,
+   "eye": "#d8303a",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#e2c8c4",
+     "contrast": 0.12
+    },
+    {
+     "type": "region",
+     "color": "#f6d8d0",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.6,
+     "y1": 0.6,
+     "softness": 0.4
+    }
+   ],
+   "fins": {
+    "anal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6d860",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff8e0"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6d860",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff8e0"
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "chindongo-socolofi",
+  "availability": "common"
+ },
+ {
+  "id": "chindongo-elongatus",
+  "commonName": "Elongatus Mbuna",
+  "scientificName": "Chindongo elongatus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of Lake Malawi",
+  "description": "A slender, torpedo-shaped mbuna and one of the most belligerent of its group; dominant males are dark blue with black bars and fins. Many \"elongatus\" trade forms exist, some of which are separate species.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.25,
+   "width": 0.12,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#3e70d0",
+   "dorsal": "#22366f",
+   "ventral": "#5a86d8",
+   "fin": "#18203e",
+   "finOpacity": 0.85,
+   "eye": "#c09030",
+   "iridescence": 0.3,
+   "iridescenceColor": "#8fc0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#0f1530",
+     "count": 6,
+     "width": 0.08,
+     "x0": 0.22,
+     "x1": 0.95
+    },
+    {
+     "type": "region",
+     "color": "#0f1530",
+     "x0": 0.02,
+     "x1": 0.26,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#18203e",
+     "edge": "#9ec8ff",
+     "edgeWidth": 0.14
+    },
+    "pelvic": {
+     "color": "#0f1530",
+     "edge": "#9ec8ff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#18203e",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f0b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f0b020",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#6c7f9a",
+    "dorsal": "#4b5a70",
+    "ventral": "#9aa8b8",
+    "fin": "#4e5a6e",
+    "finOpacity": 0.7
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudotropheus-sp-acei",
+  "commonName": "Acei (Yellow-tail Acei)",
+  "scientificName": "Pseudotropheus sp. 'acei'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Malawi — Ngara (Malawi), Msuli (Mozambique) and other localities",
+  "description": "Unusual for an mbuna, acei forage in roving groups over sunken logs and reed stems, grazing aufwuchs from wood rather than rock. One of the most peaceful mbuna; the Msuli form has a violet-blue body and bright yellow fins.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "surface-grazer",
+   "algae-eater",
+   "plant-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.27,
+   "width": 0.12,
+   "depthPos": 0.36,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#4b40a8",
+   "dorsal": "#2e2a78",
+   "ventral": "#6a62c0",
+   "fin": "#f0c81a",
+   "finOpacity": 0.85,
+   "eye": "#b08828",
+   "iridescence": 0.3,
+   "iridescenceColor": "#7aa0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a2470",
+     "count": 6,
+     "width": 0.06,
+     "x0": 0.25,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0c81a",
+     "edge": "#fff0a0",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#3a3088",
+       "x0": 0,
+       "x1": 0.35,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.3
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f2cc1c",
+     "opacity": 0.9
+    },
+    "anal": {
+     "color": "#e8c020",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f8e070",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      },
+      {
+       "type": "blotch",
+       "color": "#f8e070",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#1c1840",
+     "edge": "#f0c81a",
+     "edgeWidth": 0.25
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "pseudotropheus-crabro",
+  "commonName": "Bumblebee Cichlid",
+  "scientificName": "Pseudotropheus crabro",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky reefs and caves throughout Lake Malawi",
+  "description": "Juveniles and subordinate fish are yellow with dark bars, but dominant males can turn almost black within seconds. In the lake it picks parasites off the large catfish Bagrus meridionalis — and raids the catfish's eggs when it gets the chance.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "territorial",
+   "cleaner",
+   "cave-dweller",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#e2c040",
+   "dorsal": "#b89830",
+   "ventral": "#f0d878",
+   "fin": "#c8a830",
+   "finOpacity": 0.7,
+   "eye": "#c09030",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a2418",
+     "count": 6,
+     "width": 0.08,
+     "x0": 0.22,
+     "x1": 0.95
+    },
+    {
+     "type": "mask",
+     "color": "#2a2418",
+     "width": 0.05
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8a830",
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a2418",
+       "count": 4,
+       "width": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b420",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff2c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b420",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff2c8"
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "look": {
+    "base": "#3a3428",
+    "dorsal": "#1e1a16",
+    "ventral": "#4a4434",
+    "fin": "#2a2620",
+    "finOpacity": 0.85,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#141210",
+      "count": 6,
+      "width": 0.08,
+      "x0": 0.22,
+      "x1": 0.95
+     },
+     {
+      "type": "mask",
+      "color": "#141210",
+      "width": 0.05
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#2a2620"
+     },
+     "anal": {
+      "color": "#2a2620",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#e8a820",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#f8e8c0"
+       },
+       {
+        "type": "blotch",
+        "color": "#e8a820",
+        "x": 0.53,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#f8e8c0"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-zebra",
+  "commonName": "Zebra Mbuna (BB Zebra)",
+  "scientificName": "Maylandia zebra",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky coasts of Lake Malawi (widespread; many locality forms)",
+  "description": "The classic barred zebra mbuna: males are sky-blue with bold black bars and a dark chin, grazing algae from rock faces and defending a cave. Females may be similar, brownish or orange-blotched (OB). Also sold as Metriaclima zebra.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#80b6ec",
+   "dorsal": "#5a90d8",
+   "ventral": "#a8ccf0",
+   "fin": "#7aa8e0",
+   "finOpacity": 0.75,
+   "eye": "#c88a20",
+   "iridescence": 0.25,
+   "iridescenceColor": "#b8e0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#151a2e",
+     "count": 6,
+     "width": 0.07,
+     "x0": 0.22,
+     "x1": 0.92
+    },
+    {
+     "type": "region",
+     "color": "#151a2e",
+     "x0": 0.02,
+     "x1": 0.26,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#7aa8e0",
+     "edge": "#d8ecff",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151a2e",
+       "x0": 0,
+       "x1": 1,
+       "y0": 0.4,
+       "y1": 0.75,
+       "softness": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#151a2e",
+     "edge": "#d8ecff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#3a4a78",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a81e",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a81e",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a81e",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#7aa8e0",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#8a8e9a",
+    "dorsal": "#6a6e7a",
+    "ventral": "#b0b4bc",
+    "fin": "#7a7e8a",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#4a4e5a",
+      "count": 6,
+      "width": 0.06,
+      "x0": 0.22,
+      "x1": 0.92
+     }
+    ]
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-zebra-ob",
+  "commonName": "OB Zebra (Orange Blotch)",
+  "scientificName": "Maylandia zebra 'OB'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (the OB pattern occurs naturally, mostly in females)",
+  "description": "Orange-blotch zebra mbuna: a peach-orange body splashed with irregular black blotches. The OB pattern occurs naturally in several mbuna, mainly in females, and has been line-bred so that males show it too.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f0a868",
+   "dorsal": "#e09050",
+   "ventral": "#f6c8a0",
+   "fin": "#f0a060",
+   "finOpacity": 0.7,
+   "eye": "#c07020",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 22,
+     "size": 0.06,
+     "jitter": 1
+    },
+    {
+     "type": "marble",
+     "color": "#2a1c14",
+     "scale": 2.5,
+     "amount": 0.18
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0a060",
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 10,
+       "size": 0.1,
+       "jitter": 1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f0a868",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 8,
+       "size": 0.08,
+       "jitter": 1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#f0a060",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "maylandia-zebra",
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-estherae",
+  "commonName": "Red Zebra",
+  "scientificName": "Maylandia estherae",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mozambique shore of Lake Malawi (e.g. Minos Reef)",
+  "description": "Despite the name, only females and juveniles are the classic orange-red; adult males are usually pale powder-blue with faint bars. A hardy, very common mbuna that grazes algae-covered rocks; also sold as Metriaclima estherae.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 1,
+  "maturityMonths": 8,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.32,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f08a28",
+   "dorsal": "#e07a20",
+   "ventral": "#f6b060",
+   "fin": "#f08a30",
+   "finOpacity": 0.8,
+   "eye": "#c06818",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#d06818",
+     "contrast": 0.15
+    }
+   ],
+   "fins": {
+    "anal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f8c050",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff2d0"
+      },
+      {
+       "type": "blotch",
+       "color": "#f8c050",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff2d0"
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "look": {
+    "base": "#a8c4ec",
+    "dorsal": "#8aaee0",
+    "ventral": "#c8daf2",
+    "fin": "#a0bce8",
+    "finOpacity": 0.75,
+    "eye": "#c07020",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#7090c8",
+      "count": 6,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.9
+     },
+     {
+      "type": "scales",
+      "color": "#86a4d4",
+      "contrast": 0.1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#a0bce8",
+      "edge": "#e8f2ff",
+      "edgeWidth": 0.1
+     },
+     "anal": {
+      "color": "#90acdc",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f2a020",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2a020",
+        "x": 0.53,
+        "y": 0.24999999999999997,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2a020",
+        "x": 0.45,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-lombardoi",
+  "commonName": "Kenyi Cichlid",
+  "scientificName": "Maylandia lombardoi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mbenji Island, Lake Malawi",
+  "description": "A case of reversed dichromatism: juveniles and females are pale blue with black bars, while mature males turn yellow-orange. Kenyi males are among the most aggressive mbuna and need a large, rocky tank with plenty of females.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#86a8e0",
+   "dorsal": "#5f84c8",
+   "ventral": "#b0c8ee",
+   "fin": "#7a9cd8",
+   "finOpacity": 0.75,
+   "eye": "#c08a20",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#141a30",
+     "count": 6,
+     "width": 0.075,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#7a9cd8",
+     "edge": "#dceaff",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#141a30",
+       "count": 4,
+       "width": 0.08
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#141a30",
+     "edge": "#dceaff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.08,
+   "look": {
+    "base": "#f2c030",
+    "dorsal": "#e8a820",
+    "ventral": "#f6d870",
+    "fin": "#f0b828",
+    "finOpacity": 0.8,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#d89a28",
+      "count": 6,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.9
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b828",
+      "edge": "#fff0b0",
+      "edgeWidth": 0.1
+     },
+     "pelvic": {
+      "color": "#f0b828"
+     },
+     "anal": {
+      "color": "#f0b020",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f8e070",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#ffffff"
+       },
+       {
+        "type": "blotch",
+        "color": "#f8e070",
+        "x": 0.53,
+        "y": 0.24999999999999997,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#ffffff"
+       },
+       {
+        "type": "blotch",
+        "color": "#f8e070",
+        "x": 0.45,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#ffffff"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-callainos",
+  "commonName": "Cobalt Blue Zebra",
+  "scientificName": "Maylandia callainos",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern Lake Malawi, Malawi",
+  "description": "A uniformly cobalt-blue zebra mbuna that lacks the bold bars of Maylandia zebra; whitish individuals are also sold. It grazes aufwuchs from shallow rock surfaces and is as territorial as its relatives.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#2e64d8",
+   "dorsal": "#2050b8",
+   "ventral": "#5a88e2",
+   "fin": "#2d5ccc",
+   "finOpacity": 0.8,
+   "eye": "#c09030",
+   "iridescence": 0.35,
+   "iridescenceColor": "#79b4ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a58c0",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.9
+    },
+    {
+     "type": "scales",
+     "color": "#2050b0",
+     "contrast": 0.12
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2d5ccc",
+     "edge": "#a8ccff",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#2d5ccc",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#1e3c90",
+     "edge": "#a8ccff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-greshakei",
+  "commonName": "Red Top Ice Blue Zebra",
+  "scientificName": "Maylandia greshakei",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern Lake Malawi, Malawi",
+  "description": "Males are pale ice-blue with a fiery orange-red dorsal fin and back, the combination behind the trade name \"red top ice blue\". Females are much duller, tan to brownish.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.33,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#bcd8f2",
+   "dorsal": "#e8742a",
+   "ventral": "#dcebf8",
+   "fin": "#c8dcf0",
+   "finOpacity": 0.7,
+   "eye": "#c07020",
+   "iridescence": 0.25,
+   "iridescenceColor": "#e0f0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8742a",
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": 0.55,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#9ab8dc",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8642a",
+     "opacity": 0.9,
+     "edge": "#f8b878",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#c8dcf0",
+     "opacity": 0.6
+    },
+    "anal": {
+     "color": "#b0c8e6",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#b8a890",
+    "dorsal": "#9a8a70",
+    "ventral": "#d0c8b8",
+    "fin": "#b8a890",
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#9a8a70",
+      "contrast": 0.15
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#a89878"
+     },
+     "anal": {
+      "color": "#b8a890"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-sp-msobo",
+  "commonName": "Msobo",
+  "scientificName": "Maylandia sp. 'msobo'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Tanzanian coast of Lake Malawi (Magunga, Lundo Island)",
+  "description": "A strongly dichromatic, undescribed zebra-group mbuna: dominant males are blue-black with bright blue bars, while females and juveniles are vivid yellow-orange. Trade forms are named for their collection sites, e.g. \"Msobo Magunga\".",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 8,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.32,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f2a020",
+   "dorsal": "#e48a18",
+   "ventral": "#f6c060",
+   "fin": "#f0a020",
+   "finOpacity": 0.8,
+   "eye": "#c06818",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#d88818",
+     "contrast": 0.12
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "look": {
+    "base": "#1c2850",
+    "dorsal": "#141c3a",
+    "ventral": "#2a3c70",
+    "fin": "#1a2040",
+    "finOpacity": 0.9,
+    "eye": "#c08020",
+    "iridescence": 0.4,
+    "iridescenceColor": "#78b0ff",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#5e8ee0",
+      "count": 6,
+      "width": 0.06,
+      "x0": 0.24,
+      "x1": 0.92
+     },
+     {
+      "type": "bars",
+      "color": "#5e8ee0",
+      "count": 1,
+      "width": 0.05,
+      "x0": 0.08,
+      "x1": 0.12,
+      "y0": 0.2,
+      "y1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#3c6ac8",
+      "edge": "#bfe0ff",
+      "edgeWidth": 0.12
+     },
+     "pelvic": {
+      "color": "#141c3a",
+      "edge": "#bfe0ff",
+      "edgeWidth": 0.2
+     },
+     "anal": {
+      "color": "#1a2040",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f2b020",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2b020",
+        "x": 0.53,
+        "y": 0.24999999999999997,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2b020",
+        "x": 0.45,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "maylandia-aurora",
+  "commonName": "Aurora Cichlid",
+  "scientificName": "Maylandia aurora",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Likoma Island, Lake Malawi",
+  "description": "A zebra-group mbuna from Likoma Island; males combine a golden-yellow body with a pale blue head and back crossed by faint bars, while females are drab yellowish-brown. One of the milder members of its genus.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.32,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#e8c840",
+   "dorsal": "#9cc4ec",
+   "ventral": "#f0d860",
+   "fin": "#d8c050",
+   "finOpacity": 0.75,
+   "eye": "#c08020",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#a8cdee",
+     "x0": 0,
+     "x1": 0.32,
+     "y0": -0.2,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#8aa0b8",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a8cdee",
+     "edge": "#e8f4ff",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#e0c040",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e0c040",
+     "edge": "#f8f0c0",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#b8a060",
+    "dorsal": "#988048",
+    "ventral": "#d0c088",
+    "fin": "#b09858",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#8a7848",
+      "count": 6,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.9
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b09858"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "maylandia-pyrsonotos",
+  "commonName": "Red Top Zebra",
+  "scientificName": "Maylandia pyrsonotos",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Nakantenga Island, Lake Malawi",
+  "description": "Named for its \"fire back\": males are sky-blue with black bars under a red-orange dorsal fin. A small zebra-group mbuna known only from the rocks around Nakantenga Island.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.32,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#7ab0e8",
+   "dorsal": "#5a8ed0",
+   "ventral": "#a8c8ee",
+   "fin": "#78a8e0",
+   "finOpacity": 0.75,
+   "eye": "#c07a20",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#151a30",
+     "count": 6,
+     "width": 0.065,
+     "x0": 0.22,
+     "x1": 0.92
+    },
+    {
+     "type": "region",
+     "color": "#151a30",
+     "x0": 0.02,
+     "x1": 0.26,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8582a",
+     "opacity": 0.9,
+     "edge": "#f6b070",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#151a30",
+     "edge": "#d8ecff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#3a4a78",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a81e",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a81e",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a81e",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#9a9a9e",
+    "dorsal": "#7a7a80",
+    "ventral": "#bcbcc0",
+    "fin": "#8a8a90",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#5a5a62",
+      "count": 6,
+      "width": 0.05,
+      "x0": 0.22,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#a08870"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "labidochromis-caeruleus",
+  "commonName": "Electric Yellow Lab",
+  "scientificName": "Labidochromis caeruleus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "North-western Lake Malawi; the yellow form from Charo to Lion's Cove",
+  "description": "One of the most peaceful mbuna: rather than grazing algae it picks insect larvae, snails and crustaceans from rocks and Vallisneria beds. Both sexes are lemon-yellow with a black band in the dorsal fin; males show more black in the pelvic and anal fins.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "curious",
+   "invert-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.3,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f6d61c",
+   "dorsal": "#f0c814",
+   "ventral": "#f8e060",
+   "fin": "#f6d020",
+   "finOpacity": 0.85,
+   "eye": "#3a2a18",
+   "metallic": 0.1,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#e0b810",
+     "contrast": 0.12
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f6d020",
+     "edge": "#fbf2b0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141414",
+       "x0": 0,
+       "x1": 1,
+       "y0": 0.35,
+       "y1": 0.8,
+       "softness": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#f6d020",
+     "edge": "#141414",
+     "edgeWidth": 0.25
+    },
+    "anal": {
+     "color": "#f6d020",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141414",
+       "x0": 0,
+       "x1": 0.5,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.2
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f6d020",
+     "opacity": 0.8
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.05,
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#f6d020",
+      "edge": "#cfe6ff",
+      "edgeWidth": 0.1,
+      "patterns": [
+       {
+        "type": "region",
+        "color": "#121212",
+        "x0": 0,
+        "x1": 1,
+        "y0": 0.3,
+        "y1": 0.85,
+        "softness": 0.05
+       }
+      ]
+     },
+     "pelvic": {
+      "color": "#121212",
+      "edge": "#bfe0ff",
+      "edgeWidth": 0.18
+     },
+     "anal": {
+      "color": "#121212",
+      "edge": "#bfe0ff",
+      "edgeWidth": 0.1,
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f6d020",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff6c0"
+       },
+       {
+        "type": "blotch",
+        "color": "#f6d020",
+        "x": 0.53,
+        "y": 0.24999999999999997,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff6c0"
+       },
+       {
+        "type": "blotch",
+        "color": "#f6d020",
+        "x": 0.45,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff6c0"
+       }
+      ]
+     },
+     "caudal": {
+      "color": "#f6d020",
+      "opacity": 0.8
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "labidochromis-sp-hongi",
+  "commonName": "Red Top Hongi",
+  "scientificName": "Labidochromis sp. 'hongi'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Hongi Island, Tanzanian coast of Lake Malawi",
+  "description": "Males are pale blue with dark bars under an orange-red crown and dorsal fin; females are orange-brown. Like other Labidochromis it is a comparatively mild mbuna that picks small invertebrates and algae from the rocks.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "invert-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.31,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#9cc0ec",
+   "dorsal": "#e86a2a",
+   "ventral": "#c8daf2",
+   "fin": "#8cb0e0",
+   "finOpacity": 0.75,
+   "eye": "#c07020",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e86a2a",
+     "x0": 0.02,
+     "x1": 0.9,
+     "y0": 0.5,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#3a4a78",
+     "count": 7,
+     "width": 0.05,
+     "x0": 0.2,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8642a",
+     "opacity": 0.9,
+     "edge": "#f8c080",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#1a2240",
+     "edge": "#d8ecff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#6a88c0",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#c8682a",
+    "dorsal": "#a85020",
+    "ventral": "#e09060",
+    "fin": "#c86a30",
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#a85020",
+      "contrast": 0.15
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c86a30"
+     },
+     "pelvic": {
+      "color": "#c86a30"
+     },
+     "anal": {
+      "color": "#c86a30"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "labidochromis-chisumulae",
+  "commonName": "Chisumulae",
+  "scientificName": "Labidochromis chisumulae",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Chizumulu Island, Lake Malawi",
+  "description": "A small, slender Labidochromis from Chizumulu Island; both sexes are pale blue-white with dark vertical bars, males showing more blue and black in the fins. It picks tiny invertebrates from the rock surface with its pointed teeth.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 7,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "invert-eater",
+   "territorial",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.28,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#c8dcf0",
+   "dorsal": "#a0b8d8",
+   "ventral": "#e4eef8",
+   "fin": "#b8cce4",
+   "finOpacity": 0.65,
+   "eye": "#c09030",
+   "iridescence": 0.25,
+   "iridescenceColor": "#d8ecff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#283858",
+     "count": 6,
+     "width": 0.06,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b8cce4",
+     "edge": "#eef6ff",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#283858",
+       "x0": 0,
+       "x1": 1,
+       "y0": 0.4,
+       "y1": 0.75,
+       "softness": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#1c2640",
+     "edge": "#eef6ff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#3a4c70",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f0b030",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f0b030",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "labidochromis-sp-perlmutt",
+  "commonName": "Perlmutt",
+  "scientificName": "Labidochromis sp. 'perlmutt'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Higga Reef, northern Lake Malawi",
+  "description": "A pearly, almost white Labidochromis from Higga Reef whose German trade name means \"mother-of-pearl\". Peaceful for an mbuna, it feeds on tiny invertebrates picked from rocks.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 7,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "invert-eater",
+   "curious",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.29,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#eceef0",
+   "dorsal": "#d8dce4",
+   "ventral": "#f6f6f6",
+   "fin": "#e8eaee",
+   "finOpacity": 0.55,
+   "eye": "#8a7040",
+   "metallic": 0.35,
+   "iridescence": 0.3,
+   "iridescenceColor": "#d8e8ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#c4ccd8",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.22,
+     "x1": 0.9
+    },
+    {
+     "type": "scales",
+     "color": "#d0d6de",
+     "contrast": 0.12
+    }
+   ],
+   "fins": {
+    "anal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f0c850",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      },
+      {
+       "type": "blotch",
+       "color": "#f0c850",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e8eaee",
+     "edge": "#ffffff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "melanochromis-auratus",
+  "commonName": "Auratus (Golden Mbuna)",
+  "scientificName": "Melanochromis auratus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of southern Lake Malawi",
+  "description": "Females and juveniles are gold with two black, white-edged stripes; dominant males reverse the scheme to a near-black body with pale yellow stripes. Notoriously aggressive for its size and best kept with a single male.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.27,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f2c21e",
+   "dorsal": "#e8b018",
+   "ventral": "#f6dc70",
+   "fin": "#f0c020",
+   "finOpacity": 0.8,
+   "eye": "#c08020",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#f8f4e0",
+     "y": 0.5,
+     "width": 0.2,
+     "x0": 0.04,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141414",
+     "y": 0.5,
+     "width": 0.13,
+     "x0": 0.04,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#f8f4e0",
+     "y": 0,
+     "width": 0.2,
+     "x0": 0.1,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141414",
+     "y": 0,
+     "width": 0.13,
+     "x0": 0.1,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0c020",
+     "edge": "#f8f4e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141414",
+       "x0": 0,
+       "x1": 0.45,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f0c020",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 10,
+       "size": 0.06,
+       "y0": 0,
+       "y1": 1
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "base": "#1c1a16",
+    "dorsal": "#141414",
+    "ventral": "#2a2824",
+    "fin": "#1a1a1a",
+    "finOpacity": 0.85,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#e8d880",
+      "y": 0.75,
+      "width": 0.07,
+      "x0": 0.05,
+      "x1": 1
+     },
+     {
+      "type": "stripe",
+      "color": "#e8d880",
+      "y": 0.25,
+      "width": 0.07,
+      "x0": 0.1,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#1a1a1a",
+      "edge": "#e8d880",
+      "edgeWidth": 0.14
+     },
+     "caudal": {
+      "color": "#1a1a1a",
+      "opacity": 0.8,
+      "edge": "#e8d880",
+      "edgeWidth": 0.08
+     },
+     "anal": {
+      "color": "#1a1a1a",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f2c020",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2c020",
+        "x": 0.53,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "melanochromis-johannii",
+  "commonName": "Johanni",
+  "scientificName": "Melanochromis johannii",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of south-eastern Lake Malawi",
+  "description": "Males are blue-black with electric-blue horizontal stripes, while females and juveniles are a uniform bright orange. Small but aggressive, it grazes aufwuchs and picks small invertebrates.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.28,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f28a1c",
+   "dorsal": "#e07418",
+   "ventral": "#f6b060",
+   "fin": "#f08a20",
+   "finOpacity": 0.8,
+   "eye": "#c06818",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#d06818",
+     "contrast": 0.12
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#141c3c",
+    "dorsal": "#0e1430",
+    "ventral": "#24305a",
+    "fin": "#1a2448",
+    "finOpacity": 0.85,
+    "iridescence": 0.5,
+    "iridescenceColor": "#6ab8ff",
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#4aa0ff",
+      "y": 0.5,
+      "width": 0.08,
+      "x0": 0.06,
+      "x1": 1,
+      "glow": 0.3
+     },
+     {
+      "type": "stripe",
+      "color": "#4aa0ff",
+      "y": 0.05,
+      "width": 0.08,
+      "x0": 0.1,
+      "x1": 1,
+      "glow": 0.3
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#1a2448",
+      "edge": "#6ab8ff",
+      "edgeWidth": 0.14
+     },
+     "anal": {
+      "color": "#1a2448",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f2b020",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2b020",
+        "x": 0.53,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "melanochromis-cyaneorhabdos",
+  "commonName": "Maingano",
+  "scientificName": "Melanochromis cyaneorhabdos",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Maingano, Likoma Island, Lake Malawi",
+  "description": "Both sexes are midnight-blue with two neon-blue horizontal stripes, making it one of the few mbuna without obvious dichromatism. Comparatively mild for its group; widely sold under the locality name \"Maingano\".",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.27,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#1c2a78",
+   "dorsal": "#121c50",
+   "ventral": "#2a3a90",
+   "fin": "#1a2464",
+   "finOpacity": 0.85,
+   "eye": "#b08020",
+   "iridescence": 0.5,
+   "iridescenceColor": "#58a8ff",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#58b0ff",
+     "y": 0.5,
+     "width": 0.09,
+     "x0": 0.06,
+     "x1": 1,
+     "glow": 0.4,
+     "iridescent": true
+    },
+    {
+     "type": "stripe",
+     "color": "#58b0ff",
+     "y": 0.02,
+     "width": 0.09,
+     "x0": 0.12,
+     "x1": 1,
+     "glow": 0.4,
+     "iridescent": true
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1a2464",
+     "edge": "#7cc0ff",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#1a2464",
+     "opacity": 0.85
+    },
+    "anal": {
+     "color": "#1a2464",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f0b030",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f0b030",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "melanochromis-chipokae",
+  "commonName": "Chipokae",
+  "scientificName": "Melanochromis chipokae",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Chidunga Rocks near Chipoka, southern Lake Malawi",
+  "description": "Often called the most aggressive of all mbuna: males are blue-black with pale blue stripes, while females are yellow with black stripes. Known in the wild only from the Chidunga Rocks off Chipoka.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.28,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#e8c040",
+   "dorsal": "#c8a030",
+   "ventral": "#f0d880",
+   "fin": "#e0b838",
+   "finOpacity": 0.8,
+   "eye": "#c08020",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#141414",
+     "y": 0.5,
+     "width": 0.12,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141414",
+     "y": 0,
+     "width": 0.12,
+     "x0": 0.12,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0b838",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141414",
+       "x0": 0,
+       "x1": 0.4,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.08,
+   "look": {
+    "base": "#1c2440",
+    "dorsal": "#121830",
+    "ventral": "#2a3452",
+    "fin": "#1a2240",
+    "finOpacity": 0.85,
+    "iridescence": 0.35,
+    "iridescenceColor": "#8ab8f0",
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#8ab8f0",
+      "y": 0.48,
+      "width": 0.09,
+      "x0": 0.05,
+      "x1": 1
+     },
+     {
+      "type": "stripe",
+      "color": "#8ab8f0",
+      "y": 0,
+      "width": 0.09,
+      "x0": 0.12,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#1a2240",
+      "edge": "#8ab8f0",
+      "edgeWidth": 0.14
+     },
+     "anal": {
+      "color": "#1a2240",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f2b020",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f2b020",
+        "x": 0.53,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "melanochromis-parallelus",
+  "commonName": "Parallelus",
+  "scientificName": "Melanochromis parallelus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of Lake Malawi",
+  "description": "A slender Melanochromis whose females and juveniles are white with two black horizontal stripes; dominant males darken to a blue-black body with pale stripes. Quarrelsome like its relatives and needs plenty of rockwork.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.26,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#f0f0ea",
+   "dorsal": "#d8dad6",
+   "ventral": "#f8f8f4",
+   "fin": "#e8e8e2",
+   "finOpacity": 0.7,
+   "eye": "#b08030",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#141414",
+     "y": 0.5,
+     "width": 0.13,
+     "x0": 0.04,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#141414",
+     "y": 0,
+     "width": 0.13,
+     "x0": 0.1,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8e8e2",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141414",
+       "x0": 0,
+       "x1": 0.45,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e8e8e2",
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#141414",
+       "y": 0.35,
+       "width": 0.18,
+       "x0": 0,
+       "x1": 0.7
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "base": "#2a3048",
+    "dorsal": "#1a1e30",
+    "ventral": "#3a4058",
+    "fin": "#22283c",
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#a8c8e8",
+      "y": 0.75,
+      "width": 0.07,
+      "x0": 0.05,
+      "x1": 1
+     },
+     {
+      "type": "stripe",
+      "color": "#a8c8e8",
+      "y": 0.25,
+      "width": 0.07,
+      "x0": 0.1,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#22283c",
+      "edge": "#a8c8e8",
+      "edgeWidth": 0.12
+     },
+     "anal": {
+      "color": "#22283c",
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#f0b030",
+        "x": 0.45,
+        "y": -0.1,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       },
+       {
+        "type": "blotch",
+        "color": "#f0b030",
+        "x": 0.53,
+        "y": 0.6,
+        "rx": 0.12,
+        "ry": 0.14,
+        "ring": "#fff0c8"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "iodotropheus-sprengerae",
+  "commonName": "Rusty Cichlid",
+  "scientificName": "Iodotropheus sprengerae",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Small islands of southern Lake Malawi",
+  "description": "A rust-brown mbuna washed with lavender, both sexes alike; one of the gentlest mbuna and a good choice for mixed communities. It grazes aufwuchs from rocks in the shallows.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 7,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "surface-grazer",
+   "algae-eater",
+   "bold",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.31,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#b8603a",
+   "dorsal": "#8a4a40",
+   "ventral": "#c87850",
+   "fin": "#9a5a58",
+   "finOpacity": 0.75,
+   "eye": "#c06020",
+   "iridescence": 0.35,
+   "iridescenceColor": "#9a80c8",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#8a6aa0",
+     "x0": 0,
+     "x1": 0.35,
+     "y0": -0.3,
+     "y1": 1,
+     "softness": 0.4
+    },
+    {
+     "type": "scales",
+     "color": "#8a4028",
+     "contrast": 0.15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8a6a90",
+     "edge": "#d88850",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#9a5a58",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a030",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a030",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cynotilapia-afra",
+  "commonName": "Afra Cichlid",
+  "scientificName": "Cynotilapia afra",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern Lake Malawi (many locality forms)",
+  "description": "A zebra-like mbuna that hovers in open water above the rocks to snap up zooplankton, using the single-pointed teeth that set its genus apart. Males are blue with black bars and, in many forms, a yellow dorsal fin.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "hoverer",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.31,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#5e8ee0",
+   "dorsal": "#3e68b8",
+   "ventral": "#88aee8",
+   "fin": "#2a3a70",
+   "finOpacity": 0.8,
+   "eye": "#c09030",
+   "iridescence": 0.3,
+   "iridescenceColor": "#a8d0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#121a38",
+     "count": 6,
+     "width": 0.075,
+     "x0": 0.22,
+     "x1": 0.92
+    },
+    {
+     "type": "region",
+     "color": "#121a38",
+     "x0": 0.02,
+     "x1": 0.26,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0c828",
+     "opacity": 0.9,
+     "edge": "#fff0a0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#121a38",
+     "edge": "#c8e0ff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#2a3a70",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#8a98b0",
+    "dorsal": "#6a7890",
+    "ventral": "#b0bccc",
+    "fin": "#6a7890",
+    "fins": {
+     "dorsal": {
+      "color": "#b0a070"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cynotilapia-sp-hara",
+  "commonName": "Hara (Red Top Afra)",
+  "scientificName": "Cynotilapia sp. 'hara'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Gallireya Reef, Tanzanian coast of Lake Malawi",
+  "description": "An undescribed Cynotilapia from Gallireya Reef whose males are bright blue with black bars and a red-orange dorsal fin; females are greyish. Like its relatives it feeds on zooplankton in the water column above the rocks.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "colony",
+  "groupSize": 6,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "hoverer",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.31,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#4f86e2",
+   "dorsal": "#d8582a",
+   "ventral": "#80aae8",
+   "fin": "#2a3a70",
+   "finOpacity": 0.8,
+   "eye": "#c07020",
+   "iridescence": 0.35,
+   "iridescenceColor": "#a8d0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8582a",
+     "x0": 0.08,
+     "x1": 0.85,
+     "y0": 0.72,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#121a38",
+     "count": 6,
+     "width": 0.075,
+     "x0": 0.22,
+     "x1": 0.92
+    },
+    {
+     "type": "region",
+     "color": "#121a38",
+     "x0": 0.02,
+     "x1": 0.26,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e05a28",
+     "opacity": 0.9,
+     "edge": "#f8b070",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#121a38",
+     "edge": "#c8e0ff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#2a3a70",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#8a92a0",
+    "dorsal": "#6a7280",
+    "ventral": "#b0b6c0",
+    "fin": "#6a7280",
+    "fins": {
+     "dorsal": {
+      "color": "#8a7a70"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "labeotropheus-fuelleborni",
+  "commonName": "Fuelleborn's Cichlid",
+  "scientificName": "Labeotropheus fuelleborni",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shallows throughout Lake Malawi",
+  "description": "A stocky algae-scraper with an overhanging snout and underslung mouth that lets it rasp aufwuchs while lying almost flat against the rock. Males are typically blue with faint bars; females range from brown to orange-blotched (OB).",
+  "adultLengthCm": 15,
+  "birthLengthCm": 1,
+  "maturityMonths": 12,
+  "lifespanYears": 12,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.34,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "blunt",
+   "mouth": "subterminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.28
+  },
+  "look": {
+   "base": "#4a7ed4",
+   "dorsal": "#3a62b0",
+   "ventral": "#7aa0e0",
+   "fin": "#4a78c8",
+   "finOpacity": 0.75,
+   "eye": "#c07020",
+   "iridescence": 0.3,
+   "iridescenceColor": "#9cc8ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a4888",
+     "count": 7,
+     "width": 0.05,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#4a78c8",
+     "edge": "#c8e0ff",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#3a62b0",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#c89060",
+    "dorsal": "#a87848",
+    "ventral": "#e0b890",
+    "fin": "#c08858",
+    "patterns": [
+     {
+      "type": "spots",
+      "color": "#1a1410",
+      "density": 18,
+      "size": 0.05,
+      "jitter": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c08858",
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#1a1410",
+        "density": 6,
+        "size": 0.1,
+        "jitter": 1
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "labeotropheus-trewavasae",
+  "commonName": "Red Top Trewavasae",
+  "scientificName": "Labeotropheus trewavasae",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of Lake Malawi (e.g. Thumbi West Island)",
+  "description": "A slimmer cousin of Fuelleborn's cichlid with the same overhanging scraper snout; males of many forms are blue with a red-orange dorsal fin, females often orange-blotched. It grazes algae from steep rock faces, often hanging head-down.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.28,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "blunt",
+   "mouth": "subterminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.27
+  },
+  "look": {
+   "base": "#5a8ad8",
+   "dorsal": "#4068b8",
+   "ventral": "#88aee8",
+   "fin": "#5a8ad8",
+   "finOpacity": 0.75,
+   "eye": "#c07020",
+   "iridescence": 0.3,
+   "iridescenceColor": "#a8d0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#34508e",
+     "count": 7,
+     "width": 0.045,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d84028",
+     "opacity": 0.9,
+     "edge": "#f8a070",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#4068b8",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#e0a070",
+    "dorsal": "#c88050",
+    "ventral": "#f0c8a0",
+    "fin": "#d89060",
+    "patterns": [
+     {
+      "type": "spots",
+      "color": "#1a1410",
+      "density": 20,
+      "size": 0.05,
+      "jitter": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d89060"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "petrotilapia-tridentiger",
+  "commonName": "Blue Petrotilapia",
+  "scientificName": "Petrotilapia tridentiger",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of Lake Malawi",
+  "description": "A large, deep-bodied mbuna whose broad mouth carries combs of tricuspid teeth for brushing loose algae from rock. Males are blue with dark bars and bold yellow egg spots; boisterous and best in a big rock-scape.",
+  "adultLengthCm": 16,
+  "birthLengthCm": 1.1,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 400,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 4,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.38,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#3f6ac8",
+   "dorsal": "#2c4c98",
+   "ventral": "#6a8ed8",
+   "fin": "#3a5ab0",
+   "finOpacity": 0.8,
+   "eye": "#c08020",
+   "iridescence": 0.3,
+   "iridescenceColor": "#90c0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1a2858",
+     "count": 7,
+     "width": 0.06,
+     "x0": 0.22,
+     "x1": 0.92
+    },
+    {
+     "type": "region",
+     "color": "#1a2858",
+     "x0": 0.02,
+     "x1": 0.26,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a5ab0",
+     "edge": "#c0dcff",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#2c4c98",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6d020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff6c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6d020",
+       "x": 0.53,
+       "y": 0.1333333333333333,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff6c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6d020",
+       "x": 0.45,
+       "y": 0.3666666666666666,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff6c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6d020",
+       "x": 0.53,
+       "y": 0.5999999999999999,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff6c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#1a2858",
+     "edge": "#c0dcff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#8a7e6a",
+    "dorsal": "#6a604e",
+    "ventral": "#b0a890",
+    "fin": "#7a705e",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#5a5040",
+      "count": 7,
+      "width": 0.05,
+      "x0": 0.22,
+      "x1": 0.92
+     }
+    ]
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "tropheops-tropheops",
+  "commonName": "Tropheops (Orange Chest)",
+  "scientificName": "Tropheops tropheops",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky shores of southern Lake Malawi (many colour forms)",
+  "description": "Recognised by its steep forehead and underslung mouth, used to comb algae and the small animals living in it from rocks. Males are typically blue-grey with dark bars and an orange chest; females are often yellow. Long sold as Pseudotropheus tropheops.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "algae-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.34,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "blunt",
+   "mouth": "subterminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35,
+   "backArch": 0.3
+  },
+  "look": {
+   "base": "#6e8ab8",
+   "dorsal": "#4e6890",
+   "ventral": "#e8a040",
+   "fin": "#6a84b0",
+   "finOpacity": 0.75,
+   "eye": "#c07020",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e88a30",
+     "x0": 0.15,
+     "x1": 0.5,
+     "y0": -1,
+     "y1": -0.2,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#34466c",
+     "count": 6,
+     "width": 0.06,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#6a84b0",
+     "edge": "#d0e2f8",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#5a70a0",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#e0b830",
+    "dorsal": "#c8a028",
+    "ventral": "#f0d070",
+    "fin": "#d8b030",
+    "patterns": [
+     {
+      "type": "scales",
+      "color": "#c09828",
+      "contrast": 0.12
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b030"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "gephyrochromis-lawsi",
+  "commonName": "Lawsi",
+  "scientificName": "Gephyrochromis lawsi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern Lake Malawi, where rock meets sand",
+  "description": "A mild mbuna that lives at the rock-sand transition, sifting sediment and picking food from the bottom rather than grazing rock faces. Males are pale blue with faint bars and dark pelvic fins.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 1,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sifter",
+   "territorial",
+   "bold"
+  ],
+  "body": {
+   "archetype": "mbuna",
+   "depth": 0.3,
+   "width": 0.13,
+   "depthPos": 0.36,
+   "snout": "rounded",
+   "mouth": "subterminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#a8c0dc",
+   "dorsal": "#8aa4c8",
+   "ventral": "#d0dcec",
+   "fin": "#98b0d0",
+   "finOpacity": 0.7,
+   "eye": "#b08030",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#7088b0",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#98b0d0",
+     "edge": "#e8f2ff",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#141a2a",
+     "edge": "#e8f2ff",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#8aa4c8",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a830",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a830",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#a89a80",
+    "dorsal": "#8a7c64",
+    "ventral": "#c8bca4",
+    "fin": "#9a8c74"
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "aulonocara-jacobfreibergi",
+  "commonName": "Fairy Cichlid (Lwanda Peacock)",
+  "scientificName": "Aulonocara jacobfreibergi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Malawi (several locality forms)",
+  "description": "A cave-dwelling peacock whose males glow metallic blue with a yellow-orange wash on the lower flanks. Males hover near caves and hunt sand-dwelling invertebrates detected through enlarged sensory pores on the head.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#3e6ad0",
+   "dorsal": "#2c4ea8",
+   "ventral": "#e0a030",
+   "fin": "#3e6ad0",
+   "finOpacity": 0.8,
+   "eye": "#c08020",
+   "iridescence": 0.5,
+   "iridescenceColor": "#7ab8ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8a030",
+     "x0": 0.22,
+     "x1": 0.7,
+     "y0": -0.95,
+     "y1": 0.15,
+     "softness": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#2a428a",
+     "count": 8,
+     "width": 0.04,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3e6ad0",
+     "edge": "#e8f2ff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#3a60c0",
+     "edge": "#e8f2ff",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#2c4ea8",
+     "edge": "#e8f2ff",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#3e6ad0",
+     "opacity": 0.75
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9a9480",
+    "dorsal": "#7a7462",
+    "ventral": "#c0bcac",
+    "fin": "#8a8472",
+    "finOpacity": 0.6,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6452",
+      "count": 8,
+      "width": 0.05,
+      "x0": 0.2,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#8a8472"
+     },
+     "anal": {
+      "color": "#8a8472"
+     },
+     "caudal": {
+      "color": "#8a8472"
+     },
+     "pelvic": {
+      "color": "#8a8472"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "aulonocara-jacobfreibergi-eureka-red",
+  "commonName": "Eureka Red Peacock",
+  "scientificName": "Aulonocara jacobfreibergi 'Eureka Red'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred peacock with a blood-red to orange body set off by a powder-blue face and dorsal fin, developed in captivity from Aulonocara jacobfreibergi. Females are a plain silvery brown.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#d8381e",
+   "dorsal": "#7aa8e8",
+   "ventral": "#e86a28",
+   "fin": "#d84a28",
+   "finOpacity": 0.8,
+   "eye": "#c07020",
+   "iridescence": 0.3,
+   "iridescenceColor": "#a8d0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#80b0ec",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.4,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "region",
+     "color": "#80b0ec",
+     "x0": 0.3,
+     "x1": 0.92,
+     "y0": 0.75,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#b02818",
+     "count": 8,
+     "width": 0.035,
+     "x0": 0.25,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#88b8f0",
+     "edge": "#ffffff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#d84a28",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#d84a28",
+     "opacity": 0.8
+    },
+    "pelvic": {
+     "color": "#d84a28",
+     "edge": "#e8f2ff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9a9480",
+    "dorsal": "#7a7462",
+    "ventral": "#c0bcac",
+    "fin": "#8a8472",
+    "finOpacity": 0.6,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6452",
+      "count": 8,
+      "width": 0.05,
+      "x0": 0.2,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#8a8472"
+     },
+     "anal": {
+      "color": "#8a8472"
+     },
+     "caudal": {
+      "color": "#8a8472"
+     },
+     "pelvic": {
+      "color": "#8a8472"
+     }
+    }
+   }
+  },
+  "variantOf": "aulonocara-jacobfreibergi",
+  "availability": "common"
+ },
+ {
+  "id": "aulonocara-stuartgranti",
+  "commonName": "Flavescent Peacock (Stuartgranti)",
+  "scientificName": "Aulonocara stuartgranti",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Widespread in Lake Malawi (many locality forms, e.g. Ngara, Chilumba)",
+  "description": "The most widespread peacock, with dozens of locality forms differing in how much yellow, orange or red marks the blue males. It hovers just above sand and hunts buried invertebrates by sensing them through enlarged head pores.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#3a64c4",
+   "dorsal": "#2a4a9c",
+   "ventral": "#f0c040",
+   "fin": "#3a64c4",
+   "finOpacity": 0.8,
+   "eye": "#c08020",
+   "iridescence": 0.45,
+   "iridescenceColor": "#80b8ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f0c030",
+     "x0": 0.22,
+     "x1": 0.55,
+     "y0": -0.7,
+     "y1": 0.45,
+     "softness": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#26408a",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.2,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a64c4",
+     "edge": "#f0f6ff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#d8b040",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2a020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#2a4a9c",
+     "edge": "#f0f6ff",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#3a64c4",
+     "opacity": 0.75
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9a9480",
+    "dorsal": "#7a7462",
+    "ventral": "#c0bcac",
+    "fin": "#8a8472",
+    "finOpacity": 0.6,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6452",
+      "count": 8,
+      "width": 0.05,
+      "x0": 0.2,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#8a8472"
+     },
+     "anal": {
+      "color": "#8a8472"
+     },
+     "caudal": {
+      "color": "#8a8472"
+     },
+     "pelvic": {
+      "color": "#8a8472"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "aulonocara-stuartgranti-maleri",
+  "commonName": "Sunshine Peacock",
+  "scientificName": "Aulonocara stuartgranti 'Maleri'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Maleri Islands, Lake Malawi",
+  "description": "The \"sunshine peacock\": a natural stuartgranti form from the Maleri Islands whose males are bright yellow with a blue face and a pale-edged dorsal fin. Now mostly captive-bred.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#f2c820",
+   "dorsal": "#e8b818",
+   "ventral": "#f6dc60",
+   "fin": "#f0c020",
+   "finOpacity": 0.85,
+   "eye": "#c08020",
+   "iridescence": 0.25,
+   "iridescenceColor": "#a8d0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#4a80d8",
+     "x0": 0,
+     "x1": 0.28,
+     "y0": -0.6,
+     "y1": 0.8,
+     "softness": 0.25
+    },
+    {
+     "type": "bars",
+     "color": "#d8a818",
+     "count": 8,
+     "width": 0.035,
+     "x0": 0.25,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0c020",
+     "edge": "#d8ecff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#f0c020",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6e080",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6e080",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6e080",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#f0c020",
+     "edge": "#ffffff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9a9480",
+    "dorsal": "#7a7462",
+    "ventral": "#c0bcac",
+    "fin": "#8a8472",
+    "finOpacity": 0.6,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6452",
+      "count": 8,
+      "width": 0.05,
+      "x0": 0.2,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#8a8472"
+     },
+     "anal": {
+      "color": "#8a8472"
+     },
+     "caudal": {
+      "color": "#8a8472"
+     },
+     "pelvic": {
+      "color": "#8a8472"
+     }
+    }
+   }
+  },
+  "variantOf": "aulonocara-stuartgranti",
+  "availability": "common"
+ },
+ {
+  "id": "aulonocara-sp-dragon-blood",
+  "commonName": "Dragon Blood Peacock",
+  "scientificName": "Aulonocara sp. 'Dragon Blood'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A man-made peacock line, generally traced to Aulonocara stuartgranti stock, in which both sexes are pinkish-white to orange speckled densely with red. Its exact parentage is debated and it has no wild counterpart.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#f4b8a0",
+   "dorsal": "#e89070",
+   "ventral": "#f8d8c8",
+   "fin": "#f0a080",
+   "finOpacity": 0.7,
+   "eye": "#c05028",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d83820",
+     "density": 60,
+     "size": 0.025,
+     "jitter": 0.8
+    },
+    {
+     "type": "region",
+     "color": "#c8d0f0",
+     "x0": 0,
+     "x1": 0.22,
+     "y0": -0.3,
+     "y1": 0.8,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0a080",
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d83820",
+       "density": 14,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f0a080",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d83820",
+       "density": 12,
+       "size": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "color": "#f0a080",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.53,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "aulonocara-stuartgranti",
+  "availability": "common"
+ },
+ {
+  "id": "aulonocara-sp-ob",
+  "commonName": "OB Peacock",
+  "scientificName": "Aulonocara sp. 'OB'",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A man-made peacock carrying the orange-blotch (OB) pattern borrowed from mbuna, so males show patchy blue, orange and black over a pale body. It is a hybrid line with no wild counterpart.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#e8b080",
+   "dorsal": "#7090d0",
+   "ventral": "#f0c8a0",
+   "fin": "#8090c8",
+   "finOpacity": 0.75,
+   "eye": "#c07020",
+   "iridescence": 0.3,
+   "iridescenceColor": "#a8c8ff",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a78d0",
+     "scale": 2,
+     "amount": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 20,
+     "size": 0.055,
+     "jitter": 1
+    },
+    {
+     "type": "region",
+     "color": "#4a78d0",
+     "x0": 0,
+     "x1": 0.25,
+     "y0": -0.5,
+     "y1": 0.9,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8090c8",
+     "edge": "#e8f0ff",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 8,
+       "size": 0.08,
+       "jitter": 1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#e8a070",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c09080",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 8,
+       "size": 0.06,
+       "jitter": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e8c0a0",
+    "dorsal": "#d0a080",
+    "ventral": "#f4dcc8",
+    "fin": "#e0b090",
+    "patterns": [
+     {
+      "type": "spots",
+      "color": "#141414",
+      "density": 18,
+      "size": 0.05,
+      "jitter": 1
+     }
+    ]
+   }
+  },
+  "variantOf": "aulonocara-stuartgranti",
+  "availability": "common"
+ },
+ {
+  "id": "aulonocara-baenschi",
+  "commonName": "New Yellow Regal Peacock",
+  "scientificName": "Aulonocara baenschi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Nkhomo Reef near Benga, central Lake Malawi",
+  "description": "Males are canary-yellow with a blue face and faint blue bars, a combination that made it one of the most popular peacocks. It hunts invertebrates over sand near the rocky reefs of the Benga area.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#f0cc28",
+   "dorsal": "#e0b820",
+   "ventral": "#f6dc60",
+   "fin": "#f0c428",
+   "finOpacity": 0.85,
+   "eye": "#c08020",
+   "iridescence": 0.25,
+   "iridescenceColor": "#a8d0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#3f70d0",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.7,
+     "y1": 0.9,
+     "softness": 0.25
+    },
+    {
+     "type": "bars",
+     "color": "#8aa0c8",
+     "count": 8,
+     "width": 0.035,
+     "x0": 0.25,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0c428",
+     "edge": "#c8e0ff",
+     "edgeWidth": 0.14
+    },
+    "anal": {
+     "color": "#f0c428",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6e080",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6e080",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6e080",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#ffffff"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#3f70d0",
+     "edge": "#ffffff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9a9480",
+    "dorsal": "#7a7462",
+    "ventral": "#c0bcac",
+    "fin": "#8a8472",
+    "finOpacity": 0.6,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6452",
+      "count": 8,
+      "width": 0.05,
+      "x0": 0.2,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#8a8472"
+     },
+     "anal": {
+      "color": "#8a8472"
+     },
+     "caudal": {
+      "color": "#8a8472"
+     },
+     "pelvic": {
+      "color": "#8a8472"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "aulonocara-hansbaenschi",
+  "commonName": "Red Flush Peacock",
+  "scientificName": "Aulonocara hansbaenschi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Malawi, Malawi",
+  "description": "Males are metallic blue with a red to orange flush across the shoulder and lower flanks; females are brownish with dark bars. Like other peacocks it detects buried prey with the enlarged sensory pores on its head.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#3a60c0",
+   "dorsal": "#2a4898",
+   "ventral": "#d84a24",
+   "fin": "#3a60c0",
+   "finOpacity": 0.8,
+   "eye": "#c07020",
+   "iridescence": 0.45,
+   "iridescenceColor": "#80b8ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d84a24",
+     "x0": 0.22,
+     "x1": 0.65,
+     "y0": -0.8,
+     "y1": 0.35,
+     "softness": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#24408a",
+     "count": 8,
+     "width": 0.04,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a60c0",
+     "edge": "#f0f6ff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#c85a30",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#2a4898",
+     "edge": "#f0f6ff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9a9480",
+    "dorsal": "#7a7462",
+    "ventral": "#c0bcac",
+    "fin": "#8a8472",
+    "finOpacity": 0.6,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6452",
+      "count": 8,
+      "width": 0.05,
+      "x0": 0.2,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#8a8472"
+     },
+     "anal": {
+      "color": "#8a8472"
+     },
+     "caudal": {
+      "color": "#8a8472"
+     },
+     "pelvic": {
+      "color": "#8a8472"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "aulonocara-maylandi",
+  "commonName": "Sulphurhead Peacock",
+  "scientificName": "Aulonocara maylandi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Malawi (e.g. Kande Island)",
+  "description": "Males are deep blue with a brilliant sulphur-yellow to white blaze running from the snout over the head and along the dorsal fin. It lives around caves at the rock-sand interface, hunting small invertebrates.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 1,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "sand-sifter",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.36,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35,
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#2e52b0",
+   "dorsal": "#f2e060",
+   "ventral": "#4a6cc8",
+   "fin": "#2e52b0",
+   "finOpacity": 0.85,
+   "eye": "#c08020",
+   "iridescence": 0.45,
+   "iridescenceColor": "#78b0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f2e060",
+     "x0": 0,
+     "x1": 0.9,
+     "y0": 0.72,
+     "y1": 1,
+     "softness": 0.2
+    },
+    {
+     "type": "bars",
+     "color": "#1c3478",
+     "count": 8,
+     "width": 0.04,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f2e060",
+     "edge": "#ffffff",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#2e52b0",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#1c3478",
+     "edge": "#f0f6ff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#9a9480",
+    "dorsal": "#7a7462",
+    "ventral": "#c0bcac",
+    "fin": "#8a8472",
+    "finOpacity": 0.6,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#6a6452",
+      "count": 8,
+      "width": 0.05,
+      "x0": 0.2,
+      "x1": 0.92
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#8a8472"
+     },
+     "anal": {
+      "color": "#8a8472"
+     },
+     "caudal": {
+      "color": "#8a8472"
+     },
+     "pelvic": {
+      "color": "#8a8472"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "copadichromis-borleyi",
+  "commonName": "Redfin Hap (Borleyi Kadango)",
+  "scientificName": "Copadichromis borleyi",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky reefs of Lake Malawi (Kadango, Mbenji and other forms)",
+  "description": "A plankton-feeding \"utaka\" that hovers in loose groups above rocks; breeding males of the Kadango form have a blue head and a fiery red-orange body and fins. Females are silver with three dark spots.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 1.1,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "hoverer",
+   "territorial",
+   "bold"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.38,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#e04a20",
+   "dorsal": "#d03a1a",
+   "ventral": "#e86a28",
+   "fin": "#e04020",
+   "finOpacity": 0.85,
+   "eye": "#c06020",
+   "iridescence": 0.3,
+   "iridescenceColor": "#80b0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#2a54b0",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.8,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "scales",
+     "color": "#c03818",
+     "contrast": 0.12
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e04020",
+     "edge": "#80b0ff",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#e04020",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e04020",
+     "opacity": 0.85
+    },
+    "pelvic": {
+     "color": "#2a54b0",
+     "edge": "#ffffff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#c8ccd0",
+    "dorsal": "#9aa0a8",
+    "ventral": "#e8eaec",
+    "fin": "#b0b4b8",
+    "finOpacity": 0.55,
+    "metallic": 0.5,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.42,
+      "y": 0.3,
+      "rx": 0.03,
+      "ry": 0.09
+     },
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.66,
+      "y": 0.15,
+      "rx": 0.03,
+      "ry": 0.09
+     },
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.92,
+      "y": 0,
+      "rx": 0.03,
+      "ry": 0.08
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b0b4b8"
+     },
+     "anal": {
+      "color": "#b0b4b8"
+     },
+     "caudal": {
+      "color": "#b0b4b8"
+     },
+     "pelvic": {
+      "color": "#b0b4b8"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "copadichromis-azureus",
+  "commonName": "Azureus Hap",
+  "scientificName": "Copadichromis azureus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky reefs of Lake Malawi",
+  "description": "Breeding males are an intense azure blue all over, with a white-edged dorsal fin and darker throat; females are silvery with dark spots. Like other utaka it feeds on zooplankton in open water near rocky reefs.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 1.1,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "hoverer",
+   "territorial",
+   "bold"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.38,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#2a5ad0",
+   "dorsal": "#1e44a8",
+   "ventral": "#4a74d8",
+   "fin": "#2a52c0",
+   "finOpacity": 0.85,
+   "eye": "#c08020",
+   "iridescence": 0.45,
+   "iridescenceColor": "#7ab8ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#141c40",
+     "x0": 0.02,
+     "x1": 0.28,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#1e44a8",
+     "count": 8,
+     "width": 0.04,
+     "x0": 0.22,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2a52c0",
+     "edge": "#ffffff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#1e44a8",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#141c40",
+     "edge": "#ffffff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#c8ccd0",
+    "dorsal": "#9aa0a8",
+    "ventral": "#e8eaec",
+    "fin": "#b0b4b8",
+    "finOpacity": 0.55,
+    "metallic": 0.5,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.42,
+      "y": 0.3,
+      "rx": 0.03,
+      "ry": 0.09
+     },
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.66,
+      "y": 0.15,
+      "rx": 0.03,
+      "ry": 0.09
+     },
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.92,
+      "y": 0,
+      "rx": 0.03,
+      "ry": 0.08
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b0b4b8"
+     },
+     "anal": {
+      "color": "#b0b4b8"
+     },
+     "caudal": {
+      "color": "#b0b4b8"
+     },
+     "pelvic": {
+      "color": "#b0b4b8"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "copadichromis-chrysonotus",
+  "commonName": "Chrysonotus Hap",
+  "scientificName": "Copadichromis chrysonotus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Malawi (widespread)",
+  "description": "Displaying males are blue-black on the lower body with a gleaming white-blue blaze along the back and dorsal fin; females are silver with three dark spots. A zooplankton feeder of open water near rocks.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 1.1,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 8,
+  "traits": [
+   "hoverer",
+   "territorial",
+   "bold"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.38,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.26
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#1c2848",
+   "dorsal": "#a8c8f0",
+   "ventral": "#141c34",
+   "fin": "#1c2848",
+   "finOpacity": 0.85,
+   "eye": "#c08020",
+   "iridescence": 0.4,
+   "iridescenceColor": "#a8d0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#b8d8f8",
+     "x0": 0,
+     "x1": 1,
+     "y0": 0.45,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "scales",
+     "color": "#2a3860",
+     "contrast": 0.12
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8e0fa",
+     "edge": "#ffffff",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#1c2848",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f2b020",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff0c8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#141c34",
+     "edge": "#c8e0fa",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#c8ccd0",
+    "dorsal": "#9aa0a8",
+    "ventral": "#e8eaec",
+    "fin": "#b0b4b8",
+    "finOpacity": 0.55,
+    "metallic": 0.5,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.42,
+      "y": 0.3,
+      "rx": 0.03,
+      "ry": 0.09
+     },
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.66,
+      "y": 0.15,
+      "rx": 0.03,
+      "ry": 0.09
+     },
+     {
+      "type": "blotch",
+      "color": "#2a2a2a",
+      "x": 0.92,
+      "y": 0,
+      "rx": 0.03,
+      "ry": 0.08
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b0b4b8"
+     },
+     "anal": {
+      "color": "#b0b4b8"
+     },
+     "caudal": {
+      "color": "#b0b4b8"
+     },
+     "pelvic": {
+      "color": "#b0b4b8"
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "sciaenochromis-fryeri",
+  "commonName": "Electric Blue Hap (Ahli)",
+  "scientificName": "Sciaenochromis fryeri",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rocky habitats throughout Lake Malawi",
+  "description": "Long sold as \"Haplochromis ahli\", males are vivid electric blue with darker bars, a white-edged dorsal and, in some forms, a red-orange anal fin; females are silvery-grey. In the lake it hunts juvenile mbuna among the rocks.",
+  "adultLengthCm": 16,
+  "birthLengthCm": 1.1,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 9,
+  "traits": [
+   "predator",
+   "territorial",
+   "bold"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.32,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#2a6ae0",
+   "dorsal": "#1e4cb0",
+   "ventral": "#4a88e8",
+   "fin": "#2a60d0",
+   "finOpacity": 0.85,
+   "eye": "#c08020",
+   "iridescence": 0.5,
+   "iridescenceColor": "#78c0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1a3a90",
+     "count": 9,
+     "width": 0.045,
+     "x0": 0.2,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2a60d0",
+     "edge": "#ffffff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#e05a28",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#1a3a90",
+     "edge": "#ffffff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#c8ccd0",
+    "dorsal": "#9aa0a8",
+    "ventral": "#e8eaec",
+    "fin": "#b0b4b8",
+    "finOpacity": 0.55,
+    "metallic": 0.5,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#3a3a3a",
+      "y": 0.08,
+      "width": 0.08,
+      "x0": 0.12,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b0b4b8"
+     },
+     "anal": {
+      "color": "#b0b4b8"
+     },
+     "caudal": {
+      "color": "#b0b4b8"
+     },
+     "pelvic": {
+      "color": "#b0b4b8"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "protomelas-taeniolatus",
+  "commonName": "Red Empress",
+  "scientificName": "Protomelas taeniolatus",
+  "family": "Cichlidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Malawi; the Red Empress form from Namalenje Island",
+  "description": "Breeding males of the \"Red Empress\" form have a turquoise-blue head and a body flushed red-orange with blue markings; females are silver with a dark horizontal stripe. In the lake it grazes aufwuchs and picks small invertebrates from rocks.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 1.1,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.6,
+   8.6
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 4,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "territorial",
+   "surface-grazer",
+   "bold"
+  ],
+  "body": {
+   "archetype": "cichlid",
+   "depth": 0.34,
+   "width": 0.12,
+   "depthPos": 0.38,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.17,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.63,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "scaleSize": 0.35
+  },
+  "look": {
+   "base": "#e0582a",
+   "dorsal": "#3f78c8",
+   "ventral": "#e87838",
+   "fin": "#d85a30",
+   "finOpacity": 0.85,
+   "eye": "#c07020",
+   "iridescence": 0.4,
+   "iridescenceColor": "#70b8ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#3a80d0",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.7,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "region",
+     "color": "#3a80d0",
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": 0.6,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#5aa0f0",
+     "density": 30,
+     "size": 0.025,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.6
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a80d0",
+     "edge": "#f08040",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#d85a30",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": -0.1,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.53,
+       "y": 0.24999999999999997,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      },
+      {
+       "type": "blotch",
+       "color": "#f6c040",
+       "x": 0.45,
+       "y": 0.6,
+       "rx": 0.12,
+       "ry": 0.14,
+       "ring": "#fff4d8"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c85a40",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#5aa0f0",
+       "density": 12,
+       "size": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#2a5ab0",
+     "edge": "#ffffff",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#c8ccd0",
+    "dorsal": "#9aa0a8",
+    "ventral": "#e8eaec",
+    "fin": "#b0b4b8",
+    "finOpacity": 0.55,
+    "metallic": 0.5,
+    "iridescence": 0,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#3a3a3a",
+      "y": 0.08,
+      "width": 0.08,
+      "x0": 0.12,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b0b4b8"
+     },
+     "anal": {
+      "color": "#b0b4b8"
+     },
+     "caudal": {
+      "color": "#b0b4b8"
+     },
+     "pelvic": {
+      "color": "#b0b4b8"
+     }
+    }
+   }
+  },
+  "availability": "common"
+ }
+]

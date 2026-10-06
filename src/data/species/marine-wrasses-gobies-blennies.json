@@ -1,0 +1,8252 @@
+[
+ {
+  "id": "cirrhilabrus-solorensis",
+  "commonName": "Solar Fairy Wrasse",
+  "scientificName": "Cirrhilabrus solorensis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indonesia — Bali and the Lesser Sunda Islands",
+  "description": "Named for the island of Solor in Indonesia; terminal males develop a fiery red head over a violet-blue body and flare their fins at females during late-afternoon courtship. Like other fairy wrasses it spends the night wrapped in a mucus cocoon among rubble.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#6f56a8",
+   "dorsal": "#c9362a",
+   "ventral": "#efe6f0",
+   "fin": "#8a5fb0",
+   "finOpacity": 0.8,
+   "eye": "#d84a2a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#5ab0f0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8341f",
+     "x0": 0,
+     "x1": 0.36,
+     "y0": -0.3,
+     "y1": 1,
+     "softness": 0.2
+    },
+    {
+     "type": "stripe",
+     "color": "#5aa8f0",
+     "y": -0.15,
+     "width": 0.03,
+     "x0": 0.35,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d03a2a",
+     "opacity": 0.85,
+     "edge": "#3a7ae0",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#7a50b0",
+     "opacity": 0.8,
+     "edge": "#4a8ae8",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#7a52a8",
+     "opacity": 0.8,
+     "edge": "#4a8ae8",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#c8402a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#d9707e",
+    "dorsal": "#c0506a",
+    "ventral": "#f3e3e6",
+    "fin": "#e8a0a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#e8a0a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#e8a0a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#e8a0a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#e8a0a8",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cirrhilabrus-rubripinnis",
+  "commonName": "Redfin Fairy Wrasse",
+  "scientificName": "Cirrhilabrus rubripinnis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — mainly the Philippines",
+  "description": "A Philippine fairy wrasse of rubble slopes; terminal males are orange-pink with deep red dorsal and pelvic fins that they raise like banners while displaying to their harem.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e8765a",
+   "dorsal": "#d8603e",
+   "ventral": "#f6d8c8",
+   "fin": "#d8282a",
+   "finOpacity": 0.85,
+   "eye": "#d83a2a",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#c0306a",
+     "y": 0.45,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.85
+    },
+    {
+     "type": "region",
+     "color": "#f2a07a",
+     "x0": 0,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c81e28",
+     "opacity": 0.9,
+     "edge": "#2a3a8a",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#c81e28",
+     "opacity": 0.9
+    },
+    "anal": {
+     "color": "#d84a3a",
+     "opacity": 0.8
+    },
+    "caudal": {
+     "color": "#e0603a",
+     "opacity": 0.8,
+     "edge": "#c01e28",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e8908a",
+    "dorsal": "#e07a70",
+    "ventral": "#f6e0d8",
+    "fin": "#f0b0a0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b0a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b0a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b0a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b0a0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-lubbocki",
+  "commonName": "Lubbock's Fairy Wrasse",
+  "scientificName": "Cirrhilabrus lubbocki",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Philippines & eastern Indonesia",
+  "description": "One of the smaller fairy wrasses, living in loose groups a few metres above rubble on outer reef slopes. Displaying males turn intense magenta with a yellow-orange back and flare their dark pelvic fins.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.29,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#c24f9e",
+   "dorsal": "#f0a020",
+   "ventral": "#e9c6e2",
+   "fin": "#a84aa0",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f2b028",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.25,
+     "y1": 1,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e88a30",
+     "opacity": 0.85,
+     "edge": "#5a3ac0",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#f0b030",
+     "opacity": 0.85,
+     "edge": "#b04aa0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#4a2a70",
+     "opacity": 0.9
+    },
+    "anal": {
+     "color": "#a84aa0",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e07a9a",
+    "dorsal": "#e0a050",
+    "ventral": "#f4dbe6",
+    "fin": "#f0b0c0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b0c0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b0c0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b0c0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b0c0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cirrhilabrus-exquisitus",
+  "commonName": "Exquisite Fairy Wrasse",
+  "scientificName": "Cirrhilabrus exquisitus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to the Tuamotus, north to southern Japan",
+  "description": "The most widespread fairy wrasse, and its colours differ noticeably between Indian Ocean and Pacific populations. A dark spot on the upper caudal peduncle marks both sexes, and displaying males light up with electric-blue lines.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#3e9a78",
+   "dorsal": "#c8582c",
+   "ventral": "#d8eedc",
+   "fin": "#c0503a",
+   "finOpacity": 0.8,
+   "eye": "#e04030",
+   "iridescence": 0.4,
+   "iridescenceColor": "#4ac8ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c8582c",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.35,
+     "y1": 1,
+     "softness": 0.2
+    },
+    {
+     "type": "lines",
+     "color": "#5ad0ff",
+     "count": 3,
+     "width": 0.03,
+     "y0": -0.3,
+     "y1": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#151515",
+     "x": 0.93,
+     "y": 0.45,
+     "rx": 0.035,
+     "ry": 0.12
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d04a30",
+     "opacity": 0.85,
+     "edge": "#3a8ae8",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#2a6ad0",
+     "opacity": 0.8,
+     "edge": "#c03030",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#c84a3a",
+     "opacity": 0.8,
+     "edge": "#3a8ae8",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#2a5ad0",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#8fb08a",
+    "dorsal": "#c88060",
+    "ventral": "#e8eadc",
+    "fin": "#e8b8a0",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#151515",
+      "x": 0.93,
+      "y": 0.45,
+      "rx": 0.035,
+      "ry": 0.12
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#e8b8a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#e8b8a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#e8b8a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#e8b8a0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cirrhilabrus-rubrimarginatus",
+  "commonName": "Red-margin Fairy Wrasse",
+  "scientificName": "Cirrhilabrus rubrimarginatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — southern Japan to Indonesia, east to Fiji & Tonga",
+  "description": "One of the largest fairy wrasses, usually found on rubble slopes below about 20 m. Males are pink to lavender with yellow-centred dorsal, anal and caudal fins boldly edged in red.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.31,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#c87aa8",
+   "dorsal": "#b06098",
+   "ventral": "#f2dcea",
+   "fin": "#f0c84a",
+   "finOpacity": 0.85,
+   "eye": "#e8b030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#9a4f90",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.2,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "lines",
+     "color": "#e8a8d8",
+     "count": 4,
+     "width": 0.02,
+     "y0": -0.4,
+     "y1": 0.5
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0c84a",
+     "opacity": 0.9,
+     "edge": "#d81e30",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#f0c84a",
+     "opacity": 0.85,
+     "edge": "#d81e30",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#e8b8d8",
+     "opacity": 0.85,
+     "edge": "#d81e30",
+     "edgeWidth": 0.15
+    },
+    "pelvic": {
+     "color": "#e080b0",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e08aa8",
+    "dorsal": "#d07898",
+    "ventral": "#f6e0ea",
+    "fin": "#f0d080",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0d080",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0d080",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0d080",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0d080",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-scottorum",
+  "commonName": "Scott's Fairy Wrasse",
+  "scientificName": "Cirrhilabrus scottorum",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western & central Pacific — Great Barrier Reef to the Pitcairn Islands",
+  "description": "Ranges further east than most fairy wrasses, from the Great Barrier Reef to Pitcairn. Terminal males are vividly red, purple and green and spend much of the day displaying to the females of their harem.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#6a3d8e",
+   "dorsal": "#d84a2a",
+   "ventral": "#e4c8e0",
+   "fin": "#c0402a",
+   "finOpacity": 0.85,
+   "eye": "#e0502a",
+   "iridescence": 0.25,
+   "iridescenceColor": "#40c0a0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d84a2a",
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": 0.35,
+     "y1": 1,
+     "softness": 0.2
+    },
+    {
+     "type": "region",
+     "color": "#3a8a6a",
+     "x0": 0,
+     "x1": 0.25,
+     "y0": -0.3,
+     "y1": 0.4,
+     "softness": 0.3
+    },
+    {
+     "type": "region",
+     "color": "#2a1a4a",
+     "x0": 0.35,
+     "x1": 0.65,
+     "y0": -0.3,
+     "y1": 0.3,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d03a28",
+     "opacity": 0.85,
+     "edge": "#4a7ad8",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#c0402a",
+     "opacity": 0.85,
+     "edge": "#4a7ad8",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#6a3d8e",
+     "opacity": 0.8,
+     "edge": "#4a7ad8",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#4a2a70",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#d06a6a",
+    "dorsal": "#c05a50",
+    "ventral": "#f0d8d0",
+    "fin": "#e8a090",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#e8a090",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#e8a090",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#e8a090",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#e8a090",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-jordani",
+  "commonName": "Flame Fairy Wrasse",
+  "scientificName": "Cirrhilabrus jordani",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Hawaiian Islands (endemic)",
+  "description": "Endemic to Hawaii, where it lives over rubble and sand patches on deeper reef slopes. Terminal males are flame-red above shading to yellow below, while females are paler and pinker.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e4402a",
+   "dorsal": "#d42a1e",
+   "ventral": "#f4c040",
+   "fin": "#e0301e",
+   "finOpacity": 0.85,
+   "eye": "#f0d040",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f4c040",
+     "x0": 0,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d81e18",
+     "opacity": 0.9,
+     "edge": "#3a5ad0",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#e03020",
+     "opacity": 0.85
+    },
+    "anal": {
+     "color": "#e8501e",
+     "opacity": 0.85
+    },
+    "pelvic": {
+     "color": "#e03a1e",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e8807a",
+    "dorsal": "#e06a60",
+    "ventral": "#f6dca0",
+    "fin": "#f0a090",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0a090",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0a090",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0a090",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0a090",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-lineatus",
+  "commonName": "Lineatus Fairy Wrasse",
+  "scientificName": "Cirrhilabrus lineatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Coral Sea — Great Barrier Reef & New Caledonia",
+  "description": "A Coral Sea species of deeper rubble slopes, notable for the long, lance-shaped tail of the male. Males are golden-yellow with fine purple-blue lines running along the flank.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "pointed",
+    "size": 0.4
+   }
+  },
+  "look": {
+   "base": "#e6b23a",
+   "dorsal": "#d79c2c",
+   "ventral": "#f3e0a8",
+   "fin": "#e8b030",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#9a7aff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#8a5ac8",
+     "x0": 0,
+     "x1": 0.22,
+     "y0": -0.4,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "lines",
+     "color": "#7a4fc8",
+     "count": 6,
+     "width": 0.035,
+     "y0": -0.5,
+     "y1": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8b030",
+     "opacity": 0.85,
+     "edge": "#7a4fc8",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#9a6ad0",
+     "opacity": 0.85,
+     "edge": "#e8b030",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#d8a030",
+     "opacity": 0.85,
+     "edge": "#7a4fc8",
+     "edgeWidth": 0.15
+    },
+    "pelvic": {
+     "color": "#8a5ac8",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e8a080",
+    "dorsal": "#e09070",
+    "ventral": "#f6e0c8",
+    "fin": "#f0c0a0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0c0a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0c0a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0c0a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0c0a0",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.3
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-cyanopleura",
+  "commonName": "Blueside Fairy Wrasse",
+  "scientificName": "Cirrhilabrus cyanopleura",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Eastern Indian Ocean & western Pacific — Andaman Sea to the Philippines & southern Japan",
+  "description": "Lives in large mixed aggregations above reef slopes, picking zooplankton from the current. The name means \"blue side\", for the bright blue-edged scales on the forward flank of displaying males.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#5a6ac0",
+   "dorsal": "#e8902a",
+   "ventral": "#e6e2f0",
+   "fin": "#7a5ab8",
+   "finOpacity": 0.8,
+   "eye": "#e05a2a",
+   "iridescence": 0.45,
+   "iridescenceColor": "#4ab0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8902a",
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": 0.4,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "scales",
+     "color": "#3a4aa0",
+     "contrast": 0.35
+    },
+    {
+     "type": "region",
+     "color": "#9a6ad0",
+     "x0": 0.55,
+     "x1": 1,
+     "y0": -0.6,
+     "y1": 0.4,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e07030",
+     "opacity": 0.85,
+     "edge": "#4a7ad8",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#7a5ab8",
+     "opacity": 0.8,
+     "edge": "#4a9af0",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#7a5ab8",
+     "opacity": 0.8,
+     "edge": "#4a9af0",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#4a3ab0",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e08a6a",
+    "dorsal": "#e0905a",
+    "ventral": "#f4e0d0",
+    "fin": "#f0b8a0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b8a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cirrhilabrus-laboutei",
+  "commonName": "Labout's Fairy Wrasse",
+  "scientificName": "Cirrhilabrus laboutei",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Coral Sea — New Caledonia & the Great Barrier Reef",
+  "description": "Named for the French diver and photographer Pierre Laboute, it is known mainly from New Caledonia and the southern Great Barrier Reef. Males are rosy pink with bold magenta and yellow stripes along the flank.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e888a8",
+   "dorsal": "#d86a98",
+   "ventral": "#f6dce6",
+   "fin": "#e070a0",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#b02068",
+     "y": 0.35,
+     "width": 0.07,
+     "x0": 0.15,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#f2d040",
+     "y": 0.1,
+     "width": 0.05,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#b02068",
+     "y": -0.2,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d85090",
+     "opacity": 0.85,
+     "edge": "#3a6ad0",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#e070a0",
+     "opacity": 0.8,
+     "edge": "#b02068",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#f0a0c0",
+     "opacity": 0.8
+    },
+    "pelvic": {
+     "color": "#b02068",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#f0a0a8",
+    "dorsal": "#e08a90",
+    "ventral": "#f8e4e8",
+    "fin": "#f8c8c8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f8c8c8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f8c8c8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f8c8c8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f8c8c8",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cirrhilabrus-rubriventralis",
+  "commonName": "Social Fairy Wrasse",
+  "scientificName": "Cirrhilabrus rubriventralis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Red Sea & western Indian Ocean to Sri Lanka",
+  "description": "A small fairy wrasse that forms large, busy aggregations just above the reef, hence its common name. Males have greatly elongated red pelvic fins that trail beneath the body during display.",
+  "adultLengthCm": 7.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.38,
+    "shape": "filament",
+    "trail": 0.15
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e0607e",
+   "dorsal": "#cf4a6e",
+   "ventral": "#f3cad8",
+   "fin": "#e04a5a",
+   "finOpacity": 0.85,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#f8b0c0",
+     "count": 3,
+     "width": 0.03,
+     "y0": -0.3,
+     "y1": 0.4
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#d8202e",
+     "opacity": 0.9
+    },
+    "dorsal": {
+     "color": "#d83a5a",
+     "opacity": 0.85,
+     "edge": "#2a4ad0",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#d84a6a",
+     "opacity": 0.8,
+     "edge": "#3a5ad8",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#e05a70",
+     "opacity": 0.8,
+     "edge": "#3a5ad8",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e88a98",
+    "dorsal": "#e07888",
+    "ventral": "#f8e0e6",
+    "fin": "#f0b0b8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b0b8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b0b8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b0b8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b0b8",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "pelvic": {
+     "start": 0.33,
+     "end": 0.37,
+     "height": 0.15,
+     "shape": "pointed"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-luteovittatus",
+  "commonName": "Yellow-band Fairy Wrasse",
+  "scientificName": "Cirrhilabrus luteovittatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Micronesia — Caroline, Mariana & Marshall Islands",
+  "description": "A Micronesian fairy wrasse whose name means \"yellow-striped\", for the golden band along the upper flank that stands out against the male's magenta-purple body.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a8509e",
+   "dorsal": "#8a3a90",
+   "ventral": "#ecd0e6",
+   "fin": "#b04a9a",
+   "finOpacity": 0.85,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#f2c830",
+     "y": 0.45,
+     "width": 0.14,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b04a9a",
+     "opacity": 0.85,
+     "edge": "#3a7ad8",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#a8509e",
+     "opacity": 0.8,
+     "edge": "#f2c830",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#c060a8",
+     "opacity": 0.8
+    },
+    "pelvic": {
+     "color": "#6a2a7a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e098b0",
+    "dorsal": "#d888a0",
+    "ventral": "#f6e2ea",
+    "fin": "#f0c0d0",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#f2c830",
+      "y": 0.45,
+      "width": 0.08,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#f0c0d0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0c0d0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0c0d0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0c0d0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-flavidorsalis",
+  "commonName": "Yellowfin Fairy Wrasse",
+  "scientificName": "Cirrhilabrus flavidorsalis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Philippines, Indonesia & Palau",
+  "description": "A small fairy wrasse of rubble slopes; the male's bright yellow dorsal fin and yellow-washed back contrast sharply with its pink to red body.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.29,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e2607a",
+   "dorsal": "#e8a040",
+   "ventral": "#f4d0d8",
+   "fin": "#f2d020",
+   "finOpacity": 0.9,
+   "eye": "#e04a2a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f0b030",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.55,
+     "y1": 1,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f2d020",
+     "opacity": 0.95,
+     "edge": "#e05030",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#e8708a",
+     "opacity": 0.75
+    },
+    "anal": {
+     "color": "#e8708a",
+     "opacity": 0.75
+    },
+    "pelvic": {
+     "color": "#f0b0c0",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e8909a",
+    "dorsal": "#e8a890",
+    "ventral": "#f8e0e6",
+    "fin": "#f4d0a0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4d0a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4d0a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4d0a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4d0a0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-filamentosus",
+  "commonName": "Whip-fin Fairy Wrasse",
+  "scientificName": "Cirrhilabrus filamentosus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indonesia — Java, Bali & Sulawesi",
+  "description": "Males carry long whip-like filaments on the dorsal fin, which they raise while racing around their females in display. The body shades from red-orange above to violet-blue below.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.2,
+    "shape": "filament",
+    "trail": 0.25
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#7050b0",
+   "dorsal": "#e0602a",
+   "ventral": "#e6dcf0",
+   "fin": "#d84a30",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#4ab0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e0602a",
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": 0.3,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "lines",
+     "color": "#4ab0ff",
+     "count": 2,
+     "width": 0.03,
+     "y0": 0.05,
+     "y1": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d84a30",
+     "opacity": 0.85,
+     "edge": "#3a7ad8",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#7050b0",
+     "opacity": 0.8,
+     "edge": "#4a9af0",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#7050b0",
+     "opacity": 0.8,
+     "edge": "#4a9af0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#4a2a8a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e08880",
+    "dorsal": "#e09060",
+    "ventral": "#f6e2dc",
+    "fin": "#f0b8a0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b8a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.13,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-punctatus",
+  "commonName": "Finespotted Fairy Wrasse",
+  "scientificName": "Cirrhilabrus punctatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Papua New Guinea & the Great Barrier Reef to Fiji & Tonga",
+  "description": "Often found in shallower lagoon and back-reef rubble than its deep-water relatives. Both sexes are peppered with fine dark spots, and males develop violet tones and long pelvic fins.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.24,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#5c62a6",
+   "dorsal": "#6c4a8e",
+   "ventral": "#dcdcee",
+   "fin": "#6a6ab0",
+   "finOpacity": 0.8,
+   "eye": "#e05a2a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1e2a66",
+     "density": 80,
+     "size": 0.02,
+     "y0": -0.6,
+     "y1": 1
+    },
+    {
+     "type": "region",
+     "color": "#3a3a7a",
+     "x0": 0,
+     "x1": 0.25,
+     "y0": -0.2,
+     "y1": 1,
+     "softness": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#6a5aa8",
+     "opacity": 0.8,
+     "edge": "#4a8ae8",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#6a6ab0",
+     "opacity": 0.8,
+     "edge": "#4a8ae8",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#2a2a6a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#b07a86",
+    "dorsal": "#9a6a7a",
+    "ventral": "#f0e0e4",
+    "fin": "#d8b0b8",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "spots",
+      "color": "#3a2a3a",
+      "density": 80,
+      "size": 0.02,
+      "y0": -0.6,
+      "y1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#d8b0b8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#d8b0b8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#d8b0b8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#d8b0b8",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-aurantidorsalis",
+  "commonName": "Orangeback Fairy Wrasse",
+  "scientificName": "Cirrhilabrus aurantidorsalis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indonesia — northern Sulawesi & the Molucca Sea",
+  "description": "Described in 1999 from northern Sulawesi; displaying males have a vivid orange back and dorsal fin over a magenta-purple lower body.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a84aa8",
+   "dorsal": "#f08020",
+   "ventral": "#e8cce8",
+   "fin": "#f08020",
+   "finOpacity": 0.9,
+   "eye": "#e05a2a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f08a20",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.3,
+     "y1": 1,
+     "softness": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f08020",
+     "opacity": 0.9,
+     "edge": "#4a6ad8",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#a84aa8",
+     "opacity": 0.8,
+     "edge": "#f08020",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#a84aa8",
+     "opacity": 0.8,
+     "edge": "#4a6ad8",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#6a2a8a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e090a0",
+    "dorsal": "#e8a060",
+    "ventral": "#f6e0e8",
+    "fin": "#f0c0b0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0c0b0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0c0b0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0c0b0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0c0b0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cirrhilabrus-lanceolatus",
+  "commonName": "Longtail Fairy Wrasse",
+  "scientificName": "Cirrhilabrus lanceolatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — southern Japan & Taiwan",
+  "description": "A rarely exported fairy wrasse from deep reef slopes of southern Japan and Taiwan; males are distinguished by a long, lance-shaped tail and a pink body washed with yellow above.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "pointed",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#d77aa6",
+   "dorsal": "#e8b040",
+   "ventral": "#f4dce8",
+   "fin": "#c060a8",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8b040",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.4,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "lines",
+     "color": "#9a5ad0",
+     "count": 3,
+     "width": 0.025,
+     "y0": -0.3,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0a040",
+     "opacity": 0.85,
+     "edge": "#6a4ad0",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#c060a8",
+     "opacity": 0.85,
+     "edge": "#4a5ad8",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#d080b8",
+     "opacity": 0.8,
+     "edge": "#6a4ad0",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#9a4aa0",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e8a0b0",
+    "dorsal": "#e8b890",
+    "ventral": "#f8e6ee",
+    "fin": "#f0c8d0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0c8d0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0c8d0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0c8d0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0c8d0",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.3
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cirrhilabrus-rhomboidalis",
+  "commonName": "Rhomboid Fairy Wrasse",
+  "scientificName": "Cirrhilabrus rhomboidalis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Micronesia — Marshall Islands & Pohnpei",
+  "description": "Known from deeper outer-reef slopes in the Marshall Islands and Pohnpei. Males are golden yellow with violet-edged fins and a diamond-shaped (rhomboid) tail.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "pointed",
+    "size": 0.34
+   }
+  },
+  "look": {
+   "base": "#efc23a",
+   "dorsal": "#e8b02a",
+   "ventral": "#f6e6b0",
+   "fin": "#e8b02a",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#b066c0",
+     "x0": 0,
+     "x1": 0.2,
+     "y0": -0.3,
+     "y1": 0.6,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8b02a",
+     "opacity": 0.85,
+     "edge": "#8a4ac8",
+     "edgeWidth": 0.18
+    },
+    "caudal": {
+     "color": "#e8b02a",
+     "opacity": 0.85,
+     "edge": "#8a4ac8",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#c070c0",
+     "opacity": 0.8,
+     "edge": "#8a4ac8",
+     "edgeWidth": 0.15
+    },
+    "pelvic": {
+     "color": "#9a5ac0",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#f0b090",
+    "dorsal": "#e8a880",
+    "ventral": "#f8e6d8",
+    "fin": "#f4d0b0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4d0b0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4d0b0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4d0b0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4d0b0",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.3
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cirrhilabrus-rubrisquamis",
+  "commonName": "Red-scaled Fairy Wrasse",
+  "scientificName": "Cirrhilabrus rubrisquamis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Central Indian Ocean — Chagos Archipelago & Maldives",
+  "description": "Described from the Chagos Archipelago and exported mainly from the Maldives. Its name (\"red scales\") refers to the patch of crimson scales on the male's lower forward flank.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e48aa0",
+   "dorsal": "#d06a8c",
+   "ventral": "#f6e0e8",
+   "fin": "#e07090",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c8182e",
+     "x0": 0.22,
+     "x1": 0.55,
+     "y0": -0.9,
+     "y1": 0.1,
+     "softness": 0.25
+    },
+    {
+     "type": "scales",
+     "color": "#a01828",
+     "contrast": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d85a8a",
+     "opacity": 0.85,
+     "edge": "#4a6ad8",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#e07090",
+     "opacity": 0.8,
+     "edge": "#4a6ad8",
+     "edgeWidth": 0.1
+    },
+    "anal": {
+     "color": "#e890b0",
+     "opacity": 0.8
+    },
+    "pelvic": {
+     "color": "#c8182e",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#eeaab4",
+    "dorsal": "#e098a8",
+    "ventral": "#f8e8ec",
+    "fin": "#f4c8d0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4c8d0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4c8d0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4c8d0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4c8d0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "paracheilinus-carpenteri",
+  "commonName": "Carpenter's Flasher Wrasse",
+  "scientificName": "Paracheilinus carpenteri",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Philippines, Indonesia, Palau & southern Japan",
+  "description": "Males hold harems over rubble and, especially in late afternoon, \"flash\" — racing above the females with every fin spread and colours briefly intensified. The tall red dorsal fin carries a few elongated rays.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.24,
+    "shape": "filament",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#e4572e",
+   "dorsal": "#d84a26",
+   "ventral": "#f6c8b0",
+   "fin": "#d8302a",
+   "finOpacity": 0.85,
+   "eye": "#e04a2a",
+   "iridescence": 0.4,
+   "iridescenceColor": "#8a7aff",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#7a62e0",
+     "count": 5,
+     "width": 0.03,
+     "y0": -0.5,
+     "y1": 0.7
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8302a",
+     "opacity": 0.9,
+     "edge": "#3a5ad8",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#d8402a",
+     "opacity": 0.85,
+     "edge": "#3a5ad8",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#e05a30",
+     "opacity": 0.85,
+     "edge": "#3a5ad8",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#6a4ad0",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e88a6a",
+    "dorsal": "#e07a5a",
+    "ventral": "#f8dccc",
+    "fin": "#f0b098",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b098",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b098",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b098",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b098",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "paracheilinus-filamentosus",
+  "commonName": "Filamented Flasher Wrasse",
+  "scientificName": "Paracheilinus filamentosus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Indonesia & the Philippines to the Solomon Islands & Great Barrier Reef",
+  "description": "Named for the many long filaments that trail from the male's dorsal fin and are raised during display flights over the harem. Forms mixed groups with other flashers and fairy wrasses over rubble.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.22,
+    "shape": "filament",
+    "trail": 0.3
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#e06a3a",
+   "dorsal": "#d8562e",
+   "ventral": "#f4ccc0",
+   "fin": "#d0303a",
+   "finOpacity": 0.85,
+   "eye": "#e04a2a",
+   "iridescence": 0.4,
+   "iridescenceColor": "#7a8aff",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a6ae0",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.4,
+     "y1": 0.6
+    },
+    {
+     "type": "region",
+     "color": "#c8406a",
+     "x0": 0.5,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.2,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8283a",
+     "opacity": 0.9,
+     "edge": "#2a4ac0",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#c8406a",
+     "opacity": 0.85,
+     "edge": "#3a6ad8",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#d8504a",
+     "opacity": 0.85,
+     "edge": "#3a6ad8",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#5a4ac0",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e89878",
+    "dorsal": "#e08868",
+    "ventral": "#f8e0d4",
+    "fin": "#f0b8a0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b8a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b8a0",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "paracheilinus-mccoskeri",
+  "commonName": "McCosker's Flasher Wrasse",
+  "scientificName": "Paracheilinus mccoskeri",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indian Ocean & western Pacific — East Africa to Indonesia",
+  "description": "Unlike many flashers, the male has no long filaments; instead its tall, sail-like dorsal fin is red with an electric-blue border. Courting males flash over rubble patches in the late afternoon.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.24,
+    "shape": "sail"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#e8803a",
+   "dorsal": "#e06a30",
+   "ventral": "#f6dad0",
+   "fin": "#d83a2a",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.35,
+   "iridescenceColor": "#6aa0ff",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a7ae8",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.3,
+     "y1": 0.7
+    },
+    {
+     "type": "region",
+     "color": "#f2b0a8",
+     "x0": 0.1,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d83a2a",
+     "opacity": 0.9,
+     "edge": "#3a8af0",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#e05a5a",
+     "opacity": 0.85,
+     "edge": "#3a8af0",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#e8703a",
+     "opacity": 0.85,
+     "edge": "#3a8af0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e07070",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#eca07a",
+    "dorsal": "#e8906a",
+    "ventral": "#f8e4d8",
+    "fin": "#f4c0a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4c0a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "paracheilinus-octotaenia",
+  "commonName": "Red Sea Eightline Flasher",
+  "scientificName": "Paracheilinus octotaenia",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Red Sea (endemic)",
+  "description": "A Red Sea endemic named for the eight blue-violet lines along its orange flanks. The male's dorsal fin is tall and rounded rather than filamentous.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#e86a2e",
+   "dorsal": "#e05a26",
+   "ventral": "#f6d0b8",
+   "fin": "#d8402a",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.35,
+   "iridescenceColor": "#7a6aff",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a5ad8",
+     "count": 8,
+     "width": 0.022,
+     "y0": -0.7,
+     "y1": 0.85
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d83a2a",
+     "opacity": 0.9,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.18
+    },
+    "anal": {
+     "color": "#d8402a",
+     "opacity": 0.85,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#e05a30",
+     "opacity": 0.85,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#6a4ad0",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#eca07a",
+    "dorsal": "#e8906a",
+    "ventral": "#f8e4d8",
+    "fin": "#f4c0a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4c0a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheilinus-lineopunctatus",
+  "commonName": "Spot-lined Flasher Wrasse",
+  "scientificName": "Paracheilinus lineopunctatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Philippines & Indonesia",
+  "description": "Its blue flank lines are broken into rows of dots and dashes, which separates it from the similar Carpenter's flasher. Males display over rubble in late afternoon with all fins spread.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.2,
+    "shape": "filament",
+    "trail": 0.12
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#e2683a",
+   "dorsal": "#d85a30",
+   "ventral": "#f6d4c0",
+   "fin": "#d8402e",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#6a8aff",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#5a6ae0",
+     "density": 60,
+     "size": 0.018,
+     "y0": -0.5,
+     "y1": 0.8,
+     "jitter": 0.1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8402e",
+     "opacity": 0.9,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#d84a3a",
+     "opacity": 0.85,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#e05a3a",
+     "opacity": 0.85,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e07a6a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#eca07a",
+    "dorsal": "#e8906a",
+    "ventral": "#f8e4d8",
+    "fin": "#f4c0a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4c0a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheilinus-cyaneus",
+  "commonName": "Blue Flasher Wrasse",
+  "scientificName": "Paracheilinus cyaneus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indonesia — Sulawesi, Halmahera & Raja Ampat",
+  "description": "Described in 1999 from Indonesia; when flashing, males turn an intense violet-blue below an orange-red back.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.22,
+    "shape": "filament",
+    "trail": 0.2
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#5a5ad0",
+   "dorsal": "#e0602e",
+   "ventral": "#c8c8f0",
+   "fin": "#d8402e",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.5,
+   "iridescenceColor": "#5ab0ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e0602e",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.35,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "lines",
+     "color": "#8ab0ff",
+     "count": 3,
+     "width": 0.03,
+     "y0": -0.4,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8402e",
+     "opacity": 0.9,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#4a4ac0",
+     "opacity": 0.85,
+     "edge": "#8ab0ff",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#5a5ad0",
+     "opacity": 0.85,
+     "edge": "#e0602e",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#4a4ac0",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#e8907a",
+    "dorsal": "#e0806a",
+    "ventral": "#f8e0d8",
+    "fin": "#f0b8a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b8a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0b8a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0b8a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0b8a8",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheilinus-flavianalis",
+  "commonName": "Yellowfin Flasher Wrasse",
+  "scientificName": "Paracheilinus flavianalis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Indonesia & the Philippines",
+  "description": "Males are told apart from other flashers by their bright yellow anal fin beneath an orange-red, blue-lined body. Like its relatives it lives in harems a metre or two above rubble.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.22,
+    "shape": "filament",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#e8682e",
+   "dorsal": "#e05a26",
+   "ventral": "#f6d4b8",
+   "fin": "#d8402a",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#6a8aff",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a6ae0",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.4,
+     "y1": 0.6
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d8402a",
+     "opacity": 0.9,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#f2d020",
+     "opacity": 0.9,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#e05a30",
+     "opacity": 0.85,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#f2c030",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#eca07a",
+    "dorsal": "#e8906a",
+    "ventral": "#f8e4d8",
+    "fin": "#f4c0a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4c0a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheilinus-angulatus",
+  "commonName": "Angular Flasher Wrasse",
+  "scientificName": "Paracheilinus angulatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Philippines & Indonesia",
+  "description": "Named for the angular outline of the male's dorsal fin. Displaying males show orange-red flanks with blue lines and a deep red dorsal fin.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 3,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "jumper",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "fairy-wrasse",
+   "depth": 0.28,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.33,
+   "scaleSize": 0.6,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.86,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.11,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.28
+   }
+  },
+  "look": {
+   "base": "#e66a34",
+   "dorsal": "#dc5a2c",
+   "ventral": "#f6d4c0",
+   "fin": "#c8302a",
+   "finOpacity": 0.85,
+   "eye": "#e05a2a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#6a8aff",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a6ae0",
+     "count": 4,
+     "width": 0.03,
+     "y0": -0.4,
+     "y1": 0.6
+    },
+    {
+     "type": "region",
+     "color": "#f0b040",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.4,
+     "y1": 0.3,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8302a",
+     "opacity": 0.9,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#d84a3a",
+     "opacity": 0.85,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#e05a30",
+     "opacity": 0.85,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e07a5a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "look": {
+    "base": "#eca07a",
+    "dorsal": "#e8906a",
+    "ventral": "#f8e4d8",
+    "fin": "#f4c0a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4c0a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4c0a8",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.12,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudocheilinus-hexataenia",
+  "commonName": "Sixline Wrasse",
+  "scientificName": "Pseudocheilinus hexataenia",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to the Tuamotus",
+  "description": "Darts constantly among rock crevices hunting tiny crustaceans, pest flatworms and pyramid snails, and sleeps in a mucus cocoon. Often turns into a persistent bully toward smaller, more peaceful fish.",
+  "adultLengthCm": 7.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.28,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#4b4fb0",
+   "dorsal": "#6a3a9a",
+   "ventral": "#5a70c8",
+   "fin": "#4a60b0",
+   "finOpacity": 0.7,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#f08a2a",
+     "count": 6,
+     "width": 0.035,
+     "y0": -0.1,
+     "y1": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#111111",
+     "x": 0.97,
+     "y": 0.35,
+     "rx": 0.025,
+     "ry": 0.06,
+     "ring": "#f0f0f0"
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#4aa070",
+     "opacity": 0.8
+    },
+    "dorsal": {
+     "color": "#5a50a8",
+     "opacity": 0.7,
+     "edge": "#e8603a",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "pseudocheilinus-tetrataenia",
+  "commonName": "Fourline Wrasse",
+  "scientificName": "Pseudocheilinus tetrataenia",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Central & western Pacific — Micronesia to Hawaii & the Tuamotus",
+  "description": "A secretive cousin of the sixline wrasse with four bright blue stripes on a bronze upper body above a violet belly. Notably aggressive toward other small wrasses.",
+  "adultLengthCm": 7.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.28,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#4a5ac8",
+   "dorsal": "#d88a3a",
+   "ventral": "#6a6ad0",
+   "fin": "#5a6ab8",
+   "finOpacity": 0.7,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e0983a",
+     "x0": 0,
+     "x1": 1,
+     "y0": 0.1,
+     "y1": 1,
+     "softness": 0.15
+    },
+    {
+     "type": "lines",
+     "color": "#5aa0f0",
+     "count": 4,
+     "width": 0.03,
+     "y0": 0.2,
+     "y1": 0.9
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#5a6ab8",
+     "opacity": 0.75
+    },
+    "dorsal": {
+     "color": "#c8803a",
+     "opacity": 0.7
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudocheilinus-octotaenia",
+  "commonName": "Eightline Wrasse",
+  "scientificName": "Pseudocheilinus octotaenia",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii & the Tuamotus",
+  "description": "The largest Pseudocheilinus, recognised by eight thin dark lines on a pinkish body. An efficient hunter of pest snails and bristleworms that grows more aggressive with age.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "reef-safe",
+   "mucus-cocoon",
+   "invert-eater"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.29,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#e89a7a",
+   "dorsal": "#d8806a",
+   "ventral": "#f4d8c8",
+   "fin": "#e8c060",
+   "finOpacity": 0.7,
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#8a2a5a",
+     "count": 8,
+     "width": 0.025,
+     "y0": -0.8,
+     "y1": 0.9
+    },
+    {
+     "type": "speckle",
+     "color": "#f8f0e0",
+     "density": 0.15
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e8c060",
+     "opacity": 0.75
+    },
+    "dorsal": {
+     "color": "#e8b070",
+     "opacity": 0.7
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "pseudocheilinus-evanidus",
+  "commonName": "Striated Wrasse",
+  "scientificName": "Pseudocheilinus evanidus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to Hawaii",
+  "description": "Also called the disappearing wrasse: it lives deep in rubble and coral heads and is rarely seen in the open. Reddish with fine pale striations and a white streak below the eye.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "reef-safe",
+   "mucus-cocoon",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.28,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#c8504a",
+   "dorsal": "#b0403e",
+   "ventral": "#e08070",
+   "fin": "#d87060",
+   "finOpacity": 0.65,
+   "eye": "#e8c040",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#f4ddd4",
+     "count": 14,
+     "width": 0.012,
+     "y0": -0.8,
+     "y1": 0.9
+    },
+    {
+     "type": "stripe",
+     "color": "#f8f4f0",
+     "y": -0.15,
+     "width": 0.04,
+     "x0": 0.08,
+     "x1": 0.26
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#d87060",
+     "opacity": 0.7
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudocheilinus-ocellatus",
+  "commonName": "Mystery Wrasse",
+  "scientificName": "Pseudocheilinus ocellatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western & central Pacific — Philippines & Micronesia to Samoa",
+  "description": "A deep-reef wrasse, usually below 20 m, with a violet forebody fading into a yellow rear and a black eyespot near the tail. Comparatively rarely collected and highly prized.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "reef-safe",
+   "mucus-cocoon",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.28,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#7a4aa8",
+   "dorsal": "#6a3a98",
+   "ventral": "#9a6ac0",
+   "fin": "#e8c040",
+   "finOpacity": 0.75,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f2c830",
+     "x0": 0.55,
+     "x1": 1,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#d8f048",
+     "y": 0.3,
+     "width": 0.025,
+     "x0": 0,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#d8f048",
+     "y": 0.05,
+     "width": 0.025,
+     "x0": 0,
+     "x1": 0.28
+    },
+    {
+     "type": "blotch",
+     "color": "#111111",
+     "x": 0.93,
+     "y": 0.45,
+     "rx": 0.04,
+     "ry": 0.09,
+     "ring": "#f6e070"
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#f0c830",
+     "opacity": 0.8
+    },
+    "dorsal": {
+     "color": "#9a5ab0",
+     "opacity": 0.75,
+     "edge": "#f0c830",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pseudocheilinops-ataenia",
+  "commonName": "Pink-streaked Wrasse",
+  "scientificName": "Pseudocheilinops ataenia",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Philippines & Indonesia",
+  "description": "A tiny, secretive wrasse of sheltered inshore reefs, purple with pinkish streaks along the flank. It stays close to rock and coral cover and is one of the most peaceful wrasses for small reefs.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "reef-safe",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.27,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#8a4a9a",
+   "dorsal": "#7a3a8a",
+   "ventral": "#b07ab8",
+   "fin": "#b06ab0",
+   "finOpacity": 0.6,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#f0a8d0",
+     "count": 5,
+     "width": 0.03,
+     "y0": -0.5,
+     "y1": 0.7
+    },
+    {
+     "type": "region",
+     "color": "#e0a040",
+     "x0": 0,
+     "x1": 0.2,
+     "y0": 0.3,
+     "y1": 1,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#a060a8",
+     "opacity": 0.65
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "wetmorella-nigropinnata",
+  "commonName": "Sharpnose Possum Wrasse",
+  "scientificName": "Wetmorella nigropinnata",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea to the Marquesas & Pitcairn",
+  "description": "Creeps through caves and crevices rather than swimming in the open, rarely leaving cover. Yellow-ringed black eyespots on the rear dorsal, anal and pelvic fins likely misdirect predators.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.3,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#9a3a22",
+   "dorsal": "#7a2c1a",
+   "ventral": "#b04a2a",
+   "fin": "#8a3020",
+   "finOpacity": 0.8,
+   "eye": "#f0c030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f0c838",
+     "x0": 0.27,
+     "x1": 0.31,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.02
+    },
+    {
+     "type": "region",
+     "color": "#f0c838",
+     "x0": 0.82,
+     "x1": 0.86,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.02
+    },
+    {
+     "type": "stripe",
+     "color": "#f0c838",
+     "y": 0.25,
+     "width": 0.02,
+     "x0": 0,
+     "x1": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8a3020",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.8,
+       "y": 0,
+       "rx": 0.12,
+       "ry": 0.4,
+       "ring": "#f0c838"
+      }
+     ]
+    },
+    "anal": {
+     "color": "#8a3020",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.7,
+       "y": 0,
+       "rx": 0.15,
+       "ry": 0.45,
+       "ring": "#f0c838"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#111111",
+     "opacity": 0.9,
+     "edge": "#f0c838",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "wetmorella-albofasciata",
+  "commonName": "Whitebanded Possum Wrasse",
+  "scientificName": "Wetmorella albofasciata",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii & the Tuamotus",
+  "description": "A smaller, deeper-living relative of the sharpnose possum wrasse with narrow white rather than yellow bars. It lives deep within reef crevices and is seldom seen by divers.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.3,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#a8402a",
+   "dorsal": "#8a3020",
+   "ventral": "#c05a3a",
+   "fin": "#9a3a26",
+   "finOpacity": 0.8,
+   "eye": "#f0d080",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f8f4ee",
+     "x0": 0.28,
+     "x1": 0.31,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.02
+    },
+    {
+     "type": "region",
+     "color": "#f8f4ee",
+     "x0": 0.55,
+     "x1": 0.58,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.02
+    },
+    {
+     "type": "region",
+     "color": "#f8f4ee",
+     "x0": 0.84,
+     "x1": 0.87,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.02
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#9a3a26",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.8,
+       "y": 0,
+       "rx": 0.12,
+       "ry": 0.4,
+       "ring": "#f8f4ee"
+      }
+     ]
+    },
+    "anal": {
+     "color": "#9a3a26",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.7,
+       "y": 0,
+       "rx": 0.15,
+       "ry": 0.45,
+       "ring": "#f8f4ee"
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#111111",
+     "opacity": 0.9
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "labroides-dimidiatus",
+  "commonName": "Bluestreak Cleaner Wrasse",
+  "scientificName": "Labroides dimidiatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to the Line Islands",
+  "description": "Runs cleaning stations visited by hundreds of reef fish a day, advertising with a bobbing dance and removing parasites and dead tissue. Most wild-caught individuals fail to adapt to aquarium diets, so its collection is widely discouraged.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 7,
+  "traits": [
+   "cleaner",
+   "mucus-cocoon",
+   "bold",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.2,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#e6eef8",
+   "dorsal": "#d8d8b8",
+   "ventral": "#f4f6fa",
+   "fin": "#c8d8f0",
+   "finOpacity": 0.6,
+   "eye": "#2a2a3a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#3a78e0",
+     "x0": 0.45,
+     "x1": 1,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.35
+    },
+    {
+     "type": "region",
+     "color": "#e8d870",
+     "x0": 0,
+     "x1": 0.35,
+     "y0": 0.35,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#101014",
+     "y": 0.05,
+     "width": 0.12,
+     "x0": 0,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#3a78e0",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#101014",
+       "y": 0,
+       "width": 0.35,
+       "x0": 0,
+       "x1": 1
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#2a3a6a",
+     "opacity": 0.75,
+     "edge": "#4a8af0",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#c8d8f0",
+     "opacity": 0.6,
+     "edge": "#4a8af0",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "labroides-phthirophagus",
+  "commonName": "Hawaiian Cleaner Wrasse",
+  "scientificName": "Labroides phthirophagus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Hawaiian Islands (endemic)",
+  "description": "Hawaii's endemic cleaner wrasse, more colourful than its widespread relative with a yellow head and a magenta-violet rear half. It services a wide range of reef fish at fixed cleaning stations.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   26
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 7,
+  "traits": [
+   "cleaner",
+   "mucus-cocoon",
+   "bold",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.2,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#c048a0",
+   "dorsal": "#b03a90",
+   "ventral": "#d070b8",
+   "fin": "#b04a98",
+   "finOpacity": 0.75,
+   "eye": "#2a2a3a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f2d030",
+     "x0": 0,
+     "x1": 0.4,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#101014",
+     "y": 0.05,
+     "width": 0.12,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#4a90f0",
+     "y": 0.18,
+     "width": 0.03,
+     "x0": 0.2,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c048a0",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#101014",
+       "y": 0,
+       "width": 0.35,
+       "x0": 0,
+       "x1": 1
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#2a2a5a",
+     "opacity": 0.75,
+     "edge": "#4a90f0",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "labroides-bicolor",
+  "commonName": "Bicolor Cleaner Wrasse",
+  "scientificName": "Labroides bicolor",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to the Line Islands & Marquesas",
+  "description": "Unlike the bluestreak cleaner it roams widely instead of holding a fixed station, cleaning fish across a large home range. Adults are dark in front and pale yellow behind, with a dark crescent in the tail.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 7,
+  "traits": [
+   "cleaner",
+   "mucus-cocoon",
+   "bold",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.21,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#efe6b8",
+   "dorsal": "#e6d890",
+   "ventral": "#f6f2dc",
+   "fin": "#e8e0b0",
+   "finOpacity": 0.6,
+   "eye": "#2a2a3a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#1a2448",
+     "x0": 0,
+     "x1": 0.48,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#3a5a9a",
+     "y": 0.05,
+     "width": 0.05,
+     "x0": 0,
+     "x1": 0.5
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#f2ecc8",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1a2448",
+       "x": 0.6,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.8
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#1a2448",
+     "opacity": 0.75
+    },
+    "anal": {
+     "color": "#e8e0b0",
+     "opacity": 0.6
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "larabicus-quadrilineatus",
+  "commonName": "Fourline Cleaner Wrasse",
+  "scientificName": "Larabicus quadrilineatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Red Sea & Gulf of Aden",
+  "description": "Juveniles are dedicated cleaners of other fish, but adults switch to feeding mainly on coral polyps. Its deep blue body bears two electric-blue lines along each side.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 7,
+  "traits": [
+   "cleaner",
+   "coral-nipper",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.22,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#1a1e4a",
+   "dorsal": "#141838",
+   "ventral": "#2a3270",
+   "fin": "#1a2050",
+   "finOpacity": 0.8,
+   "eye": "#2a2a3a",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3aa0ff",
+     "y": 0.35,
+     "width": 0.05,
+     "x0": 0,
+     "x1": 1,
+     "glow": 0.2
+    },
+    {
+     "type": "stripe",
+     "color": "#3aa0ff",
+     "y": -0.2,
+     "width": 0.05,
+     "x0": 0,
+     "x1": 1,
+     "glow": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1a2050",
+     "opacity": 0.8,
+     "edge": "#3aa0ff",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#1a2050",
+     "opacity": 0.8,
+     "edge": "#3aa0ff",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "labropsis-xanthonota",
+  "commonName": "Wedgetail Tubelip",
+  "scientificName": "Labropsis xanthonota",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Samoa",
+  "description": "A thick-lipped wrasse that feeds on live coral polyps and mucus, while juveniles also clean other fish part-time. Adults have a golden-yellow back and a pale wedge in the tail.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 7,
+  "traits": [
+   "coral-nipper",
+   "cleaner",
+   "shy"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.25,
+   "width": 0.11,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#2a3a6a",
+   "dorsal": "#e8b830",
+   "ventral": "#3a5a8a",
+   "fin": "#2a3a6a",
+   "finOpacity": 0.8,
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8b830",
+     "x0": 0.1,
+     "x1": 0.9,
+     "y0": 0.4,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#6ab0f0",
+     "density": 40,
+     "size": 0.02,
+     "y0": -0.8,
+     "y1": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#2a3a6a",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#f2f2ee",
+       "x0": 0.3,
+       "x1": 1,
+       "y0": -0.4,
+       "y1": 0.4,
+       "softness": 0.1
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#e0b030",
+     "opacity": 0.8,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pseudojuloides-cerasinus",
+  "commonName": "Smalltail Pencil Wrasse",
+  "scientificName": "Pseudojuloides cerasinus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii",
+  "description": "A slender, fast-swimming wrasse that dives into the sand to sleep. Females are salmon-pink, while terminal males turn blue-green with a yellow-and-blue stripe along the lower flank.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 9,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "shy",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.19,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.2
+   }
+  },
+  "look": {
+   "base": "#3a9a9a",
+   "dorsal": "#2a8a80",
+   "ventral": "#9ad0d0",
+   "fin": "#58a8a8",
+   "finOpacity": 0.6,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#f2d030",
+     "y": -0.3,
+     "width": 0.09,
+     "x0": 0.25,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#3a6ae0",
+     "y": -0.45,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#4a9aa0",
+     "opacity": 0.7,
+     "edge": "#3a6ae0",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#f0907a",
+    "dorsal": "#e8806a",
+    "ventral": "#f8d4c8",
+    "fin": "#f4b8a8",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4b8a8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4b8a8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4b8a8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4b8a8",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudojuloides-severnsi",
+  "commonName": "Severns' Pencil Wrasse",
+  "scientificName": "Pseudojuloides severnsi",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indian Ocean & western Pacific — Maldives & Sri Lanka to Indonesia",
+  "description": "Named after underwater photographer Mike Severns. A slender sand-sleeping wrasse whose terminal males are greenish blue with fine lines, while females are orange-pink.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 9,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "shy",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.19,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.2
+   }
+  },
+  "look": {
+   "base": "#4a9ab0",
+   "dorsal": "#3a8a98",
+   "ventral": "#b0d8e0",
+   "fin": "#5aa0b0",
+   "finOpacity": 0.6,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#e8c040",
+     "count": 3,
+     "width": 0.025,
+     "y0": -0.4,
+     "y1": 0.2
+    },
+    {
+     "type": "stripe",
+     "color": "#2a4ac0",
+     "y": -0.55,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#4a9ab0",
+     "opacity": 0.7,
+     "edge": "#2a4ac0",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#f09a70",
+    "dorsal": "#e8885e",
+    "ventral": "#f8dcc8",
+    "fin": "#f4c0a0",
+    "finOpacity": 0.5,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f4c0a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f4c0a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f4c0a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f4c0a0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "stethojulis-bandanensis",
+  "commonName": "Red-shoulder Wrasse",
+  "scientificName": "Stethojulis bandanensis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Pacific — Indonesia to the Line Islands & the eastern Pacific",
+  "description": "A restless forager of shallow reef flats that is almost never still. Both sexes carry a bright red-orange mark above the pectoral fin — the \"red shoulder\".",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 9,
+  "traits": [
+   "sand-sleeper",
+   "bold",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.24,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   }
+  },
+  "look": {
+   "base": "#7a8a7a",
+   "dorsal": "#5a6a5a",
+   "ventral": "#e6eee6",
+   "fin": "#a0b0a0",
+   "finOpacity": 0.5,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#e8501e",
+     "x": 0.3,
+     "y": 0.2,
+     "rx": 0.04,
+     "ry": 0.07
+    },
+    {
+     "type": "lines",
+     "color": "#6ab0f0",
+     "count": 3,
+     "width": 0.02,
+     "y0": -0.3,
+     "y1": 0.5
+    },
+    {
+     "type": "speckle",
+     "color": "#f0f4f0",
+     "density": 0.2
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#8a8a7a",
+    "dorsal": "#6a6a5a",
+    "ventral": "#eeeee6",
+    "fin": "#b0b0a0",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#e8501e",
+      "x": 0.3,
+      "y": 0.2,
+      "rx": 0.035,
+      "ry": 0.06
+     },
+     {
+      "type": "speckle",
+      "color": "#f8f8f0",
+      "density": 0.35
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b0b0a0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#b0b0a0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#b0b0a0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#b0b0a0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "stethojulis-balteata",
+  "commonName": "Belted Wrasse",
+  "scientificName": "Stethojulis balteata",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Hawaiian Islands & Johnston Atoll",
+  "description": "Endemic to Hawaii and Johnston Atoll, where it forages over shallow reef flats. Terminal males are green with a bright orange belt along the flank edged by blue lines.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   26
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 9,
+  "traits": [
+   "sand-sleeper",
+   "bold",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.24,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   }
+  },
+  "look": {
+   "base": "#3a9a6a",
+   "dorsal": "#2a7a5a",
+   "ventral": "#c8e8d8",
+   "fin": "#5aa080",
+   "finOpacity": 0.6,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#f08a20",
+     "y": -0.05,
+     "width": 0.12,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#3a8af0",
+     "y": 0.15,
+     "width": 0.025,
+     "x0": 0.05,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#3a8af0",
+     "y": -0.25,
+     "width": 0.025,
+     "x0": 0.1,
+     "x1": 0.95
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#8a9a8a",
+    "dorsal": "#6a7a6a",
+    "ventral": "#eef2ee",
+    "fin": "#b0b8b0",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "speckle",
+      "color": "#f8f8f0",
+      "density": 0.3
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#b0b8b0",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#b0b8b0",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#b0b8b0",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#b0b8b0",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "gomphosus-varius",
+  "commonName": "Bird Wrasse",
+  "scientificName": "Gomphosus varius",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Pacific — Cocos-Keeling & Christmas Islands to Hawaii & the Marquesas",
+  "description": "Its long, tubular snout probes coral branches and crevices for small crustaceans and brittle stars. Males are deep blue-green, while females are pale in front shading to black behind with an orange upper snout.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 9,
+  "traits": [
+   "bold",
+   "invert-eater",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.23,
+   "width": 0.12,
+   "snout": "elongate",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "lunate",
+    "size": 0.28
+   },
+   "headLength": 0.32
+  },
+  "look": {
+   "base": "#1e7a6a",
+   "dorsal": "#1a5a5a",
+   "ventral": "#2a8a7a",
+   "fin": "#1e6a70",
+   "finOpacity": 0.85,
+   "eye": "#2a2a2a",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#6ad0a0",
+     "y": 0.1,
+     "width": 0.03,
+     "x0": 0.05,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e8d040",
+     "opacity": 0.6
+    },
+    "caudal": {
+     "color": "#1a5a6a",
+     "opacity": 0.85,
+     "edge": "#3ab0c0",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#2a2a2a",
+    "dorsal": "#1a1a1a",
+    "ventral": "#6a6a6a",
+    "fin": "#2a2a2a",
+    "finOpacity": 0.8,
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#f2f0e8",
+      "x0": 0,
+      "x1": 0.35,
+      "y0": -1,
+      "y1": 1,
+      "softness": 0.3
+     },
+     {
+      "type": "region",
+      "color": "#e8902a",
+      "x0": 0,
+      "x1": 0.12,
+      "y0": 0.2,
+      "y1": 1,
+      "softness": 0.1
+     },
+     {
+      "type": "spots",
+      "color": "#0a0a0a",
+      "density": 30,
+      "size": 0.02,
+      "x0": 0.4,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "caudal": {
+      "color": "#2a2a2a",
+      "opacity": 0.8,
+      "edge": "#f2f0e8",
+      "edgeWidth": 0.15
+     },
+     "pectoral": {
+      "color": "#e8d0a0",
+      "opacity": 0.5
+     }
+    }
+   },
+   "body": {
+    "caudal": {
+     "shape": "truncate",
+     "size": 0.25
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "gomphosus-caeruleus",
+  "commonName": "Indian Ocean Bird Wrasse",
+  "scientificName": "Gomphosus caeruleus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indian Ocean — Red Sea & East Africa to the Andaman Sea",
+  "description": "The Indian Ocean counterpart of the Pacific bird wrasse, using its long beak to pick prey from coral crevices. Males are deep blue; females are paler with a dark rear and finely spotted flanks.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "harem",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 9,
+  "traits": [
+   "bold",
+   "invert-eater",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.23,
+   "width": 0.12,
+   "snout": "elongate",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "lunate",
+    "size": 0.28
+   },
+   "headLength": 0.32
+  },
+  "look": {
+   "base": "#1a3a9a",
+   "dorsal": "#142e7a",
+   "ventral": "#2a4aaa",
+   "fin": "#1a3a8a",
+   "finOpacity": 0.85,
+   "eye": "#2a2a2a",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#4ab0e0",
+     "y": 0.1,
+     "width": 0.03,
+     "x0": 0.05,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#1a3a8a",
+     "opacity": 0.85,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#4a5a4a",
+    "dorsal": "#2a3a2a",
+    "ventral": "#e8e8d8",
+    "fin": "#5a6a5a",
+    "finOpacity": 0.7,
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#e8e8d8",
+      "x0": 0,
+      "x1": 0.3,
+      "y0": -1,
+      "y1": 1,
+      "softness": 0.3
+     },
+     {
+      "type": "spots",
+      "color": "#1a1a1a",
+      "density": 50,
+      "size": 0.015,
+      "x0": 0.3,
+      "x1": 1
+     }
+    ]
+   },
+   "body": {
+    "caudal": {
+     "shape": "truncate",
+     "size": 0.25
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "halichoeres-chrysus",
+  "commonName": "Yellow Coris Wrasse",
+  "scientificName": "Halichoeres chrysus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Eastern Indian Ocean & western Pacific — Christmas Island to the Marshall Islands, Japan to Australia",
+  "description": "A bright yellow wrasse that dives into the sand at night or when frightened, and may stay buried for days after being moved. Prized in reef tanks for picking off flatworms and other small pests.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#f2d020",
+   "dorsal": "#e8c010",
+   "ventral": "#f6e070",
+   "fin": "#f2d020",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#1a1a1a",
+     "x": 0.23,
+     "y": 0.3,
+     "rx": 0.015,
+     "ry": 0.03
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f2d020",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.3,
+       "y": 0,
+       "rx": 0.08,
+       "ry": 0.35
+      },
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.85,
+       "y": 0,
+       "rx": 0.07,
+       "ry": 0.35
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "halichoeres-leucoxanthus",
+  "commonName": "Lemon Meringue Wrasse",
+  "scientificName": "Halichoeres leucoxanthus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indian Ocean — Maldives & Sri Lanka to western Indonesia",
+  "description": "Named for its two-tone colouring — lemon-yellow above, white below — with black spots on the dorsal fin. Like other Halichoeres it buries itself in the sand to sleep.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#f6f4ee",
+   "dorsal": "#f2d030",
+   "ventral": "#fbfaf6",
+   "fin": "#f2e48a",
+   "finOpacity": 0.7,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f2d030",
+     "x0": 0,
+     "x1": 1,
+     "y0": 0,
+     "y1": 1,
+     "softness": 0.15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f2d030",
+     "opacity": 0.85,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.3,
+       "y": 0,
+       "rx": 0.08,
+       "ry": 0.35
+      },
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.85,
+       "y": 0,
+       "rx": 0.07,
+       "ry": 0.35
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f2e070",
+     "opacity": 0.7
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "halichoeres-melanurus",
+  "commonName": "Tail-spot Wrasse",
+  "scientificName": "Halichoeres melanurus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Indonesia & the Philippines to Samoa, north to southern Japan",
+  "description": "Females and juveniles are white with bold black stripes and eyespots on the fins, while terminal males turn green with orange lines and a dark spot at the tail base. A useful hunter of flatworms and small pest snails; also called Hoeven's wrasse.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#3a9a70",
+   "dorsal": "#2e8060",
+   "ventral": "#b8e0c8",
+   "fin": "#4aa080",
+   "finOpacity": 0.75,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#f08060",
+     "count": 5,
+     "width": 0.04,
+     "y0": -0.6,
+     "y1": 0.8
+    },
+    {
+     "type": "blotch",
+     "color": "#111111",
+     "x": 0.97,
+     "y": 0.15,
+     "rx": 0.03,
+     "ry": 0.12
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#4a9a80",
+     "opacity": 0.8,
+     "edge": "#4a8af0",
+     "edgeWidth": 0.15
+    },
+    "dorsal": {
+     "color": "#4aa080",
+     "opacity": 0.75,
+     "edge": "#f08060",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#f2f0e8",
+    "dorsal": "#e8e4d8",
+    "ventral": "#fafaf6",
+    "fin": "#f0eadc",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "lines",
+      "color": "#1a1a2a",
+      "count": 5,
+      "width": 0.05,
+      "y0": -0.7,
+      "y1": 0.8
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#f0eadc",
+      "opacity": 0.6,
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#111111",
+        "x": 0.3,
+        "y": 0,
+        "rx": 0.08,
+        "ry": 0.35,
+        "ring": "#f0e070"
+       },
+       {
+        "type": "blotch",
+        "color": "#111111",
+        "x": 0.85,
+        "y": 0,
+        "rx": 0.07,
+        "ry": 0.35,
+        "ring": "#f0e070"
+       }
+      ]
+     },
+     "caudal": {
+      "color": "#f2e070",
+      "opacity": 0.6
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "halichoeres-ornatissimus",
+  "commonName": "Ornate Wrasse",
+  "scientificName": "Halichoeres ornatissimus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Pacific — western Pacific to the Hawaiian Islands",
+  "description": "Green with rows of red-pink scale markings and bold red bands on the head, a colour scheme that earned it the trade name \"Christmas wrasse\". It buries in sand at night and hunts small crustaceans by day.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#2f9a6a",
+   "dorsal": "#287e58",
+   "ventral": "#9ad4b0",
+   "fin": "#3a9a70",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#e05a7a",
+     "count": 7,
+     "width": 0.035,
+     "wavy": 0.4,
+     "y0": -0.7,
+     "y1": 0.85
+    },
+    {
+     "type": "stripe",
+     "color": "#d84a6a",
+     "y": 0.25,
+     "width": 0.04,
+     "x0": 0,
+     "x1": 0.28
+    },
+    {
+     "type": "stripe",
+     "color": "#d84a6a",
+     "y": -0.05,
+     "width": 0.04,
+     "x0": 0,
+     "x1": 0.26
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a9a70",
+     "opacity": 0.8,
+     "edge": "#e05a7a",
+     "edgeWidth": 0.15,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.5,
+       "y": 0,
+       "rx": 0.08,
+       "ry": 0.35
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#3a9a70",
+     "opacity": 0.8,
+     "edge": "#e05a7a",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "halichoeres-iridis",
+  "commonName": "Radiant Wrasse",
+  "scientificName": "Halichoeres iridis",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Indian Ocean — East Africa, Madagascar & the Mascarenes",
+  "description": "A western Indian Ocean wrasse whose adults combine an orange-brown body with a paler, pink-lined head and a white-ringed black eyespot on the dorsal fin. It sleeps buried in the sand.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe",
+   "shy"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#b85a2a",
+   "dorsal": "#9a4a20",
+   "ventral": "#d8803a",
+   "fin": "#c86a30",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8d048",
+     "x0": 0,
+     "x1": 0.28,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.2
+    },
+    {
+     "type": "stripe",
+     "color": "#e86a8a",
+     "y": 0.2,
+     "width": 0.03,
+     "x0": 0,
+     "x1": 0.27
+    },
+    {
+     "type": "stripe",
+     "color": "#e86a8a",
+     "y": -0.1,
+     "width": 0.03,
+     "x0": 0,
+     "x1": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c86a30",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.4,
+       "y": 0,
+       "rx": 0.1,
+       "ry": 0.4,
+       "ring": "#f8f8f0"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e8c040",
+     "opacity": 0.8
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "halichoeres-cosmetus",
+  "commonName": "Adorned Wrasse",
+  "scientificName": "Halichoeres cosmetus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Indian Ocean — East Africa & the Mascarenes to the Maldives",
+  "description": "A small, peaceful sand-sleeper of the western Indian Ocean, green with pink stripes along the body and black eyespots on the dorsal fin.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#7ab060",
+   "dorsal": "#5a9a4a",
+   "ventral": "#d0e8c0",
+   "fin": "#8ab870",
+   "finOpacity": 0.75,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#e87a9a",
+     "count": 5,
+     "width": 0.04,
+     "y0": -0.6,
+     "y1": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8ab870",
+     "opacity": 0.75,
+     "edge": "#e87a9a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.3,
+       "y": 0,
+       "rx": 0.08,
+       "ry": 0.35
+      },
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.85,
+       "y": 0,
+       "rx": 0.07,
+       "ry": 0.35
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#8ab870",
+     "opacity": 0.75
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "halichoeres-hortulanus",
+  "commonName": "Checkerboard Wrasse",
+  "scientificName": "Halichoeres hortulanus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to the Marquesas",
+  "description": "Adults have a dark checkerboard of scale markings and a bright yellow spot below the dorsal fin; juveniles are black and white with the same yellow spot. A bold forager that turns over rubble for crustaceans and molluscs.",
+  "adultLengthCm": 22,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "invert-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.28,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#d4e4dc",
+   "dorsal": "#a8c0b8",
+   "ventral": "#eef4f0",
+   "fin": "#c8d8d0",
+   "finOpacity": 0.7,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#2a4a5a",
+     "contrast": 0.6
+    },
+    {
+     "type": "blotch",
+     "color": "#f2d020",
+     "x": 0.55,
+     "y": 0.85,
+     "rx": 0.05,
+     "ry": 0.12
+    },
+    {
+     "type": "stripe",
+     "color": "#e87aa0",
+     "y": 0.15,
+     "width": 0.03,
+     "x0": 0,
+     "x1": 0.28
+    },
+    {
+     "type": "stripe",
+     "color": "#58b090",
+     "y": -0.1,
+     "width": 0.03,
+     "x0": 0,
+     "x1": 0.27
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#f2d040",
+     "opacity": 0.85
+    },
+    "dorsal": {
+     "color": "#c8d8d0",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.2,
+       "y": 0,
+       "rx": 0.06,
+       "ry": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "halichoeres-biocellatus",
+  "commonName": "Red-lined Wrasse",
+  "scientificName": "Halichoeres biocellatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Indonesia & the Philippines to Fiji, north to southern Japan",
+  "description": "Green with bold red-pink lines and two white-ringed black eyespots on the dorsal fin — the \"biocellatus\" of its name. A peaceful, reef-safe sand-sleeper.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#4aa060",
+   "dorsal": "#3a8a50",
+   "ventral": "#c0e0c8",
+   "fin": "#5aa870",
+   "finOpacity": 0.75,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#d8507a",
+     "count": 5,
+     "width": 0.045,
+     "y0": -0.6,
+     "y1": 0.85
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#5aa870",
+     "opacity": 0.8,
+     "edge": "#d8507a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.3,
+       "y": 0,
+       "rx": 0.08,
+       "ry": 0.35,
+       "ring": "#f8f8f0"
+      },
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.85,
+       "y": 0,
+       "rx": 0.07,
+       "ry": 0.35,
+       "ring": "#f8f8f0"
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#5aa870",
+     "opacity": 0.75,
+     "edge": "#d8507a",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "halichoeres-garnoti",
+  "commonName": "Yellowhead Wrasse",
+  "scientificName": "Halichoeres garnoti",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — Bermuda & Florida through the Caribbean to Brazil",
+  "description": "Terminal males have a yellow head, a black bar behind the pectoral fin and a blue-green rear; juveniles are bright yellow with a blue stripe. A common forager over Caribbean reefs.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#3a5aa8",
+   "dorsal": "#2a4a8a",
+   "ventral": "#6a8ac0",
+   "fin": "#4a6ab0",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f0c830",
+     "x0": 0,
+     "x1": 0.36,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.12
+    },
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": 0.37,
+     "x1": 0.45,
+     "y0": -0.3,
+     "y1": 1,
+     "softness": 0.05
+    },
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": 0.45,
+     "x1": 0.85,
+     "y0": 0.55,
+     "y1": 1,
+     "softness": 0.15
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#3a7ab0",
+     "opacity": 0.8,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.12
+    },
+    "dorsal": {
+     "color": "#2a2a3a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#e8a838",
+    "dorsal": "#c88a30",
+    "ventral": "#f4d080",
+    "fin": "#f0c060",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#5a7ad0",
+      "y": 0.05,
+      "width": 0.06,
+      "x0": 0.25,
+      "x1": 1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#f0c060",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0c060",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0c060",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0c060",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "halichoeres-cyanocephalus",
+  "commonName": "Yellowcheek Wrasse",
+  "scientificName": "Halichoeres cyanocephalus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — Florida & the Caribbean to Brazil",
+  "description": "A deeper-water Caribbean wrasse, yellow below with a broad navy-blue band along the back from head to tail. Large and robust, it hunts crabs and other invertebrates.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 500,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "invert-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.27,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#e8c830",
+   "dorsal": "#1c2c6a",
+   "ventral": "#f2e070",
+   "fin": "#e8c830",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#1c2c6a",
+     "x0": 0.25,
+     "x1": 1,
+     "y0": 0.25,
+     "y1": 1,
+     "softness": 0.12
+    },
+    {
+     "type": "region",
+     "color": "#3a6ad0",
+     "x0": 0,
+     "x1": 0.25,
+     "y0": -0.2,
+     "y1": 1,
+     "softness": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1c2c6a",
+     "opacity": 0.85,
+     "edge": "#3a6ad0",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#e8c830",
+     "opacity": 0.8
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "halichoeres-maculipinna",
+  "commonName": "Clown Wrasse",
+  "scientificName": "Halichoeres maculipinna",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina & Bermuda to Brazil",
+  "description": "Terminal males are greenish with a large dark blotch on the mid-flank and red-lined heads, while initial-phase fish are white with a black midlateral stripe and yellow back.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#8ab060",
+   "dorsal": "#6a9a4a",
+   "ventral": "#d8e8c0",
+   "fin": "#9ab870",
+   "finOpacity": 0.75,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#1a1a1a",
+     "x": 0.5,
+     "y": 0.15,
+     "rx": 0.08,
+     "ry": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#d8506a",
+     "y": 0.2,
+     "width": 0.03,
+     "x0": 0,
+     "x1": 0.28
+    },
+    {
+     "type": "stripe",
+     "color": "#d8506a",
+     "y": -0.1,
+     "width": 0.03,
+     "x0": 0,
+     "x1": 0.26
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#9ab870",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.2,
+       "y": 0,
+       "rx": 0.06,
+       "ry": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#f0eadc",
+    "dorsal": "#e0c040",
+    "ventral": "#faf8f0",
+    "fin": "#f0e8c8",
+    "finOpacity": 0.5,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#141414",
+      "y": 0,
+      "width": 0.1,
+      "x0": 0.05,
+      "x1": 1
+     },
+     {
+      "type": "region",
+      "color": "#e0c040",
+      "x0": 0,
+      "x1": 1,
+      "y0": 0.3,
+      "y1": 1,
+      "softness": 0.1
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#f0e8c8",
+      "opacity": 0.55
+     },
+     "caudal": {
+      "color": "#f0e8c8",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#f0e8c8",
+      "opacity": 0.5
+     },
+     "pelvic": {
+      "color": "#f0e8c8",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "halichoeres-radiatus",
+  "commonName": "Puddingwife",
+  "scientificName": "Halichoeres radiatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina & Bermuda to Brazil",
+  "description": "The largest Halichoeres, reaching half a metre in the wild; adults are blue-green with gold mottling and a dark spot at the base of the pectoral fin. It feeds on snails, crabs and urchins, and is mostly seen in public aquaria.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 30,
+  "lifespanYears": 12,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 1500,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 6,
+  "traits": [
+   "sand-sleeper",
+   "invert-eater",
+   "bold",
+   "predator"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.32,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#3a8a8a",
+   "dorsal": "#2a6a70",
+   "ventral": "#8ac0b8",
+   "fin": "#4a8a90",
+   "finOpacity": 0.85,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#c8a040",
+     "scale": 4,
+     "amount": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#1a2a3a",
+     "x": 0.29,
+     "y": 0,
+     "rx": 0.03,
+     "ry": 0.08
+    },
+    {
+     "type": "stripe",
+     "color": "#5ab0e0",
+     "y": 0.1,
+     "width": 0.03,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#3a7a80",
+     "opacity": 0.85,
+     "edge": "#e8c040",
+     "edgeWidth": 0.12
+    },
+    "dorsal": {
+     "color": "#3a7a80",
+     "opacity": 0.85,
+     "edge": "#e8c040",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "halichoeres-bivittatus",
+  "commonName": "Slippery Dick",
+  "scientificName": "Halichoeres bivittatus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina & Bermuda to Brazil, including the Gulf of Mexico",
+  "description": "Common on shallow reefs, rubble and seagrass, and recognisable by two dark stripes along a pale greenish body. It dives into the sand when threatened and to sleep.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "invert-eater",
+   "bold"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.24,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#d8e8d0",
+   "dorsal": "#8aa880",
+   "ventral": "#f2f6ee",
+   "fin": "#d0d8c0",
+   "finOpacity": 0.6,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a4a3a",
+     "y": 0.05,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#5a6a5a",
+     "y": -0.45,
+     "width": 0.06,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#d8b030",
+     "x": 0.3,
+     "y": 0.1,
+     "rx": 0.02,
+     "ry": 0.04
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c8d0b8",
+     "opacity": 0.6,
+     "edge": "#3a4a3a",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "halichoeres-chloropterus",
+  "commonName": "Pastel-green Wrasse",
+  "scientificName": "Halichoeres chloropterus",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Indonesia & the Philippines to New Caledonia",
+  "description": "A wrasse of shallow lagoons and seagrass beds; adults are pale pastel green with faint darker markings, while juveniles are mottled green and brown for camouflage among the grass.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#a8d4a8",
+   "dorsal": "#8ac090",
+   "ventral": "#e0f0d8",
+   "fin": "#b0d0a8",
+   "finOpacity": 0.65,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#5a8a6a",
+     "density": 40,
+     "size": 0.02,
+     "y0": -0.5,
+     "y1": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#2a3a2a",
+     "x": 0.22,
+     "y": 0.35,
+     "rx": 0.02,
+     "ry": 0.04
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b0d0a8",
+     "opacity": 0.65,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a3a2a",
+       "x": 0.15,
+       "y": 0,
+       "rx": 0.06,
+       "ry": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "halichoeres-prosopeion",
+  "commonName": "Twotone Wrasse",
+  "scientificName": "Halichoeres prosopeion",
+  "family": "Labridae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Pacific — Indonesia & the Philippines to Samoa, north to Japan",
+  "description": "Adults are dark blue-grey in front, shading abruptly to yellow over the rear half; juveniles are white with black stripes. It forages among coral and rubble on reef slopes.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.18,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 250,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sleeper",
+   "burrower",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "wrasse",
+   "depth": 0.26,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0.5,
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.25
+   }
+  },
+  "look": {
+   "base": "#e8c840",
+   "dorsal": "#d8b030",
+   "ventral": "#f2e090",
+   "fin": "#e8c840",
+   "finOpacity": 0.8,
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#4a5070",
+     "x0": 0,
+     "x1": 0.5,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8c840",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#111111",
+       "x": 0.15,
+       "y": 0,
+       "rx": 0.06,
+       "ry": 0.3
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e8c840",
+     "opacity": 0.8
+    }
+   }
+  },
+  "availability": "uncommon"
+ }
+]

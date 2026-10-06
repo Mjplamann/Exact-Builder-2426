@@ -1,0 +1,6770 @@
+[
+ {
+  "id": "corydoras-aeneus",
+  "commonName": "Bronze Cory",
+  "scientificName": "Corydoras aeneus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Widespread in South America east of the Andes; Trinidad",
+  "description": "The classic bronze cory, recorded from Trinidad and Venezuela south to the Río de la Plata; it is really a complex of near-identical species, now placed by some authors in Osteogaster. Pairs spawn in the corydoras \"T-position\", the female carrying eggs in her cupped pelvic fins to stick them on glass or leaves.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "bold"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#7d7552",
+   "dorsal": "#4f4b38",
+   "ventral": "#e6d7bd",
+   "fin": "#c9c0a6",
+   "finOpacity": 0.35,
+   "eye": "#c49a4a",
+   "metallic": 0.45,
+   "iridescence": 0.6,
+   "iridescenceColor": "#38a385",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#c8873e",
+     "x": 0.2,
+     "y": 0.35,
+     "rx": 0.09,
+     "ry": 0.35
+    },
+    {
+     "type": "stripe",
+     "color": "#2f3a30",
+     "y": 0.15,
+     "width": 0.4,
+     "x0": 0.28,
+     "x1": 1,
+     "iridescent": true
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "corydoras-aeneus-albino",
+  "commonName": "Albino Cory",
+  "scientificName": "Corydoras aeneus (albino)",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A long-established captive-bred albino of the bronze cory that lacks dark pigment, so the body is pinkish-white with red eyes. It behaves and breeds exactly like the wild form and is one of the most widely sold corydoras.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "bold"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#f2d8c6",
+   "dorsal": "#e9c8b0",
+   "ventral": "#fbf0e8",
+   "fin": "#f6e8de",
+   "finOpacity": 0.3,
+   "eye": "#c8343e",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#f3dcb0",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#efb994",
+     "x": 0.2,
+     "y": 0.35,
+     "rx": 0.09,
+     "ry": 0.35
+    },
+    {
+     "type": "stripe",
+     "color": "#e8bfa4",
+     "y": 0.15,
+     "width": 0.35,
+     "x0": 0.28,
+     "x1": 1
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "variantOf": "corydoras-aeneus",
+  "availability": "common"
+ },
+ {
+  "id": "corydoras-aeneus-black-venezuela",
+  "commonName": "Black Venezuela Cory",
+  "scientificName": "Corydoras aff. aeneus 'Black Venezuela'",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Venezuela (trade form; now mostly captive-bred)",
+  "description": "A naturally dark aeneus-group form sold as \"Black Venezuela\", sooty black all over with only a faint greenish sheen. Most fish in the trade are now captive-bred, and they behave like a bronze cory.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 8,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#2b2a26",
+   "dorsal": "#1d1c1a",
+   "ventral": "#3e3b35",
+   "fin": "#3a3833",
+   "finOpacity": 0.5,
+   "eye": "#8a7a50",
+   "metallic": 0.15,
+   "iridescence": 0.25,
+   "iridescenceColor": "#3e5c52",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#121110",
+     "contrast": 0.25
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "variantOf": "corydoras-aeneus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-sp-cw010",
+  "commonName": "Gold Laser Cory",
+  "scientificName": "Corydoras sp. CW010",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South America (exact collecting locality uncertain)",
+  "description": "An undescribed member of the bronze-cory group, catalogued in the CW series as \"Gold Laser\" for the vivid orange-gold stripe along its dark olive flank. It forages in groups and spawns in the T-position like its relatives.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#4d5546",
+   "dorsal": "#323a32",
+   "ventral": "#d9c9a6",
+   "fin": "#b9b29a",
+   "finOpacity": 0.35,
+   "eye": "#b88a40",
+   "metallic": 0.4,
+   "iridescence": 0.5,
+   "iridescenceColor": "#4aa08a",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#d4893a",
+     "x": 0.18,
+     "y": 0.4,
+     "rx": 0.08,
+     "ry": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#f0a02a",
+     "y": 0.12,
+     "width": 0.14,
+     "x0": 0.2,
+     "x1": 0.98,
+     "glow": 0.5
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-eques",
+  "commonName": "Eques Cory",
+  "scientificName": "Corydoras eques",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central Amazon, Brazil",
+  "description": "An aeneus-group cory from the central Brazilian Amazon, slimmer than the bronze cory and with a broad blue-green iridescent band along the flank. Rarely exported; it forages in groups over sand like its relatives.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.35,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#5f6b56",
+   "dorsal": "#3d463a",
+   "ventral": "#e1d3b8",
+   "fin": "#c4bca6",
+   "finOpacity": 0.35,
+   "eye": "#b88f4a",
+   "metallic": 0.45,
+   "iridescence": 0.65,
+   "iridescenceColor": "#3c9ca0",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#b97a3c",
+     "x": 0.2,
+     "y": 0.45,
+     "rx": 0.08,
+     "ry": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#24302c",
+     "y": 0.15,
+     "width": 0.42,
+     "x0": 0.25,
+     "x1": 1,
+     "iridescent": true
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-rabauti",
+  "commonName": "Rabaut's Cory",
+  "scientificName": "Corydoras rabauti",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Colombia & Brazil",
+  "description": "A rust-orange member of the bronze-cory group with a black band running from the dorsal fin back along the top of the tail stem. It forages in loose groups in clear forest streams of the upper Amazon.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#c26c3a",
+   "dorsal": "#8a4626",
+   "ventral": "#efd8bf",
+   "fin": "#e6cfb6",
+   "finOpacity": 0.35,
+   "eye": "#c48a4a",
+   "metallic": 0.35,
+   "iridescence": 0.3,
+   "iridescenceColor": "#3c7a6a",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1d1a17",
+     "y": 0.62,
+     "width": 0.32,
+     "x0": 0.36,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#1d1a17",
+     "x": 0.4,
+     "y": 0.8,
+     "rx": 0.07,
+     "ry": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a2a20",
+     "opacity": 0.6
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-zygatus",
+  "commonName": "Black-stripe Cory",
+  "scientificName": "Corydoras zygatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru",
+  "description": "Closely related to C. rabauti but with the black band set lower, running along the middle of the orange flank from beneath the dorsal fin to the tail. Native to Peruvian tributaries of the upper Amazon.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#b8743e",
+   "dorsal": "#7a5030",
+   "ventral": "#eed8bd",
+   "fin": "#e2cdb4",
+   "finOpacity": 0.35,
+   "eye": "#c08a4c",
+   "metallic": 0.35,
+   "iridescence": 0.35,
+   "iridescenceColor": "#3c7a6a",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1c1916",
+     "y": 0.25,
+     "width": 0.35,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-melanotaenia",
+  "commonName": "Green Gold Cory",
+  "scientificName": "Corydoras melanotaenia",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Meta basin, Colombia",
+  "description": "An aeneus-group cory from the Río Meta drainage of Colombia, golden-bronze with the dark green band along the flank that gives it its name (\"black stripe\"). It is kept and spawned like the bronze cory but is rarely exported.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#9a8a52",
+   "dorsal": "#5a5a3a",
+   "ventral": "#e8d6b4",
+   "fin": "#d0c6a8",
+   "finOpacity": 0.35,
+   "eye": "#c49a4a",
+   "metallic": 0.45,
+   "iridescence": 0.5,
+   "iridescenceColor": "#4caa7a",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#d49a48",
+     "x": 0.2,
+     "y": 0.35,
+     "rx": 0.09,
+     "ry": 0.35
+    },
+    {
+     "type": "stripe",
+     "color": "#24332c",
+     "y": 0.12,
+     "width": 0.25,
+     "x0": 0.28,
+     "x1": 1,
+     "iridescent": true
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-venezuelanus",
+  "commonName": "Venezuelan Cory",
+  "scientificName": "Corydoras venezuelanus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern Venezuela",
+  "description": "An aeneus-group cory from northern Venezuela, warm orange-bronze with a broad dark greenish band along the upper flank. In the trade it is easily confused with orange-toned bronze cory forms.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#b07440",
+   "dorsal": "#5a4632",
+   "ventral": "#ecd6b8",
+   "fin": "#dccab0",
+   "finOpacity": 0.35,
+   "eye": "#c08a48",
+   "metallic": 0.4,
+   "iridescence": 0.45,
+   "iridescenceColor": "#3a8a78",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2d3c34",
+     "y": 0.35,
+     "width": 0.4,
+     "x0": 0.3,
+     "x1": 1,
+     "iridescent": true
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-paleatus",
+  "commonName": "Peppered Cory",
+  "scientificName": "Corydoras paleatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "La Plata basin & coastal rivers of southern Brazil, Uruguay & Argentina",
+  "description": "The peppered cory of the La Plata basin, one of the first aquarium catfish ever spawned in captivity (in Paris in the 1870s). It tolerates cooler water than most corydoras and spawns readily after a cool water change.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "bold"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#a49c80",
+   "dorsal": "#5b5a48",
+   "ventral": "#efe6d2",
+   "fin": "#d8d0bc",
+   "finOpacity": 0.35,
+   "eye": "#8e8c7a",
+   "metallic": 0.35,
+   "iridescence": 0.4,
+   "iridescenceColor": "#5a9a8a",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2e2e26",
+     "scale": 3,
+     "amount": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2a22",
+     "x": 0.45,
+     "y": 0.35,
+     "rx": 0.1,
+     "ry": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2a22",
+     "x": 0.72,
+     "y": 0.25,
+     "rx": 0.08,
+     "ry": 0.35
+    },
+    {
+     "type": "speckle",
+     "color": "#3a382e",
+     "density": 40
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a22",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a382e",
+       "count": 4,
+       "width": 0.08,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "corydoras-paleatus-albino",
+  "commonName": "Albino Peppered Cory",
+  "scientificName": "Corydoras paleatus (albino)",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A captive-bred albino of the peppered cory, pinkish-white with red eyes and only ghostly traces of the mottled pattern. Produced commercially in large numbers and as hardy as the wild type.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "bold"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#f1dacb",
+   "dorsal": "#e7c6b2",
+   "ventral": "#fbf0e8",
+   "fin": "#f5e6dc",
+   "finOpacity": 0.3,
+   "eye": "#c8343e",
+   "metallic": 0.25,
+   "iridescence": 0.2,
+   "iridescenceColor": "#f3dcb0",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#e2b9a0",
+     "scale": 3,
+     "amount": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8c6b2",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "variantOf": "corydoras-paleatus",
+  "availability": "common"
+ },
+ {
+  "id": "corydoras-paleatus-long-fin",
+  "commonName": "Long-fin Peppered Cory",
+  "scientificName": "Corydoras paleatus (long-fin)",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A line-bred peppered cory with greatly elongated dorsal, pectoral and tail fins, developed by hobby breeders. The long fins make it a slower, less agile swimmer than the wild form.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.46,
+    "height": 0.45,
+    "shape": "flowing",
+    "trail": 0.15
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.27,
+    "height": 0.32,
+    "shape": "flowing"
+   },
+   "caudal": {
+    "shape": "forked",
+    "size": 1.5
+   }
+  },
+  "look": {
+   "base": "#a49c80",
+   "dorsal": "#5b5a48",
+   "ventral": "#efe6d2",
+   "fin": "#d8d0bc",
+   "finOpacity": 0.35,
+   "eye": "#8e8c7a",
+   "metallic": 0.35,
+   "iridescence": 0.4,
+   "iridescenceColor": "#5a9a8a",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2e2e26",
+     "scale": 3,
+     "amount": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2a22",
+     "x": 0.45,
+     "y": 0.35,
+     "rx": 0.1,
+     "ry": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2a22",
+     "x": 0.72,
+     "y": 0.25,
+     "rx": 0.08,
+     "ry": 0.35
+    },
+    {
+     "type": "speckle",
+     "color": "#3a382e",
+     "density": 40
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a22",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a382e",
+       "count": 4,
+       "width": 0.08,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "variantOf": "corydoras-paleatus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-sterbai",
+  "commonName": "Sterba's Cory",
+  "scientificName": "Corydoras sterbai",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Guaporé basin, Brazil & Bolivia",
+  "description": "Sterba's cory is dark grey-brown covered in white spots, with bright orange leading rays on the pectoral and pelvic fins. A warmth-tolerant species from the Rio Guaporé that is often chosen as a companion for discus.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.6
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#4a4740",
+   "dorsal": "#33312c",
+   "ventral": "#ddd2bc",
+   "fin": "#d6cfc0",
+   "finOpacity": 0.35,
+   "eye": "#5a5448",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#ece6d6",
+     "density": 110,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#ece6d6",
+     "density": 160,
+     "size": 0.018,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#ec9a3a",
+     "opacity": 0.85
+    },
+    "pelvic": {
+     "color": "#e8a048",
+     "opacity": 0.7
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a372f",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a372f",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "corydoras-sterbai-albino",
+  "commonName": "Albino Sterba's Cory",
+  "scientificName": "Corydoras sterbai (albino)",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred",
+  "description": "A captive-bred albino of Sterba's cory: cream to pale yellow with faint pale spots, red eyes and the species' orange pectoral spines still present. It needs the same warm, soft water as the wild form.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.6
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#f1e2cf",
+   "dorsal": "#e6d3bc",
+   "ventral": "#fbf3ea",
+   "fin": "#f4ece0",
+   "finOpacity": 0.3,
+   "eye": "#c8343e",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#fbf8f0",
+     "density": 90,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f0a048",
+     "opacity": 0.85
+    },
+    "pelvic": {
+     "color": "#f0b060",
+     "opacity": 0.6
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "variantOf": "corydoras-sterbai",
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-haraldschultzi",
+  "commonName": "Harald Schultz's Cory",
+  "scientificName": "Corydoras haraldschultzi",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Guaporé basin, Brazil",
+  "description": "A Rio Guaporé cory close to C. sterbai but with the pattern reversed: dark spots on a light golden-tan body, plus orange pectoral spines. Named after the explorer and collector Harald Schultz.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#cdb58c",
+   "dorsal": "#9a8462",
+   "ventral": "#efe4d0",
+   "fin": "#dcd2bf",
+   "finOpacity": 0.35,
+   "eye": "#5a5040",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2f24",
+     "density": 70,
+     "size": 0.035,
+     "y0": -0.5,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#3a2f24",
+     "density": 150,
+     "size": 0.02,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e59a42",
+     "opacity": 0.8
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a2f24",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a2f24",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-nattereri",
+  "commonName": "Blue Cory",
+  "scientificName": "Corydoras nattereri",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of southeastern Brazil",
+  "description": "The blue cory of Brazil's Atlantic coastal rivers, silvery blue-grey with a dark band along the rear flank. It prefers slightly cooler, well-oxygenated water than Amazonian corydoras.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   21,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#8c979b",
+   "dorsal": "#566069",
+   "ventral": "#eef0ea",
+   "fin": "#d4d8d6",
+   "finOpacity": 0.3,
+   "eye": "#3a3e44",
+   "metallic": 0.45,
+   "iridescence": 0.5,
+   "iridescenceColor": "#6f9ec7",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2b3036",
+     "y": 0.05,
+     "width": 0.14,
+     "x0": 0.3,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#2b3036",
+     "x": 0.4,
+     "y": 0.75,
+     "rx": 0.07,
+     "ry": 0.2
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-concolor",
+  "commonName": "Slate Cory",
+  "scientificName": "Corydoras concolor",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco basin, Venezuela",
+  "description": "The slate cory is almost uniformly slate-grey, lacking the spots and bands of most relatives, as its name (\"one colour\") says. An uncommon import from Venezuela, kept like other round-snouted corydoras.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#615b56",
+   "dorsal": "#45403c",
+   "ventral": "#bfb5a8",
+   "fin": "#a59a8c",
+   "finOpacity": 0.4,
+   "eye": "#4a4440",
+   "metallic": 0.2,
+   "iridescence": 0.2,
+   "iridescenceColor": "#8a7a9a",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#3a3532",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-gossei",
+  "commonName": "Gosse's Cory",
+  "scientificName": "Corydoras gossei",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Mamoré basin, Brazil & Bolivia",
+  "description": "Gosse's cory has a plain grey body set off by bright orange fins. It comes from the Mamoré drainage on the Brazil–Bolivia border and was named for the ichthyologist Jean-Pierre Gosse.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#787775",
+   "dorsal": "#55545a",
+   "ventral": "#d6d0c6",
+   "fin": "#e08a2a",
+   "finOpacity": 0.75,
+   "eye": "#4a4848",
+   "metallic": 0.25,
+   "iridescence": 0.3,
+   "iridescenceColor": "#8a8aa8",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#4a4a4c",
+     "contrast": 0.15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8902e",
+     "opacity": 0.8
+    },
+    "caudal": {
+     "color": "#e8902e",
+     "opacity": 0.75
+    },
+    "anal": {
+     "color": "#e8902e",
+     "opacity": 0.75
+    },
+    "pelvic": {
+     "color": "#e8902e",
+     "opacity": 0.7
+    },
+    "pectoral": {
+     "color": "#d88a34",
+     "opacity": 0.6
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-julii",
+  "commonName": "Julii Cory",
+  "scientificName": "Corydoras julii",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of northeastern Brazil (Piauí & Maranhão)",
+  "description": "The true julii cory comes from coastal rivers of northeastern Brazil and is far rarer in shops than the three-stripe cory often sold under its name. It has clean black spots on the head, where C. trilineatus has a maze of lines.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d6d0c2",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1d1d1b",
+     "density": 110,
+     "size": 0.022,
+     "y0": -0.3,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#1d1d1b",
+     "density": 180,
+     "size": 0.015,
+     "x0": 0,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#1d1d1b",
+     "y": 0,
+     "width": 0.07,
+     "x0": 0.35,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#161514",
+       "x": 0.7,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1d1d1b",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-trilineatus",
+  "commonName": "Three-stripe Cory",
+  "scientificName": "Corydoras trilineatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Ecuador, Colombia & Brazil",
+  "description": "The three-stripe cory of the upper Amazon has a maze of dark lines over the head and back and a black stripe along the flank. Most \"julii cories\" in shops are actually this hardy, readily spawned species.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "bold"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d6d0c2",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#232220",
+     "scale": 7,
+     "thickness": 0.15
+    },
+    {
+     "type": "stripe",
+     "color": "#1b1a18",
+     "y": 0,
+     "width": 0.08,
+     "x0": 0.3,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3833",
+     "y": 0.45,
+     "width": 0.05,
+     "x0": 0.35,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#161514",
+       "x": 0.7,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#232220",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "corydoras-punctatus",
+  "commonName": "Punctatus Cory",
+  "scientificName": "Corydoras punctatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Suriname & French Guiana",
+  "description": "One of the earliest corydoras described (by Bloch in 1794, from Suriname): a pale body dotted with round dark spots, a dark bar through the eye and a black blotch in the dorsal fin. It is rarely exported.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d0c8b4",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.07
+    },
+    {
+     "type": "spots",
+     "color": "#262420",
+     "density": 60,
+     "size": 0.035,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#262420",
+       "x": 0.6,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#262420",
+       "count": 4,
+       "width": 0.07,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-ambiacus",
+  "commonName": "Ambiacus Cory",
+  "scientificName": "Corydoras ambiacus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Colombia & Brazil",
+  "description": "Named after the Río Ampiyacu (formerly \"Ambiyacu\") in Peru, this spotted cory has a dark bar through the eye and a black blotch in the dorsal fin. It is one of several near-identical spotted species from the upper Amazon that are often mixed in imports.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d4cdbd",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.07
+    },
+    {
+     "type": "spots",
+     "color": "#262420",
+     "density": 80,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2b26",
+     "y": 0.1,
+     "width": 0.1,
+     "x0": 0.5,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#262420",
+       "x": 0.55,
+       "y": 0,
+       "rx": 0.4,
+       "ry": 0.8
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#262420",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-agassizii",
+  "commonName": "Agassiz's Cory",
+  "scientificName": "Corydoras agassizii",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Brazil & Peru",
+  "description": "Agassiz's cory is spotted like its upper-Amazon relatives but has a dark band dropping from the dorsal fin base down the flank. It is named after the Swiss-American naturalist Louis Agassiz.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d6cfbf",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#262420",
+     "width": 0.07
+    },
+    {
+     "type": "spots",
+     "color": "#262420",
+     "density": 80,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#24221e",
+     "x": 0.42,
+     "y": 0.55,
+     "rx": 0.07,
+     "ry": 0.45
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#24221e",
+       "x": 0.4,
+       "y": 0,
+       "rx": 0.45,
+       "ry": 0.8
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#262420",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-leucomelas",
+  "commonName": "Blackfin Cory",
+  "scientificName": "Corydoras leucomelas",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Colombia & Ecuador",
+  "description": "The blackfin cory has a spotted pale body, a dark bar through the eye and an almost entirely black dorsal fin, which separates it from similar spotted species of the upper Amazon. \"Leucomelas\" means white-and-black.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d8d0c0",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#1f1e1c",
+     "width": 0.08
+    },
+    {
+     "type": "spots",
+     "color": "#222120",
+     "density": 70,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#1f1e1c",
+     "x": 0.42,
+     "y": 0.82,
+     "rx": 0.08,
+     "ry": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#1a1a18",
+     "opacity": 0.85
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#222120",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-schwartzi",
+  "commonName": "Schwartz's Cory",
+  "scientificName": "Corydoras schwartzi",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Purus basin, Brazil",
+  "description": "A pale, spotted cory from the Rio Purus drainage with a broad dark band along the upper flank from the dorsal fin to the tail and a bar through the eye. Usually wild-caught and somewhat sensitive until settled.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d2c9b6",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#23211d",
+     "width": 0.07
+    },
+    {
+     "type": "spots",
+     "color": "#23211d",
+     "density": 80,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#23211d",
+     "y": 0.5,
+     "width": 0.32,
+     "x0": 0.38,
+     "x1": 0.98
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#23211d",
+       "x": 0.5,
+       "y": 0,
+       "rx": 0.4,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#23211d",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-melanistius",
+  "commonName": "Black-sail Cory",
+  "scientificName": "Corydoras melanistius",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco & Essequibo basins, Venezuela & Guyana",
+  "description": "The black-sail cory has a pale, finely peppered body, a dark bar through the eye and a black patch running from the front of the dorsal fin down onto the flank. It lives in clear, sandy streams of the Orinoco and Essequibo basins.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d4cec2",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#1f1e1c",
+     "width": 0.07
+    },
+    {
+     "type": "spots",
+     "color": "#2a2826",
+     "density": 140,
+     "size": 0.02,
+     "y0": -0.5,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#1f1e1c",
+     "x": 0.42,
+     "y": 0.62,
+     "rx": 0.09,
+     "ry": 0.38
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1f1e1c",
+       "x": 0.4,
+       "y": 0,
+       "rx": 0.45,
+       "ry": 0.85
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a2826",
+       "count": 5,
+       "width": 0.05,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-reticulatus",
+  "commonName": "Reticulated Cory",
+  "scientificName": "Corydoras reticulatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru & Brazil",
+  "description": "The reticulated or mosaic cory is covered in a fine dark net pattern and carries a large black blotch in the dorsal fin. It shares upper-Amazon rivers with the very similar C. sodalis.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#cfc5b0",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#2a2622",
+     "scale": 6,
+     "thickness": 0.18
+    },
+    {
+     "type": "spots",
+     "color": "#2a2622",
+     "density": 160,
+     "size": 0.016,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1c1a18",
+       "x": 0.55,
+       "y": 0,
+       "rx": 0.45,
+       "ry": 0.85
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2622",
+       "density": 35,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-sodalis",
+  "commonName": "Sodalis Cory",
+  "scientificName": "Corydoras sodalis",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon (Javari basin), Peru & Brazil",
+  "description": "Its name means \"companion\": it lives alongside and closely resembles the reticulated cory, with a dark net pattern, darker mid-flank and a black dorsal blotch. The two are often imported together.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#cbc1ac",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#2a2622",
+     "scale": 7,
+     "thickness": 0.16
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2622",
+     "y": 0.05,
+     "width": 0.12,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1c1a18",
+       "x": 0.6,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2622",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-similis",
+  "commonName": "Violet Cory",
+  "scientificName": "Corydoras similis",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Madeira basin (Rondônia), Brazil",
+  "description": "The violet or smudge-spot cory has a finely dotted head, a lavender-grey body and a dark smudge on the tail stem. It comes from tributaries of the Rio Madeira and is peaceful and hardy once settled.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#8e8592",
+   "dorsal": "#6a6270",
+   "ventral": "#e4dfe0",
+   "fin": "#d8d2d0",
+   "finOpacity": 0.3,
+   "eye": "#3a3838",
+   "metallic": 0.3,
+   "iridescence": 0.3,
+   "iridescenceColor": "#a08cc0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2628",
+     "density": 150,
+     "size": 0.018,
+     "x0": 0,
+     "x1": 0.35
+    },
+    {
+     "type": "spots",
+     "color": "#3a3438",
+     "density": 60,
+     "size": 0.02,
+     "x0": 0.3,
+     "x1": 1,
+     "y0": -0.2,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2628",
+     "x": 0.9,
+     "y": 0.15,
+     "rx": 0.09,
+     "ry": 0.45
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-caudimaculatus",
+  "commonName": "Tail-spot Cory",
+  "scientificName": "Corydoras caudimaculatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Guaporé basin, Brazil",
+  "description": "As its name says, this Rio Guaporé cory carries a large black spot at the base of the tail on a pale, finely spotted body. An infrequent import that prefers warm, soft water.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d0c8b8",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2c2822",
+     "density": 70,
+     "size": 0.025,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#1c1a18",
+     "x": 0.92,
+     "y": 0.1,
+     "rx": 0.08,
+     "ry": 0.5
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-atropersonatus",
+  "commonName": "Masked Cory",
+  "scientificName": "Corydoras atropersonatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Ecuador & Peru",
+  "description": "The masked cory has bold black spots and a broad black bar through the eyes (\"atropersonatus\" means black-masked). It is a sought-after but infrequent import from Ecuador and Peru.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d6cdbb",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#1c1a18",
+     "width": 0.1
+    },
+    {
+     "type": "spots",
+     "color": "#1c1a18",
+     "density": 45,
+     "size": 0.045,
+     "y0": -0.5,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1c1a18",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1c1a18",
+       "count": 4,
+       "width": 0.08,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-axelrodi",
+  "commonName": "Axelrod's Cory",
+  "scientificName": "Corydoras axelrodi",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Meta basin, Colombia",
+  "description": "A small, tan cory from the Río Meta in Colombia with a single dark stripe running the length of the flank. It is named after the aquarium publisher Herbert R. Axelrod.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 8,
+  "lifespanYears": 7,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.35,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d3bf96",
+   "dorsal": "#9a8662",
+   "ventral": "#efe6d2",
+   "fin": "#e2d8c4",
+   "finOpacity": 0.3,
+   "eye": "#4a3e30",
+   "metallic": 0.3,
+   "iridescence": 0.2,
+   "iridescenceColor": "#c0b080",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#4a3e30",
+     "width": 0.05
+    },
+    {
+     "type": "stripe",
+     "color": "#2a241c",
+     "y": 0.02,
+     "width": 0.1,
+     "x0": 0.2,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#6a5a44",
+     "y": 0.55,
+     "width": 0.06,
+     "x0": 0.35,
+     "x1": 1
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-robineae",
+  "commonName": "Bannertail Cory",
+  "scientificName": "Corydoras robineae",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Rio Negro, Brazil",
+  "description": "The bannertail cory from the middle Rio Negro is unmistakable for the bold black-and-white horizontal stripes across its tail fin. It is a fairly slender species that needs soft, acidic water.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.3
+  },
+  "look": {
+   "base": "#d8d0c0",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2826",
+     "density": 150,
+     "size": 0.015,
+     "x0": 0,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1c1a",
+     "y": 0.05,
+     "width": 0.1,
+     "x0": 0.2,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1c1a",
+     "y": 0.82,
+     "width": 0.1,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#f0ece4",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#1a1918",
+       "count": 5,
+       "width": 0.08
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1e1c1a",
+       "x": 0.35,
+       "y": 0,
+       "rx": 0.3,
+       "ry": 0.6
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-leopardus",
+  "commonName": "Leopard Cory",
+  "scientificName": "Corydoras leopardus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru & Brazil",
+  "description": "A long-snouted cory densely spotted like a leopard, with a dark stripe on the rear flank and a black-tipped dorsal fin. Like other long-nosed species it probes deeper into the sand than round-snouted corydoras.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "snout": "elongate",
+   "headLength": 0.34,
+   "eyeSize": 0.22
+  },
+  "look": {
+   "base": "#d2c8b2",
+   "dorsal": "#a8a090",
+   "ventral": "#f2eee6",
+   "fin": "#e4dfd4",
+   "finOpacity": 0.3,
+   "eye": "#3a3a36",
+   "metallic": 0.3,
+   "iridescence": 0.25,
+   "iridescenceColor": "#a0b8b0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#262220",
+     "width": 0.06
+    },
+    {
+     "type": "spots",
+     "color": "#262220",
+     "density": 90,
+     "size": 0.028,
+     "y0": -0.5,
+     "y1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#262220",
+     "y": 0.05,
+     "width": 0.1,
+     "x0": 0.5,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1c1a18",
+       "x": 0.7,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#262220",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-adolfoi",
+  "commonName": "Adolfo's Cory",
+  "scientificName": "Corydoras adolfoi",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro near São Gabriel da Cachoeira, Brazil",
+  "description": "Named for the Manaus exporter Adolfo Schwartz, this blackwater cory is creamy white with a black eye mask, a black band along the back and a bright orange patch on the nape. It needs soft, acidic water and is sensitive to poor water quality.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#eee6d8",
+   "dorsal": "#d8ccba",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "stripe",
+     "color": "#151413",
+     "y": 0.62,
+     "width": 0.28,
+     "x0": 0.37,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#e07a2a",
+     "x": 0.26,
+     "y": 0.72,
+     "rx": 0.08,
+     "ry": 0.22
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151413",
+       "x0": 0,
+       "x1": 0.35,
+       "softness": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-duplicareus",
+  "commonName": "Duplicareus Cory",
+  "scientificName": "Corydoras duplicareus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro basin, Brazil",
+  "description": "A near-double of Adolfo's cory (its name alludes to this) with a much broader black band along the back and a larger orange nape patch. Like C. adolfoi it comes from soft blackwater streams of the upper Rio Negro.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#eee6d8",
+   "dorsal": "#d8ccba",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "stripe",
+     "color": "#151413",
+     "y": 0.55,
+     "width": 0.42,
+     "x0": 0.37,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#e07a2a",
+     "x": 0.26,
+     "y": 0.72,
+     "rx": 0.1,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151413",
+       "x0": 0,
+       "x1": 0.35,
+       "softness": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-burgessi",
+  "commonName": "Burgess's Cory",
+  "scientificName": "Corydoras burgessi",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro basin, Brazil",
+  "description": "A Rio Negro member of the adolfoi group: cream with a black eye mask, an orange-red patch on the forehead and a broad dark band along the upper flank. It is named after the ichthyologist Warren E. Burgess.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#ecdfcc",
+   "dorsal": "#d8ccba",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "stripe",
+     "color": "#151413",
+     "y": 0.5,
+     "width": 0.4,
+     "x0": 0.33,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#d8642a",
+     "x": 0.24,
+     "y": 0.7,
+     "rx": 0.1,
+     "ry": 0.28
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151413",
+       "x0": 0,
+       "x1": 0.35,
+       "softness": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-imitator",
+  "commonName": "Imitator Cory",
+  "scientificName": "Corydoras imitator",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro basin, Brazil",
+  "description": "A long-snouted cory from the upper Rio Negro that copies the pattern of the round-snouted Adolfo's cory living alongside it, one of many corydoras mimicry pairs. The two species forage together in mixed shoals.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "snout": "elongate",
+   "headLength": 0.34,
+   "eyeSize": 0.22
+  },
+  "look": {
+   "base": "#eee6d8",
+   "dorsal": "#d8ccba",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "stripe",
+     "color": "#151413",
+     "y": 0.6,
+     "width": 0.3,
+     "x0": 0.37,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#e07a2a",
+     "x": 0.26,
+     "y": 0.72,
+     "rx": 0.07,
+     "ry": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151413",
+       "x0": 0,
+       "x1": 0.35,
+       "softness": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-metae",
+  "commonName": "Bandit Cory",
+  "scientificName": "Corydoras metae",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Meta basin, Colombia",
+  "description": "The bandit cory from the Río Meta in Colombia has a black mask through the eyes, a black dorsal fin and a black band running along the back to the tail. A hardy, long-popular species.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#dccab0",
+   "dorsal": "#b8a48a",
+   "ventral": "#f4ece0",
+   "fin": "#e8e0d0",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "stripe",
+     "color": "#151413",
+     "y": 0.72,
+     "width": 0.26,
+     "x0": 0.38,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#151413",
+     "opacity": 0.9
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-simulatus",
+  "commonName": "Simulatus Cory",
+  "scientificName": "Corydoras simulatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Meta basin, Colombia",
+  "description": "A long-snouted mimic of the bandit cory from the same Río Meta drainage, with the same black eye mask, black dorsal fin and dark band along the back. Its name means \"imitating\".",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "snout": "elongate",
+   "headLength": 0.34,
+   "eyeSize": 0.22
+  },
+  "look": {
+   "base": "#d9c6aa",
+   "dorsal": "#b4a084",
+   "ventral": "#f4ece0",
+   "fin": "#e8e0d0",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.08
+    },
+    {
+     "type": "stripe",
+     "color": "#151413",
+     "y": 0.72,
+     "width": 0.26,
+     "x0": 0.38,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#151413",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-melini",
+  "commonName": "False Bandit Cory",
+  "scientificName": "Corydoras melini",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro & Vaupés drainages, Colombia & Brazil",
+  "description": "The false bandit cory has a black eye mask and a dark band running diagonally from the dorsal fin down to the lower base of the tail. It lives in the upper Rio Negro and Vaupés drainages of Colombia and Brazil.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d8ccb4",
+   "dorsal": "#b8aa92",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.47,
+     "y": 0.72,
+     "rx": 0.1,
+     "ry": 0.28
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.63,
+     "y": 0.447,
+     "rx": 0.1,
+     "ry": 0.28
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.79,
+     "y": 0.173,
+     "rx": 0.1,
+     "ry": 0.28
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.95,
+     "y": -0.1,
+     "rx": 0.1,
+     "ry": 0.28
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151413",
+       "x0": 0,
+       "x1": 0.35,
+       "softness": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-loxozonus",
+  "commonName": "Loxozonus Cory",
+  "scientificName": "Corydoras loxozonus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Meta basin, Colombia",
+  "description": "\"Loxozonus\" means oblique band: this Río Meta cory has a dark band slanting from the dorsal fin to the lower base of the tail, over a pale body dotted with small spots.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#d6c8ae",
+   "dorsal": "#b0a088",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#24221e",
+     "width": 0.07
+    },
+    {
+     "type": "spots",
+     "color": "#3a342c",
+     "density": 70,
+     "size": 0.02,
+     "y0": -0.5,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#24221e",
+     "x": 0.47,
+     "y": 0.7,
+     "rx": 0.09,
+     "ry": 0.25
+    },
+    {
+     "type": "blotch",
+     "color": "#24221e",
+     "x": 0.63,
+     "y": 0.433,
+     "rx": 0.09,
+     "ry": 0.25
+    },
+    {
+     "type": "blotch",
+     "color": "#24221e",
+     "x": 0.79,
+     "y": 0.167,
+     "rx": 0.09,
+     "ry": 0.25
+    },
+    {
+     "type": "blotch",
+     "color": "#24221e",
+     "x": 0.95,
+     "y": -0.1,
+     "rx": 0.09,
+     "ry": 0.25
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a342c",
+       "count": 4,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-davidsandsi",
+  "commonName": "Sands' Cory",
+  "scientificName": "Corydoras davidsandsi",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Negro basin, Brazil",
+  "description": "Named after the catfish author David Sands, this cory has a pinkish-orange body with a dark band along the upper flank and an orange-tinted head. It comes from the Rio Negro drainage and prefers soft, acidic water.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#e2c4a2",
+   "dorsal": "#c49a72",
+   "ventral": "#f6ece0",
+   "fin": "#ecdcc8",
+   "finOpacity": 0.3,
+   "eye": "#3a2e26",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e08848",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -0.2,
+     "y1": 1,
+     "softness": 0.6
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2420",
+     "y": 0.5,
+     "width": 0.26,
+     "x0": 0.2,
+     "x1": 1
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-arcuatus",
+  "commonName": "Skunk Cory",
+  "scientificName": "Corydoras arcuatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Ecuador & Brazil",
+  "description": "The skunk cory has a single black stripe that arcs from the snout over the back and down into the lower lobe of the tail. It is widespread in the upper Amazon and has a long-snouted mimic, C. narcissus.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#e6dccc",
+   "dorsal": "#cbbfa9",
+   "ventral": "#f6f0e6",
+   "fin": "#efe8dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1c1a18",
+     "y": 0.45,
+     "width": 0.12,
+     "x0": 0.02,
+     "x1": 0.55
+    },
+    {
+     "type": "stripe",
+     "color": "#1c1a18",
+     "y": 0.28,
+     "width": 0.12,
+     "x0": 0.5,
+     "x1": 0.8
+    },
+    {
+     "type": "stripe",
+     "color": "#1c1a18",
+     "y": 0.05,
+     "width": 0.12,
+     "x0": 0.75,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#1c1a18",
+       "y": -0.45,
+       "width": 0.18
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-narcissus",
+  "commonName": "Narcissus Cory",
+  "scientificName": "Corydoras narcissus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Purus basin, Brazil",
+  "description": "A large long-snouted cory from the Rio Purus that carries the same arched black stripe as the skunk cory, the classic example of a corydoras mimicry pair. It is only occasionally exported.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 11,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "snout": "elongate",
+   "headLength": 0.34,
+   "eyeSize": 0.22
+  },
+  "look": {
+   "base": "#e2d6c2",
+   "dorsal": "#c6b8a0",
+   "ventral": "#f6f0e6",
+   "fin": "#efe8dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1c1a18",
+     "y": 0.45,
+     "width": 0.12,
+     "x0": 0.02,
+     "x1": 0.55
+    },
+    {
+     "type": "stripe",
+     "color": "#1c1a18",
+     "y": 0.28,
+     "width": 0.12,
+     "x0": 0.5,
+     "x1": 0.8
+    },
+    {
+     "type": "stripe",
+     "color": "#1c1a18",
+     "y": 0.05,
+     "width": 0.12,
+     "x0": 0.75,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#1c1a18",
+       "y": -0.45,
+       "width": 0.18
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-weitzmani",
+  "commonName": "Weitzman's Cory",
+  "scientificName": "Corydoras weitzmani",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Urubamba basin (Cusco), Peru",
+  "description": "A yellowish cory from the foothills near Cusco, Peru, resembling a panda cory with a black eye mask and dark saddles below the dorsal fin and on the tail stem. Its upland origin means it prefers cooler water than most corydoras.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   24
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#e0c890",
+   "dorsal": "#c8aa70",
+   "ventral": "#f4ead6",
+   "fin": "#ece2cc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.44,
+     "y": 0.55,
+     "rx": 0.1,
+     "ry": 0.45
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.9,
+     "y": 0.45,
+     "rx": 0.07,
+     "ry": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a3430",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-virginiae",
+  "commonName": "Virginia's Cory",
+  "scientificName": "Corydoras virginiae",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Ucayali basin, Peru",
+  "description": "A pale grey-pink cory from the Ucayali basin of Peru with a black eye mask, a black dorsal fin and a dusky band along the back toward the tail. It is imported irregularly with other Peruvian corydoras.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 9,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.38,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior"
+  },
+  "look": {
+   "base": "#e2d6c6",
+   "dorsal": "#bfb2a0",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
+   "finOpacity": 0.3,
+   "eye": "#1c1a18",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#e0e8e0",
+   "patterns": [
+    {
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2622",
+     "x": 0.42,
+     "y": 0.78,
+     "rx": 0.08,
+     "ry": 0.22
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3632",
+     "y": 0.7,
+     "width": 0.25,
+     "x0": 0.4,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#151413",
+     "opacity": 0.85
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#3a3632",
+       "x": 0.1,
+       "y": 0,
+       "rx": 0.12,
+       "ry": 0.6
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-habrosus",
+  "commonName": "Salt and Pepper Cory",
+  "scientificName": "Corydoras habrosus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Orinoco basin, Venezuela & Colombia",
+  "description": "One of the three classic dwarf corydoras: a tan bottom-dweller with irregular dark blotches along the flank and a peppered back. Unlike the pygmy and tail-spot pygmy cories it stays mainly on the substrate rather than shoaling in midwater.",
+  "adultLengthCm": 3.2,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 10,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.36
+  },
+  "look": {
+   "base": "#cbb48c",
+   "dorsal": "#8c7656",
+   "ventral": "#efe6d2",
+   "fin": "#e0d6c2",
+   "finOpacity": 0.3,
+   "eye": "#4a4034",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a3e30",
+     "density": 60
+    },
+    {
+     "type": "stripe",
+     "color": "#4a3c2c",
+     "y": 0.08,
+     "width": 0.06,
+     "x0": 0.25,
+     "x1": 1
+    },
+    {
+     "type": "bars",
+     "color": "#3a2e22",
+     "count": 4,
+     "width": 0.06,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": -0.15,
+     "y1": 0.75
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a2e22",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a2e22",
+       "count": 4,
+       "width": 0.07,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-pygmaeus",
+  "commonName": "Pygmy Cory",
+  "scientificName": "Corydoras pygmaeus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Madeira basin, Brazil; also reported from Peru & Ecuador",
+  "description": "One of the smallest catfish in the hobby, the pygmy cory shoals in midwater among plants and leaf litter instead of staying on the bottom, with a black stripe from snout to tail along its silvery flank. It is now often placed in Gastrodermus.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 12,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.28,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.36
+  },
+  "look": {
+   "base": "#bcbcb6",
+   "dorsal": "#8a8a82",
+   "ventral": "#f4f2ec",
+   "fin": "#e4e2dc",
+   "finOpacity": 0.25,
+   "eye": "#2a2a28",
+   "metallic": 0.45,
+   "iridescence": 0.2,
+   "iridescenceColor": "#c0d0d0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1c1c1a",
+     "y": 0,
+     "width": 0.12,
+     "x0": 0.02,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#5a5a54",
+     "y": 0.65,
+     "width": 0.06,
+     "x0": 0.2,
+     "x1": 1
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.12,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "corydoras-hastatus",
+  "commonName": "Tail-spot Pygmy Cory",
+  "scientificName": "Corydoras hastatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraguay basin (Pantanal) & Amazon tributaries, Brazil, Bolivia & Paraguay",
+  "description": "The tail-spot pygmy cory hovers in loose midwater shoals, sculling with its pectoral fins, and is recognised by the white-edged black spot at the base of its tail. It is now often placed in Gastrodermus with the pygmy cory.",
+  "adultLengthCm": 2.8,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 12,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.3,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.36
+  },
+  "look": {
+   "base": "#a8a48e",
+   "dorsal": "#6e6c5c",
+   "ventral": "#ece8dc",
+   "fin": "#e2ded2",
+   "finOpacity": 0.25,
+   "eye": "#2e2e2a",
+   "metallic": 0.4,
+   "iridescence": 0.25,
+   "iridescenceColor": "#b0c0a0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#4a4a40",
+     "y": 0.05,
+     "width": 0.06,
+     "x0": 0.4,
+     "x1": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#121210",
+     "x": 0.96,
+     "y": 0,
+     "rx": 0.07,
+     "ry": 0.4,
+     "ring": "#f2f0e8"
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.12,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-gracilis",
+  "commonName": "Gracilis Cory",
+  "scientificName": "Corydoras gracilis",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Madeira basin (Rondônia), Brazil",
+  "description": "A slender dwarf cory from Rondônia in the Rio Madeira basin, pale with a thin black stripe along the flank. It spends more time swimming in open water than most corydoras.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 11,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.28,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.36
+  },
+  "look": {
+   "base": "#d4ccb8",
+   "dorsal": "#a89c86",
+   "ventral": "#f4f0e8",
+   "fin": "#e8e2d6",
+   "finOpacity": 0.25,
+   "eye": "#2a2826",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1c1a",
+     "y": 0.02,
+     "width": 0.08,
+     "x0": 0.15,
+     "x1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#4a4440",
+     "density": 60,
+     "size": 0.015,
+     "y0": 0.3,
+     "y1": 1
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-guapore",
+  "commonName": "Guapore Cory",
+  "scientificName": "Corydoras guapore",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Guaporé basin, Brazil & Bolivia",
+  "description": "A small cory from the Rio Guaporé that shoals in midwater like the pygmy species; its spotted body ends in a large black blotch at the base of the tail.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 11,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.32,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.36
+  },
+  "look": {
+   "base": "#c8c2b0",
+   "dorsal": "#8a8270",
+   "ventral": "#f0ece2",
+   "fin": "#e2dccf",
+   "finOpacity": 0.25,
+   "eye": "#2a2826",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#b8c8b8",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2e2a24",
+     "density": 60,
+     "size": 0.022,
+     "y0": -0.3,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.95,
+     "y": 0,
+     "rx": 0.08,
+     "ry": 0.45
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-elegans",
+  "commonName": "Elegant Cory",
+  "scientificName": "Corydoras elegans",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Ecuador, Colombia & Brazil",
+  "description": "A slim upper-Amazon cory that spends much of its time in open water, its greenish flanks marked with dark longitudinal bands. It gives its name to the elegans group, now often treated as the genus Gastrodermus.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 54,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger",
+   "sand-sifter"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.32,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.32
+  },
+  "look": {
+   "base": "#a69e84",
+   "dorsal": "#6a6450",
+   "ventral": "#ece6d6",
+   "fin": "#ddd6c4",
+   "finOpacity": 0.3,
+   "eye": "#3a3830",
+   "metallic": 0.4,
+   "iridescence": 0.45,
+   "iridescenceColor": "#5aa080",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2a24",
+     "y": 0.1,
+     "width": 0.1,
+     "x0": 0.2,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#3a3a30",
+     "y": 0.55,
+     "width": 0.07,
+     "x0": 0.3,
+     "x1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#2a2a24",
+     "density": 60,
+     "size": 0.02,
+     "x0": 0,
+     "x1": 0.35
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a2a24",
+       "x": 0.65,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-nanus",
+  "commonName": "Nanus Cory",
+  "scientificName": "Corydoras nanus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of Suriname & French Guiana",
+  "description": "A small, active cory from the coastal rivers of Suriname and French Guiana, silvery-cream with three dark lines along the flank. It swims higher in the water than typical corydoras and is regularly bred in aquaria.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 54,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "air-gulper",
+   "scavenger",
+   "sand-sifter",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.33,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.32
+  },
+  "look": {
+   "base": "#d6d2c6",
+   "dorsal": "#a6a090",
+   "ventral": "#f4f2ec",
+   "fin": "#e6e2d8",
+   "finOpacity": 0.3,
+   "eye": "#2e2c28",
+   "metallic": 0.45,
+   "iridescence": 0.3,
+   "iridescenceColor": "#b8c8c8",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#262420",
+     "count": 3,
+     "width": 0.05,
+     "y0": -0.2,
+     "y1": 0.8
+    },
+    {
+     "type": "spots",
+     "color": "#262420",
+     "density": 140,
+     "size": 0.015,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#262420",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "corydoras-napoensis",
+  "commonName": "Napo Cory",
+  "scientificName": "Corydoras napoensis",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Napo basin, Ecuador & Peru",
+  "description": "A member of the elegans group from the Río Napo, pale grey with a row of dark blotches along the flank. It shoals more actively in open water than typical bottom-dwelling corydoras.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 54,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger",
+   "sand-sifter"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.33,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.32
+  },
+  "look": {
+   "base": "#ccc6b6",
+   "dorsal": "#968e7c",
+   "ventral": "#f2eee6",
+   "fin": "#e4e0d4",
+   "finOpacity": 0.3,
+   "eye": "#2e2c28",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e2a24",
+     "count": 5,
+     "width": 0.05,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": -0.25,
+     "y1": 0.35
+    },
+    {
+     "type": "spots",
+     "color": "#2e2a24",
+     "density": 140,
+     "size": 0.015,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2e2a24",
+       "x": 0.6,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2e2a24",
+       "count": 4,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "corydoras-undulatus",
+  "commonName": "Undulatus Cory",
+  "scientificName": "Corydoras undulatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Paraná & Uruguay basins, Brazil & Argentina",
+  "description": "A small cory from the lower Paraná and Uruguay basins whose body is marked with wavy dark lines, as its name suggests. Coming from subtropical waters, it tolerates cooler temperatures like the peppered cory.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   20,
+   25
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 54,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 9,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "eyeSize": 0.36
+  },
+  "look": {
+   "base": "#c8c0a8",
+   "dorsal": "#8a826c",
+   "ventral": "#efe9dc",
+   "fin": "#e2dccc",
+   "finOpacity": 0.3,
+   "eye": "#3a362e",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a342a",
+     "count": 6,
+     "width": 0.04,
+     "wavy": 0.6,
+     "y0": -0.4,
+     "y1": 0.9
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a342a",
+       "count": 4,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "scleromystax-barbatus",
+  "commonName": "Bearded Cory",
+  "scientificName": "Scleromystax barbatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of southeastern Brazil (Rio de Janeiro to Santa Catarina)",
+  "description": "The bearded or banded cory of Brazil's Atlantic coastal streams is one of the largest corydoradines; mature males grow bristly cheek odontodes and a golden stripe from the snout along the back. It needs cool, well-oxygenated water.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.33,
+   "width": 0.2,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.3,
+   "snout": "pointed"
+  },
+  "look": {
+   "base": "#c4a878",
+   "dorsal": "#5a4a34",
+   "ventral": "#f0e4cc",
+   "fin": "#d8ccb0",
+   "finOpacity": 0.35,
+   "eye": "#5a4a30",
+   "metallic": 0.35,
+   "iridescence": 0.3,
+   "iridescenceColor": "#c0a050",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2a241c",
+     "scale": 3.5,
+     "amount": 0.5
+    },
+    {
+     "type": "spots",
+     "color": "#2a241c",
+     "density": 50,
+     "size": 0.03,
+     "y0": -0.3,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a241c",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a241c",
+       "count": 5,
+       "width": 0.07,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "patterns": [
+     {
+      "type": "marble",
+      "color": "#2a241c",
+      "scale": 3.5,
+      "amount": 0.5
+     },
+     {
+      "type": "spots",
+      "color": "#2a241c",
+      "density": 50,
+      "size": 0.03,
+      "y0": -0.3,
+      "y1": 1
+     },
+     {
+      "type": "stripe",
+      "color": "#e8c050",
+      "y": 0.85,
+      "width": 0.12,
+      "x0": 0,
+      "x1": 0.45,
+      "glow": 0.3
+     }
+    ]
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "scleromystax-prionotos",
+  "commonName": "Prionotos Cory",
+  "scientificName": "Scleromystax prionotos",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of southeastern Brazil",
+  "description": "A coastal Brazilian Scleromystax with a pale body covered in dark spots and blotches; as in its relatives, mature males grow bristle-like odontodes on the cheeks. It comes from cool, clear Atlantic-forest streams.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   24
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.34,
+   "width": 0.2,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.3,
+   "snout": "pointed"
+  },
+  "look": {
+   "base": "#c8b694",
+   "dorsal": "#7a6a50",
+   "ventral": "#f0e6d2",
+   "fin": "#ddd2bc",
+   "finOpacity": 0.35,
+   "eye": "#4a3e2e",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2a241c",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#2a241c",
+     "density": 60,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a241c",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a241c",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "scleromystax-macropterus",
+  "commonName": "Sailfin Cory",
+  "scientificName": "Scleromystax macropterus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of São Paulo, Paraná & Santa Catarina, Brazil",
+  "description": "Mature males of this \"big-finned\" cory develop a tall, sail-like dorsal fin, long pectoral spines and dense cheek bristles. It lives in cool, often fast-flowing coastal streams of southern Brazil.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   18,
+   23
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.33,
+   "width": 0.2,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.3,
+   "snout": "pointed"
+  },
+  "look": {
+   "base": "#c2ad88",
+   "dorsal": "#6a5a42",
+   "ventral": "#efe5d2",
+   "fin": "#d8ccb4",
+   "finOpacity": 0.35,
+   "eye": "#4a3e2e",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2c261e",
+     "density": 55,
+     "size": 0.032,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#2c261e",
+     "y": 0.05,
+     "width": 0.1,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2c261e",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2c261e",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.48,
+     "height": 0.45,
+     "shape": "sail"
+    },
+    "pectoral": {
+     "start": 0.22,
+     "end": 0.27,
+     "height": 0.3,
+     "shape": "pointed"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "scleromystax-lacerdai",
+  "commonName": "Lacerda's Cory",
+  "scientificName": "Scleromystax lacerdai",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of eastern Brazil",
+  "description": "A yellowish Scleromystax from Brazil's eastern coastal rivers, densely marked with dark spots; mature males show the genus' bristly cheeks. It was described as Corydoras lacerdai and is still often sold under that name.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 11,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.35,
+   "width": 0.2,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.3,
+   "snout": "pointed"
+  },
+  "look": {
+   "base": "#d0b880",
+   "dorsal": "#8a7450",
+   "ventral": "#f2e8d2",
+   "fin": "#e2d6bc",
+   "finOpacity": 0.35,
+   "eye": "#4a3e2a",
+   "metallic": 0.4,
+   "iridescence": 0.35,
+   "iridescenceColor": "#c8b060",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2218",
+     "density": 70,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#2a2218",
+     "density": 150,
+     "size": 0.016,
+     "x0": 0,
+     "x1": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2218",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a2218",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "aspidoras-pauciradiatus",
+  "commonName": "Pauciradiatus Cory",
+  "scientificName": "Aspidoras pauciradiatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rio Araguaia basin, Brazil",
+  "description": "A tiny, slender corydoras relative with a dark blotch in the dorsal fin, long sold as \"Corydoras pauciradiatus\". Aspidoras differ from Corydoras in skull details and tend to be livelier and more skittish.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.2
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.3,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.26,
+   "eyeSize": 0.3
+  },
+  "look": {
+   "base": "#d8c8a4",
+   "dorsal": "#a08c68",
+   "ventral": "#f2eadc",
+   "fin": "#e6dcc8",
+   "finOpacity": 0.3,
+   "eye": "#3a3228",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2e22",
+     "density": 50,
+     "size": 0.025,
+     "y0": -0.2,
+     "y1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#4a3c2c",
+     "y": 0.02,
+     "width": 0.06,
+     "x0": 0.3,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1e1a16",
+       "x": 0.45,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "aspidoras-spilotus",
+  "commonName": "Spilotus Cory",
+  "scientificName": "Aspidoras spilotus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of Ceará, northeastern Brazil",
+  "description": "A small Aspidoras from the coastal rivers of Ceará, sandy-tan with scattered dark spots (\"spilotus\" means spotted). It is imported only occasionally and is mostly bred by specialists.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.2
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.3,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.26,
+   "eyeSize": 0.3
+  },
+  "look": {
+   "base": "#d4c4a0",
+   "dorsal": "#9a8664",
+   "ventral": "#f0e8d8",
+   "fin": "#e4dac6",
+   "finOpacity": 0.3,
+   "eye": "#3a3228",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2c20",
+     "density": 45,
+     "size": 0.035,
+     "y0": -0.3,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a2018",
+       "x": 0.5,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a2c20",
+       "count": 4,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "aspidoras-fuscoguttatus",
+  "commonName": "Fuscoguttatus Cory",
+  "scientificName": "Aspidoras fuscoguttatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mato Grosso do Sul, Brazil",
+  "description": "Its name means \"dark-spotted\": a stocky little Aspidoras from Mato Grosso do Sul covered with brown spots. Peaceful and best kept in a group over fine sand.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.2
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.3,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.26,
+   "eyeSize": 0.3
+  },
+  "look": {
+   "base": "#c8b48c",
+   "dorsal": "#8a7454",
+   "ventral": "#eee4d0",
+   "fin": "#dcd0b8",
+   "finOpacity": 0.3,
+   "eye": "#3a3228",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2c1e",
+     "density": 70,
+     "size": 0.03,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a2c1e",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a2c1e",
+       "count": 4,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "aspidoras-albater",
+  "commonName": "Albater Cory",
+  "scientificName": "Aspidoras albater",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Tocantins basin (Goiás), Brazil",
+  "description": "A small Aspidoras from the upper Rio Tocantins, pale with a row of dark blotches along the flank. Like its relatives it is lively and forages in groups over sand.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.2
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.3,
+   "width": 0.19,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "headLength": 0.26,
+   "eyeSize": 0.3
+  },
+  "look": {
+   "base": "#e0d4bc",
+   "dorsal": "#9a8a70",
+   "ventral": "#f4eee2",
+   "fin": "#e8e0d0",
+   "finOpacity": 0.3,
+   "eye": "#3a3228",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e261e",
+     "count": 5,
+     "width": 0.05,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": -0.2,
+     "y1": 0.4
+    },
+    {
+     "type": "speckle",
+     "color": "#5a4c3a",
+     "density": 40
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2e261e",
+       "x": 0.5,
+       "y": 0,
+       "rx": 0.35,
+       "ry": 0.7
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.1,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ }
+]
