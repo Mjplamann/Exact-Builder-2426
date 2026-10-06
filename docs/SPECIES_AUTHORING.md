@@ -102,3 +102,18 @@ line → +1 = dorsal midline. Patterns are painted in array order (later on top)
 
 Aim for the look of a healthy adult in good lighting — the colors a keeper would recognise
 instantly. Use 1–6 patterns; prefer fewer, well-placed patterns over noisy ones.
+
+## Invertebrate conventions (renderer + data agree on these)
+
+- `adultLengthCm`: shrimp = body length without antennae; crabs = carapace width (arrow crab: body
+  incl. rostrum); hermit crabs = crab + shell; crayfish = body length; snails = shell length;
+  starfish & brittle stars = arm-tip-to-arm-tip span; urchins = test diameter (without spines).
+- `look`: `base` = carapace / shell / body color (hermit crab: `base` = the borrowed shell, `eye` =
+  eyestalk color); `fin` = legs, tube feet or spines; `fins.pectoral` = claws (chelae);
+  `fins.caudal` = shrimp/crayfish tail fan; `fins.pelvic.patterns` = leg banding (hermits);
+  `fins.dorsal` = urchin primary-spine banding. Starfish patterns: `x` runs from disc center (0)
+  to arm tip (1).
+- `body.barbels` / `barbelLength` = shrimp antennae (count, length relative to body).
+- Reproduction: `egg-carrier` only where young are actually raised in home tanks (Neocaridina,
+  Caridina bees, peppermint shrimp); berried species whose larvae need brackish/plankton rearing
+  (Amano, most marine decapods, nerites) use `none`.
