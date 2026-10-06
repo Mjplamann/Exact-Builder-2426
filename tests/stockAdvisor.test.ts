@@ -174,6 +174,48 @@ describe('stock suggestions', () => {
   });
 });
 
+describe('living with the advice', () => {
+  /**
+   * The water drifts after setup — CO₂ injection swings the pH by over a unit each day, a fresh
+   * tank degasses — so follow suggested communities through four days and nights in the sim.
+   */
+  const cases: [WaterType, string, TankSize][] = [
+    ['freshwater', 'iwagumi', SIZES.standard], ['freshwater', 'dutch', SIZES.standard], ['freshwater', 'nature', SIZES.cube],
+    ['freshwater', 'amazon', SIZES.standard], ['freshwater', 'nano-shrimp', SIZES.nano], ['freshwater', 'malawi', SIZES.standard],
+    ['freshwater', 'goldfish', SIZES.standard], ['brackish', 'mangrove', SIZES.standard], ['marine', 'reef', SIZES.cube],
+  ];
+  for (const [water, id, size] of cases) {
+    it(`${id}: suggestions stay within the sim's comfort through the daily cycle`, () => {
+      const spec = specFor(water, id, size);
+      for (const s of suggestStock(spec, species, plants).slice(0, 3)) {
+        const tank = tankFromSpec(spec, { now: Date.UTC(2026, 5, 1, 6), seed: 21 });
+        const built = AQUASCAPES.find((a) => a.id === id)!.build(tank, plants, tank.seed);
+        tank.decor = built.decor;
+        tank.plants = built.plants;
+        const world = createWorld({ tank, species, plants, settings: { ...DEFAULT_SETTINGS } });
+        const life = new LifeSim(world);
+        for (const q of s.stock) life.addFish(world, q.speciesId, q.count);
+        const seen = new Set<string>();
+        for (let step = 0; step < 4 * 24 * 4; step++) {
+          world.clock.simTime += 900_000;
+          life.update(world, 900);
+          if (step % 8) continue;
+          for (const q of s.stock) {
+            const sp = species.get(q.speciesId)!;
+            // The sim's check asks about adding one more: for a lone fighter that is a rival male.
+            if (isFighter(sp)) continue;
+            const r = life.compatibility(world, sp, 0);
+            // Water and tankmates as they are — not the stocking or group-size advice about adding more.
+            const own = r.issues.filter((t) => !/^Adding|can jump|feel secure in groups|do best as a bonded pair/.test(t));
+            if (r.level !== 'good' && own.length) seen.add(`${q.speciesId} at pH ${world.tank.waterParams.ph.toFixed(2)}, ${world.tank.waterParams.temperatureC.toFixed(1)} °C: ${own[0]}`);
+          }
+        }
+        if (s.level === 'good') expect([...seen], `${id} “${s.title}”`).toEqual([]);
+      }
+    });
+  }
+});
+
 describe('stock check', () => {
   const amazon = specFor('freshwater', 'amazon', SIZES.standard);
 

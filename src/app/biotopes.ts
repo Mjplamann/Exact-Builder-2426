@@ -58,6 +58,11 @@ const EMPTY_NAME = 'Empty tank — aquascape it yourself';
 const LONG_DAY = { onHour: 9, offHour: 21 };
 const SHORT_DAY = { onHour: 10, offHour: 20 };
 
+/*
+ * CO₂ tanks: the pH given is the degassed reading at lights-on. Injection drops it by a little
+ * over a unit by midday in the life sim (pH 7.1 → ≈ 5.8), so these start near neutral and the
+ * stock advisor checks fish against the whole daily swing.
+ */
 const BIOTOPES: Biotope[] = [
   // --- freshwater ---------------------------------------------------------------------------------
   {
@@ -70,21 +75,21 @@ const BIOTOPES: Biotope[] = [
   {
     id: 'dutch', water: 'freshwater', minLiters: 60,
     substrate: 'aqua-soil', background: 'black', slope: [4, 8],
-    chem: { temperatureC: 25, ph: 6.9, gh: 6, kh: 4 },
+    chem: { temperatureC: 25, ph: 7.1, gh: 6, kh: 4 },
     heater: true, light: { colorTempK: 6800, ...SHORT_DAY, intensity: 1 }, co2: true,
     filter: { turnover: 6 }, food: 'flakes',
   },
   {
     id: 'iwagumi', water: 'freshwater', minLiters: 20,
     substrate: 'aqua-soil', background: 'frosted', slope: [2.5, 9],
-    chem: { temperatureC: 25, ph: 6.8, gh: 4, kh: 3 },
+    chem: { temperatureC: 25, ph: 7.1, gh: 4, kh: 3 },
     heater: true, light: { colorTempK: 7000, ...SHORT_DAY, intensity: 1 }, co2: true,
     filter: { turnover: 6 }, food: 'micro-pellets',
   },
   {
     id: 'nature', water: 'freshwater', minLiters: 30,
     substrate: 'aqua-soil', background: 'frosted', slope: [3, 9],
-    chem: { temperatureC: 25.5, ph: 6.6, gh: 5, kh: 3 },
+    chem: { temperatureC: 25.5, ph: 7.1, gh: 5, kh: 3 },
     heater: true, light: { colorTempK: 6800, ...SHORT_DAY, intensity: 0.9 }, co2: true,
     filter: { turnover: 6 }, food: 'flakes',
   },

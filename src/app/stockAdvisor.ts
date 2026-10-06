@@ -159,7 +159,9 @@ function context(spec: TankSpec, species: SpeciesIndex, plants: PlantIndex): Ctx
     style: spec.aquascape,
     // An unheated tank follows the room's daily swing; a heated one sits at its set-point.
     temp: eq.heater.on ? [T, T + 0.5] : [ROOM_TEMP_C - 1, ROOM_TEMP_C + 1.6],
-    ph: [wp.ph - (eq.co2 ? 0.6 : 0.1), wp.ph + 0.1],
+    // The life sim's water drifts: CO₂ injection takes about 1.3 off the pH by midday; without
+    // it the pH settles a little above the starting value as the water degasses.
+    ph: eq.co2 ? [wp.ph - 1.32, wp.ph + 0.1] : [wp.ph - 0.15, wp.ph + 0.3],
     gh: wp.gh,
     liters: waterLiters(tank),
     size: tank.size,
@@ -187,7 +189,7 @@ function livesHere(sp: Species, c: Ctx): boolean {
   if (sp.water !== c.water) return false;
   const [tlo, thi] = sp.tempC;
   if (thi < 21 || tlo > c.temp[0] + 0.2 || thi < c.temp[1] - 0.2) return false;
-  if (sp.ph[0] > c.ph[0] + 0.2 || sp.ph[1] < c.ph[1] - 0.2) return false;
+  if (sp.ph[0] > c.ph[0] + 0.15 || sp.ph[1] < c.ph[1] - 0.15) return false;
   if (sp.dGH && c.water === 'freshwater' && (c.gh < sp.dGH[0] - 1 || c.gh > sp.dGH[1] + 2)) return false;
   if (sp.minTankLiters > c.liters) return false;
   if (c.corals) {
@@ -370,7 +372,7 @@ const TEMPLATES: Template[] = [
     slots: [{ role: 'shoal', share: 0.35, max: 3 }, { role: 'top', share: 0.2 }, { role: 'bottom', share: 0.2, optional: true }, { role: 'grazer', share: 0.06, optional: true }],
   },
   {
-    id: 'nano', intro: 'Tiny fish with a shrimp colony',
+    id: 'nano', intro: 'Tiny fish with shrimp',
     when: (c) => tropicalFw(c) && c.liters < 120,
     slots: [{ role: 'tiny', share: 0.45, max: 2 }, { role: 'shrimp', share: 0.1 }, { role: 'snail', share: 0.03, optional: true }],
   },
@@ -633,6 +635,12 @@ function pluralOf(name: string): string {
   return m ? pluralName(m[1]) + m[2] : pluralName(name);
 }
 
+/** What shrimp pick over in each style. */
+const SURFACES: Record<string, string> = {
+  amazon: 'wood and leaves', blackwater: 'wood and leaves', 'nano-shrimp': 'wood and moss', nature: 'wood and moss',
+  iwagumi: 'stones and carpet', dutch: 'plants', malawi: 'stones',
+};
+
 function phrase(p: Pick, c: Ctx, again: boolean): string {
   const name = nameOf(p.sp);
   const many = pluralOf(name);
@@ -648,10 +656,10 @@ function phrase(p: Pick, c: Ctx, again: boolean): string {
     case 'bottom':
       return `${some} ${has(p.sp, 'sand-sifter') ? 'sifting the sand' : 'foraging along the bottom'}`;
     case 'grazer':
-      return `${some} grazing algae from the glass and leaves`;
+      return `${some} grazing algae from the glass and ${c.style === 'iwagumi' ? 'stones' : 'leaves'}`;
     case 'shrimp':
     case 'colony':
-      return n >= 8 ? `a colony of ${n} ${many} picking over the wood and leaves` : `${some} picking over the wood and leaves`;
+      return `${n >= 8 ? `a colony of ${n} ${many}` : some} picking over the ${SURFACES[c.style] ?? 'plants and stones'}`;
     case 'snail':
       return `${some} tidying the algae`;
     case 'centre':
