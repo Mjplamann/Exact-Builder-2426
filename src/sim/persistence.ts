@@ -398,16 +398,18 @@ export function loadSettings(): Settings {
 export function sanitizeSettings(raw: unknown): Settings {
   const d = DEFAULT_SETTINGS;
   if (!isObj(raw)) return { ...d };
-  const bool = (v: unknown, def: boolean) => (typeof v === 'boolean' ? v : def);
-  return {
-    quality: oneOf(raw.quality, ['low', 'medium', 'high', 'ultra'] as const, d.quality),
-    sound: bool(raw.sound, d.sound),
-    volume: num(raw.volume, d.volume, 0, 1),
-    uiAutoHide: bool(raw.uiAutoHide, d.uiAutoHide),
-    showStats: bool(raw.showStats, d.showStats),
-    cameraDrift: bool(raw.cameraDrift, d.cameraDrift),
-    careMode: oneOf(raw.careMode, ['realistic', 'gentle', 'zen'] as const, d.careMode),
-    units: oneOf(raw.units, ['metric', 'imperial'] as const, d.units),
-    dayNight: bool(raw.dayNight, d.dayNight),
-  };
+  // Keep every key the defaults know about whose type matches (future settings included)…
+  const out: Record<string, unknown> = { ...d };
+  for (const k of Object.keys(d)) {
+    const v = raw[k];
+    const def = (d as unknown as Record<string, unknown>)[k];
+    if (typeof v === typeof def && (typeof v !== 'number' || Number.isFinite(v))) out[k] = v;
+  }
+  const s = out as unknown as Settings;
+  // …then enforce enumerations and ranges.
+  s.quality = oneOf(s.quality, ['low', 'medium', 'high', 'ultra'] as const, d.quality);
+  s.careMode = oneOf(s.careMode, ['realistic', 'gentle', 'zen'] as const, d.careMode);
+  s.units = oneOf(s.units, ['metric', 'imperial'] as const, d.units);
+  s.volume = num(s.volume, d.volume, 0, 1);
+  return s;
 }

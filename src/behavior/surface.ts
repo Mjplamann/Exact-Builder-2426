@@ -282,16 +282,31 @@ export function reproject(h: Habitat, fish: FishEntity, b: Brain, climbs: boolea
     const dd = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
     if (dd < so * 0.9 && h.nearestIndex >= 0) {
       const ci = h.nearestIndex;
-      const hl = Math.sqrt(hit.nx * hit.nx + hit.nz * hit.nz) || 1;
-      const nx = hit.nx / hl, nz = hit.nz / hl;
+      const hl = Math.sqrt(hit.nx * hit.nx + hit.nz * hit.nz);
+      let nx: number, nz: number;
+      if (hl > 0.25) {
+        nx = hit.nx / hl;
+        nz = hit.nz / hl;
+      } else {
+        // Under a low branch: back out the way we came.
+        const fl = Math.sqrt(f[0] * f[0] + f[2] * f[2]) || 1;
+        nx = -f[0] / fl;
+        nz = -f[2] / fl;
+      }
       if (climbs) {
         attachDecor(h, fish, b, ci);
         if (b.surf === SURF_DECOR) return;
         // (The contact point was underground: walk around the base instead.)
       }
-      const push = so - dd;
-      k.pos[0] += nx * push;
-      k.pos[2] += nz * push;
+      // Step out horizontally until clear (a couple of iterations for concave unions).
+      for (let it = 0; it < 3; it++) {
+        const dd2 = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
+        if (dd2 >= so * 0.9) break;
+        const push = (so - dd2) / Math.max(0.25, hl) + 0.001;
+        k.pos[0] += nx * push;
+        k.pos[2] += nz * push;
+        k.pos[1] = h.floor(k.pos[0], k.pos[2]) + so;
+      }
       const d = f[0] * nx + f[2] * nz;
       if (d < 0) {
         f[0] -= 1.6 * d * nx;

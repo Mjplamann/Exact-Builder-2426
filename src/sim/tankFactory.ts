@@ -33,12 +33,15 @@ export function defaultWaterParams(water: WaterType, simTime: number): WaterPara
 
 export function defaultEquipment(water: WaterType, liters: number): Equipment {
   const marine = water === 'marine';
+  // A "pinch" from the food system is ~30 mg of flakes; a real auto-feeder portion grows with
+  // the tank (≈ one pinch per 40 L per feeding keeps a moderately stocked community fed).
+  const pinches = Math.max(1, Math.min(10, Math.round(liters / 40)));
   return {
     filter: { type: liters > 400 ? 'sump' : liters > 120 ? 'canister' : 'hang-on-back', flowLph: Math.round(liters * (marine ? 8 : 5)), on: true },
     heater: { on: true, targetC: marine ? 25.5 : 25 },
     lights: { onHour: 9, offHour: 21, intensity: 0.85, colorTempK: marine ? 14000 : 6800, moonlight: true, rampMinutes: 45 },
     co2: false,
-    autoFeeder: { enabled: false, food: marine ? 'mysis' : 'flakes', hours: [9.5, 18], pinches: 1 },
+    autoFeeder: { enabled: false, food: marine ? 'mysis' : 'flakes', hours: [9.5, 18], pinches },
   };
 }
 
@@ -51,6 +54,11 @@ export interface NewTankOptions {
   seed?: number;
   /** Real ms "now" (injectable for tests). */
   now?: number;
+  /**
+   * Start with a mature (seeded) filter — the default — or a brand-new, uncycled one that has to
+   * grow its nitrifying bacteria over the first weeks (ammonia, then nitrite spikes).
+   */
+  cycled?: boolean;
 }
 
 export function newTank(opts: NewTankOptions): TankState {
@@ -72,7 +80,7 @@ export function newTank(opts: NewTankOptions): TankState {
     substrateDepthFrontCm: Math.max(2, opts.size.heightCm * 0.06),
     substrateDepthBackCm: Math.max(3, opts.size.heightCm * 0.16),
     background: opts.background ?? (marine ? 'deep-blue' : 'black'),
-    waterParams: defaultWaterParams(opts.water, now),
+    waterParams: uncycledIf(defaultWaterParams(opts.water, now), opts.cycled === false),
     equipment: defaultEquipment(opts.water, liters),
     decor: [],
     plants: [],
@@ -81,4 +89,10 @@ export function newTank(opts: NewTankOptions): TankState {
     stats: { births: 0, deaths: 0, feedings: 0, waterChanges: 0 },
     seed,
   };
+}
+
+/** A brand-new filter: only a trace of nitrifying bacteria and a faint new-tank haze. */
+function uncycledIf(wp: WaterParams, uncycled: boolean): WaterParams {
+  if (!uncycled) return wp;
+  return { ...wp, bacteria: 0.02, cloudiness: 0.08, surfaceAlgae: 0, nitrate: 2 };
 }
