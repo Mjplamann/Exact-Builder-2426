@@ -238,15 +238,18 @@ export function humanActivity(label: string | undefined): string {
 }
 
 /**
- * Dissolved-oxygen saturation (mg/L) at temperature T (°C), corrected for salinity — Benson &
- * Krause fit (freshwater) with the Weiss salinity factor approximated from specific gravity.
+ * Dissolved-oxygen saturation (mg/L) at 1 atm — Benson & Krause (1984), the USGS standard:
+ * ln C* = −139.34411 + 1.575701e5/T − 6.642308e7/T² + 1.2438e10/T³ − 8.621949e11/T⁴
+ *         − S·(0.017674 − 10.754/T + 2140.7/T²), T in kelvin, S salinity in ‰.
+ * Salinity from specific gravity at ~25 °C: S ≈ (SG − 1)·1330 (SG 1.0264 ≈ 35 ‰).
  */
 export function oxygenSaturationMgL(tempC: number, salinitySG: number): number {
-  const t = tempC;
-  const fresh = 14.652 - 0.41022 * t + 0.007991 * t * t - 0.000077774 * t * t * t;
-  // SG 1.025 ≈ 35 ppt; each ppt lowers saturation by ~0.6 %.
-  const ppt = Math.max(0, (salinitySG - 1) * 1400);
-  return Math.max(0, fresh * (1 - 0.006 * ppt));
+  const T = tempC + 273.15;
+  const S = Math.max(0, (salinitySG - 1) * 1330);
+  const ln =
+    -139.34411 + 1.575701e5 / T - 6.642308e7 / T ** 2 + 1.2438e10 / T ** 3 - 8.621949e11 / T ** 4 -
+    S * (0.017674 - 10.754 / T + 2140.7 / T ** 2);
+  return Math.exp(ln);
 }
 
 /**

@@ -74,7 +74,9 @@ export class PlantSystem {
       const cur = this.built.get(p.id);
       if (cur && cur.key === key) continue;
       if (cur) this.drop(p.id, cur);
+      const __t = performance.now();
       const build = this.buildPlant(sp, p, tank, quality);
+      console.log('[decor-dbg] plant', sp.id, (performance.now() - __t).toFixed(1));
       this.built.set(p.id, { key, build, speciesId: sp.id });
       for (const k of build.parts.keys()) this.dirtyParts.add(k);
       for (const mesh of build.meshes) {
@@ -83,7 +85,9 @@ export class PlantSystem {
       }
     }
     for (const [id, b] of [...this.built]) if (!seen.has(id)) this.drop(id, b);
+    const __f = performance.now();
     this.flush();
+    console.log('[decor-dbg] flush', (performance.now() - __f).toFixed(1));
     if (this.selected) this.applySelection(this.selected, 1);
   }
 

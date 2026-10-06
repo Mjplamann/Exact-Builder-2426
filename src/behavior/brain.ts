@@ -103,6 +103,10 @@ export class Brain {
   buried = 0;
   /** Client posing for a cleaner (s). */
   pose = 0;
+  /** Forced tail effort while stationary (digging, fanning) 0..1. */
+  thrash = 0;
+  /** Hiding because it is daytime (nocturnal species) rather than from fright. */
+  dayHide = false;
 
   // --- locomotion state ----------------------------------------------------------------------
   yaw = 0;

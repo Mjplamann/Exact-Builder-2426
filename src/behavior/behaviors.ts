@@ -172,8 +172,11 @@ function chooseCover(ctx: Ctx, fish: FishEntity, b: Brain): number {
     if (pref >= 99) continue;
     // Caves are personal: avoid occupied ones (territorial cave-dwellers fight over them).
     const crowd = c.kind === 'cave' || c.kind === 'burrow' || c.kind === 'crevice' ? h.coverUse[i] * 2 : h.coverUse[i] * 0.15;
-    // Too small a cave for a big fish?
-    if ((c.kind === 'cave' || c.kind === 'crevice' || c.kind === 'burrow') && c.radius < b.L * 0.3) continue;
+    // Too small a cave for a big fish? Already full?
+    const enclosed = c.kind === 'cave' || c.kind === 'crevice' || c.kind === 'burrow';
+    if (enclosed && c.radius < b.L * 0.3) continue;
+    const cap = Math.max(1, Math.floor((c.radius / (b.L * (enclosed ? 0.8 : 0.55))) ** 2 * (enclosed ? 0.6 : 0.9)));
+    if (h.coverUse[i] >= cap) continue;
     const dx = c.position[0] - k.pos[0], dy = c.position[1] - k.pos[1], dz = c.position[2] - k.pos[2];
     const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
     const s = (d + 0.05) * pref * (1 + crowd);
@@ -451,6 +454,7 @@ export function thinkFish(ctx: Ctx, fish: FishEntity, b: Brain): void {
 
 function enterHide(ctx: Ctx, fish: FishEntity, b: Brain): void {
   enter(ctx, fish, b, 'hide', ctx.rng.range(10, 30));
+  b.dayHide = false;
   b.restKind = RK_COVER;
   if (b.p.t.burrower && fish.state.home) b.restKind = RK_BURY;
   chooseCover(ctx, fish, b);
@@ -469,8 +473,9 @@ function enterRest(ctx: Ctx, fish: FishEntity, b: Brain, byDay: boolean): void {
   else if ((t.hoverer || t.shy) && ctx.h.cover.length > 0 && ctx.rng.chance(0.6)) kind = RK_COVER;
   if (kind === RK_BURY && ctx.world.tank.substrate === 'bare') kind = RK_COVER;
   enter(ctx, fish, b, byDay ? 'hide' : 'rest', 1e9);
+  b.dayHide = byDay;
   b.restKind = kind;
-  if (kind === RK_COVER) chooseCover(ctx, fish, b);
+  if (kind === RK_COVER && chooseCover(ctx, fish, b) < 0 && !byDay) b.restKind = zone === 'bottom' ? RK_BOTTOM : RK_HOVER;
   b.label = byDay ? 'hiding until dark' : kind === RK_BURY ? 'sleeping in the sand' : 'resting';
 }
 
@@ -575,6 +580,7 @@ export function steerFish(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): voi
   b.surfaceOk = false;
   b.floorOk = false;
   b.glassOk = false;
+  b.thrash = 0;
   b.turnBoost = 1;
   b.accelBoost = 1;
   b.posture = p.postureCruise;
@@ -750,7 +756,6 @@ function steerHover(ctx: Ctx, fish: FishEntity, b: Brain): void {
     b.dy = (b.gy - k.pos[1]) / Math.max(L, 0.01);
   }
   b.posture = p.postureRest * 0.7 + p.postureCruise * 0.3;
-  if (p.species.locomotion === 'gymnotiform' && ctx.rng.chance(0.002)) b.ds = -0.3 * p.cruise * L;
   b.label = p.t['anemone-host'] && fish.state.home ? 'hovering by its anemone' : 'hovering';
 }
 
@@ -816,6 +821,11 @@ function forageBottom(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
     b.pitchLimit = 10 * DEG;
     if (!sifter && ctx.rng.chance(dt * 2.5)) b.chewT = 0.25;
     b.label = sifter ? 'sifting sand' : 'rooting in the substrate';
+    if (p.t.digger && ctx.world.tank.substrate !== 'bare') {
+      // Excavating: nose down, tail fanning hard to blow sand out of the pit.
+      b.thrash = 0.55 + 0.35 * Math.sin(ctx.t * 9);
+      b.label = 'digging a pit';
+    }
     if (b.subT > b.subDur) {
       b.subT = 0;
       if (sifter) {
@@ -935,7 +945,7 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
       b.ds = 0;
       b.hasSurfTarget = false;
     }
-    b.label = b.mode === 'hide' ? 'hiding until dark' : 'resting on the glass';
+    b.label = b.mode === 'hide' && b.dayHide ? 'hiding until dark' : 'resting on the glass';
     if (b.surf === SURF_SUBSTRATE) b.label = 'resting on the bottom';
     if (b.surf === SURF_DECOR) b.label = 'resting on the decor';
     return;
@@ -968,7 +978,7 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
       b.ds = 0;
       b.hasSurfTarget = false;
     }
-    b.label = b.mode === 'hide' ? 'hiding until dark' : b.rest > 0.5 ? 'sleeping on the bottom' : 'resting on the bottom';
+    b.label = b.mode === 'hide' && b.dayHide ? 'hiding until dark' : b.rest > 0.5 ? 'sleeping on the bottom' : 'resting on the bottom';
     b.pitchLimit = p.maxPitch * 0.8;
     return;
   }
@@ -999,7 +1009,7 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
       b.hold = true;
       face(b, Math.cos(b.yaw), Math.sin(b.yaw), 0);
       b.buried = Math.min(1, b.buried + dt / (b.fear > 0.3 ? 0.6 : 2.5));
-      b.label = b.mode === 'hide' ? (b.fear > 0.3 ? 'hiding in its burrow' : 'buried until dark') : 'sleeping in the sand';
+      b.label = b.mode === 'hide' ? (b.dayHide ? 'buried until dark' : 'hiding in its burrow') : 'sleeping in the sand';
     }
     return;
   }
@@ -1028,7 +1038,7 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
         b.dy = (b.gy - k.pos[1]) / Math.max(0.01, L);
         b.floorOk = true;
       }
-      b.label = kind === RK_ANEMONE ? 'nestled in its anemone' : b.mode === 'hide' ? (b.fear > 0.2 ? 'hiding' : 'hiding until dark') : 'sleeping in cover';
+      b.label = kind === RK_ANEMONE ? 'nestled in its anemone' : b.mode === 'hide' ? (b.dayHide ? 'hiding until dark' : b.fear > 0.2 ? 'hiding' : 'sheltering') : 'sleeping in cover';
       return;
     }
     // No cover in the tank: hide low against the back glass, near the corners.
@@ -1201,6 +1211,22 @@ function steerFeed(ctx: Ctx, fish: FishEntity, b: Brain): void {
   desire(b, vx, vy, vz, speed);
   if (dc < 3 * L) b.turnBoost = 1.6;
   const hf = h.heightFrac(f.pos[0], f.pos[1], f.pos[2]);
+  if (p.t.spitter && f.state === 'floating' && f.kind === 'fruit-flies' && b.biteT <= 0) {
+    // Archerfish: line up beneath the insect, pause to aim, then strike.
+    const hd = Math.hypot(f.pos[0] - k.pos[0], f.pos[2] - k.pos[2]);
+    if (b.sub === 0 && hd < 3 * L && f.pos[1] - k.pos[1] < 6 * L) {
+      b.sub = 1;
+      b.subT = 0;
+    }
+    if (b.sub === 1 && b.subT < 0.9) {
+      b.hold = true;
+      b.pitchLimit = 40 * DEG;
+      b.posture = 25 * DEG;
+      face(b, f.pos[0] - k.pos[0], f.pos[2] - k.pos[2], 0.02 * p.cruise * L);
+      b.label = 'taking aim';
+      return;
+    }
+  }
   if (f.state === 'floating' || hf > 0.94) {
     b.surfaceOk = true;
     b.pitchLimit = 40 * DEG;

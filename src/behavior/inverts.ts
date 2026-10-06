@@ -218,7 +218,9 @@ export function steerInvert(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): v
       const d = Math.sqrt(fdx * fdx + fdy * fdy + fdz * fdz);
       // Shrimp swim over to food that is far away or on another surface.
       const otherSurface = f.state === 'settled' && ((rt(f).restOn ?? -1) >= 0 ? b.surf !== SURF_DECOR : b.surf !== SURF_SUBSTRATE);
-      if (walker && fish.species.group === 'shrimp' && (d > 0.18 || (otherSurface && d > 3 * L)) && b.surf !== SURF_NONE) {
+      // (Only for food that has landed or is about to: shrimp don't chase pellets up the water column.)
+      const nearBottom = f.state === 'settled' || f.pos[1] - h.floor(f.pos[0], f.pos[2]) < 0.04;
+      if (walker && fish.species.group === 'shrimp' && nearBottom && (d > 0.18 || (otherSurface && d > 3 * L)) && b.surf !== SURF_NONE) {
         enterInv(b, 'swim', 8);
         b.gx = f.pos[0];
         b.gy = f.pos[1] + standoff(b);

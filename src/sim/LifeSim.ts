@@ -78,6 +78,9 @@ const MAX_STEP_S = 900;
 const CATCHUP_TARGET_STEPS = 2200;
 const CATCHUP_MIN_STEP_S = 300;
 const CATCHUP_MAX_STEP_S = 4 * 3600;
+/** Absences longer than two months use 6-hour steps (still 4 per day: feeds, day & night). */
+const CATCHUP_LONG_S = 60 * 86400;
+const CATCHUP_LONG_STEP_S = 6 * 3600;
 /** Plants and algae change over days: integrate them at most hourly. */
 const FLORA_STEP_S = 3600;
 /** Of a meal's satiety, this share is felt at once (gut distension); the rest as it digests. */
@@ -100,6 +103,21 @@ const GREW_EVENT_FRACTION = 0.02;
 const JOURNAL_MAX = 500;
 
 type WarnKind = 'ammonia' | 'nitrite' | 'nitrate' | 'oxygen' | 'temperature' | 'hunger' | 'algae' | 'plants';
+
+/** Census stress ids → the cause reported with 'fish-died' (shown to the keeper as-is). */
+const CAUSE_TEXT: Record<string, string> = {
+  ammonia: 'ammonia poisoning',
+  nitrite: 'nitrite poisoning',
+  nitrate: 'high nitrate',
+  'low oxygen': 'low oxygen',
+  'too warm': 'water too warm',
+  'too cold': 'water too cold',
+  ph: 'unsuitable pH',
+  salinity: 'wrong salinity',
+  cramped: 'a tank too small',
+  lonely: 'loneliness',
+  tankmates: 'stress from tankmates',
+};
 
 interface PendingBirth {
   mother: FishEntity;
@@ -154,7 +172,6 @@ export class LifeSim implements BreedHost {
   private animalO2 = 0;
   private detritusMgDay = 0;
   private capacityRatio = 0;
-  private stepNow = 0;
   private deadFish: FishEntity[] = [];
   private deadCause: string[] = [];
   private deadCount = 0;
@@ -316,7 +333,8 @@ export class LifeSim implements BreedHost {
     this.tallyDied = [];
     this.pending = 0;
 
-    const n = Math.max(1, Math.ceil(simSeconds / clamp(simSeconds / CATCHUP_TARGET_STEPS, CATCHUP_MIN_STEP_S, CATCHUP_MAX_STEP_S)));
+    const maxStep = simSeconds > CATCHUP_LONG_S ? CATCHUP_LONG_STEP_S : CATCHUP_MAX_STEP_S;
+    const n = Math.max(1, Math.ceil(simSeconds / clamp(simSeconds / CATCHUP_TARGET_STEPS, CATCHUP_MIN_STEP_S, maxStep)));
     const dt = simSeconds / n;
     this.catchingUp = true;
     try {
@@ -346,7 +364,6 @@ export class LifeSim implements BreedHost {
   private step(world: World, dt: number, now: number, live: boolean): void {
     const tank = world.tank;
     const zen = this.careModeNow === 'zen';
-    this.stepNow = now;
     const lights = tank.equipment.lights;
     const hour = localHour(now - dt * 500);
     // Biology follows the light *schedule* even when the view pins daylight.
@@ -406,11 +423,12 @@ export class LifeSim implements BreedHost {
     this.deadCount = 0;
     this.eatenCount = 0;
 
+    const fishStats = census.fishStats;
     for (let i = 0; i < fish.length; i++) {
       const f = fish[i];
       const s = f.state;
       const sp = f.species;
-      const st = census.stats(sp);
+      const st = fishStats[i] ?? census.stats(sp);
       const L = s.lengthCm;
       const w = st.massCoef * L * L * L;
       const cap = STOMACH_MG_PER_G * w;
@@ -486,7 +504,7 @@ export class LifeSim implements BreedHost {
 
       // --- growth: von Bertalanffy, slowed by hunger, stress, cold, poor water, cramped tank --
       const linf = linfOf(st, s) * st.stunt;
-      if (L < linf) {
+      if (L < linf * 0.9995) {
         const f =
           (1 - smoothstep(0.35, 0.85, s.hunger)) *
           (1 - 0.6 * smoothstep(0.25, 0.9, s.stress)) *
@@ -558,15 +576,16 @@ export class LifeSim implements BreedHost {
     }
   }
 
+  /** The main reason a fish's health gave out, as a short readable phrase ("ammonia poisoning"). */
   private causeOf(s: FishState, st: SpeciesStats): string {
     const starve = smoothstep(0.85, 1, s.hunger);
     if (starve > 0.5 && starve * 0.3 >= st.acute) return 'starvation';
-    if (st.acute > 0.05) return st.acuteCause || 'poor water';
+    if (st.acute > 0.05) return CAUSE_TEXT[st.acuteCause] ?? 'poor water quality';
     const env = st.envStress, tox = st.toxStress, soc = st.socialStress;
-    if (tox >= env && tox >= soc && tox > 0.1) return st.toxCause || 'poor water';
-    if (env >= soc && env > 0.1) return st.envCause === 'cramped' ? 'stress' : st.envCause || 'stress';
-    if (soc > 0.1) return st.socialCause === 'tankmates' ? 'tankmates' : 'stress';
-    return starve > 0 ? 'starvation' : 'stress';
+    if (tox >= env && tox >= soc && tox > 0.1) return CAUSE_TEXT[st.toxCause] ?? 'poor water quality';
+    if (env >= soc && env > 0.1) return CAUSE_TEXT[st.envCause] ?? 'chronic stress';
+    if (soc > 0.1) return CAUSE_TEXT[st.socialCause] ?? 'chronic stress';
+    return starve > 0 ? 'starvation' : 'chronic stress';
   }
 
   private markDead(f: FishEntity, cause: string): void {
@@ -724,8 +743,9 @@ export class LifeSim implements BreedHost {
         text = n === 1 ? `A ${name} fry was born.` : `${n} ${name} fry were born.`;
     }
     text = capitalize(text);
+    // The UI turns the 'fish-born' events into one batched toast; the journal keeps the story.
     this.journal(world, 'born', text, now, motherId);
-    if (live) world.events.emit('notify', { message: text, level: 'success' });
+    void live;
   }
 
   // ===========================================================================================
@@ -833,10 +853,14 @@ export class LifeSim implements BreedHost {
     return true;
   }
 
+  /**
+   * Journal the heads-up; gentle 'info' hints are also toasted. Water-quality warnings are
+   * journal-only because the UI already shows its own throttled water-quality reminders.
+   */
   private fire(world: World, now: number, live: boolean, level: 'warning' | 'info', text: string): void {
     this.lastWarnReal = world.clock.realSeconds;
     this.journal(world, level === 'warning' ? 'warning' : 'info', text, now);
-    if (live) world.events.emit('notify', { message: text, level });
+    if (live && level === 'info') world.events.emit('notify', { message: text, level });
   }
 
   private maybeEmitPlants(world: World): void {

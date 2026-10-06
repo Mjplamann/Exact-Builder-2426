@@ -8,7 +8,7 @@ import { DECOR_CATALOG, type DecorVariant } from '../../decor/catalog';
 import { TANK_SIZES } from '../../sim/tankFactory';
 import type { Panel, UIHost } from '../context';
 import { confirmButton, section, segmented, slider, tabs } from '../controls';
-import { clear, debounce, h, setClass, throttle } from '../dom';
+import { clear, debounce, h, prefersReducedMotion, setClass, throttle } from '../dom';
 import { formatLength, formatLiters } from '../format';
 import { icon } from '../icons';
 import { BACKGROUNDS, SUBSTRATES, decorColor, decorGlyph, plantGlyph } from '../scapeArt';
@@ -318,7 +318,7 @@ export class AquascapePanel implements Panel {
     this.setTab('tank');
     requestAnimationFrame(() => {
       const secs = this.views.tank.querySelectorAll('.aq-sec');
-      (secs[secs.length - 2] as HTMLElement | undefined)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      (secs[secs.length - 2] as HTMLElement | undefined)?.scrollIntoView({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     });
   }
 

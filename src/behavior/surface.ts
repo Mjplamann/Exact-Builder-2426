@@ -295,7 +295,8 @@ export function reproject(h: Habitat, fish: FishEntity, b: Brain, climbs: boolea
       }
       if (climbs) {
         attachDecor(h, fish, b, ci);
-        if (b.surf === SURF_DECOR) return;
+        // (attachDecor may fall back to the substrate; TS keeps the earlier narrowing.)
+        if ((b.surf as number) === SURF_DECOR) return;
         // (The contact point was underground: walk around the base instead.)
       }
       // Step out horizontally until clear (a couple of iterations for concave unions).

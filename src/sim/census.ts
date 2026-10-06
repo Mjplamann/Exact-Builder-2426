@@ -127,6 +127,8 @@ export class Census {
   /** Species present this step: `active[0..activeCount)`. */
   active: SpeciesStats[] = [];
   activeCount = 0;
+  /** Stats of `world.fish[i]` at build time (valid until the fish list changes). */
+  fishStats: SpeciesStats[] = [];
   /** Gapes (cm) of every animal that can eat small prey; sorted lazily on first query. */
   private gapes = new Float64Array(512);
   gapeCount = 0;
@@ -267,9 +269,12 @@ export class Census {
     let gapes = this.gapes;
     const fish = world.fish;
     this.fishCount = fish.length;
+    const fishStats = this.fishStats;
+    fishStats.length = fish.length;
     for (let i = 0; i < fish.length; i++) {
       const f = fish[i];
       const st = this.stats(f.species);
+      fishStats[i] = st;
       if (st.stamp !== stamp) {
         st.stamp = stamp;
         st.count = 0;

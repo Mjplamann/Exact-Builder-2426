@@ -156,12 +156,14 @@ export class FishPanel implements Panel {
     this.el = h('div', { class: 'aq-fish-panel' }, this.tabBar.el, this.catalogEl, this.tankEl);
 
     const ev = app.world.events;
-    const stockChanged = () => {
+    // Adding a group or a brood fires one event per animal: coalesce into one refresh.
+    const refreshSoon = debounce(() => {
       this.compatCache.clear();
       this.recount();
       this.dirtyTank = true;
       if (host.openPanelId === 'fish') this.onStockChanged();
-    };
+    }, 120);
+    const stockChanged = () => refreshSoon();
     ev.on('fish-added', stockChanged);
     ev.on('fish-removed', stockChanged);
     ev.on('fish-died', stockChanged);

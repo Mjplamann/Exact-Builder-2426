@@ -37,7 +37,14 @@ export function integrateSwimmer(env: SwimEnv, fish: FishEntity, b: Brain, dt: n
 
   // ---- heading (yaw) ------------------------------------------------------------------------
   const dhor = Math.sqrt(b.dx * b.dx + b.dz * b.dz);
-  const wantYaw = dhor > 0.04 ? Math.atan2(b.dz, b.dx) : b.yaw;
+  let wantYaw = dhor > 0.04 ? Math.atan2(b.dz, b.dx) : b.yaw;
+  // Fin-driven swimmers back up a short way instead of turning round (knifefish, cichlids,
+  // puffers): a slow desire pointing behind them, while station-keeping.
+  let backing = false;
+  if (p.canReverse && b.hold && b.turnBoost < 1.2 && b.ds > 0 && b.ds < 0.45 * p.cruise * L && Math.cos(wantYaw - b.yaw) < -0.6) {
+    backing = true;
+    wantYaw = wrapAngle(wantYaw + Math.PI);
+  }
   const err = wrapAngle(wantYaw - b.yaw);
   // Routine turns need thrust: body-caudal swimmers turn slowly when barely moving, paired-fin
   // swimmers (angels, gouramis, puffers) can pivot on the spot but deliberately.
@@ -60,8 +67,8 @@ export function integrateSwimmer(env: SwimEnv, fish: FishEntity, b: Brain, dt: n
   const cruise = p.cruise * L;
   // Slow down while turning hard (except during escapes), as real fish do.
   const align = Math.cos(err);
-  let target = b.ds;
-  if (b.turnBoost < 1.5) target *= 0.35 + 0.65 * Math.max(0, align);
+  let target = backing ? -b.ds * 0.8 : b.ds;
+  if (b.turnBoost < 1.5 && !backing) target *= 0.35 + 0.65 * Math.max(0, align);
   const prevSpeed = b.speed;
   let effortTarget: number;
   const glideTau = p.glideTau * Math.sqrt(Math.max(0.005, L) / 0.04);
@@ -132,10 +139,11 @@ export function integrateSwimmer(env: SwimEnv, fish: FishEntity, b: Brain, dt: n
     tailT = b.beating ? b.effort : 0;
     if (b.hold && sAbs < 0.3 * cruise) tailT = Math.max(tailT * 0.4, 0.06);
     if (p.continuousWave) tailT = Math.max(tailT, sAbs > 0.05 * cruise ? 0.22 : 0.06);
+    tailT = Math.max(tailT, b.thrash);
   } else {
     // Median/paired-fin swimmers keep the body stiff until they need speed.
     const tailOn = clamp((sAbs / L - 1.3 * p.cruise) / Math.max(0.2, p.cruise), 0, 1);
-    tailT = Math.max(0.04, b.effort * tailOn);
+    tailT = Math.max(0.04, b.effort * tailOn, b.thrash);
     if (b.turnBoost > 1.5) tailT = 1;
   }
   b.tailAmp = approach(b.tailAmp, tailT, 0.07, dt);

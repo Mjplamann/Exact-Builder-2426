@@ -14,7 +14,7 @@ import type { FinDef, ResolvedBody } from './archetypes';
 import { ATLAS, cellLocal, type Cell } from './atlas';
 import { hex, luma, mix, type RGB } from './color';
 import { rayCount } from './fins';
-import { fbm, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
+import { fastNoise, fbm, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
 import type { BodyProfile } from './profile';
 
 /**
@@ -54,10 +54,11 @@ export interface Bufs {
   mask: Float32Array;
 }
 
-let scratch: Bufs | null = null;
+const scratchBySize = new Map<number, Bufs>();
 export function bufs(N: number): Bufs {
   const W = 2 * N, H = N, n = W * H;
-  if (!scratch || scratch.W !== W) {
+  let scratch = scratchBySize.get(N) ?? null;
+  if (!scratch) {
     scratch = {
       W, H,
       col: new Float32Array(n * 3),
@@ -69,6 +70,7 @@ export function bufs(N: number): Bufs {
       emis: new Float32Array(n * 3),
       mask: new Float32Array(n),
     };
+    scratchBySize.set(N, scratch);
   }
   const b = scratch;
   b.col.fill(0.5);
@@ -146,7 +148,7 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
   switch (body.skin) {
     case 'scaled': {
       if (body.scaleSize <= 0.02 || x < head * 0.92) {
-        out[0] = 0.05 * (valueNoise(x * 90, Y * 90, 3) - 0.5);
+        out[0] = 0.05 * (fastNoise(x * 90, Y * 90) - 0.5);
         return;
       }
       const ncol = 62 - 40 * body.scaleSize;
@@ -183,7 +185,7 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
     case 'scutes': {
       // Corydoras: two rows of overlapping bony plates meeting along the flank midline.
       if (x < head) {
-        out[0] = 0.15 * (fbm(x * 40, Y * 40, 7, 2) - 0.5);
+        out[0] = 0.15 * (fastNoise(x * 40, Y * 40 + 5) - 0.5);
         out[2] = 0.5;
         return;
       }
@@ -208,7 +210,7 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
       const f = q - Math.floor(q);
       const seam = 1 - smooth(0, 0.1, Math.min(f, 1 - f));
       const rowSeam = 1 - smooth(0, 0.05, Math.abs(y - (ri > 0 ? (rows[ri - 1] + rows[ri]) / 2 : -2)));
-      const odont = smooth(0.72, 0.95, valueNoise(x * 260, Y * 260, 13));
+      const odont = smooth(0.72, 0.95, fastNoise(x * 260, Y * 260 + 9));
       out[0] = 0.35 * (1 - f) - 0.7 * seam - 0.5 * rowSeam + 0.25 * odont;
       out[1] = Math.max(seam, rowSeam) * 0.6;
       out[2] = hash2(Math.floor(q), ri, 33);
@@ -255,8 +257,8 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
       return;
     }
     case 'prickly': {
-      const sp = smooth(0.78, 0.92, valueNoise(x * 140, Y * 140, 29));
-      out[0] = 0.5 * sp + 0.06 * (fbm(x * 30, Y * 30, 2, 2) - 0.5);
+      const sp = smooth(0.78, 0.92, fastNoise(x * 140 + 3, Y * 140));
+      out[0] = 0.5 * sp + 0.06 * (fastNoise(x * 30, Y * 30 + 11) - 0.5);
       out[1] = sp * 0.3;
       out[2] = 0.5;
       return;
@@ -277,7 +279,7 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
       // Smooth mucus-covered skin; faint myomere chevrons on the flank.
       const q = (x - Math.abs(y) * 0.06 * hd * 10) * 34;
       const f = q - Math.floor(q);
-      out[0] = 0.08 * (1 - smooth(0, 0.1, Math.min(f, 1 - f))) * -1 + 0.04 * (valueNoise(x * 70, Y * 70, 21) - 0.5);
+      out[0] = 0.08 * (1 - smooth(0, 0.1, Math.min(f, 1 - f))) * -1 + 0.04 * (fastNoise(x * 70 + 7, Y * 70) - 0.5);
       out[1] = 0;
       out[2] = 0.5;
       return;
@@ -403,8 +405,34 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
   const opX = head.opercleX, hl = head.headLen;
   const llOn = body.skin === 'scaled' && body.scaleSize > 0.2;
   const translucent = clamp(look.translucency ?? 0, 0, 1);
+  // Per-column / per-row precomputation keeps the per-pixel work to plain arithmetic.
+  const gapeY = new Float32Array(s.w).fill(NaN);
+  const gapeFade = new Float32Array(s.w);
+  const llY = new Float32Array(s.w);
+  const llPore = new Float32Array(s.w);
+  const llFreq = (62 - 40 * body.scaleSize) * Math.PI * 2;
+  for (let c = 0; c < s.w; c++) {
+    const x = s.px[c];
+    if (hasGape && x < head.rictusX + 0.01) {
+      const t = clamp((x - sL * 0.85) / Math.max(1e-4, head.rictusX - sL * 0.85), 0, 1);
+      gapeY[c] = prof.patternY(x, head.yTip - head.gapeDrop * t);
+      gapeFade[c] = 1 - smooth(0.85, 1.0, t);
+    }
+    llY[c] = 0.05 + 0.42 * (1 - smooth(0.2, 0.92, x));
+    llPore[c] = 0.5 + 0.5 * Math.cos(x * llFreq);
+  }
+  const opRow = new Float32Array(s.h), preRow = new Float32Array(s.h);
   for (let r = 0; r < s.h; r++) {
     const y = s.py[r];
+    opRow[r] = opX - hl * 0.22 * (y + 0.1) * (y + 0.1);
+    preRow[r] = opX - hl * 0.36 - hl * 0.12 * (y + 0.2) * (y + 0.2);
+  }
+  const noiseOff = (ctx.seed % 257) * 0.123;
+  const transOn = translucent > 0.42;
+  for (let r = 0; r < s.h; r++) {
+    const y = s.py[r];
+    const op = opRow[r], pre = preRow[r];
+    const opRowOn = y > -0.9 && y < 0.62, preOn = y > -0.8 && y < 0.35, slitOn = y > -0.8 && y < 0.4;
     for (let c = 0; c < s.w; c++) {
       const x = s.px[c];
       const hd = s.hd[c];
@@ -412,58 +440,55 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
       skinField(ctx, x, y, hd, sk);
       if (!night) height[i] = sk[0];
       let k = 1;
-      // Scale margins carry melanophores; scale centers catch a little more light.
-      let tint: RGB | null = null;
+      // Scale margins carry melanophores (or the authored 'scales' color).
       const edge = sk[1] * scaleContrast;
-      if (edge > 0) {
-        if (scaleCol) tint = scaleCol;
-        else k *= 1 - 0.55 * edge;
-      }
+      if (edge > 0 && !scaleCol) k *= 1 - 0.55 * edge;
       if (!night) {
         // Guanine platelets: each scale reflects a little differently (the glitter of a shoal).
-        const sparkle = 0.75 + 0.5 * sk[2];
-        metal[i] *= sparkle;
+        metal[i] *= 0.75 + 0.5 * sk[2];
         rough[i] = clamp(rough[i] + 0.06 * sk[1] - 0.04 * (sk[2] - 0.5), 0.08, 0.9);
       }
       // --- head anatomy ---
       if (x < opX + 0.04) {
-        // Opercle (gill cover) rear edge: convex backward arc.
-        const op = opX - hl * 0.22 * (y + 0.1) * (y + 0.1);
-        const dxo = (x - op) / Math.max(0.0025, 0.004 + 0.002 * hd);
-        if (y > -0.9 && y < 0.62) {
-          const line = Math.exp(-dxo * dxo);
-          k *= 1 - 0.22 * line;
-          if (dxo < 0 && dxo > -3) k *= 1 + 0.04 * (1 + dxo / 3);
-          if (!night) height[i] += 0.5 * smooth(1.5, -1.5, dxo) - 0.25;
+        if (opRowOn) {
+          // Opercle (gill cover) rear edge: a convex backward arc, slightly raised.
+          const dxo = (x - op) / Math.max(0.0025, 0.004 + 0.002 * hd);
+          if (dxo > -4 && dxo < 4) {
+            k *= 1 - 0.22 * Math.exp(-dxo * dxo);
+            if (dxo < 0 && dxo > -3) k *= 1 + 0.04 * (1 + dxo / 3);
+            if (!night) height[i] += 0.5 * smooth(1.5, -1.5, dxo) - 0.25;
+          } else if (!night && dxo <= -4) height[i] += 0.25;
+          else if (!night) height[i] -= 0.25;
         }
-        // Preopercle: a faint inner arc.
-        const pre = opX - hl * 0.36 - hl * 0.12 * (y + 0.2) * (y + 0.2);
-        const dxp = (x - pre) / 0.004;
-        if (y > -0.8 && y < 0.35) k *= 1 - 0.07 * Math.exp(-dxp * dxp);
-        // Eye socket ring.
+        if (preOn) {
+          const dxp = (x - pre) / 0.004;
+          if (dxp > -4 && dxp < 4) k *= 1 - 0.07 * Math.exp(-dxp * dxp);
+        }
+        // Eye socket ring and nostrils.
         const ex = (x - head.eyeX) / eyeR, ey = ((y - eyePY) * hd) / eyeR;
-        const de = Math.sqrt(ex * ex + ey * ey);
-        if (de < 1.6) {
+        const de2 = ex * ex + ey * ey;
+        if (de2 < 6.5) {
+          const de = Math.sqrt(de2);
           k *= 1 - 0.25 * smooth(0.95, 1.08, de) * (1 - smooth(1.15, 1.55, de));
           if (de < 1) k *= 0.6;
+          const nx = (ex + 1.55) / 0.16, ny = (ey - 0.45) / 0.16;
+          const nn = nx * nx + ny * ny;
+          if (nn < 4) k *= 1 - 0.35 * Math.exp(-nn);
         }
-        // Nostrils.
-        const nx = (x - (head.eyeX - eyeR * 1.55)) / (eyeR * 0.16), ny = ((y - eyePY) * hd - eyeR * 0.45) / (eyeR * 0.16);
-        if (nx * nx + ny * ny < 1.5) k *= 1 - 0.35 * Math.exp(-(nx * nx + ny * ny));
         // Gape (mouth line) with lips.
-        if (hasGape && x < head.rictusX + 0.01) {
-          const t = clamp((x - sL * 0.85) / Math.max(1e-4, head.rictusX - sL * 0.85), 0, 1);
-          const gy = prof.patternY(x, head.yTip - head.gapeDrop * t);
+        const gy = gapeY[c];
+        if (gy === gy) {
           const d = ((y - gy) * hd) / 0.0045;
-          const fade = 1 - smooth(0.85, 1.0, t);
-          k *= 1 - 0.5 * Math.exp(-d * d) * fade;
-          const lip = Math.exp(-((Math.abs(d) - 2.2) ** 2) / 1.5) * fade;
-          k *= 1 + 0.05 * lip * body.lips * 2;
+          if (d > -5 && d < 5) {
+            const fade = gapeFade[c];
+            k *= 1 - 0.5 * Math.exp(-d * d) * fade;
+            const lip = Math.exp(-((Math.abs(d) - 2.2) ** 2) / 1.5) * fade;
+            k *= 1 + 0.1 * lip * body.lips;
+          }
         }
       }
       // Gill slit glimpse (red filaments) just behind the opercle.
-      if (x > opX - 0.01 && x < opX + 0.02 && y > -0.8 && y < 0.4) {
-        const op = opX - hl * 0.22 * (y + 0.1) * (y + 0.1);
+      if (slitOn && x > opX - 0.01 && x < opX + 0.02) {
         const d = (x - op - 0.004) / 0.003;
         const g = Math.exp(-d * d) * 0.25;
         col[i * 3] += (0.45 - col[i * 3]) * g;
@@ -472,27 +497,24 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
       }
       // Lateral line pores.
       if (llOn && x > opX && x < 0.97) {
-        const yl = 0.05 + 0.42 * (1 - smooth(0.2, 0.92, x));
-        const dl = ((y - yl) * hd) / 0.0035;
-        const pore = Math.exp(-dl * dl) * (0.5 + 0.5 * Math.cos(x * (62 - 40 * body.scaleSize) * Math.PI * 2));
-        k *= 1 - 0.1 * pore;
+        const dl = ((y - llY[c]) * hd) / 0.0035;
+        if (dl > -4 && dl < 4) k *= 1 - 0.1 * Math.exp(-dl * dl) * llPore[c];
       }
-      // Low-frequency mottling so no surface is flat CG color.
-      const mott = 1 + 0.07 * (fbm(x * 14, y * hd * 14, ctx.seed + 3, 3) - 0.5) + 0.03 * (valueNoise(x * 120, y * hd * 120, ctx.seed) - 0.5);
-      k *= mott;
-      if (tint && edge > 0) {
-        col[i * 3] += (tint[0] - col[i * 3]) * edge;
-        col[i * 3 + 1] += (tint[1] - col[i * 3 + 1]) * edge;
-        col[i * 3 + 2] += (tint[2] - col[i * 3 + 2]) * edge;
+      // Low-frequency mottling + fine grain so no surface is flat CG color.
+      k *= 1 + 0.08 * (fastNoise(x * 14 + noiseOff, y * hd * 14) - 0.5) + 0.04 * (fastNoise(x * 110, y * hd * 110 + noiseOff) - 0.5);
+      if (scaleCol && edge > 0) {
+        col[i * 3] += (scaleCol[0] - col[i * 3]) * edge;
+        col[i * 3 + 1] += (scaleCol[1] - col[i * 3 + 1]) * edge;
+        col[i * 3 + 2] += (scaleCol[2] - col[i * 3 + 2]) * edge;
       }
       col[i * 3] *= k;
       col[i * 3 + 1] *= k;
       col[i * 3 + 2] *= k;
       // Translucent bodies: flesh lets light through; head, viscera and spine stay opaque.
-      if (translucent > 0.42) {
+      if (transOn) {
         const vx = (x - 0.3) / 0.17, vy = (y + 0.35) / 0.5;
         const viscera = 1 - smooth(0.75, 1.05, Math.sqrt(vx * vx + vy * vy));
-        const spineL = Math.exp(-(((y - 0.12) * hd) / 0.006) ** 2) * smooth(0.15, 0.3, x) * (1 - smooth(0.97, 1, x));
+        const spineL = Math.exp(-((((y - 0.12) * hd) / 0.006) ** 2)) * smooth(0.15, 0.3, x) * (1 - smooth(0.97, 1, x));
         const headO = 1 - smooth(opX * 0.75, opX * 1.05, x);
         const opaque = clamp(Math.max(viscera * 0.95, spineL * 0.55, headO * 0.6), 0, 1);
         alpha[i] = clamp(1 - translucent * (1 - opaque), 0.08, 1);
@@ -588,7 +610,7 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       }
       // Soft outer margin.
       a *= 1 - 0.45 * smooth(0.94, 1, x);
-      const n = 1 + 0.06 * (valueNoise(x * 18, y * 30, ctx.seed + 9) - 0.5);
+      const n = 1 + 0.06 * (fastNoise(x * 18 + (ctx.seed % 31), y * 30) - 0.5);
       col[i * 3] = cr * n;
       col[i * 3 + 1] = cg * n;
       col[i * 3 + 2] = cb * n;
@@ -649,7 +671,7 @@ function paintEye(b: Bufs, look: Appearance, body: ResolvedBody, seed: number): 
     for (let c = 0; c < w; c++) {
       cellLocal(cell, (x0 + c + 0.5) / b.W, (y0 + r + 0.5) / b.H, tmp);
       const ex = tmp[0] * 2 - 1, ey = tmp[1] * 2 - 1;
-      const rad = Math.hypot(ex / 1.06, ey);
+      const rad = Math.sqrt((ex / 1.06) * (ex / 1.06) + ey * ey);
       const ang = Math.atan2(ey, ex);
       const i = (y0 + r) * b.W + x0 + c;
       let cr: number, cg: number, cb: number, rough: number, metal: number;
@@ -717,7 +739,7 @@ function tex(data: Uint8Array, W: number, H: number, cs: ColorSpace): DataTextur
   return t;
 }
 
-const to8 = (v: number) => (v <= 0 ? 0 : v >= 1 ? 255 : Math.round(v * 255));
+const to8 = (v: number) => (v <= 0 ? 0 : v >= 1 ? 255 : (v * 255 + 0.5) | 0);
 
 function packColor(b: Bufs, withAlpha = true): Uint8Array {
   const n = b.W * b.H;
@@ -740,10 +762,10 @@ function packNormal(b: Bufs, strength: number): Uint8Array {
       const hl = height[y * W + Math.max(0, x - 1)], hr = height[y * W + Math.min(W - 1, x + 1)];
       const hu = height[Math.max(0, y - 1) * W + x], hd = height[Math.min(H - 1, y + 1) * W + x];
       const dx = (hr - hl) * 0.5 * strength, dy = (hd - hu) * 0.5 * strength;
-      const l = Math.hypot(dx, dy, 1);
-      out[i * 4] = to8((-dx / l) * 0.5 + 0.5);
-      out[i * 4 + 1] = to8((-dy / l) * 0.5 + 0.5);
-      out[i * 4 + 2] = to8((1 / l) * 0.5 + 0.5);
+      const il = 1 / Math.sqrt(dx * dx + dy * dy + 1);
+      out[i * 4] = to8(-dx * il * 0.5 + 0.5);
+      out[i * 4 + 1] = to8(-dy * il * 0.5 + 0.5);
+      out[i * 4 + 2] = to8(il * 0.5 + 0.5);
       out[i * 4 + 3] = 255;
     }
   }

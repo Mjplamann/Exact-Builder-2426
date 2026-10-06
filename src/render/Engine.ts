@@ -95,6 +95,7 @@ export class Engine {
     return this.quality;
   }
   private preset: QualityPreset = QUALITY_PRESETS.high;
+  private qualityApplied = false;
   private dt = 1 / 60;
   private exposure = 1;
   private shadowScanTimer = 0;
@@ -176,6 +177,9 @@ export class Engine {
 
   setQuality(q: Quality): void {
     const p = QUALITY_PRESETS[q] ?? QUALITY_PRESETS.high;
+    // App calls this on every settings change (sound, units…): only rebuild when it matters.
+    if (this.qualityApplied && q === this.quality) return;
+    this.qualityApplied = true;
     const prev = this.preset;
     this.quality = q;
     this.preset = p;

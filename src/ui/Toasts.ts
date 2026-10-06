@@ -59,7 +59,7 @@ export class Toasts {
     this.welcome?.remove();
     const card = h(
       'div',
-      { class: 'aq-welcome', role: 'dialog', 'aria-label': 'Welcome back', tabindex: '-1' },
+      { class: 'aq-welcome', role: 'status', 'aria-live': 'polite' },
       h('div', { class: 'aq-welcome-icon' }, icon('sparkle', 22)),
       h('h2', { class: 'aq-welcome-title' }, 'Welcome back'),
       h('p', { class: 'aq-welcome-text' }, text),

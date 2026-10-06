@@ -6,7 +6,7 @@ import { ATLAS, bodyUV, cellLocal, cellUV, type Cell } from './atlas';
 import { hex, mix, type RGB } from './color';
 import type { FishGeometryInfo } from './fishGeometry';
 import { GeoBuilder, PART } from './geometryBuilder';
-import { fbm, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
+import { fastNoise, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
 import { bufs, cellSurface, clearMask, composite, packAtlas, rect, type Bufs, type FishTextures } from './textures';
 
 /**
@@ -272,8 +272,8 @@ function paintCellSolid(b: Bufs, cell: Cell, color: RGB, alpha: number, rough: n
       const x = s.px[c], y = s.py[r];
       const i = (y0 + r) * b.W + x0 + c;
       // Joints / segment rings darken slightly; a lighter top, darker underside.
-      const seg = bands > 0 ? Math.exp(-(((x * bands) % 1) - 0.5) ** 2 / 0.004) : 0;
-      const k = (1 - 0.18 * seg) * (1 + 0.06 * y) * (1 + 0.06 * (valueNoise(x * 30, y * 6, seed) - 0.5));
+      const seg = bands > 0 ? Math.exp(-((((x * bands) % 1) - 0.5) ** 2) / 0.004) : 0;
+      const k = (1 - 0.18 * seg) * (1 + 0.06 * y) * (1 + 0.06 * (fastNoise(x * 30 + (seed % 41), y * 6) - 0.5));
       b.col[i * 3] = color[0] * k;
       b.col[i * 3 + 1] = color[1] * k;
       b.col[i * 3 + 2] = color[2] * k;
@@ -372,7 +372,7 @@ function paintInvertAtlas(sp: Species, look: Appearance, spec: PaintSpec, N: num
       det[1] = 0;
       det[2] = 0;
       spec.detail?.(x, y, det);
-      const mott = 1 + 0.06 * (fbm(x * 16, y * s.hd[c] * 16, seed, 3) - 0.5);
+      const mott = 1 + 0.06 * (fastNoise(x * 16 + (seed % 37), y * s.hd[c] * 16) - 0.5);
       const k = det[0] * mott;
       b.col[i * 3] *= k;
       b.col[i * 3 + 1] *= k;
@@ -1182,7 +1182,7 @@ function urchin(sp: Species, body: ResolvedBody, look: Appearance, detail: numbe
     normalStrength: 5,
     detail: (x, y, out) => {
       // Tubercle rows on the test and the ambulacral pore bands.
-      const amb = Math.exp(-((((x * 5) % 1) - 0.5) / 0.05) ** 2);
+      const amb = Math.exp(-((((((x * 5) % 1) - 0.5) / 0.05) ** 2)));
       const tub = smooth(0.7, 0.9, valueNoise(x * 140, y * 30, 4));
       out[0] = 1 - 0.1 * amb + 0.05 * tub;
       out[1] = 0.6 * tub - 0.3 * amb;

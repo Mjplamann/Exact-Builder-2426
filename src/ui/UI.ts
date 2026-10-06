@@ -129,6 +129,7 @@ export class UI implements UIHost {
   private needsDirty = true;
   /** Updates seen so far (the idle clock starts after the first frame has been presented). */
   private updates = 0;
+  private lastUnits: string;
 
   constructor(
     private root: HTMLElement,
@@ -138,6 +139,7 @@ export class UI implements UIHost {
     this.mobileQuery = matchMedia('(max-width: 640px)');
     this.lastFood = prefs.get<FoodKind | null>('lastFood', null) ?? bestFood(app.world.fish, app.world.tank.water);
     if (!FOODS[this.lastFood]) this.lastFood = 'flakes';
+    this.lastUnits = app.world.settings.units;
     this.needs = computeNeeds(app.world.fish, app.world.tank.water);
     this.water = assessWater(app.world.tank.waterParams, app.world.tank.water, this.needs);
 
@@ -493,7 +495,10 @@ export class UI implements UIHost {
     const s = this.app.world.settings;
     this.statsEl.hidden = !s.showStats;
     if (!s.uiAutoHide) this.wake();
-    for (const p of this.panels.values()) p.onSettingsChanged?.();
+    if (s.units !== this.lastUnits) {
+      this.lastUnits = s.units;
+      for (const p of this.panels.values()) p.onSettingsChanged?.();
+    }
     this.current?.refresh?.();
   }
 

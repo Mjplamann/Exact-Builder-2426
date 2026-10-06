@@ -126,31 +126,35 @@ export function joinList(items: string[]): string {
   return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
 }
 
-/** Death cause id → respectful phrase used after "passed away". */
+/** Death cause (as reported with 'fish-died') → respectful phrase used after "passed away". */
 export function deathPhrase(cause: string): string {
   switch (cause) {
     case 'old age':
       return 'peacefully of old age';
     case 'starvation':
       return 'after going hungry for too long';
-    case 'ammonia':
+    case 'ammonia poisoning':
       return 'from ammonia in the water';
-    case 'nitrite':
+    case 'nitrite poisoning':
       return 'from nitrite in the water';
-    case 'nitrate':
+    case 'high nitrate':
       return 'after a long time in nitrate-heavy water';
     case 'low oxygen':
       return 'when the water ran short of oxygen';
-    case 'too warm':
+    case 'water too warm':
       return 'because the water was too warm';
-    case 'too cold':
+    case 'water too cold':
       return 'because the water was too cold';
-    case 'ph':
+    case 'unsuitable pH':
       return 'because the water chemistry did not suit it';
-    case 'salinity':
+    case 'wrong salinity':
       return 'because it could not live in this water';
-    case 'tankmates':
+    case 'stress from tankmates':
       return 'worn down by stressful tankmates';
+    case 'loneliness':
+      return 'after a long time without its own kind';
+    case 'a tank too small':
+      return 'after a long time in a tank too small for it';
     default:
       return 'after a period of poor health';
   }

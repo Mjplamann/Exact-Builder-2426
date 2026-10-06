@@ -68,7 +68,9 @@ export class DecorRenderer {
       }
       if (cur) disposeDecor(cur.built);
       try {
+        const __t = performance.now();
         const built = buildDecor(item, { tank, quality });
+        console.log('[decor-dbg] decor', item.kind, item.variant, (performance.now() - __t).toFixed(1));
         this.hardscape.add(built.object);
         this.items.set(item.id, { key, xform, built });
       } catch (err) {

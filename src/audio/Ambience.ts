@@ -352,7 +352,8 @@ export class Ambience {
     // Perceptual volume curve; a little quieter at night, like a room after dark.
     const target = this.enabled ? this.volume * this.volume * 0.85 * (this.night ? 0.62 : 1) : 0;
     const p = this.master.gain;
-    p.cancelScheduledValues(ctx.currentTime);
+    // Hold the current (possibly mid-fade) value, then glide — never a jump, never a click.
+    if (typeof p.cancelAndHoldAtTime === 'function') p.cancelAndHoldAtTime(ctx.currentTime);
     p.setTargetAtTime(target, ctx.currentTime, tau);
   }
 

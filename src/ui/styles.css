@@ -687,6 +687,13 @@ body.aq-idle #tank { cursor: none; }
   .aq-root.has-panel .aq-fishcard { opacity: 0; pointer-events: none; }
   .aq-toasts { bottom: calc(max(8px, env(safe-area-inset-bottom)) + 66px); }
   .aq-modehint-key { display: none; }
+  .aq-modehint { top: calc(max(12px, env(safe-area-inset-top)) + 52px); left: 8px; right: 8px; transform: none; justify-content: space-between; }
+  .aq-modehint-text { white-space: normal; font-size: 12px; line-height: 1.35; }
+  /* While aquascaping on a phone, keep most of the tank visible above the sheet. */
+  .aq-panel[data-panel="scape"] { height: min(48vh, 520px); }
+  .aq-scape-toolbar { padding-left: 8px; }
+  .aq-tb-name { display: none; }
+  .aq-tb-sep { display: none; }
   .aq-facts { grid-template-columns: 1fr; }
   .aq-stats { grid-template-columns: repeat(2, 1fr); }
   .aq-swatch-grid { grid-template-columns: repeat(3, 1fr); }

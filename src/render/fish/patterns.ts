@@ -64,6 +64,49 @@ export function fbm(x: number, y: number, seed: number, oct = 4): number {
   return s / n;
 }
 
+// Periodic fbm lookup table: fast organic noise for per-pixel painting.
+const NT = 256; // table size
+const NP = 32; // period in noise units (8 samples per unit)
+let noiseTable: Float32Array | null = null;
+function periodicValue(x: number, y: number, period: number, seed: number): number {
+  const ix = Math.floor(x), iy = Math.floor(y);
+  let fx = x - ix, fy = y - iy;
+  fx = fx * fx * (3 - 2 * fx);
+  fy = fy * fy * (3 - 2 * fy);
+  const x0 = ((ix % period) + period) % period, y0 = ((iy % period) + period) % period;
+  const x1 = (x0 + 1) % period, y1 = (y0 + 1) % period;
+  const a = hash2(x0, y0, seed), b = hash2(x1, y0, seed), c = hash2(x0, y1, seed), d = hash2(x1, y1, seed);
+  return (a + (b - a) * fx) * (1 - fy) + (c + (d - c) * fx) * fy;
+}
+function buildNoiseTable(): Float32Array {
+  const t = new Float32Array(NT * NT);
+  for (let j = 0; j < NT; j++) {
+    for (let i = 0; i < NT; i++) {
+      const x = (i / NT) * NP, y = (j / NT) * NP;
+      let s = 0, a = 0.5, n = 0;
+      for (let o = 0; o < 4; o++) {
+        const f = 1 << o;
+        s += a * periodicValue(x * f, y * f, NP * f, 1009 + o * 17);
+        n += a;
+        a *= 0.5;
+      }
+      t[j * NT + i] = s / n;
+    }
+  }
+  return t;
+}
+/** Smooth fbm-like noise in [0,1] (feature size ≈ 1 unit), periodic every 32 units. */
+export function fastNoise(x: number, y: number): number {
+  const t = noiseTable ?? (noiseTable = buildNoiseTable());
+  const u = x * 8, v = y * 8;
+  const iu = Math.floor(u), iv = Math.floor(v);
+  const fu = u - iu, fv = v - iv;
+  const x0 = iu & (NT - 1), y0 = iv & (NT - 1);
+  const x1 = (x0 + 1) & (NT - 1), y1 = (y0 + 1) & (NT - 1);
+  const a = t[y0 * NT + x0], b = t[y0 * NT + x1], c = t[y1 * NT + x0], d = t[y1 * NT + x1];
+  return (a + (b - a) * fu) * (1 - fv) + (c + (d - c) * fu) * fv;
+}
+
 /** F1 / F2 Voronoi distances (jittered grid) at (x, y); writes [f1, f2, cellHash]. */
 export function voronoi(x: number, y: number, seed: number, out: Float64Array): void {
   const ix = Math.floor(x), iy = Math.floor(y);
@@ -174,7 +217,7 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
       const slant = p.slant ?? 0;
       const spacing = n > 1 ? (x1 - x0) / (n - 1) : 1;
       const [r0, r1] = rowRange(s, y0 - 0.1, y1 + 0.1);
-      const wob = s.seed % 997;
+      const wob = (s.seed % 997) * 0.37;
       for (let r = r0; r <= r1; r++) {
         const y = s.py[r];
         const ey = smooth(y0 - 0.06, y0 + 0.06, y) * (1 - smooth(y1 - 0.06, y1 + 0.06, y));
@@ -186,7 +229,7 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
           i = clamp(i, 0, n - 1);
           const cx = n > 1 ? x0 + i * spacing : (x0 + x1) / 2;
           // Natural bars have slightly irregular edges.
-          const wobble = 1 + 0.12 * (valueNoise(y * 3 + i * 7.3, wob, 5) - 0.5);
+          const wobble = 1 + 0.12 * (fastNoise(y * 3 + i * 7.3, wob) - 0.5);
           const d = Math.abs(xs - cx) / (half * wobble);
           const e = Math.max(0.12, ax / half);
           const v = (1 - smooth(1 - e, 1 + e, d)) * ey;
@@ -271,9 +314,10 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
         for (let c = 0; c < W; c++) {
           const X = s.px[c] * sc, Y = s.py[r] * s.hd[c] * sc;
           // Domain-warped fbm gives organic, flowing marbling.
-          const wx = fbm(X * 0.7 + 3.1, Y * 0.7, s.seed + 5, 3) - 0.5;
-          const wy = fbm(X * 0.7, Y * 0.7 + 7.7, s.seed + 9, 3) - 0.5;
-          const n = fbm(X + wx * 1.6, Y + wy * 1.6, s.seed, 4);
+          const so = (s.seed % 101) * 0.71;
+          const wx = fastNoise(X * 0.7 + 3.1 + so, Y * 0.7) - 0.5;
+          const wy = fastNoise(X * 0.7 + so, Y * 0.7 + 7.7) - 0.5;
+          const n = fastNoise(X + wx * 1.6 + so * 1.3, Y + wy * 1.6);
           const t = 1 - amt;
           const v = smooth(t - 0.06, t + 0.06, n * 1.0 + 0.1 * (amt - 0.5));
           if (v > 0) maxv(m, r * W + c, v);
@@ -314,7 +358,7 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
           if (wavy > 0) {
             // Vermiculation: sinusoidal + noisy displacement that grows with `wavy`.
             const k = 2 * Math.PI * (3 + 4 * wavy);
-            y += wavy * spacing * 0.45 * (Math.sin(k * x + y * 3.1) * 0.6 + (fbm(x * 9, y * 4, s.seed, 3) - 0.5) * 1.6);
+            y += wavy * spacing * 0.45 * (Math.sin(k * x + y * 3.1) * 0.6 + (fastNoise(x * 9 + (s.seed % 89), y * 4) - 0.5) * 1.6);
           }
           let i = n > 1 ? Math.round((y - y0) / spacing) : 0;
           i = clamp(i, 0, n - 1);

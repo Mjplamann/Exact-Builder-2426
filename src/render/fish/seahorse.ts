@@ -13,7 +13,7 @@ import { PART, type GeoBuilder } from './geometryBuilder';
  * Length convention: straightened length (coronet to tail tip) = 1, like a ruler laid along it.
  */
 
-const bump = (x: number, c: number, w: number) => Math.exp(-((x - c) / w) ** 2);
+const bump = (x: number, c: number, w: number) => Math.exp(-(((x - c) / w) ** 2));
 
 /** Curvature (rad per unit length) along the unrolled body. */
 function curvature(x: number): number {
