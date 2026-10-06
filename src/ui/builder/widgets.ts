@@ -106,8 +106,14 @@ export function dimField(label: string, hint: string, units: Units, cm: number, 
     }
   });
   num.addEventListener('change', () => {
-    const v = Number(num.value);
-    onSet(fromDisplayLength(Number.isFinite(v) && num.value !== '' ? v : Number(range.value), units));
+    let v = Number(num.value);
+    if (num.value === '' || !Number.isFinite(v)) v = Number(range.value);
+    // Out of range: settle on the nearest limit, visibly.
+    v = Math.min(Number(num.max), Math.max(Number(num.min), Math.round(v / step) * step));
+    num.value = String(v);
+    range.value = String(v);
+    paint();
+    onSet(fromDisplayLength(v, units));
   });
   const el = h(
     'div',

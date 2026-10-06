@@ -309,6 +309,8 @@
 .aqb-level { flex: none; font-size: 10.5px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; background: rgba(143, 214, 166, 0.13); color: #b9e6c7; }
 .aqb-level.is-caution { background: rgba(232, 196, 124, 0.14); color: #ecd29e; }
 .aqb-level.is-bad { background: rgba(239, 146, 130, 0.14); color: #f2b5a9; }
+.aqb-community-notes { margin: 0; padding: 0 0 0 16px; font-size: 12px; color: #ecd29e; line-height: 1.5; }
+.aqb-community-notes li + li { margin-top: 2px; }
 .aqb-members { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 10px; }
 .aqb-member { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 12.5px; }
 .aqb-member .aqb-thumb-wrap, .aqb-member .aqb-thumb { width: 44px; height: 28px; }
@@ -411,7 +413,13 @@
   .aqb-title { font-size: 18px; margin-top: 2px; }
   .aqb-lead { margin-bottom: 12px; font-size: 12.5px; }
   .aqb-foot { padding: 7px 16px max(7px, var(--safe-b)); }
-  .aqb-cards-water .aqb-card-art, .aqb-cards-style .aqb-card-art { aspect-ratio: 21 / 9; }
+  /* Two columns of picture-beside-words cards, so a screenful shows several choices. */
+  .aqb-cards-water, .aqb-cards-style { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aqb-cards-water .aqb-card, .aqb-cards-style .aqb-card { display: grid; grid-template-columns: 112px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 12px; row-gap: 3px; align-items: start; padding: 10px; }
+  .aqb-cards-water .aqb-card-art, .aqb-cards-style .aqb-card-art { grid-row: 1 / span 3; aspect-ratio: 4 / 3; margin: 0; }
+  .aqb-cards-water .aqb-card-text, .aqb-cards-style .aqb-card-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .aqb-shape-art { max-width: 84px; }
+  .aqb-cards-shape .aqb-card { padding: 8px 4px 9px; }
   .aqb-cards-start .aqb-card, .aqb-cards-cycle .aqb-card { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; padding: 12px; }
   .aqb-cards-start .aqb-start-icon, .aqb-cards-cycle .aqb-start-icon { grid-row: 1 / span 2; margin: 0; }
   .aqb-picker-list { height: 250px; }
@@ -421,6 +429,7 @@
 
 /* Fingers: 44 px targets, 16 px text in fields (iOS never zooms). */
 @media (pointer: coarse) {
+  .aqb-enter { display: none; }
   .aqb-chip { height: 34px; padding: 0 13px; font-size: 12px; }
   .aqb-back, .aqb-next { height: 46px; }
   .aqb-num, .aqb-name-input, .aqm-rename-input { height: 44px; font-size: 16px; }

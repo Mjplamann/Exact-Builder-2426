@@ -25,6 +25,12 @@ function suggestKey(env: StepEnv): string {
   return JSON.stringify([s.water, s.size, s.aquascape, s.substrate, s.waterParams, s.equipment, s.cycled]);
 }
 
+/** Why a 'caution' community is still worth considering (optional in the advisor's answer). */
+function notesOf(s: StockSuggestion): string[] {
+  const notes = (s as StockSuggestion & { notes?: unknown }).notes;
+  return Array.isArray(notes) ? notes.filter((n): n is string => typeof n === 'string') : [];
+}
+
 function stockingBar(fraction: number): HTMLElement {
   const f = Math.max(0, fraction);
   const cls = f > 1 ? 'is-bad' : f > 0.8 ? 'is-caution' : '';
@@ -177,6 +183,7 @@ export function animalsStep(env: StepEnv): StepView {
         { class: 'aqb-community' },
         h('div', { class: 'aqb-community-head' }, h('h4', { class: 'aqb-community-title' }, s.title), h('span', { class: `aqb-level is-${s.level}` }, LEVEL_WORDS[s.level])),
         h('p', { class: 'aqb-community-desc' }, s.description),
+        notesOf(s).length ? h('ul', { class: 'aqb-community-notes' }, ...notesOf(s).slice(0, 3).map((n) => h('li', null, localizeUnits(n, units)))) : null,
         h('ul', { class: 'aqb-members' }, ...members.map(({ q, sp }) => h('li', { class: 'aqb-member' }, h('span', { class: 'aqb-thumb-wrap' }, thumb(sp)), h('span', { class: 'aqb-member-name' }, h('span', { class: 'aqb-member-count' }, `${q.count} ×`), ` ${sp.commonName}`)))),
         stockingBar(s.stocking),
         h('div', { class: 'aqb-community-foot' }, h('span', { class: 'aq-hint' }, `${n} ${plural(n, 'animal')}, ${members.length} ${plural(members.length, 'species', 'species')}`), btn),
