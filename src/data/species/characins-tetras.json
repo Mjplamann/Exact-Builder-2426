@@ -1,0 +1,2455 @@
+[
+ {
+  "id": "paracheirodon-simulans",
+  "commonName": "Green Neon Tetra",
+  "scientificName": "Paracheirodon simulans",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Rio Negro & upper Orinoco — Brazil, Colombia & Venezuela",
+  "description": "The smallest Paracheirodon, living in very soft, acidic blackwater pools and flooded forest. Its blue-green stripe runs right into the tail base, while red is confined to a narrow band on the lower rear flank.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   4,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 10,
+  "traits": [
+   "shy",
+   "night-coloration"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.23,
+   "width": 0.11,
+   "eyeSize": 0.44,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.84,
+    "height": 0.09,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#b4b39e",
+   "dorsal": "#5e5c40",
+   "ventral": "#ece8e0",
+   "fin": "#e6e6e0",
+   "finOpacity": 0.16,
+   "eye": "#9fb7c2",
+   "metallic": 0.3,
+   "iridescence": 1,
+   "iridescenceColor": "#2ef0c8",
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#cf2a2c",
+     "x0": 0.58,
+     "x1": 0.96,
+     "y0": -0.85,
+     "y1": -0.25,
+     "softness": 0.08
+    },
+    {
+     "type": "stripe",
+     "color": "#22b8d8",
+     "y": 0.12,
+     "width": 0.22,
+     "x0": 0.12,
+     "x1": 1,
+     "glow": 0.55,
+     "iridescent": true
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheirodon-innesi-long-fin",
+  "commonName": "Long-fin Neon Tetra",
+  "scientificName": "Paracheirodon innesi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: upper Amazon basin — Peru, Colombia & Brazil)",
+  "description": "A captive-bred neon strain with elongated, trailing dorsal, anal and tail fins; stripe and red belly are as in the wild form. The long fins make it slower and a target for fin-nipping tankmates.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 8,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.24,
+   "width": 0.11,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.55
+   },
+   "dorsal": {
+    "start": 0.47,
+    "end": 0.58,
+    "height": 0.26,
+    "shape": "flowing",
+    "trail": 0.12
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.84,
+    "height": 0.16,
+    "shape": "flowing",
+    "trail": 0.08
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.45,
+    "height": 0.16,
+    "shape": "flowing"
+   }
+  },
+  "look": {
+   "base": "#b9b7a4",
+   "dorsal": "#6b6544",
+   "ventral": "#e9e7df",
+   "fin": "#e6e6e0",
+   "finOpacity": 0.2,
+   "eye": "#9fb3c7",
+   "metallic": 0.35,
+   "iridescence": 1,
+   "iridescenceColor": "#3cf2ff",
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d7232c",
+     "x0": 0.5,
+     "x1": 1,
+     "y0": -1,
+     "y1": 0.02,
+     "softness": 0.06
+    },
+    {
+     "type": "stripe",
+     "color": "#1f8cff",
+     "y": 0.16,
+     "width": 0.17,
+     "x0": 0.14,
+     "x1": 0.82,
+     "glow": 0.6,
+     "iridescent": true
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e8e4dc",
+     "opacity": 0.22
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "variantOf": "paracheirodon-innesi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheirodon-innesi-diamond-head",
+  "commonName": "Diamond-head Neon Tetra",
+  "scientificName": "Paracheirodon innesi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: upper Amazon basin — Peru, Colombia & Brazil)",
+  "description": "A farmed neon strain carrying extra reflective guanine over the head and nape, giving it a sparkling silvery crown. The blue line is shortened to the rear half of the body, above the usual red.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 10,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.24,
+   "width": 0.11,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#bdbcae",
+   "dorsal": "#76725a",
+   "ventral": "#ece9e2",
+   "fin": "#e6e6e0",
+   "finOpacity": 0.18,
+   "eye": "#b8c6d0",
+   "metallic": 0.55,
+   "iridescence": 0.9,
+   "iridescenceColor": "#3cf2ff",
+   "translucency": 0.2,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d7232c",
+     "x0": 0.5,
+     "x1": 1,
+     "y0": -1,
+     "y1": 0.02,
+     "softness": 0.06
+    },
+    {
+     "type": "stripe",
+     "color": "#1f8cff",
+     "y": 0.16,
+     "width": 0.17,
+     "x0": 0.42,
+     "x1": 0.82,
+     "glow": 0.5,
+     "iridescent": true
+    },
+    {
+     "type": "region",
+     "color": "#eef4f6",
+     "x0": 0,
+     "x1": 0.34,
+     "y0": 0.1,
+     "y1": 1,
+     "softness": 0.12
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "variantOf": "paracheirodon-innesi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheirodon-innesi-gold",
+  "commonName": "Golden Neon Tetra",
+  "scientificName": "Paracheirodon innesi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: upper Amazon basin — Peru, Colombia & Brazil)",
+  "description": "A captive strain with most dark pigment missing, so the body looks pale gold while the eyes stay dark. The iridescent line and red rear survive but appear softer than in wild-type neons.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 10,
+  "traits": [
+   "night-coloration",
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.24,
+   "width": 0.11,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#e2cf96",
+   "dorsal": "#cdb276",
+   "ventral": "#f4ecd6",
+   "fin": "#efe8d6",
+   "finOpacity": 0.16,
+   "eye": "#3a3a3a",
+   "metallic": 0.4,
+   "iridescence": 0.75,
+   "iridescenceColor": "#7ff0e8",
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e0605a",
+     "x0": 0.52,
+     "x1": 1,
+     "y0": -1,
+     "y1": 0,
+     "softness": 0.1
+    },
+    {
+     "type": "stripe",
+     "color": "#7cc8e0",
+     "y": 0.16,
+     "width": 0.15,
+     "x0": 0.16,
+     "x1": 0.8,
+     "glow": 0.35,
+     "iridescent": true
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "variantOf": "paracheirodon-innesi",
+  "availability": "uncommon"
+ },
+ {
+  "id": "paracheirodon-innesi-albino",
+  "commonName": "Albino Neon Tetra",
+  "scientificName": "Paracheirodon innesi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: upper Amazon basin — Peru, Colombia & Brazil)",
+  "description": "A melanin-free farmed neon with pink eyes and a creamy body. Albinism removes only the black pigment, so a pale iridescent line and the red rear patch are still visible.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 10,
+  "traits": [
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.24,
+   "width": 0.11,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#f0ddd4",
+   "dorsal": "#e8cfc2",
+   "ventral": "#f8eeea",
+   "fin": "#f4ece8",
+   "finOpacity": 0.15,
+   "eye": "#d8505a",
+   "metallic": 0.3,
+   "iridescence": 0.6,
+   "iridescenceColor": "#b8f0ff",
+   "translucency": 0.35,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e04a52",
+     "x0": 0.52,
+     "x1": 1,
+     "y0": -1,
+     "y1": 0,
+     "softness": 0.08
+    },
+    {
+     "type": "stripe",
+     "color": "#a6d4e8",
+     "y": 0.16,
+     "width": 0.15,
+     "x0": 0.16,
+     "x1": 0.8,
+     "glow": 0.3,
+     "iridescent": true
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.5
+   }
+  },
+  "variantOf": "paracheirodon-innesi",
+  "availability": "rare"
+ },
+ {
+  "id": "hyphessobrycon-eques",
+  "commonName": "Serpae Tetra",
+  "scientificName": "Hyphessobrycon eques",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guaporé, Paraguay & central Amazon basins — Brazil, Bolivia, Paraguay & Argentina",
+  "description": "A hardy, deep-red tetra of slow, heavily vegetated waters, marked by a black comma-shaped shoulder spot. Kept in small numbers it squabbles and nips the fins of slow, long-finned tankmates.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 11,
+  "traits": [
+   "fin-nipper",
+   "bold"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.38,
+   "width": 0.11,
+   "depthPos": 0.4,
+   "eyeSize": 0.4,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.86,
+    "height": 0.12,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#c9472e",
+   "dorsal": "#8e3a26",
+   "ventral": "#de7a5c",
+   "fin": "#c9402c",
+   "finOpacity": 0.6,
+   "eye": "#c4a040",
+   "metallic": 0.25,
+   "iridescence": 0.15,
+   "iridescenceColor": "#ff9a7a",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#141010",
+     "x": 0.29,
+     "y": 0.18,
+     "rx": 0.025,
+     "ry": 0.36
+    },
+    {
+     "type": "scales",
+     "color": "#a8361f",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c9402c",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.15,
+       "x1": 0.82,
+       "y0": -0.2,
+       "y1": 1
+      }
+     ],
+     "edge": "#f2ece6",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#c63a28",
+     "opacity": 0.7,
+     "edge": "#1a1210",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#cc4630",
+     "opacity": 0.65,
+     "edge": "#f0e8e0",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#c84a32",
+     "opacity": 0.5
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hyphessobrycon-eques-long-fin",
+  "commonName": "Long-fin Serpae Tetra",
+  "scientificName": "Hyphessobrycon eques",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Guaporé & Paraguay basins, South America)",
+  "description": "A line-bred serpae with long, trailing dorsal, anal and tail fins. It keeps the wild form's red body and black shoulder comma — and much of its nippy temperament.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 9,
+  "traits": [
+   "fin-nipper"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.38,
+   "width": 0.11,
+   "depthPos": 0.4,
+   "eyeSize": 0.4,
+   "adipose": true,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.6
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.38,
+    "shape": "flowing",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.58,
+    "end": 0.86,
+    "height": 0.22,
+    "shape": "flowing",
+    "trail": 0.1
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.43,
+    "height": 0.2,
+    "shape": "flowing"
+   }
+  },
+  "look": {
+   "base": "#c9472e",
+   "dorsal": "#8e3a26",
+   "ventral": "#de7a5c",
+   "fin": "#c9402c",
+   "finOpacity": 0.55,
+   "eye": "#c4a040",
+   "metallic": 0.25,
+   "iridescence": 0.15,
+   "iridescenceColor": "#ff9a7a",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#141010",
+     "x": 0.29,
+     "y": 0.18,
+     "rx": 0.025,
+     "ry": 0.36
+    },
+    {
+     "type": "scales",
+     "color": "#a8361f",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c9402c",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.1,
+       "x1": 0.85,
+       "y0": -0.2,
+       "y1": 1
+      }
+     ],
+     "edge": "#f2ece6",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#c63a28",
+     "opacity": 0.65,
+     "edge": "#1a1210",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#c84a32",
+     "opacity": 0.45
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "variantOf": "hyphessobrycon-eques",
+  "availability": "uncommon"
+ },
+ {
+  "id": "hyphessobrycon-megalopterus",
+  "commonName": "Black Phantom Tetra",
+  "scientificName": "Hyphessobrycon megalopterus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Paraguay & Guaporé basins — Mato Grosso, Brazil & Bolivia",
+  "description": "A smoky-gray tetra with a large black shoulder blotch ringed in silver. Males stage harmless sparring displays with fully spread jet-black fins, while females show red ventral and adipose fins.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 10,
+  "traits": [
+   "hoverer",
+   "flarer"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.42,
+   "width": 0.11,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.26,
+    "shape": "sail"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.86,
+    "height": 0.14,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#8e8e92",
+   "dorsal": "#5c5a5e",
+   "ventral": "#bdbbbe",
+   "fin": "#151517",
+   "finOpacity": 0.8,
+   "eye": "#b8403a",
+   "metallic": 0.4,
+   "iridescence": 0.2,
+   "iridescenceColor": "#b8c4ff",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#0e0e10",
+     "x": 0.31,
+     "y": 0.12,
+     "rx": 0.06,
+     "ry": 0.4,
+     "ring": "#d6dbe0"
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#9a9aa0",
+     "opacity": 0.3
+    },
+    "pectoral": {
+     "color": "#c8c8cc",
+     "opacity": 0.2
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.42,
+     "end": 0.57,
+     "height": 0.34,
+     "shape": "sail"
+    },
+    "anal": {
+     "start": 0.56,
+     "end": 0.86,
+     "height": 0.17,
+     "shape": "low"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55,
+    "dorsal": {
+     "start": 0.43,
+     "end": 0.55,
+     "height": 0.2,
+     "shape": "pointed"
+    }
+   },
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#151517",
+      "opacity": 0.75
+     },
+     "anal": {
+      "color": "#c8382c",
+      "opacity": 0.65
+     },
+     "pelvic": {
+      "color": "#cc3a2e",
+      "opacity": 0.7
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hyphessobrycon-sweglesi",
+  "commonName": "Red Phantom Tetra",
+  "scientificName": "Hyphessobrycon sweglesi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Orinoco & Meta river basins — Colombia & Venezuela",
+  "description": "A blood-red phantom tetra from cool, soft, tannin-stained tributaries of the Orinoco. It prefers cooler water than most tetras, and males flare their red-and-black dorsal fins at one another in brief displays.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   20,
+   25
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 10,
+  "traits": [
+   "shy",
+   "hoverer",
+   "flarer"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.4,
+   "width": 0.11,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.43,
+    "end": 0.56,
+    "height": 0.24,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.57,
+    "end": 0.86,
+    "height": 0.13,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#d0503a",
+   "dorsal": "#9e3e2c",
+   "ventral": "#e48a70",
+   "fin": "#d0402e",
+   "finOpacity": 0.6,
+   "eye": "#c8342c",
+   "metallic": 0.2,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#161010",
+     "x": 0.31,
+     "y": 0.15,
+     "rx": 0.035,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d0402e",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#161010",
+       "x0": 0.2,
+       "x1": 0.75,
+       "y0": -0.3,
+       "y1": 1
+      }
+     ],
+     "edge": "#f6f0ec",
+     "edgeWidth": 0.14
+    },
+    "anal": {
+     "color": "#d23e2c",
+     "opacity": 0.7,
+     "edge": "#f0e6e0",
+     "edgeWidth": 0.08
+    },
+    "pelvic": {
+     "color": "#d4442e",
+     "opacity": 0.7,
+     "edge": "#f2ebe6",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#cc4630",
+     "opacity": 0.55
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.43,
+     "end": 0.57,
+     "height": 0.32,
+     "shape": "sail"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hyphessobrycon-roseus",
+  "commonName": "Yellow Phantom Tetra",
+  "scientificName": "Hyphessobrycon roseus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guiana Shield — Suriname & French Guiana",
+  "description": "A tiny golden relative of the black and red phantom tetras, found in shaded forest creeks of the Guianas. A dark shoulder mark and white-tipped ventral fins set off its translucent yellow body.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "shy",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.37,
+   "width": 0.11,
+   "eyeSize": 0.44,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.22,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#e8b860",
+   "dorsal": "#b88a48",
+   "ventral": "#f4d8a0",
+   "fin": "#f0c070",
+   "finOpacity": 0.45,
+   "eye": "#c4483a",
+   "metallic": 0.2,
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#1c1410",
+     "x": 0.31,
+     "y": 0.18,
+     "rx": 0.025,
+     "ry": 0.28
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8a850",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#1c1410",
+       "x": 0.4,
+       "y": 0,
+       "rx": 0.25,
+       "ry": 0.55
+      }
+     ],
+     "edge": "#fbf6ee",
+     "edgeWidth": 0.14
+    },
+    "anal": {
+     "color": "#eeb060",
+     "opacity": 0.5,
+     "edge": "#fbf6ee",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#eeb060",
+     "opacity": 0.55,
+     "edge": "#fbf6ee",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1,
+   "body": {
+    "belly": 0.55
+   },
+   "look": {
+    "base": "#e0a858",
+    "fin": "#e8b470"
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hyphessobrycon-erythrostigma",
+  "commonName": "Bleeding Heart Tetra",
+  "scientificName": "Hyphessobrycon erythrostigma",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon basin — Peru, Colombia & Brazil",
+  "description": "A tall, rosy-silver tetra of quiet forest streams, named for the bright red spot over its heart. Mature males grow a long, sickle-shaped black-and-white dorsal fin and an extended anal fin.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.2
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.46,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "eyeSize": 0.4,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.55,
+    "height": 0.24,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.88,
+    "height": 0.14,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#c9aeaa",
+   "dorsal": "#8c7c72",
+   "ventral": "#e8d4d0",
+   "fin": "#d8b8b4",
+   "finOpacity": 0.4,
+   "eye": "#c0443c",
+   "metallic": 0.45,
+   "iridescence": 0.25,
+   "iridescenceColor": "#c8b8ff",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#d81e2a",
+     "x": 0.31,
+     "y": -0.02,
+     "rx": 0.045,
+     "ry": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d0a8a0",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141212",
+       "x0": 0.15,
+       "x1": 0.8,
+       "y0": -1,
+       "y1": 0.4
+      }
+     ],
+     "edge": "#f6f2f0",
+     "edgeWidth": 0.14
+    },
+    "anal": {
+     "color": "#d8b0a8",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#f6f2f0",
+       "y": 0.85,
+       "width": 0.15
+      },
+      {
+       "type": "stripe",
+       "color": "#141212",
+       "y": 0.65,
+       "width": 0.12
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#d4a8a0",
+     "opacity": 0.5,
+     "edge": "#f6f2f0",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#d8b4ae",
+     "opacity": 0.35
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.42,
+     "end": 0.56,
+     "height": 0.42,
+     "shape": "falcate"
+    },
+    "anal": {
+     "start": 0.55,
+     "end": 0.88,
+     "height": 0.2,
+     "shape": "falcate"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hyphessobrycon-pyrrhonotus",
+  "commonName": "Flame-back Bleeding Heart Tetra",
+  "scientificName": "Hyphessobrycon pyrrhonotus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Rio Negro, Amazonas, Brazil",
+  "description": "A Rio Negro relative of the bleeding heart, named for the fiery red that runs along its back above a pale violet flank. Exported wild-caught, it does best in very soft, acidic, tannin-stained water.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   6.8
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 70,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "shy",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.43,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "eyeSize": 0.4,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.55,
+    "height": 0.24,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#bfb0c4",
+   "dorsal": "#c4483a",
+   "ventral": "#e2d8e6",
+   "fin": "#d4a4a0",
+   "finOpacity": 0.45,
+   "eye": "#c8403a",
+   "metallic": 0.4,
+   "iridescence": 0.35,
+   "iridescenceColor": "#b49cff",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d23a30",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.45,
+     "y1": 1,
+     "softness": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#cc1e2a",
+     "x": 0.31,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.18
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d03a30",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141212",
+       "x0": 0.3,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 0.3
+      }
+     ],
+     "edge": "#f6f2f0",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#d8a8a8",
+     "opacity": 0.5,
+     "edge": "#f2ecec",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#d8a8a8",
+     "opacity": 0.5,
+     "edge": "#f6f2f0",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#d8908a",
+     "opacity": 0.4
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.42,
+     "end": 0.56,
+     "height": 0.36,
+     "shape": "falcate"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hyphessobrycon-socolofi",
+  "commonName": "Lesser Bleeding Heart Tetra",
+  "scientificName": "Hyphessobrycon socolofi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Middle Rio Negro, Amazonas, Brazil",
+  "description": "A smaller, Rio Negro cousin of the bleeding heart tetra with a darker, maroon shoulder spot and a lilac sheen. It was named after the aquarium-fish importer Ross Socolof.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.42,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.43,
+    "end": 0.55,
+    "height": 0.22,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#c4aab8",
+   "dorsal": "#8a7480",
+   "ventral": "#e6dae2",
+   "fin": "#d6aab0",
+   "finOpacity": 0.4,
+   "eye": "#c4483c",
+   "metallic": 0.4,
+   "iridescence": 0.3,
+   "iridescenceColor": "#c8a8ff",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#5a1420",
+     "x": 0.31,
+     "y": 0.02,
+     "rx": 0.04,
+     "ry": 0.24
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#cfa0a0",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141212",
+       "x0": 0.2,
+       "x1": 0.8,
+       "y0": -1,
+       "y1": 0.5
+      }
+     ],
+     "edge": "#f6f2f0",
+     "edgeWidth": 0.14
+    },
+    "anal": {
+     "color": "#d4a0a4",
+     "opacity": 0.5,
+     "edge": "#f0e8e8",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#d4a0a4",
+     "opacity": 0.5,
+     "edge": "#f6f2f0",
+     "edgeWidth": 0.18
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.43,
+     "end": 0.56,
+     "height": 0.3,
+     "shape": "falcate"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hyphessobrycon-rosaceus",
+  "commonName": "Rosy Tetra",
+  "scientificName": "Hyphessobrycon rosaceus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Guyana, Suriname & French Guiana — slow coastal rivers",
+  "description": "A delicate pink tetra of slow, plant-choked Guianan streams with a black dorsal flag tipped in white, taller in males. It scatters adhesive eggs among fine-leaved plants at dawn.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.42,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.43,
+    "end": 0.55,
+    "height": 0.24,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#e2b4ac",
+   "dorsal": "#a88070",
+   "ventral": "#f2dcd6",
+   "fin": "#e07868",
+   "finOpacity": 0.5,
+   "eye": "#c84a40",
+   "metallic": 0.3,
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#3a1e1c",
+     "x": 0.3,
+     "y": 0.15,
+     "rx": 0.02,
+     "ry": 0.14
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e07868",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141212",
+       "x0": 0.15,
+       "x1": 0.78,
+       "y0": -1,
+       "y1": 1
+      }
+     ],
+     "edge": "#fbf6f2",
+     "edgeWidth": 0.16
+    },
+    "anal": {
+     "color": "#e0705e",
+     "opacity": 0.6,
+     "edge": "#f6efea",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e0705e",
+     "opacity": 0.6,
+     "edge": "#fbf6f2",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#e06858",
+     "opacity": 0.5
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.43,
+     "end": 0.56,
+     "height": 0.34,
+     "shape": "falcate"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hyphessobrycon-rosaceus-long-fin",
+  "commonName": "Long-fin Rosy Tetra",
+  "scientificName": "Hyphessobrycon rosaceus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Guyana, Suriname & French Guiana)",
+  "description": "A popular line-bred rosy tetra whose dorsal, anal and tail fins trail far beyond the normal outline. The black-and-white dorsal flag becomes a tall, flowing banner in males.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 8,
+  "traits": [
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.42,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.65
+   },
+   "dorsal": {
+    "start": 0.43,
+    "end": 0.56,
+    "height": 0.45,
+    "shape": "flowing",
+    "trail": 0.2
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.24,
+    "shape": "flowing",
+    "trail": 0.12
+   },
+   "pelvic": {
+    "start": 0.4,
+    "end": 0.43,
+    "height": 0.22,
+    "shape": "flowing"
+   }
+  },
+  "look": {
+   "base": "#e2b4ac",
+   "dorsal": "#a88070",
+   "ventral": "#f2dcd6",
+   "fin": "#e07868",
+   "finOpacity": 0.45,
+   "eye": "#c84a40",
+   "metallic": 0.3,
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#3a1e1c",
+     "x": 0.3,
+     "y": 0.15,
+     "rx": 0.02,
+     "ry": 0.14
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e07868",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141212",
+       "x0": 0.1,
+       "x1": 0.8,
+       "y0": -1,
+       "y1": 1
+      }
+     ],
+     "edge": "#fbf6f2",
+     "edgeWidth": 0.14
+    },
+    "anal": {
+     "color": "#e0705e",
+     "opacity": 0.55,
+     "edge": "#f6efea",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "color": "#e0705e",
+     "opacity": 0.55,
+     "edge": "#fbf6f2",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#e06858",
+     "opacity": 0.45
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55,
+    "dorsal": {
+     "start": 0.43,
+     "end": 0.56,
+     "height": 0.32,
+     "shape": "flowing",
+     "trail": 0.1
+    }
+   }
+  },
+  "variantOf": "hyphessobrycon-rosaceus",
+  "availability": "common"
+ },
+ {
+  "id": "hyphessobrycon-bentosi",
+  "commonName": "Ornate Tetra",
+  "scientificName": "Hyphessobrycon bentosi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower & middle Amazon basin, Brazil",
+  "description": "Very like the rosy tetra but lacking a shoulder spot; mature males carry a tall, white-tipped black dorsal fin. It lives among submerged vegetation and roots along the lower Amazon and its tributaries.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.1,
+  "burstSpeed": 10,
+  "traits": [
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.42,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.43,
+    "end": 0.55,
+    "height": 0.24,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.56,
+    "end": 0.88,
+    "height": 0.13,
+    "shape": "low"
+   }
+  },
+  "look": {
+   "base": "#dcb8b4",
+   "dorsal": "#a08478",
+   "ventral": "#f0e0dc",
+   "fin": "#e28474",
+   "finOpacity": 0.45,
+   "eye": "#c84a40",
+   "metallic": 0.35,
+   "translucency": 0.25,
+   "fins": {
+    "dorsal": {
+     "color": "#e08070",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141212",
+       "x0": 0.15,
+       "x1": 0.75,
+       "y0": -1,
+       "y1": 1
+      }
+     ],
+     "edge": "#fbf8f6",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#e07a6a",
+     "opacity": 0.55,
+     "edge": "#fbf8f6",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#e07a6a",
+     "opacity": 0.55,
+     "edge": "#fbf8f6",
+     "edgeWidth": 0.25
+    },
+    "caudal": {
+     "color": "#e07464",
+     "opacity": 0.45
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.43,
+     "end": 0.56,
+     "height": 0.36,
+     "shape": "falcate"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hyphessobrycon-copelandi",
+  "commonName": "Copeland's Tetra",
+  "scientificName": "Hyphessobrycon copelandi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central & upper Amazon basin — Brazil & Peru",
+  "description": "A member of the rosy-tetra group from the central Amazon, with an amber-red body, a dark vertical shoulder mark and a white-tipped black dorsal fin. It is often confused with the serpae and rosy tetras.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "shy"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.4,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.43,
+    "end": 0.55,
+    "height": 0.24,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#d09068",
+   "dorsal": "#946850",
+   "ventral": "#ecc8b0",
+   "fin": "#d86a50",
+   "finOpacity": 0.5,
+   "eye": "#c8443a",
+   "metallic": 0.3,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#2a1612",
+     "x": 0.3,
+     "y": 0.18,
+     "rx": 0.025,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d86a50",
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141212",
+       "x0": 0.15,
+       "x1": 0.78,
+       "y0": -1,
+       "y1": 1
+      }
+     ],
+     "edge": "#fbf6f2",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#d65e48",
+     "opacity": 0.6,
+     "edge": "#1c1210",
+     "edgeWidth": 0.08
+    },
+    "pelvic": {
+     "color": "#d65e48",
+     "opacity": 0.6,
+     "edge": "#fbf6f2",
+     "edgeWidth": 0.18
+    },
+    "caudal": {
+     "color": "#d66a50",
+     "opacity": 0.5
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hyphessobrycon-flammeus",
+  "commonName": "Flame Tetra",
+  "scientificName": "Hyphessobrycon flammeus",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal streams around Rio de Janeiro, south-eastern Brazil",
+  "description": "Also called the Von Rio tetra, it comes from coastal streams around Rio de Janeiro, much of which have been lost to urban growth; aquarium stocks are almost all captive-bred. Two black bars mark the shoulder and the rear body glows red.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   20,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.37,
+   "width": 0.11,
+   "depthPos": 0.4,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#c8a090",
+   "dorsal": "#8a6a5a",
+   "ventral": "#e8c8b8",
+   "fin": "#d8402c",
+   "finOpacity": 0.6,
+   "eye": "#c8443a",
+   "metallic": 0.35,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8402e",
+     "x0": 0.45,
+     "x1": 1,
+     "y0": -1,
+     "y1": 0.6,
+     "softness": 0.18
+    },
+    {
+     "type": "bars",
+     "color": "#1a1210",
+     "count": 2,
+     "width": 0.022,
+     "x0": 0.25,
+     "x1": 0.34,
+     "y0": -0.3,
+     "y1": 0.7
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#d8402c",
+     "opacity": 0.75,
+     "edge": "#151010",
+     "edgeWidth": 0.15
+    },
+    "pelvic": {
+     "color": "#d8402c",
+     "opacity": 0.7
+    },
+    "dorsal": {
+     "color": "#d24430",
+     "opacity": 0.55
+    },
+    "caudal": {
+     "color": "#d24430",
+     "opacity": 0.55
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d8402c",
+      "opacity": 0.8,
+      "edge": "#0e0a0a",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1,
+   "body": {
+    "belly": 0.55
+   },
+   "look": {
+    "fins": {
+     "anal": {
+      "color": "#d8705c",
+      "opacity": 0.55
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "hyphessobrycon-griemi",
+  "commonName": "Griem's Tetra",
+  "scientificName": "Hyphessobrycon griemi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Tocantins basin — Goiás, Brazil",
+  "description": "A small, copper-red tetra from the upper Tocantins basin that closely resembles the flame tetra. It is told apart by the white tips on its dorsal, anal and pelvic fins.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.3,
+  "burstSpeed": 10,
+  "traits": [
+   "bold"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.36,
+   "width": 0.11,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#c88466",
+   "dorsal": "#8a5c48",
+   "ventral": "#e6b8a0",
+   "fin": "#d4482e",
+   "finOpacity": 0.55,
+   "eye": "#c8443a",
+   "metallic": 0.3,
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#cc4a30",
+     "x0": 0.4,
+     "x1": 1,
+     "y0": -1,
+     "y1": 0.5,
+     "softness": 0.2
+    },
+    {
+     "type": "bars",
+     "color": "#1c1210",
+     "count": 2,
+     "width": 0.02,
+     "x0": 0.25,
+     "x1": 0.33,
+     "y0": -0.2,
+     "y1": 0.65
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d24a30",
+     "opacity": 0.6,
+     "edge": "#f8f2ee",
+     "edgeWidth": 0.18
+    },
+    "anal": {
+     "color": "#d24a30",
+     "opacity": 0.65,
+     "edge": "#f8f2ee",
+     "edgeWidth": 0.12
+    },
+    "pelvic": {
+     "color": "#d24a30",
+     "opacity": 0.65,
+     "edge": "#f8f2ee",
+     "edgeWidth": 0.2
+    },
+    "caudal": {
+     "color": "#d04a32",
+     "opacity": 0.5
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hyphessobrycon-herbertaxelrodi",
+  "commonName": "Black Neon Tetra",
+  "scientificName": "Hyphessobrycon herbertaxelrodi",
+  "family": "Characidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Paraguay basin (Rio Taquari) — Mato Grosso do Sul, Brazil",
+  "description": "From streams feeding the Pantanal, it carries a brilliant greenish-white line above a broad velvet-black band, with a red crescent over the eye. Hardy, peaceful and widely captive-bred.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   5.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   15
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "night-coloration"
+  ],
+  "body": {
+   "archetype": "tetra",
+   "depth": 0.27,
+   "width": 0.11,
+   "eyeSize": 0.42,
+   "adipose": true,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   }
+  },
+  "look": {
+   "base": "#a4a492",
+   "dorsal": "#6a6650",
+   "ventral": "#d8d6cc",
+   "fin": "#d8d6cc",
+   "finOpacity": 0.2,
+   "eye": "#cc3a30",
+   "metallic": 0.35,
+   "iridescence": 0.7,
+   "iridescenceColor": "#c8ffe8",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#101010",
+     "y": -0.1,
+     "width": 0.34,
+     "x0": 0.22,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#d8f4e0",
+     "y": 0.18,
+     "width": 0.09,
+     "x0": 0.18,
+     "x1": 0.95,
+     "glow": 0.4,
+     "iridescent": true
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#d0cec4",
+     "opacity": 0.22
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.05,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ }
+]
