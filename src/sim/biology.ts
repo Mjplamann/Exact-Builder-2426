@@ -373,15 +373,16 @@ export function grazingWeights(sp: Species): { glass: number; surface: number } 
 
 /**
  * Bioload of one adult in "centimetres of small fish" — the unit of the classic 1 cm/L rule —
- * corrected for size and build: a 5 cm generic fish counts 5, bulk scales with L² (between the
- * gill-surface and metabolic-mass scalings) times body build relative to a generic fish.
+ * corrected for size and build: a 5 cm generic fish counts 5; bigger fish count more than their
+ * length (L^1.6, between the plain length rule and metabolic mass) and deep/heavy bodies more
+ * than slender ones (√ of the mass coefficient).
  * Invertebrates count 30% (tiny metabolic load per cm).
  */
 export function bioloadUnits(sp: Species): number {
   const male = sexLengthScale(sp, 'male');
   const female = sexLengthScale(sp, 'female');
   const l = sp.adultLengthCm * (male + female) * 0.5;
-  const build = Math.pow(massCoefficient(sp) / 0.011, 0.67);
-  const u = 5 * (l / 5) * (l / 5) * build;
+  const build = Math.sqrt(massCoefficient(sp) / 0.011);
+  const u = 5 * Math.pow(l / 5, 1.6) * build;
   return isInvertebrate(sp) ? u * 0.3 : u;
 }

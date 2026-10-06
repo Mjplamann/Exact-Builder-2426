@@ -39,7 +39,11 @@ export function integrateSwimmer(env: SwimEnv, fish: FishEntity, b: Brain, dt: n
   const dhor = Math.sqrt(b.dx * b.dx + b.dz * b.dz);
   const wantYaw = dhor > 0.04 ? Math.atan2(b.dz, b.dx) : b.yaw;
   const err = wrapAngle(wantYaw - b.yaw);
-  const wMax = b.turnMax * b.turnBoost;
+  // Routine turns need thrust: body-caudal swimmers turn slowly when barely moving, paired-fin
+  // swimmers (angels, gouramis, puffers) can pivot on the spot but deliberately.
+  const sRel = clamp(Math.abs(b.speed) / Math.max(1e-4, 0.8 * b.p.cruise * b.L), 0, 1);
+  const lowSpeedTurn = b.turnBoost > 1.2 ? 1 : b.p.bcf && !b.hold ? 0.3 + 0.7 * sRel : 0.45 + 0.55 * sRel;
+  const wMax = b.turnMax * b.turnBoost * lowSpeedTurn;
   // Proportional heading control with a yaw-acceleration limit (fish can't snap to a new yaw rate).
   const gain = 2.6 + 2 * (b.turnBoost - 1);
   const wWant = clamp(err * gain, -wMax, wMax);

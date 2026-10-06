@@ -256,7 +256,11 @@ export class LifeSim implements BreedHost {
     for (const k of Object.keys(this.warnArmed) as WarnKind[]) this.warnArmed[k] = true;
   }
 
-  /** Ammonia production (mg N/day) the current stock would produce when fed normally. */
+  /**
+   * Ammonia production (mg N/day) the filter's bacteria are sized for: the current stock fed
+   * normally, but at least what a typically stocked tank of this size produces — a "seeded"
+   * filter matured on a normal bioload, so stocking a cycled tank doesn't trigger a new cycle.
+   */
   private expectedLoadN(world: World): number {
     let n = 0;
     for (const f of world.fish) {
@@ -264,7 +268,10 @@ export class LifeSim implements BreedHost {
       const needMg = NEED_STOMACHS_PER_DAY_REF * sizeRateScale(w) * STOMACH_MG_PER_G * w;
       n += needMg * FOOD_N_FRACTION * 0.8;
     }
-    return n;
+    // ≈0.075 mg N/day per bioload unit (a 5 cm fish fed normally); a seeded filter carries ~70%
+    // of the tank's capacity.
+    const typical = stockingReport(world).capacity * 0.7 * 0.075;
+    return Math.max(n, typical);
   }
 
   update(world: World, simDt: number): void {

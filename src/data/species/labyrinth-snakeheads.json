@@ -1156,14 +1156,14 @@
  },
  {
   "id": "betta-stiktos",
-  "commonName": "Spotted-fin Betta (B. stiktos)",
+  "commonName": "Stiktos Betta",
   "scientificName": "Betta stiktos",
   "family": "Osphronemidae",
   "group": "fish",
   "water": "freshwater",
   "region": "Cambodia — Mekong basin lowlands",
   "description": "The smallest member of the splendens group, named from the Greek for \"spotted\" after the rows of round black marks on the male's dorsal fin. Males are brown-black flecked with green-blue iridescence, with black cross-bars on the tail.",
-  "adultLengthCm": 4,
+  "adultLengthCm": 4.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 4,
   "lifespanYears": 3,
@@ -1249,16 +1249,6 @@
      "type": "scales",
      "color": "#36b0c0",
      "contrast": 0.55
-    },
-    {
-     "type": "bars",
-     "color": "#121010",
-     "count": 7,
-     "width": 0.02,
-     "x0": 0.35,
-     "x1": 0.92,
-     "y0": -0.6,
-     "y1": 0.7
     }
    ],
    "fins": {
@@ -11107,8 +11097,8 @@
      "shape": "rounded"
     },
     "caudal": {
-     "shape": "crowntail",
-     "size": 0.55
+     "shape": "rounded",
+     "size": 0.45
     }
    },
    "look": {
@@ -11858,8 +11848,8 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred (wild form: central Thailand floodplains)",
-  "description": "A Thai-developed line selected purely for size, reaching around twice the length of an ordinary betta. Giants grow quickly and need more space and food than standard plakats.",
-  "adultLengthCm": 10,
+  "description": "A Thai-developed line selected purely for size, reaching 10–13 cm — up to twice the length of an ordinary betta. Giants grow quickly and need more space and food than standard plakats.",
+  "adultLengthCm": 11,
   "birthLengthCm": 0.25,
   "maturityMonths": 5,
   "lifespanYears": 3,
@@ -13779,7 +13769,7 @@
      },
      "pelvic": {
       "color": "#c8c8c0",
-      "opacity": 0.39999999999999997
+      "opacity": 0.4
      }
     }
    }
@@ -13938,7 +13928,7 @@
      },
      "pelvic": {
       "color": "#c8c8c0",
-      "opacity": 0.39999999999999997
+      "opacity": 0.4
      }
     }
    }
@@ -14098,7 +14088,7 @@
      },
      "pelvic": {
       "color": "#c8c8c0",
-      "opacity": 0.39999999999999997
+      "opacity": 0.4
      }
     }
    }
@@ -14260,7 +14250,7 @@
      },
      "pelvic": {
       "color": "#c8b890",
-      "opacity": 0.39999999999999997
+      "opacity": 0.4
      }
     }
    }
@@ -16814,7 +16804,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Central Kalimantan, Borneo — blackwater swamps",
-  "description": "Like all licorice gouramis it spawns upside-down in a tiny cave, sticking the eggs to the roof beneath a few bubbles. Males take longer than most species to develop their full fin colours of red-brown, black and iridescent blue.",
+  "description": "Like all licorice gouramis it spawns upside-down in a tiny cave, sticking the eggs to the roof beneath a few bubbles. Displaying males show red-brown unpaired fins crossed by a black band and edged in iridescent blue.",
   "adultLengthCm": 3.8,
   "birthLengthCm": 0.2,
   "maturityMonths": 6,
@@ -19341,8 +19331,8 @@
      "shape": "rounded"
     },
     "caudal": {
-     "shape": "forked",
-     "size": 0.6
+     "shape": "rounded",
+     "size": 0.5
     }
    },
    "look": {
@@ -21055,9 +21045,9 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Brahmaputra basin, Assam (India) & Bhutan",
-  "description": "A dwarf snakehead with no pelvic fins, a brilliant orange-red wash on the lower flanks, a blue-speckled body and orange-edged fins. Unlike its look-alike C. andrao it guards floating eggs rather than mouthbrooding, and it does best in cool water.",
+  "description": "A dwarf snakehead with no pelvic fins, a brilliant orange-red wash on the lower flanks, a blue-speckled body and orange-edged fins. Like its look-alike C. andrao it is a paternal mouthbrooder, and it does best in cool water.",
   "adultLengthCm": 18,
-  "birthLengthCm": 0.4,
+  "birthLengthCm": 0.8,
   "maturityMonths": 12,
   "lifespanYears": 8,
   "tempC": [
@@ -21079,7 +21069,7 @@
   "groupSize": 2,
   "diet": "carnivore",
   "activity": "crepuscular",
-  "reproduction": "bubble-nester",
+  "reproduction": "mouthbrooder",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 0.3,
   "burstSpeed": 8,
@@ -21486,7 +21476,7 @@
   "family": "Channidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Rakhine State, western Myanmar — Waloun Chaung hill streams",
+  "region": "Rakhine State, western Myanmar — hill streams",
   "description": "Told apart by the large black spots on its cheeks, golden-orange lips, red rim to the gill cover and 5–7 alternating white and dark bands on each pectoral fin. Its body scales are a mix of red and bluish-grey, peppered with black spots.",
   "adultLengthCm": 22,
   "birthLengthCm": 0.8,
@@ -22905,7 +22895,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Mainland Southeast Asia & Sundaland — large rivers, lakes and reservoirs",
-  "description": "The largest snakehead, sold as the \"red snakehead\" when young for its orange juveniles banded with two black stripes. Adults turn blue-black above and pale below and defend their floating eggs and fry ferociously.",
+  "description": "One of the largest snakeheads, sold as the \"red snakehead\" when young for its orange juveniles banded with two black stripes. Adults turn blue-black above and pale below and defend their floating eggs and fry ferociously.",
   "adultLengthCm": 80,
   "birthLengthCm": 0.4,
   "maturityMonths": 36,

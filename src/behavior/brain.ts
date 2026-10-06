@@ -212,6 +212,8 @@ export class Brain {
   perchT = 0;
   target: FishEntity | null = null;
   displayT = 0;
+  /** Territorial chase cooldown (s). */
+  chaseCool = 0;
   /** Extra fin flare (flaring betta, territorial display) 0..1. */
   flare = 0;
 

@@ -235,6 +235,7 @@ export class BehaviorSystem {
     b.soloT -= dt;
     b.partnerCheckT -= dt;
     b.pose -= dt;
+    b.chaseCool -= dt;
     b.thinkT -= dt;
     b.scanT -= dt;
     b.biteT -= dt;

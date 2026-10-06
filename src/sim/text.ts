@@ -5,21 +5,42 @@ import { MS_PER_DAY } from '../core/clock';
  * Gentle, natural-language phrasing for journal entries and the welcome-back summary.
  */
 
-/** Words that stay capitalized mid-sentence (proper nouns/adjectives in common names). */
+/** Words that stay capitalized mid-sentence (places, people, peoples). */
 const PROPER = new Set([
-  'african', 'amano', 'amazon', 'american', 'asian', 'australian', 'banggai', 'bolivian', 'borneo', 'brazilian',
-  'burmese', 'celebes', 'chinese', 'colombian', 'congo', 'endler', "endler's", 'german', 'hawaiian', 'indian',
-  'japanese', 'madagascar', 'malawi', 'malaysian', 'mexican', 'peruvian', 'rio', 'siamese', 'sumatra', 'sumatran',
-  'tanganyika', 'thai', 'venezuelan',
+  'african', 'amano', 'amazon', 'amazonian', 'american', 'asian', 'australian', 'banggai', 'bolivian', 'borneo',
+  'brazilian', 'burmese', 'cameroon', 'celebes', 'chinese', 'colombian', 'congo', 'cuban', 'ecuador', 'ecuadorian',
+  'egyptian', 'endler', 'florida', 'german', 'guinea', 'guyana', 'hawaiian', 'indian', 'japanese', 'java', 'javan',
+  'kenyan', 'lake', 'madagascar', 'malawi', 'malayan', 'malaysian', 'mexican', 'nicaraguan', 'niger', 'nile',
+  'orinoco', 'panama', 'panamanian', 'peruvian', 'philippine', 'red', 'rio', 'siamese', 'sri', 'sulawesi', 'sumatra',
+  'sumatran', 'tanganyika', 'texas', 'thai', 'venezuelan', 'victoria', 'zambezi',
 ]);
+/** Proper only in context: "Red Sea" (not "red cherry"); "Lake" before a name. */
+const PROPER_ONLY_BEFORE: Record<string, string> = { red: 'sea', lake: '' };
 
-/** "Neon tetra" → "neon tetra"; "German blue ram" stays. */
+/** Lower-case a Title Case common name for use mid-sentence, keeping proper nouns ("German blue ram"). */
 export function lowerName(commonName: string): string {
-  const first = commonName.split(/[\s-]/, 1)[0] ?? '';
-  if (PROPER.has(first.toLowerCase())) return commonName;
-  // Keep acronyms / internal capitals ("L-number", "GBR").
-  if (first.length > 1 && first[1] === first[1].toUpperCase() && /[A-Z]/.test(first[1])) return commonName;
-  return commonName.charAt(0).toLowerCase() + commonName.slice(1);
+  const words = commonName.split(' ');
+  return words
+    .map((word, i) =>
+      word
+        .split('-')
+        .map((w, j) => {
+          const bare = w.replace(/[^A-Za-z']/g, '').toLowerCase();
+          if (!bare) return w;
+          // Acronyms and internal capitals (GBR, McCulloch) stay.
+          if (w.length > 1 && /[A-Z]/.test(w.slice(1))) return w;
+          // Possessives of people ("Sterba's", "Endler's") stay.
+          if (/'s$/i.test(w)) return w;
+          if (j === 0 && PROPER.has(bare)) {
+            const need = PROPER_ONLY_BEFORE[bare];
+            const next = (words[i + 1] ?? '').toLowerCase();
+            if (need === undefined || (need === '' ? next.length > 0 : next === need)) return w;
+          }
+          return w.charAt(0).toLowerCase() + w.slice(1);
+        })
+        .join('-'),
+    )
+    .join(' ');
 }
 
 const INVARIANT_ENDINGS = ['fish', 'shrimp', 'fry', 'corydoras', 'bass', 'trout', 'salmon', 'species', 'sheep'];

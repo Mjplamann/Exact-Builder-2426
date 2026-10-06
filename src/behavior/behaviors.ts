@@ -30,12 +30,25 @@ function desire(b: Brain, x: number, y: number, z: number, speed: number): void 
   b.ds = speed;
 }
 
-/** Steer toward a point, slowing within `arrive` m. Returns the distance. */
+/**
+ * Steer toward a point, slowing within `arrive` m. Inside the arrival zone the heading eases
+ * toward the current one, so a fish that has arrived settles instead of pirouetting over the
+ * spot. Returns the distance.
+ */
 function seek(fish: FishEntity, b: Brain, gx: number, gy: number, gz: number, speed: number, arrive: number): number {
   const k = fish.kin;
-  const x = gx - k.pos[0], y = gy - k.pos[1], z = gz - k.pos[2];
+  let x = gx - k.pos[0], y = gy - k.pos[1], z = gz - k.pos[2];
   const d = Math.sqrt(x * x + y * y + z * z);
-  const s = arrive > 0 && d < arrive ? speed * (d / arrive) : speed;
+  let s = speed;
+  if (arrive > 0 && d < arrive) {
+    const w = d / arrive;
+    s = speed * w;
+    const inv = 1 / Math.max(d, 1e-6);
+    const cp = Math.cos(b.pitch);
+    x = x * inv * w + cp * Math.cos(b.yaw) * (1 - w);
+    y = y * inv * w + Math.sin(b.pitch) * (1 - w) * 0.3;
+    z = z * inv * w + cp * Math.sin(b.yaw) * (1 - w);
+  }
   desire(b, x, y, z, s);
   return d;
 }
@@ -294,7 +307,7 @@ function chooseActivity(ctx: Ctx, fish: FishEntity, b: Brain): void {
   if (t.shy && !grouped) W[2] += 1;
   if (zone === 'bottom' && (t['bottom-rester'] || t['sand-sifter'] || t.scavenger || t['sifter-of-detritus'] || t.digger)) W[3] += 4;
   if (t['surface-grazer'] || t['plant-eater'] || t['coral-nipper'] || (t['algae-eater'] && !t.clings)) W[3] += 1.6;
-  if (grouped && p.schooling === 1 && zone !== 'bottom') W[3] += 0.6; // shoal members pick at things
+  if (grouped && p.schooling === 1 && zone !== 'bottom') W[3] += 0.35; // shoal members pick at things briefly
   if (t.clings || t['glass-grazer']) W[4] += 6;
   if (t.perches || t.hops) W[5] += 4;
   if (t.territorial && home) W[6] += 2.5;
@@ -327,7 +340,7 @@ function chooseActivity(ctx: Ctx, fish: FishEntity, b: Brain): void {
     case 'shoal': enter(ctx, fish, b, 'shoal', rr.range(20, 60)); break;
     case 'cruise': enter(ctx, fish, b, 'cruise', rr.range(10, 30)); break;
     case 'hover': enter(ctx, fish, b, 'hover', rr.range(8, 25)); break;
-    case 'forage': enter(ctx, fish, b, 'forage', rr.range(15, 50)); break;
+    case 'forage': enter(ctx, fish, b, 'forage', grouped && zone !== 'bottom' ? rr.range(4, 10) : rr.range(15, 50)); break;
     case 'graze': enter(ctx, fish, b, 'graze', rr.range(40, 180)); break;
     case 'perch': enter(ctx, fish, b, 'perch', rr.range(30, 90)); break;
     case 'patrol': enter(ctx, fish, b, 'patrol', rr.range(15, 40)); break;
@@ -422,8 +435,10 @@ export function thinkFish(ctx: Ctx, fish: FishEntity, b: Brain): void {
   }
 
   // Territorial interruptions: chase off intruders.
-  if ((t.territorial || p.aggression > 0.6) && b.mode !== 'chase' && b.fear < 0.3 && ctx.rng.chance(0.5)) {
+  if ((t.territorial || p.aggression > 0.6) && b.mode !== 'chase' && b.fear < 0.3 && b.chaseCool <= 0 && ctx.rng.chance(0.35)) {
     if (checkIntruder(ctx, fish, b)) {
+      // Brief displays and short chases, separated by long calm spells.
+      b.chaseCool = ctx.rng.range(10, 30) * (1.4 - p.aggression);
       enter(ctx, fish, b, 'chase', ctx.rng.range(1.2, 3));
       b.label = 'chasing off an intruder';
       return;
@@ -473,8 +488,11 @@ function checkIntruder(ctx: Ctx, fish: FishEntity, b: Brain): boolean {
     if (o === b.partner || ob.p.move !== 'swimmer' || ob.surf !== SURF_NONE || ob.mode === 'hide') continue;
     const same = o.species === fish.species;
     const oL = ob.L;
-    // Real territorial fish mostly chase conspecifics and similar-sized competitors.
-    if (!same && (oL < 0.35 * L || oL > 2.2 * L)) continue;
+    // Real territorial fish mostly chase conspecifics and similar-sized competitors that use the
+    // same part of the water column; small fish passing overhead are tolerated.
+    if (!same && (oL < 0.5 * L || oL > 2 * L)) continue;
+    if (!same && Math.abs(o.kin.pos[1] - cy) > r * 0.6) continue;
+    if (!same && b.p.aggression < 0.5 && ob.p.species.zone !== b.p.species.zone && ob.p.species.zone !== 'all') continue;
     if (same && b.p.colony === false && b.p.schooling > 0 && b.p.aggression < 0.5) continue;
     const d = dist2(fish, o.kin.pos[0], o.kin.pos[1], o.kin.pos[2]);
     if (d < bestD) {
@@ -560,7 +578,8 @@ export function steerFish(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): voi
   b.turnBoost = 1;
   b.accelBoost = 1;
   b.posture = p.postureCruise;
-  b.pitchLimit = p.maxPitch;
+  // Routine swimming stays close to level (≈ ±14°); feeding, escapes and air gulps raise the limit.
+  b.pitchLimit = p.maxPitch * 0.55;
   b.flare = Math.max(0, b.flare - dt * 1.5);
   if (b.mode !== 'hide' && b.mode !== 'rest' && b.mode !== 'feed') b.shelterOwner = undefined;
   b.modeT += dt;
@@ -950,6 +969,7 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
       b.hasSurfTarget = false;
     }
     b.label = b.mode === 'hide' ? 'hiding until dark' : b.rest > 0.5 ? 'sleeping on the bottom' : 'resting on the bottom';
+    b.pitchLimit = p.maxPitch * 0.8;
     return;
   }
 
@@ -1312,6 +1332,7 @@ function steerChase(ctx: Ctx, fish: FishEntity, b: Brain): void {
   const ay = nip ? q[1] - tf[1] * tl * 0.45 : q[1];
   const az = nip ? q[2] - tf[2] * tl * 0.45 : q[2];
   const d = seek(fish, b, ax, ay, az, (nip ? 0.6 : 0.5) * p.burst * L, 0);
+  b.pitchLimit = p.maxPitch;
   b.turnBoost = 1.8;
   b.accelBoost = 2;
   if (d < 4 * L) b.flare = Math.max(b.flare, 0.7);

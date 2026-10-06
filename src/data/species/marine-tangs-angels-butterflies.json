@@ -84,11 +84,11 @@
       {
        "type": "region",
        "color": "#ff6a1a",
-       "x0": 0.78,
-       "x1": 0.9,
+       "x0": 0,
+       "x1": 0.12,
        "y0": -1,
        "y1": 1,
-       "softness": 0
+       "softness": 0.03
       }
      ]
     },
@@ -101,11 +101,11 @@
       {
        "type": "region",
        "color": "#ff6a1a",
-       "x0": 0.78,
-       "x1": 0.9,
+       "x0": 0,
+       "x1": 0.12,
        "y0": -1,
        "y1": 1,
-       "softness": 0
+       "softness": 0.03
       }
      ]
     },
@@ -1111,16 +1111,16 @@
     {
      "type": "blotch",
      "color": "#141214",
-     "x": 0.9,
-     "y": 0.42,
+     "x": 0.86,
+     "y": 0.74,
      "rx": 0.025,
      "ry": 0.05
     },
     {
      "type": "blotch",
      "color": "#141214",
-     "x": 0.9,
-     "y": -0.42,
+     "x": 0.86,
+     "y": -0.74,
      "rx": 0.025,
      "ry": 0.05
     }
@@ -1477,8 +1477,7 @@
   "burstSpeed": 6,
   "traits": [
    "reef-safe",
-   "bold",
-   "territorial"
+   "bold"
   ],
   "body": {
    "archetype": "tang",
@@ -2323,7 +2322,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-West Pacific — East Africa to Samoa",
-  "description": "Named for the orange ring (\"socket\") around its tail spine; otherwise dark grey-brown with a pale band at the base of the tail. Long confused with A. bariene.",
+  "description": "Named for the orange ring (\"socket\") around its tail spine; otherwise dark grey-brown with a pale band at the base of the tail. Grazes algal and detrital films on sand and rubble next to reefs.",
   "adultLengthCm": 30,
   "birthLengthCm": 0.25,
   "maturityMonths": 30,
@@ -3500,16 +3499,16 @@
     {
      "type": "blotch",
      "color": "#141416",
-     "x": 0.9,
-     "y": 0.52,
+     "x": 0.86,
+     "y": 0.74,
      "rx": 0.025,
      "ry": 0.05
     },
     {
      "type": "blotch",
      "color": "#141416",
-     "x": 0.9,
-     "y": -0.52,
+     "x": 0.86,
+     "y": -0.74,
      "rx": 0.025,
      "ry": 0.05
     }
@@ -5828,7 +5827,7 @@
    "archetype": "rabbitfish",
    "depth": 0.5,
    "width": 0.12,
-   "snout": "rounded",
+   "snout": "elongate",
    "mouth": "terminal",
    "dorsal": {
     "start": 0.25,
@@ -6954,7 +6953,7 @@
   "family": "Pomacanthidae",
   "group": "fish",
   "water": "marine",
-  "region": "Pacific — Cocos-Keeling to Easter Island & the Marshall Islands",
+  "region": "Indo-Pacific — Cocos-Keeling to the Line, Marquesas & Ducie islands",
   "description": "Lemon-yellow with electric-blue rings around the eyes and blue edges on the gill cover and fins. Notorious for nipping clam mantles and large-polyp stony corals.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.15,
@@ -8149,8 +8148,8 @@
      "color": "#5a9af0",
      "density": 80,
      "size": 0.012,
-     "x0": 0,
-     "x1": 0.5
+     "x0": 0.45,
+     "x1": 0.95
     }
    ],
    "fins": {
@@ -8799,7 +8798,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Western Pacific — Mariana & Ogasawara Islands",
-  "description": "Orange with irregular darker vertical bars and blue-edged dorsal and anal fins, sometimes sold as the Mango Angelfish. Hybridizes with the flame angelfish where they overlap.",
+  "description": "Orange with irregular darker vertical bars and blue-edged dorsal and anal fins, sometimes sold as the Mango Angelfish. Hybridizes with the coral beauty where the two meet in the Mariana Islands.",
   "adultLengthCm": 10,
   "birthLengthCm": 0.15,
   "maturityMonths": 12,
@@ -12833,7 +12832,7 @@
   "family": "Pomacanthidae",
   "group": "fish",
   "water": "marine",
-  "region": "Western Pacific — Sri Lanka & the Andaman Sea to the Philippines & northern Australia",
+  "region": "Indo-West Pacific — Sri Lanka & the Andaman Sea to the Philippines & northern Australia",
   "description": "White front with a black eye bar and a dark rear covered in fine wavy lines, finished with a yellow tail. Lives on silty coastal reefs, picking at sponges and tunicates.",
   "adultLengthCm": 15,
   "birthLengthCm": 0.15,
@@ -12910,6 +12909,15 @@
      "count": 12,
      "width": 0.012,
      "wavy": 0.6
+    },
+    {
+     "type": "region",
+     "color": "#f0eee8",
+     "x0": 0,
+     "x1": 0.36,
+     "y0": -1,
+     "y1": 1,
+     "softness": 0.12
     },
     {
      "type": "mask",
@@ -13705,7 +13713,7 @@
      "width": 0.008,
      "x0": 0.35,
      "x1": 0.9,
-     "slant": -0.6,
+     "slant": 0.6,
      "y0": -1,
      "y1": 0.2
     },
@@ -14232,7 +14240,7 @@
   "family": "Chaetodontidae",
   "group": "fish",
   "water": "marine",
-  "region": "Pacific — Cocos-Keeling to the Tuamotus & southern Japan",
+  "region": "Indo-Pacific — Cocos-Keeling to the Tuamotus & southern Japan",
   "description": "White with fine vertical lines, two dark saddles across the back, a yellow rear and a black spot on the tail stalk. Usually in pairs, feeding on algae, polyps and small invertebrates.",
   "adultLengthCm": 15,
   "birthLengthCm": 0.15,
@@ -16259,7 +16267,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-Pacific incl. Red Sea — East Africa to Hawaii & the Tuamotus",
-  "description": "An elongate white butterflyfish marked with black chevron lines and a black-edged tail. Aggressively guards a single table Acropora colony whose polyps it eats.",
+  "description": "An elongate white butterflyfish marked with black chevron lines and a dark, yellow-edged tail. Aggressively guards a single table Acropora colony whose polyps it eats.",
   "adultLengthCm": 15,
   "birthLengthCm": 0.15,
   "maturityMonths": 12,
@@ -18019,7 +18027,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Red Sea & Gulf of Aden",
-  "description": "Blue-grey with fine white chevrons, an orange head and a black rear tail section; also called the Hooded Butterflyfish. Feeds solely on Acropora polyps.",
+  "description": "Blue-grey with fine white chevrons, an orange head and a black rear tail section; also called the Hooded Butterflyfish. An obligate corallivore that picks polyps from Acropora and other stony corals.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.15,
   "maturityMonths": 12,
@@ -20011,9 +20019,9 @@
      "color": "#141416",
      "count": 2,
      "width": 0.13,
-     "x0": 0.3,
-     "x1": 0.62,
-     "slant": 0.35
+     "x0": 0.34,
+     "x1": 0.64,
+     "slant": -0.25
     },
     {
      "type": "blotch",
@@ -20140,9 +20148,9 @@
      "color": "#141416",
      "count": 2,
      "width": 0.13,
-     "x0": 0.3,
-     "x1": 0.62,
-     "slant": 0.35
+     "x0": 0.34,
+     "x1": 0.64,
+     "slant": -0.25
     },
     {
      "type": "blotch",
@@ -20276,7 +20284,7 @@
      "width": 0.13,
      "x0": 0.36,
      "x1": 0.72,
-     "slant": 0.35
+     "slant": -0.25
     },
     {
      "type": "blotch",
@@ -20404,7 +20412,7 @@
      "width": 0.16,
      "x0": 0.48,
      "x1": 0.48,
-     "slant": 0.35
+     "slant": -0.25
     },
     {
      "type": "region",
@@ -20521,7 +20529,7 @@
      "width": 0.13,
      "x0": 0.36,
      "x1": 0.7,
-     "slant": 0.35
+     "slant": -0.25
     },
     {
      "type": "region",
@@ -20554,7 +20562,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-Pacific — Indonesia & the Andaman Sea to the Society Islands & southern Japan",
-  "description": "Dark brown with thin white lines outlining a triangular pattern; adults develop a bony hump on the nape and short horns above the eyes. Hides under ledges by day and feeds on coral polyps and invertebrates.",
+  "description": "Dark brown with thin white lines outlining a triangular pattern; adults develop a bony hump on the nape and short horns above the eyes. Often shelters beneath ledges, feeding on coral polyps and small benthic invertebrates.",
   "adultLengthCm": 18,
   "birthLengthCm": 0.15,
   "maturityMonths": 18,
@@ -20738,9 +20746,9 @@
      "color": "#141416",
      "count": 2,
      "width": 0.13,
-     "x0": 0.3,
-     "x1": 0.62,
-     "slant": 0.35
+     "x0": 0.34,
+     "x1": 0.64,
+     "slant": -0.25
     },
     {
      "type": "region",

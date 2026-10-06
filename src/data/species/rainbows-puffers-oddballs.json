@@ -29994,5 +29994,2504 @@
    ]
   },
   "availability": "rare"
+ },
+ {
+  "id": "protopterus-annectens",
+  "commonName": "West African Lungfish",
+  "scientificName": "Protopterus annectens",
+  "family": "Protopteridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "West & Central Africa, from Senegal to the Niger & Chad basins",
+  "description": "An obligate air-breather that drowns if it cannot reach the surface. When its swamp dries out it burrows into the mud and sleeps inside a mucus cocoon for months until the rains return.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 1.2,
+  "maturityMonths": 48,
+  "lifespanYears": 25,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 500,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 2,
+  "traits": [
+   "air-gulper",
+   "burrower",
+   "predator",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "lungfish",
+   "depth": 0.1,
+   "width": 0.09,
+   "headLength": 0.14,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.12,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "continuous",
+    "size": 0.08
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.16,
+    "height": 0.18,
+    "shape": "filament",
+    "trail": 0.05
+   },
+   "pelvic": {
+    "start": 0.56,
+    "end": 0.57,
+    "height": 0.15,
+    "shape": "filament",
+    "trail": 0.04
+   }
+  },
+  "look": {
+   "base": "#7a7058",
+   "dorsal": "#4e4636",
+   "ventral": "#c8bca0",
+   "fin": "#6a604a",
+   "finOpacity": 0.55,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2418",
+     "density": 45,
+     "size": 0.025,
+     "x0": 0.05,
+     "x1": 1,
+     "y0": -0.6,
+     "y1": 1,
+     "jitter": 0.8
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "protopterus-aethiopicus",
+  "commonName": "Marbled Lungfish",
+  "scientificName": "Protopterus aethiopicus",
+  "family": "Protopteridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Nile basin, the East African great lakes & the Congo basin",
+  "description": "The largest African lungfish, exceeding two meters in the wild, and the animal with one of the largest known genomes. Its grey-yellow body is marbled with dark blotches, and it gulps air at the surface every few minutes.",
+  "adultLengthCm": 100,
+  "birthLengthCm": 1.2,
+  "maturityMonths": 60,
+  "lifespanYears": 25,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6.5,
+   7.8
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 2000,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 2,
+  "traits": [
+   "air-gulper",
+   "burrower",
+   "predator",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "lungfish",
+   "depth": 0.11,
+   "width": 0.1,
+   "headLength": 0.14,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.12,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "continuous",
+    "size": 0.08
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.16,
+    "height": 0.18,
+    "shape": "filament",
+    "trail": 0.05
+   },
+   "pelvic": {
+    "start": 0.56,
+    "end": 0.57,
+    "height": 0.15,
+    "shape": "filament",
+    "trail": 0.04
+   }
+  },
+  "look": {
+   "base": "#8a826a",
+   "dorsal": "#5a523e",
+   "ventral": "#d0c8b0",
+   "fin": "#7a7058",
+   "finOpacity": 0.55,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2e2a1e",
+     "scale": 5,
+     "amount": 0.5
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "protopterus-dolloi",
+  "commonName": "Slender Lungfish",
+  "scientificName": "Protopterus dolloi",
+  "family": "Protopteridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower & middle Congo River basin, Central Africa",
+  "description": "A slim, dark, almost eel-like lungfish with very long, thread-like paired fins. Like its relatives it can survive dry seasons buried in a mucus-lined burrow, breathing air.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 1.2,
+  "maturityMonths": 48,
+  "lifespanYears": 25,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 500,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 2,
+  "traits": [
+   "air-gulper",
+   "burrower",
+   "predator",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "lungfish",
+   "depth": 0.08,
+   "width": 0.08,
+   "headLength": 0.14,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.12,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "continuous",
+    "size": 0.08
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.16,
+    "height": 0.24,
+    "shape": "filament",
+    "trail": 0.08
+   },
+   "pelvic": {
+    "start": 0.56,
+    "end": 0.57,
+    "height": 0.2,
+    "shape": "filament",
+    "trail": 0.06
+   }
+  },
+  "look": {
+   "base": "#4e4a40",
+   "dorsal": "#33302a",
+   "ventral": "#8a8270",
+   "fin": "#4a463c",
+   "finOpacity": 0.55,
+   "eye": "#3a3a30",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#24221c",
+     "density": 0.3
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "protopterus-amphibius",
+  "commonName": "Gilled Lungfish",
+  "scientificName": "Protopterus amphibius",
+  "family": "Protopteridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal East Africa — Kenya, Somalia, Tanzania & Mozambique",
+  "description": "The smallest African lungfish, often keeping small external gill remnants into adulthood. It lives in seasonal floodplain swamps and aestivates in the mud when they dry.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 1,
+  "maturityMonths": 36,
+  "lifespanYears": 20,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 2,
+  "traits": [
+   "air-gulper",
+   "burrower",
+   "predator",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "lungfish",
+   "depth": 0.11,
+   "width": 0.09,
+   "headLength": 0.14,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.12,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "continuous",
+    "size": 0.08
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.16,
+    "height": 0.18,
+    "shape": "filament",
+    "trail": 0.05
+   },
+   "pelvic": {
+    "start": 0.56,
+    "end": 0.57,
+    "height": 0.15,
+    "shape": "filament",
+    "trail": 0.04
+   }
+  },
+  "look": {
+   "base": "#6a7078",
+   "dorsal": "#444a52",
+   "ventral": "#b8bcc0",
+   "fin": "#5a6068",
+   "finOpacity": 0.55,
+   "eye": "#3a3a30",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2e34",
+     "density": 50,
+     "size": 0.02,
+     "x0": 0.05,
+     "x1": 1,
+     "y0": -0.6,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lepidosiren-paradoxa",
+  "commonName": "South American Lungfish",
+  "scientificName": "Lepidosiren paradoxa",
+  "family": "Lepidosirenidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon & Paraná–Paraguay basins, South America",
+  "description": "An eel-shaped lungfish with tiny thread-like fins that breathes almost entirely with its lungs. In the breeding season males grow feathery, blood-rich pelvic fins thought to release oxygen to the eggs in their burrow.",
+  "adultLengthCm": 70,
+  "birthLengthCm": 1.2,
+  "maturityMonths": 48,
+  "lifespanYears": 20,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 600,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 2,
+  "traits": [
+   "air-gulper",
+   "burrower",
+   "predator",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "lungfish",
+   "depth": 0.08,
+   "width": 0.08,
+   "headLength": 0.14,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.12,
+   "scaleSize": 0.3,
+   "caudal": {
+    "shape": "continuous",
+    "size": 0.08
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 1,
+    "height": 0.04,
+    "shape": "low"
+   },
+   "pectoral": {
+    "start": 0.14,
+    "end": 0.15,
+    "height": 0.06,
+    "shape": "filament"
+   },
+   "pelvic": {
+    "start": 0.6,
+    "end": 0.61,
+    "height": 0.06,
+    "shape": "filament"
+   }
+  },
+  "look": {
+   "base": "#4a4436",
+   "dorsal": "#302c22",
+   "ventral": "#7a705a",
+   "fin": "#4a4436",
+   "finOpacity": 0.55,
+   "eye": "#3a3a30",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#c8b070",
+     "density": 30,
+     "size": 0.02,
+     "x0": 0.05,
+     "x1": 1,
+     "y0": -0.5,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "neoceratodus-forsteri",
+  "commonName": "Australian Lungfish",
+  "scientificName": "Neoceratodus forsteri",
+  "family": "Ceratodontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Burnett & Mary rivers, south-eastern Queensland, Australia",
+  "description": "A living fossil almost unchanged for over 100 million years, with large scales and paddle-like fins; it has a single lung and usually breathes with gills. Extremely long-lived, one individual lived in a Chicago aquarium for over 80 years.",
+  "adultLengthCm": 100,
+  "birthLengthCm": 1.8,
+  "maturityMonths": 180,
+  "lifespanYears": 80,
+  "tempC": [
+   15,
+   25
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 3000,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 2,
+  "traits": [
+   "air-gulper",
+   "bottom-rester",
+   "shy",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "lungfish",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.18,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.12,
+   "scaleSize": 0.9,
+   "caudal": {
+    "shape": "continuous",
+    "size": 0.12
+   },
+   "dorsal": {
+    "start": 0.45,
+    "end": 1,
+    "height": 0.07,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 1,
+    "height": 0.07,
+    "shape": "low"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.22,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.55,
+    "end": 0.6,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#6a6a4a",
+   "dorsal": "#44442e",
+   "ventral": "#d8c8a0",
+   "fin": "#5a5a40",
+   "finOpacity": 0.75,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#3a3a28",
+     "contrast": 0.5
+    },
+    {
+     "type": "spots",
+     "color": "#2a2a1c",
+     "density": 15,
+     "size": 0.03,
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.9
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "acipenser-ruthenus",
+  "commonName": "Sterlet",
+  "scientificName": "Acipenser ruthenus",
+  "family": "Acipenseridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rivers of the Black, Caspian & Kara Sea basins (Danube, Volga, Ob, Yenisei)",
+  "description": "A small, long-snouted sturgeon and the species most often kept in garden ponds and large aquaria. It cruises the bottom constantly, sweeping fringed barbels over the substrate to find worms and insect larvae.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 48,
+  "lifespanYears": 20,
+  "tempC": [
+   8,
+   22
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 2000,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 2.5,
+  "traits": [
+   "sand-sifter",
+   "invert-eater",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "shark",
+   "depth": 0.13,
+   "width": 0.13,
+   "headLength": 0.26,
+   "snout": "elongate",
+   "mouth": "inferior",
+   "eyeSize": 0.12,
+   "peduncle": 0.4,
+   "scaleSize": 0,
+   "armored": true,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "backArch": 0.1,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "falcate"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.82,
+    "height": 0.07,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.6,
+    "end": 0.65,
+    "height": 0.06,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.29,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7a7468",
+   "dorsal": "#4a4640",
+   "ventral": "#e8e0c8",
+   "fin": "#7a7468",
+   "finOpacity": 0.7,
+   "eye": "#4a4a40",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#e8e2d0",
+     "y": 0.95,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#e8e2d0",
+     "y": 0.25,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "region",
+     "color": "#e8e0c8",
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -1,
+     "y1": -0.4,
+     "softness": 0.2
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "acipenser-baerii",
+  "commonName": "Siberian Sturgeon",
+  "scientificName": "Acipenser baerii",
+  "family": "Acipenseridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Siberian rivers from the Ob to the Kolyma, and Lake Baikal",
+  "description": "A cold-water sturgeon widely farmed for caviar and sold for large garden ponds. It grows quickly to an impressive size and feeds on bottom invertebrates sucked up with its protrusible mouth.",
+  "adultLengthCm": 80,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 72,
+  "lifespanYears": 30,
+  "tempC": [
+   6,
+   20
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 5000,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 2.5,
+  "traits": [
+   "sand-sifter",
+   "invert-eater",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "shark",
+   "depth": 0.13,
+   "width": 0.13,
+   "headLength": 0.22,
+   "snout": "elongate",
+   "mouth": "inferior",
+   "eyeSize": 0.12,
+   "peduncle": 0.4,
+   "scaleSize": 0,
+   "armored": true,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "backArch": 0.1,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "falcate"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.82,
+    "height": 0.07,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.6,
+    "end": 0.65,
+    "height": 0.06,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.29,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#6a6a64",
+   "dorsal": "#3e3e3a",
+   "ventral": "#e8e4d8",
+   "fin": "#5a5a54",
+   "finOpacity": 0.7,
+   "eye": "#4a4a40",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#d8d4c8",
+     "y": 0.95,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "region",
+     "color": "#e8e4d8",
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.2
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "acipenser-gueldenstaedtii",
+  "commonName": "Russian Sturgeon",
+  "scientificName": "Acipenser gueldenstaedtii",
+  "family": "Acipenseridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Black, Azov & Caspian Sea basins",
+  "description": "A short-snouted sturgeon once fished heavily for caviar and now critically endangered in the wild. Farmed fish are kept in large ponds and public aquaria.",
+  "adultLengthCm": 80,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 96,
+  "lifespanYears": 30,
+  "tempC": [
+   6,
+   22
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 5000,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 2.5,
+  "traits": [
+   "sand-sifter",
+   "invert-eater",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "shark",
+   "depth": 0.13,
+   "width": 0.13,
+   "headLength": 0.2,
+   "snout": "blunt",
+   "mouth": "inferior",
+   "eyeSize": 0.12,
+   "peduncle": 0.4,
+   "scaleSize": 0,
+   "armored": true,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "backArch": 0.1,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "falcate"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.82,
+    "height": 0.07,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.6,
+    "end": 0.65,
+    "height": 0.06,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.29,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#5e5e4e",
+   "dorsal": "#383a2e",
+   "ventral": "#e4dcc4",
+   "fin": "#4e4e40",
+   "finOpacity": 0.7,
+   "eye": "#4a4a40",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#cfc8b0",
+     "y": 0.95,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "region",
+     "color": "#e4dcc4",
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.2
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "acipenser-fulvescens",
+  "commonName": "Lake Sturgeon",
+  "scientificName": "Acipenser fulvescens",
+  "family": "Acipenseridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Great Lakes, Hudson Bay & Mississippi basins, North America",
+  "description": "A huge, slow-growing sturgeon of large lakes and rivers that may take 15–25 years to mature and live well over a century. Young fish bear sharp bony scutes that wear smooth with age.",
+  "adultLengthCm": 100,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 180,
+  "lifespanYears": 50,
+  "tempC": [
+   4,
+   20
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 10000,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 2,
+  "traits": [
+   "sand-sifter",
+   "invert-eater",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "shark",
+   "depth": 0.13,
+   "width": 0.13,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "inferior",
+   "eyeSize": 0.12,
+   "peduncle": 0.4,
+   "scaleSize": 0,
+   "armored": true,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "backArch": 0.1,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "falcate"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.82,
+    "height": 0.07,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.6,
+    "end": 0.65,
+    "height": 0.06,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.29,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7a7258",
+   "dorsal": "#4a4434",
+   "ventral": "#e8e2cc",
+   "fin": "#6a6450",
+   "finOpacity": 0.7,
+   "eye": "#4a4a40",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a3428",
+     "density": 0.2
+    },
+    {
+     "type": "region",
+     "color": "#e8e2cc",
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.2
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "scaphirhynchus-platorynchus",
+  "commonName": "Shovelnose Sturgeon",
+  "scientificName": "Scaphirhynchus platorynchus",
+  "family": "Acipenseridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mississippi & Missouri river basins, USA",
+  "description": "A small sturgeon of large, turbid rivers with a flattened, shovel-shaped snout and an armored tail stalk ending in a long upper-lobe filament. It feeds on insect larvae in strong currents over sand and gravel.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 72,
+  "lifespanYears": 20,
+  "tempC": [
+   8,
+   24
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 3000,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 2.5,
+  "traits": [
+   "sand-sifter",
+   "invert-eater",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "shark",
+   "depth": 0.1,
+   "width": 0.15,
+   "headLength": 0.24,
+   "snout": "duckbill",
+   "mouth": "inferior",
+   "eyeSize": 0.12,
+   "peduncle": 0.4,
+   "scaleSize": 0,
+   "armored": true,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "backArch": 0.1,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.09,
+    "shape": "falcate"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.82,
+    "height": 0.07,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.6,
+    "end": 0.65,
+    "height": 0.06,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.29,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b09a70",
+   "dorsal": "#7a6848",
+   "ventral": "#f0e8d4",
+   "fin": "#a08c66",
+   "finOpacity": 0.65,
+   "eye": "#4a4a40",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f0e8d4",
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.2
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "polyodon-spathula",
+  "commonName": "American Paddlefish",
+  "scientificName": "Polyodon spathula",
+  "family": "Polyodontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mississippi River basin, USA",
+  "description": "A scaleless, shark-like relative of sturgeons with a long, flat paddle covered in electroreceptors that detect swarms of plankton. It cruises with its huge mouth agape, straining zooplankton from the water.",
+  "adultLengthCm": 120,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 96,
+  "lifespanYears": 30,
+  "tempC": [
+   10,
+   26
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 15000,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "filter-feeder",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 2.5,
+  "traits": [
+   "shy",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "shark",
+   "depth": 0.18,
+   "width": 0.12,
+   "headLength": 0.42,
+   "snout": "elongate",
+   "mouth": "terminal",
+   "eyeSize": 0.06,
+   "peduncle": 0.35,
+   "scaleSize": 0,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.26
+   },
+   "dorsal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.55,
+    "end": 0.6,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.42,
+    "end": 0.46,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7a8088",
+   "dorsal": "#4a5058",
+   "ventral": "#e8eaec",
+   "fin": "#6a7078",
+   "finOpacity": 0.75,
+   "eye": "#3a3a3a",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8eaec",
+     "x0": 0.4,
+     "x1": 0.95,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.25
+    },
+    {
+     "type": "speckle",
+     "color": "#3a4048",
+     "density": 0.15
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "oncorhynchus-mykiss",
+  "commonName": "Rainbow Trout",
+  "scientificName": "Oncorhynchus mykiss",
+  "family": "Salmonidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Pacific drainages of North America & Kamchatka; introduced worldwide",
+  "description": "A cold-water salmonid of clear streams and lakes, peppered with small black spots and marked by a pink-red band along the side. It needs cool, highly oxygenated water and strong flow, and is a staple of public aquaria and classroom hatchery programs.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 1.6,
+  "maturityMonths": 30,
+  "lifespanYears": 6,
+  "tempC": [
+   8,
+   18
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 1000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 10,
+  "traits": [
+   "predator",
+   "jumper",
+   "bold"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.13,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.24,
+   "peduncle": 0.45,
+   "scaleSize": 0.1,
+   "adipose": true,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.54,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.68,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.5,
+    "end": 0.54,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8bca8",
+   "dorsal": "#5a6a48",
+   "ventral": "#f2f0ea",
+   "fin": "#9a9a80",
+   "finOpacity": 0.6,
+   "eye": "#c8b880",
+   "metallic": 0.5,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#d8607a",
+     "y": 0,
+     "width": 0.16,
+     "x0": 0.15,
+     "x1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#1e1e18",
+     "density": 80,
+     "size": 0.015,
+     "x0": 0.15,
+     "x1": 1,
+     "y0": -0.2,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1e1e18",
+       "density": 30,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1e1e18",
+       "density": 40,
+       "size": 0.035
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "salmo-trutta",
+  "commonName": "Brown Trout",
+  "scientificName": "Salmo trutta",
+  "family": "Salmonidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe, North Africa & western Asia; introduced worldwide",
+  "description": "A golden-brown trout of cool rivers and lakes, marked with black spots and red spots ringed in pale halos. Wary and largely nocturnal when large, it feeds on insects, crustaceans and smaller fish.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 1.8,
+  "maturityMonths": 36,
+  "lifespanYears": 8,
+  "tempC": [
+   6,
+   18
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 1000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 10,
+  "traits": [
+   "predator",
+   "jumper",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.13,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.24,
+   "peduncle": 0.45,
+   "scaleSize": 0.1,
+   "adipose": true,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.54,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.68,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.5,
+    "end": 0.54,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8a868",
+   "dorsal": "#5a5034",
+   "ventral": "#f0e6c8",
+   "fin": "#a08a60",
+   "finOpacity": 0.6,
+   "eye": "#c8a050",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1e1a12",
+     "density": 45,
+     "size": 0.025,
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": -0.2,
+     "y1": 1,
+     "jitter": 0.8
+    },
+    {
+     "type": "spots",
+     "color": "#d8382a",
+     "density": 18,
+     "size": 0.022,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.3
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "salvelinus-fontinalis",
+  "commonName": "Brook Trout",
+  "scientificName": "Salvelinus fontinalis",
+  "family": "Salmonidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern North America, from Hudson Bay to the Appalachians",
+  "description": "A char of cold, clean streams and ponds, with pale worm-like markings on a dark olive back, blue-haloed red spots on the sides, and white-edged orange lower fins. Spawning males blaze orange-red on the belly in autumn.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 1.6,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   4,
+   16
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   3,
+   18
+  ],
+  "minTankLiters": 800,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 10,
+  "traits": [
+   "predator",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.13,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.24,
+   "peduncle": 0.45,
+   "scaleSize": 0.1,
+   "adipose": true,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.54,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.68,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.5,
+    "end": 0.54,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.1,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#6a7448",
+   "dorsal": "#343c24",
+   "ventral": "#e88a3a",
+   "fin": "#d8703a",
+   "finOpacity": 0.65,
+   "eye": "#c8a050",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#c8c890",
+     "count": 6,
+     "width": 0.015,
+     "wavy": 1,
+     "y0": 0.3,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#e0e0b0",
+     "density": 35,
+     "size": 0.022,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.4
+    },
+    {
+     "type": "spots",
+     "color": "#d8302a",
+     "density": 12,
+     "size": 0.018,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.2
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "edge": "#f4f4f0",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "edge": "#f4f4f0",
+     "edgeWidth": 0.2
+    },
+    "dorsal": {
+     "color": "#5a6040",
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#1e1e14",
+       "count": 4,
+       "width": 0.05,
+       "wavy": 0.8
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "maccullochella-peelii",
+  "commonName": "Murray Cod",
+  "scientificName": "Maccullochella peelii",
+  "family": "Percichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Murray–Darling basin, south-eastern Australia",
+  "description": "Australia's largest freshwater fish, a long-lived ambush predator that lurks under snags in large rivers. Its greenish-cream body is heavily marbled with dark green, and males guard eggs laid on hollow logs.",
+  "adultLengthCm": 70,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 60,
+  "lifespanYears": 30,
+  "tempC": [
+   12,
+   26
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 3000,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 5,
+  "traits": [
+   "ambush",
+   "predator",
+   "territorial",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.26,
+   "width": 0.16,
+   "headLength": 0.32,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.18,
+   "peduncle": 0.5,
+   "scaleSize": 0.2,
+   "backArch": 0.3,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.56,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.57,
+    "end": 0.82,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8c8a0",
+   "dorsal": "#4a5a34",
+   "ventral": "#f0eee0",
+   "fin": "#4a5434",
+   "finOpacity": 0.75,
+   "eye": "#c8a050",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#3a4a2a",
+     "scale": 5,
+     "amount": 0.55
+    },
+    {
+     "type": "spots",
+     "color": "#3a4a2a",
+     "density": 40,
+     "size": 0.025,
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "edge": "#e8e8d8",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "edge": "#e8e8d8",
+     "edgeWidth": 0.08
+    },
+    "anal": {
+     "edge": "#e8e8d8",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "nannoperca-australis",
+  "commonName": "Southern Pygmy Perch",
+  "scientificName": "Nannoperca australis",
+  "family": "Percichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Murray–Darling basin, Victoria, South Australia & Tasmania",
+  "description": "A small perch of weedy, slow streams and wetlands in south-eastern Australia. Breeding males develop bright red fins edged in black and a red flush on the flanks, then scatter eggs among plants.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   10,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "shy",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.32,
+   "width": 0.12,
+   "headLength": 0.3,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "peduncle": 0.4,
+   "scaleSize": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.34,
+    "end": 0.56,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.82,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a89a72",
+   "dorsal": "#5e5438",
+   "ventral": "#e8e0c8",
+   "fin": "#b8a88a",
+   "finOpacity": 0.4,
+   "eye": "#c8603a",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a3e28",
+     "scale": 6,
+     "amount": 0.4
+    },
+    {
+     "type": "lines",
+     "color": "#4a3e28",
+     "count": 3,
+     "width": 0.015,
+     "y0": -0.3,
+     "y1": 0.5
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "fin": "#d83a2a",
+    "finOpacity": 0.75,
+    "patterns": [
+     {
+      "type": "marble",
+      "color": "#4a3e28",
+      "scale": 6,
+      "amount": 0.4
+     },
+     {
+      "type": "region",
+      "color": "#d8402a",
+      "x0": 0.2,
+      "x1": 0.9,
+      "y0": -0.7,
+      "y1": 0.2,
+      "softness": 0.3
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "edge": "#141410",
+      "edgeWidth": 0.12
+     },
+     "anal": {
+      "edge": "#141410",
+      "edgeWidth": 0.12
+     },
+     "caudal": {
+      "edge": "#141410",
+      "edgeWidth": 0.06
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "aphredoderus-sayanus",
+  "commonName": "Pirate Perch",
+  "scientificName": "Aphredoderus sayanus",
+  "family": "Aphredoderidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern USA — Atlantic & Gulf coastal plains, Mississippi basin & Great Lakes",
+  "description": "A small, secretive night hunter of swamps and weedy backwaters, unique in that the adult's vent migrates forward to sit beneath the throat. Its purplish-grey body is peppered with dark specks, with a dark bar at the tail base and below the eye.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   8,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 80,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "nocturnal-hider",
+   "shy",
+   "predator"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.26,
+   "width": 0.13,
+   "headLength": 0.34,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.66,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#6a5c64",
+   "dorsal": "#3e3640",
+   "ventral": "#b8aaa8",
+   "fin": "#5a4e56",
+   "finOpacity": 0.6,
+   "eye": "#a88050",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#221c22",
+     "density": 0.5
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1820",
+     "x": 0.97,
+     "y": 0,
+     "rx": 0.02,
+     "ry": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1820",
+     "x": 0.16,
+     "y": -0.4,
+     "rx": 0.012,
+     "ry": 0.25
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "doryichthys-boaja",
+  "commonName": "Long-snouted Pipefish",
+  "scientificName": "Doryichthys boaja",
+  "family": "Syngnathidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rivers of Thailand, the Malay Peninsula, Sumatra, Borneo & Java",
+  "description": "One of the largest truly freshwater pipefishes, living among vegetation in slow rivers and streams. The male carries the eggs in a brood area along his belly, and it needs a steady supply of small live crustaceans.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 1.2,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   15
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "pouch-brooder",
+  "locomotion": "amiiform",
+  "cruiseSpeed": 0.08,
+  "burstSpeed": 1.5,
+  "traits": [
+   "shy",
+   "hoverer",
+   "ambush"
+  ],
+  "body": {
+   "archetype": "pipefish",
+   "depth": 0.04,
+   "width": 0.04,
+   "headLength": 0.12,
+   "snout": "tubular",
+   "mouth": "terminal",
+   "eyeSize": 0.2,
+   "scaleSize": 0,
+   "armored": true,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.05
+   },
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.6,
+    "height": 0.035,
+    "shape": "rounded"
+   },
+   "anal": null,
+   "pelvic": null,
+   "pectoral": {
+    "start": 0.12,
+    "end": 0.13,
+    "height": 0.025,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#8a6a48",
+   "dorsal": "#5a4430",
+   "ventral": "#c8a880",
+   "fin": "#d8c0a0",
+   "finOpacity": 0.3,
+   "eye": "#c8603a",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#5a3e28",
+     "count": 26,
+     "width": 0.008,
+     "x0": 0.12,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#c86a3a",
+     "y": -0.3,
+     "width": 0.2,
+     "x0": 0.15,
+     "x1": 0.6
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "indostomus-paradoxus",
+  "commonName": "Armoured Stickleback",
+  "scientificName": "Indostomus paradoxus",
+  "family": "Indostomidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lake Indawgyi & upper Irrawaddy basin, Myanmar",
+  "description": "A tiny, bony-plated fish that creeps slowly through leaf litter and plants, able to move its head up and down independently of its body. Males guard eggs laid inside a hollow twig or tube.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.2
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 4,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "stickleback",
+   "depth": 0.1,
+   "width": 0.08,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "scaleSize": 0,
+   "armored": true,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.18
+   },
+   "dorsal": {
+    "start": 0.6,
+    "end": 0.72,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.74,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.24,
+    "height": 0.08,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#7a6a52",
+   "dorsal": "#4e4434",
+   "ventral": "#b8a888",
+   "fin": "#d8d0c0",
+   "finOpacity": 0.3,
+   "eye": "#8a7050",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a3024",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "speckle",
+     "color": "#2a2218",
+     "density": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#1a1a1a",
+       "y": 0,
+       "width": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "allenbatrachus-grunniens",
+  "commonName": "Grunting Toadfish",
+  "scientificName": "Allenbatrachus grunniens",
+  "family": "Batrachoididae",
+  "group": "fish",
+  "water": "brackish",
+  "region": "Estuaries & lower rivers from India and Sri Lanka to Indonesia",
+  "description": "A broad-headed ambush predator of muddy estuaries, often sold as a \"freshwater frogfish\". It sits motionless in crevices and audibly grunts using muscles on its swim bladder.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   25
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 4,
+  "traits": [
+   "ambush",
+   "predator",
+   "bottom-rester",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "sleeper",
+   "depth": 0.22,
+   "width": 0.26,
+   "headLength": 0.36,
+   "snout": "blunt",
+   "mouth": "superior",
+   "eyeSize": 0.2,
+   "peduncle": 0.45,
+   "scaleSize": 0,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.2
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.44,
+    "height": 0.08,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.46,
+    "end": 0.9,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.9,
+    "height": 0.09,
+    "shape": "low"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.16,
+    "shape": "fan"
+   },
+   "barbels": 6,
+   "barbelLength": 0.02
+  },
+  "look": {
+   "base": "#8a7044",
+   "dorsal": "#4e3e26",
+   "ventral": "#d8c8a0",
+   "fin": "#7a6440",
+   "finOpacity": 0.65,
+   "eye": "#c8a050",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a2c18",
+     "count": 4,
+     "width": 0.08,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.3,
+     "y1": 1
+    },
+    {
+     "type": "marble",
+     "color": "#3a2c18",
+     "scale": 5,
+     "amount": 0.35
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a2c18",
+       "count": 4,
+       "width": 0.08
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "antennarius-biocellatus",
+  "commonName": "Brackishwater Frogfish",
+  "scientificName": "Antennarius biocellatus",
+  "family": "Antennariidae",
+  "group": "fish",
+  "water": "brackish",
+  "region": "Mangroves & river mouths of the Philippines, Indonesia, New Guinea & the Solomon Islands",
+  "description": "The only frogfish that regularly enters fresh and brackish water, sold as the \"freshwater frogfish\". It walks on its arm-like pectoral fins, wiggles a lure on its snout to attract prey, and engulfs fish in a split second.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7.5,
+   8.5
+  ],
+  "dGH": [
+   10,
+   25
+  ],
+  "minTankLiters": 100,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 4,
+  "traits": [
+   "ambush",
+   "predator",
+   "perches",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "frogfish",
+   "depth": 0.55,
+   "width": 0.4,
+   "headLength": 0.45,
+   "snout": "blunt",
+   "mouth": "superior",
+   "eyeSize": 0.16,
+   "scaleSize": 0,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal2": {
+    "start": 0.5,
+    "end": 0.85,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.86,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.14,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#6a5a40",
+   "dorsal": "#4a3e2a",
+   "ventral": "#9a8a68",
+   "fin": "#6a5a40",
+   "finOpacity": 0.85,
+   "eye": "#a88050",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2e2618",
+     "scale": 4,
+     "amount": 0.45
+    },
+    {
+     "type": "blotch",
+     "color": "#141210",
+     "x": 0.62,
+     "y": 0.55,
+     "rx": 0.05,
+     "ry": 0.12,
+     "ring": "#e8d8b0"
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141210",
+       "x": 0.4,
+       "y": 0.2,
+       "rx": 0.3,
+       "ry": 0.4,
+       "ring": "#e8d8b0"
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
  }
 ]

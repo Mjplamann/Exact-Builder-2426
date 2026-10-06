@@ -228,8 +228,9 @@ export class Flora {
 
     // ---------------------------------------------------------------- algae --------------------
     const compete = clamp(uptake / (uptake + inp.loadN + 1), 0, 0.85);
-    const nutr = Math.min(1.25, 0.35 + 0.65 * smoothstep(0, 25, no3) + 0.5 * smoothstep(0, 0.4, tan));
-    const r = 0.45 * Math.pow(light, 1.5) * nutr * (1 - 0.7 * compete) * (inp.zen ? 0.4 : 1);
+    const nutr = Math.min(1.25, 0.25 + 0.6 * smoothstep(0, 30, no3) + 0.5 * smoothstep(0, 0.4, tan));
+    // ≈0.17/day in a bright (12 h) tank with moderate nitrate: a light film ~2 weeks after a scrub.
+    const r = 0.38 * Math.pow(light, 1.5) * nutr * (1 - 0.7 * compete) * (inp.zen ? 0.4 : 1);
 
     const surfaceArea = floorArea + inp.decorArea + leaf;
     const bioG = glassArea * BIOFILM_GLASS * maturity * (0.4 + 0.6 * Math.min(1, light));
@@ -243,10 +244,10 @@ export class Flora {
     const eatenS = Math.max(0, consS - bioS) * days;
 
     let G = wp.glassAlgae;
-    G += r * (G + 0.008) * (1 - G) * days - eatenG / (glassArea * ALGAE_STOCK_MG_M2);
+    G += r * (G + 0.02) * (1 - G) * days - eatenG / (glassArea * ALGAE_STOCK_MG_M2);
     wp.glassAlgae = clamp01(G);
     let S = wp.surfaceAlgae;
-    S += 0.8 * r * (S + 0.01) * (1 - S) * days - eatenS / (surfaceArea * ALGAE_STOCK_MG_M2);
+    S += 0.8 * r * (S + 0.02) * (1 - S) * days - eatenS / (surfaceArea * ALGAE_STOCK_MG_M2);
     wp.surfaceAlgae = clamp01(S);
 
     // Shares for the next fish loop.
