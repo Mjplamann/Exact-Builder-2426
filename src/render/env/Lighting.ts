@@ -170,7 +170,9 @@ export class Lighting {
     this.hemi.intensity = 1;
 
     this.room.color.copy(ROOM_COLOR);
-    this.room.intensity = 0.004 + room * 0.035;
+    // Room light leaking in: a little by day, almost nothing in a dark room at night (it would
+    // otherwise tint the blue moonlight purple).
+    this.room.intensity = 0.002 + room * (0.006 + 0.03 * Math.min(1, day));
   }
 
   /** Overall light level 0..1+ (for exposure adaptation and the veil). */
