@@ -184,7 +184,7 @@ export function animalsStep(env: StepEnv): StepView {
         h('div', { class: 'aqb-community-head' }, h('h4', { class: 'aqb-community-title' }, s.title), h('span', { class: `aqb-level is-${s.level}` }, LEVEL_WORDS[s.level])),
         h('p', { class: 'aqb-community-desc' }, s.description),
         notesOf(s).length ? h('ul', { class: 'aqb-community-notes' }, ...notesOf(s).slice(0, 3).map((n) => h('li', null, localizeUnits(n, units)))) : null,
-        h('ul', { class: 'aqb-members' }, ...members.map(({ q, sp }) => h('li', { class: 'aqb-member' }, h('span', { class: 'aqb-thumb-wrap' }, thumb(sp)), h('span', { class: 'aqb-member-name' }, h('span', { class: 'aqb-member-count' }, `${q.count} ×`), ` ${sp.commonName}`)))),
+        h('ul', { class: 'aqb-members' }, ...members.map(({ q, sp }) => h('li', { class: 'aqb-member' }, h('span', { class: 'aqb-thumb-wrap' }, thumb(sp)), h('span', { class: 'aqb-member-name', title: `${q.count} × ${sp.commonName}` }, h('span', { class: 'aqb-member-count' }, `${q.count} ×`), ` ${sp.commonName}`)))),
         stockingBar(s.stocking),
         h('div', { class: 'aqb-community-foot' }, h('span', { class: 'aq-hint' }, `${n} ${plural(n, 'animal')}, ${members.length} ${plural(members.length, 'species', 'species')}`), btn),
       );
