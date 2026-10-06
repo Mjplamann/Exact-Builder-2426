@@ -25,10 +25,15 @@ function suggestKey(env: StepEnv): string {
   return JSON.stringify([s.water, s.size, s.aquascape, s.substrate, s.waterParams, s.equipment, s.cycled]);
 }
 
-/** Why a 'caution' community is still worth considering (optional in the advisor's answer). */
+/**
+ * Why a 'caution' community is still worth considering (optional in the advisor's answer), minus
+ * any the description already tells.
+ */
 function notesOf(s: StockSuggestion): string[] {
   const notes = (s as StockSuggestion & { notes?: unknown }).notes;
-  return Array.isArray(notes) ? notes.filter((n): n is string => typeof n === 'string') : [];
+  if (!Array.isArray(notes)) return [];
+  const desc = s.description.toLowerCase();
+  return notes.filter((n): n is string => typeof n === 'string' && !!n && !desc.includes(n.slice(1).toLowerCase()));
 }
 
 function stockingBar(fraction: number): HTMLElement {
