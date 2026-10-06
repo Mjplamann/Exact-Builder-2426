@@ -2465,7 +2465,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Orinoco basin llanos — Colombia & Venezuela",
-  "description": "A slender dwarf cichlid of shallow savanna creeks; males have red streaks across the cheeks and red-striped dorsal and tail fins over a greenish-blue body. It needs soft, acidic water to breed.",
+  "description": "A dwarf cichlid of shallow savanna creeks; males have red streaks across the cheeks and red-striped dorsal and tail fins over a greenish-blue body. It needs soft, acidic water to breed.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.2,
   "maturityMonths": 6,
@@ -6447,6 +6447,10 @@
    ],
    "fins": {
     "dorsal": {
+     "color": "#c0a860",
+     "opacity": 0.6,
+     "edge": "#e0402a",
+     "edgeWidth": 0.12,
      "patterns": [
       {
        "type": "region",
@@ -6454,7 +6458,8 @@
        "x0": 0,
        "x1": 1,
        "y0": -1,
-       "y1": 1
+       "y1": -0.6,
+       "softness": 0.1
       },
       {
        "type": "spots",
@@ -6462,9 +6467,7 @@
        "density": 30,
        "size": 0.05
       }
-     ],
-     "edge": "#e0402a",
-     "edgeWidth": 0.12
+     ]
     },
     "caudal": {
      "patterns": [
@@ -6981,7 +6984,7 @@
   "water": "freshwater",
   "region": "Middle & lower Amazon basin, Brazil",
   "description": "A peaceful little acara of shallow, vegetated Amazonian backwaters, named for its steeply curved head and wearing a blue-spangled face. Pairs spawn on a cleaned leaf or stone and both parents guard the fry.",
-  "adultLengthCm": 8,
+  "adultLengthCm": 7,
   "birthLengthCm": 0.2,
   "maturityMonths": 8,
   "lifespanYears": 6,
@@ -7976,7 +7979,7 @@
     "shape": "pointed"
    },
    "caudal": {
-    "shape": "spade",
+    "shape": "pointed",
     "size": 0.38
    }
   },
@@ -10426,7 +10429,7 @@
  },
  {
   "id": "gymnogeophagus-gymnogenys",
-  "commonName": "Pearl-cheek Eartheater",
+  "commonName": "Gymnogenys Eartheater",
   "scientificName": "Gymnogeophagus gymnogenys",
   "family": "Cichlidae",
   "group": "fish",
@@ -11789,7 +11792,7 @@
    10
   ],
   "minTankLiters": 150,
-  "temperament": "predatory",
+  "temperament": "semi-aggressive",
   "zone": "bottom",
   "social": "pair",
   "groupSize": 2,
@@ -12814,7 +12817,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Central Amazon basin, Brazil (Solimões–Amazonas & lower Rio Negro)",
-  "description": "The smallest angelfish, with a straight profile in front of the dorsal fin and a dark blotch where the main body bar meets the dorsal fin base. It is shyer and more delicate than the domesticated P. scalare.",
+  "description": "The smallest angelfish, with a straight profile in front of the dorsal fin (no nuchal notch) and a distinct dark blotch at the base of the dorsal fin. It is shyer and more delicate than the domesticated P. scalare.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.3,
   "maturityMonths": 9,
@@ -14790,7 +14793,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred",
-  "description": "One of the classic strains, developed by German breeders from wild blue and brown discus, with bold turquoise stripes over a red-brown ground. Behaviour and care match other domestic discus.",
+  "description": "One of the classic domestic strains, selectively bred from wild blue and green discus into bold turquoise stripes over a red-brown ground. Behaviour and care match other domestic discus.",
   "adultLengthCm": 16,
   "birthLengthCm": 0.25,
   "maturityMonths": 14,
@@ -17496,7 +17499,7 @@
  },
  {
   "id": "astronotus-crassipinnis",
-  "commonName": "Dark Oscar",
+  "commonName": "Black Oscar",
   "scientificName": "Astronotus crassipinnis",
   "family": "Cichlidae",
   "group": "fish",
@@ -18581,8 +18584,8 @@
   "family": "Cichlidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Amazon & upper Orinoco basins — Brazil, Peru, Colombia, Venezuela & Bolivia",
-  "description": "A robust acara found widely in the Amazon and upper Orinoco, named for the dark 'saddle' blotch where its lateral band ends mid-flank. Pairs dig pits and guard their fry, and it tolerates a wide range of water.",
+  "region": "Amazon basin — Brazil, Peru, Colombia, Ecuador & Bolivia",
+  "description": "A robust, widespread Amazonian acara, called the saddle cichlid for the dark blotch where its lateral band ends mid-flank. Pairs dig pits and guard their fry, and it tolerates a wide range of water.",
   "adultLengthCm": 18,
   "birthLengthCm": 0.3,
   "maturityMonths": 12,

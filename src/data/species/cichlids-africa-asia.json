@@ -3654,7 +3654,7 @@
   "family": "Cichlidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Lake Malawi (the \"Maingano\" locality)",
+  "region": "Maingano, Likoma Island, Lake Malawi",
   "description": "Both sexes are midnight-blue with two neon-blue horizontal stripes, making it one of the few mbuna without obvious dichromatism. Comparatively mild for its group; widely sold under the locality name \"Maingano\".",
   "adultLengthCm": 8,
   "birthLengthCm": 0.8,
@@ -4933,7 +4933,7 @@
  },
  {
   "id": "petrotilapia-tridentiger",
-  "commonName": "Blue Petrotilapia",
+  "commonName": "Tridentiger (Petrotilapia)",
   "scientificName": "Petrotilapia tridentiger",
   "family": "Cichlidae",
   "group": "fish",
@@ -5111,13 +5111,13 @@
  },
  {
   "id": "tropheops-tropheops",
-  "commonName": "Tropheops (Orange Chest)",
+  "commonName": "Tropheops",
   "scientificName": "Tropheops tropheops",
   "family": "Cichlidae",
   "group": "fish",
   "water": "freshwater",
   "region": "Rocky shores of southern Lake Malawi (many colour forms)",
-  "description": "Recognised by its steep forehead and underslung mouth, used to comb algae and the small animals living in it from rocks. Males are typically blue-grey with dark bars and an orange chest; females are often yellow. Long sold as Pseudotropheus tropheops.",
+  "description": "Recognised by its steep forehead and underslung mouth, used to comb algae and the small animals living in it from rocks. Males of most forms are dusky blue-grey with dark bars, while females are often golden yellow; long sold as Pseudotropheus tropheops.",
   "adultLengthCm": 13,
   "birthLengthCm": 1,
   "maturityMonths": 10,
@@ -5187,20 +5187,11 @@
   "look": {
    "base": "#6e8ab8",
    "dorsal": "#4e6890",
-   "ventral": "#e8a040",
+   "ventral": "#9cb0d0",
    "fin": "#6a84b0",
    "finOpacity": 0.75,
    "eye": "#c07020",
    "patterns": [
-    {
-     "type": "region",
-     "color": "#e88a30",
-     "x0": 0.15,
-     "x1": 0.5,
-     "y0": -1,
-     "y1": -0.2,
-     "softness": 0.3
-    },
     {
      "type": "bars",
      "color": "#34466c",
@@ -5412,7 +5403,7 @@
  },
  {
   "id": "aulonocara-jacobfreibergi",
-  "commonName": "Fairy Cichlid (Lwanda Peacock)",
+  "commonName": "Jacobfreibergi Peacock (Malawi Butterfly)",
   "scientificName": "Aulonocara jacobfreibergi",
   "family": "Cichlidae",
   "group": "fish",
@@ -5447,6 +5438,7 @@
   "cruiseSpeed": 0.6,
   "burstSpeed": 7,
   "traits": [
+   "cave-dweller",
    "hoverer",
    "sand-sifter",
    "territorial"
@@ -5637,6 +5629,7 @@
   "cruiseSpeed": 0.6,
   "burstSpeed": 7,
   "traits": [
+   "cave-dweller",
    "hoverer",
    "sand-sifter",
    "territorial"
@@ -6698,13 +6691,13 @@
  },
  {
   "id": "aulonocara-hansbaenschi",
-  "commonName": "Red Flush Peacock",
+  "commonName": "Red Shoulder Peacock",
   "scientificName": "Aulonocara hansbaenschi",
   "family": "Cichlidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Lake Malawi, Malawi",
-  "description": "Males are metallic blue with a red to orange flush across the shoulder and lower flanks; females are brownish with dark bars. Like other peacocks it detects buried prey with the enlarged sensory pores on its head.",
+  "region": "South-eastern arm of Lake Malawi (e.g. Masinje, Makanjila)",
+  "description": "Males are metallic blue with a bright red-orange patch on the shoulder just behind the gill cover, the mark behind its common name; females are brownish with dark bars. Like other peacocks it detects buried prey with the enlarged sensory pores on its head.",
   "adultLengthCm": 13,
   "birthLengthCm": 1,
   "maturityMonths": 10,
@@ -6773,7 +6766,7 @@
   "look": {
    "base": "#3a60c0",
    "dorsal": "#2a4898",
-   "ventral": "#d84a24",
+   "ventral": "#6a8ad0",
    "fin": "#3a60c0",
    "finOpacity": 0.8,
    "eye": "#c07020",
@@ -6783,10 +6776,10 @@
     {
      "type": "region",
      "color": "#d84a24",
-     "x0": 0.22,
-     "x1": 0.65,
-     "y0": -0.8,
-     "y1": 0.35,
+     "x0": 0.24,
+     "x1": 0.47,
+     "y0": -0.55,
+     "y1": 0.5,
      "softness": 0.35
     },
     {
@@ -6805,7 +6798,7 @@
      "edgeWidth": 0.12
     },
     "anal": {
-     "color": "#c85a30",
+     "color": "#3a60c0",
      "patterns": [
       {
        "type": "blotch",
@@ -6887,7 +6880,7 @@
   "family": "Cichlidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Lake Malawi (e.g. Kande Island)",
+  "region": "South-eastern arm of Lake Malawi",
   "description": "Males are deep blue with a brilliant sulphur-yellow to white blaze running from the snout over the head and along the dorsal fin. It lives around caves at the rock-sand interface, hunting small invertebrates.",
   "adultLengthCm": 12,
   "birthLengthCm": 1,
@@ -6917,6 +6910,7 @@
   "cruiseSpeed": 0.6,
   "burstSpeed": 7,
   "traits": [
+   "cave-dweller",
    "hoverer",
    "sand-sifter",
    "territorial"
@@ -9618,7 +9612,7 @@
  },
  {
   "id": "otopharynx-lithobates",
-  "commonName": "Yellow Blaze (Zimbabwe Rock)",
+  "commonName": "Lithobates (Zimbabwe Rock)",
   "scientificName": "Otopharynx lithobates",
   "family": "Cichlidae",
   "group": "fish",
@@ -13016,13 +13010,13 @@
  },
  {
   "id": "julidochromis-regani",
-  "commonName": "Regan's Julie (Four-stripe Julie)",
+  "commonName": "Regan's Julie",
   "scientificName": "Julidochromis regani",
   "family": "Cichlidae",
   "group": "fish",
   "water": "freshwater",
   "region": "Rocky shores throughout Lake Tanganyika",
-  "description": "The largest julie, yellow with four black horizontal stripes. Like all Julidochromis it hugs the rock face, often swimming sideways or upside-down along overhangs, and pairs spawn hidden in narrow crevices; the female is usually the larger partner.",
+  "description": "One of the largest julies, yellow with four black horizontal stripes. Like all Julidochromis it hugs the rock face, often swimming sideways or upside-down along overhangs, and pairs spawn hidden in narrow crevices; the female is usually the larger partner.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.3,
   "maturityMonths": 10,
@@ -14269,9 +14263,9 @@
     {
      "type": "bars",
      "color": "#141418",
-     "count": 6,
-     "width": 0.07,
-     "x0": 0.2,
+     "count": 5,
+     "width": 0.08,
+     "x0": 0.22,
      "x1": 0.98
     },
     {
@@ -18369,7 +18363,7 @@
  },
  {
   "id": "pundamilia-nyererei",
-  "commonName": "Nyererei (Victorian Red-back)",
+  "commonName": "Nyererei",
   "scientificName": "Pundamilia nyererei",
   "family": "Cichlidae",
   "group": "fish",
@@ -18552,7 +18546,7 @@
  },
  {
   "id": "pundamilia-pundamilia",
-  "commonName": "Pundamilia (Blue Victorian)",
+  "commonName": "Pundamilia",
   "scientificName": "Pundamilia pundamilia",
   "family": "Cichlidae",
   "group": "fish",
@@ -22199,7 +22193,7 @@
  },
  {
   "id": "ptychochromis-grandidieri",
-  "commonName": "Grandidier's Saroy",
+  "commonName": "Saroy (Grandidieri)",
   "scientificName": "Ptychochromis grandidieri",
   "family": "Cichlidae",
   "group": "fish",
