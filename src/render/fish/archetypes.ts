@@ -774,7 +774,7 @@ export const ARCHETYPE_PRESETS: Record<Archetype, Preset> = {
     tailTaper: 1, skin: 'naked', scaleSize: 0,
   },
   // ---------------------------------------------------------------- invertebrates (own builders)
-  shrimp: { kind: 'shrimp', depth: 0.2, width: 0.16 },
+  shrimp: { kind: 'shrimp', depth: 0.23, width: 0.17, backArch: 0.45 },
   snail: { kind: 'snail', depth: 0.6, width: 0.7 },
   crab: { kind: 'crab', depth: 0.35, width: 0.9 },
   'hermit-crab': { kind: 'hermit-crab', depth: 0.6, width: 0.5 },

@@ -83,7 +83,6 @@ export class BodyProfile {
   private pThroat: number;
   private xEnd: number;
   private mTop: number;
-  private mBot: number;
   private round: number;
   private tubeT: number;
   private tubeB: number;
@@ -124,7 +123,6 @@ export class BodyProfile {
     // Snout shape → head ease exponents and nose roundness.
     const sn = b.snout;
     this.mTop = sn === 'blunt' ? 3.4 : sn === 'pointed' ? 1.75 : sn === 'upturned' ? 1.6 : sn === 'beak' ? 2.8 : sn === 'elongate' || sn === 'duckbill' ? 1.5 : sn === 'tubular' ? 1.9 : 2.4;
-    this.mBot = sn === 'blunt' ? 2.6 : sn === 'pointed' ? 1.7 : sn === 'upturned' ? 2.4 : 2.1;
     this.mTop *= 1 - 0.25 * b.backArch;
     this.pHead = (sn === 'blunt' ? 2.3 : sn === 'pointed' ? 1.3 : sn === 'upturned' ? 1.45 : sn === 'beak' ? 2.1 : sn === 'rounded' ? 1.85 : 1.6) * (1 + 0.12 * b.backArch);
     this.pThroat = sn === 'blunt' ? 1.9 : sn === 'pointed' ? 1.35 : 1.6;

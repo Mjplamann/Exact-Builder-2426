@@ -13,7 +13,6 @@ import { buildInvertebrate } from './invertebrates';
 import { buildSeahorse } from './seahorse';
 import { swimParams } from './swim';
 import { atlasSizeFor, paintFishAtlas, type FishTextures } from './textures';
-import { BodyProfile } from './profile';
 
 /**
  * One render variant = one species × visually distinct sex. Owns the geometry (body + fins),
@@ -174,4 +173,3 @@ export class FishVariant {
   }
 }
 
-export { BodyProfile };

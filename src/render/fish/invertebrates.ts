@@ -6,7 +6,7 @@ import { ATLAS, bodyUV, cellLocal, cellUV, type Cell } from './atlas';
 import { hex, mix, type RGB } from './color';
 import type { FishGeometryInfo } from './fishGeometry';
 import { GeoBuilder, PART } from './geometryBuilder';
-import { fastNoise, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
+import { fastNoise, hash2, rasterize, rasterizeRing, smooth, valueNoise } from './patterns';
 import { bufs, cellSurface, clearMask, composite, packAtlas, rect, type Bufs, type FishTextures } from './textures';
 
 /**
@@ -39,7 +39,6 @@ const norm = (a: V3): V3 => {
 };
 const lerp3 = (a: V3, b: V3, t: number): V3 => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
 const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
-const mirrorZ = (p: V3): V3 => [p[0], p[1], -p[2]];
 
 export interface InvertGeometry {
   body: BufferGeometry;
@@ -254,6 +253,8 @@ interface PaintSpec {
   /** Body detailing: out[0] color multiplier, out[1] height, out[2] opacity of internal organs. */
   detail?: (x: number, y: number, out: Float64Array) => void;
   roughness: number;
+  /** Surface specular intensity (calcite shells / chitin reflect more than skin). */
+  specular: number;
   /** Eye style: compound (black, shrimp/crabs) or snail (tiny dark eye). */
   eye: 'compound' | 'snail';
   normalStrength: number;
@@ -282,6 +283,7 @@ function paintCellSolid(b: Bufs, cell: Cell, color: RGB, alpha: number, rough: n
       b.rough[i] = rough;
       b.metal[i] = 0;
       b.irid[i] = 0;
+      b.spec[i] = 0.35;
     }
   }
   if (fl) {
@@ -332,6 +334,7 @@ function paintInvertAtlas(sp: Species, look: Appearance, spec: PaintSpec, N: num
       b.rough[i] = spec.roughness;
       b.metal[i] = 0;
       b.irid[i] = 0;
+      b.spec[i] = spec.specular;
       b.height[i] = 0;
     }
   }
@@ -431,6 +434,7 @@ function paintInvertAtlas(sp: Species, look: Appearance, spec: PaintSpec, N: num
         b.rough[i] = 0.08;
         b.metal[i] = 0;
         b.irid[i] = 0;
+        b.spec[i] = 1;
         b.height[i] = 0;
       }
     }
@@ -660,6 +664,7 @@ function shrimpLike(sp: Species, body: ResolvedBody, look: Appearance, detail: n
   const spec: PaintSpec = {
     hd: (x) => sampleAt(0.5 - x).hy,
     roughness: crayfish ? 0.42 : 0.3,
+    specular: 0.45,
     eye: 'compound',
     normalStrength: 5,
     detail: (x, y, out) => {
@@ -774,6 +779,7 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
   const spec: PaintSpec = {
     hd: () => 0.5,
     roughness: 0.38,
+    specular: 0.4,
     eye: 'compound',
     normalStrength: 4,
     detail: (x, y, out) => {
@@ -965,6 +971,7 @@ function shellPaintSpec(look: Appearance, W: number, T: number): PaintSpec {
   return {
     hd: () => 0.25 + 0.1 * T / W,
     roughness: 0.3,
+    specular: 0.55,
     eye: 'snail',
     normalStrength: 3,
     detail: (x, y, out) => {
@@ -1042,7 +1049,7 @@ function snail(sp: Species, body: ResolvedBody, look: Appearance, detail: number
     ellipsoid(gb, [0, shellTop + h * 0.42, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1], [0.5, h * 0.5, w * 0.5], Math.round(14 * detail), Math.round(24 * detail), o,
       (th, ph) => bodyUV(0.5 - 0.5 * Math.sin(th) * Math.cos(ph), clamp(Math.cos(th) * 1.15, -1, 1)),
       (th) => (th > Math.PI * 0.62 ? 0.8 + 0.2 * Math.cos((th - Math.PI * 0.62) * 2) : 1));
-    spec = { hd: () => 0.35, roughness: 0.12, eye: 'snail', normalStrength: 1.2, detail: (_x, _y, out) => { out[0] = 1; out[1] = 0; out[2] = 1; } };
+    spec = { hd: () => 0.35, roughness: 0.12, specular: 0.9, eye: 'snail', normalStrength: 1.2, detail: (_x, _y, out) => { out[0] = 1; out[1] = 0; out[2] = 1; } };
   } else if (kind === 'abalone') {
     const P: ShellParams = { W: 600, T: 0.12, ka: 1.4, kb: 0.45, whorls: 1.15, apertureFlare: 0.3 };
     shellMesh(gb, P, 1, clamp(width, 0.4, 0.9), detail, (p) => [p[2], p[1] * 0.5 + shellTop + D * 0.25, -p[0]]);
@@ -1163,6 +1170,7 @@ function starfish(sp: Species, body: ResolvedBody, look: Appearance, detail: num
   const spec: PaintSpec = {
     hd: () => (brittle ? 0.05 : 0.12),
     roughness: 0.55,
+    specular: 0.2,
     eye: 'snail',
     normalStrength: 6,
     detail: (x, y, out) => {
@@ -1216,6 +1224,7 @@ function urchin(sp: Species, body: ResolvedBody, look: Appearance, detail: numbe
   const spec: PaintSpec = {
     hd: () => 0.3,
     roughness: 0.5,
+    specular: 0.25,
     eye: 'snail',
     normalStrength: 5,
     detail: (x, y, out) => {
@@ -1272,6 +1281,3 @@ export function buildInvertebrate(sp: Species, body: ResolvedBody, look: Appeara
   }
 }
 
-/** Exposed for tests. */
-export const _internal = { spline, shellKind };
-export type { Surface };

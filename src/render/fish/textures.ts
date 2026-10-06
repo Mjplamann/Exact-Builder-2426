@@ -14,7 +14,7 @@ import type { FinDef, ResolvedBody } from './archetypes';
 import { ATLAS, cellLocal, type Cell } from './atlas';
 import { hex, luma, mix, type RGB } from './color';
 import { rayCount } from './fins';
-import { fastNoise, fbm, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
+import { fastNoise, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
 import type { BodyProfile } from './profile';
 
 /**
@@ -50,6 +50,8 @@ export interface Bufs {
   rough: Float32Array;
   metal: Float32Array;
   irid: Float32Array;
+  /** Surface specular intensity (packed in ORM alpha): skin low, eye lens / shells higher. */
+  spec: Float32Array;
   emis: Float32Array;
   mask: Float32Array;
 }
@@ -67,6 +69,7 @@ export function bufs(N: number): Bufs {
       rough: new Float32Array(n),
       metal: new Float32Array(n),
       irid: new Float32Array(n),
+      spec: new Float32Array(n),
       emis: new Float32Array(n * 3),
       mask: new Float32Array(n),
     };
@@ -79,6 +82,7 @@ export function bufs(N: number): Bufs {
   b.rough.fill(0.45);
   b.metal.fill(0);
   b.irid.fill(0);
+  b.spec.fill(0.14);
   b.emis.fill(0);
   return b;
 }
@@ -531,7 +535,17 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
         const viscera = 1 - smooth(0.75, 1.05, Math.sqrt(vx * vx + vy * vy));
         const spineL = Math.exp(-((((y - 0.12) * hd) / 0.006) ** 2)) * smooth(0.15, 0.3, x) * (1 - smooth(0.97, 1, x));
         const headO = 1 - smooth(opX * 0.75, opX * 1.05, x);
-        const opaque = clamp(Math.max(viscera * 0.95, spineL * 0.55, headO * 0.6), 0, 1);
+        // Ribs / pleural bones fan down and back from the spine over the abdomen; fine
+        // intermuscular bones hint the myomeres along the tail.
+        const ribPhase = (x - 0.12 * (0.12 - y) * hd * 8) * 46;
+        const rib = (1 - smooth(0.06, 0.16, Math.abs(ribPhase - Math.round(ribPhase)))) *
+          smooth(opX, opX + 0.05, x) * (1 - smooth(0.85, 0.95, x)) * smooth(-0.75, -0.4, y) * (1 - smooth(0.05, 0.12, y));
+        const opaque = clamp(Math.max(viscera * 0.95, spineL * 0.55, headO * 0.6, rib * 0.35), 0, 1);
+        if (rib > 0) {
+          col[i * 3] *= 1 - 0.25 * rib;
+          col[i * 3 + 1] *= 1 - 0.25 * rib;
+          col[i * 3 + 2] *= 1 - 0.2 * rib;
+        }
         alpha[i] = clamp(1 - translucent * (1 - opaque), 0.08, 1);
         if (viscera > 0 && !night) {
           // The silvery peritoneal sac of glassfish / glass catfish.
@@ -634,6 +648,7 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       rough[i] = 0.44 - 0.1 * ray;
       metal[i] = 0;
       irid[i] = iridFin;
+      b.spec[i] = 0.18;
     }
   }
   // Fin patterns (pigment is opaque: raise alpha where painted).
@@ -736,6 +751,7 @@ function paintEye(b: Bufs, look: Appearance, body: ResolvedBody, seed: number): 
       b.rough[i] = rough;
       b.metal[i] = metal;
       b.irid[i] = 0;
+      b.spec[i] = rad < 0.92 ? 1 : 0.3;
       b.height[i] = 0;
     }
   }
@@ -758,14 +774,16 @@ function tex(data: Uint8Array, W: number, H: number, cs: ColorSpace): DataTextur
 }
 
 const to8 = (v: number) => (v <= 0 ? 0 : v >= 1 ? 255 : (v * 255 + 0.5) | 0);
+/** Biological whites reflect ≤ ~85%: soft-compress albedo above 0.7 so whites don't overexpose. */
+const albedo8 = (v: number) => to8(v < 0.7 ? v : 0.7 + (v - 0.7) * 0.55);
 
 function packColor(b: Bufs, withAlpha = true): Uint8Array {
   const n = b.W * b.H;
   const out = new Uint8Array(n * 4);
   for (let i = 0; i < n; i++) {
-    out[i * 4] = to8(b.col[i * 3]);
-    out[i * 4 + 1] = to8(b.col[i * 3 + 1]);
-    out[i * 4 + 2] = to8(b.col[i * 3 + 2]);
+    out[i * 4] = albedo8(b.col[i * 3]);
+    out[i * 4 + 1] = albedo8(b.col[i * 3 + 1]);
+    out[i * 4 + 2] = albedo8(b.col[i * 3 + 2]);
     out[i * 4 + 3] = withAlpha ? to8(b.alpha[i]) : 255;
   }
   return out;
@@ -797,7 +815,7 @@ function packOrm(b: Bufs): Uint8Array {
     out[i * 4] = to8(b.irid[i]);
     out[i * 4 + 1] = to8(b.rough[i]);
     out[i * 4 + 2] = to8(b.metal[i]);
-    out[i * 4 + 3] = 255;
+    out[i * 4 + 3] = to8(b.spec[i]);
   }
   return out;
 }
@@ -903,10 +921,4 @@ export function paintFishAtlas(sp: Species, body: ResolvedBody, look: Appearance
       for (const t of all) t?.dispose();
     },
   };
-}
-
-/** Average body color (for LOD fallbacks / UI). */
-export function bodyTone(look: Appearance): RGB {
-  const b = hex(look.base);
-  return luma(b) > 0 ? b : [0.5, 0.5, 0.5];
 }

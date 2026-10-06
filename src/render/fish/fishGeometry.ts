@@ -185,7 +185,7 @@ function buildEyes(gb: GeoBuilder, prof: BodyProfile, lod: FishLod): void {
   const nLat = lod.eyeLat, nLon = lod.eyeLon;
   const uv: [number, number] = [0, 0];
   for (const side of [1, -1]) {
-    const idx0 = gb.idx.length, v0 = gb.vertexCount;
+    const v0 = gb.vertexCount;
     const sz = side; // left eye at +z (SL frame z = fish's left), right eye mirrored
     for (let i = 0; i <= nLat; i++) {
       const th = (i / nLat) * Math.PI;
@@ -223,7 +223,6 @@ function buildEyes(gb: GeoBuilder, prof: BodyProfile, lod: FishLod): void {
         else gb.quad(a, a + 1, b + 1, b);
       }
     }
-    void idx0;
   }
 }
 
@@ -236,7 +235,7 @@ function tube(
   gravity: number, segs: number, sides: number,
   part: number, sAttach: number, uvx: number, uvy: number, flow: number,
 ): void {
-  const idx0 = gb.idx.length, v0 = gb.vertexCount;
+  const v0 = gb.vertexCount;
   const dl = Math.hypot(dx, dy, dz) || 1;
   dx /= dl;
   dy /= dl;
@@ -245,7 +244,6 @@ function tube(
   bodyUV(uvx, uvy, uv);
   let px = ax, py = ay, pz = az;
   let tx = dx, ty = dy, tz = dz;
-  const ring: number[] = [];
   for (let i = 0; i <= segs; i++) {
     const t = i / segs;
     if (i > 0) {
@@ -281,7 +279,7 @@ function tube(
       const a = (j / sides) * Math.PI * 2;
       const ca = Math.cos(a), sa = Math.sin(a);
       const nx = ux * ca + wx * sa, ny = uy * ca + wy * sa, nz = uz * ca + wz * sa;
-      ring.push(gb.v(px + nx * r, py + ny * r, pz + nz * r, uv[0], uv[1], sAttach, part, 0, 0, t, 0, packSideFlow(az >= 0 ? 1 : -1, flow), len * t, nx, ny, nz));
+      gb.v(px + nx * r, py + ny * r, pz + nz * r, uv[0], uv[1], sAttach, part, 0, 0, t, 0, packSideFlow(az >= 0 ? 1 : -1, flow), len * t, nx, ny, nz);
     }
   }
   for (let i = 0; i < segs; i++) {
@@ -294,8 +292,6 @@ function tube(
   // Cap the tip.
   const tip = gb.v(px + tx * r1, py + ty * r1, pz + tz * r1, uv[0], uv[1], sAttach, part, 0, 0, 1, 0, packSideFlow(az >= 0 ? 1 : -1, flow), len, tx, ty, tz);
   for (let j = 0; j < sides; j++) gb.tri(v0 + segs * sides + j, v0 + segs * sides + ((j + 1) % sides), tip);
-  void idx0;
-  void ring;
 }
 
 function buildBarbels(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): void {

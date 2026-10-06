@@ -142,8 +142,7 @@ export function buildMedianFin(
       const bx = base[i * 2], by = base[i * 2 + 1];
       for (let j = 0; j <= nw; j++) {
         const w = j / nw;
-        // Integrate along a gently curving ray (2-point midpoint is enough).
-        const a = rake + curve * w;
+        // Integrate along a gently curving ray (midpoint direction is enough).
         const r = len * w;
         const x = bx + Math.sin(rake + curve * w * 0.5) * r;
         const yOff = Math.cos(rake + curve * w * 0.5) * r;
@@ -151,7 +150,6 @@ export function buildMedianFin(
         // Twin anal fins splay apart toward their tips; flowing fins ripple into pleats.
         const pleat = fin.shape === 'flowing' ? 0.04 * fin.height * Math.pow(w, 1.5) * Math.sin(u * Math.PI * 5 + 0.4) : 0;
         const z = (sheet === 0 ? 0 : sheet * (0.004 + yOff * 0.55)) + pleat;
-        void a;
         const [uu, vv] = cellUV(cell, w, u * 2 - 1);
         gb.v(x, y, z, uu, vv, x, part, 0, 0, w, u * 2 - 1, packSideFlow(sheet, flow), r);
       }

@@ -7,6 +7,8 @@ import { sexMatters, variantKey } from './archetypes';
 import { createUnderwaterEnv } from './envMap';
 import { ThumbnailRenderer } from './thumbnails';
 import { FishVariant } from './variant';
+import { updateFishTime } from './fishMaterial';
+import { GLOBALS } from '../globals';
 
 /**
  * Renders every living animal: procedural bodies & fins per species (built from BodyPlan +
@@ -20,10 +22,11 @@ import { FishVariant } from './variant';
 
 /** Days from fertilisation to birth used to grow the gravid belly (Poecilia ≈ 24–30 days). */
 const GESTATION_DAYS = 26;
+/** Phases are wrapped by a multiple of 2π before upload (seamless; keeps float32 precision). */
+const PHASE_WRAP = Math.PI * 2 * 1024;
 
 // Scratch (module-level, reused).
 const _basis = new Float32Array(9);
-const _m = new Matrix4();
 const _inv = new Matrix4();
 const _ro = new Vector3();
 const _rd = new Vector3();
@@ -90,9 +93,9 @@ function basisFromKin(k: FishKinematics, out: Float32Array): void {
   out[6] = rx; out[7] = ry; out[8] = rz;
 }
 
-function markRange(a: InstancedBufferAttribute, count: number): void {
-  a.clearUpdateRanges();
-  a.addUpdateRange(0, Math.max(1, count) * a.itemSize);
+/** Flag an instance buffer for upload (capacity is ≤ 1.6× the live count, so uploading the
+ *  whole buffer is cheaper than allocating update-range records every frame). */
+function markDirty(a: InstancedBufferAttribute): void {
   a.needsUpdate = true;
 }
 
@@ -101,6 +104,8 @@ export class FishRenderer {
   /** All animal meshes live under this group (child of engine.contents). */
   readonly group = new Group();
   private variants = new Map<string, FishVariant>();
+  /** Same variants as an array (iterated every frame without allocating an iterator). */
+  private variantList: FishVariant[] = [];
   private envMap: Texture | null = null;
   private studioEnv: Texture | null = null;
   private thumbs: ThumbnailRenderer | null = null;
@@ -154,14 +159,16 @@ export class FishRenderer {
         this.group.add(...fresh);
       });
     }
+    this.variantList = [...this.variants.values()];
     let maxN = 0;
-    for (const v of this.variants.values()) maxN = Math.max(maxN, v.members.length);
+    for (const v of this.variantList) maxN = Math.max(maxN, v.members.length);
     if (this.sortDist.length < maxN) this.sortDist = new Float32Array(Math.ceil(maxN * 1.5));
   }
 
   /** Per frame: push kinematics (position, orientation, swim phase/amp, bend, size) to the GPU. */
   update(world: World, dt: number): void {
     const env = world.env;
+    updateFishTime(GLOBALS.uTime.value);
     // Calm selection fades (~0.4 s in, ~0.6 s out).
     this.selT = Math.min(1, this.selT + dt / 0.4);
     this.prevSelT = Math.max(0, this.prevSelT - dt / 0.6);
@@ -171,7 +178,9 @@ export class FishRenderer {
     _cam.copy(this.engine.camera.position).applyMatrix4(_inv);
     const simTime = world.clock.simTime;
 
-    for (const v of this.variants.values()) {
+    const list = this.variantList;
+    for (let vi = 0; vi < list.length; vi++) {
+      const v = list[vi];
       v.mats.setLight(env.daylight, env.moonlight);
       const members = v.members;
       const n = members.length;
@@ -210,13 +219,13 @@ export class FishRenderer {
         mat[o + 8] = _basis[6] * s; mat[o + 9] = _basis[7] * s; mat[o + 10] = _basis[8] * s; mat[o + 11] = 0;
         mat[o + 12] = k.pos[0]; mat[o + 13] = k.pos[1]; mat[o + 14] = k.pos[2]; mat[o + 15] = 1;
         const q = i * 4;
-        A[q] = k.tailPhase;
+        A[q] = k.tailPhase % PHASE_WRAP;
         A[q + 1] = k.tailAmp;
         A[q + 2] = k.bend;
-        A[q + 3] = k.finPhase;
+        A[q + 3] = k.finPhase % PHASE_WRAP;
         B[q] = k.finAmp;
         B[q + 1] = k.mouth;
-        B[q + 2] = k.gillPhase;
+        B[q + 2] = k.gillPhase % PHASE_WRAP;
         B[q + 3] = k.rest;
         FishVariant.individual(st.colorSeed, L, q);
         const sexScale = st.sex === 'male' ? sp.male?.lengthScale ?? 1 : st.sex === 'female' ? sp.female?.lengthScale ?? 1 : 1;
@@ -235,11 +244,11 @@ export class FishRenderer {
       }
       v.bodyMesh.count = n;
       v.finMesh.count = n;
-      markRange(v.bodyMesh.instanceMatrix, n);
-      markRange(v.aA, n);
-      markRange(v.aB, n);
-      markRange(v.aLook, n);
-      markRange(v.aState, n);
+      markDirty(v.bodyMesh.instanceMatrix);
+      markDirty(v.aA);
+      markDirty(v.aB);
+      markDirty(v.aLook);
+      markDirty(v.aState);
     }
   }
 
@@ -252,7 +261,7 @@ export class FishRenderer {
     const rd = _rd.copy(ray.direction).transformDirection(_inv);
     let best: string | null = null;
     let bestT = Infinity;
-    for (const v of this.variants.values()) {
+    for (const v of this.variantList) {
       const h = v.info.half;
       for (const f of v.members) {
         const s = Math.max(0.0005, f.state.lengthCm / 100);
@@ -345,8 +354,9 @@ export class FishRenderer {
   }
 
   dispose(): void {
-    for (const v of this.variants.values()) v.dispose();
+    for (const v of this.variantList) v.dispose();
     this.variants.clear();
+    this.variantList = [];
     this.engine.contents.remove(this.group);
     this.thumbs?.dispose();
     this.envMap?.dispose();

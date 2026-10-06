@@ -4,14 +4,12 @@ import {
   FrontSide,
   MeshDepthMaterial,
   MeshPhysicalMaterial,
-  MeshStandardMaterial,
   RGBADepthPacking,
   Vector2,
   Vector4,
   type Texture,
 } from 'three';
 import type { Appearance, Species } from '../../core/types';
-import { GLOBALS } from '../globals';
 import { addShaderPatch } from '../materialPatch';
 import { applyUnderwater } from '../underwater';
 import { hex, srgbToLinear } from './color';
@@ -26,9 +24,20 @@ import { blackTexture, type FishTextures } from './textures';
  * depth material for shadows. All three share the same swim uniforms so the deformation matches.
  */
 
+/**
+ * Animation clock for every animal material. The shared GLOBALS.uTime grows without bound and a
+ * float32 uniform loses precision after hours (high-frequency fin flutter would start to
+ * stutter), so the fish clock wraps once an hour — a single imperceptible phase hop.
+ */
+export const FISH_TIME = { value: 0 };
+const FISH_TIME_WRAP = 3600;
+export function updateFishTime(t: number): void {
+  FISH_TIME.value = t % FISH_TIME_WRAP;
+}
+
 export interface FishMaterials {
   body: MeshPhysicalMaterial;
-  fins: MeshStandardMaterial;
+  fins: MeshPhysicalMaterial;
   depth: MeshDepthMaterial;
   uniforms: FishUniforms;
   /** Per-frame light-dependent factors (env reflections, glow, fin transmission). */
@@ -83,7 +92,6 @@ export function createFishMaterials(
     uTranslucency: { value: translucency },
   };
 
-  const gloss = opts.skinGloss ?? 1;
   const body = new MeshPhysicalMaterial({
     map: tex.map,
     normalMap: tex.normal,
@@ -92,9 +100,12 @@ export function createFishMaterials(
     metalnessMap: tex.orm,
     roughness: 1,
     metalness: 1,
-    // Thin mucus layer: a soft second specular lobe (sharp clearcoat reads as plastic).
-    clearcoat: 0.22 * gloss,
-    clearcoatRoughness: 0.42,
+    // Under water the skin/water refractive-index step is tiny (n ≈ 1.37 vs 1.33), so fish skin
+    // has almost no surface glare; their shine is guanine (metalness). Relative IOR of 1.33 and a
+    // per-texel specular intensity (ORM alpha) keep only the eye lens and shells glinting.
+    ior: 1.33,
+    specularIntensity: 1,
+    specularIntensityMap: tex.orm,
     emissive: new Color(1, 1, 1),
     emissiveMap: tex.emissive,
     emissiveIntensity: 0,
@@ -106,7 +117,9 @@ export function createFishMaterials(
   });
   body.name = `fish-body:${sp.id}`;
 
-  const fins = new MeshStandardMaterial({
+  const fins = new MeshPhysicalMaterial({
+    ior: 1.33,
+    specularIntensity: 0.6,
     map: tex.map,
     normalMap: tex.normal,
     normalScale: new Vector2(0.6, 0.6),
@@ -131,13 +144,12 @@ export function createFishMaterials(
 
   const vertexPatch = (depthOnly: boolean) => (shader: Parameters<Parameters<typeof addShaderPatch>[2]>[0]) => {
     Object.assign(shader.uniforms, uniforms);
-    shader.uniforms.uFishTime = GLOBALS.uTime;
+    shader.uniforms.uFishTime = FISH_TIME;
     patchFishVertex(shader, depthOnly);
   };
-  addShaderPatch(body, 'fish-swim', (shader, r) => {
+  addShaderPatch(body, 'fish-swim', (shader) => {
     vertexPatch(false)(shader);
     patchFishFragment(shader, true);
-    void r;
   }, -10);
   addShaderPatch(fins, 'fish-swim', (shader) => {
     vertexPatch(false)(shader);
