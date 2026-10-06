@@ -214,9 +214,10 @@ export class CanvasInput {
         if (this.view.isClose()) this.view.reset();
         return;
       }
-      // One finger stays down: it keeps looking around.
+      // One finger stays down: it keeps looking around (unless an animal is being followed — a
+      // pinch only reframed it, and the lagging finger must not let go of it).
       const rest = this.pointers.entries().next().value;
-      if (rest) this.startPan(rest[0], rest[1].x, rest[1].y, true);
+      if (rest && !this.host.app.world.follow) this.startPan(rest[0], rest[1].x, rest[1].y, true);
       return;
     }
     const pn = this.panning;
