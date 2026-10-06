@@ -5,7 +5,7 @@
 import { TIME_SCALES } from '../../core/clock';
 import type { Panel, UIHost } from '../context';
 import { button } from '../controls';
-import { h, setClass, setText } from '../dom';
+import { h, setAttr, setClass, setText } from '../dom';
 import { formatHour, formatLongDate, formatSimClock, scheduleIsOn } from '../format';
 import { icon } from '../icons';
 
@@ -82,8 +82,8 @@ export class TimePanel implements Panel {
     const scale = w.clock.timeScale;
     for (const c of this.choices) {
       const on = c.value === scale;
-      c.el.setAttribute('aria-checked', String(on));
-      c.el.tabIndex = on ? 0 : -1;
+      setAttr(c.el, 'aria-checked', String(on));
+      if (c.el.tabIndex !== (on ? 0 : -1)) c.el.tabIndex = on ? 0 : -1;
       setClass(c.el, 'is-active', on);
     }
     const label = this.pauseBtn.querySelector('span')!;

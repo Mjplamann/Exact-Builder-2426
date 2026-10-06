@@ -52,6 +52,8 @@ export class ThumbnailLoader {
       list.push(cb);
       // Move to the front of the queue — the user is looking at it again.
       const i = this.queue.findIndex((j) => j.key === key);
+      // Wanted by more than one requester now: no single requester may cancel it.
+      if (i >= 0 && this.queue[i].tag !== tag) this.queue[i].tag = '';
       if (i > 0) this.queue.unshift(...this.queue.splice(i, 1));
       return;
     }
@@ -78,7 +80,7 @@ export class ThumbnailLoader {
     }
     let w = 0;
     for (const j of this.queue) {
-      if (j.tag === tag && !keep?.(j.species.id, j.size)) this.waiting.delete(j.key);
+      if (tag !== '' && j.tag === tag && !keep?.(j.species.id, j.size)) this.waiting.delete(j.key);
       else this.queue[w++] = j;
     }
     this.queue.length = w;

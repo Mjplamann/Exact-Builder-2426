@@ -3,7 +3,7 @@
  * stepper, buttons with an inline two-step confirm. Each returns its element plus a `set()` to
  * reflect external state without re-creating DOM.
  */
-import { domId, h, setText, type Child } from './dom';
+import { domId, h, setAttr, setText, type Child } from './dom';
 import { icon, type IconName } from './icons';
 
 export interface Control<T> {
@@ -117,6 +117,8 @@ export function slider(o: SliderOpts): Control<number> & { input: HTMLInputEleme
     max: o.max,
     step: o.step,
     value: o.value,
+    // Screen readers announce the formatted value ("25.5 °C"), not the raw number.
+    'aria-valuetext': o.format(o.value),
   });
   const paint = () => {
     const t = (Number(input.value) - o.min) / (o.max - o.min || 1);
@@ -145,6 +147,7 @@ export function slider(o: SliderOpts): Control<number> & { input: HTMLInputEleme
       if (document.activeElement === input) return; // don't fight the user's thumb
       input.value = String(v);
       setText(out, o.format(v));
+      setAttr(input, 'aria-valuetext', o.format(v));
       paint();
     },
   };

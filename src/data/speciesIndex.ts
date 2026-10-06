@@ -3,14 +3,16 @@ import { validateSpecies } from './validate';
 
 /**
  * Von Bertalanffy growth: L(t) = L∞ − (L∞ − L0)·e^(−K·t).
- * When a species has no explicit K, derive it so that the fish reaches 75% of its
- * asymptotic length at the age of maturity — a good fit for most aquarium species.
+ * When a species has no explicit K, derive it so that the fish reaches ~75% of its asymptotic
+ * length at maturity for small species, tapering to ~65% for 25 cm+ species.
  */
 export function deriveGrowthK(s: Pick<Species, 'adultLengthCm' | 'birthLengthCm' | 'maturityMonths'>): number {
   const linf = s.adultLengthCm;
   const l0 = Math.min(s.birthLengthCm, linf * 0.5);
   const tm = Math.max(0.05, s.maturityMonths / 12);
-  const target = 0.75 * linf;
+  // Small fish reach ~75% of asymptotic length at maturity; large, long-lived species mature
+  // proportionally smaller (common goldfish ~65%), so their growth spreads over more years.
+  const target = linf * Math.max(0.45, Math.min(0.75, 0.75 - 0.12 * Math.log10(Math.max(1, linf / 5))));
   if (l0 >= target) return 3 / tm;
   return Math.log((linf - l0) / (linf - target)) / tm;
 }

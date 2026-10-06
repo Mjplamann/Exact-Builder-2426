@@ -44,6 +44,20 @@ const LOOKAHEAD = 0.15;
 const GESTURES = ['pointerup', 'touchend', 'click', 'keydown'] as const;
 const PAN_POSITIONS = [-0.65, -0.3, 0, 0.3, 0.65];
 
+/**
+ * iOS (Safari 16.4+ Audio Session API): Web Audio is "ambient" by default, so the ring/silent
+ * switch mutes it — a keeper who turned Sound on would hear nothing. While sound is on, play as
+ * media ('playback'); hand the session back ('auto') when it is switched off.
+ */
+function setAudioSession(type: 'playback' | 'auto'): void {
+  try {
+    const s = (typeof navigator !== 'undefined' ? (navigator as Navigator & { audioSession?: { type: string } }).audioSession : undefined);
+    if (s && s.type !== type) s.type = type;
+  } catch {
+    /* not supported */
+  }
+}
+
 interface GrainStream {
   bank: AudioBuffer[];
   buses: GainNode[];
@@ -98,6 +112,7 @@ export class Ambience {
     const was = this.enabled;
     this.enabled = enabled;
     if (enabled) {
+      setAudioSession('playback');
       if (!this.ctx) {
         // Autoplay policy: only create the context inside (or after) a user gesture.
         const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean; isActive: boolean } }).userActivation;
@@ -121,7 +136,9 @@ export class Ambience {
       if (this.suspendTimer) clearTimeout(this.suspendTimer);
       this.suspendTimer = setTimeout(() => {
         this.suspendTimer = null;
-        if (!this.enabled && this.ctx?.state === 'running') this.ctx.suspend().catch(() => {});
+        if (this.enabled) return;
+        if (this.ctx?.state === 'running') this.ctx.suspend().catch(() => {});
+        setAudioSession('auto');
       }, 1500);
     }
   }

@@ -56,7 +56,7 @@ export interface SpeciesStats {
   invert: boolean;
   grazeGlass: number;
   grazeSurface: number;
-  /** Share of glass grazing that can scrape hard spot algae (nerites 1, plecos a little). */
+  /** Share of glass grazing that can scrape hard spot algae (snails 1, plecos barely). */
   grazeHard: number;
   plantEater: boolean;
   coralNipper: boolean;
@@ -124,7 +124,7 @@ export class Census {
   stamp = 0;
   fishCount = 0;
   liters = 1;
-  /** Stocking (adult bioload / capacity) and the resulting crowding stress. */
+  /** Stocking (bioload at current sizes / capacity) and the resulting crowding stress. */
   bioload = 0;
   capacity = 1;
   ratio = 0;
@@ -201,7 +201,8 @@ export class Census {
       invert: isInvertebrate(sp),
       grazeGlass: g.glass,
       grazeSurface: g.surface,
-      grazeHard: sp.group === 'snail' ? 1 : sp.body.archetype === 'pleco' ? 0.3 : 0,
+      // Nerites & turbos rasp off green spot algae; plecos barely dent it; nothing else can.
+      grazeHard: sp.group === 'snail' ? 1 : sp.body.archetype === 'pleco' ? 0.1 : 0,
       plantEater: sp.traits.includes('plant-eater'),
       coralNipper: sp.traits.includes('coral-nipper'),
       filterFeeder: sp.diet === 'filter-feeder',
@@ -293,7 +294,10 @@ export class Census {
         this.activeCount++;
       }
       st.count++;
-      this.bioload += st.bioload;
+      // Crowding follows the animals' current size (bioload ∝ length^1.6): a brood of fry is not
+      // yet a tank full of adults. The keeper's stocking report plans with adult sizes instead.
+      const sizeFrac = f.state.lengthCm / st.adultOther;
+      this.bioload += sizeFrac >= 1 ? st.bioload : st.bioload * Math.pow(sizeFrac > 0 ? sizeFrac : 0, 1.6);
       const g = st.group;
       if (g.stamp !== stamp) {
         g.stamp = stamp;

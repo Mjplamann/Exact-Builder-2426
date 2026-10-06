@@ -45,6 +45,8 @@ const IDLE_SECONDS = 3.5;
 const IDLE_SECONDS_TOUCH = 5;
 /** While an animal's card is open the keeper is probably reading it. */
 const IDLE_SECONDS_CARD = 12;
+/** Extra seconds before the controls fade for the very first time (see the first-run hint). */
+const FIRST_IDLE_EXTRA = 3;
 /** How long the one-time first-run hint stays (ms). */
 const FIRST_HINT_MS = 9500;
 const CORAL_FORMS = new Set(['soft-coral', 'mushroom-coral', 'zoanthid', 'lps-coral', 'sps-coral', 'gorgonian', 'anemone']);
@@ -112,9 +114,9 @@ export class UI implements UIHost {
   private modeHint!: HTMLElement;
   private healthIssueEl!: HTMLElement;
   private shortcutsEl: HTMLElement | null = null;
+  private shortcutsReturn: HTMLElement | null = null;
   private peekBtn!: HTMLButtonElement;
   private firstHint: 'pending' | 'shown' | 'done';
-  private firstHintAt = 0;
   private touchQuery: MediaQueryList;
   private lastFed: number | null = null;
   /** Panel footprint (cached from a ResizeObserver; see coveredInsets). */
@@ -264,6 +266,13 @@ export class UI implements UIHost {
     el.addEventListener('pointerdown', (e) => {
       if (e.target === el) this.hideShortcuts();
     });
+    // A modal keeps focus inside: its only control is the close button.
+    el.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      e.preventDefault();
+      close.focus();
+    });
+    this.shortcutsReturn = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
     this.layer.append(el);
     this.shortcutsEl = el;
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-in')));
@@ -276,6 +285,12 @@ export class UI implements UIHost {
     this.shortcutsEl = null;
     el.classList.remove('is-in');
     setTimeout(() => el.remove(), 400);
+    const back = this.shortcutsReturn;
+    this.shortcutsReturn = null;
+    if (el.contains(document.activeElement)) {
+      if (back?.isConnected) back.focus({ preventScroll: true });
+      else (document.activeElement as HTMLElement).blur();
+    }
   }
 
   // ------------------------------------------------------------------------------------------
@@ -444,6 +459,7 @@ export class UI implements UIHost {
     );
     this.panelEl.inert = true;
     this.layer.append(this.panelEl);
+    this.wireSheetSwipe(this.panelEl.querySelector('.aq-panel-head')!);
     if (typeof ResizeObserver !== 'undefined') {
       new ResizeObserver((entries) => {
         const b = entries[0]?.borderBoxSize?.[0];
@@ -452,6 +468,58 @@ export class UI implements UIHost {
         this.panelSize.h = b ? b.blockSize : (r?.height ?? 0);
       }).observe(this.panelEl);
     }
+  }
+
+  /**
+   * Phones: the bottom sheet follows a finger on its header. Swipe down to close it (a peekable
+   * sheet first lowers to its slim bar), swipe up or tap the bar to raise it again.
+   */
+  private wireSheetSwipe(head: HTMLElement): void {
+    let drag: { id: number; y: number; t: number; dy: number } | null = null;
+    const panel = this.panelEl;
+    const end = (e: PointerEvent, cancelled: boolean) => {
+      const d = drag;
+      if (!d || e.pointerId !== d.id) return;
+      drag = null;
+      panel.classList.remove('is-dragging');
+      const dt = Math.max(1, performance.now() - d.t);
+      const fling = d.dy / dt > 0.5;
+      const peek = panel.classList.contains('is-peek');
+      if (!cancelled && (d.dy > 80 || (d.dy > 24 && fling))) {
+        if (this.current?.peekable && !peek) {
+          panel.style.transform = '';
+          this.setSheetPeek(true);
+        } else {
+          // Slide the rest of the way down while it fades (cleared again when a panel opens).
+          panel.style.transform = 'translateY(calc(100% + 24px))';
+          this.openPanel(null);
+        }
+        return;
+      }
+      panel.style.transform = '';
+      if (!cancelled && peek && (d.dy < -24 || Math.abs(d.dy) < 6)) this.setSheetPeek(false);
+    };
+    head.addEventListener('pointerdown', (e) => {
+      if (!this.isMobile || !this.current || e.button !== 0 || (e.target as Element).closest('button')) return;
+      drag = { id: e.pointerId, y: e.clientY, t: performance.now(), dy: 0 };
+      try {
+        head.setPointerCapture(e.pointerId);
+      } catch {
+        /* synthetic pointer */
+      }
+    });
+    head.addEventListener('pointermove', (e) => {
+      const d = drag;
+      if (!d || e.pointerId !== d.id) return;
+      d.dy = e.clientY - d.y;
+      if (d.dy > 4) {
+        panel.classList.add('is-dragging');
+        // Follow the finger downward; resist a little at first so taps don't wobble the sheet.
+        panel.style.transform = `translateY(${Math.round(d.dy - 4)}px)`;
+      }
+    });
+    head.addEventListener('pointerup', (e) => end(e, false));
+    head.addEventListener('pointercancel', (e) => end(e, true));
   }
 
   private makePanel(id: PanelId): Panel {
@@ -512,6 +580,7 @@ export class UI implements UIHost {
       this.panels.set(id, p);
     }
     this.current = p;
+    if (this.panelEl.style.transform) this.panelEl.style.transform = '';
     this.setSheetPeek(false);
     setClass(this.panelEl, 'is-peekable', !!p.peekable);
     setText(this.panelTitle, p.title);
@@ -628,7 +697,9 @@ export class UI implements UIHost {
 
   private idleSeconds(): number {
     if (this.card.visible) return IDLE_SECONDS_CARD;
-    return this.isTouch ? IDLE_SECONDS_TOUCH : IDLE_SECONDS;
+    const base = this.isTouch ? IDLE_SECONDS_TOUCH : IDLE_SECONDS;
+    // A newcomer gets a moment longer to take in the controls before they first fade.
+    return this.firstHint === 'pending' ? base + FIRST_IDLE_EXTRA : base;
   }
 
   /**
@@ -637,13 +708,16 @@ export class UI implements UIHost {
    */
   private showFirstHint(): void {
     this.firstHint = 'shown';
-    this.firstHintAt = performance.now();
     prefs.set('firstHintSeen', true);
     const touch = this.isTouch;
     const auto = this.app.world.settings.uiAutoHide;
     const lead = auto ? (touch ? 'The controls rest while you watch — tap to bring them back.' : 'The controls rest while you watch — move the mouse to bring them back.') : 'Enjoy the view.';
+    // In portrait a phone shows only part of the tank's width, so a swipe looks along it.
+    const portrait = window.innerHeight > window.innerWidth;
     const tips = touch
-      ? 'Swipe to look along the tank · pinch to look closer · double-tap the glass to knock'
+      ? portrait
+        ? 'Swipe to look along the tank · pinch to look closer · double-tap the glass to knock'
+        : 'Swipe to look around · pinch to look closer · double-tap the glass to knock'
       : 'Double-click the glass to tap it · scroll to look closer · press ? for shortcuts';
     const el = h('div', { class: 'aq-firsthint aq-glass', role: 'status' }, h('p', { class: 'aq-firsthint-lead' }, lead), h('p', { class: 'aq-firsthint-tips' }, tips));
     const close = () => {
@@ -655,8 +729,10 @@ export class UI implements UIHost {
     };
     el.addEventListener('click', close);
     this.layer.append(el);
-    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-in')));
-    setTimeout(close, FIRST_HINT_MS);
+    // It rises where the dock rests: wait until the dock has faded away (1.2 s) so the two never
+    // overlap. With auto-hide off it sits above the dock and can appear at once.
+    setTimeout(() => el.isConnected && el.classList.add('is-in'), auto ? 1100 : 60);
+    setTimeout(close, FIRST_HINT_MS + (auto ? 1100 : 0));
   }
 
   private canIdle(): boolean {

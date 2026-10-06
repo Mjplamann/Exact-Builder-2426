@@ -216,7 +216,9 @@ export class App implements AppApi {
   private catchUpSince(realMs: number): void {
     const away = Math.max(0, Date.now() - realMs) / 1000;
     if (away < 5) return;
-    const simSeconds = Math.min(MAX_CATCHUP_SIM_SECONDS, away * this.world.clock.timeScale);
+    // Absences pass in real time: the time-lapse speed applies only while someone is watching
+    // (otherwise one day away at "1 min = 1 week" would age the tank 27 years).
+    const simSeconds = Math.min(MAX_CATCHUP_SIM_SECONDS, away);
     const summary = this.life.catchUp(this.world, simSeconds);
     this.fishRenderer.sync(this.world);
     this.decorRenderer.sync(this.world);
@@ -231,8 +233,19 @@ export class App implements AppApi {
       resync();
     });
     ev.on('fish-born', resync);
-    ev.on('fish-removed', resync);
-    ev.on('fish-died', resync);
+    // A selected or followed animal that dies or is removed must not stay selected/followed.
+    const gone = (id: string) => {
+      if (this.world.selection.fishId === id) this.select({});
+      if (this.world.follow === id) this.follow(null);
+    };
+    ev.on('fish-removed', ({ fishId }) => {
+      gone(fishId);
+      resync();
+    });
+    ev.on('fish-died', ({ fish }) => {
+      gone(fish.state.id);
+      resync();
+    });
     ev.on('decor-changed', () => this.rebuildEnvironment());
     ev.on('plants-changed', () => this.rebuildEnvironment());
     ev.on('settings-changed', () => {
@@ -289,7 +302,7 @@ export class App implements AppApi {
     const added = this.life.addFish(this.world, speciesId, count);
     if (added.length) {
       const sp = added[0].species;
-      this.journal('added', `Added ${count} × ${sp.commonName}`);
+      this.journal('added', `Added ${added.length} × ${sp.commonName}`);
     }
   }
 
@@ -307,9 +320,9 @@ export class App implements AppApi {
     if (f) f.state.name = name.trim() || undefined;
   }
 
-  compatibility(speciesId: string): CompatibilityReport {
+  compatibility(speciesId: string, count?: number): CompatibilityReport {
     const sp = this.world.species.get(speciesId);
-    return sp ? this.life.compatibility(this.world, sp) : { level: 'bad', issues: ['Unknown species'] };
+    return sp ? this.life.compatibility(this.world, sp, count) : { level: 'bad', issues: ['Unknown species'] };
   }
 
   stocking(): StockingReport {

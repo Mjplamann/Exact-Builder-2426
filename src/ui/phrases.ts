@@ -148,7 +148,7 @@ export const CARE_MODES: { value: CareMode; label: string; text: string }[] = [
   {
     value: 'realistic',
     label: 'Realistic',
-    text: 'Natural lifespans. Neglect has real consequences — hunger, poor water and disease can take lives.',
+    text: 'Natural lifespans. Neglect has real consequences — hunger, poor water and stress can take lives, and fry may be eaten.',
   },
   {
     value: 'gentle',

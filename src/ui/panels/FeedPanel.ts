@@ -6,8 +6,8 @@ import type { FoodKind, FoodType } from '../../core/types';
 import { FOOD_LIST, FOODS } from '../../data/foods';
 import type { Panel, UIHost } from '../context';
 import { button } from '../controls';
-import { clear, h, setClass, setText } from '../dom';
-import { formatDuration, pluralName } from '../format';
+import { clear, h, setAttr, setClass, setText } from '../dom';
+import { formatDuration, pluralName, proseName } from '../format';
 import { buoyancyLabel, foodIcon } from '../foodIcons';
 
 interface FoodMatch {
@@ -70,7 +70,7 @@ export class FeedPanel implements Panel {
   private feedNowBtn: HTMLButtonElement;
 
   constructor(private host: UIHost) {
-    this.listEl = h('div', { class: 'aq-food-list', role: 'listbox', 'aria-label': 'Foods' });
+    this.listEl = h('div', { class: 'aq-food-list', role: 'group', 'aria-label': 'Foods' });
     this.lastFedEl = h('span', { class: 'aq-hint' });
     this.feedNowBtn = button('Feed now', () => this.feedNow(), { icon: 'feed', variant: 'primary' });
     this.el = h(
@@ -114,12 +114,12 @@ export class FeedPanel implements Panel {
       if (f.buoyancy === 'live-swimming') tags.append(h('span', { class: 'aq-tag aq-tag-live' }, 'Triggers hunting'));
       if (f.sizeM >= 0.02) tags.append(h('span', { class: 'aq-tag' }, 'For larger fish'));
       // Name who relishes it — but only once per distinct line, so the list doesn't chant.
-      const fanText = m.score >= 0.55 && m.fans.length ? `A favorite of your ${m.fans.slice(0, 2).map((n) => pluralName(n)).join(' and ')}` : '';
+      const fanText = m.score >= 0.55 && m.fans.length ? `A favorite of your ${m.fans.slice(0, 2).map((n) => pluralName(proseName(n))).join(' and ')}` : '';
       const fans = fanText && !shownFans.has(fanText) ? h('span', { class: 'aq-food-fans' }, fanText) : null;
       if (fanText) shownFans.add(fanText);
       const btn = h(
         'button',
-        { type: 'button', class: 'aq-food', role: 'option', 'aria-selected': 'false', 'data-food': f.kind, title: fish.length ? `Suits about ${Math.round(m.score * 100)}% of your animals` : undefined },
+        { type: 'button', class: 'aq-food', 'aria-pressed': 'false', 'data-food': f.kind, title: fish.length ? `Suits about ${Math.round(m.score * 100)}% of your animals` : undefined },
         foodIcon(f),
         h('span', { class: 'aq-food-text' }, h('span', { class: 'aq-food-name' }, f.name), h('span', { class: 'aq-food-desc' }, f.description), tags, fans),
       );
@@ -147,7 +147,7 @@ export class FeedPanel implements Panel {
     for (const [k, b] of this.items) {
       const on = k === cur;
       setClass(b, 'is-active', on);
-      b.setAttribute('aria-selected', String(on));
+      setAttr(b, 'aria-pressed', String(on));
     }
     const kind = cur ?? this.host.lastFood;
     setText(this.feedNowBtn.querySelector('span')!, `Feed ${FOODS[kind].name.toLowerCase()}`);

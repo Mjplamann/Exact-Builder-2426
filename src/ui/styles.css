@@ -32,6 +32,7 @@
   --radius: 16px;
   --radius-md: 12px;
   --radius-sm: 9px;
+  /* Keep in sync with the literal -webkit-backdrop-filter values (older Safari ignores var() there). */
   --blur: blur(22px) saturate(140%);
   --shadow: 0 18px 50px rgba(0, 0, 0, 0.38), 0 2px 8px rgba(0, 0, 0, 0.2);
   --ease: cubic-bezier(0.22, 0.7, 0.2, 1);
@@ -84,7 +85,7 @@ html, body {
 
 .aq-glass {
   background: var(--glass);
-  -webkit-backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
   backdrop-filter: var(--blur);
   border: 1px solid var(--hair);
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -131,7 +132,7 @@ body.aq-idle #tank { cursor: none; }
    Top-left: tank name & sim time
    --------------------------------------------------------------------------------------------- */
 
-.aq-topleft { position: fixed; top: max(18px, env(safe-area-inset-top)); left: max(var(--gutter), env(safe-area-inset-left));
+.aq-topleft { position: fixed; top: max(18px, var(--safe-t)); left: max(var(--gutter), var(--safe-l));
   pointer-events: auto; text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55); max-width: min(46vw, 420px); }
 .aq-tankname { display: block; background: none; border: 0; padding: 2px 6px; margin: 0 0 0 -6px; border-radius: 8px;
   font-size: 15px; font-weight: 600; letter-spacing: 0.01em; color: var(--text); text-align: left;
@@ -150,7 +151,7 @@ body.aq-idle #tank { cursor: none; }
    Top-right: water health & stats
    --------------------------------------------------------------------------------------------- */
 
-.aq-topright { position: fixed; top: max(16px, env(safe-area-inset-top)); right: max(var(--gutter), env(safe-area-inset-right));
+.aq-topright { position: fixed; top: max(16px, var(--safe-t)); right: max(var(--gutter), var(--safe-r));
   display: flex; align-items: center; gap: 12px; pointer-events: auto; }
 .aq-root.has-panel:not(.is-mobile) .aq-topright { transform: translateX(calc(-1 * (var(--panel-w) + 8px))); }
 .aq-health { display: inline-flex; align-items: center; gap: 0; height: 30px; padding: 0 10px; border-radius: 999px;
@@ -164,7 +165,7 @@ body.aq-idle #tank { cursor: none; }
   transition: max-width 450ms var(--ease), opacity 300ms ease, margin 450ms var(--ease); }
 .aq-health-issue { display: none; }
 .aq-health:hover, .aq-health:focus-visible, .aq-health.is-caution, .aq-health.is-bad { background: var(--glass); border-color: var(--hair);
-  -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
+  -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: var(--blur); }
 /* When the water needs care a short label stays beside the dot (touch screens have no hover);
    hovering adds the specific issue. */
 .aq-health.is-caution .aq-health-text, .aq-health.is-bad .aq-health-text { max-width: min(30vw, 220px); opacity: 1; margin-left: 9px; }
@@ -177,7 +178,7 @@ body.aq-idle #tank { cursor: none; }
    Dock
    --------------------------------------------------------------------------------------------- */
 
-.aq-dock { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+.aq-dock { position: fixed; left: 50%; bottom: max(18px, var(--safe-b)); transform: translateX(-50%);
   display: flex; gap: 2px; padding: 6px; border-radius: 20px; pointer-events: auto; z-index: 20; }
 .aq-dock-btn { position: relative; width: 46px; height: 46px; display: grid; place-items: center; border: 0; border-radius: 14px;
   background: transparent; color: var(--text-2); transition: background 220ms ease, color 220ms ease; }
@@ -189,7 +190,7 @@ body.aq-idle #tank { cursor: none; }
 /* Touch screens have no tooltips: name each tool under its icon. */
 .aq-root.is-touch { --dock-space: 84px; }
 .aq-root.is-touch .aq-dock-btn { width: 52px; height: 54px; grid-template-rows: 1fr auto; align-content: center; gap: 1px; padding: 5px 0 4px; }
-.aq-root.is-touch .aq-dock-label { display: block; font-size: 9.5px; line-height: 1.1; letter-spacing: 0.01em; color: var(--text-3); }
+.aq-root.is-touch .aq-dock-label { display: block; font-size: 10px; line-height: 1.1; letter-spacing: 0.01em; color: var(--text-3); }
 .aq-root.is-touch .aq-dock-btn.is-active .aq-dock-label { color: var(--text-2); }
 .aq-root.is-touch .aq-dock-btn.is-active::before { bottom: auto; top: 3px; }
 .aq-dock-btn::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translate(-50%, 4px);
@@ -455,13 +456,18 @@ body.aq-idle #tank { cursor: none; }
 .aq-food-fans { font-size: 11.5px; color: #b9e6c7; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Feeding hint (top center) */
-.aq-modehint { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px;
+.aq-modehint { position: fixed; top: max(16px, var(--safe-t)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px;
   padding: 6px 8px 6px 8px; border-radius: 999px; pointer-events: auto; z-index: 22; max-width: calc(100vw - 32px);
   animation: aq-in 500ms var(--ease) backwards; }
 .aq-modehint .aq-food-icon { width: 30px; height: 30px; border-radius: 50%; }
 .aq-modehint .aq-food-icon svg { width: 24px; height: 24px; }
-.aq-modehint-text { font-size: 12.5px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aq-modehint-text { min-width: 0; font-size: 12.5px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aq-modehint .aq-btn { flex: none; }
+/* A side panel is open: centre the hint (and its Done button) in the free space beside it. */
+.aq-root.has-panel:not(.is-mobile) .aq-modehint { left: calc((100vw - var(--panel-w) - max(14px, var(--safe-r))) / 2);
+  max-width: calc(100vw - var(--panel-w) - 48px - var(--safe-l)); }
 .aq-modehint-key { color: var(--text-3); }
+.aq-root.is-touch .aq-modehint-key { display: none; }
 .aq-ripple { position: fixed; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; pointer-events: none; z-index: 5;
   border: 1.5px solid rgba(230, 245, 248, 0.55); animation: aq-ripple 900ms var(--ease) forwards; }
 @keyframes aq-ripple { from { transform: scale(0.25); opacity: 0.7; } to { transform: scale(1.4); opacity: 0; } }
@@ -605,7 +611,7 @@ body.aq-idle #tank { cursor: none; }
 
 /* Floating toolbar above the selected hardscape/plant */
 .aq-scape-toolbar { position: fixed; left: 0; top: 0; display: flex; align-items: center; gap: 2px; padding: 4px 4px 4px 12px; border-radius: 14px;
-  background: var(--glass-strong); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--hair);
+  background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: var(--blur); border: 1px solid var(--hair);
   box-shadow: var(--shadow); pointer-events: auto; z-index: 21; will-change: transform; }
 .aq-tb-name { font-size: 12px; color: var(--text-2); max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .aq-tb-sep { width: 1px; height: 18px; background: var(--hair-strong); margin: 0 6px 0 8px; }
@@ -616,7 +622,7 @@ body.aq-idle #tank { cursor: none; }
    Fish info card
    --------------------------------------------------------------------------------------------- */
 
-.aq-fishcard { position: fixed; left: max(var(--gutter), env(safe-area-inset-left)); bottom: max(18px, env(safe-area-inset-bottom)); width: 296px;
+.aq-fishcard { position: fixed; left: max(var(--gutter), var(--safe-l)); bottom: max(18px, var(--safe-b)); width: 296px;
   padding: 14px 16px 14px; border-radius: var(--radius); pointer-events: auto; z-index: 18; opacity: 0; transform: translateY(6px); }
 .aq-fishcard.is-in { opacity: 1; transform: none; }
 .aq-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
@@ -657,10 +663,13 @@ body.aq-idle #tank { cursor: none; }
    Toasts, welcome card, shortcuts overlay
    --------------------------------------------------------------------------------------------- */
 
-.aq-toasts { position: fixed; left: 50%; bottom: calc(max(18px, env(safe-area-inset-bottom)) + var(--dock-space)); transform: translateX(-50%);
+.aq-toasts { position: fixed; left: 50%; bottom: calc(max(18px, var(--safe-b)) + var(--dock-space)); transform: translateX(-50%);
   display: flex; flex-direction: column-reverse; align-items: center; gap: 8px; z-index: 30; pointer-events: none; width: min(560px, calc(100vw - 32px)); }
+/* With a side panel open, centre the toasts in the free space beside it (never over its controls). */
+.aq-root.has-panel:not(.is-mobile) .aq-toasts { left: calc((100vw - var(--panel-w) - max(14px, var(--safe-r))) / 2);
+  width: min(520px, calc(100vw - var(--panel-w) - 60px)); }
 .aq-toast { display: flex; align-items: flex-start; gap: 10px; max-width: 100%; padding: 9px 16px 9px 13px; border-radius: 14px; pointer-events: auto;
-  background: var(--glass-strong); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--hair);
+  background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: var(--blur); border: 1px solid var(--hair);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); font-size: 12.5px; line-height: 1.45; color: var(--text); cursor: default;
   opacity: 0; transform: translateY(6px); transition: opacity 500ms var(--ease), transform 500ms var(--ease); }
 .aq-toast.is-in { opacity: 1; transform: none; }
@@ -673,7 +682,7 @@ body.aq-idle #tank { cursor: none; }
 
 .aq-welcome { position: fixed; left: 50%; top: 46%; width: min(420px, calc(100vw - 40px)); transform: translate(-50%, -50%) scale(0.985);
   padding: 26px 28px 22px; border-radius: 20px; text-align: center; z-index: 40; pointer-events: auto;
-  background: rgba(8, 15, 20, 0.9); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--hair); box-shadow: var(--shadow);
+  background: rgba(8, 15, 20, 0.9); -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: var(--blur); border: 1px solid var(--hair); box-shadow: var(--shadow);
   opacity: 0; transition: opacity 900ms var(--ease), transform 900ms var(--ease); }
 .aq-welcome.is-in { opacity: 1; transform: translate(-50%, -50%); }
 .aq-welcome-icon { color: var(--accent); display: grid; place-items: center; margin-bottom: 8px; }
@@ -716,33 +725,40 @@ body.aq-idle #tank { cursor: none; }
 
 @media (max-width: 640px) {
   :root { --gutter: 14px; }
-  .aq-topleft { top: max(12px, env(safe-area-inset-top)); max-width: 58vw; }
+  .aq-topleft { top: max(12px, var(--safe-t)); max-width: 58vw; }
   .aq-health.is-caution .aq-health-text, .aq-health.is-bad .aq-health-text { max-width: 30vw; }
   .aq-tankname { font-size: 14px; }
   .aq-clockline { font-size: 11.5px; }
-  .aq-topright { top: max(10px, env(safe-area-inset-top)); }
-  .aq-dock { left: max(8px, var(--safe-l)); right: max(8px, var(--safe-r)); transform: none; justify-content: space-between; bottom: max(8px, env(safe-area-inset-bottom)); padding: 4px; border-radius: 18px; }
+  .aq-topright { top: max(10px, var(--safe-t)); }
+  .aq-dock { left: max(8px, var(--safe-l)); right: max(8px, var(--safe-r)); transform: none; justify-content: space-between; bottom: max(8px, var(--safe-b)); padding: 4px; border-radius: 18px; }
   .aq-dock-btn { width: auto; flex: 1; height: 46px; }
   .aq-root.is-touch .aq-dock-btn { width: auto; height: 54px; }
   .aq-root.is-touch { --dock-space: 70px; }
   .aq-dock-btn::after { display: none; }
   .aq-panel { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-width: none; height: min(80vh, 720px); height: min(80dvh, 720px);
-    border-radius: 20px 20px 0 0; transform: translateY(24px); padding-bottom: env(safe-area-inset-bottom); }
+    border-radius: 20px 20px 0 0; transform: translateY(24px); padding-bottom: var(--safe-b); }
   /* Collapsed sheet (aquascaping on a phone): just the header and the hint line. */
   .aq-panel.is-peekable .aq-panel-peek { display: inline-grid !important; }
   .aq-panel.is-peek, .aq-panel[data-panel="scape"].is-peek { height: auto; max-height: 40dvh; }
   .aq-panel.is-peek .aq-tabs, .aq-panel.is-peek .aq-scape-view { display: none; }
   .aq-panel.is-peek .aq-panel-body { padding-bottom: 10px; }
   .aq-panel.is-open { transform: none; }
-  .aq-panel-head { padding-top: 12px; }
+  /* The header is the sheet's grab handle (swipe down to close / lower, up to raise). */
+  .aq-panel-head { padding-top: 12px; touch-action: none; cursor: grab; }
+  .aq-panel.is-dragging { transition: none !important; }
   .aq-panel-head::before { content: ""; position: absolute; top: 6px; left: 50%; width: 36px; height: 4px; margin-left: -18px; border-radius: 4px; background: rgba(255, 255, 255, 0.18); }
-  .aq-fishcard { left: max(8px, var(--safe-l)); right: max(8px, var(--safe-r)); width: auto; bottom: calc(max(8px, env(safe-area-inset-bottom)) + var(--dock-space) - 6px); }
+  .aq-fishcard { left: max(8px, var(--safe-l)); right: max(8px, var(--safe-r)); width: auto; bottom: calc(max(8px, var(--safe-b)) + var(--dock-space)); }
   .aq-root.has-panel .aq-fishcard { opacity: 0; pointer-events: none; }
-  .aq-toasts { bottom: calc(max(8px, env(safe-area-inset-bottom)) + var(--dock-space) - 4px); }
+  .aq-toasts { bottom: calc(max(8px, var(--safe-b)) + var(--dock-space) - 4px); }
+  /* A bottom sheet is open: toasts drop in from the top instead, so they never sit on the sheet's
+     buttons (a tap meant for "Add to tank" would only dismiss the toast). */
+  .aq-root.has-panel .aq-toasts { top: calc(max(10px, var(--safe-t)) + 6px); bottom: auto; flex-direction: column; }
+  .aq-root.has-panel .aq-toast { transform: translateY(-6px); }
+  .aq-root.has-panel .aq-toast.is-in { transform: none; }
   .aq-firsthint { bottom: calc(max(8px, var(--safe-b)) + 4px); }
   .aq-root:not(.is-idle) .aq-firsthint { bottom: calc(max(8px, var(--safe-b)) + var(--dock-space)); }
   .aq-modehint-key { display: none; }
-  .aq-modehint { top: calc(max(12px, env(safe-area-inset-top)) + 52px); left: 8px; right: 8px; transform: none; justify-content: space-between; }
+  .aq-modehint { top: calc(max(12px, var(--safe-t)) + 52px); left: max(8px, var(--safe-l)); right: max(8px, var(--safe-r)); transform: none; justify-content: space-between; }
   .aq-modehint-text { white-space: normal; font-size: 12px; line-height: 1.35; }
   /* While aquascaping on a phone, keep most of the tank visible above the sheet. */
   .aq-panel[data-panel="scape"] { height: min(48vh, 520px); height: min(48dvh, 520px); }
@@ -752,6 +768,34 @@ body.aq-idle #tank { cursor: none; }
   .aq-facts { grid-template-columns: 1fr; }
   .aq-stats { grid-template-columns: repeat(2, 1fr); }
   .aq-swatch-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Short screens (phones in landscape): tighter panel header; the catalog's filter rows tuck away
+   while its list is scrolled (FishPanel toggles .is-tucked), leaving search and the list. */
+@media (max-height: 520px) and (min-width: 641px) {
+  .aq-panel-head { padding-top: 6px !important; padding-bottom: 0 !important; }
+  .aq-catalog-head { padding-top: 8px; }
+  /* Below the tank name rather than beside it. */
+  .aq-modehint { top: calc(max(12px, var(--safe-t)) + 52px); }
+  .aq-catalog-list.is-tucked .aq-catalog-head > :not(.aq-search) { display: none; }
+  .aq-catalog-list.is-tucked .aq-search { margin-bottom: 6px; }
+  /* The result count gives way to rows (it stays while "Reset filters" is offered). */
+  .aq-results-meta:not(:has(.aq-link:not([hidden]))) { display: none; }
+  .aq-detail-scroll { padding-top: 6px; }
+  .aq-portrait { aspect-ratio: 21 / 9; margin-bottom: 10px; }
+  /* The animal card sits above the dock; stacked it would reach up over the tank name, so it
+     lays out in two columns: who it is on the left, how it is doing and the actions on the right. */
+  .aq-fishcard { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 18px; align-items: start;
+    width: min(560px, calc(100vw - var(--safe-l) - var(--safe-r) - 44px)); padding-top: 10px; padding-bottom: 12px;
+    bottom: calc(max(18px, var(--safe-b)) + var(--dock-space)); }
+  .aq-root.has-panel .aq-fishcard { width: min(560px, calc(100vw - var(--panel-w) - 28px - var(--safe-l) - var(--safe-r) - 24px)); }
+  .aq-card-head { grid-column: 1 / -1; }
+  .aq-card-sub { grid-column: 1; grid-row: 2; margin-bottom: 6px; }
+  .aq-card-facts { grid-column: 1; grid-row: 3; }
+  .aq-card-activity { grid-column: 1; grid-row: 4; margin: 10px 0 0; }
+  .aq-card-lineage { display: none; }
+  .aq-bars { grid-column: 2; grid-row: 2 / span 2; gap: 5px; margin: 2px 0 0; }
+  .aq-card-actions { grid-column: 2; grid-row: 4; margin-top: 8px; }
 }
 
 @media (hover: none) {
@@ -764,9 +808,11 @@ body.aq-idle #tank { cursor: none; }
   .aq-card-close { width: 44px; height: 44px; margin: -12px -12px 0 0; }
   .aq-panel-head { padding-top: 10px; padding-bottom: 4px; padding-right: 8px; }
   .aq-btn, .aq-btn-small, .aq-select, .aq-chip-toggle, .aq-time-chip, .aq-health, .aq-size, .aq-link, .aq-ind-main { min-height: 44px; }
+  .aq-health { min-width: 44px; justify-content: center; }
   .aq-seg-btn { min-height: 40px; }
   .aq-seg { padding: 2px; }
-  .aq-tab { padding: 13px 0 14px; }
+  .aq-tabs { gap: 8px; }
+  .aq-tab { padding: 13px 6px 14px; min-width: 44px; }
   .aq-search-input, .aq-tankname-input, .aq-card-name-input { height: 44px; font-size: 16px; }
   .aq-switch { width: 51px; height: 31px; }
   .aq-switch-knob { width: 25px; height: 25px; }

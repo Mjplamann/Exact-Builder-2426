@@ -23,8 +23,9 @@ export interface TankPreset extends TankPresetInfo {
   equipment?: { heaterC?: number; heaterOn?: boolean; colorTempK?: number };
   /**
    * The auto-feeder ships switched on with a staple the whole community eats, portioned for the
-   * stock once grown (tests/presets.test.ts checks it against the life sim's own ration), so the
-   * tank stays fed through ordinary absences and time-lapse. Hand-feeding adds treats on top.
+   * stock once grown (tests/sim/presetLife.test.ts checks it against the life sim's own ration and
+   * that a month away leaves the water healthy and everyone alive), so the tank stays fed through
+   * ordinary absences and time-lapse. Hand-feeding adds treats on top.
    */
   feeder: { food: FoodKind; pinches: number; hours?: number[] };
   /** Stocking list; ids missing from the species index are skipped. */
@@ -152,7 +153,9 @@ export const PRESETS: TankPreset[] = [
     substrate: 'river-sand',
     background: 'black',
     aquascape: 'blackwater',
-    waterParams: { ph: 6.0, kh: 1, gh: 2, tannins: 0.45 },
+    // Soft and acidic, but with enough carbonate (3 dKH) that nitrification can't strip it bare
+    // between water changes — pure blackwater (KH 0–1) crashes in weeks without RO top-ups.
+    waterParams: { ph: 6.3, kh: 3, gh: 3, tannins: 0.45 },
     equipment: { heaterC: 27, colorTempK: 5600 },
     feeder: { food: 'flakes', pinches: 7 },
     fish: [

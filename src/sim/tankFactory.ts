@@ -33,11 +33,11 @@ export function defaultWaterParams(water: WaterType, simTime: number): WaterPara
 
 export function defaultEquipment(water: WaterType, liters: number): Equipment {
   const marine = water === 'marine';
-  // A "pinch" from the food system is ~30 mg of flakes. A moderately stocked community of small
-  // fish eats roughly one pinch per 80 L per feeding, twice a day, once grown. The feeder ships
-  // switched on: fish stay fed through ordinary absences and time-lapse (it idles while the tank
-  // is empty), and the keeper can still feed treats by hand.
-  const pinches = Math.max(1, Math.min(20, Math.round(liters / 80)));
+  // The feeder ships switched on, twice a day: fish stay fed through ordinary absences and
+  // time-lapse (it idles while the tank is empty), and the keeper can still feed treats by hand.
+  // It starts on its smallest portion (a pinch is ~30 mg of flakes); the life sim then sizes the
+  // portion to the animals as they are added, until the keeper sets their own.
+  const pinches = 1;
   return {
     filter: { type: liters > 400 ? 'sump' : liters > 120 ? 'canister' : 'hang-on-back', flowLph: Math.round(liters * (marine ? 8 : 5)), on: true },
     heater: { on: true, targetC: marine ? 25.5 : 25 },

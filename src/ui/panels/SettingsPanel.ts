@@ -107,23 +107,41 @@ export class SettingsPanel implements Panel {
         null,
         h('div', { class: 'aq-about' },
           host.isTouch ? null : button('Keyboard shortcuts', () => host.showShortcuts(), { icon: 'keyboard', variant: 'quiet' }),
-          h('p', { class: 'aq-hint' }, `Living Aquarium · ${formatCount(app.world.species.size)} species, ${formatCount(app.world.plants.all.length)} plants & corals. Your tank is saved in this browser.`),
+          h('p', { class: 'aq-hint' }, `Living Aquarium · ${formatCount(app.world.species.size)} species, ${formatCount(app.world.plants.all.length)} plants & corals. Your tank is saved automatically.`),
         ),
       ),
     );
   }
 
-  private exportTank(): void {
+  private async exportTank(): Promise<void> {
     const app = this.host.app;
+    const filename = `${app.world.tank.name.replace(/[^\w\- ]+/g, '').trim() || 'aquarium'}.aquarium.json`;
+    // Inside claude.ai the page is sandboxed and plain download links are inert: use the
+    // viewer's `downloads` capability when it is available (the viewer confirms the save).
+    const claude = (globalThis as { claude?: { use(name: string): Promise<unknown> } }).claude;
+    if (claude?.use) {
+      try {
+        const downloads = (await claude.use('downloads')) as { save(f: { filename: string; data: string }): Promise<unknown> } | null;
+        if (downloads) {
+          await downloads.save({ filename, data: app.exportTank() });
+          this.host.toast('Tank exported — keep the file to restore or share it.', 'success');
+          return;
+        }
+      } catch {
+        this.host.toast('The export was not saved.', 'info');
+        return;
+      }
+    }
     try {
       const json = app.exportTank();
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
-      const a = h('a', { href: url, download: `${app.world.tank.name.replace(/[^\w\- ]+/g, '').trim() || 'aquarium'}.aquarium.json` });
+      const a = h('a', { href: url, download: filename });
       document.body.append(a);
       a.click();
       a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      // iOS Safari asks before saving; revoking too soon breaks the download (FileSaver.js waits 40 s).
+      setTimeout(() => URL.revokeObjectURL(url), 40_000);
       this.host.toast('Tank exported — keep the file to restore or share it.', 'success');
     } catch {
       this.host.toast('Export failed.', 'warning');

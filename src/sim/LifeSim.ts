@@ -21,13 +21,14 @@ import {
   sizeRateScale,
   vbLength,
 } from './biology';
-import { breedingTick, fryPredationHazard, type BirthKind, type BreedHost } from './breeding';
+import { GUARDED_FRY_RISK, GUARD_DAYS, breedingTick, fryPredationHazard, guardsYoung, type BirthKind, type BreedHost } from './breeding';
 import { Census, linfOf, type SpeciesStats } from './census';
-import { Chemistry, newChemInputs } from './chemistry';
+import { Chemistry, newChemInputs, tapWater } from './chemistry';
 import { compatibilityReport, stockingReport } from './compatibility';
 import { dailyLightDose, lightScheduleLevel, localHour, localMs } from './environment';
-import { feedDirect } from './feeding';
+import { feedDirect, pinchMg, recommendedPinches } from './feeding';
 import { canonicalFishState, canonicalizeWorldFish } from './fishState';
+import { repairFishStates, repairTankInputs } from './guards';
 import { Flora, trimPlants as trimTankPlants, type FloraInputs } from './flora';
 import { clamp, clamp01, relaxFast, smoothstep } from './simMath';
 import {
@@ -112,7 +113,7 @@ const MICRO_FEEDER_CM = 1.5;
 const GREW_EVENT_FRACTION = 0.02;
 const JOURNAL_MAX = 500;
 
-type WarnKind = 'ammonia' | 'nitrite' | 'nitrate' | 'oxygen' | 'temperature' | 'hunger' | 'algae' | 'plants';
+type WarnKind = 'ammonia' | 'nitrite' | 'nitrate' | 'oxygen' | 'kh' | 'temperature' | 'hunger' | 'algae' | 'plants';
 
 /** Census stress ids → the cause reported with 'fish-died' (shown to the keeper as-is). */
 const CAUSE_TEXT: Record<string, string> = {
@@ -193,7 +194,7 @@ export class LifeSim implements BreedHost {
   // Events, journal, warnings.
   private grewAt = new Map<string, number>();
   private warnArmed: Record<WarnKind, boolean> = {
-    ammonia: true, nitrite: true, nitrate: true, oxygen: true, temperature: true, hunger: true, algae: true, plants: true,
+    ammonia: true, nitrite: true, nitrate: true, oxygen: true, kh: true, temperature: true, hunger: true, algae: true, plants: true,
   };
   private lastWarnReal = -Infinity;
   private lastPlantsEmitReal = -Infinity;
@@ -216,9 +217,22 @@ export class LifeSim implements BreedHost {
   get cover(): number {
     return this.flora.cover;
   }
+  /**
+   * Spawning sites: caves and shells, plus the sheltered hollows under driftwood and rock
+   * overhangs the decor module marks as cover (where apistogrammas and plecos really spawn).
+   */
   get caves(): number {
-    return this.chem.decorInfo.caves;
+    const cover = this.worldRef?.cover;
+    if (cover !== this.sitesFor) {
+      this.sitesFor = cover;
+      let n = 0;
+      if (cover) for (const c of cover) if (c.kind === 'cave' || c.kind === 'overhang') n++;
+      this.sites = n;
+    }
+    return Math.max(this.chem.decorInfo.caves, this.sites);
   }
+  private sitesFor: unknown = null;
+  private sites = 0;
   private careModeNow: CareMode = 'realistic';
   get careMode(): CareMode {
     return this.careModeNow;
@@ -280,6 +294,8 @@ export class LifeSim implements BreedHost {
     if (world.tank === this.tankRef) return;
     this.tankRef = world.tank;
     canonicalizeWorldFish(world);
+    repairTankInputs(world.tank);
+    repairFishStates(world, world.clock.simTime);
     this.rng = new Rng((world.tank.seed ^ 0x5bd1e995) >>> 0);
     this.census.reset();
     this.flora.reset();
@@ -303,10 +319,20 @@ export class LifeSim implements BreedHost {
    */
   private expectedLoadN(world: World): number {
     let n = 0;
+    let room = 0;
     for (const f of world.fish) {
       const w = massG(f.species, f.state.lengthCm);
       const needMg = NEED_STOMACHS_PER_DAY_REF * sizeRateScale(w) * STOMACH_MG_PER_G * w;
       n += needMg * FOOD_N_FRACTION * 0.8;
+      room += STOMACH_MG_PER_G * w;
+    }
+    // Fish offered more than they need eat it (up to a stomachful a meal) and excrete the extra
+    // nitrogen: a filter matured on the scheduled feedings is sized for what is actually eaten.
+    const af = world.tank.equipment.autoFeeder;
+    if (af.enabled && world.fish.length > 0 && af.pinches > 0 && af.hours && af.hours.length > 0) {
+      const feeds = Math.min(8, af.hours.length);
+      const eaten = Math.min(pinchMg(af.food) * af.pinches * feeds, room * feeds);
+      n = Math.max(n, eaten * FOOD_N_FRACTION * 0.85);
     }
     // ≈0.075 mg N/day per bioload unit (a 5 cm fish fed normally); a seeded filter carries ~70%
     // of the tank's capacity.
@@ -319,6 +345,7 @@ export class LifeSim implements BreedHost {
     if (!(simDt > 0) || !Number.isFinite(simDt)) return;
     this.pending += simDt;
     if (this.pending < LIVE_MIN_STEP_S) return;
+    repairTankInputs(world.tank);
     let remaining = this.pending;
     this.pending = 0;
     let t = world.clock.simTime - remaining * 1000;
@@ -334,12 +361,14 @@ export class LifeSim implements BreedHost {
     this.ensure(world);
     const empty: CatchUpSummary = { simSeconds: Math.max(0, simSeconds || 0), born: 0, died: [], text: '' };
     if (!(simSeconds > 0) || !Number.isFinite(simSeconds)) return empty;
+    repairTankInputs(world.tank);
     const tank = world.tank;
     const wp = tank.waterParams;
     const before = {
       glass: wp.glassAlgae,
       fish: world.fish.length,
       nitrate: wp.nitrate,
+      ph: wp.ph,
       overgrown: this.flora.overgrown,
       plantGrowth: tank.plants.reduce((a, p) => a + p.growth, 0),
       length: world.fish.reduce((a, f) => a + f.state.lengthCm, 0) / Math.max(1, world.fish.length),
@@ -495,7 +524,9 @@ export class LifeSim implements BreedHost {
         intake += appetite * want * flora.shareCoral * days;
       }
       // Fry graze infusoria; filter-feeders (fan shrimp, feather dusters) strain suspended
-      // particles — micro-fauna, detritus and the crumbs of every feeding.
+      // particles — micro-fauna, detritus and the crumbs of every feeding. (Shrimplets graze the
+      // same biofilm as their parents: when a colony outgrows its food, the young go first —
+      // quietly, see `quietLoss` — which is how real colonies level off.)
       if ((L < MICRO_FEEDER_CM && !st.invert) || st.filterFeeder) {
         const want = needMg * (st.filterFeeder ? 0.7 : 0.9);
         flora.demandMicro += want;
@@ -587,7 +618,10 @@ export class LifeSim implements BreedHost {
       // and adult predation risk is surfaced by `compatibility` rather than staged as carnage.
       // Prey approaching the biggest mouth in the tank is increasingly hard to catch.
       if (realistic && s.generation > 0 && L < maxGape && !st.isSnail && (now - s.bornAt) / MS_PER_MONTH < st.maturityMonths) {
-        const hz = fryPredationHazard(census, L, cover) * (1 - smoothstep(0.3, 1, L / maxGape));
+        // Parents of guarding species (cichlids, mouthbrooders, cave-spawning plecos) shepherd their fry
+        // through the first weeks.
+        const guard = now - s.bornAt < GUARD_DAYS * MS_PER_DAY && guardsYoung(st) ? GUARDED_FRY_RISK : 1;
+        const hz = fryPredationHazard(census, L, cover) * (1 - smoothstep(0.3, 1, L / maxGape)) * guard;
         if (hz > 0 && this.rng.next() < 1 - Math.exp(-hz * days)) {
           if (this.eatenCount < this.eaten.length) this.eaten[this.eatenCount] = f;
           else this.eaten.push(f);
@@ -646,6 +680,13 @@ export class LifeSim implements BreedHost {
       this.deadFish[i] = undefined as unknown as FishEntity;
       if (!detachFish(world, f.state.id)) continue;
       this.grewAt.delete(f.state.id);
+      if (quietLoss(f, cause, now)) {
+        // Tank-born young that don't make it simply vanish — tankmates and shrimp clean up a tiny
+        // body within the hour, and no keeper ever finds it (the same as fry that get eaten).
+        this.chem.addOrganicN(massG(f.species, f.state.lengthCm) * BODY_N_MG_PER_G);
+        if (live) world.events.emit('fish-removed', { fishId: f.state.id });
+        continue;
+      }
       world.tank.stats.deaths++;
       // The keeper finds and removes the body, but some of it has already decayed.
       this.chem.addOrganicN(massG(f.species, f.state.lengthCm) * BODY_N_MG_PER_G * 0.5);
@@ -857,6 +898,11 @@ export class LifeSim implements BreedHost {
         this.fire(world, now, live, 'warning', `Nitrate has built up to ${Math.round(wp.nitrate)} ppm — time for a water change.`);
       if (this.armed('oxygen', wp.oxygen < 0.55, wp.oxygen > 0.7, world, live))
         this.fire(world, now, live, 'warning', 'Oxygen is running low — more surface movement would help the fish breathe.');
+      // Nitrification eats alkalinity: without water changes KH runs out and the pH slides (the
+      // "old tank syndrome" that eventually stalls the filter). A heads-up while it is easy to fix.
+      const khLow = marine ? 5.5 : 1;
+      if (this.armed('kh', wp.kh < khLow && tapWater(world.tank.water).kh > khLow + 1, wp.kh > khLow + 1, world, live))
+        this.fire(world, now, live, 'info', `The water's carbonate hardness is nearly used up, so the pH has begun to slide (pH ${wp.ph.toFixed(1)}). A partial water change will restore it.`);
     }
     // Temperature well outside what a good share of the residents tolerate.
     let outside = 0;
@@ -918,7 +964,7 @@ export class LifeSim implements BreedHost {
   private summaryText(
     world: World,
     simSeconds: number,
-    before: { glass: number; fish: number; nitrate: number; overgrown: number; plantGrowth: number; length: number },
+    before: { glass: number; fish: number; nitrate: number; ph: number; overgrown: number; plantGrowth: number; length: number },
   ): string {
     const wp = world.tank.waterParams;
     const parts: string[] = [];
@@ -938,6 +984,7 @@ export class LifeSim implements BreedHost {
     else if (plantGrowth > before.plantGrowth + 0.05 * Math.max(1, world.tank.plants.length)) parts.push('the plants have filled out');
     if (wp.nitrate >= (world.tank.water === 'marine' ? 25 : 40) && wp.nitrate > before.nitrate + 5) parts.push('the water could use a change');
     else if (wp.ammonia >= 0.25 || wp.nitrite >= 0.25) parts.push('the water quality has slipped');
+    else if (wp.kh < (world.tank.water === 'marine' ? 5.5 : 1) && wp.ph < before.ph - 0.3) parts.push('the pH has drifted down and the water could use a change');
     let hunger = 0;
     for (const f of world.fish) hunger += f.state.hunger;
     if (world.fish.length && hunger / world.fish.length > 0.6) parts.push(world.fish.some((f) => f.species.group === 'fish') ? 'the fish are hungry' : 'everyone is hungry');
@@ -1041,6 +1088,7 @@ export class LifeSim implements BreedHost {
     const out: FishEntity[] = [];
     const sp = world.species.get(speciesId);
     if (!sp) return out;
+    const followFeeder = this.feederFollowsStock(world);
     // Pairs and harems are sold as such: balance the sexes.
     const bonded = sp.social === 'pair' || sp.social === 'harem' || sp.traits.includes('pair-bonding');
     const firstMale = this.rng.chance(0.5);
@@ -1056,14 +1104,40 @@ export class LifeSim implements BreedHost {
       out.push(e);
     }
     this.census.invalidateSocial();
+    if (followFeeder && out.length) this.portionFeeder(world);
     return out;
   }
 
   removeFish(world: World, fishId: string): void {
+    const followFeeder = this.feederFollowsStock(world);
     if (detachFish(world, fishId)) {
       this.grewAt.delete(fishId);
       this.census.invalidateSocial();
       world.events.emit('fish-removed', { fishId });
+      if (followFeeder && world.fish.length) this.portionFeeder(world);
+    }
+  }
+
+  /**
+   * The auto-feeder's portion follows the stock the keeper buys or rehomes for as long as it
+   * sits on the recommended setting (a new tank starts on 1 pinch and an empty tank): like the
+   * shop's advice when you bring fish home. Once the keeper dials in their own portion — or a
+   * preset ships its own — it is left alone.
+   */
+  private feederFollowsStock(world: World): boolean {
+    const af = world.tank.equipment.autoFeeder;
+    const feeds = af.hours ? af.hours.length : 0;
+    if (!af.enabled || feeds === 0) return false;
+    if (world.fish.length === 0) return af.pinches === 1;
+    return af.pinches === recommendedPinches(world, af.food, feeds);
+  }
+
+  private portionFeeder(world: World): void {
+    const af = world.tank.equipment.autoFeeder;
+    const p = recommendedPinches(world, af.food, af.hours.length);
+    if (p !== af.pinches) {
+      af.pinches = p;
+      world.events.emit('tank-settings-changed', {});
     }
   }
 
@@ -1115,8 +1189,8 @@ export class LifeSim implements BreedHost {
     this.chem.crashBacteria(strength);
   }
 
-  compatibility(world: World, species: Species): CompatibilityReport {
-    return compatibilityReport(world, species);
+  compatibility(world: World, species: Species, count?: number): CompatibilityReport {
+    return compatibilityReport(world, species, count);
   }
 
   stocking(world: World): StockingReport {
@@ -1136,5 +1210,15 @@ export class LifeSim implements BreedHost {
 /** Age in months at the start of the step. */
 function f0Months(s: FishState, t0: number): number {
   return (t0 - s.bornAt) / MS_PER_MONTH;
+}
+
+/**
+ * Deaths nobody would notice: unnamed tank-born young in their first weeks (fry, shrimplets,
+ * hatchling snails). Density-dependent loss of young is how real colonies regulate themselves;
+ * it happens out of sight, so it is not journaled, toasted or counted as a death.
+ */
+function quietLoss(f: FishEntity, cause: string, now: number): boolean {
+  const s = f.state;
+  return s.generation > 0 && !s.name && cause !== 'old age' && (now - s.bornAt) / MS_PER_MONTH < 0.5 * f.species.maturityMonths;
 }
 

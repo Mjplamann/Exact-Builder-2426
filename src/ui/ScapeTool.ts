@@ -8,6 +8,7 @@ import { Vector3 } from 'three';
 import type { DecorItem, DecorKind, PlantInstance, PlantSpecies } from '../core/types';
 import { substrateHeight, tankBounds } from '../core/tankGeometry';
 import { DECOR_CATALOG } from '../decor/catalog';
+import { hostAnchor, itemTransform, toLocal, toWorld, type V3 } from '../decor/shapes';
 import type { UIHost } from './context';
 import { iconButton } from './controls';
 import { h, setText, throttle } from './dom';
@@ -29,14 +30,39 @@ interface DragState {
   x0: number;
   y0: number;
   moved: boolean;
-  /** Item base minus the substrate point under the cursor at grab time (xz). */
+  /** Item base minus the grabbed point on the item (xz). */
   offX: number;
   offZ: number;
+  /** Height and depth of the grabbed point: the drag follows the cursor on that horizontal plane. */
+  planeY: number;
+  grabZ: number;
+  /** An epiphyte: released over wood or stone it is tied on again. */
+  epiphyte: boolean;
   /** Burial depth/height above the substrate, preserved while moving. */
   dy: number;
   start: [number, number, number];
   last: [number, number, number];
+  /** Decor: the host's pose and its attached plants' positions at grab time. */
+  before?: HostPose;
+  snap?: Map<string, V3>;
 }
+
+export interface HostPose {
+  position: V3;
+  rotation: V3;
+  scale: number;
+}
+
+const poseOf = (d: DecorItem): HostPose => ({ position: [...d.position], rotation: [...d.rotation], scale: d.scale });
+
+/**
+ * Where a point fixed on a host ends up when the host goes from pose `before` to pose `after`
+ * (rigid: it keeps its spot on the wood or stone through moves, turns and resizes).
+ */
+export function carryOnHost(before: HostPose, after: HostPose, p: V3): V3 {
+  return toWorld(itemTransform(after), toLocal(itemTransform(before), p, [0, 0, 0]), [0, 0, 0]);
+}
+const sameV3 = (a: readonly number[], b: readonly number[] | undefined) => !!b && a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 
 const ROT_STEP = Math.PI / 12; // 15°
 const NO_COVER = { right: 0, bottom: 0 };
@@ -60,6 +86,7 @@ export class ScapeTool {
   private applyDrag: (id: string, kind: 'decor' | 'plant', pos: [number, number, number]) => void;
   private applyWheel: () => void;
   private warnedSubstrate = false;
+  private warnedEpiphyte = false;
   private sel: Selection | null = null;
   /** Canvas rect cached on resize (no layout reads per frame). */
   private rect = { left: 0, top: 0, width: 1, height: 1 };
@@ -102,7 +129,10 @@ export class ScapeTool {
       if (sel.kind === 'decor') {
         const d = sel.item as DecorItem;
         const scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, d.scale * this.pendingScale));
+        const before = poseOf(d);
+        const snap = this.attachedSnapshot(d.id);
         app.updateDecor(d.id, { rotation: [d.rotation[0], d.rotation[1] + this.pendingRot, d.rotation[2]], scale });
+        this.followHost(d.id, before, snap);
       } else {
         const p = sel.item as PlantInstance;
         app.updatePlant(p.id, { rotationY: p.rotationY + this.pendingRot });
@@ -234,9 +264,10 @@ export class ScapeTool {
     if (!item) return false;
     if (hit.kind === 'decor') app.select({ decorId: hit.id });
     else app.select({ plantId: hit.id });
-    const sp = app.substratePointAt(e.clientX, e.clientY);
     const pos = item.position;
     const ground = substrateHeight(w.tank, pos[0], pos[2]);
+    const placement = hit.kind === 'plant' ? w.plants.get((item as PlantInstance).speciesId)?.placement : undefined;
+    const g = hit.point;
     this.drag = {
       kind: hit.kind,
       id: hit.id,
@@ -244,11 +275,16 @@ export class ScapeTool {
       x0: e.clientX,
       y0: e.clientY,
       moved: false,
-      offX: sp ? pos[0] - sp[0] : 0,
-      offZ: sp ? pos[2] - sp[2] : 0,
-      dy: hit.kind === 'plant' && w.plants.get((item as PlantInstance).speciesId)?.placement === 'floating' ? NaN : pos[1] - ground,
+      offX: pos[0] - g.x,
+      offZ: pos[2] - g.z,
+      planeY: g.y,
+      grabZ: g.z,
+      epiphyte: placement === 'epiphyte',
+      dy: placement === 'floating' ? NaN : pos[1] - ground,
       start: [pos[0], pos[1], pos[2]],
       last: [pos[0], pos[1], pos[2]],
+      before: hit.kind === 'decor' ? poseOf(item as DecorItem) : undefined,
+      snap: hit.kind === 'decor' ? this.attachedSnapshot(hit.id) : undefined,
     };
     return true;
   }
@@ -260,12 +296,29 @@ export class ScapeTool {
     d.moved = true;
     const app = this.host.app;
     const t = app.world.tank;
-    const sp = app.substratePointAt(e.clientX, e.clientY);
-    if (!sp) return;
+    // Follow the cursor on the horizontal plane through the grabbed point, so a tall branch
+    // grabbed high in the water moves as naturally as a pebble (a ray from up there may never
+    // reach the substrate). When the view is too shallow for that plane, slide sideways at the
+    // grabbed depth instead.
+    const ray = app.engine.rayFromScreen(e.clientX, e.clientY);
+    const o = ray.origin;
+    const dir = ray.direction;
+    let gx: number;
+    let gz: number;
+    const tp = Math.abs(dir.y) > 0.12 ? (d.planeY - o.y) / dir.y : -1;
+    if (tp > 0) {
+      gx = o.x + dir.x * tp;
+      gz = o.z + dir.z * tp;
+    } else {
+      const ts = Math.abs(dir.z) > 1e-4 ? (d.grabZ - o.z) / dir.z : -1;
+      if (ts <= 0) return;
+      gx = o.x + dir.x * ts;
+      gz = d.grabZ;
+    }
     const b = tankBounds(t);
     const m = 0.02;
-    const x = Math.min(b.halfW - m, Math.max(-b.halfW + m, sp[0] + d.offX));
-    const z = Math.min(b.halfD - m, Math.max(-b.halfD + m, sp[2] + d.offZ));
+    const x = Math.min(b.halfW - m, Math.max(-b.halfW + m, gx + d.offX));
+    const z = Math.min(b.halfD - m, Math.max(-b.halfD + m, gz + d.offZ));
     const ground = substrateHeight(t, x, z);
     // Attached epiphytes are set down on the substrate when dragged off their host.
     const y = Number.isNaN(d.dy) ? d.start[1] : d.kind === 'plant' ? ground : ground + d.dy;
@@ -280,21 +333,47 @@ export class ScapeTool {
     this.drag = null;
     if (!d.moved) return true; // selection already happened on pointer-down
     (this.applyDrag as unknown as { flush(): void }).flush();
-    if (d.kind === 'decor') this.carryAttached(d.id, d.start, d.last);
+    if (d.kind === 'decor') this.followHost(d.id, d.before!, d.snap!);
+    else if (d.epiphyte) this.retie(d.id, e.clientX, e.clientY);
     return true;
   }
 
-  /** Move epiphytes attached to a decor item by the same offset as their host. */
-  private carryAttached(decorId: string, from: [number, number, number], to: [number, number, number]): void {
+  /** An epiphyte let go over wood or stone is tied on there (seated on the host's surface). */
+  private retie(plantId: string, x: number, y: number): void {
+    const hit = this.pick(x, y);
+    if (!hit || hit.kind !== 'decor') return;
     const app = this.host.app;
-    const dx = to[0] - from[0];
-    const dy = to[1] - from[1];
-    const dz = to[2] - from[2];
-    if (Math.abs(dx) + Math.abs(dy) + Math.abs(dz) < 1e-5) return;
+    const host = app.world.tank.decor.find((q) => q.id === hit.id);
+    if (!host || host.kind === 'airstone') return;
+    app.updatePlant(plantId, { attachedTo: host.id, position: hostAnchor(host, hit.point.x, hit.point.z).p });
+  }
+
+  /** Where the plants tied to a host are right now (to tell later whether something moved them). */
+  private attachedSnapshot(hostId: string): Map<string, V3> {
+    const m = new Map<string, V3>();
+    for (const p of this.host.app.world.tank.plants) if (p.attachedTo === hostId) m.set(p.id, [p.position[0], p.position[1], p.position[2]]);
+    return m;
+  }
+
+  /**
+   * Keep epiphytes on a host that was just moved, turned or resized: each keeps its spot on the
+   * wood or stone and turns with it (a rigid carry from the host's old pose to its new one).
+   * Plants something else already carried (their position changed since the snapshot) are left be.
+   */
+  private followHost(hostId: string, before: HostPose, snap: Map<string, V3>): void {
+    if (!snap.size) return;
+    const app = this.host.app;
+    const host = app.world.tank.decor.find((d) => d.id === hostId);
+    if (!host) return;
+    if (sameV3(host.position, before.position) && sameV3(host.rotation, before.rotation) && host.scale === before.scale) return;
+    const after = poseOf(host);
+    const dYaw = host.rotation[1] - before.rotation[1];
+    const moves: { id: string; position: V3; rotationY: number }[] = [];
     for (const p of app.world.tank.plants) {
-      if (p.attachedTo !== decorId) continue;
-      app.updatePlant(p.id, { position: [p.position[0] + dx, p.position[1] + dy, p.position[2] + dz] });
+      if (p.attachedTo !== hostId || !sameV3(p.position, snap.get(p.id))) continue;
+      moves.push({ id: p.id, position: carryOnHost(before, after, p.position), rotationY: p.rotationY + dYaw });
     }
+    for (const m of moves) app.updatePlant(m.id, { position: m.position, rotationY: m.rotationY });
   }
 
   /**
@@ -307,7 +386,7 @@ export class ScapeTool {
     this.drag = null;
     if (!d.moved) return;
     (this.applyDrag as unknown as { flush(): void }).flush();
-    if (d.kind === 'decor') this.carryAttached(d.id, d.start, d.last);
+    if (d.kind === 'decor') this.followHost(d.id, d.before!, d.snap!);
   }
 
   isDragging(): boolean {
@@ -333,17 +412,16 @@ export class ScapeTool {
     let placed: PlantInstance | null = null;
     if (a.placement === 'epiphyte') {
       const hit = this.pick(x, y);
-      if (hit && hit.kind === 'decor') {
-        placed = app.addPlant(a.id, [hit.point.x, hit.point.z], hit.id);
-        if (placed) app.updatePlant(placed.id, { position: [hit.point.x, hit.point.y, hit.point.z] });
-      }
+      // The app seats the epiphyte on the host's surface above the clicked spot (the same anchor
+      // the renderer and colliders use) — one 'plants-changed', no second rebuild.
+      if (hit && hit.kind === 'decor') placed = app.addPlant(a.id, [hit.point.x, hit.point.z], hit.id);
     }
     if (!placed) {
       const p = app.substratePointAt(x, y) ?? (a.placement === 'floating' ? app.surfacePointAt(x, y) : null);
       if (!p) return this.substrateHint();
       placed = app.addPlant(a.id, [p[0], p[2]]);
-      if (placed && a.placement === 'epiphyte' && !this.warnedSubstrate) {
-        this.warnedSubstrate = true;
+      if (placed && a.placement === 'epiphyte' && !this.warnedEpiphyte) {
+        this.warnedEpiphyte = true;
         this.host.toast(`Tip: epiphytes grow best tied to wood or stone — ${this.host.isTouch ? 'tap' : 'click'} a piece of hardscape to attach them.`, 'info');
       }
     }

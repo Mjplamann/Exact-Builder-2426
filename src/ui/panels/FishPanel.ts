@@ -12,6 +12,8 @@ import type { Panel, UIHost } from '../context';
 import { button, confirmButton, iconButton, segmented, select, stepper, tabs } from '../controls';
 import { append, clear, debounce, h, prefs, setClass, setText } from '../dom';
 import {
+  aName,
+  capitalize,
   formatAge,
   formatAgeRange,
   formatCount,
@@ -24,6 +26,7 @@ import {
   localizeUnits,
   plural,
   pluralName,
+  proseName,
 } from '../format';
 import { icon } from '../icons';
 import {
@@ -40,7 +43,7 @@ import {
 } from '../phrases';
 import { VirtualList } from '../VirtualList';
 
-type SortKey = 'name' | 'size-asc' | 'size-desc';
+export type SortKey = 'popular' | 'name' | 'size-asc' | 'size-desc';
 /** LifeSim's report plus a hard block the UI applies (e.g. marine animal in freshwater). */
 type Compat = CompatibilityReport & { blocked?: string };
 type Tab = 'catalog' | 'tank';
@@ -74,6 +77,10 @@ const ROW_H = 68;
 const THUMB = 128;
 const BIG_THUMB = 256;
 const MIN_LEN = 1;
+const AVAILABILITY_RANK: Record<NonNullable<Species['availability']>, number> = { common: 0, uncommon: 1, rare: 2 };
+const TEMPERAMENT_RANK: Record<Temperament, number> = { peaceful: 0, 'semi-aggressive': 1, aggressive: 2, predatory: 3 };
+/** "Popular" order: how often keepers meet it, then how easily it shares a tank (lower first). */
+const popularity = (s: Pick<Species, 'availability' | 'temperament'>) => AVAILABILITY_RANK[s.availability ?? 'uncommon'] * 4 + TEMPERAMENT_RANK[s.temperament];
 /** Thumbnail requests from the virtual list (cancelled when their rows scroll away). */
 const CATALOG_TAG = 'catalog';
 
@@ -102,13 +109,38 @@ export function searchRank(commonName: string, scientificName: string, query: st
   const c = commonName.toLowerCase();
   const sci = scientificName.toLowerCase();
   if (c === q || sci === q) return 0;
-  if (c.startsWith(q)) return 1;
   const words = c.split(/[\s\-()'’,]+/).filter(Boolean);
   const terms = q.split(' ');
+  // Same words in any order ("tetra neon" → Neon Tetra) is as good as exact.
+  if (terms.length === words.length && terms.every((t) => words.includes(t))) return 0;
+  if (c.startsWith(q)) return 1;
   if (terms.every((t) => words.some((w) => w.startsWith(t)))) return 2;
   if (sci.startsWith(q) || terms.every((t) => sci.includes(t))) return 3;
   if (terms.every((t) => c.includes(t))) return 4;
   return 5;
+}
+
+/**
+ * Order catalog results in place (`list` arrives A–Z; Array.sort is stable, so A–Z breaks ties).
+ *  - size: smallest/largest adult first;
+ *  - with a search: relevance bands (searchRank), and within a band the animals keepers actually
+ *    meet first (common, uncommon, rare);
+ *  - 'popular' without a search: commonly kept, peaceful community animals first.
+ */
+export function sortCatalog<T extends Pick<Species, 'id' | 'commonName' | 'scientificName' | 'adultLengthCm' | 'availability' | 'temperament'>>(
+  list: T[],
+  sort: SortKey,
+  query: string,
+): T[] {
+  if (sort === 'size-asc') return list.sort((a, b) => a.adultLengthCm - b.adultLengthCm);
+  if (sort === 'size-desc') return list.sort((a, b) => b.adultLengthCm - a.adultLengthCm);
+  if (query.trim()) {
+    const rank = new Map<string, number>();
+    for (const s of list) rank.set(s.id, searchRank(s.commonName, s.scientificName, query) * 4 + AVAILABILITY_RANK[s.availability ?? 'uncommon']);
+    return list.sort((a, b) => rank.get(a.id)! - rank.get(b.id)!);
+  }
+  if (sort === 'popular') list.sort((a, b) => popularity(a) - popularity(b));
+  return list;
 }
 
 export class FishPanel implements Panel {
@@ -134,6 +166,10 @@ export class FishPanel implements Panel {
   private detailRefresh: (() => void) | null = null;
   private expanded = new Set<string>();
   private dirtyTank = true;
+  /** Text that changes as animals age and grow, refreshed in place (~1 Hz) while the tab is open. */
+  private liveInd: { f: FishEntity; sub: HTMLElement }[] = [];
+  private liveGroups: { list: FishEntity[]; sub: HTMLElement }[] = [];
+  private liveTick = 0;
 
   // Filter controls (kept to re-sync after resets / tank changes)
   private searchInput!: HTMLInputElement;
@@ -172,6 +208,20 @@ export class FishPanel implements Panel {
     });
 
     this.listView = h('div', { class: 'aq-catalog-list' }, this.buildFilters(), this.list.el);
+    // Short screens (a phone in landscape): the search/filter header would leave room for barely
+    // one row, so it tucks away (search stays) once the list is scrolled, and returns at the top.
+    const short = matchMedia('(max-height: 520px)');
+    let tucked = false;
+    this.list.el.addEventListener(
+      'scroll',
+      () => {
+        const top = this.list.el.scrollTop;
+        // Only for lists long enough that tucking can't pull the scroll position back to the top.
+        const want = short.matches && this.results.length * ROW_H > this.list.el.clientHeight + 240 ? (top > 48 ? true : top < 4 ? false : tucked) : false;
+        if (want !== tucked) setClass(this.listView, 'is-tucked', (tucked = want));
+      },
+      { passive: true },
+    );
     this.emptyEl = h('div', { class: 'aq-empty', hidden: true }, 'No species match these filters.');
     this.listView.append(this.emptyEl);
     this.detailEl = h('div', { class: 'aq-detail', hidden: true });
@@ -216,7 +266,8 @@ export class FishPanel implements Panel {
       zone: 'all',
       size: 100,
       fits: false,
-      sort: prefs.get<SortKey>('catalogSort', 'name'),
+      // Commonly kept species first: a newcomer's first page is neons and corys, not oddities.
+      sort: prefs.get<SortKey>('catalogSort', 'popular'),
     };
   }
 
@@ -274,6 +325,7 @@ export class FishPanel implements Panel {
     });
 
     this.sortSel = select<string>('Sort by', [
+      { value: 'popular', label: 'Popular' },
       { value: 'name', label: 'A–Z' },
       { value: 'size-asc', label: 'Smallest' },
       { value: 'size-desc', label: 'Largest' },
@@ -404,15 +456,7 @@ export class FishPanel implements Panel {
       maxLengthCm: Number.isFinite(lim) ? lim : undefined,
       maxTankLiters: this.f.fits ? waterLiters(app.world.tank) : undefined,
     });
-    if (this.f.sort === 'size-asc') res.sort((a, b) => a.adultLengthCm - b.adultLengthCm);
-    else if (this.f.sort === 'size-desc') res.sort((a, b) => b.adultLengthCm - a.adultLengthCm);
-    else if (this.f.query.trim()) {
-      // A–Z within relevance bands (the index is already A–Z; Array.sort is stable).
-      const q = this.f.query;
-      const rank = new Map<string, number>();
-      for (const s of res) rank.set(s.id, searchRank(s.commonName, s.scientificName, q));
-      res.sort((a, b) => rank.get(a.id)! - rank.get(b.id)!);
-    }
+    sortCatalog(res, this.f.sort, this.f.query);
     this.results = res;
     this.host.thumbs.cancelPending(CATALOG_TAG);
     this.list.setItems(res, resetScroll);
@@ -520,11 +564,11 @@ export class FishPanel implements Panel {
   }
 
   /** LifeSim's report, plus hard limits the UI enforces itself (wrong water, tank too small). */
-  private compatibility(sp: Species): Compat {
+  private compatibility(sp: Species, count?: number): Compat {
     const app = this.host.app;
     let rep: CompatibilityReport;
     try {
-      rep = app.compatibility(sp.id);
+      rep = app.compatibility(sp.id, count);
     } catch {
       rep = { level: 'good', issues: [] };
     }
@@ -649,19 +693,23 @@ export class FishPanel implements Panel {
     const compatBox = h('div', { class: 'aq-compat' });
     const inTank = h('span', { class: 'aq-detail-intank' });
     let qty = Math.max(1, Math.min(60, sp.groupSize || 1));
-    const qtyCtl = stepper('animals', qty, 1, 60, (v) => (qty = v));
+    const qtyCtl = stepper('animals', qty, 1, 60, (v) => {
+      qty = v;
+      renderCompat();
+    });
     const add = button('Add to tank', () => {
       const before = app.world.fish.length;
       app.addFish(sp.id, qty);
       // Report what actually arrived (the sim may decline, e.g. an unknown species).
       const n = app.world.fish.length - before;
       if (n <= 0) this.host.toast(`${pluralName(sp.commonName)} couldn’t be added right now.`, 'warning');
-      else if (n === 1) this.host.toast(`A ${sp.commonName} joins your tank — it will explore its new home for a while.`, 'success');
-      else this.host.toast(`${n} ${pluralName(sp.commonName)} added — they’ll explore their new home for a while.`, 'success');
+      else if (n === 1) this.host.toast(`${capitalize(aName(sp.commonName))} joins your tank — it will explore its new home for a while.`, 'success');
+      else this.host.toast(`${n} ${pluralName(proseName(sp.commonName))} join your tank — they’ll explore their new home for a while.`, 'success');
     }, { icon: 'plus', variant: 'primary', cls: 'aq-add-btn' });
 
     const renderCompat = () => {
-      const c = this.compat(sp);
+      // The detail page judges exactly the number on the stepper.
+      const c = this.compatibility(sp, qty);
       clear(compatBox);
       compatBox.className = `aq-compat is-${c.level}`;
       append(compatBox, [
@@ -725,6 +773,8 @@ export class FishPanel implements Panel {
     const sorted = [...groups.values()].sort((a, b) => b.length - a.length || a[0].species.commonName.localeCompare(b[0].species.commonName));
     const scroll = this.tankEl.scrollTop;
     clear(this.tankEl);
+    this.liveInd = [];
+    this.liveGroups = [];
     const total = app.world.fish.length;
     if (!total) {
       this.tankEl.append(
@@ -735,10 +785,9 @@ export class FishPanel implements Panel {
     this.tankEl.append(h('p', { class: 'aq-intank-summary' }, `${formatCount(total)} ${plural(total, 'animal')} · ${sorted.length} ${plural(sorted.length, 'species', 'species')}`));
     for (const list of sorted) {
       const sp = list[0].species;
-      const ages = list.map((f) => now - f.state.bornAt);
-      const minA = Math.min(...ages);
-      const maxA = Math.max(...ages);
-      const ageText = formatAgeRange(minA, maxA);
+      const ageText = this.groupAges(list, now);
+      const groupSub = h('span', { class: 'aq-srow-sub' }, ageText);
+      this.liveGroups.push({ list, sub: groupSub });
       const open = this.expanded.has(sp.id);
       const thumb = this.host.thumbs.immediate(sp, THUMB);
       const img = h('img', { class: `aq-srow-img${thumb.real ? ' is-real' : ''}`, src: thumb.url, alt: '', width: 72, height: 46 });
@@ -747,7 +796,7 @@ export class FishPanel implements Panel {
         'button',
         { type: 'button', class: 'aq-group-head', 'aria-expanded': String(open) },
         h('span', { class: 'aq-srow-thumb' }, img),
-        h('span', { class: 'aq-srow-text' }, h('span', { class: 'aq-srow-name' }, sp.commonName), h('span', { class: 'aq-srow-sub' }, ageText)),
+        h('span', { class: 'aq-srow-text' }, h('span', { class: 'aq-srow-name' }, sp.commonName), groupSub),
         h('span', { class: 'aq-group-count' }, `${list.length}`),
         icon('chevron', 16, 'aq-group-caret'),
       );
@@ -764,9 +813,11 @@ export class FishPanel implements Panel {
         const s = f.state;
         const sex = s.sex === 'male' ? '♂' : s.sex === 'female' ? '♀' : '';
         const label = s.name ?? `${sp.commonName} ${i + 1}`;
+        const sub = h('span', { class: 'aq-ind-sub' }, this.indSub(f, now, units));
+        this.liveInd.push({ f, sub });
         const view = h('button', { type: 'button', class: 'aq-ind-main', title: 'Show in the tank' },
           h('span', { class: 'aq-ind-name' }, label, sex ? h('span', { class: 'aq-ind-sex', 'aria-label': s.sex }, ` ${sex}`) : null),
-          h('span', { class: 'aq-ind-sub' }, `${formatAge(now - s.bornAt)} · ${formatLength(s.lengthCm, units)}${s.generation > 0 ? ` · born here` : ''}`),
+          sub,
         );
         view.addEventListener('click', () => this.host.showFish(s.id));
         const rehome = confirmButton('Rehome', 'Confirm', () => app.removeFish(s.id), { variant: 'quiet', cls: 'aq-btn-small', title: `Rehome ${label} to another keeper` });
@@ -779,9 +830,35 @@ export class FishPanel implements Panel {
     this.tankEl.scrollTop = scroll;
   }
 
+  private groupAges(list: FishEntity[], now: number): string {
+    let minA = Infinity;
+    let maxA = -Infinity;
+    for (const f of list) {
+      const a = now - f.state.bornAt;
+      if (a < minA) minA = a;
+      if (a > maxA) maxA = a;
+    }
+    return formatAgeRange(minA, maxA);
+  }
+
+  private indSub(f: FishEntity, now: number, units: 'metric' | 'imperial'): string {
+    const s = f.state;
+    return `${formatAge(now - s.bornAt)} · ${formatLength(s.lengthCm, units)}${s.generation > 0 ? ' · born here' : ''}`;
+  }
+
   // ------------------------------------------------------------------------------------------
   // Panel lifecycle
   // ------------------------------------------------------------------------------------------
+
+  /** ~4 Hz while open: keep ages and lengths on the "In your tank" tab current (1 Hz is plenty). */
+  refresh(): void {
+    if (this.tab !== 'tank' || this.dirtyTank || (this.liveTick = (this.liveTick + 1) % 4) !== 0) return;
+    const app = this.host.app;
+    const now = app.world.clock.simTime;
+    const units = app.world.settings.units;
+    for (const g of this.liveGroups) setText(g.sub, this.groupAges(g.list, now));
+    for (const r of this.liveInd) setText(r.sub, this.indSub(r.f, now, units));
+  }
 
   onOpen(): void {
     if (this.dirtyTank && this.tab === 'tank') this.renderTank();

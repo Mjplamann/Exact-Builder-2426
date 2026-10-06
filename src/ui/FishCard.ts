@@ -7,7 +7,7 @@ import type { FishEntity } from '../core/types';
 import type { UIHost } from './context';
 import { button, confirmButton, iconButton } from './controls';
 import { h, setClass, setStyle, setText } from './dom';
-import { formatAge, formatLength, humanActivity } from './format';
+import { aName, formatAge, formatLength, humanActivity } from './format';
 import { icon } from './icons';
 
 interface Bar {
@@ -149,7 +149,7 @@ export class FishCard {
     if (s.generation > 0) {
       const names = (s.parents ?? []).map((id) => {
         const p = app.world.fishById.get(id);
-        return p ? (p.state.name ?? `a ${p.species.commonName.toLowerCase()}`) : null;
+        return p ? (p.state.name ?? aName(p.species.commonName)) : null;
       });
       const known = names.filter((n): n is string => !!n);
       lineage = `Born in your tank · generation ${s.generation}${known.length ? ` · parents: ${known.join(' & ')}` : ''}`;

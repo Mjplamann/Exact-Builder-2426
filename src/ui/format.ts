@@ -230,6 +230,23 @@ export function proseName(commonName: string): string {
   return parts.join(' ');
 }
 
+/**
+ * Indefinite article for a name in running prose: "a Neon tetra", "an Otocinclus", "an Endler's
+ * livebearer", "a Uaru" (a "yoo" sound), "an hour". Heuristic, tuned for animal common names.
+ */
+export function article(name: string): 'a' | 'an' {
+  const w = name.trim().toLowerCase();
+  if (/^(u[bcfhjkqrstn][aeiou]|uni|use|usu|uaru|eu|one|once)/.test(w)) return 'a';
+  if (/^(hour|honest|heir|honou?r)/.test(w)) return 'an';
+  return /^[aeiou]/.test(w) ? 'an' : 'a';
+}
+
+/** "a Neon tetra" / "an Otocinclus" (prose case, with the right article). */
+export function aName(commonName: string): string {
+  const p = proseName(commonName);
+  return `${article(p)} ${p}`;
+}
+
 /** Naive English plural for a common name ("Neon Tetra" → "Neon Tetras", "Goby" → "Gobies"). */
 export function pluralName(name: string): string {
   if (/(fish|shrimp|sheep|deer|fry|koi|discus|corydoras|otocinclus|ancistrus)$/i.test(name)) return name;

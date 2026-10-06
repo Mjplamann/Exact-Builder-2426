@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   formatAge,
   formatAgeRange,
@@ -14,9 +14,12 @@ import {
   localizeUnits,
   formatFlow,
   scheduleIsOn,
+  article,
+  aName,
 } from '../src/ui/format';
-import { searchRank } from '../src/ui/panels/FishPanel';
-import { birthMessage } from '../src/ui/Notifier';
+import { searchRank, sortCatalog } from '../src/ui/panels/FishPanel';
+import { carryOnHost } from '../src/ui/ScapeTool';
+import { Notifier, birthMessage, deathMessage } from '../src/ui/Notifier';
 import { ThumbnailLoader } from '../src/ui/thumbs';
 import type { FishRenderer } from '../src/render/fish/FishRenderer';
 import { assessWater, computeNeeds } from '../src/ui/waterHealth';
@@ -205,6 +208,9 @@ describe('review regressions (UI)', () => {
     expect(searchRank('Neon Tetra', 'Paracheirodon innesi', 'neon')).toBeLessThan(searchRank('Black Neon Tetra', 'x', 'neon'));
     expect(searchRank('Cardinal Tetra', 'Paracheirodon axelrodi', 'paracheirodon')).toBe(3);
     expect(searchRank('Anything', 'x', '')).toBe(0);
+    // Word order doesn't matter for an exact match.
+    expect(searchRank('Neon Tetra', 'Paracheirodon innesi', 'tetra neon')).toBe(0);
+    expect(searchRank('Black Neon Tetra', 'x', 'tetra neon')).toBe(2);
   });
 
   it('brood messages read naturally for fish and invertebrates', () => {
@@ -227,5 +233,111 @@ describe('review regressions (UI)', () => {
     expect(loader.pending).toBe(2); // c (still visible) and d (not the catalog's)
     loader.cancelPending();
     expect(loader.pending).toBe(0);
+  });
+});
+
+describe('review regressions (UI, round 2)', () => {
+  it('names take the right article', () => {
+    expect(aName('Neon Tetra')).toBe('a Neon tetra');
+    expect(aName('Otocinclus')).toBe('an Otocinclus');
+    expect(aName("Endler's Livebearer")).toBe("an Endler's livebearer");
+    expect(article('Uaru')).toBe('a');
+    expect(article('Unicorn Tang')).toBe('a');
+    expect(article('Upside-down Catfish')).toBe('an');
+    expect(birthMessage("Endler's Livebearer", 'fish', 1)).toBe("An Endler's livebearer fry was born");
+  });
+
+  it('losses are told gently, in the sim’s own words for the cause', () => {
+    expect(deathMessage('', 'Neon Tetra', true, 'old age')).toBe('One of your Neon tetras passed away peacefully of old age.');
+    expect(deathMessage('Pip', 'Betta', false, 'water too cold')).toBe('Pip, your Betta, passed away because the water was too cold.');
+    expect(deathMessage('', 'Oscar', false, 'starvation')).toBe('Your Oscar passed away after going hungry for too long.');
+  });
+
+  it('a portrait wanted by two requesters survives one of them cancelling', () => {
+    const never = new Promise<string>(() => {});
+    const loader = new ThumbnailLoader({ thumbnail: () => never } as unknown as FishRenderer);
+    const sp = (id: string) => ({ id }) as unknown as Species;
+    loader.request(sp('busy'), 128, () => {}, 'catalog'); // occupies the renderer
+    let got = '';
+    loader.request(sp('a'), 128, () => {}, 'catalog');
+    loader.request(sp('a'), 128, (u) => (got = u)); // e.g. the "In your tank" list
+    loader.cancelPending('catalog');
+    expect(loader.pending).toBe(1);
+    void got;
+  });
+});
+
+describe('gentle reminders', () => {
+  it('a persistent problem is mentioned less and less often, and afresh once it clears', () => {
+    const wp = { ...defaultWaterParams('freshwater', 0), nitrate: 60 };
+    const world = {
+      settings: { careMode: 'realistic' },
+      tank: { waterParams: wp },
+      clock: { simTime: 0 },
+      fish: [],
+      events: { on: () => () => {} },
+    } as unknown as import('../src/core/world').World;
+    const said: string[] = [];
+    const n = new Notifier(world, (m) => said.push(m));
+    const needs = computeNeeds([], 'freshwater');
+    let now = 0;
+    const spy = vi.spyOn(performance, 'now').mockImplementation(() => now);
+    const minutes = (m: number) => {
+      // Fast-forward at "1 min = 1 week": sim time is never the limiting factor here.
+      for (let i = 0; i < m * 60; i++) {
+        now += 1000;
+        world.clock.simTime += 1000 * 10080;
+        n.check(needs, 'metric');
+      }
+    };
+    minutes(31);
+    // Warned at 0, 2, 6, 14, 30 min (intervals 2, 4, 8, 16) — not 16 times.
+    expect(said.length).toBe(5);
+    wp.nitrate = 10;
+    minutes(1);
+    wp.nitrate = 60;
+    minutes(1);
+    expect(said.length).toBe(6); // a fresh episode is announced again
+    spy.mockRestore();
+    n.dispose();
+  });
+});
+
+describe('catalog order', () => {
+  type Row = Parameters<typeof sortCatalog>[0][number];
+  const row = (commonName: string, availability: Species['availability'], temperament: Species['temperament'] = 'peaceful', adultLengthCm = 4): Row =>
+    ({ id: commonName, commonName, scientificName: `${commonName} sp.`, availability, temperament, adultLengthCm }) as Row;
+  const az = (rows: Row[]) => [...rows].sort((a, b) => a.commonName.localeCompare(b.commonName));
+
+  it('a newcomer’s first page is commonly kept, peaceful animals — not Aba Aba', () => {
+    const rows = az([row('Aba Aba', 'uncommon', 'aggressive', 100), row('Neon Tetra', 'common'), row('Afra Cichlid', 'common', 'aggressive'), row('Bronze Cory', 'common')]);
+    expect(sortCatalog(rows, 'popular', '').map((r) => r.commonName)).toEqual(['Bronze Cory', 'Neon Tetra', 'Afra Cichlid', 'Aba Aba']);
+    expect(sortCatalog(az(rows), 'name', '')[0].commonName).toBe('Aba Aba');
+  });
+
+  it('searches rank by relevance, then by how commonly kept', () => {
+    const rows = az([row("Adolfo's Cory", 'rare'), row('Albino Cory', 'common'), row('Bronze Cory', 'common'), row('Cory Cat Shrimp', 'uncommon')]);
+    expect(sortCatalog(rows, 'popular', 'cory').map((r) => r.commonName)).toEqual(['Cory Cat Shrimp', 'Albino Cory', 'Bronze Cory', "Adolfo's Cory"]);
+  });
+});
+
+describe('aquascaping: epiphytes stay on their host', () => {
+  const pose = (x: number, yaw: number, scale = 1) => ({ position: [x, 0.02, 0] as [number, number, number], rotation: [0, yaw, 0] as [number, number, number], scale });
+  it('moves with the host', () => {
+    const p = carryOnHost(pose(0, 0), pose(0.1, 0), [0.05, 0.12, 0.01]);
+    expect(p[0]).toBeCloseTo(0.15, 6);
+    expect(p[1]).toBeCloseTo(0.12, 6);
+    expect(p[2]).toBeCloseTo(0.01, 6);
+  });
+  it('turns with the host and keeps its distance from the pivot', () => {
+    const p = carryOnHost(pose(0, 0), pose(0, Math.PI / 2), [0.05, 0.12, 0]);
+    expect(Math.hypot(p[0], p[2])).toBeCloseTo(0.05, 6);
+    expect(Math.abs(p[0])).toBeLessThan(1e-9 + 1e-6);
+    expect(p[1]).toBeCloseTo(0.12, 6);
+  });
+  it('rides up and out when the host is enlarged', () => {
+    const p = carryOnHost(pose(0, 0), pose(0, 0, 1.5), [0.04, 0.12, 0]);
+    expect(p[0]).toBeCloseTo(0.06, 6);
+    expect(p[1]).toBeCloseTo(0.02 + 0.1 * 1.5, 6);
   });
 });

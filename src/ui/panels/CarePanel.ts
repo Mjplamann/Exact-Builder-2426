@@ -7,7 +7,7 @@ import { FOOD_LIST } from '../../data/foods';
 import type { DeepPartial } from '../../app/AppApi';
 import type { Panel, UIHost } from '../context';
 import { button, section, select, slider, stepper, toggle } from '../controls';
-import { clear, h, setClass, setStyle, setText, throttle } from '../dom';
+import { append, clear, h, setClass, setStyle, setText, throttle } from '../dom';
 import {
   formatDuration,
   formatFlow,
@@ -154,7 +154,8 @@ export class CarePanel implements Panel {
         }
         case 'cycle':
           v = p.note ?? '';
-          note = `bacteria ${Math.round(Math.min(1.5, wp.bacteria) * 100)}% of need`;
+          // bacteria = filter capacity relative to 3× the ammonia load (≥ 1 comfortably cycled).
+          note = `filter capacity ${wp.bacteria >= 1 ? 'ample' : `${Math.round(wp.bacteria * 100)}%`}`;
           break;
       }
       if (t.el.hidden !== hidden) t.el.hidden = hidden;
@@ -198,7 +199,8 @@ export class CarePanel implements Panel {
   private buildStocking(): HTMLElement {
     this.stockBar = h('span', { class: 'aq-meter-fill' });
     this.stockText = h('span', { class: 'aq-hint' });
-    return section('Stocking', h('div', { class: 'aq-meter', role: 'img', 'aria-label': 'Stocking level' }, this.stockBar, h('span', { class: 'aq-meter-tick', style: { left: '80%' } })), this.stockText);
+    // The meter is decorative; the sentence below says the same in words (and is read out).
+    return section('Stocking', h('div', { class: 'aq-meter', 'aria-hidden': 'true' }, this.stockBar, h('span', { class: 'aq-meter-tick', style: { left: '80%' } })), this.stockText);
   }
 
   private paintStocking(): void {
@@ -268,7 +270,8 @@ export class CarePanel implements Panel {
     const flow = slider({
       label: 'Flow',
       min: Math.round(liters * 2),
-      max: Math.round(liters * 12),
+      // Reef keepers run 8–15× (and more, with powerheads); community tanks 4–6×.
+      max: Math.round(liters * (marine ? 20 : 12)),
       step: 10,
       value: e.filter.flowLph,
       format: (v) => `${formatFlow(v, units())} · ${(v / liters).toFixed(1)}× tank/hour`,
@@ -324,8 +327,8 @@ export class CarePanel implements Panel {
       paintPhoto();
     });
 
-    // CO2
-    const co2 = toggle('CO₂ injection', e.co2, (v) => app.setEquipment({ co2: v }), marine ? 'Not used in reef tanks' : 'Lush plant growth; lowers pH slightly during the light period');
+    // CO2 — a planted-tank tool; reef tanks never inject it (it would drag the pH down).
+    const co2 = toggle('CO₂ injection', e.co2, (v) => app.setEquipment({ co2: v }), 'Lush plant growth; lowers pH slightly during the light period');
 
     // Auto-feeder
     const af = e.autoFeeder;
@@ -364,13 +367,13 @@ export class CarePanel implements Panel {
       afPinches.set(eq().autoFeeder.pinches);
     });
 
-    this.equipEl.append(
+    append(this.equipEl, [
       section('Heater', heaterOn.el, heatTarget.el),
       section('Filter', filterOn.el, h('div', { class: 'aq-field aq-field-inline' }, h('span', { class: 'aq-field-label' }, 'Type'), filterType.el), flow.el),
       section('Lighting', onH.el, offH.el, photo, intensity.el, kelvin.el, ramp.el, moon.el),
-      section(marine ? 'Extras' : 'Plants', co2.el),
+      marine && !e.co2 ? null : section('Plants', co2.el),
       section('Auto-feeder', afOn.el, h('div', { class: 'aq-field aq-field-inline' }, h('span', { class: 'aq-field-label' }, 'Food'), afFood.el), h('div', { class: 'aq-field aq-field-inline' }, h('span', { class: 'aq-field-label' }, 'Amount'), afPinches.el), h('div', { class: 'aq-field' }, h('span', { class: 'aq-field-label' }, 'Times'), times)),
-    );
+    ]);
   }
 
   private heaterHint(): string | undefined {

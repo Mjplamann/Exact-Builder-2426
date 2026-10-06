@@ -35,10 +35,28 @@ const MU_AOB = 0.35; // max specific growth (doubling ≈ 2 d)
 const DEATH_AOB = 0.05;
 const MU_NOB = 0.28; // nitrite oxidizers are slower (doubling ≈ 2.5 d) — the classic nitrite lag
 const DEATH_NOB = 0.04;
-const K_AOB = 0.1; // half-saturation (mg N/L)
-const K_NOB = 0.12;
+/**
+ * Half-saturation (mg N/L). Aquarium biofilters are dominated by high-affinity oxidizers
+ * (ammonia-oxidizing archaea, Nitrospira; Sauder 2011, Hovanec 1998), so a mature filter keeps
+ * ammonia and nitrite below test-kit detection (≈0.01–0.03 ppm) rather than at the ≈0.1 ppm
+ * residual of a low-affinity Nitrosomonas/Nitrobacter culture.
+ */
+const K_AOB = 0.05;
+const K_NOB = 0.05;
+/** Oxidation capacity of a colony relative to the rate it sustains at steady state (MU/DEATH). */
+const CAP_AOB = MU_AOB / DEATH_AOB;
+const CAP_NOB = MU_NOB / DEATH_NOB;
+/**
+ * `WaterParams.bacteria` reads 1 when the filter can oxidize this many times the tank's ammonia
+ * production at once — comfortably "cycled": the residual stays below detection even right after
+ * a meal. A colony at steady state on its load reads ≈ 7/3 ≈ 2.3 in good conditions, so ordinary
+ * swings in feeding never flip a mature tank back to "cycling".
+ */
+const CYCLED_HEADROOM = 3;
 /** A pinch of spores/biofilm is always present, so an empty filter can always re-cycle. */
 const SEED_MG_N_PER_DAY = 0.02;
+/** Warming rate of a typical ~1 W/L aquarium heater (°C per hour): 3.6 kJ/h per L ÷ 4.19 kJ/(L·°C). */
+const HEATER_C_PER_HOUR = 0.9;
 /** Alkalinity consumed per mg/L of ammonia-N oxidized (dKH). */
 const KH_PER_MG_N = 7.14 / 17.86;
 
@@ -64,6 +82,18 @@ export function oxygenSaturation(tempC: number, water: WaterType): number {
     8.621949e11 / (T * T * T * T) -
     salinity * (0.017674 - 10.754 / T + 2140.7 / (T * T));
   return Math.exp(lnC);
+}
+
+/**
+ * Environmental activity of the nitrifiers 0..1.6: Q10 ≈ 2 in temperature; an acclimated filter
+ * community keeps most of its activity down to pH ≈ 6 (acid-tolerant archaea and Nitrospira take
+ * over in soft, acidic tanks — blackwater and discus tanks stay cycled) and slows steeply only
+ * below pH ≈ 5.5; it needs oxygen.
+ */
+export function nitrifierActivity(tempC: number, ph: number, oxygen: number): number {
+  const tempF = clamp(Math.pow(2, (tempC - 25) / 10), 0.15, 1.6);
+  const phF = 0.2 + 0.8 * smoothstep(4.5, 6.8, ph);
+  return tempF * phF * smoothstep(0.08, 0.4, oxygen);
 }
 
 /** Fraction of total ammonia present as toxic free NH₃ (Emerson et al. 1975). */
@@ -170,7 +200,13 @@ export class Chemistry {
   attach(tank: TankState, expectedLoadN: number): void {
     const wp = tank.waterParams;
     this.loadN = Math.max(0.3, expectedLoadN);
-    const colony = Math.max(SEED_MG_N_PER_DAY, clamp(wp.bacteria, 0, 3) * this.loadN);
+    // Invert the `bacteria` reading (capacity / (headroom × load)) back to a colony size. A mature
+    // reading (≥ 1) restores at least the steady-state colony; a partial one a proportionally
+    // smaller colony that still has to grow.
+    const envF = Math.max(0.15, nitrifierActivity(wp.temperatureC, wp.ph, wp.oxygen));
+    const b = clamp(wp.bacteria, 0, 3);
+    const fromReading = (b * CYCLED_HEADROOM * this.loadN) / (Math.min(CAP_AOB, CAP_NOB) * envF);
+    const colony = Math.max(SEED_MG_N_PER_DAY, b >= 0.95 ? Math.max(this.loadN, fromReading) : fromReading);
     this.aob = colony;
     this.nob = colony;
     this.pendingN = 0;
@@ -284,20 +320,17 @@ export class Chemistry {
     this.loadN += (tanInMg / Math.max(days, 1e-6) - this.loadN) * relax(days, 3);
 
     // --- nitrification ------------------------------------------------------------------------
-    const tempF = clamp(Math.pow(2, (T - 25) / 10), 0.15, 1.6);
-    const phF = clamp((wp.ph - 5.5) / 1.5, 0.12, 1);
-    const o2F = smoothstep(0.08, 0.4, wp.oxygen);
-    const envF = tempF * phF * o2F;
+    const envF = nitrifierActivity(T, wp.ph, wp.oxygen);
 
     // Ammonia (mg N/L): S' = (S + in/V) / (1 + Vmax·dt/(V(K+S))).
     let sA = Math.max(0, wp.ammonia / NH3_PER_N);
-    const vmaxA = (this.aob * MU_AOB) / DEATH_AOB * envF; // mg N/day
+    const vmaxA = this.aob * CAP_AOB * envF; // mg N/day
     const sA0 = sA + tanInMg / v;
     sA = sA0 / (1 + (vmaxA * days) / (v * (K_AOB + sA0)));
     const oxA = (sA0 - sA) * v; // mg N oxidized
 
     let sN = Math.max(0, wp.nitrite / NO2_PER_N);
-    const vmaxN = (this.nob * MU_NOB) / DEATH_NOB * envF;
+    const vmaxN = this.nob * CAP_NOB * envF;
     const sN0 = sN + oxA / v;
     sN = sN0 / (1 + (vmaxN * days) / (v * (K_NOB + sN0)));
     const oxN = (sN0 - sN) * v;
@@ -312,7 +345,10 @@ export class Chemistry {
     let sNO3 = Math.max(0, wp.nitrate / NO3_PER_N) + oxN / v;
 
     // --- plant uptake: ammonium preferred, then nitrate ---------------------------------------
+    // Assimilating ammonium releases one H⁺ per N; assimilating nitrate takes one up — so plants
+    // return half the alkalinity nitrification consumed (planted tanks lose KH more slowly).
     let plantTan = 0;
+    let plantAlk = 0; // mg N/L: nitrate taken up minus ammonium taken up
     if (inp.plantUptakeN > 0) {
       const cap = (inp.plantUptakeN * days) / v; // mg N/L this step
       const fromA = Math.min(sA * 0.9, cap * (sA / (0.05 + sA)));
@@ -321,6 +357,7 @@ export class Chemistry {
       const rest = cap - fromA;
       const fromN = Math.min(sNO3 * 0.9, rest * (sNO3 / (0.4 + sNO3)));
       sNO3 -= fromN;
+      plantAlk = fromN - fromA;
     }
     this.plantTanN += (plantTan / Math.max(days, 1e-6) - this.plantTanN) * relax(days, 3);
     // Slow denitrification in anoxic pockets (deep sand, live rock interiors).
@@ -332,7 +369,7 @@ export class Chemistry {
     wp.nitrate = sNO3 * NO3_PER_N;
 
     // --- alkalinity & hardness ----------------------------------------------------------------
-    let kh = wp.kh - (oxA / v) * KH_PER_MG_N;
+    let kh = wp.kh - (oxA / v) * KH_PER_MG_N + plantAlk * 0.5 * KH_PER_MG_N;
     const dissolve = smoothstep(8.3, 7.2, wp.ph);
     let buffer = (decor.bufferRate / v) * dissolve * days;
     if (tank.substrate === 'crushed-coral' || tank.substrate === 'aragonite') {
@@ -382,8 +419,16 @@ export class Chemistry {
     const lampHeat = 0.4 * inp.light;
     const heater = tank.equipment.heater;
     const target = heater.on ? Math.max(heater.targetC, room + lampHeat) + lampHeat * 0.4 : room + lampHeat;
-    const tauH = target > T && heater.on ? 1.5 : 4 * Math.cbrt(v / 50); // a heater warms ~1 °C/h
-    wp.temperatureC = T + (target - T) * relax(days * 24, tauH);
+    const hours = days * 24;
+    if (target > T && heater.on) {
+      // A heater sized at the usual ~1 W/L warms the water by at most ≈0.9 °C an hour, easing in
+      // as the thermostat nears its set-point.
+      wp.temperatureC = T + Math.min((target - T) * relax(hours, 1.5), HEATER_C_PER_HOUR * hours);
+    } else {
+      // A glass tank sheds heat to the room with a time constant of ~10 h for 50 L, growing with
+      // volume/surface (∛V): ≈17 h for 250 L — an unheated tank follows the room's daily swing.
+      wp.temperatureC = T + (target - T) * relax(hours, 10 * Math.cbrt(v / 50));
+    }
 
     // --- tannins, cloudiness ------------------------------------------------------------------
     const tanLeach = (decor.tanninRate / v) * (1 - wp.tannins);
@@ -397,10 +442,12 @@ export class Chemistry {
     wp.ph = clamp(this.modelPh(wp), lo, 9.2);
 
     // --- biofiltration (relative to load) -----------------------------------------------------
-    // What the keeper's "is my tank cycled?" means: can the tank process the ammonia it makes?
-    // Nitrifier capacity plus the ammonium the plants are taking up, relative to production.
+    // What the keeper's "is my tank cycled?" means: can the tank process the ammonia it makes, with
+    // room to spare? The nitrifiers' oxidation capacity in today's conditions plus the plants'
+    // ammonium uptake, relative to `CYCLED_HEADROOM` × production (see `attach` for the inverse).
     const load = Math.max(0.3, this.loadN);
-    wp.bacteria = clamp((Math.min(this.aob, this.nob) + this.plantTanN) / load, 0, 3);
+    const cap = Math.min(this.aob * CAP_AOB, this.nob * CAP_NOB) * envF + Math.max(0, inp.plantUptakeN);
+    wp.bacteria = clamp(cap / (CYCLED_HEADROOM * load), 0, 3);
 
     if (inp.zen) this.keepPristine(tank);
   }

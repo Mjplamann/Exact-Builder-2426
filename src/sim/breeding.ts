@@ -165,14 +165,16 @@ export function clutchSize(mode: Reproduction, len: number): number {
 export function fryPredationHazard(census: Census, len: number, cover: number): number {
   const n = census.predatorsFor(len);
   if (n <= 0) return 0;
-  return 0.3 * (1 - Math.exp(-n / 3)) * (1 - 0.85 * clamp01(cover));
+  return 0.3 * (1 - Math.exp(-n / 3)) * (1 - 0.7 * clamp01(cover));
 }
 
 /** Brood multiplier from population size and stocking (soft cap). */
 export function populationScale(census: Census, capacityRatio: number): number {
   const n = census.fishCount;
   const pop = n < 0.75 * POPULATION_SOFT_CAP ? 1 : clamp((POPULATION_SOFT_CAP * 1.05 - n) / (0.3 * POPULATION_SOFT_CAP), 0, 1);
-  const crowd = clamp((2 - capacityRatio) / 0.7, 0, 1);
+  // Crowding (bioload at current sizes vs capacity) curbs breeding from a full tank onwards: fewer
+  // females carry eggs, and fewer young survive the competition for food and space.
+  const crowd = clamp((1.7 - capacityRatio) / 0.7, 0, 1);
   return pop * crowd;
 }
 
@@ -207,12 +209,12 @@ export function breedingTick(
       const len = s.lengthCm;
       let mean = clutchSize(mode, len) * (first ? 0.6 : 1);
       // Mouthbrooders' and seahorses' young are released into a tank full of mouths.
-      if (mode === 'mouthbrooder') mean *= 0.6 * Math.exp(-(host.census.fishCount - st.group.count) / 30) * (0.5 + 0.5 * host.cover);
+      if (mode === 'mouthbrooder') mean *= 0.6 * Math.exp(-othersPer100L(host, st) / 10) * (0.5 + 0.5 * host.cover);
       if (mode === 'pouch-brooder') mean *= 0.02;
       if (mode === 'egg-carrier') mean *= 0.9;
       mean *= populationScale(host.census, capacityRatio);
       // In gentle/zen modes nothing is eaten on screen: only the fry that would have made it are born.
-      if (host.careMode !== 'realistic') mean *= expectedEarlySurvival(host, st.birthLengthCm);
+      if (host.careMode !== 'realistic') mean *= expectedEarlySurvival(host, st.birthLengthCm, guardsYoung(st));
       const count = Math.min(MAX_BROOD, poisson(mean, () => host.rng.next()));
       s.gravidSince = undefined;
       s.lastSpawnAt = now;
@@ -263,30 +265,51 @@ export function breedingTick(
   const experienced = s.lastSpawnAt !== undefined;
   s.lastSpawnAt = now;
   const eggs = clutchSize(mode, s.lengthCm);
-  const survival = eggSurvival(host, st, mode, experienced);
+  let survival = eggSurvival(host, st, mode, experienced);
+  // As for live-bearers: in gentle/zen nothing is eaten on screen, so only the fry that would
+  // have made it through their first weeks hatch (keeps every care mode equally fertile).
+  if (host.careMode !== 'realistic') survival *= expectedEarlySurvival(host, st.birthLengthCm, guardsYoung(st));
   const mean = eggs * survival * populationScale(host.census, capacityRatio);
   const count = Math.min(MAX_BROOD, poisson(mean, () => host.rng.next()));
   if (count > 0) host.queueClutch(f, count, hatchDays(mode), now);
   else host.noteSpawn(f, now);
 }
 
-/** Expected fraction of eggs that become free-swimming fry, by strategy and tank. */
+/** Other animals (not this species' group) per 100 L: how crowded with hungry mouths the tank is. */
+function othersPer100L(host: BreedHost, st: SpeciesStats): number {
+  const c = host.census;
+  return (Math.max(0, c.fishCount - st.group.count) * 100) / Math.max(20, c.liters);
+}
+
+/**
+ * Expected fraction of eggs that become free-swimming fry, by strategy and tank. Egg predation
+ * scales with the *density* of egg-eaters (a 300 L community of 60 fish is as hard on eggs as a
+ * 60 L tank of 12), and dense cover lets a few hatch unseen — the surprise fry of planted tanks.
+ */
 function eggSurvival(host: BreedHost, st: SpeciesStats, mode: Reproduction, experienced: boolean): number {
   const c = host.census;
-  const others = Math.max(0, c.fishCount - st.group.count);
   switch (mode) {
     case 'egg-scatterer':
-    case 'egg-depositor': {
-      // Every fish (parents included) eats eggs; only dense cover and few mouths let any hatch.
-      const eaters = c.predatorsFor(0.12);
-      const base = mode === 'egg-scatterer' ? 0.06 : 0.1;
-      return base * Math.pow(host.cover, 1.5) * Math.exp(-eaters / 4);
-    }
+    case 'egg-depositor':
     case 'substrate-spawner':
-    case 'cave-spawner':
-    case 'bubble-nester': {
+    case 'cave-spawner': {
+      if (!guardsYoung(st)) {
+        // Every fish (parents included) eats eggs; only dense cover and few mouths let any
+        // hatch. Adhesive eggs stuck to glass and leaves (corydoras, rasboras, rainbowfish on
+        // plants) fare better than scattered ones.
+        const eatersPer100L = (c.predatorsFor(0.12) * 100) / Math.max(20, c.liters);
+        const base = mode === 'egg-scatterer' ? 0.03 : 0.1;
+        return base * Math.pow(host.cover, 1.5) * Math.exp(-eatersPer100L / 3);
+      }
+      // Guarding parents keep most mouths away; the more crowded the tank, the more get through.
       const site = mode === 'cave-spawner' ? (host.caves > 0 ? 1 : 0.4) : 0.6 + 0.4 * host.cover;
-      return 0.3 * Math.exp(-others / 12) * site * (experienced ? 1 : 0.35);
+      return 0.3 * Math.exp(-othersPer100L(host, st) / 8) * site * (experienced ? 1 : 0.35);
+    }
+    case 'bubble-nester': {
+      // The male guards the nest only until the fry swim free (3–4 days); then hundreds of
+      // dust-sized fry scatter into a tank full of mouths, and only floating cover hides a few.
+      const eatersPer100L = (c.predatorsFor(0.25) * 100) / Math.max(20, c.liters);
+      return 0.05 * Math.pow(host.cover, 1.5) * Math.exp(-eatersPer100L / 3) * (experienced ? 1 : 0.5);
     }
     case 'demersal-spawner':
     case 'pelagic-spawner':
@@ -296,8 +319,34 @@ function eggSurvival(host: BreedHost, st: SpeciesStats, mode: Reproduction, expe
   }
 }
 
-/** For gentle/zen: the share of live-born young that would survive their first weeks. */
-function expectedEarlySurvival(host: BreedHost, birthLengthCm: number): number {
-  const h = fryPredationHazard(host.census, birthLengthCm, host.cover);
+/**
+ * Species whose parents guard the free-swimming fry for their first weeks: cichlids lead their
+ * school of fry, mouthbrooding mothers take them back in at any alarm, cave-spawning plecos
+ * guard the cave. Rainbowfish and killies that spawn on plants, and bubble-nesting males (they
+ * guard only until the fry swim free), leave the young to fend for themselves.
+ */
+export function guardsYoung(st: Pick<SpeciesStats, 'reproduction' | 'species' | 'territorial'>): boolean {
+  const mode = st.reproduction;
+  if (mode === 'cave-spawner' || mode === 'mouthbrooder') return true;
+  return mode === 'substrate-spawner' && (st.species.family === 'Cichlidae' || st.territorial);
+}
+
+/** Guarded fry face this share of the predation of unguarded ones while the parents watch. */
+export const GUARDED_FRY_RISK = 0.35;
+/** How long parents guard their fry (days). */
+export const GUARD_DAYS = 30;
+
+/**
+ * For gentle/zen: the share of newborn young that would survive their first weeks — the same
+ * hazard realistic mode applies day by day (fry close to the biggest mouth's gape are hard to
+ * catch, guarded fry are shepherded), over the ~18 days it takes to outgrow most mouths.
+ */
+function expectedEarlySurvival(host: BreedHost, birthLengthCm: number, guarded = false): number {
+  const gape = host.census.maxGape;
+  if (!(gape > birthLengthCm)) return 1;
+  const h =
+    fryPredationHazard(host.census, birthLengthCm, host.cover) *
+    (1 - smoothstep(0.3, 1, birthLengthCm / gape)) *
+    (guarded ? GUARDED_FRY_RISK : 1);
   return Math.exp(-h * 18);
 }

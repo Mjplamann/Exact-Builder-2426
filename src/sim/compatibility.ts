@@ -46,7 +46,7 @@ function fmt(n: number): string {
   return Number.isInteger(n) ? `${n}` : n.toFixed(1);
 }
 
-export function compatibilityReport(world: World, sp: Species): CompatibilityReport {
+export function compatibilityReport(world: World, sp: Species, count?: number): CompatibilityReport {
   const tank = world.tank;
   const wp = tank.waterParams;
   const liters = waterLiters(tank);
@@ -168,7 +168,10 @@ export function compatibilityReport(world: World, sp: Species): CompatibilityRep
   // --- stocking -------------------------------------------------------------------------------
   const social = sp.social === 'school' || sp.social === 'shoal' || sp.social === 'colony' || sp.social === 'harem';
   const have = groupCount.get(conspecificKey(sp)) ?? 0;
-  const adding = social ? Math.max(1, sp.groupSize - have) : sp.social === 'pair' && have === 0 ? 2 : 1;
+  const adding =
+    count !== undefined && count > 0
+      ? Math.round(count)
+      : social ? Math.max(1, sp.groupSize - have) : sp.social === 'pair' && have === 0 ? 2 : 1;
   const cap = stockingCapacity(world);
   let load = 0;
   for (const f of world.fish) load += bioloadUnits(f.species);

@@ -46,7 +46,8 @@ export interface AppApi {
   addFish(speciesId: string, count: number): void;
   removeFish(fishId: string): void;
   renameFish(fishId: string, name: string): void;
-  compatibility(speciesId: string): CompatibilityReport;
+  /** Would adding `count` (default: a sensible first group) of this species suit the tank? */
+  compatibility(speciesId: string, count?: number): CompatibilityReport;
   stocking(): StockingReport;
 
   // Feeding & interaction
