@@ -5,7 +5,7 @@ import { RK_BURY, enter, startFlee, steerFish, thinkFish } from './behaviors';
 import { type Brain, SURF_DECOR, SURF_NONE, SURF_PLANT, brainOf } from './brain';
 import { Ctx } from './context';
 import { appetite } from './feeding';
-import { WALL_BACK, WALL_FRONT, WALL_LEFT, WALL_RIGHT } from './habitat';
+import { WALL_BACK, WALL_FRONT, WALL_LEFT, WALL_RIGHT, hit } from './habitat';
 import { integrateInvertFree, startFall, startRetract, startTailflip, steerInvert, thinkInvert } from './inverts';
 import { animateBreathing, integrateSwimmer, type SwimEnv } from './locomotion';
 import { FastRng, TAU, approach, clamp, smoothstep } from './math';
@@ -111,7 +111,8 @@ export class BehaviorSystem {
     }
     const px = ctx.hash.begin(n);
     ctx.brains.length = n;
-    for (const g of ctx.groups.values()) {
+    for (let gi = 0; gi < ctx.groupList.length; gi++) {
+      const g = ctx.groupList[gi];
       g.count = 0;
       g.sumL = 0;
       g.fear = 0;
@@ -239,9 +240,12 @@ export class BehaviorSystem {
     b.thinkT -= dt;
     b.scanT -= dt;
     b.biteT -= dt;
-    // Rest follows the light with a lag of minutes of sim time (fish settle gradually).
-    const tau = Math.max(1.5, 240 / ctx.timeScale);
-    b.rest = approach(b.rest, this.restTarget(b), tau, dt);
+    // Rest follows the light with a lag of minutes of sim time (fish settle gradually), but a
+    // sudden switch-on of the lights wakes sleeping fish within seconds.
+    const target = this.restTarget(b);
+    let tau = Math.max(1.5, 240 / ctx.timeScale);
+    if (target < b.rest - 0.3 && ctx.light > 0.6 && b.p.species.activity !== 'nocturnal') tau = Math.min(tau, 6);
+    b.rest = approach(b.rest, target, tau, dt);
     // Shoal sub-groups reshuffle now and then.
     if (ctx.rng.chance(dt / 90)) b.anchor = Math.floor(ctx.rng.next() * 4);
   }
@@ -252,7 +256,7 @@ export class BehaviorSystem {
     if (b.surf !== SURF_NONE) {
       const climbs = p.move === 'crawler' || (p.move === 'walker' ? p.t.climbs : b.mode === 'graze' || (b.mode === 'rest' && p.t.clings) || (b.mode === 'feed' && p.t.clings));
       const lateral = f.species.group === 'crab' && f.species.body.archetype !== 'hermit-crab';
-      integrateSurface(this.ctx.h, f, b, dt, { climbs, lateral });
+      integrateSurface(this.ctx.h, f, b, dt, climbs, lateral);
       return;
     }
     if (p.move !== 'swimmer' && integrateInvertFree(this.ctx, f, b, dt)) return;
@@ -306,21 +310,9 @@ export class BehaviorSystem {
     k.vel[2] = b.vz;
     k.speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy + b.vz * b.vz);
     k.onSurface = false;
-    if (p.inverted) {
-      // Belly-up catfish: give the renderer the explicit up vector as well.
-      const sp = Math.sin(b.bodyPitch);
-      const ux = -sp * Math.cos(b.yaw), uy = cp, uz = -sp * Math.sin(b.yaw);
-      const fx = k.forward[0], fy = k.forward[1], fz = k.forward[2];
-      // right = forward × up0; rolled up = up0·cos r + right·sin r.
-      const rx = fy * uz - fz * uy, ry = fz * ux - fx * uz, rz = fx * uy - fy * ux;
-      const c = Math.cos(k.roll), s = Math.sin(k.roll);
-      b.up[0] = ux * c + rx * s;
-      b.up[1] = uy * c + ry * s;
-      b.up[2] = uz * c + rz * s;
-      k.up = b.up;
-    } else {
-      k.up = undefined;
-    }
+    // Belly-up swimmers (Synodontis nigriventris) are expressed purely through roll ≈ π; the
+    // renderer applies roll about forward on top of world up.
+    k.up = undefined;
     if (p.move === 'walker') {
       // Swimming shrimp: pleopods beat hard, legs trail.
       k.tailPhase = (k.tailPhase + TAU * 7 * dt) % (TAU * 64);
@@ -376,10 +368,19 @@ export class BehaviorSystem {
     const mx = Math.min(B.halfW * 0.9, Math.max(0.03, 1.5 * L)), mz = Math.min(B.halfD * 0.9, Math.max(0.03, 1.5 * L));
     const rx = () => rng.range(-B.halfW + mx, B.halfW - mx);
     const rz = () => rng.range(-B.halfD + mz, B.halfD - mz);
+    const clear = 0.5 * Math.max(p.depthFrac, p.widthFrac) * L + 0.003;
     const setPos = (x: number, y: number, z: number) => {
-      k.pos[0] = clamp(x, -B.halfW + 0.005, B.halfW - 0.005);
-      k.pos[2] = clamp(z, -B.halfD + 0.005, B.halfD - 0.005);
-      k.pos[1] = clamp(y, h.floor(k.pos[0], k.pos[2]) + 0.003, B.surfaceY - 0.004);
+      // Never start inside rock or wood: nudge up and out until clear.
+      for (let tries = 0; tries < 8; tries++) {
+        k.pos[0] = clamp(x, -B.halfW + 0.005, B.halfW - 0.005);
+        k.pos[2] = clamp(z, -B.halfD + 0.005, B.halfD - 0.005);
+        k.pos[1] = clamp(y, h.floor(k.pos[0], k.pos[2]) + 0.003, B.surfaceY - 0.004);
+        const d = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2]);
+        if (d >= clear || h.nearestIndex < 0) return;
+        x += hit.nx * (clear - d + 0.01) + rng.signed() * 0.02;
+        y += Math.max(0, hit.ny) * (clear - d) + 0.01;
+        z += hit.nz * (clear - d + 0.01) + rng.signed() * 0.02;
+      }
     };
 
     // Fry: beside the mother, or tucked into plants.

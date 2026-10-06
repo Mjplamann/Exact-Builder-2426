@@ -189,6 +189,8 @@ export class LifeSim implements BreedHost {
   private lastPlantsEmitReal = -Infinity;
   private spawnNotedAt = new Map<string, number>();
   private bigWaterChangeAt = -Infinity;
+  /** Until this sim time the seeded filter grows to match the first stock (see `ensure`). */
+  private seedUntil = -Infinity;
   /** Catch-up tallies. */
   private tallyBorn = new Map<string, number>();
   private tallyDied: { name: string; cause: string }[] = [];
@@ -279,6 +281,9 @@ export class LifeSim implements BreedHost {
     this.spawnNotedAt.clear();
     this.bigWaterChangeAt = world.tank.waterParams.lastWaterChange;
     for (const k of Object.keys(this.warnArmed) as WarnKind[]) this.warnArmed[k] = true;
+    // A cycled tank that is still empty has a seeded filter waiting for its first stock: for the
+    // next sim day the colony is sized to whatever the keeper puts in (presets, a new tank).
+    this.seedUntil = world.fish.length === 0 && world.tank.waterParams.bacteria >= 0.9 ? world.clock.simTime + MS_PER_DAY : -Infinity;
   }
 
   /**
@@ -369,6 +374,7 @@ export class LifeSim implements BreedHost {
     // Biology follows the light *schedule* even when the view pins daylight.
     const level = lightScheduleLevel(lights, hour) * clamp01(lights.intensity);
 
+    if (now <= this.seedUntil && world.fish.length > 0) this.chem.seedFor(this.expectedLoadN(world));
     this.autoFeed(world, now - dt * 1000, now, live);
     this.census.build(world, now, this.chem.co2, zen);
     this.capacityRatio = this.census.ratio;
@@ -471,8 +477,10 @@ export class LifeSim implements BreedHost {
         flora.demandCoral += want;
         intake += appetite * want * flora.shareCoral * days;
       }
-      if (L < MICRO_FEEDER_CM && !st.invert) {
-        const want = needMg * 0.9;
+      // Fry graze infusoria; filter-feeders (fan shrimp, feather dusters) strain suspended
+      // particles — micro-fauna, detritus and the crumbs of every feeding.
+      if ((L < MICRO_FEEDER_CM && !st.invert) || st.filterFeeder) {
+        const want = needMg * (st.filterFeeder ? 0.7 : 0.9);
         flora.demandMicro += want;
         intake += appetite * want * flora.shareMicro * days;
       }
@@ -863,9 +871,14 @@ export class LifeSim implements BreedHost {
     if (live && level === 'info') world.events.emit('notify', { message: text, level });
   }
 
+  /**
+   * Plant growth is drawn per frame by the decor renderer; 'plants-changed' (which rebuilds
+   * colliders & cover synchronously in the App) is only needed for noticeably larger plants, so
+   * it is sent sparingly — at most every 30 real seconds — to keep fast-forward smooth.
+   */
   private maybeEmitPlants(world: World): void {
     const real = world.clock.realSeconds;
-    if (this.flora.pendingVisualChange < 0.03 || real - this.lastPlantsEmitReal < 8) return;
+    if (this.flora.pendingVisualChange < 0.05 || real - this.lastPlantsEmitReal < 30) return;
     this.lastPlantsEmitReal = real;
     this.flora.markVisualSynced(world.tank);
     world.events.emit('plants-changed', {});

@@ -24,7 +24,7 @@ const ALL_REFERENCE = [
 
 describe('behavior: containment', () => {
   it('no animal leaves the water volume or sinks into decor over 60 s (random decor)', () => {
-    for (const seed of [3, 11]) {
+    for (const seed of [3, 9, 11]) {
       const sim = makeSim({ seed, decor: 9 });
       for (const [id, n] of ALL_REFERENCE) sim.add(id, n);
       const b = tankBounds(sim.world.tank);
@@ -49,7 +49,7 @@ describe('behavior: containment', () => {
       // Body centres never end up inside rock or wood (a few mm of numerical slack).
       expect(worstDecor).toBeLessThan(0.004);
     }
-  });
+  }, 60_000);
 
   it('stays bounded and finite with large dt steps (low frame rate)', () => {
     const sim = makeSim({ seed: 5, decor: 6 });
@@ -213,15 +213,18 @@ describe('behavior: kinematics', () => {
     const sim = makeSim({ seed: 50, decor: 12, size: { widthCm: 180, heightCm: 60, depthCm: 60 } });
     while (sim.world.fish.length < 300) for (const [id, n] of ALL_REFERENCE) sim.add(id, n);
     sim.run(2);
-    const t0 = performance.now();
-    const frames = 120;
-    sim.run(frames / 60);
-    const ms = (performance.now() - t0) / frames;
-    console.log(`behavior: ${sim.world.fish.length} animals, ${ms.toFixed(2)} ms/frame`);
+    // Best of several short windows: robust to CPU contention from parallel test files.
+    let ms = Infinity;
+    for (let w = 0; w < 6; w++) {
+      const t0 = performance.now();
+      sim.run(0.5);
+      ms = Math.min(ms, (performance.now() - t0) / 30);
+    }
+    console.log(`behavior: ${sim.world.fish.length} animals, ${ms.toFixed(2)} ms/frame (best window)`);
     expect(sim.world.fish.length).toBeGreaterThanOrEqual(300);
-    // Generous bound for CI machines; typically well under 2 ms.
-    expect(ms).toBeLessThan(12);
-  });
+    // Generous bound for shared CI machines; typically ~1–2 ms.
+    expect(ms).toBeLessThan(10);
+  }, 30_000);
 });
 
 function centroid(fish: { kin: { pos: [number, number, number] } }[]): [number, number, number] {

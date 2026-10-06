@@ -83,6 +83,8 @@ export class App implements AppApi {
       }
     };
     this.foodSystem.onDecay = (food) => this.life.onFoodDecay(this.world, food);
+    // Auto-feeder: the life sim schedules feedings; drop real food so fish visibly come to eat.
+    this.life.requestFeed = (kind, pinches) => this.feed(kind, undefined, pinches);
 
     this.wireEvents();
     this.rebuildEnvironment();
@@ -119,6 +121,22 @@ export class App implements AppApi {
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
+  }
+
+  /**
+   * QA helper: advance simulation (clock, environment, life, food, behavior) by `seconds` of real
+   * time in fixed steps without rendering — lets headless screenshots stage scenes reliably even
+   * when software WebGL renders at a few fps.
+   */
+  advance(seconds: number, step = 1 / 30): void {
+    const w = this.world;
+    for (let t = 0; t < seconds; t += step) {
+      const simDt = w.clock.tick(step);
+      computeEnv(w);
+      if (!this.debug.freezeLife) this.life.update(w, simDt);
+      this.foodSystem.update(w, step, simDt);
+      if (!this.debug.freezeBehavior) this.behavior.update(w, step);
+    }
   }
 
   /** One frame. Exposed for tests/screenshots (advance deterministically). */

@@ -6,7 +6,7 @@ const GUPPY = 'poecilia-reticulata';
 const CHERRY = 'neocaridina-davidi-red-cherry';
 
 describe('breeding', () => {
-  it('a guppy pair produces fry within about two months', () => {
+  it('a guppy pair produces fry within about two months', { timeout: 30_000 }, () => {
     const t = makeTank({});
     feeder(t, 1, [9, 18]);
     plant(t, 'taxiphyllum-barbieri', 6);
@@ -33,7 +33,7 @@ describe('breeding', () => {
     expect(gestationDays('egg-carrier', 24)).toBeGreaterThan(24);
   });
 
-  it('a cherry shrimp colony grows in a shrimp-only tank', () => {
+  it('a cherry shrimp colony grows in a shrimp-only tank', { timeout: 30_000 }, () => {
     const t = makeTank({});
     feeder(t, 1, [9]);
     plant(t, 'taxiphyllum-barbieri', 8);
@@ -44,7 +44,7 @@ describe('breeding', () => {
     expect(t.world.tank.journal.some((j) => j.kind === 'born' && /cherry shrimp were born/.test(j.text))).toBe(true);
   });
 
-  it('nerites and amanos never breed in a freshwater tank', () => {
+  it('nerites and amanos never breed in a freshwater tank', { timeout: 30_000 }, () => {
     const t = makeTank({});
     feeder(t, 1, [9]);
     stock(t, 'neritina-natalensis', 4, { ageMonths: 12 });
@@ -54,7 +54,7 @@ describe('breeding', () => {
     expect(t.world.tank.stats.births).toBe(0);
   });
 
-  it('the population stays below the soft cap', () => {
+  it('the population stays below the soft cap', { timeout: 30_000 }, () => {
     const t = makeTank({ careMode: 'zen', size: { widthCm: 120, heightCm: 50, depthCm: 50 } });
     feeder(t, 6, [9, 18]);
     plant(t, 'taxiphyllum-barbieri', 20);

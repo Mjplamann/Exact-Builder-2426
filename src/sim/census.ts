@@ -58,6 +58,7 @@ export interface SpeciesStats {
   grazeSurface: number;
   plantEater: boolean;
   coralNipper: boolean;
+  filterFeeder: boolean;
   /** Hot species fields copied here so per-fish loops stay monomorphic (species JSON shapes vary). */
   adultMale: number;
   adultFemale: number;
@@ -198,6 +199,7 @@ export class Census {
       grazeSurface: g.surface,
       plantEater: sp.traits.includes('plant-eater'),
       coralNipper: sp.traits.includes('coral-nipper'),
+      filterFeeder: sp.diet === 'filter-feeder',
       adultMale: sp.adultLengthCm * sexLengthScale(sp, 'male'),
       adultFemale: sp.adultLengthCm * sexLengthScale(sp, 'female'),
       adultOther: sp.adultLengthCm,

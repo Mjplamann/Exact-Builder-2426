@@ -40,7 +40,7 @@ const candidates = [
 ].filter(Boolean);
 const executablePath = candidates.find((p) => existsSync(p));
 
-const server = await createServer({ server: { port: 0, host: '127.0.0.1' }, logLevel: 'error' });
+const server = await createServer({ server: { port: 0, host: '127.0.0.1', hmr: false, watch: { ignored: ['**/*'] } }, logLevel: 'error' });
 await server.listen();
 const url = server.resolvedUrls.local[0];
 

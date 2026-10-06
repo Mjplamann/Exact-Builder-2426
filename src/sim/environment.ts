@@ -1,6 +1,6 @@
 import type { EnvState, Equipment, TankState } from '../core/types';
 import type { World } from '../core/world';
-import { tankBounds } from '../core/tankGeometry';
+import { SURFACE_GAP_M } from '../core/tankGeometry';
 import { clamp, clamp01, lerp, smoothstep } from './simMath';
 
 /**
@@ -211,7 +211,10 @@ export function computeEnv(world: World): EnvState {
   const l = t.equipment.lights;
   const simTime = world.clock.simTime;
   const hour = localHour(simTime);
-  const b = tankBounds(t);
+  // Same as tankBounds(), without allocating an object every frame.
+  const halfW = t.size.widthCm / 200;
+  const halfD = t.size.depthCm / 200;
+  const surfaceY = t.size.heightCm / 100 - SURFACE_GAP_M;
   const marine = t.water === 'marine';
   const wp = t.waterParams;
 
@@ -231,8 +234,9 @@ export function computeEnv(world: World): EnvState {
 
   // Color: rated Kelvin at full output; during the ramps a warm sunrise/sunset hue (mired blend).
   const rated = clamp(l.colorTempK || 6500, 1500, 30000);
-  // Deep orange only while dim; already a warm white at half output.
-  const warmth = world.settings.dayNight ? Math.pow(1 - smoothstep(0.05, 0.9, level), 1.5) : 0;
+  // Deep orange only while dim; already a warm white at half output. With the lamp off the
+  // color stays at its rated value (nothing should be tinted by a lamp that isn't lit).
+  const warmth = world.settings.dayNight && level > 0 ? Math.pow(1 - smoothstep(0.05, 0.9, level), 1.5) : 0;
   const mired = lerp(1e6 / rated, 1e6 / RAMP_KELVIN, warmth);
   kelvinToLinearRgb(1e6 / mired, env.lightColor);
 
@@ -244,7 +248,7 @@ export function computeEnv(world: World): EnvState {
     roomCheckedReal = real;
   }
   env.roomLight = roomLightAtHour(roomHour);
-  env.surfaceY = b.surfaceY;
+  env.surfaceY = surfaceY;
 
   // --- filter current -------------------------------------------------------------------------
   // Outlet near the back top-left corner; the jet runs along the long axis and bends slightly
@@ -252,9 +256,9 @@ export function computeEnv(world: World): EnvState {
   // turnover (√, jet entrainment) and the return type (a sponge filter barely stirs).
   const f = t.equipment.filter;
   const cur = env.current;
-  cur.origin[0] = -b.halfW + Math.min(0.06, b.halfW * 0.2);
-  cur.origin[1] = b.surfaceY - Math.min(0.06, b.surfaceY * 0.15);
-  cur.origin[2] = -b.halfD + Math.min(0.05, b.halfD * 0.3);
+  cur.origin[0] = -halfW + Math.min(0.06, halfW * 0.2);
+  cur.origin[1] = surfaceY - Math.min(0.06, surfaceY * 0.15);
+  cur.origin[2] = -halfD + Math.min(0.05, halfD * 0.3);
   const dx = 1, dz = 0.18;
   const inv = 1 / Math.hypot(dx, dz);
   cur.dir[0] = dx * inv;
@@ -278,9 +282,11 @@ export function computeEnv(world: World): EnvState {
   let r = marine ? 0.8 : t.water === 'brackish' ? 0.83 : 0.84;
   let gg = marine ? 0.94 : 0.95;
   let bb = marine ? 1.0 : t.water === 'brackish' ? 0.93 : 0.91;
-  r *= 1 - 0.08 * tan;
-  gg *= 1 - 0.3 * tan;
-  bb *= 1 - 0.62 * tan;
+  // Humic/fulvic acids absorb exponentially toward the blue (spectral slope S ≈ 0.016 /nm):
+  // relative to 450 nm, absorption at 530 nm is ~0.3× and at 610 nm ~0.08× — tea, not olive.
+  r *= Math.exp(-1.5 * 0.08 * tan);
+  gg *= Math.exp(-1.5 * 0.35 * tan);
+  bb *= Math.exp(-1.5 * tan);
   const milk = 0.65 * cloud;
   env.waterTint[0] = lerp(r, 0.9, milk);
   env.waterTint[1] = lerp(gg, 0.9, milk);

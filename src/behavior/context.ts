@@ -60,6 +60,8 @@ export class Ctx {
   /** Brains parallel to world.fish (this frame). */
   brains: Brain[] = [];
   readonly groups = new Map<string, SpeciesGroup>();
+  /** Same groups as an array (iterated every frame without allocating an iterator). */
+  readonly groupList: SpeciesGroup[] = [];
   readonly cur = new Float64Array(3);
   readonly v3 = new Float64Array(3);
   rng = new FastRng(12345);
@@ -80,6 +82,7 @@ export class Ctx {
     if (!g) {
       g = new SpeciesGroup(p);
       this.groups.set(id, g);
+      this.groupList.push(g);
     }
     return g;
   }
@@ -88,7 +91,8 @@ export class Ctx {
   updateGroups(dt: number): void {
     const h = this.h;
     const B = h.b;
-    for (const g of this.groups.values()) {
+    for (let gi = 0; gi < this.groupList.length; gi++) {
+      const g = this.groupList[gi];
       if (g.count === 0) continue;
       g.meanL = g.sumL / g.count;
       g.fear /= g.count;

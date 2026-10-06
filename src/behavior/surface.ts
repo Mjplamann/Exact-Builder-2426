@@ -61,13 +61,66 @@ function tangentForward(fish: FishEntity, b: Brain): void {
 
 export function attachSubstrate(h: Habitat, fish: FishEntity, b: Brain): void {
   const k = fish.kin;
-  h.floorNormal(k.pos[0], k.pos[2]);
+  const so = standoff(b);
   b.surf = SURF_SUBSTRATE;
   b.surfIdx = -1;
+  k.pos[1] = h.floor(k.pos[0], k.pos[2]) + so;
+  if (b.p.move !== 'swimmer') stepOutOfDecor(h, fish, b, so);
+  h.floorNormal(k.pos[0], k.pos[2]);
   setNormal(fish, b, hit.nx, hit.ny, hit.nz);
-  k.pos[1] = hit.d + standoff(b);
+  k.pos[1] = hit.d + so;
   tangentForward(fish, b);
 }
+
+/**
+ * Walk a substrate-bound animal horizontally out of any decor it overlaps (the buried base of a
+ * rock, under a low branch), turning it away. A few iterations handle unions of colliders.
+ */
+function stepOutOfDecor(h: Habitat, fish: FishEntity, b: Brain, so: number): void {
+  const k = fish.kin;
+  const f = k.forward;
+  let turnX = 0, turnZ = 0;
+  for (let it = 0; it < 6; it++) {
+    const dd = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
+    if (dd >= so * 0.9 || h.nearestIndex < 0) break;
+    const ci = h.nearestIndex;
+    let nx = hit.nx, nz = hit.nz;
+    let hl = Math.sqrt(nx * nx + nz * nz);
+    if (hl < 0.25) {
+      // Under a low branch: use the horizontal gradient of the distance field.
+      const e = 0.004, x = k.pos[0], y = k.pos[1], z = k.pos[2];
+      nx = h.sdf(ci, x + e, y, z) - h.sdf(ci, x - e, y, z);
+      nz = h.sdf(ci, x, y, z + e) - h.sdf(ci, x, y, z - e);
+      hl = Math.sqrt(nx * nx + nz * nz);
+      if (hl < 1e-6) {
+        nx = -f[0];
+        nz = -f[2];
+        hl = Math.sqrt(nx * nx + nz * nz) || 1;
+      }
+      nx /= hl;
+      nz /= hl;
+      hl = 0.35;
+    } else {
+      nx /= hl;
+      nz /= hl;
+    }
+    const push = (so - dd) / Math.max(0.35, hl) + 0.001;
+    k.pos[0] += nx * push;
+    k.pos[2] += nz * push;
+    k.pos[1] = h.floor(k.pos[0], k.pos[2]) + so;
+    turnX = nx;
+    turnZ = nz;
+  }
+  const B = h.b;
+  k.pos[0] = clamp(k.pos[0], -B.halfW + so, B.halfW - so);
+  k.pos[2] = clamp(k.pos[2], -B.halfD + so, B.halfD - so);
+  const d = f[0] * turnX + f[2] * turnZ;
+  if (d < 0) {
+    f[0] -= 1.6 * d * turnX;
+    f[2] -= 1.6 * d * turnZ;
+  }
+}
+
 
 export function attachGlass(h: Habitat, fish: FishEntity, b: Brain, wall: number): void {
   const k = fish.kin;
@@ -155,18 +208,13 @@ export function attachNearest(h: Habitat, fish: FishEntity, b: Brain, reach: num
   return true;
 }
 
-export interface SurfaceMoveOpts {
-  /** May move onto glass and decor (snails, climbing shrimp, clinging fish). */
-  climbs: boolean;
-  /** Crabs walk sideways: the body stays perpendicular to the direction of travel. */
-  lateral: boolean;
-}
-
 /**
  * One sub-step of walking/crawling toward (b.sx, b.sy, b.sz) at speed b.ds over the current
  * surface, with surface transitions.
+ *  - `climbs`: may move onto glass and decor (snails, climbing shrimp, clinging fish).
+ *  - `lateral`: crabs walk sideways — the body stays perpendicular to the direction of travel.
  */
-export function integrateSurface(h: Habitat, fish: FishEntity, b: Brain, dt: number, opts: SurfaceMoveOpts): void {
+export function integrateSurface(h: Habitat, fish: FishEntity, b: Brain, dt: number, climbs: boolean, lateral: boolean): void {
   const k = fish.kin;
   if (b.surf === SURF_PLANT) {
     b.speed = 0;
@@ -198,7 +246,7 @@ export function integrateSurface(h: Habitat, fish: FishEntity, b: Brain, dt: num
     dz /= dl;
     // Which body axis should point along d? (forward, or ±left for crabs.)
     let ax = f[0], ay = f[1], az = f[2];
-    if (opts.lateral) {
+    if (lateral) {
       const side = dx * lx + dy * ly + dz * lz;
       moveSign = side >= 0 ? 1 : -1;
       ax = lx * moveSign;
@@ -233,7 +281,7 @@ export function integrateSurface(h: Habitat, fish: FishEntity, b: Brain, dt: num
 
   // Move.
   let mx = f[0], my = f[1], mz = f[2];
-  if (opts.lateral) {
+  if (lateral) {
     mx = lx * moveSign;
     my = ly * moveSign;
     mz = lz * moveSign;
@@ -245,7 +293,7 @@ export function integrateSurface(h: Habitat, fish: FishEntity, b: Brain, dt: num
   k.pos[1] += b.vy * dt;
   k.pos[2] += b.vz * dt;
 
-  reproject(h, fish, b, opts.climbs);
+  reproject(h, fish, b, climbs);
 }
 
 /** Keep the animal glued to its surface and handle surface-to-surface transitions. */
@@ -278,41 +326,15 @@ export function reproject(h: Habitat, fish: FishEntity, b: Brain, climbs: boolea
         f[2] -= 2 * d * hit.nz;
       }
     }
-    // Decor.
+    // Decor: climb onto it, or step around its base.
     const dd = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
     if (dd < so * 0.9 && h.nearestIndex >= 0) {
-      const ci = h.nearestIndex;
-      const hl = Math.sqrt(hit.nx * hit.nx + hit.nz * hit.nz);
-      let nx: number, nz: number;
-      if (hl > 0.25) {
-        nx = hit.nx / hl;
-        nz = hit.nz / hl;
-      } else {
-        // Under a low branch: back out the way we came.
-        const fl = Math.sqrt(f[0] * f[0] + f[2] * f[2]) || 1;
-        nx = -f[0] / fl;
-        nz = -f[2] / fl;
-      }
       if (climbs) {
-        attachDecor(h, fish, b, ci);
+        attachDecor(h, fish, b, h.nearestIndex);
         // (attachDecor may fall back to the substrate; TS keeps the earlier narrowing.)
         if ((b.surf as number) === SURF_DECOR) return;
-        // (The contact point was underground: walk around the base instead.)
       }
-      // Step out horizontally until clear (a couple of iterations for concave unions).
-      for (let it = 0; it < 3; it++) {
-        const dd2 = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
-        if (dd2 >= so * 0.9) break;
-        const push = (so - dd2) / Math.max(0.25, hl) + 0.001;
-        k.pos[0] += nx * push;
-        k.pos[2] += nz * push;
-        k.pos[1] = h.floor(k.pos[0], k.pos[2]) + so;
-      }
-      const d = f[0] * nx + f[2] * nz;
-      if (d < 0) {
-        f[0] -= 1.6 * d * nx;
-        f[2] -= 1.6 * d * nz;
-      }
+      stepOutOfDecor(h, fish, b, so);
     }
     h.floorNormal(k.pos[0], k.pos[2]);
     k.pos[1] = hit.d + so;

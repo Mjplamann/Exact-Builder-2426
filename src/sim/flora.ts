@@ -327,7 +327,9 @@ export class Flora {
     this.sharePlant = this.demandPlant > 0 ? Math.min(1, plantSupply / this.demandPlant) : 0;
     const coralSupply = coral * PLANT_MG_PER_B * 0.03;
     this.shareCoral = this.demandCoral > 0 ? Math.min(1, coralSupply / this.demandCoral) : 0;
-    const micro = (floorArea * (10 + 60 * this.cover) + leaf * 20) * maturity + inp.detritusMgDay * 0.05;
+    // Infusoria & suspended fines: produced on surfaces and plants, plus fine detritus and the
+    // crumbs of every feeding.
+    const micro = (floorArea * (10 + 60 * this.cover) + leaf * 20) * maturity + inp.detritusMgDay * 0.15;
     this.shareMicro = this.demandMicro > 0 ? Math.min(1, micro / this.demandMicro) : 1;
   }
 

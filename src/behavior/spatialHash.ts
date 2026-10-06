@@ -4,7 +4,6 @@
  * Int32Array.
  */
 export class SpatialHash {
-  private cell = 0.1;
   private inv = 10;
   private nx = 1;
   private ny = 1;
@@ -20,7 +19,6 @@ export class SpatialHash {
 
   /** Configure the grid for a box [min, max] with the given cell size (m). */
   configure(minX: number, minY: number, minZ: number, maxX: number, maxY: number, maxZ: number, cell: number): void {
-    this.cell = cell;
     this.inv = 1 / cell;
     this.ox = minX;
     this.oy = minY;

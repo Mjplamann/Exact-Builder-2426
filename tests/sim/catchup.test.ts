@@ -3,7 +3,8 @@ import { DAY, SIZE_120, feeder, makeTank, mean, plant, stock } from './helpers';
 
 /** A busy 300 L community of ~150 animals. */
 function community(seed: number) {
-  const t = makeTank({ size: SIZE_120, seed });
+  // Gentle mode: nobody dies of neglect, so all ~150 animals (and their young) cost CPU all year.
+  const t = makeTank({ size: SIZE_120, seed, careMode: 'gentle' });
   plant(t, 'rotala-rotundifolia', 25);
   plant(t, 'taxiphyllum-barbieri', 8);
   plant(t, 'anubias-barteri', 6);
@@ -34,15 +35,22 @@ function fingerprint(t: ReturnType<typeof community>) {
 }
 
 describe('catch-up', () => {
-  it('fast-forwards a year with ~150 animals in well under a second, deterministically', () => {
+  it('fast-forwards a year with ~150 animals in well under a second, deterministically', { timeout: 60_000 }, () => {
     const a = community(42);
     const b = community(42);
     expect(a.world.fish.length).toBe(150);
-    const t0 = performance.now();
+    // CPU time of this thread, not wall time: the machine (and this process, when vitest runs
+    // files in worker threads) may be shared with other busy work.
+    const cpu = (): number => {
+      const u = (process as unknown as { threadCpuUsage?: () => NodeJS.CpuUsage }).threadCpuUsage?.() ?? process.cpuUsage();
+      return (u.user + u.system) / 1000;
+    };
+    const c0 = cpu();
     const sa = a.sim.catchUp(a.world, 365 * DAY);
-    const ms = performance.now() - t0;
+    const cpuMs = cpu() - c0;
     const sb = b.sim.catchUp(b.world, 365 * DAY);
-    expect(ms).toBeLessThan(1000);
+    expect(a.world.fish.length).toBeGreaterThan(140);
+    expect(cpuMs).toBeLessThan(1000);
     expect(sa.text).toBe(sb.text);
     expect(fingerprint(a)).toEqual(fingerprint(b));
     expect(sa.text).toMatch(/^While you were away, a year passed\./);

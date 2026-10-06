@@ -240,6 +240,17 @@ export class Chemistry {
     tank.waterParams.ammonia += (mgN / v) * NH3_PER_N;
   }
 
+  /**
+   * A mature, seeded filter sized for `loadN` (mg N/day): used while a freshly set-up cycled tank
+   * is first stocked, so the keeper's planned stock doesn't trigger a new-tank cycle.
+   */
+  seedFor(loadN: number): void {
+    if (!(loadN > 0)) return;
+    this.aob = Math.max(this.aob, loadN);
+    this.nob = Math.max(this.nob, loadN);
+    this.loadN = Math.max(this.loadN, loadN);
+  }
+
   /** Kill a fraction of the nitrifying bacteria (medication, filter cleaned in tap water). */
   crashBacteria(fraction: number): void {
     const k = 1 - clamp01(fraction);

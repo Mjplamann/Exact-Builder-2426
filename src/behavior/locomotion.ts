@@ -175,8 +175,11 @@ export function constrainSwimmer(h: Habitat, fish: FishEntity, b: Brain): void {
   const half = 0.47 * L;
   const B = h.b;
 
-  // Decor first (then glass so we never get pushed through the glass by a rock).
-  for (let it = 0; it < 2; it++) {
+  // Decor first (then glass so we never get pushed through the glass by a rock). Fish in open
+  // water (centre farther than half a body from any decor) need no further checks.
+  const d0 = h.colliders.length > 0 ? h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner) : Infinity;
+  const nearDecor = d0 < half + Math.max(rSide, rVert) + 0.005;
+  for (let it = 0; it < (nearDecor ? 2 : 0); it++) {
     for (let s = -1; s <= 1; s++) {
       const off = s * half * 0.9;
       const px = k.pos[0] + fx * off, py = k.pos[1] + fy * off, pz = k.pos[2] + fz * off;
@@ -192,8 +195,9 @@ export function constrainSwimmer(h: Habitat, fish: FishEntity, b: Brain): void {
     }
   }
 
-  const ex = half * Math.abs(fx) + rSide;
-  const ez = half * Math.abs(fz) + rSide;
+  // (Capped so a fish longer than the tank is deep still keeps its centre inside.)
+  const ex = Math.min(half * Math.abs(fx) + rSide, B.halfW * 0.98);
+  const ez = Math.min(half * Math.abs(fz) + rSide, B.halfD * 0.98);
   const ey = half * Math.abs(fy) + rVert;
   k.pos[0] = clamp(k.pos[0], -B.halfW + ex, B.halfW - ex);
   k.pos[2] = clamp(k.pos[2], -B.halfD + ez, B.halfD - ez);
@@ -207,6 +211,30 @@ export function constrainSwimmer(h: Habitat, fish: FishEntity, b: Brain): void {
   const maxY = h.b.surfaceY - (b.surfaceOk ? Math.max(0.001, half * Math.max(0, fy) * 0.98 + rVert * 0.25) : ey + 0.003);
   if (k.pos[1] < minY) k.pos[1] = minY;
   if (k.pos[1] > maxY) k.pos[1] = Math.max(minY, maxY);
+  if (k.pos[1] > B.surfaceY - 0.002) k.pos[1] = B.surfaceY - 0.002;
+
+  // Rare case: wedged between a rock and the substrate/glass (the decor push and the floor or
+  // wall clamp fight). Escape sideways along the horizontal distance gradient, then upward.
+  const need = Math.min(rSide, rVert) * 0.5;
+  let d = nearDecor ? h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner) : Infinity;
+  if (d < need && h.nearestIndex >= 0) {
+    const ci = h.nearestIndex;
+    const e = 0.004, x = k.pos[0], y = k.pos[1], z = k.pos[2];
+    const gx = h.sdf(ci, x + e, y, z) - h.sdf(ci, x - e, y, z);
+    const gz = h.sdf(ci, x, y, z + e) - h.sdf(ci, x, y, z - e);
+    const gl = Math.sqrt(gx * gx + gz * gz);
+    if (gl > 1e-6) {
+      const step = need - d + 0.002;
+      k.pos[0] = clamp(k.pos[0] + (gx / gl) * step * 1.5, -B.halfW + ex, B.halfW - ex);
+      k.pos[2] = clamp(k.pos[2] + (gz / gl) * step * 1.5, -B.halfD + ez, B.halfD - ez);
+      d = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
+    }
+    for (let it = 0; it < 12 && d < need; it++) {
+      k.pos[1] = Math.min(maxY, k.pos[1] + Math.max(0.004, need - d));
+      d = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
+      if (k.pos[1] >= maxY) break;
+    }
+  }
 }
 
 /**

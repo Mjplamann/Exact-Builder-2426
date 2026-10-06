@@ -35,6 +35,10 @@ function smallestAdult(sp: Species): number {
 function largestAdult(sp: Species): number {
   return sp.adultLengthCm * Math.max(sexLengthScale(sp, 'male'), sexLengthScale(sp, 'female'));
 }
+/** Prey whose size, not armor, decides whether it gets eaten (fish and shrimp). */
+function swallowable(sp: Species): boolean {
+  return sp.group === 'fish' || sp.group === 'shrimp';
+}
 function plural(sp: Species): string {
   return pluralName(lowerName(sp.commonName));
 }
@@ -81,7 +85,10 @@ export function compatibilityReport(world: World, sp: Species): CompatibilityRep
   const T = wp.temperatureC;
   const [tlo, thi] = sp.tempC;
   const dT = T < tlo ? tlo - T : T > thi ? T - thi : 0;
-  if (dT > 0.5)
+  if (thi < 21)
+    // Heaters only heat: a room-temperature tank sits around 22 °C.
+    add('bad', `${they} are cold-water animals (${fmt(tlo)}–${fmt(thi)} °C) — a tank at room temperature is too warm without a chiller.`);
+  else if (dT > 0.5)
     add(dT > 3 ? 'bad' : 'caution', `${they} like ${fmt(tlo)}–${fmt(thi)} °C; the water is ${T.toFixed(1)} °C.`);
   const [plo, phi] = sp.ph;
   const dP = wp.ph < plo ? plo - wp.ph : wp.ph > phi ? wp.ph - phi : 0;
@@ -108,13 +115,13 @@ export function compatibilityReport(world: World, sp: Species): CompatibilityRep
     const rp = plural(r);
     if (r.id !== sp.id) {
       // We eat them.
-      if (isPredator(sp) && !isInvertebrate(r) && smallestAdult(r) <= newGape)
-        add('bad', `Adult ${plural(sp)} (${fmt(sp.adultLengthCm)} cm) eat fish small enough to swallow — like your ${rp}.`);
+      if (isPredator(sp) && swallowable(r) && smallestAdult(r) <= newGape)
+        add('bad', `Adult ${plural(sp)} (${fmt(sp.adultLengthCm)} cm) eat anything small enough to swallow — like your ${rp}.`);
       else if (!isPredator(sp) && sp.group === 'fish' && largestAdult(sp) >= 12 && !isInvertebrate(r) && largestAdult(r) <= largestAdult(sp) * 0.2)
         add('caution', `Large ${plural(sp)} may snack on tiny ${rp}.`);
       // They eat us.
       const theirGape = largestAdult(r) * gapeRatio(r);
-      if (isPredator(r) && !isInvertebrate(sp) && smallestAdult(sp) <= theirGape)
+      if (isPredator(r) && swallowable(sp) && smallestAdult(sp) <= theirGape)
         add('bad', `Your ${rp} (${fmt(r.adultLengthCm)} cm as adults) will eat ${plural(sp)}.`);
       else if (!isPredator(r) && r.group === 'fish' && largestAdult(r) >= 12 && !isInvertebrate(sp) && largestAdult(sp) <= largestAdult(r) * 0.2)
         add('caution', `Your large ${rp} may snack on ${plural(sp)}.`);
@@ -123,9 +130,9 @@ export function compatibilityReport(world: World, sp: Species): CompatibilityRep
         add('bad', `${they} hunt shrimp and snails — your ${rp} would be eaten.`);
       if (isInvertEater(r) && (sp.group === 'shrimp' || sp.group === 'snail' || sp.group === 'crab'))
         add('bad', `Your ${rp} hunt shrimp and snails.`);
-      if (sp.group === 'shrimp' && largestAdult(sp) <= 3.5 && r.group === 'fish' && !isInvertEater(r) && largestAdult(r) >= 4 * largestAdult(sp) && r.diet !== 'herbivore' && r.diet !== 'algae-grazer')
+      if (sp.group === 'shrimp' && largestAdult(sp) <= 3.5 && r.group === 'fish' && !isInvertEater(r) && !isPredator(r) && largestAdult(r) >= 4 * largestAdult(sp) && r.diet !== 'herbivore' && r.diet !== 'algae-grazer')
         add('caution', `Your ${rp} will pick off baby ${plural(sp)} and may chase the adults.`);
-      if (r.group === 'shrimp' && largestAdult(r) <= 3.5 && sp.group === 'fish' && !isInvertEater(sp) && largestAdult(sp) >= 4 * largestAdult(r) && sp.diet !== 'herbivore' && sp.diet !== 'algae-grazer')
+      if (r.group === 'shrimp' && largestAdult(r) <= 3.5 && sp.group === 'fish' && !isInvertEater(sp) && !isPredator(sp) && largestAdult(sp) >= 4 * largestAdult(r) && sp.diet !== 'herbivore' && sp.diet !== 'algae-grazer')
         add('caution', `${they} will pick off baby ${rp}.`);
       // Fin-nipping.
       if (sp.traits.includes('fin-nipper') && isLongFinned(r)) add('bad', `${they} nip fins — your ${rp} have long, flowing fins.`);

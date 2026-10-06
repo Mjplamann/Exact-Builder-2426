@@ -331,9 +331,10 @@ export class FoodSystem {
     const B = h.b;
     const env = h.world.env;
     h.current(env, t, f.pos[0], B.surfaceY - 0.003, f.pos[2], cur);
-    // Spreading velocity decays (τ ≈ 2 s); the film is carried by the current.
-    f.vel[0] = approach(f.vel[0], cur[0] * 0.9, 2, dt);
-    f.vel[2] = approach(f.vel[2], cur[2] * 0.9, 2, dt);
+    // Spreading velocity decays (τ ≈ 2 s); the film carries floating food at a little under the
+    // water speed (partly submerged flakes drag in the surface boundary layer).
+    f.vel[0] = approach(f.vel[0], cur[0] * 0.65, 2, dt);
+    f.vel[2] = approach(f.vel[2], cur[2] * 0.65, 2, dt);
     f.vel[1] = 0;
     f.pos[0] += f.vel[0] * dt;
     f.pos[2] += f.vel[2] * dt;

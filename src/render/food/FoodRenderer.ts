@@ -105,9 +105,12 @@ function hash01(n: number): number {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 
+/** Shape → batch slot. */
+const SLOT = new Map<FoodShape, number>(MESH_SHAPES.map((s, i) => [s, i]));
+
 export class FoodRenderer {
-  private batches = new Map<FoodShape, Batch>();
-  private counts = new Map<FoodShape, number>();
+  private batches: Batch[] = [];
+  private counts = new Int32Array(MESH_SHAPES.length);
   private cloud: Points;
   private cloudGeo: BufferGeometry;
   private cloudMat: ShaderMaterial;
@@ -116,15 +119,15 @@ export class FoodRenderer {
   constructor(private engine: Engine) {
     for (const shape of MESH_SHAPES) {
       const type = FOOD_LIST.find((f) => f.shape === shape);
-      this.batches.set(shape, this.makeBatch(shape, type, 64));
-      this.counts.set(shape, 0);
+      this.batches.push(this.makeBatch(shape, type, 64));
     }
     // Phytoplankton: soft green puffs.
     this.cloudGeo = new BufferGeometry();
     this.cloudMat = new ShaderMaterial({
       uniforms: {
         uScale: { value: 800 },
-        uColor: { value: new Color(FOODS.phytoplankton.color).convertSRGBToLinear() },
+        // (Color() from a hex string is already converted to the linear working space.)
+        uColor: { value: new Color(FOODS.phytoplankton.color) },
         uLight: { value: 1 },
       },
       vertexShader: /* glsl */ `
@@ -145,7 +148,8 @@ export class FoodRenderer {
         void main() {
           float r = length(gl_PointCoord - 0.5) * 2.0;
           float a = 1.0 - smoothstep(0.0, 1.0, r);
-          gl_FragColor = vec4(uColor * uLight, a * a * vAlpha);
+          // A lit suspension of microalgae scatters light: a soft, slightly milky green.
+          gl_FragColor = vec4(uColor * (0.5 + 1.1 * uLight) + 0.015 * uLight, a * a * vAlpha);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`,
@@ -228,20 +232,20 @@ export class FoodRenderer {
     void dt;
     const food = world.food;
     // Pass 1: count per shape (grow buffers if needed).
-    for (const s of MESH_SHAPES) this.counts.set(s, 0);
+    this.counts.fill(0);
     let clouds = 0;
     for (let i = 0; i < food.length; i++) {
       const type = FOODS[food[i].kind];
       if (!type || food[i].state === 'eaten') continue;
       if (type.shape === 'cloud') clouds++;
-      else this.counts.set(type.shape, (this.counts.get(type.shape) ?? 0) + 1);
+      else this.counts[SLOT.get(type.shape) ?? 1]++;
     }
-    for (const s of MESH_SHAPES) {
-      const need = this.counts.get(s) ?? 0;
-      let b = this.batches.get(s)!;
+    for (let si = 0; si < MESH_SHAPES.length; si++) {
+      const need = this.counts[si];
+      let b = this.batches[si];
       if (need > b.capacity) {
-        b = this.makeBatch(s, undefined, Math.ceil(need * 1.5), b);
-        this.batches.set(s, b);
+        b = this.makeBatch(MESH_SHAPES[si], undefined, Math.ceil(need * 1.5), b);
+        this.batches[si] = b;
       }
       b.count = 0;
     }
@@ -261,16 +265,18 @@ export class FoodRenderer {
       if (type.shape === 'cloud') {
         posA.setXYZ(ci, f.pos[0], f.pos[1], f.pos[2]);
         const age = f.age;
+        // Puffs swell as the dose mixes in, and fade as it disperses (~1–2 min).
         alphaA.setX(ci, 0.07 * (r.alpha ?? Math.exp(-age / 55)) * Math.min(1, age * 3));
-        sizeA.setX(ci, Math.min(0.06, 0.012 + age * 0.0005));
+        sizeA.setX(ci, Math.min(0.07, 0.02 + age * 0.0008));
         ci++;
         continue;
       }
-      const b = this.batches.get(type.shape)!;
+      const b = this.batches[SLOT.get(type.shape) ?? 1];
       const k = b.count++;
       this.writeInstance(b, k, f, type, r, sim);
     }
-    for (const b of this.batches.values()) {
+    for (let si = 0; si < this.batches.length; si++) {
+      const b = this.batches[si];
       b.mesh.count = b.count;
       if (b.count > 0) {
         b.mesh.instanceMatrix.needsUpdate = true;
@@ -359,13 +365,13 @@ export class FoodRenderer {
   }
 
   dispose(): void {
-    for (const b of this.batches.values()) {
+    for (const b of this.batches) {
       this.engine.contents.remove(b.mesh);
       b.mesh.dispose();
       b.geometry.dispose();
       b.material.dispose();
     }
-    this.batches.clear();
+    this.batches.length = 0;
     this.engine.contents.remove(this.cloud);
     this.cloudGeo.dispose();
     this.cloudMat.dispose();

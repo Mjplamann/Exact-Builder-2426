@@ -26,6 +26,13 @@ describe('compatibility & stocking', () => {
     expect(b.issues.join(' ')).toMatch(/angelfish .* will eat neon tetras/i);
   });
 
+  it('predators eat shrimp too; small fish only threaten shrimplets', () => {
+    const t = makeTank({ size: SIZE_120 });
+    stock(t, 'neocaridina-davidi-red-cherry', 10);
+    expect(t.sim.compatibility(t.world, sp(t, 'pterophyllum-scalare')).level).toBe('bad');
+    expect(t.sim.compatibility(t.world, sp(t, 'paracheirodon-innesi')).level).toBe('good');
+  });
+
   it('peaceful community fish are good together', () => {
     const t = makeTank({ size: SIZE_120 });
     stock(t, 'paracheirodon-innesi', 12);

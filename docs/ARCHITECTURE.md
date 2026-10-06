@@ -24,7 +24,8 @@ node scripts/screenshot.mjs --eval "window.__app.feed('flakes')" --wait 4
 
 The screenshot script prints renderer stats and every console error; look at the PNG with your
 image-reading tool. Software WebGL is slow (a few fps) — that is expected; judge visuals, not fps.
-`window.__app` is the running `App` (see `src/app/App.ts`) for scripted checks.
+`window.__app` is the running `App` (see `src/app/App.ts`) for scripted checks; `__app.advance(seconds)`
+steps the simulation without rendering so scenes can be staged quickly under slow software WebGL.
 
 ## Coordinates & units
 
@@ -92,7 +93,7 @@ Modules may subscribe to events for their own needs (e.g. UI listens to `journal
 - **Fish**: correct proportions per species, translucent fins with rays, wet specular sheen,
   guanine silver/iridescence where real, bright eyes with a catch-light. Swimming is a traveling
   body wave whose envelope matches the locomotion mode; tail-beat frequency follows speed
-  (Bainbridge: `U ≈ L·(0.75·f − 1)/4`), fish glide between beats, bank in turns, keep nearly level
+  (Bainbridge: `U/L ≈ 0.75·f − 1`, capped ≤ ~14 Hz), fish glide between beats, bank in turns, keep nearly level
   (pitch rarely > 25°), hover with pectoral sculling, breathe (gill/mouth motion).
 - **Behavior**: shoals that are loose when calm and tighten when frightened; schooling species
   polarize; bottom dwellers forage in bursts and rest; plecos cling to glass and wood; gobies

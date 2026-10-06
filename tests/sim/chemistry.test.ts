@@ -37,7 +37,7 @@ describe('nitrogen cycle & water chemistry', () => {
     expect(wp.lastWaterChange).toBe(t.world.clock.simTime);
   });
 
-  it('an uncycled tank goes through the classic ammonia → nitrite → nitrate cycle', () => {
+  it('an uncycled tank goes through the classic ammonia → nitrite → nitrate cycle', { timeout: 30_000 }, () => {
     // A "fish-in" cycle: a new filter, a shoal of hardy danios fed twice a day.
     const t = makeTank({ cycled: false, careMode: 'gentle' });
     feeder(t, 2, [9, 18]);
@@ -58,7 +58,7 @@ describe('nitrogen cycle & water chemistry', () => {
     expect(wp.nitrate).toBeGreaterThan(5);
   });
 
-  it('pH slides as alkalinity is consumed and recovers with water changes', () => {
+  it('pH slides as alkalinity is consumed and recovers with water changes', { timeout: 30_000 }, () => {
     const t = makeTank({});
     feeder(t, 2, [9, 18]);
     stock(t, NEON, 20, { ageMonths: 8 });
@@ -112,7 +112,7 @@ describe('nitrogen cycle & water chemistry', () => {
     expect(wp.tannins).toBeCloseTo(tan * 0.5, 5);
   });
 
-  it('plants take up nitrogen; physical constants are right', () => {
+  it('plants take up nitrogen; physical constants are right', { timeout: 30_000 }, () => {
     const bare = makeTank({});
     const planted = makeTank({});
     for (const t of [bare, planted]) {

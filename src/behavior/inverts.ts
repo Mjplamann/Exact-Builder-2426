@@ -1,11 +1,10 @@
 import type { FishEntity } from '../core/types';
-import { type Brain, MODE_LABEL, SURF_DECOR, SURF_GLASS, SURF_NONE, SURF_PLANT, SURF_SUBSTRATE } from './brain';
+import { type Brain, type Mode, MODE_LABEL, SURF_DECOR, SURF_GLASS, SURF_NONE, SURF_SUBSTRATE } from './brain';
 import type { Ctx } from './context';
 import { appetite, dropFood, foodValid, rt, scanForFood, tryBite } from './feeding';
-import { clamp, TAU } from './math';
 import { hit } from './habitat';
+import { TAU, clamp } from './math';
 import { attachDecor, attachNearest, attachPlant, attachSubstrate, detach, standoff } from './surface';
-import type { Mode } from './brain';
 
 /**
  * Invertebrate ethology.
@@ -51,6 +50,8 @@ export function thinkInvert(ctx: Ctx, fish: FishEntity, b: Brain): void {
   b.thinkT = walker ? ctx.rng.range(0.4, 1.0) : ctx.rng.range(1.5, 3.5);
   if (b.mode === 'tailflip' || b.mode === 'fall' || b.mode === 'swim') return;
   if (b.mode === 'retract' && b.modeT < b.modeDur) return;
+  // Morning: wake up.
+  if (b.mode === 'rest' && b.rest < 0.35) b.modeDur = 0;
 
   // Food by smell.
   if (b.scanT <= 0 && b.fear < 0.5) {

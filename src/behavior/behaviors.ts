@@ -1,10 +1,10 @@
 import type { FishEntity } from '../core/types';
 import { type Brain, type Mode, MODE_LABEL, SURF_DECOR, SURF_GLASS, SURF_NONE, SURF_SUBSTRATE } from './brain';
 import type { Ctx } from './context';
-import { appetite, claim, dropFood, foodValid, rt, scanForFood, tryBite } from './feeding';
+import { appetite, dropFood, foodValid, rt, scanForFood, tryBite } from './feeding';
 import { hit, WALL_BACK, WALL_FRONT, WALL_LEFT, WALL_RIGHT } from './habitat';
 import { DEG, clamp, noise1, smoothstep } from './math';
-import { attachDecor, attachGlass, attachNearest, attachSubstrate, detach, standoff } from './surface';
+import { attachDecor, attachGlass, attachSubstrate, detach, standoff } from './surface';
 
 /**
  * Fish ethology: a per-fish state machine (think, on a throttle) choosing what the animal is
@@ -115,6 +115,18 @@ function pickZoneGoal(ctx: Ctx, fish: FishEntity, b: Brain, local: number): void
       return;
     }
   }
+}
+
+/**
+ * Radius of the defended area around the home point (m). Anemonefish defend little more than
+ * their anemone; cave-dwellers the cave mouth; open-substrate cichlids a patch a few body
+ * lengths across.
+ */
+function territoryRadius(b: Brain): number {
+  const t = b.p.t;
+  if (t['anemone-host']) return Math.max(0.05, 1.5 * b.L);
+  if (t['cave-dweller'] || t.burrower) return clamp(2.5 * b.L, 0.05, 0.25);
+  return clamp(3.5 * b.L, 0.06, 0.3);
 }
 
 function bodyR(b: Brain): number {
@@ -313,7 +325,7 @@ function chooseActivity(ctx: Ctx, fish: FishEntity, b: Brain): void {
   if (grouped && p.schooling === 1 && zone !== 'bottom') W[3] += 0.35; // shoal members pick at things briefly
   if (t.clings || t['glass-grazer']) W[4] += 6;
   if (t.perches || t.hops) W[5] += 4;
-  if (t.territorial && home) W[6] += 2.5;
+  if (t.territorial && home && !t['anemone-host']) W[6] += 2.5;
   if (t['anemone-host'] && home) W[2] += 6;
   if (t['cave-dweller'] && home) W[2] += 1.5;
   if (t.burrower && home && p.species.activity !== 'nocturnal') W[2] += 4;
@@ -422,8 +434,9 @@ export function thinkFish(ctx: Ctx, fish: FishEntity, b: Brain): void {
   }
   if ((b.mode === 'rest' || b.mode === 'hide') && b.rest < 0.4 && !hideByDay) {
     // Waking / calm again (bottom-rest bouts run their own timer).
-    const isBout = b.mode === 'rest' && b.restKind === RK_BOTTOM && b.modeT < b.modeDur && b.rest < 0.2;
-    const stillScared = b.mode === 'hide' && (b.fear > 0.15 || b.modeT < 6);
+    const isBout = b.mode === 'rest' && b.restKind === RK_BOTTOM && b.modeT < b.modeDur;
+    // Frightened fish stay in cover for a while after the fear has faded (10–30 s).
+    const stillScared = b.mode === 'hide' && !b.dayHide && (b.fear > 0.15 || b.modeT < b.modeDur);
     if (!isBout && !stillScared) {
       chooseActivity(ctx, fish, b);
       return;
@@ -484,7 +497,7 @@ function checkIntruder(ctx: Ctx, fish: FishEntity, b: Brain): boolean {
   const k = fish.kin;
   const L = b.L;
   const cx = home ? home[0] : k.pos[0], cy = home ? home[1] : k.pos[1], cz = home ? home[2] : k.pos[2];
-  const r = clamp(5 * L, 0.08, 0.35) * (home ? 0.7 : 0.45);
+  const r = home ? territoryRadius(b) : clamp(2.5 * L, 0.05, 0.2);
   const n = ctx.hash.query(cx, cy, cz, r, b.idx, ctx.nbr);
   let best: FishEntity | null = null, bestD = Infinity;
   for (let i = 0; i < n; i++) {
@@ -649,7 +662,7 @@ function steerCruise(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
   seek(fish, b, b.gx, b.gy, b.gz, Math.max(sp, 0.4 * b.p.cruise * L), 2 * L);
   meander(ctx, b, 0.5);
   if (b.p.t['surface-skimmer']) b.dy *= 0.3;
-  b.label = b.p.t['surface-skimmer'] ? 'skimming the surface' : b.rest > 0.3 ? 'slowing down for the night' : 'cruising';
+  b.label = b.p.t['surface-skimmer'] ? 'skimming the surface' : b.rest > 0.3 && ctx.light < 0.5 ? 'slowing down for the night' : 'cruising';
 }
 
 // ---- shoal / school ---------------------------------------------------------------------------
@@ -705,6 +718,19 @@ function steerHover(ctx: Ctx, fish: FishEntity, b: Brain): void {
     b.subDur = ctx.rng.range(5, 15);
     const home = fish.state.home;
     let cx = k.pos[0], cy = k.pos[1], cz = k.pos[2], r = 4 * L;
+    if (home && p.t['anemone-host'] && ctx.rng.chance(0.35)) {
+      // Nestle down into the tentacles for a few seconds.
+      b.sub = 1;
+      b.subDur = ctx.rng.range(3, 8);
+      b.gx = home[0] + ctx.rng.signed() * 0.3 * L;
+      b.gy = home[1] + 0.3 * L;
+      b.gz = home[2] + ctx.rng.signed() * 0.3 * L;
+      b.hasGoal = true;
+      const ci = ctx.pickCover('anemone', home[0], home[2], 0.1);
+      b.shelterOwner = ci >= 0 ? ctx.h.cover[ci].ownerId : undefined;
+      return steerHover(ctx, fish, b);
+    }
+    b.sub = 0;
     if (home && (p.t['anemone-host'] || p.t.territorial || p.t['cave-dweller'] || p.t.burrower)) {
       cx = home[0];
       cy = home[1] + (p.t['anemone-host'] ? 0.6 * L : p.t.burrower ? 1.5 * L : 2 * L);
@@ -756,7 +782,14 @@ function steerHover(ctx: Ctx, fish: FishEntity, b: Brain): void {
     b.dy = (b.gy - k.pos[1]) / Math.max(L, 0.01);
   }
   b.posture = p.postureRest * 0.7 + p.postureCruise * 0.3;
-  b.label = p.t['anemone-host'] && fish.state.home ? 'hovering by its anemone' : 'hovering';
+  b.label = p.t['anemone-host'] && fish.state.home ? (b.sub === 1 ? 'nestling in its anemone' : 'hovering by its anemone') : 'hovering';
+  if (b.sub === 1) {
+    // Clownfish wriggle among the tentacles: allowed into the anemone, rubbing from side to side.
+    const ci = fish.state.home ? ctx.pickCover('anemone', fish.state.home[0], fish.state.home[2], 0.1) : -1;
+    if (ci >= 0) b.shelterOwner = ctx.h.cover[ci].ownerId;
+    b.floorOk = true;
+    b.thrash = 0.25;
+  }
 }
 
 // ---- forage -----------------------------------------------------------------------------------
@@ -1174,7 +1207,7 @@ function steerFeed(ctx: Ctx, fish: FishEntity, b: Brain): void {
   // Lead moving food a little.
   const dRaw = Math.sqrt((f.pos[0] - mx) ** 2 + (f.pos[1] - my) ** 2 + (f.pos[2] - mz) ** 2);
   const lead = clamp(dRaw / Math.max(0.02, Math.abs(b.speed) + p.cruise * L), 0, 0.6);
-  let tx = f.pos[0] + f.vel[0] * lead, ty = f.pos[1] + f.vel[1] * lead, tz = f.pos[2] + f.vel[2] * lead;
+  const tx = f.pos[0] + f.vel[0] * lead, ty = f.pos[1] + f.vel[1] * lead, tz = f.pos[2] + f.vel[2] * lead;
   const reach = Math.max(0.0035, 0.22 * L + f.sizeM * 0.5);
   const big = f.sizeM > p.gapeFrac * L * 1.5;
 
@@ -1255,7 +1288,6 @@ function steerFeed(ctx: Ctx, fish: FishEntity, b: Brain): void {
     b.thinkT = 0;
     b.modeDur = 0;
   }
-  b.excite = Math.max(b.excite, 0);
   if (b.food === null) {
     b.scanT = 0;
     b.thinkT = Math.min(b.thinkT, 0.1);
@@ -1321,7 +1353,7 @@ function steerPatrol(ctx: Ctx, fish: FishEntity, b: Brain): void {
     steerCruise(ctx, fish, b, ctx.dt);
     return;
   }
-  const r = clamp(5 * L, 0.08, 0.35);
+  const r = territoryRadius(b);
   if (!b.hasGoal || dist2(fish, b.gx, b.gy, b.gz) < (1.5 * L) ** 2 || b.subT > 12) {
     // Patrol points along the territory edge.
     const a = ctx.rng.next() * Math.PI * 2;
@@ -1377,7 +1409,7 @@ function steerChase(ctx: Ctx, fish: FishEntity, b: Brain): void {
   const home = fish.state.home;
   if (home && !nip) {
     const hx = fish.kin.pos[0] - home[0], hz = fish.kin.pos[2] - home[2];
-    if (hx * hx + hz * hz > (clamp(5 * L, 0.08, 0.35) * 1.6) ** 2) b.modeDur = Math.min(b.modeDur, b.modeT);
+    if (hx * hx + hz * hz > (territoryRadius(b) * 1.6) ** 2) b.modeDur = Math.min(b.modeDur, b.modeT);
   }
 }
 

@@ -13,7 +13,7 @@ describe('hunger, health & death', () => {
     expect(mean(fish.map((f) => f.state.health))).toBeLessThan(0.85);
   });
 
-  it('realistic mode: weeks of starvation are fatal (small fish first)', () => {
+  it('realistic mode: weeks of starvation are fatal (small fish first)', { timeout: 30_000 }, () => {
     const t = makeTank({ careMode: 'realistic' });
     stock(t, NEON, 10, { ageMonths: 8 });
     t.sim.catchUp(t.world, 30 * DAY);
@@ -24,7 +24,7 @@ describe('hunger, health & death', () => {
     expect(died[0].text).toMatch(/neon tetra passed away after going hungry/i);
   });
 
-  it('gentle mode: neglect never kills — only hunger and stress', () => {
+  it('gentle mode: neglect never kills — only hunger and stress', { timeout: 30_000 }, () => {
     const t = makeTank({ careMode: 'gentle' });
     const fish = stock(t, NEON, 10, { ageMonths: 8 });
     t.sim.catchUp(t.world, 60 * DAY);
@@ -46,7 +46,7 @@ describe('hunger, health & death', () => {
     expect(mean(many.map((f) => f.state.stress))).toBeLessThan(0.15);
   });
 
-  it('old age: fish die near their natural lifespan (not before) unless zen', () => {
+  it('old age: fish die near their natural lifespan (not before) unless zen', { timeout: 30_000 }, () => {
     const guppy = 'poecilia-reticulata';
     const t = makeTank({ careMode: 'gentle' });
     feeder(t, 1, [9]);

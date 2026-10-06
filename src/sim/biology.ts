@@ -62,6 +62,16 @@ const ARCHETYPE_DEPTH_WIDTH: Partial<Record<Archetype, [number, number]>> = {
   shark: [0.17, 0.15], ray: [0.08, 0.6],
 };
 
+/**
+ * Bodies far from an ellipsoid: a seahorse's "length" is mostly a thin prehensile tail (a 15 cm
+ * Hippocampus kuda weighs ~10 g), pipefish and needlefish are pencils, rays and stingrays are
+ * flat discs with a whip tail.
+ */
+const FORM_FACTOR: Partial<Record<Archetype, number>> = {
+  seahorse: 0.3, pipefish: 0.5, needlefish: 0.6, 'garden-eel': 0.6, stingray: 0.55, ray: 0.55,
+  lionfish: 0.8, batfish: 0.75, 'moorish-idol': 0.75,
+};
+
 const massCoefCache = new WeakMap<Species, number>();
 
 /**
@@ -96,7 +106,7 @@ export function massCoefficient(sp: Species): number {
       const dw = ARCHETYPE_DEPTH_WIDTH[sp.body.archetype];
       const d = clamp(sp.body.depth ?? dw?.[0] ?? 0.28, 0.03, 1.4);
       const w = clamp(sp.body.width ?? dw?.[1] ?? 0.13, 0.03, 1.4);
-      a = TISSUE_DENSITY * (Math.PI / 6) * SL_OVER_TL ** 3 * d * w;
+      a = TISSUE_DENSITY * (Math.PI / 6) * SL_OVER_TL ** 3 * d * w * (FORM_FACTOR[sp.body.archetype] ?? 1);
     }
   }
   massCoefCache.set(sp, a);

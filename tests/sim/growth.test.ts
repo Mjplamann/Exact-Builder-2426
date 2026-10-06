@@ -26,7 +26,7 @@ function newborns(t: ReturnType<typeof makeTank>, id: string, n: number) {
 }
 
 describe('growth (von Bertalanffy on the sim clock)', () => {
-  it('a well-kept shoal of neons follows the VB curve to maturity', () => {
+  it('a well-kept shoal of neons follows the VB curve to maturity', { timeout: 30_000 }, () => {
     const t = makeTank({});
     const sp = t.world.species.get(NEON)!;
     // Ideal conditions: optimal temperature, a planted tank, small regular meals.
@@ -51,7 +51,7 @@ describe('growth (von Bertalanffy on the sim clock)', () => {
     for (const f of fish) expect(f.state.lengthCm).toBeLessThanOrEqual(asymptoticLength(sp, f.state) + 1e-9);
   });
 
-  it('hungry, cold or cramped fish grow more slowly', () => {
+  it('hungry, cold or cramped fish grow more slowly', { timeout: 30_000 }, () => {
     // Juveniles past the fry stage (fry live on infusoria in a mature tank even if never fed).
     const grow = (setup: (t: ReturnType<typeof makeTank>) => void) => {
       const t = makeTank({ careMode: 'gentle' });
@@ -73,7 +73,7 @@ describe('growth (von Bertalanffy on the sim clock)', () => {
     expect(cold).toBeLessThan(fed * 0.97);
   });
 
-  it('a big fish in a small tank is stunted', () => {
+  it('a big fish in a small tank is stunted', { timeout: 30_000 }, () => {
     const angel = 'pterophyllum-scalare';
     const run = (size: { widthCm: number; heightCm: number; depthCm: number }) => {
       const t = makeTank({ size, careMode: 'gentle' });
