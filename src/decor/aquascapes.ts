@@ -528,7 +528,15 @@ function nature(tank: TankState, lib: PlantIndex, seed: number) {
   const r3 = s.addDecor('rock', 'dragon-stone', s.x(0.8), s.z(0.45), { scale: k * 1.1, sink: 0.008 });
   // Moss canopy on the upper branches.
   const moss = s.pick('taxiphyllum-barbieri', 'vesicularia-montagnei');
-  for (const p of s.woodPoints(tree, 0.12, 0.6).filter((_, i) => i % 2 === 0).slice(0, 8)) s.addPlant(moss, p[0], p[2], { attachTo: tree, growth: s.rng.range(0.7, 1) });
+  // A moss crown on the upper limbs only (a few cushions, spaced apart), so the wood still
+  // reads as a little tree rather than a hedge.
+  const crownPts: V3[] = [];
+  for (const p of s.woodPoints(tree, 0.14, 0.6).sort((p1, p2) => p2[1] - p1[1])) {
+    if (crownPts.some((q) => Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]) < 0.07)) continue;
+    crownPts.push(p);
+    if (crownPts.length >= 4) break;
+  }
+  for (const p of crownPts) s.addPlant(moss, p[0], p[2], { attachTo: tree, growth: s.rng.range(0.45, 0.75) });
   for (const [rock, sp] of [[r1, 'bucephalandra-brownie'], [r3, 'microsorum-pteropus-windelov']] as const) {
     const p = s.rockPoints(rock, 1)[0];
     if (p) s.addPlant(s.pick(sp, 'anubias-barteri-nana'), p[0], p[2], { attachTo: rock });
@@ -617,7 +625,7 @@ function reef(tank: TankState, lib: PlantIndex, seed: number) {
     }
   };
   place(['acropora-millepora', 'acropora-tenuis', 'acropora-formosa', 'seriatopora-hystrix', 'stylophora-pistillata', 'pocillopora-damicornis', 'montipora-digitata', 'acropora-hyacinthus'], [0, 0.25], Math.round(6 * k + 2), 0.09);
-  place(['euphyllia-ancora', 'euphyllia-glabrescens', 'euphyllia-divisa', 'duncanopsammia-axifuga', 'caulastrea-furcata', 'montipora-capricornis', 'goniopora-lobata', 'dipsastraea-speciosa', 'favites-abdita', 'micromussa-lordhowensis', 'plerogyra-sinuosa'], [0.2, 0.6], Math.round(7 * k + 2), 0.1);
+  place(['euphyllia-ancora', 'euphyllia-glabrescens', 'euphyllia-divisa', 'duncanopsammia-axifuga', 'caulastrea-furcata', 'montipora-capricornis', 'goniopora-lobata', 'platygyra-sinensis', 'dipsastraea-speciosa', 'favites-abdita', 'micromussa-lordhowensis', 'plerogyra-sinuosa'], [0.2, 0.6], Math.round(7 * k + 2), 0.1);
   place(['sarcophyton-toadstool', 'capnella-imbricata', 'xenia-elongata', 'sinularia-flexibilis'], [0.35, 0.75], Math.round(3 * k + 1), 0.12);
   place(['zoanthus-sociatus', 'zoanthus-rasta', 'palythoa-grandis', 'discosoma-red', 'discosoma-blue', 'rhodactis-indosinensis', 'ricordea-florida', 'ricordea-yuma', 'briareum-violaceum'], [0.55, 1], Math.round(6 * k + 2), 0.07);
   // The clownfish anemone: in a crevice on the second bommie, mid height.

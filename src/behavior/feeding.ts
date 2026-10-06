@@ -69,6 +69,7 @@ export function zoneWillingness(ctx: Ctx, b: Brain, food: FoodParticle, app: num
   switch (food.state) {
     case 'floating':
       if (clinger) return 0;
+      if (p.t['surface-skimmer']) return 1;
       if (zone === 'top' || zone === 'all' || p.t['surface-skimmer']) return 1;
       if (zone === 'middle') return app > 0.2 ? 0.8 : 0;
       // Bottom fish only very occasionally rise to the surface for food.
@@ -76,10 +77,15 @@ export function zoneWillingness(ctx: Ctx, b: Brain, food: FoodParticle, app: num
     case 'sinking':
     case 'swimming':
       if (clinger) return hf < 0.15 ? 0.6 : 0;
+      // Hatchetfish, halfbeaks and other surface skimmers take food only near the top.
+      if (p.t['surface-skimmer']) return hf > 0.75 ? 1 : hf > 0.55 && app > 0.6 ? 0.4 : 0;
       if (zone === 'top') return hf > 0.45 ? 1 : app > 0.6 ? 0.45 : 0;
-      if (zone === 'bottom') return hf < 0.4 ? 1 : app > 0.55 ? 0.4 : 0;
+      // Bottom fish (corydoras, loaches, gobies) wait for food to come down to them; only a
+      // very hungry one rises partway to meet it — never up among the tetras at the surface.
+      if (zone === 'bottom') return hf < 0.4 ? 1 : hf < 0.7 && app > 0.7 ? 0.35 : 0;
       return 1;
     case 'settled':
+      if (p.t['surface-skimmer']) return 0;
       if (zone === 'bottom' || clinger) return 1;
       if (zone === 'all') return 0.8;
       if (zone === 'middle') return app > 0.5 ? 0.5 : 0;
@@ -110,6 +116,8 @@ export function claim(b: Brain, food: FoodParticle | null): void {
   if (b.food === food) return;
   release(b);
   b.food = food;
+  // (The stall timer carries over: hopping between two unreachable crumbs is still a stall.)
+  b.bestD = Infinity;
   if (food) {
     const r = rt(food);
     if (r.claims !== undefined) r.claims++;
@@ -144,13 +152,17 @@ export function scanForFood(ctx: Ctx, fish: FishEntity, b: Brain, app: number): 
   const R = perception(ctx, b, app);
   const k = fish.kin;
   const px = k.pos[0], py = k.pos[1], pz = k.pos[2];
+  // Smell: food that has been in the water a while spreads an odour plume that catfish, loaches,
+  // eels and invertebrates follow from across the tank (~+1 cm of range per second, ≤ 45 cm).
+  const chemo = b.p.chemosensory;
   let best: FoodParticle | null = null, bestS = Infinity;
   for (let i = 0; i < list.length; i++) {
     const f = list[i];
-    if (f.state === 'eaten') continue;
+    if (f.state === 'eaten' || (b.skipT > 0 && (f === b.skipFood[0] || f === b.skipFood[1] || f === b.skipFood[2]))) continue;
     const dx = f.pos[0] - px, dy = f.pos[1] - py, dz = f.pos[2] - pz;
     const d2 = dx * dx + dy * dy + dz * dz;
-    if (d2 > R * R) continue;
+    const Rf = chemo && f.state !== 'floating' ? Math.min(0.9, R + Math.min(0.45, f.age * 0.01)) : R;
+    if (d2 > Rf * Rf) continue;
     const aff = affinity(b.p, f);
     if (aff < 0.12) continue;
     const z = zoneWillingness(ctx, b, f, app);
@@ -198,6 +210,7 @@ export function tryBite(ctx: Ctx, fish: FishEntity, b: Brain, mx: number, my: nu
     interval = p.mouth === 'sucker' ? ctx.rng.range(0.9, 1.6) : clamp(0.35 + b.L * 5, 0.4, 1.1);
   }
   b.biteT = interval;
+  b.feedStall = 0;
   b.snap = p.move === 'swimmer' ? 1 : 0;
   const before = f.nutrition;
   ctx.onEat(fish, f, Math.max(1e-4, amount));
@@ -210,5 +223,28 @@ export function tryBite(ctx: Ctx, fish: FishEntity, b: Brain, mx: number, my: nu
   } else {
     b.nibbling = before - f.nutrition < before; // partial bite: keep nibbling
   }
+  return true;
+}
+
+/**
+ * Track progress toward the current food item; after `limit` s without getting closer (and
+ * without a bite) give it up for half a minute. Returns true when the item was abandoned.
+ */
+export function feedProgress(b: Brain, d: number, dt: number, limit: number): boolean {
+  if (b.bestD === Infinity) b.bestD = d; // new target: measure progress from here
+  else if (d < b.bestD - 0.004) {
+    b.bestD = d;
+    b.feedStall = 0;
+    return false;
+  }
+  b.feedStall += dt;
+  if (b.feedStall < limit) return false;
+  const s = b.skipFood;
+  s[2] = s[1];
+  s[1] = s[0];
+  s[0] = b.food;
+  b.skipT = 30;
+  dropFood(b);
+  b.feedStall = 0;
   return true;
 }

@@ -55,10 +55,71 @@ export function leafTexture(spec: LeafTexSpec): Texture {
   tex.wrapS = tex.wrapT = ClampToEdgeWrapping;
   tex.minFilter = LinearMipmapLinearFilter;
   tex.anisotropy = 4;
-  tex.generateMipmaps = true;
+  const mips = coverageMipmaps(canvas, ctx, LEAF_ALPHA_CUTOFF);
+  if (mips) {
+    tex.mipmaps = mips;
+    tex.generateMipmaps = false;
+  } else tex.generateMipmaps = true;
   tex.needsUpdate = true;
   cache.set(key, tex);
   return tex;
+}
+
+/** Alpha cutoff of the plant materials (alphaTest) — mip coverage is preserved around it. */
+const LEAF_ALPHA_CUTOFF = 0.45;
+
+/**
+ * Coverage-preserving mip chain for alpha-tested foliage. Box-filtered mips average a fine
+ * leaf's alpha toward grey, so at viewing distance moss, hairgrass and feathery whorls either
+ * vanish (thin strokes fall under the cutoff) or fuse into solid blobs that read as big ivy
+ * leaves. Each level's alpha is rescaled so the fraction of texels above the cutoff matches
+ * the full-resolution leaf (Castaño 2010). Returns null where 2-D canvases are unavailable.
+ */
+function coverageMipmaps(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, cutoff: number): HTMLCanvasElement[] | null {
+  const W = canvas.width, H = canvas.height;
+  if ((W & (W - 1)) !== 0 || (H & (H - 1)) !== 0) return null;
+  const base = ctx.getImageData(0, 0, W, H)?.data;
+  if (!base || base.length !== W * H * 4) return null;
+  const thr = cutoff * 255;
+  let covered = 0;
+  for (let i = 3; i < base.length; i += 4) if (base[i] > thr) covered++;
+  const target = covered / (W * H);
+  const out: HTMLCanvasElement[] = [canvas];
+  let prev: HTMLCanvasElement = canvas;
+  let w = W, h = H;
+  while (w > 1 || h > 1) {
+    w = Math.max(1, w >> 1);
+    h = Math.max(1, h >> 1);
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const cx = c.getContext('2d', { willReadFrequently: true });
+    if (!cx) return null;
+    cx.imageSmoothingEnabled = true;
+    cx.drawImage(prev, 0, 0, w, h);
+    const img = cx.getImageData(0, 0, w, h);
+    const d = img?.data;
+    if (!d || d.length !== w * h * 4) return null;
+    if (target > 0) {
+      // Binary search the alpha scale that restores the original coverage.
+      let lo = 0.25, hi = 6;
+      for (let it = 0; it < 12; it++) {
+        const mid = (lo + hi) / 2;
+        let n = 0;
+        for (let i = 3; i < d.length; i += 4) if (d[i] * mid > thr) n++;
+        if (n / (w * h) < target) lo = mid;
+        else hi = mid;
+      }
+      // Bounded: very sparse leaves (feathery whorls, hair-thin needles) would otherwise be
+      // boosted into a speckled haze at distance; letting them thin out reads more naturally.
+      const k = Math.min(1.8, Math.max(0.6, (lo + hi) / 2));
+      for (let i = 3; i < d.length; i += 4) d[i] = Math.min(255, d[i] * k);
+      cx.putImageData(img, 0, 0);
+    }
+    out.push(c);
+    prev = c;
+  }
+  return out;
 }
 
 

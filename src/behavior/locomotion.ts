@@ -59,7 +59,9 @@ export function integrateSwimmer(env: SwimEnv, fish: FishEntity, b: Brain, dt: n
   b.yaw = wrapAngle(b.yaw + b.yawRate * dt);
 
   // ---- travel pitch ------------------------------------------------------------------------
-  const wantPitch = clamp(Math.atan2(b.dy, Math.max(1e-4, dhor)), -b.pitchLimit, b.pitchLimit);
+  // (Seahorses move up and down as freely as sideways: their body stays upright regardless.)
+  const pLim = p.upright ? 1.4 : b.pitchLimit;
+  const wantPitch = clamp(Math.atan2(b.dy, Math.max(1e-4, dhor)), -pLim, pLim);
   const pitchRate = (0.9 + 0.5 * b.turnBoost) * Math.min(2.5, b.turnMax * 0.45);
   b.pitch = stepToward(b.pitch, approach(b.pitch, wantPitch, 0.12, dt), pitchRate * dt);
 
@@ -114,13 +116,24 @@ export function integrateSwimmer(env: SwimEnv, fish: FishEntity, b: Brain, dt: n
   b.vx = tx * b.speed + cur[0] * drift;
   b.vy = ty * b.speed + cur[1] * drift * 0.5;
   b.vz = tz * b.speed + cur[2] * drift;
+  // Heave: a fish that wants to rise or sink more steeply than it will tilt (routine swimming
+  // stays within ~15° of level) sculls up or down with its pectorals and swim bladder while
+  // keeping its body nearly level — how a tetra drops into the plants at dusk.
+  if (!p.upright && b.turnBoost < 1.5 && dhor < 3 * Math.abs(b.dy)) {
+    const want = Math.atan2(Math.abs(b.dy), Math.max(1e-4, dhor));
+    if (want > b.pitchLimit) {
+      const heave = Math.min(b.ds, 0.35 * cruise) * 0.6 * clamp((want - b.pitchLimit) / 0.6, 0, 1);
+      b.vy += b.dy > 0 ? heave : -heave;
+    }
+  }
   k.pos[0] += b.vx * dt;
   k.pos[1] += b.vy * dt;
   k.pos[2] += b.vz * dt;
 
   // ---- body attitude --------------------------------------------------------------------------
   const pitchCap = p.maxPitch + Math.abs(b.posture) + (b.pitchLimit > p.maxPitch ? b.pitchLimit - p.maxPitch : 0);
-  b.bodyPitch = approach(b.bodyPitch, clamp(b.pitch + b.posture, -pitchCap, pitchCap), b.turnBoost > 1.5 ? 0.08 : 0.35, dt);
+  const bodyTarget = p.upright ? clamp(0.25 * b.pitch, -0.2, 0.2) : clamp(b.pitch + b.posture, -pitchCap, pitchCap);
+  b.bodyPitch = approach(b.bodyPitch, bodyTarget, b.turnBoost > 1.5 ? 0.08 : 0.35, dt);
   const speedRel = clamp(Math.abs(b.speed) / Math.max(1e-4, cruise), 0, 2);
   const bank = clamp(b.yawRate * (0.06 + 0.1 * speedRel), -0.38, 0.38);
   b.roll = approach(b.roll, bank, 0.22, dt);
@@ -169,10 +182,11 @@ export function constrainSwimmer(h: Habitat, fish: FishEntity, b: Brain): void {
   const p = b.p;
   const L = b.L;
   const cp = Math.cos(b.bodyPitch);
-  const fx = cp * Math.cos(b.yaw), fy = Math.sin(b.bodyPitch), fz = cp * Math.sin(b.yaw);
+  // Seahorses stand upright: their long axis (coronet to curled tail, ~0.6 L) is vertical.
+  const fx = p.upright ? 0 : cp * Math.cos(b.yaw), fy = p.upright ? 1 : Math.sin(b.bodyPitch), fz = p.upright ? 0 : cp * Math.sin(b.yaw);
   const rSide = 0.5 * p.widthFrac * L + 0.002;
   const rVert = 0.5 * p.depthFrac * L + 0.002;
-  const half = 0.47 * L;
+  const half = (p.upright ? 0.3 : 0.47) * L;
   const B = h.b;
 
   // Decor first (then glass so we never get pushed through the glass by a rock). Fish in open
@@ -186,7 +200,9 @@ export function constrainSwimmer(h: Habitat, fish: FishEntity, b: Brain): void {
       const d = h.nearestDecor(px, py, pz, b.shelterOwner);
       const need = s === 0 ? Math.min(rSide, rVert) : 0.0025;
       if (d < need) {
-        const push = need - d;
+        // The body centre is kept clear at once; a snout or tail swung into rock is eased out
+        // over a few steps (≤ 3 mm each) — the fish slides off rather than being shoved away.
+        const push = s === 0 ? need - d : Math.min(need - d, 0.003);
         k.pos[0] += hit.nx * push;
         k.pos[1] += hit.ny * push;
         k.pos[2] += hit.nz * push;
@@ -205,9 +221,13 @@ export function constrainSwimmer(h: Habitat, fish: FishEntity, b: Brain): void {
   const fc = h.floor(k.pos[0], k.pos[2]);
   const fsn = h.floor(k.pos[0] + fx * half, k.pos[2] + fz * half) - fy * half;
   const ftl = h.floor(k.pos[0] - fx * half, k.pos[2] - fz * half) + fy * half;
-  const minY = b.floorOk
+  // Burrowers and sand-sleeping wrasses work their way down into the substrate.
+  // (Never deeper than the sand is: the belly stays above the glass bottom.)
+  const sink = b.buried > 0 ? 2.2 * rVert * b.buried : 0;
+  const base = b.floorOk
     ? Math.max(fc + rVert * 0.85 * cp, fsn + 0.001, ftl + rVert * 0.3)
     : Math.max(fc + rVert, fsn + rVert * 0.5, ftl + rVert * 0.5) + 0.002;
+  const minY = sink > 0 ? Math.max(base - sink, Math.min(base, 0.9 * rVert)) : base;
   const maxY = h.b.surfaceY - (b.surfaceOk ? Math.max(0.001, half * Math.max(0, fy) * 0.98 + rVert * 0.25) : ey + 0.003);
   if (k.pos[1] < minY) k.pos[1] = minY;
   if (k.pos[1] > maxY) k.pos[1] = Math.max(minY, maxY);
@@ -223,17 +243,14 @@ export function constrainSwimmer(h: Habitat, fish: FishEntity, b: Brain): void {
     const gx = h.sdf(ci, x + e, y, z) - h.sdf(ci, x - e, y, z);
     const gz = h.sdf(ci, x, y, z + e) - h.sdf(ci, x, y, z - e);
     const gl = Math.sqrt(gx * gx + gz * gz);
+    // (A few millimetres per step: it works its way out over a few frames, never a jump.)
     if (gl > 1e-6) {
-      const step = need - d + 0.002;
-      k.pos[0] = clamp(k.pos[0] + (gx / gl) * step * 1.5, -B.halfW + ex, B.halfW - ex);
-      k.pos[2] = clamp(k.pos[2] + (gz / gl) * step * 1.5, -B.halfD + ez, B.halfD - ez);
+      const step = Math.min((need - d + 0.002) * 1.5, 0.005);
+      k.pos[0] = clamp(k.pos[0] + (gx / gl) * step, -B.halfW + ex, B.halfW - ex);
+      k.pos[2] = clamp(k.pos[2] + (gz / gl) * step, -B.halfD + ez, B.halfD - ez);
       d = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
     }
-    for (let it = 0; it < 12 && d < need; it++) {
-      k.pos[1] = Math.min(maxY, k.pos[1] + Math.max(0.004, need - d));
-      d = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
-      if (k.pos[1] >= maxY) break;
-    }
+    if (d < need) k.pos[1] = Math.min(maxY, k.pos[1] + Math.min(0.004, need - d + 0.001));
   }
 }
 

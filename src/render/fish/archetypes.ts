@@ -883,7 +883,8 @@ function snoutExtension(out: ResolvedBody, presetSnout: SnoutShape, presetLen: n
       // Long jaws / protruding snout: ~a quarter of the head (long-nosed corys, sturgeons) …
       // deep-bodied fish (tangs, butterflyfish) only protrude a short, broad snout.
       if (keepPreset) return presetLen;
-      return out.depth > 0.45 ? clamp(0.15 * out.headLength, 0.03, 0.06) : clamp(0.24 * out.headLength, 0.04, 0.12);
+      // Tangs and rabbitfish carry the eye far back above a long, tapering snout.
+      return out.depth > 0.45 ? clamp(0.12 * out.headLength, 0.02, 0.05) : clamp(0.24 * out.headLength, 0.04, 0.12);
     case 'tubular':
       return keepPreset ? presetLen : clamp(0.3 * out.headLength, 0.04, 0.14);
     case 'duckbill':

@@ -96,14 +96,15 @@ interface WoodLook {
 }
 
 const WOOD_LOOK: Record<string, WoodLook> = {
-  spiderwood: { a: '#8e6c4a', b: '#b8966c', dark: '#4e3a28', gnarl: 0.14, gnarlFreq: 40, lobes: 0.12, knots: 4, twigs: 26, weather: 0.25, knot: '#4a3220', fresh: '#c8a878' },
+  spiderwood: { a: '#8a6848', b: '#b8966c', dark: '#4a3626', gnarl: 0.14, gnarlFreq: 40, grooves: 0.05, lobes: 0.12, knots: 4, twigs: 26, weather: 0.25, knot: '#4a3220', fresh: '#c8a878' },
   'redmoor-root': { a: '#6c3e2c', b: '#8c5440', dark: '#3a2016', gnarl: 0.12, gnarlFreq: 45, lobes: 0.1, knots: 4, twigs: 18, weather: 0.15, knot: '#2e1a10', fresh: '#a8724e' },
-  manzanita: { a: '#6e3a2a', b: '#8e4e38', dark: '#3e2018', gnarl: 0.06, gnarlFreq: 25, lobes: 0.08, knots: 3, twigs: 6, weather: 0.12, knot: '#3a1c12', fresh: '#b07a52' },
+  manzanita: { a: '#6e3a2a', b: '#8e4e38', dark: '#3e2018', gnarl: 0.06, gnarlFreq: 25, lobes: 0.08, knots: 3, twigs: 14, weather: 0.12, knot: '#3a1c12', fresh: '#b07a52' },
   mopani: { a: '#3e2618', b: '#4e301e', dark: '#24160c', gnarl: 0.28, gnarlFreq: 14, twoTone: '#a8855a', lobes: 0.2, knots: 3, twigs: 0, weather: 0.1, knot: '#1e120a', fresh: '#a8855a' },
-  malaysian: { a: '#44301f', b: '#5e422c', dark: '#24180f', gnarl: 0.16, gnarlFreq: 18, grooves: 0.12, lobes: 0.16, knots: 3, twigs: 0, weather: 0.15, knot: '#1e140c', fresh: '#7a5a3a' },
+  malaysian: { a: '#4a3422', b: '#644630', dark: '#22160d', gnarl: 0.18, gnarlFreq: 18, grooves: 0.14, lobes: 0.18, knots: 3, twigs: 0, weather: 0.15, knot: '#1e140c', fresh: '#7a5a3a' },
   cholla: { a: '#a88c64', b: '#c2a67a', dark: '#5e4a32', gnarl: 0.04, gnarlFreq: 20, lobes: 0.03, knots: 0, twigs: 0, weather: 0.1, knot: '#5e4a32', fresh: '#c2a67a' },
-  branchwood: { a: '#6e5a46', b: '#9a8266', dark: '#3a2e24', gnarl: 0.1, gnarlFreq: 30, lobes: 0.1, knots: 5, twigs: 5, weather: 0.35, knot: '#30241a', fresh: '#b0946c' },
-  rubble: { a: '#dcd2bc', b: '#ece4d2', dark: '#9c907a', gnarl: 0.18, gnarlFreq: 60, lobes: 0.15, knots: 0, twigs: 0, weather: 0, knot: '#9c907a', fresh: '#f2ecdc' },
+  branchwood: { a: '#6e5a46', b: '#9a8266', dark: '#352a20', gnarl: 0.12, gnarlFreq: 30, grooves: 0.06, lobes: 0.12, knots: 5, twigs: 7, weather: 0.35, knot: '#30241a', fresh: '#b0946c' },
+  // Bleached Acropora rubble: chalk-white with cream and faint grey, never mid-grey.
+  rubble: { a: '#e6e0d0', b: '#f3efe4', dark: '#b4aa96', gnarl: 0.2, gnarlFreq: 70, lobes: 0.15, knots: 0, twigs: 0, weather: 0, knot: '#b4aa96', fresh: '#f6f2e8' },
 };
 
 /**
@@ -175,24 +176,29 @@ function woodGeometry(item: DecorItem, shape: DecorShape, quality: Quality): Buf
     gnarl: look.gnarl,
     gnarlFreq: look.gnarlFreq,
     grooves: look.grooves,
-    grooveCount: 5,
+    grooveCount: 7,
     lobes: look.lobes,
     knots: look.knots,
     capTips: !shape.hollow,
     // Fine ends taper to points; anything thicker ended in a break (driftwood is snapped wood).
-    tip: (r, bi) => (bi >= nShape || r < 0.0028 ? 'point' : rubble ? 'round' : 'broken'),
+    // Manzanita limbs taper to fine living tips; other wood mostly ends in old breaks.
+    tip: (r, bi) => (bi >= nShape || (!rubble && r < (shape.style === 'manzanita' ? 0.006 : 0.0028)) ? 'point' : 'broken'),
     // Trunk butts lying on (not buried in) the sand are snapped off too.
     capStart: (r, bi, depth, start) => (shape.hollow || depth > 0 || bi >= nShape || start[1] < -r * 0.6 ? 'open' : rubble ? 'round' : 'broken'),
     subdiv: quality === 'low' ? 1 : 2,
     hollow: shape.hollow ? 0.78 : undefined,
     seed: item.seed,
-    color: (p, n, along, t, bi, depth, _around, mark) => {
+    color: (p, n, along, t, bi, depth, around, mark) => {
       const g = noise.fbm(along * 9 + bi, p[1] * 3, bi * 0.7, 3) * 0.5 + 0.5;
       let c = mix3(A, B, smoothstep(0.25, 0.8, g));
-      // Grain: long streaks along the fibres, from fine lines to broad bands.
-      const ang = Math.atan2(n[2], n[0]);
-      const streak = noise.noise(along * 2.5 + bi * 3, ang * 1.2, 0.3) * 0.6 + noise.noise(along * 7 + bi, ang * 3.1, 2.7) * 0.4;
-      c = mul3(c, 0.84 + 0.3 * (streak * 0.5 + 0.5));
+      // Each branch weathered a little differently.
+      c = mul3(c, 1 + 0.12 * noise.noise(bi * 2.7, 0.3, 9.1));
+      // Grain: streaks along the fibres, evaluated on the tube (≈ 8–12 around a branch, several
+      // cm long) so they read at viewing distance as wood rather than a painted tube.
+      const th = around * Math.PI * 2;
+      const ca = Math.cos(th), sa = Math.sin(th);
+      const streak = noise.noise(along * 8 + bi * 3.1, ca * 2.2, sa * 2.2) * 0.6 + noise.noise(along * 22 + bi, ca * 5 + 1.3, sa * 5) * 0.4;
+      c = mul3(c, 0.76 + 0.44 * (streak * 0.5 + 0.5));
       if (T2) {
         // Mopani: pale sapwood showing through dark heartwood in sandblasted patches.
         const s = noise.fbm(along * 6 + bi * 2, n[0] * 1.5, n[2] * 1.5 + p[1] * 8, 3) * 0.5 + 0.5;
@@ -211,8 +217,8 @@ function woodGeometry(item: DecorItem, shape: DecorShape, quality: Quality): Buf
       let a = 1;
       if (depth > 0) a *= 0.72 + 0.28 * smoothstep(0, 0.12, t);
       a *= 0.8 + 0.2 * clamp01(n[1] * 0.5 + 0.6);
-      a *= rubble ? 0.85 + 0.15 * smoothstep(-0.003, 0.01, p[1]) : 0.6 + 0.4 * smoothstep(-0.005, 0.025, p[1]);
-      c = mix3(c, D, (1 - a) * 0.6);
+      a *= rubble ? 0.9 + 0.1 * smoothstep(-0.003, 0.01, p[1]) : 0.6 + 0.4 * smoothstep(-0.005, 0.025, p[1]);
+      c = mix3(c, D, (1 - a) * (rubble ? 0.35 : 0.6));
       c = mul3(c, 0.75 + 0.25 * a);
       return [c[0] * warm[0], c[1] * warm[1], c[2] * warm[2]];
     },
@@ -263,9 +269,11 @@ function pebbleGeometry(item: DecorItem, shape: DecorShape): BufferGeometry {
 // ---------------------------------------------------------------------------------------------
 
 const LITTER_TEX: Record<string, { outline: 'obovate' | 'oak' | 'elliptic'; base: string; tip: string; vein: string; aspect: number }> = {
-  catappa: { outline: 'obovate', base: '#8a5530', tip: '#9a6236', vein: '#b88656', aspect: 0.55 },
-  oak: { outline: 'oak', base: '#86603a', tip: '#946a42', vein: '#b08a5e', aspect: 0.55 },
-  guava: { outline: 'elliptic', base: '#76603c', tip: '#806842', vein: '#a08a62', aspect: 0.45 },
+  // Neutral dry-leaf browns: each leaf's decay stage (vertex tint) takes it from russet to
+  // waterlogged dark chocolate.
+  catappa: { outline: 'obovate', base: '#7c5638', tip: '#86603e', vein: '#a27c54', aspect: 0.55 },
+  oak: { outline: 'oak', base: '#7e5e3c', tip: '#8a6842', vein: '#a4845c', aspect: 0.55 },
+  guava: { outline: 'elliptic', base: '#6e5c3c', tip: '#786442', vein: '#968460', aspect: 0.45 },
 };
 
 const litterMats = new Map<string, MeshStandardMaterial>();
@@ -274,48 +282,134 @@ function litterMaterial(style: string): MeshStandardMaterial {
   if (hit) return hit;
   const L = LITTER_TEX[style] ?? LITTER_TEX.catappa;
   const map = leafTexture({ outline: L.outline, width: 128, height: 256, base: L.base, tip: L.tip, vein: L.vein, veins: 'pinnate', petiole: 0.06, dry: true, seed: 7 });
-  const m = new MeshStandardMaterial({ map, vertexColors: true, alphaTest: 0.5, side: DoubleSide, roughness: 0.78, metalness: 0 });
+  // Soaked leaves are matte: a waxy sheen would read as plastic cut-outs.
+  const m = new MeshStandardMaterial({ map, vertexColors: true, alphaTest: 0.5, side: DoubleSide, roughness: 0.93, metalness: 0 });
   m.name = `decor-litter-${style}`;
   applyUnderwater(m);
   litterMats.set(style, m);
   return m;
 }
 
+/** Decay stages of a fallen leaf (vertex tint over the texture): russet → brown → dark, soaked. */
+const LITTER_STAGES: [number, number, number][] = [
+  [1.08, 0.96, 0.84],
+  [0.86, 0.74, 0.62],
+  [0.62, 0.52, 0.44],
+  [0.42, 0.35, 0.3],
+];
+
 function litterGeometry(item: DecorItem, shape: DecorShape, ctx: BuildCtx): BufferGeometry {
   const xf = itemTransform(item);
   const gb = new GeoBuilder();
   const L = LITTER_TEX[shape.style] ?? LITTER_TEX.catappa;
-  const cols = 7, rows = 10;
+  const cols = 9, rows = 12;
   const leaves: LitterLeaf[] = shape.leaves ?? [];
-  // Stack order: later leaves lie on top of earlier ones.
+  const noise = new Noise3(item.seed ^ 0x51);
+  // Height field (item local, 6 mm cells) of the leaves already lying here: each leaf rests
+  // on the sand and on the leaves beneath it, so the pile overlaps and drapes like real litter.
+  let ext = 0.02;
+  for (const l of leaves) ext = Math.max(ext, Math.hypot(l.c[0], l.c[2]) + l.len * 0.7);
+  const cell = 0.006;
+  const n = Math.ceil((ext * 2) / cell) + 1;
+  const hf = new Float32Array(n * n).fill(-1e3);
+  const hIndex = (x: number, z: number) => {
+    const i = Math.round((x + ext) / cell), k = Math.round((z + ext) / cell);
+    return i < 0 || k < 0 || i >= n || k >= n ? -1 : i + k * n;
+  };
+  const wTmp: V3 = [0, 0, 0];
+  const lTmp: V3 = [0, 0, 0];
+  const groundLocal = (lx: number, lz: number) => {
+    toWorld(xf, [lx, 0, lz], wTmp);
+    toLocal(xf, [wTmp[0], substrateHeight(ctx.tank, wTmp[0], wTmp[2]), wTmp[2]], lTmp);
+    return lTmp[1];
+  };
+  const W = cols, N = (rows + 1) * cols;
+  const px = new Float64Array(N), pz = new Float64Array(N), sup = new Float64Array(N), tmp = new Float64Array(N);
   leaves.forEach((leaf, li) => {
     const rng = new Rng(leaf.seed);
     const len = leaf.len;
-    const wid = len * L.aspect;
-    // Rest on the sand: local y offset from the substrate under this leaf.
-    const wc = toWorld(xf, leaf.c, [0, 0, 0]);
-    const ground = substrateHeight(ctx.tank, wc[0], wc[2]);
-    const lc = toLocal(xf, [wc[0], ground, wc[2]], [0, 0, 0]);
-    const yBase = lc[1] + 0.0012 + li * 0.0009;
+    const wid = len * L.aspect * rng.range(0.85, 1.12);
     const cs = Math.cos(leaf.rotY), sn = Math.sin(leaf.rotY);
-    // Dry tone: catappa ranges from tan-orange to dark chocolate; slight greenish olive for guava.
-    const tone = 0.7 + leaf.tone * 0.5;
-    const tint: [number, number, number] = [tone * rng.range(0.95, 1.08), tone * rng.range(0.9, 1.0), tone * rng.range(0.85, 0.98)];
+    const curl = leaf.curl;
+    // Dried catappa often rolls its margins in; others lie cupped, arched or slightly twisted.
+    // (Soaked leaves relax: most lie nearly flat with lifted edges; a few stay rolled.)
+    const roll = rng.chance(0.15) ? rng.range(0.4, 0.8) : rng.range(0, 0.2);
+    const bow = rng.range(-0.5, 1);
+    const twist = rng.range(-0.35, 0.35);
+    const mirror = rng.chance(0.5);
+    // Some leaves have one end pushed into the sand (sunk by a passing fish or settling).
+    const bury = rng.chance(0.4) ? rng.range(0.002, 0.007) : 0;
+    const buryEnd = rng.chance(0.5) ? 1 : -1;
+    // Decay stage: fresh-fallen russet to soaked dark brown; a little hue drift per leaf.
+    const st = Math.min(LITTER_STAGES.length - 1.001, leaf.tone * (LITTER_STAGES.length - 1));
+    const s0 = LITTER_STAGES[Math.floor(st)], s1 = LITTER_STAGES[Math.floor(st) + 1];
+    const f = st - Math.floor(st);
+    const hue = rng.range(-0.05, 0.05);
+    const tint: [number, number, number] = [(s0[0] + (s1[0] - s0[0]) * f) * (1 + hue), s0[1] + (s1[1] - s0[1]) * f, (s0[2] + (s1[2] - s0[2]) * f) * (1 - hue)];
+    // Leaf-local shape (relative to the leaf's resting plane), then its footprint.
+    const lift = new Float64Array(N);
+    for (let j = 0; j <= rows; j++) {
+      const v = j / rows;
+      const vv = v * 2 - 1;
+      for (let i = 0; i < cols; i++) {
+        const u = i / (cols - 1);
+        const e = Math.abs(u - 0.5) * 2;
+        // Rolled margins also pull the blade narrower.
+        const x = (u - 0.5) * wid * (1 - roll * 0.22 * e * e);
+        const yLen = vv * 0.5 * len;
+        // Midrib crease, margins curling up, rolled edges, tips lifting, arch / cup along the
+        // length, a slight twist and a crumpled surface.
+        let h = 0.0025 * (1 - e) * (1 - Math.abs(vv)) * -1;
+        h += curl * 0.12 * wid * e * e + roll * 0.2 * wid * e * e * e;
+        h += curl * 0.05 * len * Math.pow(Math.abs(vv), 2.2);
+        h += bow * 0.035 * len * (1 - vv * vv) * (bow > 0 ? 1 : -0.6);
+        h += twist * x * vv;
+        h += 0.0016 * noise.noise((leaf.c[0] + x) * 120 + li, (leaf.c[2] + yLen) * 120, li * 0.7);
+        h -= bury * Math.max(0, vv * buryEnd) ** 1.5;
+        const k = i + j * W;
+        lift[k] = h;
+        px[k] = x * cs - yLen * sn + leaf.c[0];
+        pz[k] = x * sn + yLen * cs + leaf.c[2];
+        const hi = hIndex(px[k], pz[k]);
+        sup[k] = Math.max(groundLocal(px[k], pz[k]), hi >= 0 ? hf[hi] : -1e3);
+      }
+    }
+    // A stiff dry leaf bridges small bumps: rest on a blurred support, never inside it.
+    for (let pass = 0; pass < 2; pass++) {
+      for (let j = 0; j <= rows; j++) {
+        for (let i = 0; i < cols; i++) {
+          let acc = 0, cnt = 0;
+          for (let dj = -1; dj <= 1; dj++) {
+            for (let di = -1; di <= 1; di++) {
+              const jj = j + dj, ii = i + di;
+              if (jj < 0 || jj > rows || ii < 0 || ii >= cols) continue;
+              acc += sup[ii + jj * W];
+              cnt++;
+            }
+          }
+          tmp[i + j * W] = acc / cnt;
+        }
+      }
+      for (let k = 0; k < N; k++) sup[k] = Math.max(sup[k], tmp[k]);
+    }
     const start = gb.count;
     for (let j = 0; j <= rows; j++) {
       const v = j / rows;
       for (let i = 0; i < cols; i++) {
+        const k = i + j * W;
         const u = i / (cols - 1);
-        const x = (u - 0.5) * wid;
-        const yLen = (v - 0.5) * len;
-        // Dried leaves curl: margins roll up, the blade bows along the midrib, tips lift.
-        const e = Math.abs(u - 0.5) * 2;
-        const lift = leaf.curl * (0.22 * wid * e * e + 0.06 * len * Math.pow(Math.abs(v - 0.5) * 2, 2.2)) + 0.002 * Math.sin(v * 9 + li);
-        const lx = x * cs - yLen * sn + leaf.c[0];
-        const lz = x * sn + yLen * cs + leaf.c[2];
-        const ly = yBase + lift + leaf.tilt[0] * x + leaf.tilt[1] * yLen;
-        const c = mul3(tint, 0.7 + 0.3 * smoothstep(0, 0.012, lift));
-        gb.vertex([lx, ly, lz], [0, 1, 0], [u, v], c, [lx, ly, lz]);
+        const y = sup[k] + 0.0009 + lift[k] + leaf.tilt[0] * (px[k] - leaf.c[0]) + leaf.tilt[1] * (pz[k] - leaf.c[2]);
+        // Darker where the leaf lies in contact (wet, shaded), lighter on lifted curls; blotchy
+        // decay patches.
+        const raised = smoothstep(0, 0.01, lift[k]);
+        const blotch = 0.86 + 0.22 * (noise.fbm(px[k] * 45 + li * 3.1, pz[k] * 45, li, 2) * 0.5 + 0.5);
+        const shade = (0.72 + 0.28 * raised) * blotch;
+        const c: [number, number, number] = [tint[0] * shade, tint[1] * shade, tint[2] * shade];
+        gb.vertex([px[k], y, pz[k]], [0, 1, 0], [mirror ? 1 - u : u, v], c, [px[k], y, pz[k]]);
+        // The next leaves rest on this one's blade, not on its curled-up margins: a litter bed
+        // stays a few millimetres deep instead of heaping up.
+        const hi = hIndex(px[k], pz[k]);
+        if (hi >= 0) hf[hi] = Math.max(hf[hi], sup[k] + 0.0015 + Math.min(Math.max(lift[k], 0), 0.003));
       }
     }
     for (let j = 0; j < rows; j++) {
@@ -589,6 +683,8 @@ export function buildDecor(item: DecorItem, ctx: BuildCtx): BuiltDecor {
   }
   for (const m of meshes) {
     m.castShadow = m.material !== tubingMaterial();
+    // The Engine turns shadows on for every mesh unless opted out (clear tubing casts none).
+    if (!m.castShadow) m.userData.castShadow = false;
     m.receiveShadow = true;
     m.userData.decorId = item.id;
     group.add(m);

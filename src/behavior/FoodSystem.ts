@@ -267,6 +267,10 @@ export class FoodSystem {
     void simDt;
     if (dt <= 0 || world.food.length === 0) return;
     this.h.sync(world);
+    if (this.h.version !== this.layout) {
+      this.layout = this.h.version;
+      this.evictFromDecor(world);
+    }
     const t = world.clock.realSeconds;
     const sim = world.clock.simTime;
     const rng = this.rng;
@@ -322,6 +326,31 @@ export class FoodSystem {
             this.stepSettled(f, h1, t);
             break;
         }
+      }
+    }
+  }
+
+  /** Habitat version the particles were last checked against. */
+  private layout = -1;
+
+  /**
+   * Decor was added or moved: food it now covers (a rock set down on a settled pellet) is pushed
+   * out onto its surface and allowed to settle again, instead of lying inside the rock where
+   * catfish would nose at it forever.
+   */
+  private evictFromDecor(world: World): void {
+    const h = this.h;
+    if (h.colliders.length === 0) return;
+    for (let i = 0; i < world.food.length; i++) {
+      const f = world.food[i] as FoodRT;
+      if (f.type === undefined || f.state === 'eaten' || f.restOn === -2) continue;
+      const d = h.nearestDecor(f.pos[0], f.pos[1], f.pos[2]);
+      if (d >= 0 || h.nearestIndex < 0) continue;
+      h.projectToCollider(h.nearestIndex, f.pos, f.sizeM * 0.3 + 0.001);
+      if (f.state === 'settled') {
+        f.state = 'sinking';
+        f.restOn = -1;
+        f.settledAtSim = undefined;
       }
     }
   }
@@ -444,8 +473,33 @@ export class FoodSystem {
         f.vel[1] = Math.max(0, f.vel[1]);
         return;
       }
+      // Reached the sand at the foot of a rock (inside its buried base): roll out from under it
+      // before coming to rest, so it ends up where bottom feeders can actually reach it.
+      if (h.colliders.length > 0 && this.rollOut(f, rad)) return;
       this.settle(f, sim, -1, world);
     }
+  }
+
+  /** Nudge a particle on the substrate horizontally out of decor; true while still inside. */
+  private rollOut(f: FoodRT, rad: number): boolean {
+    const h = this.h;
+    const d = h.nearestDecor(f.pos[0], f.pos[1], f.pos[2]);
+    if (d >= rad * 0.5 || h.nearestIndex < 0) return false;
+    let nx = hit.nx, nz = hit.nz;
+    let l = Math.sqrt(nx * nx + nz * nz);
+    if (l < 0.2) {
+      // Right under the middle: roll toward the front glass (open sand is usually in front).
+      nx = 0;
+      nz = 1;
+      l = 1;
+    }
+    const step = Math.min(0.01, rad - d + 0.001);
+    const B = h.b;
+    f.pos[0] = clamp(f.pos[0] + (nx / l) * step, -B.halfW + rad, B.halfW - rad);
+    f.pos[2] = clamp(f.pos[2] + (nz / l) * step, -B.halfD + rad, B.halfD - rad);
+    f.pos[1] = h.floor(f.pos[0], f.pos[2]) + rad;
+    f.vel[0] = f.vel[2] = 0;
+    return true;
   }
 
   private settle(f: FoodRT, sim: number, onCollider: number, world: World): void {

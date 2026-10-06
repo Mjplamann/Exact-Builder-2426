@@ -30,7 +30,7 @@ const cm = (v: number | undefined, d: number) => (v ?? d) / 100;
 type Style =
   | 'toadstool' | 'finger' | 'tree' | 'xenia' | 'gsp' | 'clove'
   | 'disc' | 'hairy' | 'ricordea' | 'zoa' | 'palythoa'
-  | 'hammer' | 'frogspawn' | 'torch' | 'elegance' | 'duncan' | 'acan' | 'favia' | 'favites' | 'goniopora' | 'trachy' | 'plate' | 'candy' | 'bubble'
+  | 'hammer' | 'frogspawn' | 'torch' | 'elegance' | 'duncan' | 'acan' | 'favia' | 'favites' | 'meander' | 'goniopora' | 'trachy' | 'plate' | 'candy' | 'bubble'
   | 'acro' | 'tenuis' | 'staghorn' | 'table' | 'cap' | 'digitata' | 'birdsnest' | 'stylophora' | 'pocillopora'
   | 'fan' | 'rod' | 'plume'
   | 'bta' | 'carpet' | 'sebae' | 'rockflower';
@@ -51,6 +51,7 @@ export function coralStyle(sp: PlantSpecies): Style {
       if (has(sp, /duncan/)) return 'duncan';
       if (has(sp, /micromussa|acanthastrea|lordhowensis|acan/)) return 'acan';
       if (has(sp, /favites/)) return 'favites';
+      if (has(sp, /platygyra|diploria|leptoria|meandr|maze/)) return 'meander';
       if (has(sp, /favia|dipsastraea|platygyra|brain/)) return 'favia';
       if (has(sp, /goniopora|alveopora/)) return 'goniopora';
       if (has(sp, /trachyphyllia|open-brain/)) return 'trachy';
@@ -143,8 +144,8 @@ function lathe(gb: GeoBuilder, base: V3, up: V3, profile: [number, number][], se
   for (let i = 0; i < rows - 1; i++) {
     for (let a = 0; a < segs; a++) {
       const v0 = start + i * w + a;
-      gb.tri(v0, v0 + w, v0 + 1);
-      gb.tri(v0 + 1, v0 + w, v0 + w + 1);
+      gb.tri(v0, v0 + 1, v0 + w);
+      gb.tri(v0 + 1, v0 + w + 1, v0 + w);
     }
   }
 }
@@ -420,15 +421,16 @@ function genEuphyllia(a: GenArgs, style: 'hammer' | 'frogspawn' | 'torch' | 'ele
   const ph = rng.range(0, 6.28);
   const H = Math.max(0.04, m.height);
   const L0 = cm(sp.leafLength, 6);
-  // Corallite walls: pale aragonite, mostly hidden under the extended flesh.
-  const skel = lin('#c4beb2');
+  // Corallite walls, sheathed in the colony's tissue: brownish, darker than the tentacles, and
+  // mostly hidden under the extended flesh (bare white skeleton would mean a dying coral).
+  const skel = mixRGB(mulRGB(lin(sp.color), [0.55, 0.55, 0.5]), lin('#6e6250'), 0.5);
   for (let hI = 0; hI < heads; hI++) {
     const off = hI === 0 ? [0, 0] : [rng.range(-1, 1) * m.spread * 0.22, rng.range(-1, 1) * m.spread * 0.22];
     const [t1, t2] = basis(up);
     const baseP = add(add(m.anchor, t1, off[0]), t2, off[1]);
     const hr = rng.range(0.012, 0.02);
     const top = add(baseP, norm(add(up, [rng.range(-0.3, 0.3), 0, rng.range(-0.3, 0.3)], 1)), style === 'elegance' ? 0.006 : rng.range(0.008, 0.02));
-    if (style !== 'elegance') pushSegment(stems, baseP, top, hr, skel, [m.anchor[1], 1, 0, 0]);
+    if (style !== 'elegance') pushSegment(stems, add(baseP, up, -0.005), top, hr * 0.85, skel, [m.anchor[1], 1, 0, 0]);
     else {
       const disc = use(out, discPart(`${sp.id}/disc`, (r, th) => 0.1 * Math.sin(th * 3) * r * r, { map: radialTexture({ base: sp.color, center: mixHex(sp.color, '#ffffff', 0.2), stripes: { count: 28, amount: 0.3 }, seed: 9 }), transl: 0.5, roughness: 0.35, fluor: fluorOf(sp, 0.3) }));
       pushInst(disc, top, up, t1, m.spread * 0.3, m.spread * 0.3, m.spread * 0.3, tint(rng, 0.05), [m.anchor[1], H, 0.2, ph]);
@@ -544,11 +546,13 @@ function genMassive(a: GenArgs, style: 'acan' | 'favia' | 'favites' | 'goniopora
         col = mulRGB(lin(sp.color), [0.8, 0.8, 0.75]);
       } else {
         // Cups with raised septa walls; favites share walls (thinner), favia have gaps.
+        // Deep cups inside raised, septate walls; each corallite stands a little proud or sunk.
         const wallW = style === 'favites' ? cellR * 0.12 : cellR * 0.22;
-        disp = cellR * 0.3 * (1 - smoothstep(0, wallW, wall)) - cellR * 0.35 * (1 - smoothstep(0, cellR * 0.9, fromC));
+        const proud = cellR * 0.18 * noise.noise(ci * 1.7, 0.3, 4.1);
+        disp = cellR * 0.45 * (1 - smoothstep(0, wallW, wall)) - cellR * 0.6 * (1 - smoothstep(0, cellR * 0.9, fromC)) + proud;
         const septa = 0.5 + 0.5 * Math.cos(Math.atan2(v - (cells[ci]?.v ?? 0), u - (cells[ci]?.u ?? 0)) * 24);
         const center = Math.exp(-Math.pow(fromC / (cellR * 0.4), 2));
-        col = mixRGB(lin(sp.color), mulRGB(lin(sp.color), [1.25, 1.2, 1.1]), (1 - smoothstep(0, wallW, wall)) * 0.6 + septa * 0.1 * (1 - center));
+        col = mixRGB(lin(sp.color), mulRGB(lin(sp.color), [1.3, 1.25, 1.12]), (1 - smoothstep(0, wallW, wall)) * 0.6 + septa * 0.25 * (1 - center));
         col = mixRGB(col, cell.c2, center * 0.85);
         glow = center;
       }
@@ -564,13 +568,13 @@ function genMassive(a: GenArgs, style: 'acan' | 'favia' | 'favites' | 'goniopora
   for (let j = 0; j < rings; j++) {
     for (let k = 0; k < segs; k++) {
       const v0 = vertsStart + j * w + k;
-      gb.tri(v0, v0 + 1, v0 + w);
-      gb.tri(v0 + 1, v0 + w + 1, v0 + w);
+      gb.tri(v0, v0 + w, v0 + 1);
+      gb.tri(v0 + 1, v0 + w, v0 + w + 1);
     }
   }
   const geo = gb.build();
   geo.computeVertexNormals();
-  uniqueMesh(out, geo, { roughness: style === 'acan' ? 0.3 : 0.55, transl: style === 'acan' ? 0.4 : 0.15, fluor: fluorOf(sp, style === 'acan' ? 0.6 : 1), glow: true, detail: { freq: 700, bump: 0.00018, albedoVar: 0.08 } });
+  uniqueMesh(out, geo, { roughness: style === 'acan' ? 0.3 : 0.65, transl: style === 'acan' ? 0.4 : 0.15, fluor: fluorOf(sp, style === 'acan' ? 0.6 : 1), glow: true, detail: { freq: 700, bump: style === 'acan' ? 0.00018 : 0.0003, pores: style === 'acan' ? 0 : 0.3, albedoVar: 0.12 } });
   if (style === 'goniopora') {
     const tent = use(out, tentaclePart(`${sp.id}/polyp`, { rr: 0.06, taper: 0.1, tip: 'branched', rows: 8, radial: 5, tipScale: 1.4 }, { transl: 0.6, roughness: 0.45, fluor: fluorOf(sp, 0.5) }, { base: lin(sp.color), tip: lin(sp.color2 ?? sp.color), from: 0.7 }));
     const n = Math.round((120 + 230 * g) * ctx.density);
@@ -584,44 +588,131 @@ function genMassive(a: GenArgs, style: 'acan' | 'favia' | 'favites' | 'goniopora
   out.proxy = { a: m.anchor, b: add(m.anchor, up, Hd), r: R };
 }
 
-/** Free-living open brain (folded fleshy valleys) and plate coral (radial septa). */
-function genFreeLiving(a: GenArgs, style: 'trachy' | 'plate'): void {
+/**
+ * Meandroid brain coral (Platygyra): a dome furrowed by long, meandering valleys of nearly even
+ * width. The valleys are the contour lines of a smooth, domain-warped field (like a map's
+ * isolines), which gives exactly the brain pattern: parallel meanders, forks, and a few closed
+ * loops where the field peaks. Walls are thin and sharp, valley floors fluoresce.
+ */
+function genMeander(a: GenArgs): void {
   const { sp, m, rng, out } = a;
   const g = m.growth;
-  const R = Math.max(0.03, (m.spread / 2) * (0.6 + 0.4 * g));
-  const Hm = Math.max(0.01, m.height * (style === 'trachy' ? 0.55 : 0.8));
-  const yaw = a.p.rotationY;
-  const cy = Math.cos(yaw), sy = Math.sin(yaw);
-  const ell = style === 'trachy' ? 0.72 : 1;
+  const up = growUp(m.normal, 0.6);
+  const R = Math.max(0.03, (m.spread / 2) * (0.55 + 0.45 * g));
+  const Hd = Math.max(0.015, Math.min(m.height, R * 0.7));
+  const period = Math.max(0.006, cm(sp.leafLength, 0.5) * 2.2);
+  const depth = period * 0.32;
+  const [t1, t2] = basis(up);
   const noise = new Noise3(a.p.seed);
+  const fl = 1 / (period * 5);
+  const K = 1 / (period * fl * 0.8);
+  const wallC = lin(sp.color), valC = lin(sp.color2 ?? sp.color);
   const gb = new GeoBuilder();
-  const rings = 36, segs = 96;
-  const c1 = lin(sp.color), c2 = lin(sp.color2 ?? sp.color);
+  const rings = 64, segs = 256;
   const ph = rng.range(0, 6.28);
   for (let j = 0; j <= rings; j++) {
     const r = j / rings;
     for (let k = 0; k <= segs; k++) {
       const th = (k / segs) * Math.PI * 2;
-      const lu = Math.cos(th) * r, lv = Math.sin(th) * r * ell;
-      let h = Hm * Math.pow(Math.max(0, 1 - r * r), 0.6);
-      let col: RGB, glow = 0;
-      if (style === 'trachy') {
-        // Meandering valleys between fleshy folds (domain-warped ridge lines), valleys fluorescent.
-        const wx = lu * 3.4 + noise.noise(lu * 1.6, lv * 1.6, 0.3) * 0.9;
-        const wy = lv * 3.4 + noise.noise(lu * 1.6 + 4.1, lv * 1.6, 0.7) * 0.9;
-        const ridge = Math.pow(1 - Math.abs(noise.noise(wx, wy, 1.9)), 6);
-        const fold = smoothstep(0.25, 0.85, ridge);
-        h += Hm * 0.16 * fold * (1 - r * 0.6) - Hm * 0.05 * (1 - fold);
-        col = mixRGB(mixRGB(c2, c1, 0.25), mixRGB(c1, c2, 0.1), fold);
-        col = mulRGB(col, [0.8 + 0.3 * fold, 0.8 + 0.3 * fold, 0.8 + 0.3 * fold]);
-        glow = 1 - fold;
+      const u = Math.cos(th) * r, v = Math.sin(th) * r;
+      const h = Hd * Math.pow(Math.max(0, 1 - r * r), 0.55) - 0.003;
+      const nrm = norm(add(add(scl(up, Math.max(0.05, 1 - r * 0.9)), t1, u * 0.9), t2, v * 0.9));
+      const p0 = add(add(add(m.anchor, up, h), t1, u * R), t2, v * R);
+      // Contour stripes of a warped low-frequency field (seamless: evaluated in 3-D).
+      const wx = noise.noise(p0[0] * fl * 1.7 + 3.1, p0[1] * fl * 1.7, p0[2] * fl * 1.7) * 0.7;
+      const F = noise.noise(p0[0] * fl + wx, p0[1] * fl + 1.9, p0[2] * fl - wx);
+      const t = F * K;
+      const d = Math.abs(t - Math.round(t)); // 0 on a wall crest … 0.5 mid-valley
+      const valley = smoothstep(0.08, 0.5, d);
+      // Sharp walls, U-shaped valley floors, a fine mouth line along the valley axis.
+      let disp = -depth * Math.pow(valley, 0.8);
+      disp -= depth * 0.15 * Math.exp(-Math.pow((0.5 - d) / 0.05, 2));
+      disp *= 0.35 + 0.65 * smoothstep(1, 0.75, r);
+      // Walls and valleys about equally wide: brown ridges over darker, fluorescent floors.
+      let col = mixRGB(mulRGB(wallC, [1.15, 1.12, 1.05]), mulRGB(valC, [0.8, 0.8, 0.8]), smoothstep(0.2, 0.3, d));
+      col = mixRGB(col, mulRGB(valC, [0.45, 0.45, 0.45]), Math.exp(-Math.pow((0.5 - d) / 0.04, 2)) * 0.6);
+      const ao = 0.6 + 0.4 * (1 - valley * 0.8);
+      gb.vertex(add(p0, nrm, disp), nrm, [u * 0.5 + 0.5, v * 0.5 + 0.5], mulRGB(col, [ao, ao, ao]), [u * R, v * R, h]);
+      gb.attr('aSway', 4, [m.anchor[1], 1, 0, ph]);
+      gb.attr('aGlow', 1, [smoothstep(0.2, 0.45, d) * 0.9]);
+    }
+  }
+  const w = segs + 1;
+  for (let j = 0; j < rings; j++) {
+    for (let k = 0; k < segs; k++) {
+      const v0 = j * w + k;
+      gb.tri(v0, v0 + w, v0 + 1);
+      gb.tri(v0 + 1, v0 + w, v0 + w + 1);
+    }
+  }
+  const geo = gb.build();
+  geo.computeVertexNormals();
+  uniqueMesh(out, geo, { roughness: 0.5, transl: 0.25, fluor: fluorOf(sp, 0.9), glow: true, detail: { freq: 900, bump: 0.00015, albedoVar: 0.06 } });
+  out.proxy = { a: m.anchor, b: add(m.anchor, up, Hd), r: R };
+}
+
+/**
+ * Free-living open brain (Trachyphyllia: a few broad, fleshy, inflated folds around deep
+ * fluorescent valleys, on an hourglass-shaped base) and plate coral (Fungia: a low disc of
+ * toothed radial septa, alternating major and minor, around a slit mouth).
+ */
+function genFreeLiving(a: GenArgs, style: 'trachy' | 'plate'): void {
+  const { sp, m, rng, out } = a;
+  const g = m.growth;
+  const R = Math.max(0.03, (m.spread / 2) * (0.6 + 0.4 * g));
+  const Hm = Math.max(0.008, m.height * (style === 'trachy' ? 0.6 : 0.45));
+  const yaw = a.p.rotationY;
+  const cy = Math.cos(yaw), sy = Math.sin(yaw);
+  const noise = new Noise3(a.p.seed);
+  const gb = new GeoBuilder();
+  const trachy = style === 'trachy';
+  const rings = trachy ? 44 : 30, segs = trachy ? 128 : 288;
+  const c1 = lin(sp.color), c2 = lin(sp.color2 ?? sp.color);
+  const ph = rng.range(0, 6.28);
+  // Plate: 40–56 major septa with as many minor ones between.
+  const nSepta = trachy ? 0 : 2 * Math.round(rng.range(20, 28));
+  for (let j = 0; j <= rings; j++) {
+    const r = j / rings;
+    for (let k = 0; k <= segs; k++) {
+      const th = (k / segs) * Math.PI * 2;
+      // Trachyphyllia: oval with an hourglass waist; Fungia: round.
+      const pinch = trachy ? 1 - 0.2 * Math.pow(Math.sin(th), 4) : 1;
+      const lu = Math.cos(th) * r * pinch, lv = Math.sin(th) * r * (trachy ? 0.74 : 1) * pinch;
+      let h: number, col: RGB, glow = 0;
+      if (trachy) {
+        // Two or three big valleys: contour lines of a warped field across the colony.
+        const wx = noise.noise(lu * 1.3 + 4.1, lv * 1.3, 0.3) * 0.6;
+        const F = noise.noise(lu * 0.9 + wx, lv * 0.9 + 1.7, 0.8 + wx * 0.5) + lu * 0.35;
+        const t = F * 2.6;
+        const d = Math.abs(t - Math.round(t)); // 0 valley axis … 0.5 top of a fold
+        const fold = smoothstep(0.04, 0.42, d);
+        h = Hm * Math.pow(Math.max(0, 1 - r * r), 0.35) * (0.45 + 0.55 * Math.pow(fold, 0.55));
+        // The fleshy mantle bulges past the skeleton rim and rolls under.
+        if (r > 0.9) h *= 1 - (r - 0.9) * 4;
+        col = mixRGB(mulRGB(c2, [0.8, 0.8, 0.8]), c1, smoothstep(0.08, 0.3, d));
+        col = mulRGB(col, [0.82 + 0.3 * fold, 0.82 + 0.3 * fold, 0.82 + 0.3 * fold]);
+        // Mouths along the valley axis.
+        const mouth = Math.exp(-Math.pow(d / 0.035, 2)) * smoothstep(0.55, 0.8, noise.noise(lu * 9, lv * 9, 2.2) * 0.5 + 0.5);
+        h -= Hm * 0.08 * mouth;
+        col = mixRGB(col, mulRGB(c2, [0.35, 0.35, 0.35]), mouth * 0.7);
+        glow = (1 - smoothstep(0.05, 0.25, d)) * 0.9;
       } else {
-        const septa = Math.pow(Math.abs(Math.sin(th * 34 + noise.noise(r * 4, th, 0.2) * 0.5)), 0.4);
-        h += 0.0018 * septa * smoothstep(0.1, 0.25, r);
-        const slit = Math.exp(-Math.pow(lv / 0.04, 2)) * (Math.abs(lu) < 0.35 ? 1 : 0);
-        h -= 0.004 * slit;
-        col = mixRGB(mulRGB(c1, [0.75 + 0.35 * septa, 0.75 + 0.35 * septa, 0.75 + 0.3 * septa]), c2, smoothstep(0.75, 1, r) * 0.6);
-        glow = smoothstep(0.8, 1, r) * 0.6;
+        h = Hm * Math.pow(Math.max(0, 1 - r * r), 0.7);
+        const phase = th * (nSepta / 2) + noise.noise(r * 3, th * 0.5, 0.2) * 0.4;
+        const major = Math.pow(Math.abs(Math.cos(phase)), 5);
+        const minor = Math.pow(Math.abs(Math.sin(phase)), 5) * 0.55 * smoothstep(0.35, 0.6, r);
+        // Septal teeth: the crests are beaded along their length.
+        const teeth = 0.7 + 0.3 * Math.sin(r * R * 1300 + Math.cos(phase) * 2);
+        const septa = Math.max(major, minor) * teeth * smoothstep(0.08, 0.2, r);
+        h += 0.0032 * septa * (1 - 0.4 * r);
+        const slit = Math.exp(-Math.pow(lv / 0.035, 2)) * (Math.abs(lu) < 0.3 ? 1 - Math.abs(lu) / 0.3 : 0);
+        h -= 0.006 * slit;
+        if (r > 0.96) h -= (r - 0.96) * 0.06;
+        const crest = smoothstep(0.25, 0.85, septa);
+        col = mulRGB(c1, [0.62 + 0.55 * crest, 0.62 + 0.55 * crest, 0.6 + 0.5 * crest]);
+        col = mixRGB(col, c2, smoothstep(0.7, 1, r) * 0.55 + crest * 0.15);
+        col = mixRGB(col, mulRGB(c1, [0.4, 0.35, 0.35]), slit * 0.8);
+        glow = smoothstep(0.75, 1, r) * 0.6 + crest * 0.15;
       }
       const wx = (lu * cy - lv * sy) * R, wz = (lu * sy + lv * cy) * R;
       const x = m.anchor[0] + wx, z = m.anchor[2] + wz;
@@ -641,7 +732,7 @@ function genFreeLiving(a: GenArgs, style: 'trachy' | 'plate'): void {
   }
   const geo = gb.build();
   geo.computeVertexNormals();
-  uniqueMesh(out, geo, { roughness: style === 'trachy' ? 0.32 : 0.6, transl: style === 'trachy' ? 0.45 : 0.1, fluor: fluorOf(sp, 0.9), glow: true, detail: { freq: 500, bump: 0.0002, albedoVar: 0.06 } });
+  uniqueMesh(out, geo, { roughness: trachy ? 0.3 : 0.55, transl: trachy ? 0.5 : 0.15, fluor: fluorOf(sp, 0.9), glow: true, detail: { freq: 500, bump: trachy ? 0.00015 : 0.0003, albedoVar: 0.06 } });
   out.proxy = { a: m.anchor, b: add(m.anchor, UP, Hm), r: R };
 }
 
@@ -785,8 +876,8 @@ function genMontiCap(a: GenArgs, up: V3): void {
     for (let j = 0; j < rows; j++) {
       for (let k = 0; k < cols; k++) {
         const v0 = start + j * w + k;
-        gb.tri(v0, v0 + 1, v0 + w);
-        gb.tri(v0 + 1, v0 + w + 1, v0 + w);
+        gb.tri(v0, v0 + w, v0 + 1);
+        gb.tri(v0 + 1, v0 + w, v0 + w + 1);
       }
     }
   }
@@ -889,9 +980,9 @@ function genAnemone(a: GenArgs, style: 'bta' | 'carpet' | 'sebae' | 'rockflower'
   const base = lin(sp.color), tipC = lin(sp.color2 ?? sp.color);
   const tent = use(out, tentaclePart(
     `${sp.id}/tentacle`,
-    { rr: style === 'bta' ? 0.085 : style === 'sebae' ? 0.05 : 0.16, taper: style === 'sebae' ? 0.7 : 0.25, tip: tipShape, rows: style === 'carpet' || style === 'rockflower' ? 3 : 9, radial: style === 'carpet' ? 4 : 6, tipScale: style === 'bta' ? 1.0 : 1, tipDetail: style === 'carpet' ? 0 : 1 },
+    { rr: style === 'bta' ? 0.085 : style === 'sebae' ? 0.05 : 0.16, taper: style === 'sebae' ? 0.7 : 0.25, tip: tipShape, rows: style === 'carpet' || style === 'rockflower' ? 3 : 9, radial: style === 'carpet' ? 4 : 6, tipScale: style === 'bta' ? 0.7 : 1, tipDetail: style === 'carpet' ? 0 : 1 },
     { transl: 0.6, roughness: 0.35, fluor: fluorOf(sp, 0.7) },
-    { base, tip: tipC, from: style === 'bta' ? 0.72 : 0.6, ring: style === 'bta' ? lin('#f0e8e0') : undefined },
+    { base, tip: tipC, from: style === 'bta' ? 0.62 : 0.6, ring: style === 'bta' ? lin('#f0e8e0') : undefined },
   ));
   const n = Math.round((style === 'carpet' ? 450 + 700 * g : style === 'rockflower' ? 50 + 40 * g : 70 + 110 * g) * Math.min(1.2, ctx.density + 0.2));
   const L0 = cm(sp.leafLength, 5);
@@ -947,6 +1038,8 @@ export function genCoral(args: GenArgs): void {
     case 'favites':
     case 'goniopora':
       return genMassive(args, style);
+    case 'meander':
+      return genMeander(args);
     case 'trachy':
     case 'plate':
       return genFreeLiving(args, style);

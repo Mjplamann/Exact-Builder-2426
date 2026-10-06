@@ -62,6 +62,8 @@ export interface FishUniforms {
   uFishSkin: { value: Vector4 };
   /** Scale cells across the body atlas (u, v), saturation, 1 = fin sheet material. */
   uFishSkin2: { value: Vector4 };
+  /** x (SL) where the scaled flank begins behind the gill cover (scale glints only behind it). */
+  uFishSkin3: { value: Vector4 };
 }
 
 /** Optional per-variant skin parameters (scale lattice for glints, animal size). */
@@ -74,6 +76,8 @@ export interface SkinOpts {
   adultCm: number;
   /** Invertebrate (chitin, shells): no wrap/transmission defaults of fish skin. */
   invertebrate?: boolean;
+  /** Rear edge of the gill cover (SL); the scaled flank starts behind it. */
+  opercleX?: number;
 }
 
 export function swimUniforms(swim: SwimParams, info: FishGeometryInfo, halfWidthLocal: number): Pick<FishUniforms, 'uSwimEnv' | 'uSwimWave' | 'uSwimMode' | 'uRibbon' | 'uFinAnim'> {
@@ -121,6 +125,7 @@ export function createFishMaterials(
     uTranslucency: { value: translucency },
     uFishSkin: { value: bodySkin },
     uFishSkin2: { value: bodySkin2 },
+    uFishSkin3: { value: new Vector4(sk.opercleX ?? 0.25, 0, 0, 0) },
   };
 
   const body = new MeshPhysicalMaterial({

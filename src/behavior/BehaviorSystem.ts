@@ -1,13 +1,13 @@
 import type { FishEntity, FoodKind, FoodParticle } from '../core/types';
 import type { World } from '../core/world';
 import { FOODS } from '../data/foods';
-import { RK_BURY, enter, startFlee, steerFish, thinkFish } from './behaviors';
+import { RK_BURY, claimCover, enter, startFlee, steerFish, thinkFish } from './behaviors';
 import { type Brain, SURF_DECOR, SURF_NONE, SURF_PLANT, brainOf } from './brain';
 import { Ctx } from './context';
 import { appetite } from './feeding';
 import { WALL_BACK, WALL_FRONT, WALL_LEFT, WALL_RIGHT, hit } from './habitat';
 import { integrateInvertFree, startFall, startRetract, startTailflip, steerInvert, thinkInvert } from './inverts';
-import { animateBreathing, integrateSwimmer, type SwimEnv } from './locomotion';
+import { animateBreathing, constrainSwimmer, integrateSwimmer, type SwimEnv } from './locomotion';
 import { FastRng, TAU, approach, clamp, smoothstep } from './math';
 import { burstAccel, maxTailHz, maxTurnRate, routineAccel } from './params';
 import { attachDecor, attachGlass, attachNearest, attachSubstrate, animateSurface, detach, integrateSurface, standoff } from './surface';
@@ -67,19 +67,105 @@ export class BehaviorSystem {
   /** Decor/plants changed: world.colliders & world.cover were rebuilt. Refresh any caches. */
   onEnvironmentChanged(world: World): void {
     const ctx = this.ctx;
+    const h = ctx.h;
+    // Cover, perch and collider indices refer to the old layout. Remember what each animal was
+    // using, rebuild, then hand everyone the equivalent spot in the new layout — a plant growing
+    // or a rock nudged must not send every sleeping fish out of its cave.
+    const oldCover = h.cover;
+    const oldVersion = h.version;
+    const oldPerches = h.perches;
+    const oldPerchCount = h.perchCount;
+    const oldColliders = h.colliders;
     ctx.world = world;
-    ctx.h.rebuild(world);
+    h.rebuild(world);
     for (const f of world.fish) {
       const b = brainOf(f);
+      const L = b.L;
+      // Shelter.
+      const had = b.coverIdx >= 0 && b.coverVersion === oldVersion && b.coverIdx < oldCover.length ? oldCover[b.coverIdx] : null;
       b.coverIdx = -1;
-      b.perchIdx = -1;
       b.shelterOwner = undefined;
-      b.hasGoal = false;
+      if (had) {
+        const ni = this.matchCover(had.ownerId, had.kind, had.position[0], had.position[1], had.position[2]);
+        if (ni >= 0) claimCover(ctx, b, ni);
+      }
+      // Perch.
+      if (b.perchIdx >= 0 && b.perchIdx < oldPerchCount) {
+        const o = b.perchIdx * 3;
+        b.perchIdx = this.matchPerch(oldPerches[o], oldPerches[o + 1], oldPerches[o + 2], 0.03);
+      } else b.perchIdx = -1;
+      // A goal on a decor surface names a collider index: keep it only if the same piece is still
+      // there (else re-plan), so nobody "attaches" to a different rock across the tank.
+      if (b.goalSurf === SURF_DECOR) {
+        const oc = b.goalSurfIdx >= 0 && b.goalSurfIdx < oldColliders.length ? oldColliders[b.goalSurfIdx] : null;
+        const ni = oc ? this.matchCollider(oc.ownerId, b.gx, b.gy, b.gz, 2 * L + 0.02) : -1;
+        if (ni >= 0) b.goalSurfIdx = ni;
+        else {
+          b.goalSurf = SURF_NONE;
+          b.goalSurfIdx = -1;
+          b.hasGoal = false;
+        }
+      }
+      // Goals that are now inside rock or wood are re-planned; everything else carries on.
+      if (b.hasGoal && h.colliders.length > 0 && h.nearestDecor(b.gx, b.gy, b.gz, b.shelterOwner) < 0.25 * b.p.depthFrac * L) b.hasGoal = false;
       if (b.surf === SURF_DECOR) {
-        // Collider indices changed: re-seat on whatever is nearest now.
-        if (!attachNearest(ctx.h, f, b, Math.max(0.02, 2 * b.L), true, true)) detach(f, b);
+        // Re-seat on the same piece if it is still under the animal, else on whatever is nearest.
+        const oc = b.surfIdx >= 0 && b.surfIdx < oldColliders.length ? oldColliders[b.surfIdx] : null;
+        const k = f.kin;
+        const ni = oc ? this.matchCollider(oc.ownerId, k.pos[0], k.pos[1], k.pos[2], standoff(b) + 0.01) : -1;
+        if (ni >= 0) attachDecor(h, f, b, ni);
+        else if (!attachNearest(h, f, b, Math.max(0.02, 2 * L), true, true)) {
+          detach(f, b);
+          // The rock it sat on is gone: crawlers and walkers drop to the bottom.
+          if (b.p.move === 'crawler') startFall(f, b);
+        }
       }
     }
+  }
+
+  /** Index of the cover point in the current layout that best matches an old one, or −1. */
+  private matchCover(owner: string, kind: string, x: number, y: number, z: number): number {
+    const cov = this.ctx.h.cover;
+    let best = -1, bestD = Infinity;
+    for (let i = 0; i < cov.length; i++) {
+      const c = cov[i];
+      if (c.kind !== kind) continue;
+      const d = Math.hypot(c.position[0] - x, c.position[1] - y, c.position[2] - z) * (c.ownerId === owner ? 0.25 : 1);
+      if (d < bestD) {
+        bestD = d;
+        best = i;
+      }
+    }
+    // Same owner anywhere (it may have been moved), or another shelter of that kind close by.
+    return best >= 0 && (cov[best].ownerId === owner || bestD < 0.1) ? best : -1;
+  }
+
+  private matchPerch(x: number, y: number, z: number, maxD: number): number {
+    const h = this.ctx.h;
+    let best = -1, bestD = maxD;
+    for (let i = 0; i < h.perchCount; i++) {
+      const d = Math.hypot(h.perches[i * 3] - x, h.perches[i * 3 + 1] - y, h.perches[i * 3 + 2] - z);
+      if (d < bestD) {
+        bestD = d;
+        best = i;
+      }
+    }
+    return best;
+  }
+
+  /** Collider of `owner` within `maxD` of the point (nearest), or −1. */
+  private matchCollider(owner: string, x: number, y: number, z: number, maxD: number): number {
+    const h = this.ctx.h;
+    let best = -1, bestD = maxD;
+    for (let i = 0; i < h.colliders.length; i++) {
+      if (h.colliders[i].ownerId !== owner) continue;
+      const d = h.sdf(i, x, y, z);
+      if (d < bestD) {
+        bestD = d;
+        best = i;
+      }
+    }
+    return best;
   }
 
   // ------------------------------------------------------------------------------------------
@@ -134,6 +220,7 @@ export class BehaviorSystem {
       px[i * 3] = p[0];
       px[i * 3 + 1] = p[1];
       px[i * 3 + 2] = p[2];
+      this.capturePose(f, b, b.pre);
       if (b.p.move === 'swimmer' && b.p.schooling > 0) {
         const g = ctx.group(f.species.id, b.p);
         g.count++;
@@ -171,8 +258,88 @@ export class BehaviorSystem {
       for (let i = 0; i < n; i++) this.integrate(fish[i], ctx.brains[i], hdt);
     }
 
+    // Settling onto surfaces happens over a few frames, never as a one-frame snap.
+    for (let i = 0; i < n; i++) this.settle(fish[i], ctx.brains[i], dt);
+
     // Animation outputs.
     for (let i = 0; i < n; i++) this.writeKinematics(fish[i], ctx.brains[i], dt);
+  }
+
+  /** Position, forward, up (world up when free), surface kind and attach count → out[0..10]. */
+  private capturePose(f: FishEntity, b: Brain, out: Float64Array): void {
+    const k = f.kin;
+    out[0] = k.pos[0];
+    out[1] = k.pos[1];
+    out[2] = k.pos[2];
+    out[3] = k.forward[0];
+    out[4] = k.forward[1];
+    out[5] = k.forward[2];
+    const u = b.surf !== SURF_NONE ? b.up : k.up;
+    out[6] = u ? u[0] : 0;
+    out[7] = u ? u[1] : 1;
+    out[8] = u ? u[2] : 0;
+    out[9] = b.surf;
+    out[10] = b.attaches;
+  }
+
+  /**
+   * Attaching to a surface projects the animal onto it (a pleco nosing the glass ends up lying
+   * flat on it; a shrimp ends its swim on a rock): that is a jump of up to a body length within
+   * one frame. Detect it and play it out as a short, eased landing instead — the animal is
+   * already attached (the simulation sees the final pose) but is drawn sliding into place.
+   */
+  private settle(f: FishEntity, b: Brain, dt: number): void {
+    const k = f.kin;
+    const S = b.land;
+    if (b.landT >= 0) {
+      if (b.surf === SURF_NONE) {
+        b.landT = -1;
+        return;
+      }
+      b.landT += dt;
+      const u = Math.min(1, b.landT / b.landDur);
+      const e = u * u * (3 - 2 * u);
+      for (let c = 0; c < 3; c++) k.pos[c] = S[c] + (S[3 + c] - S[c]) * e;
+      blendUnit(S, 6, 9, e, k.forward);
+      blendUnit(S, 12, 15, e, b.up);
+      if (u >= 1) b.landT = -1;
+      return;
+    }
+    if (b.p.move === 'sessile') return;
+    const P = b.pre;
+    const dx = k.pos[0] - P[0], dy = k.pos[1] - P[1], dz = k.pos[2] - P[2];
+    const jump = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    if (b.surf === SURF_NONE) {
+      // Let go of (or briefly touched) a surface this frame and got shoved clear of it: spread
+      // the shove over a few frames instead of one.
+      if (P[9] === SURF_NONE && P[10] === b.attaches) return;
+      const lim = Math.max(0.006, Math.abs(b.speed) * dt * 1.5 + 0.003);
+      if (jump > lim && jump < 0.6) {
+        const s = lim / jump;
+        k.pos[0] = P[0] + dx * s;
+        k.pos[1] = P[1] + dy * s;
+        k.pos[2] = P[2] + dz * s;
+      }
+      return;
+    }
+    if (jump <= Math.max(0.004, Math.abs(b.speed) * dt * 1.5 + 0.002) || jump > 0.6) return;
+    // From: last frame's pose. To: the attached pose just computed.
+    for (let c = 0; c < 3; c++) {
+      S[c] = P[c];
+      S[3 + c] = k.pos[c];
+      S[6 + c] = P[3 + c];
+      S[9 + c] = k.forward[c];
+      S[12 + c] = P[6 + c];
+      S[15 + c] = b.up[c];
+    }
+    b.landT = 0;
+    b.landDur = clamp(0.15 + jump * 4, 0.15, 0.5);
+    k.pos[0] = P[0];
+    k.pos[1] = P[1];
+    k.pos[2] = P[2];
+    blendUnit(S, 6, 9, 0, k.forward);
+    blendUnit(S, 12, 15, 0, b.up);
+    b.speed = 0;
   }
 
   private refreshSize(f: FishEntity, b: Brain): void {
@@ -206,7 +373,8 @@ export class BehaviorSystem {
     const L = this.ctx.light;
     switch (b.p.species.activity) {
       case 'nocturnal':
-        return 0.6 * L;
+        // Out on a daytime excursion: awake (colors up, normal pace) until it heads back.
+        return b.foray > 0 ? 0.15 * L : 0.6 * L;
       case 'crepuscular': {
         const twilight = 1 - Math.abs(2 * L - 1);
         return (L > 0.5 ? 0.25 : 0.55) * (1 - twilight);
@@ -240,11 +408,18 @@ export class BehaviorSystem {
     b.thinkT -= dt;
     b.scanT -= dt;
     b.biteT -= dt;
+    b.foray -= dt;
+    b.forayT -= dt;
+    if (b.skipT > 0) {
+      b.skipT -= dt;
+      if (b.skipT <= 0) b.skipFood[0] = b.skipFood[1] = b.skipFood[2] = null;
+    }
     // Rest follows the light with a lag of minutes of sim time (fish settle gradually), but a
     // sudden switch-on of the lights wakes sleeping fish within seconds.
     const target = this.restTarget(b);
     let tau = Math.max(1.5, 240 / ctx.timeScale);
     if (target < b.rest - 0.3 && ctx.light > 0.6 && b.p.species.activity !== 'nocturnal') tau = Math.min(tau, 6);
+    if (b.foray > 0) tau = Math.min(tau, 5);
     b.rest = approach(b.rest, target, tau, dt);
     // Shoal sub-groups reshuffle now and then.
     if (ctx.rng.chance(dt / 90)) b.anchor = Math.floor(ctx.rng.next() * 4);
@@ -253,10 +428,17 @@ export class BehaviorSystem {
   private integrate(f: FishEntity, b: Brain, dt: number): void {
     const p = b.p;
     if (p.move === 'sessile') return;
+    if (b.landT >= 0) {
+      // Still settling onto its surface (see settle()): hold the eased pose.
+      if (b.surf !== SURF_NONE) return;
+      b.landT = -1;
+    }
     if (b.surf !== SURF_NONE) {
       const climbs = p.move === 'crawler' || (p.move === 'walker' ? p.t.climbs : b.mode === 'graze' || (b.mode === 'rest' && p.t.clings) || (b.mode === 'feed' && p.t.clings));
       const lateral = f.species.group === 'crab' && f.species.body.archetype !== 'hermit-crab';
       integrateSurface(this.ctx.h, f, b, dt, climbs, lateral);
+      // Lost its footing on a steep face: invertebrates drop (fish simply swim on).
+      if ((b.surf as number) === SURF_NONE && p.move !== 'swimmer') startFall(f, b);
       return;
     }
     if (p.move !== 'swimmer' && integrateInvertFree(this.ctx, f, b, dt)) return;
@@ -265,8 +447,9 @@ export class BehaviorSystem {
     if (b.buried > 0) {
       const k = f.kin;
       const fl = this.ctx.h.floor(k.pos[0], k.pos[2]);
-      const target = fl + (0.5 * p.depthFrac * b.L) * (1 - 2.1 * b.buried);
-      if (b.mode === 'rest' || b.mode === 'hide') k.pos[1] = Math.min(k.pos[1], approach(k.pos[1], target, 0.4, dt));
+      const target = Math.max(fl + (0.5 * p.depthFrac * b.L) * (1 - 2.1 * b.buried), 0.9 * (0.5 * p.depthFrac * b.L + 0.002));
+      // Wriggling down into the sand takes a moment (≤ ~1 body length per second).
+      if (b.mode === 'rest' || b.mode === 'hide') k.pos[1] = Math.min(k.pos[1], Math.max(k.pos[1] - Math.max(0.01, b.L) * dt, approach(k.pos[1], target, 0.4, dt)));
       else k.pos[1] = Math.max(k.pos[1], target);
     }
   }
@@ -283,6 +466,7 @@ export class BehaviorSystem {
       animateSurface(f, b, dt, picking, t);
       if (p.move === 'swimmer') animateBreathing(f, b, dt, t);
       if (b.surf === SURF_PLANT) k.up = b.up;
+      if (p.species.locomotion === 'seahorse') this.holdfastPose(f, b, t);
       return;
     }
     if (p.move !== 'swimmer' && (b.mode === 'fall' || b.mode === 'tailflip')) {
@@ -325,6 +509,33 @@ export class BehaviorSystem {
     k.tailAmp = b.tailAmp;
     k.finAmp = b.finAmp;
     animateBreathing(f, b, dt, t);
+  }
+
+  /**
+   * A seahorse anchored by its tail stays upright whatever the slope of its holdfast, swaying
+   * gently with the water (instead of lying flat along a rock face like a goby).
+   */
+  private holdfastPose(f: FishEntity, b: Brain, t: number): void {
+    const k = f.kin;
+    const fw = k.forward;
+    let hx = fw[0], hz = fw[2];
+    let hl = Math.sqrt(hx * hx + hz * hz);
+    if (hl < 1e-3) {
+      hx = Math.cos(b.yaw);
+      hz = Math.sin(b.yaw);
+      hl = 1;
+    }
+    fw[0] = hx / hl;
+    fw[1] = 0;
+    fw[2] = hz / hl;
+    const sx = 0.07 * Math.sin(t * 0.45 + (b.noiseSeed & 255)), sz = 0.05 * Math.sin(t * 0.31 + (b.noiseSeed & 127));
+    const ul = Math.sqrt(sx * sx + 1 + sz * sz);
+    // (b.up is this animal's own output vector; the surface normal lives in b.nx/ny/nz.)
+    b.up[0] = sx / ul;
+    b.up[1] = 1 / ul;
+    b.up[2] = sz / ul;
+    k.up = b.up;
+    k.pitch = 0;
   }
 
   // ------------------------------------------------------------------------------------------
@@ -425,8 +636,13 @@ export class BehaviorSystem {
     if (p.move === 'swimmer') {
       b.fear = 0.35;
       enter(ctx, fish, b, 'explore', 50);
+      // Start with the whole body inside the water (big fish released at the surface).
+      constrainSwimmer(h, fish, b);
+    } else if (p.move === 'walker' && (fish.species.group === 'crab' || fish.species.group === 'crayfish')) {
+      // Crabs & crayfish sink to the bottom, legs spread.
+      startFall(fish, b);
     } else if (p.move === 'walker') {
-      // Shrimp swim straight down to the bottom; crabs & crayfish sink.
+      // Shrimp swim straight down to the bottom.
       thinkInvert(ctx, fish, b);
       b.mode = 'swim';
       b.label = 'swimming';
@@ -613,4 +829,19 @@ export class BehaviorSystem {
       }
     }
   }
+}
+
+/** out = normalize(lerp(S[a..a+2], S[b..b+2], e)), falling back to the end vector if degenerate. */
+function blendUnit(S: Float64Array, a: number, b: number, e: number, out: number[] | [number, number, number]): void {
+  let x = S[a] + (S[b] - S[a]) * e, y = S[a + 1] + (S[b + 1] - S[a + 1]) * e, z = S[a + 2] + (S[b + 2] - S[a + 2]) * e;
+  let l = Math.sqrt(x * x + y * y + z * z);
+  if (l < 0.2) {
+    x = S[b];
+    y = S[b + 1];
+    z = S[b + 2];
+    l = Math.sqrt(x * x + y * y + z * z) || 1;
+  }
+  out[0] = x / l;
+  out[1] = y / l;
+  out[2] = z / l;
 }

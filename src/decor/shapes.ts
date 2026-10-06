@@ -490,9 +490,10 @@ function rockDragon(rng: Rng, S: number): SdfSpec {
     const a = rng.range(0, Math.PI * 2);
     spec.prims.push(ell([Math.cos(a) * w * 0.55, h * rng.range(0.2, 0.55) - bury, Math.sin(a) * w * 0.35], [w * rng.range(0.35, 0.55), h * rng.range(0.25, 0.45), w * rng.range(0.3, 0.45)], rng.range(-0.4, 0.4), rng.range(0, 3), rng.range(-0.5, 0.5)));
   }
-  addCuts(spec, rng, rng.int(5, 8), -0.1, [0.78, 0.94]);
-  addPockets(spec, rng, rng.int(6, 11), [S * 0.03, S * 0.075], [0.3, 0.65], [0, h * 0.4 - bury, 0], 0.6);
-  spec.holeBlend = 0.006;
+  addCuts(spec, rng, rng.int(6, 9), -0.1, [0.76, 0.93]);
+  // Many smaller, irregular pockets rather than a few round "eye sockets".
+  addPockets(spec, rng, rng.int(11, 17), [S * 0.018, S * 0.05], [0.18, 0.5], [0, h * 0.4 - bury, 0], 0.6);
+  spec.holeBlend = 0.004;
   addWarp(spec, rng, S * 0.07, S * 0.55, 4);
   return spec;
 }
@@ -640,7 +641,9 @@ export function liveRockForm(seed: number): LiveRockForm {
 }
 
 function rockLive(rng: Rng, S: number, seed: number, shape: DecorShape): SdfSpec {
-  const spec = newSdf(0.02);
+  // A tighter blend than other stones: reef rock is old coral rubble cemented together —
+  // knobs, branch stubs and ledges meet at crisp junctions, not in soft potato curves.
+  const spec = newSdf(0.013);
   const form = liveRockForm(seed);
   const w = S * 0.5;
   const bury = 0.012;
@@ -651,8 +654,8 @@ function rockLive(rng: Rng, S: number, seed: number, shape: DecorShape): SdfSpec
       let d = randomUnit(rng);
       if (upOnly || d[1] < -0.3) d = vnorm([d[0], Math.abs(d[1]) * 0.8 + 0.1, d[2]]);
       const at: V3 = [c[0] + d[0] * ext[0] * 0.8, c[1] + d[1] * ext[1] * 0.8, c[2] + d[2] * ext[2] * 0.8];
-      const len = w * rng.range(0.14, 0.32);
-      const rad = len * rng.range(0.35, 0.6);
+      const len = w * rng.range(0.15, 0.38);
+      const rad = len * rng.range(0.3, 0.52);
       // Ellipsoid elongated along d: orient its x axis with yaw/pitch of d.
       const yaw = Math.atan2(-d[2], d[0]);
       const pitch = Math.asin(Math.max(-1, Math.min(1, d[1])));
@@ -667,7 +670,7 @@ function rockLive(rng: Rng, S: number, seed: number, shape: DecorShape): SdfSpec
       const a = rng.range(0, Math.PI * 2);
       blob([Math.cos(a) * w * rng.range(0.3, 0.6), h * rng.range(0.2, 0.6) - bury, Math.sin(a) * w * rng.range(0.2, 0.45)], [w * rng.range(0.25, 0.42), h * rng.range(0.22, 0.38), w * rng.range(0.22, 0.36)]);
     }
-    knobs(rng.int(5, 9), [0, h * 0.42 - bury, 0], body);
+    knobs(rng.int(7, 12), [0, h * 0.42 - bury, 0], body);
   } else if (form === 'shelf') {
     // A low base with a flat, knobbly table jutting out — corals on top, shade below.
     const h = S * rng.range(0.35, 0.5);
@@ -703,10 +706,10 @@ function rockLive(rng: Rng, S: number, seed: number, shape: DecorShape): SdfSpec
     shape.cover.push({ p: [0, h * 0.25, 0], radius: Math.min(span * 0.55, h * 0.3), kind: 'cave' });
   }
   // Broken faces where the rock was quarried/fractured.
-  addCuts(spec, rng, rng.int(1, 3), 0.05, [0.86, 0.96]);
-  spec.cutBlend = 0.006;
+  addCuts(spec, rng, rng.int(2, 4), 0.05, [0.84, 0.95]);
+  spec.cutBlend = 0.005;
   const center: V3 = [0, S * 0.22, 0];
-  addPockets(spec, rng, rng.int(6, 12), [S * 0.02, S * 0.06], [0.15, 0.45], center);
+  addPockets(spec, rng, rng.int(8, 14), [S * 0.018, S * 0.05], [0.15, 0.45], center);
   if (form !== 'arch' && rng.chance(0.6)) addTunnels(spec, rng, rng.int(1, 2), [S * 0.035, S * 0.06], center, w * 0.6);
   spec.holeBlend = 0.008;
   addWarp(spec, rng, S * 0.06, S * 0.5, 4);
@@ -777,7 +780,9 @@ function caveRock(rng: Rng, S: number, shape: DecorShape): SdfSpec {
   const roof = ell([0, h * 0.78, -w * 0.05], [pillarX * 1.15, h * 0.3, w * 0.5], rng.range(-0.1, 0.1), rng.range(-0.2, 0.2), rng.range(-0.1, 0.1));
   spec.prims.push(...pillars, roof);
   if (rng.chance(0.7)) spec.prims.push(ell([rng.range(-0.3, 0.3) * w, h * 0.5, -w * 0.45], [w * 0.5, h * 0.45, w * 0.3], 0, rng.range(-0.5, 0.5), 0));
-  addCuts(spec, rng, rng.int(2, 5), 0, [0.85, 0.95]);
+  // Broken, faceted faces and a stronger warp: a weathered stone arch, not a smooth bun.
+  addCuts(spec, rng, rng.int(4, 7), -0.1, [0.8, 0.93]);
+  spec.cutBlend = 0.004;
   const ty = tunnelR * 0.85;
   spec.holes.push({ a: [0, ty, -w * 0.35], b: [0, ty, w * 1.4], r: tunnelR });
   spec.holeBlend = 0.012;
@@ -788,7 +793,7 @@ function caveRock(rng: Rng, S: number, shape: DecorShape): SdfSpec {
   }
   shape.colliders.push({ type: 'capsule', a: [-pillarX * 0.9, h * 0.8, -w * 0.05], b: [pillarX * 0.9, h * 0.8, -w * 0.05], radius: h * 0.22, cover: true });
   shape.cover.push({ p: [0, ty, 0], radius: tunnelR * 0.85, kind: 'cave' });
-  addWarp(spec, rng, S * 0.04, S * 0.6, 3);
+  addWarp(spec, rng, S * 0.055, S * 0.5, 4);
   return spec;
 }
 
@@ -1016,9 +1021,10 @@ function rubble(rng: Rng, S: number): Branch[] {
     const a = rng.range(0, Math.PI * 2);
     const rr = Math.sqrt(rng.next()) * S * 0.38;
     const r0 = rng.range(0.004, 0.009);
-    const start: V3 = [Math.cos(a) * rr, r0 * 0.5, Math.sin(a) * rr * 0.8];
+    // Fragments lie half sunk in the sand, at different depths.
+    const start: V3 = [Math.cos(a) * rr, r0 * rng.range(-0.3, 0.5), Math.sin(a) * rr * 0.8];
     const yaw = rng.range(0, Math.PI * 2);
-    const st: WoodStyle = { ...WOOD.manzanita, wander: 0.3, upBias: 0, arch: 0.2, taper: 0.3, tipR: 0.003, branchProb: 0.18, branchAngle: [0.5, 0.9], childScale: 0.8, childLen: 0.6, maxDepth: 1, stepLen: 0.01, spiral: 0, yawSpread: 0 };
+    const st: WoodStyle = { ...WOOD.manzanita, wander: 0.3, upBias: 0, arch: 0.2, taper: 0.3, tipR: 0.003, branchProb: 0.3, branchAngle: [0.5, 0.9], childScale: 0.8, childLen: 0.5, maxDepth: 1, stepLen: 0.01, spiral: 0, yawSpread: 0, kink: 0.15 };
     growBranch(rng, st, out, start, dirFrom(yaw, rng.range(0.0, 0.25)), r0, rng.range(0.04, 0.09), 0, -1, 1);
   }
   return out;
@@ -1038,7 +1044,20 @@ function primColliders(spec: SdfSpec, shape: DecorShape): void {
       const r = p.r;
       const order = [0, 1, 2].sort((i, j) => r[j] - r[i]);
       const long = order[0], mid = order[1], short = order[2];
-      if (r[long] > r[mid] * 1.35) {
+      if (r[short] < r[mid] * 0.6) {
+        // Flat (a shelf, a table, a plate): a row of capsules across its width, each as thick
+        // as the slab is at that place, instead of one fat capsule that misses the rim.
+        const axL: V3 = [p.m[long], p.m[3 + long], p.m[6 + long]];
+        const axM: V3 = [p.m[mid], p.m[3 + mid], p.m[6 + mid]];
+        const n = Math.min(4, Math.max(2, Math.round(r[mid] / r[short])));
+        for (let i = 0; i < n; i++) {
+          const u = (n === 1 ? 0 : (i / (n - 1)) * 2 - 1) * (r[mid] - r[short] * 0.8);
+          const f = Math.sqrt(Math.max(0.05, 1 - (u / r[mid]) ** 2));
+          const half = Math.max(0, r[long] * f - r[short] * f);
+          const c = vadd(p.c, vscale(axM, u));
+          shape.colliders.push({ type: 'capsule', a: vsub(c, vscale(axL, half)), b: vadd(c, vscale(axL, half)), radius: r[short] * f * 0.95 });
+        }
+      } else if (r[long] > r[mid] * 1.35) {
         // Elongated: capsule along the long axis with radius ≈ the middle radius (slightly inset).
         const ax: V3 = [p.m[long], p.m[3 + long], p.m[6 + long]];
         const half = Math.max(0, r[long] - r[mid]);
@@ -1055,6 +1074,141 @@ function primColliders(spec: SdfSpec, shape: DecorShape): void {
       shape.colliders.push({ type: 'capsule', a: [...p.a], b: [...p.b], radius: p.r * 0.95 });
     }
   }
+}
+
+/** Signed distance from a point to a local collider's surface (negative inside). */
+function colliderDist(c: LocalCollider, x: number, y: number, z: number): number {
+  if (c.type === 'sphere') return Math.hypot(x - c.a[0], y - c.a[1], z - c.a[2]) - (c.radius ?? 0);
+  if (c.type === 'capsule' && c.b) return sdCapsule(x, y, z, c.a, c.b, c.radius ?? 0);
+  if (c.type === 'box' && c.half) {
+    const yaw = c.rotY ?? 0, cs = Math.cos(yaw), sn = Math.sin(yaw);
+    const dx = x - c.a[0], dz = z - c.a[2];
+    const qx = Math.abs(dx * cs - dz * sn) - c.half[0], qy = Math.abs(y - c.a[1]) - c.half[1], qz = Math.abs(dx * sn + dz * cs) - c.half[2];
+    return Math.hypot(Math.max(qx, 0), Math.max(qy, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qy, qz), 0);
+  }
+  return Infinity;
+}
+
+/**
+ * Complete a stone's colliders so they follow the solid the mesh shows: surface samples that
+ * the existing (per-primitive) colliders leave more than ~8 mm uncovered — knobs, shelves,
+ * warped lobes — are covered greedily by inscribed spheres. Fish then turn away at the visible
+ * surface and sinking food comes to rest on it. Deterministic.
+ */
+function completeSdfColliders(spec: SdfSpec, b: { min: V3; max: V3 }, have: LocalCollider[], maxN: number): LocalCollider[] {
+  const ext = Math.max(b.max[0] - b.min[0], b.max[1] - b.min[1], b.max[2] - b.min[2]);
+  const h = Math.max(0.005, ext / 17);
+  const y0 = Math.max(b.min[1], -0.006);
+  const cand: number[] = [];
+  const surf: number[] = [];
+  const p: V3 = [0, 0, 0];
+  const g: V3 = [0, 0, 0];
+  for (let x = b.min[0] + h * 0.5; x < b.max[0]; x += h) {
+    for (let y = y0 + h * 0.5; y < b.max[1]; y += h) {
+      for (let z = b.min[2] + h * 0.5; z < b.max[2]; z += h) {
+        const d = sdfEval(spec, x, y, z);
+        if (d < -0.004) cand.push(x, y, z, -d);
+        if (Math.abs(d) < h * 0.55) {
+          // One Newton step onto the surface is enough for coverage sampling (full projection
+          // of every near-surface point dominated the cost).
+          sdfGradient(spec, x, y, z, 0.002, g);
+          p[0] = x - g[0] * d;
+          p[1] = y - g[1] * d;
+          p[2] = z - g[2] * d;
+          // Only the exposed part matters (fish never reach below the sand).
+          if (p[1] > 0.004 && Math.abs(sdfEval(spec, p[0], p[1], p[2])) < 0.003) surf.push(p[0], p[1], p[2]);
+        }
+      }
+    }
+  }
+  const nS = surf.length / 3;
+  if (!nS || !cand.length) return [];
+  // Only the deepest few hundred interior points are worth considering as sphere centers.
+  if (cand.length > 1600) {
+    const idx = Array.from({ length: cand.length / 4 }, (_, i) => i).sort((i, j) => cand[j * 4 + 3] - cand[i * 4 + 3]).slice(0, 400);
+    const keep: number[] = [];
+    for (const i of idx) keep.push(cand[i * 4], cand[i * 4 + 1], cand[i * 4 + 2], cand[i * 4 + 3]);
+    cand.length = 0;
+    cand.push(...keep);
+  }
+  // The SDF of blended ellipsoids underestimates depth inside; the distance to the sampled
+  // surface (less half the sample spacing) is a second lower bound — keep the larger.
+  const nC = cand.length / 4;
+  for (let c = 0; c < nC; c++) {
+    const cx = cand[c * 4], cy = cand[c * 4 + 1], cz = cand[c * 4 + 2];
+    let m2 = Infinity;
+    for (let s = 0; s < nS; s++) {
+      const dx = surf[s * 3] - cx, dy = surf[s * 3 + 1] - cy, dz = surf[s * 3 + 2] - cz;
+      const q = dx * dx + dy * dy + dz * dz;
+      if (q < m2) m2 = q;
+    }
+    cand[c * 4 + 3] = Math.max(cand[c * 4 + 3], Math.sqrt(m2) - h * 0.5) * 0.97;
+  }
+  const tol = 0.008;
+  const covered = new Uint8Array(nS);
+  let left = nS;
+  for (let s = 0; s < nS; s++) {
+    for (const c of have) {
+      if (colliderDist(c, surf[s * 3], surf[s * 3 + 1], surf[s * 3 + 2]) < tol) {
+        covered[s] = 1;
+        left--;
+        break;
+      }
+    }
+  }
+  // Largest spheres first, so ties go to the more solid choice.
+  const order = Array.from({ length: nC }, (_, i) => i).sort((i, j) => cand[j * 4 + 3] - cand[i * 4 + 3]);
+  const out: LocalCollider[] = [];
+  for (let it = 0; it < maxN && left > 0; it++) {
+    let best = -1, bestGain = 0;
+    for (const ci of order) {
+      const cx = cand[ci * 4], cy = cand[ci * 4 + 1], cz = cand[ci * 4 + 2];
+      const R = cand[ci * 4 + 3] + tol, R2 = R * R;
+      let gain = 0;
+      for (let s = 0; s < nS; s++) {
+        if (covered[s]) continue;
+        const dx = surf[s * 3] - cx, dy = surf[s * 3 + 1] - cy, dz = surf[s * 3 + 2] - cz;
+        if (dx * dx + dy * dy + dz * dz < R2) gain++;
+      }
+      if (gain > bestGain) {
+        bestGain = gain;
+        best = ci;
+      }
+    }
+    if (best < 0 || bestGain < Math.max(2, nS * 0.015)) break;
+    const cx = cand[best * 4], cy = cand[best * 4 + 1], cz = cand[best * 4 + 2], r = cand[best * 4 + 3];
+    const R2 = (r + tol) * (r + tol);
+    for (let s = 0; s < nS; s++) {
+      if (covered[s]) continue;
+      const dx = surf[s * 3] - cx, dy = surf[s * 3 + 1] - cy, dz = surf[s * 3 + 2] - cz;
+      if (dx * dx + dy * dy + dz * dz < R2) {
+        covered[s] = 1;
+        left--;
+      }
+    }
+    out.push({ type: 'sphere', a: [cx, cy, cz], radius: r });
+  }
+  return out;
+}
+
+/**
+ * Complete a stone's colliders on first use: layouts probe dozens of candidate stones (bounds
+ * only) that never need colliders, and the fit costs a few thousand SDF evaluations.
+ */
+function lazyFit(shape: DecorShape, maxN: number): void {
+  const base = shape.colliders;
+  let fitted: LocalCollider[] | null = null;
+  Object.defineProperty(shape, 'colliders', {
+    enumerable: true,
+    configurable: true,
+    get(): LocalCollider[] {
+      if (!fitted) fitted = shape.sdf ? [...base, ...completeSdfColliders(shape.sdf, shape.bounds, base, maxN)] : base;
+      return fitted;
+    },
+    set(v: LocalCollider[]) {
+      fitted = v;
+    },
+  });
 }
 
 function branchColliders(branches: Branch[], shape: DecorShape, minR: number, maxCount: number): void {
@@ -1179,6 +1333,7 @@ function buildShape(item: Pick<DecorItem, 'kind' | 'variant' | 'seed'>): DecorSh
       };
       shape.sdf = (gen[style] ?? gen.seiryu)();
       primColliders(shape.sdf, shape);
+      if (style !== 'slate' && style !== 'petrified-wood') lazyFit(shape, S >= 0.2 ? 8 : 5);
       // A crevice at the base between the largest lobes (shrimp, gobies and plecos tuck in here).
       const ells = shape.sdf.prims.filter((p): p is Extract<SdfPrim, { t: 'ell' }> => p.t === 'ell');
       if (ells.length >= 2) {
@@ -1205,7 +1360,11 @@ function buildShape(item: Pick<DecorItem, 'kind' | 'variant' | 'seed'>): DecorSh
         }
         shape.colliders.push({ type: 'sphere', a: [0, y, -len / 2], radius: rOut * 0.8 });
         shape.cover.push({ p: [0, y, -len * 0.15], radius: rIn * 0.9, kind: 'cave' });
-      } else shape.sdf = caveRock(rng, S, shape);
+      } else {
+        shape.sdf = caveRock(rng, S, shape);
+        // The arch's lumpy pillars and roof: fit to the solid (the tunnel stays free).
+        lazyFit(shape, 6);
+      }
       break;
     }
     case 'driftwood': {
@@ -1287,13 +1446,58 @@ function closestOnBranches(branches: Branch[], p: V3, horizontalOnly: boolean): 
   return best;
 }
 
+/** How far (m, item local) a stored attachment point may lie off its host's surface and still be honoured in 3-D. */
+const ATTACH_TOL = 0.015;
+
+/** Closest point on the branch axes to a local point (true 3-D distance to the wood surface). */
+function nearestBranchSurface(branches: Branch[], p: V3): { pt: V3; r: number; dir: V3; gap: number } | null {
+  let best: { pt: V3; r: number; dir: V3; gap: number } | null = null;
+  for (const b of branches) {
+    for (let i = 0; i < b.pts.length - 1; i++) {
+      const a = b.pts[i], c = b.pts[i + 1];
+      const ab = vsub(c, a);
+      const bb = vdot(ab, ab);
+      const t = bb > 0 ? Math.min(1, Math.max(0, vdot(vsub(p, a), ab) / bb)) : 0;
+      const q = vadd(a, vscale(ab, t));
+      const r = b.r[i] + (b.r[i + 1] - b.r[i]) * t;
+      const gap = vlen(vsub(p, q)) - r;
+      if (!best || gap < best.gap) best = { pt: q, r, dir: vnorm(ab), gap };
+    }
+  }
+  return best;
+}
+
 /**
  * Where an epiphyte planted at world (x, z) sits on its host: the top of the host surface under
  * that point (or the nearest surface if it misses). World space.
+ *
+ * With `y` (the stored attachment height), a point that already lies on (or within ~1.5 cm of)
+ * the host's surface keeps its exact spot — a fern tied to the side of a stone or the underside
+ * of a root stays where it was put instead of jumping to the top surface above it.
  */
-export function hostAnchor(item: DecorItem, x: number, z: number): SurfacePoint {
+export function hostAnchor(item: DecorItem, x: number, z: number, y?: number): SurfacePoint {
   const shape = decorShape(item);
   const xf = itemTransform(item);
+  if (y !== undefined && Number.isFinite(y)) {
+    const l = toLocal(xf, [x, y, z], [0, 0, 0]);
+    const tol = ATTACH_TOL / xf.s;
+    if (shape.branches && shape.branches.length) {
+      const hit = nearestBranchSurface(shape.branches, l);
+      if (hit && hit.gap < tol) {
+        // Outward direction from the branch axis toward the stored point.
+        let n = vsub(l, hit.pt);
+        n = vsub(n, vscale(hit.dir, vdot(n, hit.dir)));
+        if (vlen(n) < 1e-6) n = vsub([0, 1, 0], vscale(hit.dir, hit.dir[1]));
+        n = vnorm(n);
+        const loc = vadd(hit.pt, vscale(n, hit.r * 0.9));
+        return { p: toWorld(xf, loc, [0, 0, 0]), n: vnorm(dirToWorld(xf, n, [0, 0, 0])) };
+      }
+    } else if (shape.sdf && Math.abs(sdfEval(shape.sdf, l[0], l[1], l[2])) < tol) {
+      projectToSurface(shape.sdf, l);
+      const g = sdfGradient(shape.sdf, l[0], l[1], l[2]);
+      return { p: toWorld(xf, l, [0, 0, 0]), n: vnorm(dirToWorld(xf, g, [0, 0, 0])) };
+    }
+  }
   if (shape.branches && shape.branches.length) {
     toLocal(xf, [x, item.position[1] + 0.1, z], _l);
     const hit = closestOnBranches(shape.branches, _l, true);
@@ -1362,6 +1566,9 @@ export function projectToSurface(spec: SdfSpec, p: V3): V3 {
  * Random points on a host's surface within `radius` (world m) of a world-space center — used to
  * drape moss over wood, spread polyps over rock, etc. Prefers upward-facing surface.
  */
+/** Host-local surface samples (see sampleHostSurface), LRU. */
+const surfCache = new Map<string, { pts: { p: V3; n: V3 }[]; end: number }>();
+
 export function sampleHostSurface(item: DecorItem, center: V3, radius: number, count: number, rng: Rng): SurfacePoint[] {
   const shape = decorShape(item);
   const xf = itemTransform(item);
@@ -1397,16 +1604,34 @@ export function sampleHostSurface(item: DecorItem, center: V3, radius: number, c
     return out;
   }
   if (shape.sdf) {
-    for (let tries = 0; out.length < count && tries < count * 4; tries++) {
-      const u = randomUnit(rng);
-      const rr = Math.cbrt(rng.next()) * rLoc;
-      const loc: V3 = [cLoc[0] + u[0] * rr, cLoc[1] + Math.abs(u[1]) * rr * 0.6 + rLoc * 0.3, cLoc[2] + u[2] * rr];
-      projectToSurface(shape.sdf, loc);
-      if (vlen(vsub(loc, cLoc)) > rLoc * 1.3) continue;
-      const g = sdfGradient(shape.sdf, loc[0], loc[1], loc[2]);
-      if (g[1] < -0.35 && rng.chance(0.8)) continue;
-      out.push({ p: toWorld(xf, loc, [0, 0, 0]), n: vnorm(dirToWorld(xf, g, [0, 0, 0])) });
+    // Projecting hundreds of points onto a stone is costly (moss, zoanthid and polyp mats ask
+    // for up to ~1600), and a host that is dragged or turned keeps the same local samples:
+    // cache them in host space, along with the random stream's end state so that callers that
+    // keep drawing from `rng` see exactly the same numbers on a cache hit.
+    const rs = rng as unknown as { s: number };
+    const key = `${item.kind}|${item.variant}|${item.seed}|${cLoc.map((v) => v.toFixed(4)).join(',')}|${rLoc.toFixed(4)}|${count}|${rs.s}`;
+    let hit = surfCache.get(key);
+    if (hit) {
+      surfCache.delete(key);
+      surfCache.set(key, hit);
+    } else {
+      const pts: { p: V3; n: V3 }[] = [];
+      for (let tries = 0; pts.length < count && tries < count * 4; tries++) {
+        const u = randomUnit(rng);
+        const rr = Math.cbrt(rng.next()) * rLoc;
+        const loc: V3 = [cLoc[0] + u[0] * rr, cLoc[1] + Math.abs(u[1]) * rr * 0.6 + rLoc * 0.3, cLoc[2] + u[2] * rr];
+        projectToSurface(shape.sdf, loc);
+        if (vlen(vsub(loc, cLoc)) > rLoc * 1.3) continue;
+        const g = sdfGradient(shape.sdf, loc[0], loc[1], loc[2]);
+        if (g[1] < -0.35 && rng.chance(0.8)) continue;
+        pts.push({ p: loc, n: g });
+      }
+      hit = { pts, end: rs.s };
+      if (surfCache.size >= 96) surfCache.delete(surfCache.keys().next().value as string);
+      surfCache.set(key, hit);
     }
+    rs.s = hit.end;
+    for (const q of hit.pts) out.push({ p: toWorld(xf, q.p, [0, 0, 0]), n: vnorm(dirToWorld(xf, q.n, [0, 0, 0])) });
     return out;
   }
   for (let i = 0; i < count; i++) {

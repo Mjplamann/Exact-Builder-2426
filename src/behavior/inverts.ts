@@ -1,7 +1,7 @@
 import type { FishEntity } from '../core/types';
 import { type Brain, type Mode, MODE_LABEL, SURF_DECOR, SURF_GLASS, SURF_NONE, SURF_SUBSTRATE } from './brain';
 import type { Ctx } from './context';
-import { appetite, dropFood, foodValid, rt, scanForFood, tryBite } from './feeding';
+import { appetite, dropFood, feedProgress, foodValid, rt, scanForFood, tryBite } from './feeding';
 import { hit } from './habitat';
 import { TAU, clamp } from './math';
 import { attachDecor, attachNearest, attachPlant, attachSubstrate, detach, standoff } from './surface';
@@ -21,6 +21,7 @@ import { attachDecor, attachNearest, attachPlant, attachSubstrate, detach, stand
 
 function enterInv(b: Brain, mode: Mode, dur: number): void {
   if (mode !== 'feed') dropFood(b);
+  else if (b.mode !== 'feed') b.feedStall = 0;
   b.mode = mode;
   b.modeT = 0;
   b.modeDur = dur;
@@ -28,7 +29,13 @@ function enterInv(b: Brain, mode: Mode, dur: number): void {
   b.subT = 0;
   b.hasGoal = false;
   b.hasSurfTarget = false;
+  b.bestD = Infinity;
   b.label = MODE_LABEL[mode];
+}
+
+/** Crabs (and crayfish) cannot swim up through the water: when they lose their footing they sink. */
+function sinks(fish: FishEntity): boolean {
+  return fish.species.group === 'crab' || fish.species.group === 'crayfish';
 }
 
 /** Random point on/near the current surface, `dist` m away roughly along the body axis ± spread. */
@@ -64,8 +71,15 @@ export function thinkInvert(ctx: Ctx, fish: FishEntity, b: Brain): void {
   }
   if (b.mode === 'feed' && foodValid(ctx, b)) return;
 
-  // Nocturnal crabs & crayfish hide by day.
-  const byDay = p.species.activity === 'nocturnal' && ctx.light > 0.35 && (fish.species.group === 'crab' || fish.species.group === 'crayfish' || p.t['nocturnal-hider'] || p.t.shy);
+  // Nocturnal crabs & crayfish hide by day — but come out for a wander now and then (and for food).
+  const dayHider = walker && p.species.activity === 'nocturnal' && ctx.light > 0.35 && (fish.species.group === 'crab' || fish.species.group === 'crayfish' || p.t['nocturnal-hider'] || p.t.shy);
+  if (dayHider && b.mode === 'hide' && b.foray <= 0 && b.forayT <= 0 && b.modeT > 12 && b.fear < 0.2) {
+    b.foray = ctx.rng.range(40, 120) * (0.7 + 0.6 * b.boldness);
+    b.forayT = b.foray + ctx.rng.exp((p.t['nocturnal-hider'] ? 300 : 200) * (1.4 - 0.8 * b.boldness));
+    enterInv(b, ctx.rng.chance(0.5) ? 'walk' : 'pick', ctx.rng.range(8, 20));
+    return;
+  }
+  const byDay = dayHider && b.foray <= 0;
   if ((byDay || b.fear > 0.5) && walker && b.mode !== 'hide') {
     enterInv(b, 'hide', 1e9);
     return;
@@ -113,8 +127,11 @@ export function steerInvert(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): v
   // Free-floating (just added, swimming, flipped, falling): handled per mode below.
   if (b.surf === SURF_NONE && b.mode !== 'swim' && b.mode !== 'tailflip' && b.mode !== 'fall') {
     if (!attachNearest(h, fish, b, Math.max(0.02, 2 * L), true, true)) {
-      if (walker) enterInv(b, 'swim', 8);
-      else enterInv(b, 'fall', 30);
+      if (walker && !sinks(fish)) enterInv(b, 'swim', 8);
+      else {
+        enterInv(b, 'fall', 30);
+        b.fallV = 0;
+      }
     }
   }
 
@@ -193,15 +210,24 @@ export function steerInvert(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): v
         }
       }
       if (ci >= 0) {
-        const c = h.cover[ci].position;
+        const cv = h.cover[ci];
+        const c = cv.position;
         b.sx = c[0];
-        b.sy = h.floor(c[0], c[2]);
+        b.sy = Math.max(h.floor(c[0], c[2]), c[1] - cv.radius);
         b.sz = c[2];
         b.hasSurfTarget = true;
-        const dx = c[0] - k.pos[0], dz = c[2] - k.pos[2];
-        const close = dx * dx + dz * dz < (h.cover[ci].radius * 0.6) ** 2;
+        const dx = c[0] - k.pos[0], dy = c[1] - k.pos[1], dz = c[2] - k.pos[2];
+        const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        // Track progress: an animal that can get no closer (the gap is between rocks it cannot
+        // squeeze past) settles in the nook it has reached instead of treading on the spot.
+        if (d < b.bestD - 0.004) {
+          b.bestD = d;
+          b.subT = 0;
+        }
+        const close = d < cv.radius + 0.8 * L || b.subT > 8;
         b.ds = close ? 0 : speed * (b.fear > 0.3 ? 2.5 : 1);
-        b.label = close ? 'hiding in a cave' : 'heading for cover';
+        if (close) b.hasSurfTarget = false;
+        b.label = close ? (cv.kind === 'plants' ? 'hiding in the plants' : cv.kind === 'crevice' ? 'hiding in a crevice' : 'hiding in a cave') : 'heading for cover';
       } else {
         b.ds = 0;
         b.label = 'keeping still';
@@ -217,6 +243,11 @@ export function steerInvert(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): v
       const f = b.food!;
       const fdx = f.pos[0] - k.pos[0], fdy = f.pos[1] - k.pos[1], fdz = f.pos[2] - k.pos[2];
       const d = Math.sqrt(fdx * fdx + fdy * fdy + fdz * fdz);
+      if (feedProgress(b, d, dt, walker ? 15 : 40)) {
+        b.thinkT = 0;
+        b.ds = 0;
+        break;
+      }
       // Shrimp swim over to food that is far away or on another surface.
       const otherSurface = f.state === 'settled' && ((rt(f).restOn ?? -1) >= 0 ? b.surf !== SURF_DECOR : b.surf !== SURF_SUBSTRATE);
       // (Only for food that has landed or is about to: shrimp don't chase pellets up the water column.)
@@ -284,12 +315,26 @@ export function steerInvert(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): v
       b.pitchLimit = 0.6;
       b.label = 'swimming';
       const d2 = (b.gx - k.pos[0]) ** 2 + (b.gy - k.pos[1]) ** 2 + (b.gz - k.pos[2]) ** 2;
-      if (d2 < (0.7 * L + 0.005) ** 2 || b.modeT > 10) {
-        if (b.sub === 1) attachPlant(fish, b);
-        else if (!attachNearest(h, fish, b, 2 * L + 0.02, p.t.climbs, true)) attachSubstrate(h, fish, b);
-        const keep = b.food;
-        enterInv(b, keep ? 'feed' : 'pick', ctx.rng.range(3, 12));
-        if (keep) b.food = keep;
+      const arrived = d2 < (0.7 * L + 0.005) ** 2;
+      if (arrived || b.modeT > 10) {
+        // Land on whatever is within reach (the landing itself is eased by the behavior system);
+        // out in open water after a long swim, head straight down instead of teleporting.
+        let landed = false;
+        if (b.sub === 1 && arrived) {
+          attachPlant(fish, b);
+          landed = true;
+        } else landed = attachNearest(h, fish, b, standoff(b) + 0.8 * L + 0.006, p.t.climbs, true);
+        if (landed) {
+          const keep = b.food;
+          enterInv(b, keep ? 'feed' : 'pick', ctx.rng.range(3, 12));
+          if (keep) b.food = keep;
+        } else {
+          b.sub = 0;
+          b.gx = k.pos[0];
+          b.gz = k.pos[2];
+          b.gy = h.floor(k.pos[0], k.pos[2]) + standoff(b);
+          b.modeT = 0;
+        }
       }
       break;
     }
@@ -342,27 +387,59 @@ export function integrateInvertFree(ctx: Ctx, fish: FishEntity, b: Brain, dt: nu
   const k = fish.kin;
   const h = ctx.h;
   if (b.mode === 'fall') {
-    // Sinks shell-first at ~5 cm/s, tumbling slowly.
-    b.fallV = Math.min(0.05, b.fallV + 0.25 * dt);
+    // Snails sink shell-first at ~5 cm/s, tumbling slowly; crabs sink legs-down, a little slower.
+    const walker = b.p.move === 'walker';
+    b.fallV = Math.min(walker ? 0.04 : 0.05, b.fallV + 0.25 * dt);
     k.pos[1] -= b.fallV * dt;
     const f = k.forward;
-    const a = 1.2 * dt;
-    const c = Math.cos(a), s = Math.sin(a);
-    const y = f[1] * c - f[2] * s, z = f[1] * s + f[2] * c;
-    f[1] = y;
-    f[2] = z;
+    if (walker) {
+      f[1] *= Math.exp(-dt / 0.3);
+      const l = Math.sqrt(f[0] * f[0] + f[1] * f[1] + f[2] * f[2]) || 1;
+      f[0] /= l;
+      f[1] /= l;
+      f[2] /= l;
+    } else {
+      const a = 1.2 * dt;
+      const c = Math.cos(a), s = Math.sin(a);
+      const y = f[1] * c - f[2] * s, z = f[1] * s + f[2] * c;
+      f[1] = y;
+      f[2] = z;
+    }
     b.vx = 0;
     b.vy = -b.fallV;
     b.vz = 0;
     b.speed = b.fallV;
+    const so = standoff(b);
     const fl = h.floor(k.pos[0], k.pos[2]);
     const dd = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2]);
-    if (k.pos[1] <= fl + standoff(b) || dd < standoff(b)) {
-      if (dd < standoff(b) && h.nearestIndex >= 0 && k.pos[1] > fl + standoff(b)) attachDecor(h, fish, b, h.nearestIndex);
-      else attachSubstrate(h, fish, b);
-      // It lands, then stays withdrawn a while before righting itself.
-      enterInv(b, 'retract', ctx.rng.range(10, 40));
+    let landed = false;
+    if (dd < so && h.nearestIndex >= 0 && k.pos[1] > fl + so) {
+      // Hit rock or wood: settle on a ledge, or slide down a steep face (no sticking to cliffs).
+      const ci = h.nearestIndex;
+      const nx = hit.nx, ny = hit.ny, nz = hit.nz;
+      if (ny > 0.55) {
+        attachDecor(h, fish, b, ci);
+        landed = true;
+      } else {
+        // (Pushed out a few mm per step: a deep overlap resolves over a few frames, never a jump.)
+        const push = Math.min(so - dd, Math.max(0.003, b.fallV * dt * 2));
+        k.pos[0] += nx * push;
+        k.pos[1] += ny * push;
+        k.pos[2] += nz * push;
+        // Deflect sideways off the face so it keeps tumbling down past the rock.
+        k.pos[0] += nx * 0.3 * b.fallV * dt;
+        k.pos[2] += nz * 0.3 * b.fallV * dt;
+        const B = h.b;
+        k.pos[0] = clamp(k.pos[0], -B.halfW + so, B.halfW - so);
+        k.pos[2] = clamp(k.pos[2], -B.halfD + so, B.halfD - so);
+      }
     }
+    if (!landed && k.pos[1] <= h.floor(k.pos[0], k.pos[2]) + so) {
+      attachSubstrate(h, fish, b);
+      landed = true;
+    }
+    // It lands, then stays withdrawn a while before righting itself.
+    if (landed) enterInv(b, 'retract', ctx.rng.range(10, 40));
     return true;
   }
   if (b.mode === 'tailflip') {

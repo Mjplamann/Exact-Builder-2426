@@ -434,6 +434,9 @@ export class Habitat {
       p[2] = z;
       this.projectToCollider(i, p, 0);
       if (hit.ny < 0.55) continue; // too steep to sit on
+      // Rocks are unions of overlapping shapes: a "top" buried inside a neighbouring shape is not
+      // a perch (a goby would sit inside the rock).
+      if (this.nearestDecor(p[0], p[1] + 0.003, p[2]) < -0.001) continue;
       if (p[1] > this.b.surfaceY - 0.03 || p[1] < this.floor(p[0], p[2]) + 0.005) continue;
       if (Math.abs(p[0]) > this.b.halfW - 0.01 || Math.abs(p[2]) > this.b.halfD - 0.01) continue;
       this.perches[k * 3] = p[0];

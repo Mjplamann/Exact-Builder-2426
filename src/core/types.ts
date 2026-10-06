@@ -243,7 +243,8 @@ export type Pattern =
    */
   | { type: 'bars'; color: Color; count: number; width: number; x0?: number; x1?: number; slant?: number; y0?: number; y1?: number; curve?: number }
   | { type: 'spots'; color: Color; density: number; size: number; x0?: number; x1?: number; y0?: number; y1?: number; jitter?: number }
-  | { type: 'blotch'; color: Color; x: number; y: number; rx: number; ry: number; ring?: Color }
+  /** `softness` (optional, 0..1, default 0.22): edge blur as a fraction of the radius (0.05 = crisp). */
+  | { type: 'blotch'; color: Color; x: number; y: number; rx: number; ry: number; ring?: Color; softness?: number }
   | { type: 'region'; color: Color; x0?: number; x1?: number; y0?: number; y1?: number; softness?: number; curve?: number }
   | { type: 'reticulate'; color: Color; scale: number; thickness?: number }
   | { type: 'marble'; color: Color; scale: number; amount: number }

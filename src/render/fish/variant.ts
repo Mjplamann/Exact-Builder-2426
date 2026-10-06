@@ -99,6 +99,7 @@ export class FishVariant {
         depth: body.depth,
         adultCm: adult,
         invertebrate: !isFish,
+        opercleX: shape.info.profile?.head.opercleX,
       },
     });
     this.allocate(4);

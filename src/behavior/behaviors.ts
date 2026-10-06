@@ -1,7 +1,7 @@
 import type { FishEntity } from '../core/types';
 import { type Brain, type Mode, MODE_LABEL, SURF_DECOR, SURF_GLASS, SURF_NONE, SURF_SUBSTRATE } from './brain';
 import type { Ctx } from './context';
-import { appetite, dropFood, foodValid, rt, scanForFood, tryBite } from './feeding';
+import { appetite, dropFood, feedProgress, foodValid, rt, scanForFood, tryBite } from './feeding';
 import { hit, WALL_BACK, WALL_FRONT, WALL_LEFT, WALL_RIGHT } from './habitat';
 import { DEG, clamp, noise1, smoothstep } from './math';
 import { attachDecor, attachGlass, attachSubstrate, detach, standoff } from './surface';
@@ -144,6 +144,7 @@ function keepsSurface(mode: Mode, b: Brain): boolean {
 export function enter(ctx: Ctx, fish: FishEntity, b: Brain, mode: Mode, dur: number): void {
   if (b.surf !== SURF_NONE && !keepsSurface(mode, b)) detach(fish, b);
   if (mode !== 'feed') dropFood(b);
+  else if (b.mode !== 'feed') b.feedStall = 0;
   if (b.coverIdx >= 0 && mode !== 'hide' && mode !== 'rest') releaseCover(ctx, b);
   if (b.buried > 0 && mode !== 'rest' && mode !== 'hide') b.buried = Math.min(b.buried, 0.99);
   b.mode = mode;
@@ -161,6 +162,17 @@ function releaseCover(ctx: Ctx, b: Brain): void {
   if (b.coverIdx >= 0 && b.coverVersion === ctx.h.version && b.coverIdx < ctx.h.coverUse.length) ctx.h.coverUse[b.coverIdx]--;
   b.coverIdx = -1;
   b.shelterOwner = undefined;
+}
+
+/** Take cover point `i` (current habitat version) for this animal. */
+export function claimCover(ctx: Ctx, b: Brain, i: number): void {
+  const h = ctx.h;
+  if (b.coverIdx === i && b.coverVersion === h.version) return;
+  releaseCover(ctx, b);
+  h.coverUse[i]++;
+  b.coverIdx = i;
+  b.coverVersion = h.version;
+  b.shelterOwner = h.cover[i].ownerId;
 }
 
 /** Choose and claim a cover point suited to the species. Returns the index or −1. */
@@ -197,12 +209,8 @@ function chooseCover(ctx: Ctx, fish: FishEntity, b: Brain): number {
       best = i;
     }
   }
-  if (best >= 0) {
-    h.coverUse[best]++;
-    b.coverIdx = best;
-    b.coverVersion = h.version;
-    b.shelterOwner = h.cover[best].ownerId;
-  }
+  if (best >= 0) claimCover(ctx, b, best);
+  else b.coverMiss = h.version;
   return best;
 }
 
@@ -325,10 +333,16 @@ function chooseActivity(ctx: Ctx, fish: FishEntity, b: Brain): void {
   if (grouped && p.schooling === 1 && zone !== 'bottom') W[3] += 0.35; // shoal members pick at things briefly
   if (t.clings || t['glass-grazer']) W[4] += 6;
   if (t.perches || t.hops) W[5] += 4;
+  // Seahorses spend most of their time anchored by the tail to a holdfast.
+  if (p.species.locomotion === 'seahorse') W[5] += 8;
+  // Wrasses, puffers, triggers and loaches pick small invertebrates off rock, wood and sand.
+  if (t['invert-eater'] && !t.ambush && zone !== 'bottom') W[3] += 1.2;
   if (t.territorial && home && !t['anemone-host']) W[6] += 2.5;
   if (t['anemone-host'] && home) W[2] += 6;
   if (t['cave-dweller'] && home) W[2] += 1.5;
-  if (t.burrower && home && p.species.activity !== 'nocturnal') W[2] += 4;
+  // Burrow-dwellers (jawfish, garden eels, firefish) hover by their burrow; sand-sleeping wrasses
+  // only use the sand at night and roam all day.
+  if (t.burrower && !t['sand-sleeper'] && home && p.species.activity !== 'nocturnal') W[2] += 4;
   if ((t.curious || t.bold) && b.curiousT <= 0) W[7] += t.curious ? 1.6 : 0.7;
   if (t.flarer && b.flareT <= 0) W[8] += 2;
   if (t['fin-nipper'] && b.nipT <= 0) W[9] += 1;
@@ -426,9 +440,15 @@ export function thinkFish(ctx: Ctx, fish: FishEntity, b: Brain): void {
   }
   if (b.mode === 'gulp') return;
 
-  // Rest at night (or by day for nocturnal species).
-  const hideByDay = dayHider(ctx, b);
-  if ((b.rest > 0.55 || hideByDay) && b.mode !== 'rest' && b.mode !== 'hide') {
+  // Rest at night (or by day for nocturnal species) — but nocturnal fish slip out for a look
+  // around now and then by day, as they do in every aquarium.
+  const dayHide = dayHider(ctx, b);
+  if (dayHide && b.foray <= 0 && b.forayT <= 0 && b.mode === 'hide' && b.dayHide && b.modeT > 12 && b.fear < 0.2) {
+    startForay(ctx, fish, b);
+    return;
+  }
+  const hideByDay = dayHide && b.foray <= 0;
+  if (((b.rest > 0.55 && b.foray <= 0) || hideByDay) && b.mode !== 'rest' && b.mode !== 'hide') {
     enterRest(ctx, fish, b, hideByDay);
     return;
   }
@@ -462,6 +482,21 @@ export function thinkFish(ctx: Ctx, fish: FishEntity, b: Brain): void {
   }
 
   if (b.modeT < b.modeDur && b.mode !== 'explore') return;
+  chooseActivity(ctx, fish, b);
+}
+
+/**
+ * A nocturnal day-hider leaves its hideout for a daytime excursion (grazing the glass, a turn
+ * along the bottom, a look at the front glass), then goes back. Excursions last ~0.5–2 min and
+ * come every few minutes: strongly nocturnal hiders less often, bold or hungry fish more often.
+ */
+function startForay(ctx: Ctx, fish: FishEntity, b: Brain): void {
+  const rr = ctx.rng;
+  const app = appetite(fish);
+  b.foray = rr.range(30, 100) * (0.7 + 0.6 * b.boldness) * (0.8 + 0.6 * app);
+  const mean = (b.p.t['nocturnal-hider'] ? 300 : 170) * (1.4 - 0.8 * b.boldness) * (1.2 - 0.5 * app);
+  b.forayT = b.foray + rr.exp(mean);
+  b.dayHide = false;
   chooseActivity(ctx, fish, b);
 }
 
@@ -593,6 +628,7 @@ export function steerFish(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): voi
   b.surfaceOk = false;
   b.floorOk = false;
   b.glassOk = false;
+  b.decorOk = false;
   b.thrash = 0;
   b.turnBoost = 1;
   b.accelBoost = 1;
@@ -662,7 +698,7 @@ function steerCruise(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
   seek(fish, b, b.gx, b.gy, b.gz, Math.max(sp, 0.4 * b.p.cruise * L), 2 * L);
   meander(ctx, b, 0.5);
   if (b.p.t['surface-skimmer']) b.dy *= 0.3;
-  b.label = b.p.t['surface-skimmer'] ? 'skimming the surface' : b.rest > 0.3 && ctx.light < 0.5 ? 'slowing down for the night' : 'cruising';
+  b.label = b.p.t['surface-skimmer'] ? 'skimming the surface' : b.rest > 0.3 && ctx.light < 0.5 ? (ctx.env.hour < 12 ? 'waking up' : 'slowing down for the night') : 'cruising';
 }
 
 // ---- shoal / school ---------------------------------------------------------------------------
@@ -930,6 +966,7 @@ function foragePick(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
     }
     seek(fish, b, b.gx, b.gy, b.gz, 0.6 * p.cruise * L * b.pace, 2 * L);
     b.label = 'foraging';
+    b.decorOk = dist2(fish, b.gx, b.gy, b.gz) < (3 * L) ** 2;
     if (dist2(fish, b.gx, b.gy, b.gz) < (1.2 * L) ** 2 || b.subT > 10) {
       b.sub = 1;
       b.subT = 0;
@@ -939,6 +976,7 @@ function foragePick(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
     // Peck: hold position, nose slightly down, quick bites.
     b.hold = true;
     b.glassOk = true;
+    b.decorOk = true;
     face(b, Math.cos(b.yaw) + noise1(ctx.t * 0.4, b.noiseSeed) * 0.4, Math.sin(b.yaw), 0.05 * p.cruise * L);
     b.dy = (b.gy - k.pos[1]) / Math.max(0.01, L);
     b.posture = -12 * DEG;
@@ -969,11 +1007,17 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
   if (kind === RK_ATTACH) {
     if (b.surf === SURF_NONE) {
       // Swim to the nearest surface and hold on.
-      if (!b.hasGoal) pickGrazeSpot(ctx, fish, b, true);
+      if (!b.hasGoal) {
+        pickGrazeSpot(ctx, fish, b, true);
+        b.subT = 0;
+      }
       seek(fish, b, b.gx, b.gy, b.gz, 0.5 * p.cruise * L, L);
       b.glassOk = true;
       b.floorOk = true;
-      if (dist2(fish, b.gx, b.gy, b.gz) < (0.8 * L + standoff(b)) ** 2) attachToGoalSurface(ctx, fish, b);
+      b.decorOk = b.goalSurf === SURF_DECOR && dist2(fish, b.gx, b.gy, b.gz) < (3 * L) ** 2;
+      const reach = (b.goalSurf === SURF_DECOR ? 0.5 : 0.8) * L + standoff(b);
+      if (dist2(fish, b.gx, b.gy, b.gz) < reach * reach) attachToGoalSurface(ctx, fish, b);
+      else if (b.subT > 25) b.hasGoal = false;
     } else {
       b.ds = 0;
       b.hasSurfTarget = false;
@@ -987,26 +1031,29 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
   if (kind === RK_BOTTOM) {
     if (b.surf === SURF_NONE) {
       if (!b.hasGoal) {
-        let x = k.pos[0], z = k.pos[2];
-        const ci = ctx.pickCover(null, x, z, 0.3);
+        // A patch of open sand, often at the foot of a plant thicket or a rock.
+        const ci = ctx.pickCover(null, k.pos[0], k.pos[2], 0.3);
+        const so = standoff(b);
         if (ci >= 0 && ctx.rng.chance(0.6)) {
           const c = h.cover[ci];
-          x = c.position[0] + ctx.rng.signed() * c.radius;
-          z = c.position[2] + ctx.rng.signed() * c.radius;
-        }
-        x = clamp(x, -B.halfW + 1.2 * L, B.halfW - 1.2 * L);
-        z = clamp(z, -B.halfD + 1.2 * L, B.halfD - 1.2 * L);
-        b.gx = x;
-        b.gz = z;
-        b.gy = h.floor(x, z) + bodyR(b);
+          pickOpenSand(ctx, b, c.position[0], c.position[2], c.radius + L, c.radius + L, so);
+        } else pickOpenSand(ctx, b, k.pos[0], k.pos[2], 0.05, 0.04, so);
+        b.gx = clamp(b.gx, -B.halfW + 1.2 * L, B.halfW - 1.2 * L);
+        b.gz = clamp(b.gz, -B.halfD + 1.2 * L, B.halfD - 1.2 * L);
+        b.gy = h.floor(b.gx, b.gz) + bodyR(b);
         b.hasGoal = true;
+        b.subT = 0;
       }
       b.floorOk = true;
       const d = seek(fish, b, b.gx, b.gy, b.gz, 0.4 * p.cruise * L, 2 * L);
-      if (d < 0.7 * L + 0.01 || (b.subT > 8 && k.pos[1] - h.floor(k.pos[0], k.pos[2]) < bodyR(b) * 1.6)) {
-        attachSubstrate(h, fish, b);
-        b.hasSurfTarget = false;
-      }
+      const low = k.pos[1] - h.floor(k.pos[0], k.pos[2]) < bodyR(b) * 1.6;
+      if (d < 0.7 * L + 0.01 || (b.subT > 8 && low)) {
+        // Only settle where the sand is clear (not under a root or in a rock's footing).
+        if (h.colliders.length === 0 || h.nearestDecor(k.pos[0], h.floor(k.pos[0], k.pos[2]) + standoff(b), k.pos[2]) > standoff(b) * 0.95) {
+          attachSubstrate(h, fish, b);
+          b.hasSurfTarget = false;
+        } else b.hasGoal = false;
+      } else if (b.subT > 25) b.hasGoal = false;
     } else {
       b.ds = 0;
       b.hasSurfTarget = false;
@@ -1019,21 +1066,27 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
   if (kind === RK_BURY) {
     if (b.sub === 0) {
       if (!b.hasGoal) {
-        const home = fish.state.home;
-        let x = home ? home[0] : k.pos[0] + ctx.rng.signed() * 0.1;
-        let z = home ? home[2] : k.pos[2] + ctx.rng.signed() * 0.05;
-        x = clamp(x, -B.halfW + L, B.halfW - L);
-        z = clamp(z, -B.halfD + L, B.halfD - L);
-        b.gx = x;
-        b.gz = z;
-        b.gy = h.floor(x, z) + bodyR(b);
+        // Its burrow — or, if that proved unreachable, open sand close by.
+        const home = b.subDur < 0 ? undefined : fish.state.home;
+        if (home) {
+          b.gx = clamp(home[0], -B.halfW + L, B.halfW - L);
+          b.gz = clamp(home[2], -B.halfD + L, B.halfD - L);
+        } else pickOpenSand(ctx, b, k.pos[0], k.pos[2], 0.1, 0.05, bodyR(b));
+        b.gy = h.floor(b.gx, b.gz) + bodyR(b);
         b.hasGoal = true;
+        b.subT = 0;
       }
       b.floorOk = true;
-      const d = seek(fish, b, b.gx, b.gy, b.gz, (b.fear > 0.3 ? 2 : 0.5) * p.cruise * L, L);
+      const d = seek(fish, b, b.gx, b.gy, b.gz, (b.fear > 0.3 ? 2 : 0.8) * p.cruise * L, L);
       b.label = 'heading for its burrow';
-      if (d < 0.8 * L + 0.006 || b.subT > 12) {
+      // Dig in on arrival — or wherever it is, if it is down on the sand and can't get closer.
+      const low = k.pos[1] - h.floor(k.pos[0], k.pos[2]) < bodyR(b) * 2 + 0.006;
+      if (d < 0.8 * L + 0.006 || (b.subT > 12 && low)) {
         b.sub = 1;
+        b.subT = 0;
+      } else if (b.subT > 40) {
+        b.hasGoal = false;
+        b.subDur = -1; // (flag: try open sand next)
         b.subT = 0;
       }
     } else {
@@ -1049,7 +1102,19 @@ function steerRest(ctx: Ctx, fish: FishEntity, b: Brain, dt: number): void {
 
   if (kind === RK_ANEMONE || kind === RK_COVER) {
     let ci = b.coverIdx;
-    if (kind === RK_ANEMONE && ci < 0) ci = ctx.pickCover('anemone', k.pos[0], k.pos[2], 9);
+    // An index from an older layout (decor/plants changed) is meaningless now: find shelter again
+    // instead of giving up on it (once per layout, so a tank without cover costs nothing).
+    if (ci >= 0 && (b.coverVersion !== h.version || ci >= h.cover.length)) ci = b.coverIdx = -1;
+    if (ci < 0 && b.coverMiss !== h.version) {
+      if (kind === RK_ANEMONE) {
+        // Its own anemone (the pair's home), else the nearest one.
+        const home = fish.state.home;
+        ci = ctx.pickCover('anemone', home ? home[0] : k.pos[0], home ? home[2] : k.pos[2], 9);
+        if (ci >= 0) claimCover(ctx, b, ci);
+        else b.coverMiss = h.version;
+      } else ci = chooseCover(ctx, fish, b);
+      b.hasGoal = false;
+    }
     if (ci >= 0 && ci < h.cover.length && b.coverVersion === h.version) {
       const c = h.cover[ci];
       b.shelterOwner = c.ownerId;
@@ -1206,8 +1271,18 @@ function steerFeed(ctx: Ctx, fish: FishEntity, b: Brain): void {
   const mz = b.surf !== SURF_NONE ? k.pos[2] : k.pos[2] + fz * reachOff;
   // Lead moving food a little.
   const dRaw = Math.sqrt((f.pos[0] - mx) ** 2 + (f.pos[1] - my) ** 2 + (f.pos[2] - mz) ** 2);
+  // Can't get at it (wedged under a rock or behind a root)? Leave it and look for another bite.
+  if (feedProgress(b, dRaw, ctx.dt, b.surf !== SURF_NONE ? 20 : 8)) {
+    b.thinkT = 0;
+    b.scanT = 0;
+    b.ds = cruiseSpeed(ctx, b);
+    b.label = 'looking for food';
+    return;
+  }
   const lead = clamp(dRaw / Math.max(0.02, Math.abs(b.speed) + p.cruise * L), 0, 0.6);
   const tx = f.pos[0] + f.vel[0] * lead, ty = f.pos[1] + f.vel[1] * lead, tz = f.pos[2] + f.vel[2] * lead;
+  // Food lying on or against rock & wood: nose right up to it.
+  if (f.state === 'settled' && dRaw < 3 * L) b.decorOk = true;
   const reach = Math.max(0.0035, 0.22 * L + f.sizeM * 0.5);
   const big = f.sizeM > p.gapeFrac * L * 1.5;
 
@@ -1643,14 +1718,32 @@ function pickGrazeSpot(ctx: Ctx, fish: FishEntity, b: Brain, resting: boolean): 
     }
   }
   // Substrate.
-  const x = clamp(x0 + ctx.rng.signed() * 0.2, -B.halfW + 2 * L, B.halfW - 2 * L);
-  const z = clamp(k.pos[2] + ctx.rng.signed() * 0.1, -B.halfD + 2 * L, B.halfD - 2 * L);
-  b.gx = x;
-  b.gz = z;
-  b.gy = h.floor(x, z) + so;
+  pickOpenSand(ctx, b, k.pos[0], k.pos[2], 0.2, 0.1, so);
   b.goalSurf = SURF_SUBSTRATE;
   b.goalSurfIdx = -1;
   b.hasGoal = true;
+}
+
+/**
+ * Goal on open substrate within ±(sx, sz) of (cx, cz), clear of rock and wood (the buried base
+ * of a rock or the underside of a root is not somewhere to sit). Widens the search if needed.
+ */
+function pickOpenSand(ctx: Ctx, b: Brain, cx: number, cz: number, sx: number, sz: number, so: number): void {
+  const h = ctx.h;
+  const B = h.b;
+  const L = b.L;
+  const mx = Math.min(2 * L, 0.8 * B.halfW), mz = Math.min(2 * L, 0.8 * B.halfD);
+  const clear = so + 0.5 * b.p.widthFrac * L + 0.003;
+  let x = cx, z = cz;
+  for (let i = 0; i < 8; i++) {
+    const spread = 1 + i * 0.4;
+    x = clamp(cx + ctx.rng.signed() * sx * spread, -B.halfW + mx, B.halfW - mx);
+    z = clamp(cz + ctx.rng.signed() * sz * spread, -B.halfD + mz, B.halfD - mz);
+    if (h.colliders.length === 0 || h.nearestDecor(x, h.floor(x, z) + so, z) > clear) break;
+  }
+  b.gx = x;
+  b.gz = z;
+  b.gy = h.floor(x, z) + so;
 }
 
 function attachToGoalSurface(ctx: Ctx, fish: FishEntity, b: Brain): void {
@@ -1658,8 +1751,26 @@ function attachToGoalSurface(ctx: Ctx, fish: FishEntity, b: Brain): void {
   const kind = b.goalSurf;
   const idx = b.goalSurfIdx;
   if (kind === SURF_GLASS && idx >= 0) attachGlass(h, fish, b, idx);
-  else if (kind === SURF_DECOR && idx >= 0 && idx < h.colliders.length) attachDecor(h, fish, b, idx);
-  else attachSubstrate(h, fish, b);
+  else if (kind === SURF_DECOR && idx >= 0 && idx < h.colliders.length) {
+    // Land on the chosen spot (the goal sits just off that face), not on whichever face of the
+    // piece happens to be nearest — arriving from below must not end up clinging to an overhang's
+    // underside. Callers only attach within a short distance of the goal, so this is a small step.
+    const k = fish.kin;
+    const x0 = k.pos[0], y0 = k.pos[1], z0 = k.pos[2];
+    k.pos[0] = b.gx;
+    k.pos[1] = b.gy;
+    k.pos[2] = b.gz;
+    attachDecor(h, fish, b, idx);
+    // A percher can only sit on a ledge: if the spot turned out too steep, don't land at all.
+    if (b.surf === SURF_DECOR && b.ny < 0.4 && !(b.p.t.clings || b.p.mouth === 'sucker')) {
+      detach(fish, b);
+      k.pos[0] = x0;
+      k.pos[1] = y0;
+      k.pos[2] = z0;
+      b.hasGoal = false;
+      return;
+    }
+  } else attachSubstrate(h, fish, b);
   b.hasSurfTarget = false;
   b.pauseT = ctx.rng.range(1, 4);
   b.moveT = 0;
@@ -1683,14 +1794,22 @@ function steerGraze(ctx: Ctx, fish: FishEntity, b: Brain): void {
       b.label = 'swimming off';
       return;
     }
-    if (!b.hasGoal) pickGrazeSpot(ctx, fish, b, false);
+    if (!b.hasGoal) {
+      pickGrazeSpot(ctx, fish, b, false);
+      b.subT = 0;
+    }
     const so = standoff(b);
     // Approach a point just off the surface, then settle onto it.
     seek(fish, b, b.gx, b.gy, b.gz, 0.8 * p.cruise * L * b.pace, 1.5 * L);
     b.glassOk = true;
     b.floorOk = true;
+    b.decorOk = b.goalSurf === SURF_DECOR && dist2(fish, b.gx, b.gy, b.gz) < (3 * L) ** 2;
     b.label = 'looking for algae';
-    if (dist2(fish, b.gx, b.gy, b.gz) < (0.9 * L + so) ** 2 || b.modeT > 25) attachToGoalSurface(ctx, fish, b);
+    const d2 = dist2(fish, b.gx, b.gy, b.gz);
+    // Settle when close (on rock/wood very close: attaching places the body at the goal).
+    const reach = (b.goalSurf === SURF_DECOR ? 0.5 : b.subT > 12 ? 1.4 : 0.9) * L + so;
+    if (d2 < reach * reach) attachToGoalSurface(ctx, fish, b);
+    else if (b.subT > 20) b.hasGoal = false; // blocked: look for another spot (never snap across the tank)
     return;
   }
   // Attached: slow shuffles between long rasping pauses.
@@ -1698,7 +1817,12 @@ function steerGraze(ctx: Ctx, fish: FishEntity, b: Brain): void {
     // Let go.
     const nx = b.nx, ny = b.ny, nz = b.nz;
     detach(fish, b);
-    b.yaw = Math.atan2(nz + k.forward[2] * 0.5, nx + k.forward[0] * 0.5);
+    // Peel away along the surface at a shallow angle (head first, as it was lying) — turning
+    // straight out from the glass would shove the body off it in one frame.
+    const fx = k.forward[0], fz = k.forward[2];
+    const fl = Math.hypot(fx, fz);
+    if (fl > 0.2) b.yaw = Math.atan2(fz / fl + nz * 0.45, fx / fl + nx * 0.45);
+    else b.yaw = Math.atan2(nz, nx);
     b.pitch = clamp(Math.asin(clamp(ny * 0.4, -1, 1)), -0.4, 0.4);
     b.sub = 2;
     b.subT = 0;
@@ -1744,47 +1868,67 @@ function steerPerch(ctx: Ctx, fish: FishEntity, b: Brain): void {
   const k = fish.kin;
   const h = ctx.h;
   if (b.surf === SURF_NONE) {
+    const horse = p.species.locomotion === 'seahorse';
     if (!b.hasGoal) {
-      // Choose a perch near home (or nearby), else a patch of open substrate.
-      const hx = fish.state.home ? fish.state.home[0] : k.pos[0], hz = fish.state.home ? fish.state.home[2] : k.pos[2];
-      let best = -1, bestS = Infinity;
+      // Choose a perch close by (and toward home), else a patch of open substrate.
+      const home = fish.state.home;
+      let best = -1, bestS = Infinity, bestD = 0;
       for (let i = 0; i < h.perchCount; i++) {
-        const dx = h.perches[i * 3] - hx, dz = h.perches[i * 3 + 2] - hz;
-        const s = Math.sqrt(dx * dx + dz * dz) * (0.6 + ctx.rng.next()) + (i === b.perchIdx ? 0.3 : 0);
+        const px = h.perches[i * 3], py = h.perches[i * 3 + 1], pz = h.perches[i * 3 + 2];
+        const dx = px - k.pos[0], dy = py - k.pos[1], dz = pz - k.pos[2];
+        const dF = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (dF > 0.5) continue;
+        const hx = home ? px - home[0] : 0, hz = home ? pz - home[2] : 0;
+        const s = (dF + 0.5 * Math.sqrt(hx * hx + hz * hz)) * (0.6 + ctx.rng.next()) + (i === b.perchIdx ? 0.3 : 0);
         if (s < bestS) {
           bestS = s;
           best = i;
+          bestD = dF;
         }
       }
       const so = standoff(b);
-      if (best >= 0 && bestS < 0.5) {
+      if (best >= 0) {
         b.perchIdx = best;
         b.gx = h.perches[best * 3];
         b.gy = h.perches[best * 3 + 1] + so;
         b.gz = h.perches[best * 3 + 2];
         b.goalSurf = SURF_DECOR;
         b.goalSurfIdx = h.perchOwner[best];
+        // A hop covers a few body lengths; anything farther is a short swim.
+        b.sub = bestD > clamp(8 * L, 0.1, 0.3) ? 1 : 0;
       } else {
-        const B = h.b;
+        // A patch of open sand (never under the buried base of a rock).
         b.perchIdx = -1;
-        b.gx = clamp(k.pos[0] + ctx.rng.signed() * 0.12, -B.halfW + 2 * L, B.halfW - 2 * L);
-        b.gz = clamp(k.pos[2] + ctx.rng.signed() * 0.08, -B.halfD + 2 * L, B.halfD - 2 * L);
-        b.gy = h.floor(b.gx, b.gz) + so;
+        pickOpenSand(ctx, b, k.pos[0], k.pos[2], 0.12, 0.08, so);
         b.goalSurf = SURF_SUBSTRATE;
         b.goalSurfIdx = -1;
+        b.sub = 0;
       }
       b.hasGoal = true;
       b.subT = 0;
     }
-    // A short hop: up and over, landing on the perch.
+    // A short hop: a quick dart up and over that brakes into the landing (gobies, blennies and
+    // hawkfish cover a few body lengths in well under a second). Longer moves are a normal swim;
+    // seahorses swim slowly upright to the next holdfast.
     const d = Math.sqrt(dist2(fish, b.gx, b.gy, b.gz));
-    seek(fish, b, b.gx, b.gy + Math.min(0.03, d * 0.4), b.gz, 0.45 * p.burst * L, L);
+    const swim = horse || b.sub === 1;
+    const vMax = horse ? 1.2 * p.cruise * L : swim ? 0.8 * p.cruise * L : 0.45 * p.burst * L;
+    const sp = Math.min(vMax, 0.3 * p.cruise * L + 3 * d);
+    seek(fish, b, b.gx, b.gy + Math.min(horse ? 0.01 : 0.03, d * 0.4), b.gz, sp, Math.max(1.5 * L, 0.02));
     b.floorOk = true;
-    b.pitchLimit = 40 * DEG;
-    b.label = 'hopping';
-    if (d < 0.8 * L + 0.006 || b.subT > 6) {
+    b.decorOk = d < 3 * L;
+    if (!swim) {
+      b.pitchLimit = 40 * DEG;
+      b.turnBoost = 1.8;
+      b.accelBoost = clamp((0.35 * b.accelBurst) / Math.max(1e-4, b.accel), 1, 6);
+    }
+    b.label = horse ? 'swimming to a holdfast' : swim ? 'swimming to another perch' : 'hopping';
+    if (d < 0.5 * L + 0.005) {
       attachToGoalSurface(ctx, fish, b);
-      b.perchT = ctx.rng.range(4, 25);
+      b.perchT = horse ? ctx.rng.range(30, 120) : ctx.rng.range(4, 25);
+    } else if (b.subT > (horse ? 45 : swim ? 20 : 6)) {
+      // Couldn't get there (blocked): choose another spot rather than snapping onto it.
+      b.hasGoal = false;
     }
     return;
   }
@@ -2025,7 +2169,7 @@ function avoid(ctx: Ctx, fish: FishEntity, b: Brain): void {
   const mWall = b.glassOk ? Math.max(0.008, 0.25 * L) : Math.max(0.02, 0.9 * L);
   const mFloor = b.floorOk ? 0.15 * L : Math.max(0.012, b.p.species.zone === 'bottom' ? 0.35 * L : 0.7 * L);
   const mSurf = b.surfaceOk ? 0 : Math.max(0.012, b.p.t['surface-skimmer'] ? 0.15 * L : 0.6 * L);
-  const mDecor = Math.max(0.015, 0.7 * L);
+  const mDecor = b.decorOk ? Math.max(0.004, 0.15 * L) : Math.max(0.015, 0.7 * L);
   for (let s = 0; s < 2; s++) {
     const off = s === 0 ? 0 : look;
     const x = k.pos[0] + fx * off, y = k.pos[1] + fy * off, z = k.pos[2] + fz * off;

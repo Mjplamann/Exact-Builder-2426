@@ -99,6 +99,8 @@ export class Brain {
   shelterOwner: string | undefined = undefined;
   /** Allowed close to the glass (investigating the viewer, grazing). */
   glassOk = false;
+  /** Allowed right up to rock & wood (settling onto a perch or grazing spot, picking at a face). */
+  decorOk = false;
   /** 0..1 how deep the animal has dug into the substrate (sand-sleepers, burrowers). */
   buried = 0;
   /** Client posing for a cleaner (s). */
@@ -171,6 +173,13 @@ export class Brain {
   snap = 0;
   /** Nibbling a big item: hold here. */
   nibbling = false;
+  /**
+   * Seconds without getting any closer to the current food item; a particle that cannot be
+   * reached (wedged under a rock, behind a root) is given up for a while (`skipFood`, `skipT`).
+   */
+  feedStall = 0;
+  readonly skipFood: (FoodParticle | null)[] = [null, null, null];
+  skipT = 0;
 
   // --- rest ------------------------------------------------------------------------------------
   rest = 0;
@@ -181,6 +190,31 @@ export class Brain {
   // --- home / cover ------------------------------------------------------------------------------
   coverIdx = -1;
   coverVersion = -1;
+  /** Habitat version for which a cover search came up empty (don't search again every frame). */
+  coverMiss = -1;
+  /**
+   * Nocturnal day-hiders: seconds until the next daytime excursion, and seconds left on the
+   * current one. Even strongly nocturnal aquarium fish (plecos, kuhli loaches, knifefish, morays)
+   * are seen out and about by day now and then — and always at feeding time.
+   */
+  forayT = 0;
+  foray = 0;
+  /** Closest approach (m) to the current target so far — detects being blocked. */
+  bestD = Infinity;
+  /**
+   * Pose at the start of the current frame — position, forward, up, surface kind, attachment
+   * count — to detect snaps when settling onto (or letting go of) a surface.
+   */
+  readonly pre = new Float64Array(11);
+  /** Incremented on every attachment to a surface. */
+  attaches = 0;
+  /**
+   * Settling onto a surface: seconds into the landing (−1 = none) and its duration. `land` holds
+   * from/to position, forward and up (6 × 3) — the snap of an attachment is played out smoothly.
+   */
+  landT = -1;
+  landDur = 0.3;
+  readonly land = new Float64Array(18);
   /** Perch index (Habitat.perches) in use, or −1. */
   perchIdx = -1;
 
@@ -243,6 +277,7 @@ export class Brain {
     this.curiousT = this.rng.range(10, 60);
     this.cleanT = this.rng.range(10, 40);
     this.soloT = this.rng.range(10, 40);
+    this.forayT = this.rng.range(20, 150);
     this.wanderT = 0;
     this.offX = this.rng.signed();
     this.offY = this.rng.signed() * 0.5;

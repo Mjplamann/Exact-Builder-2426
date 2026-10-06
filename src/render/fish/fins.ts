@@ -54,7 +54,7 @@ function medianRay(shape: FinShape, u: number, H: number, trail: number, out: [n
   if (shape === 'spiny' && compound) {
     // One continuous perciform dorsal (cichlids, damsels, clownfish, basslets): a lower spiny
     // part, a shallow notch, then the taller, rounded soft part that ends in a rear lobe.
-    rake = 0.42 + 0.38 * u;
+    rake = 0.38 + 0.3 * u;
     const spiny = H * (0.6 + 0.1 * Math.sin((Math.PI * Math.min(u, 0.58)) / 0.58)) * (0.45 + 0.55 * smooth(0, 0.1, u));
     const soft = H * (0.55 + 0.45 * Math.sin(Math.PI * clamp((u - 0.48) / 0.5, 0, 1))) * (1 - 0.5 * smooth(0.84, 1, u));
     const w = smooth(0.5, 0.62, u);
@@ -207,7 +207,10 @@ export function buildMedianFin(
         const y = ventral ? by - yOff : by + yOff;
         // Twin anal fins splay apart toward their tips; flowing fins ripple into pleats.
         const pleat = fin.shape === 'flowing' ? 0.04 * fin.height * Math.pow(w, 1.5) * Math.sin(u * Math.PI * 5 + 0.4) : 0;
-        const z = (sheet === 0 ? 0 : sheet * (0.004 + yOff * 0.55)) + pleat;
+        // Real membranes are never perfectly flat: a slight cupping and a soft wave across the
+        // rays, so the light falls differently over the fin instead of on a flat card.
+        const relief = len * w * w * (0.05 * Math.sin(Math.PI * u) + 0.025 * Math.sin(u * Math.PI * 2.6 + 0.8));
+        const z = (sheet === 0 ? 0 : sheet * (0.004 + yOff * 0.55)) + pleat + (extra.adipose ? 0 : relief);
         const [uu, vv] = cellUV(cell, w, u * 2 - 1);
         gb.v(x, y, z, uu, vv, x, part, 0, 0, w, u * 2 - 1, packSideFlow(sheet, flow), r);
       }
@@ -266,7 +269,7 @@ function caudalRay(shape: CaudalShape, u: number, S: number, out: [number, numbe
       break;
     case 'rounded':
       b = 0.62 * v;
-      len = 0.85 * S * (1 - 0.14 * av * av);
+      len = 0.85 * S * (1 - 0.14 * av * av) * (1 - 0.3 * smooth(0.82, 1, av));
       break;
     case 'pointed':
       b = 0.5 * v;
@@ -393,7 +396,9 @@ export function buildCaudalFin(gb: GeoBuilder, prof: BodyProfile, body: Resolved
         const p = x - x0;
         y -= droop * p * p;
         // Long soft tails fall into gentle pleats (ruffles between ray groups).
-        const pleat = pleats > 0 ? pleats * S * Math.pow(w, 1.6) * Math.sin(u * Math.PI * pleatN + 0.7) : 0;
+        const pleat = (pleats > 0 ? pleats * S * Math.pow(w, 1.6) * Math.sin(u * Math.PI * pleatN + 0.7) : 0) +
+          // A gentle cup and wave across the rays (no fin is a flat card).
+          len * w * w * (0.035 * Math.sin(Math.PI * u) + 0.02 * Math.sin(u * Math.PI * 3.2 + 0.3));
         // Twin tails (fancy goldfish): joined along the top edge, splayed apart below.
         const z = (sheet === 0 ? 0 : sheet * Math.max(0, (by + hb * 0.9 - y)) * 0.6 * (0.3 + 0.7 * w)) + pleat;
         const [uu, vv] = cellUV(ATLAS.caudal, w, u * 2 - 1);

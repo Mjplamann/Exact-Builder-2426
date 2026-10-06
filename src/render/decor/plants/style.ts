@@ -11,6 +11,8 @@ export interface LeafLook {
   tex: LeafTexSpec;
   /** Leaf strip geometry. */
   rows: number;
+  /** Vertices across the blade (3 = a V crease; 5 lets broad blades cup and roll). */
+  cols: number;
   fold: number;
   ruffle: number;
   ruffleFreq: number;
@@ -51,7 +53,7 @@ export function leafLook(sp: PlantSpecies): LeafLook {
   let bands: LeafTexSpec['bands'];
   let sparkle: string | undefined;
   let tip = tipColored(sp) ? sp.color2 : lighten(sp.color, 1.12);
-  let rows = 6, fold = 0.04, ruffle = 0, ruffleFreq = 8, cup = 0;
+  let rows = 6, cols = 3, fold = 0.04, ruffle = 0, ruffleFreq = 8, cup = 0;
   let transl = 0.45, roughness = 0.6;
   let w = 64, h = 256;
 
@@ -62,7 +64,10 @@ export function leafLook(sp: PlantSpecies): LeafLook {
       if (has(sp, /pogostemon-helferi/)) ruffle = 0.06;
       if (has(sp, /ceratopteris/)) outline = 'lobed-hygro';
       rows = 8;
-      fold = 0.05;
+      // Broad blades keep a keel along the midrib and cup slightly: never a flat card.
+      cols = 5;
+      fold = 0.06;
+      cup = 0.05;
       w = 96;
       break;
     case 'ribbon':
@@ -106,6 +111,9 @@ export function leafLook(sp: PlantSpecies): LeafLook {
       roughness = 0.5;
       transl = has(sp, /bolbitis/) ? 0.5 : 0.25;
       veins = 'net';
+      cols = 5;
+      fold = 0.06;
+      cup = 0.03;
       if (has(sp, /windelov/)) outline = 'windelov';
       else if (has(sp, /trident/)) outline = 'trident';
       else if (has(sp, /bolbitis/)) outline = 'pinnate';
@@ -117,7 +125,8 @@ export function leafLook(sp: PlantSpecies): LeafLook {
       rows = 6;
       roughness = 0.32;
       transl = 0.16;
-      cup = 0.06;
+      cols = 5;
+      cup = 0.08;
       if (has(sp, /coffeefolia/)) {
         ruffle = 0.03;
         ruffleFreq = 10;
@@ -224,6 +233,7 @@ export function leafLook(sp: PlantSpecies): LeafLook {
   return {
     tex: { outline, width: w, height: h, base: sp.color, tip, vein: lighten(sp.color, 1.3), veins, petiole, spots, bands, wavy, sparkle, seed },
     rows,
+    cols,
     fold,
     ruffle,
     ruffleFreq,

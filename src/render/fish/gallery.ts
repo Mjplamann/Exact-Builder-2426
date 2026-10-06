@@ -79,7 +79,7 @@ export function fitLengthCm(sp: Species, sex: Sex, cellW: number, cellH: number)
   const b = resolveBody(sp, sex);
   const tl = 1 + caudalWebLength(b.caudal.shape, b.caudal.size);
   const fins = 0.7 * ((b.dorsal?.height ?? 0) + (b.anal?.height ?? 0) * 0.8) + 0.4 * (b.pelvic?.height ?? 0);
-  const h = b.kind === 'ray' ? 0.35 : b.kind === 'seahorse' ? 1.6 : (b.depth + fins) / tl;
+  const h = b.kind === 'ray' ? 0.35 : b.kind === 'seahorse' ? 0.75 : (b.depth + fins) / tl;
   return Math.min(cellW * 0.84, (cellH * 0.86) / Math.max(0.12, h)) * 100;
 }
 

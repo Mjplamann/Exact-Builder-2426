@@ -73,7 +73,8 @@ export function plantMetrics(sp: PlantSpecies, p: PlantInstance, tank: TankState
   if (p.attachedTo) {
     const host = tank.decor.find((d) => d.id === p.attachedTo);
     if (host) {
-      const a = hostAnchor(host, x, z);
+      // The stored height keeps epiphytes placed on the side or underside of their host there.
+      const a = hostAnchor(host, x, z, p.position[1]);
       return { anchor: a.p, normal: a.n, height, spread, growth: g, hostId: host.id };
     }
   }

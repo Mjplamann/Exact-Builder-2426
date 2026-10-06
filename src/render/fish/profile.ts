@@ -157,8 +157,10 @@ export class BodyProfile {
         this.tubeW = 0.045 + 0.1 * b.width;
         this.tubeT = this.tubeB = 0.25 * this.tubeW;
       } else if (sn === 'elongate') {
-        // Deep fish with a protruding snout keep a broader snout tip (a mouth, not a needle).
-        this.tubeW = this.tubeT = this.tubeB = 0.012 + 0.04 * D + (this.concave ? 0.05 * D : 0);
+        // Deep fish with a protruding snout keep a taller snout tip (a small mouth, not a needle),
+        // laterally compressed like the rest of the head.
+        this.tubeT = this.tubeB = 0.012 + 0.04 * D + (this.concave ? 0.02 * D : 0);
+        this.tubeW = this.tubeT * (this.concave ? 0.62 : 1);
       } else {
         this.tubeT = this.tubeB = 0.02 + 0.06 * D;
         this.tubeW = this.tubeT * 0.9;
@@ -233,7 +235,7 @@ export class BodyProfile {
     this.head.headLen = headLen;
     const E = clamp(b.eyeSize, 0.05, 0.7) * HL;
     const eyeR = Math.min(E / 2, 0.42 * D, 0.45 * Math.max(0.02, b.width) + 0.02);
-    const eyeX = sL + Math.max(0.36 * headLen, 0.025 + 1.25 * eyeR);
+    const eyeX = sL + Math.max((this.concave ? 0.47 : 0.36) * headLen, 0.025 + 1.25 * eyeR);
     this.head.eyeX = eyeX;
     this.head.eyeR = eyeR;
     this.head.rictusX = sL + clamp(b.mouthSize, 0.05, 1) * headLen * 0.85 + 0.01;
@@ -285,6 +287,14 @@ export class BodyProfile {
     return x < 0.4 ? 0 : 0.032 * Math.pow(1 - 0.9 * t, 1.6) + 0.0015;
   }
 
+  /** Radius profile along a snout extension (t = 0 tip … 1 base). */
+  private snoutTaper(t: number): number {
+    if (this.body.snout !== 'elongate') return headEase(Math.min(1, t * 6), 2, 0.8);
+    // Needle jaws taper to a point; the short snout of a tang or rabbitfish ends in a small,
+    // rounded mouth.
+    return this.concave ? Math.min(1, 0.2 + 0.8 * Math.sqrt(t)) : Math.min(1, 0.25 + 0.75 * t);
+  }
+
   /** Peduncle half-depth band (flares slightly toward the caudal base). */
   private pedBand(x: number): number {
     const t = smooth(this.xPed, 1, x);
@@ -300,14 +310,14 @@ export class BodyProfile {
     let y: number;
     if (x <= sL && sL > 0) {
       const t = x / sL;
-      const r = this.tubeT * (this.body.snout === 'elongate' ? Math.min(1, 0.25 + 0.75 * t) : headEase(Math.min(1, t * 6), 2, 0.8));
+      const r = this.tubeT * this.snoutTaper(t);
       y = yTip + r;
     } else if (x < this.xT) {
       const u = (this.xT - x) / (this.xT - sL);
       const base = yTip + this.tubeT;
       let f = quadrant(u, sL > 0 ? 1.5 : this.pHead);
       // A short protruding snout (tangs, butterflyfish, moorish idol) rises into a concave forehead.
-      if (sL > 0 && sL < 0.15 && this.concave) f = f * (1 - u) + Math.pow(1 - u, 1.6) * u;
+      if (sL > 0 && sL < 0.15 && this.concave) f = f * (1 - 0.5 * u) + 0.5 * Math.pow(1 - u, 1.6) * u;
       y = base + (this.Tmax - base) * f;
     } else {
       const t = (x - this.xT) / (this.xEnd - this.xT);
@@ -328,13 +338,13 @@ export class BodyProfile {
     let y: number;
     if (x <= sL && sL > 0) {
       const t = x / sL;
-      const r = this.tubeB * (this.body.snout === 'elongate' ? Math.min(1, 0.25 + 0.75 * t) : headEase(Math.min(1, t * 6), 2, 0.8));
+      const r = this.tubeB * this.snoutTaper(t);
       y = yTip - r;
     } else if (x < this.xB) {
       const u = (this.xB - x) / (this.xB - sL);
       const base = yTip - this.tubeB;
       let f = quadrant(u, sL > 0 ? 1.5 : this.pThroat);
-      if (sL > 0 && sL < 0.15 && this.concave) f = f * (1 - u) + Math.pow(1 - u, 1.3) * u;
+      if (sL > 0 && sL < 0.15 && this.concave) f = f * (1 - 0.5 * u) + 0.5 * Math.pow(1 - u, 1.3) * u;
       y = base + (-this.Bmax - base) * f;
     } else {
       const t = (x - this.xB) / (this.xEnd - this.xB);
@@ -354,7 +364,7 @@ export class BodyProfile {
     let w: number;
     if (x <= sL && sL > 0) {
       const t = x / sL;
-      w = this.tubeW * (this.body.snout === 'elongate' ? Math.min(1, 0.25 + 0.75 * t) : headEase(Math.min(1, t * 6), 2, 0.8));
+      w = this.tubeW * this.snoutTaper(t);
     } else if (x < xw) {
       const t = (x - sL) / (xw - sL);
       const base = this.tubeW;

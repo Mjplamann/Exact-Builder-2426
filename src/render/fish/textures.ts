@@ -185,9 +185,12 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
       }
       if (best < 0) return;
       const e = (R - bestD) / R; // 0 at the free margin → 1 at the center
-      // Raised free margin, gently sloping scale surface.
-      out[0] = 0.75 * smooth(0, 0.16, e) + 0.35 * (1 - e) - 0.2;
-      out[1] = 1 - smooth(0.0, 0.14, e);
+      // Overlapping shingles: the free margin is a soft step (the next scale's edge lies on top),
+      // the exposed field slopes gently — no crisp, net-like ridges. Scales lie flatter toward
+      // the back and belly, and each sits a little differently.
+      const lie = (0.55 + 0.45 * hash2(Math.round(bestId * 9973), 7, 13)) * (1 - 0.45 * smooth(0.45, 0.95, Math.abs(y)));
+      out[0] = (0.5 * smooth(0, 0.3, e) + 0.3 * (1 - e) - 0.2) * lie;
+      out[1] = (1 - smooth(0.0, 0.14, e)) * lie;
       out[2] = bestId;
       return;
     }
@@ -220,8 +223,8 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
       const seam = 1 - smooth(0, 0.1, Math.min(f, 1 - f));
       const rowSeam = 1 - smooth(0, 0.05, Math.abs(y - (ri > 0 ? (rows[ri - 1] + rows[ri]) / 2 : -2)));
       const odont = smooth(0.72, 0.95, fastNoise(x * 260, Y * 260 + 9));
-      out[0] = 0.35 * (1 - f) - 0.7 * seam - 0.5 * rowSeam + 0.25 * odont;
-      out[1] = Math.max(seam, rowSeam) * 0.6;
+      out[0] = 0.25 * (1 - f) - 0.4 * seam - 0.3 * rowSeam + 0.35 * odont;
+      out[1] = Math.max(seam, rowSeam) * 0.35;
       out[2] = hash2(Math.floor(q), ri, 33);
       return;
     }
@@ -266,7 +269,7 @@ function skinField(ctx: BodyCtx, x: number, y: number, hd: number, out: Float64A
       const edge = 1 - smooth(0.0, 0.07, gap);
       const dome = 1 - smooth(0.05, 0.62, best);
       const gran = smooth(0.6, 0.85, fastNoise(x * 220, Y * 220)) * dome;
-      out[0] = 0.55 * dome - 1.0 * edge + 0.15 * gran;
+      out[0] = 0.2 * dome - 0.4 * edge + 0.15 * gran;
       out[1] = edge;
       out[2] = id;
       return;
@@ -346,10 +349,13 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
       col[i * 3 + 1] = cg * ridge * cheek;
       col[i * 3 + 2] = cb * ridge * cheek;
       alpha[i] = 1;
-      // Guanine: lower flanks and belly reflect most; the back is matte.
-      const mw = metallic * (1 - 0.6 * smooth(0.15, 0.95, y)) * (0.85 + 0.15 * smooth(-0.2, -0.9, y));
+      // Guanine: lower flanks and belly reflect most; the back is darker and nearly matte (the
+      // silver reflectors sit mostly below the lateral line, where the light comes from above).
+      const mw = metallic * (1 - 0.82 * smooth(0.05, 0.85, y)) * (0.85 + 0.15 * smooth(-0.2, -0.9, y));
       metal[i] = mw;
-      rough[i] = 0.4 - 0.14 * mw;
+      rough[i] = (body.skin === 'scaled' || body.skin === 'naked' ? 0.34 : 0.42) - 0.12 * mw;
+      // A thin, wet mucus film: a soft sheen (specular intensity, ORM alpha).
+      b.spec[i] = body.skin === 'scaled' || body.skin === 'naked' ? 0.8 : 0.6;
       // Thin tissue that lets light through: the belly wall, the dorsal ridge and the peduncle.
       b.thin[i] = 0.45 * smooth(-0.35, -0.9, y) + 0.3 * smooth(0.8, 0.98, y) + 0.35 * smooth(0.8, 0.97, x);
       irid[i] = hasIridPattern ? iridAmt * 0.15 * (1 - smooth(0.4, 1, Math.abs(y))) : iridAmt * 0.75 * (1 - smooth(0.25, 1, Math.abs(y - 0.05)));
@@ -376,6 +382,20 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
     clearMask(b, s);
     if (!rasterize(pat, s, b.mask)) continue;
     composite(b, s, x0, y0, color);
+    // Pigment cells (melanophores, erythrophores) sit over the guanine layer and hide it: dark or
+    // saturated patterns are matte, white ones keep the silver.
+    {
+      const mx = Math.max(color[0], color[1], color[2]), mn = Math.min(color[0], color[1], color[2]);
+      const hide = clamp(1.6 * (mx - mn) + 0.9 * (1 - luma(color)) - 0.15, 0, 0.9);
+      if (hide > 0 && !(pat.type === 'stripe' && pat.iridescent)) {
+        for (let r = 0; r < s.h; r++) {
+          for (let c = 0; c < s.w; c++) {
+            const m = b.mask[r * s.w + c];
+            if (m > 0) metal[(y0 + r) * W + x0 + c] *= 1 - hide * m;
+          }
+        }
+      }
+    }
     const glow = pat.type === 'stripe' ? pat.glow ?? 0 : 0;
     const iridP = pat.type === 'stripe' && pat.iridescent;
     if (glow > 0 || iridP) {
@@ -486,7 +506,7 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
       if (edge > 0 && !scaleCol) k *= 1 - 0.45 * edge;
       if (body.skin === 'hex' && sk[2] !== 0.5) {
         // Bony plates: each plate a slightly different tone, sutures darker, centres paler.
-        k *= (1 + 0.08 * (sk[2] - 0.5)) * (1 - 0.3 * sk[1]) * (1 + 0.06 * (1 - sk[1]));
+        k *= (1 + 0.07 * (sk[2] - 0.5)) * (1 - 0.16 * sk[1]) * (1 + 0.05 * (1 - sk[1]));
         if (!night) rough[i] = clamp(0.5 + 0.1 * sk[1], 0.08, 0.9);
       }
       if (body.skin === 'scaled' && body.scaleSize > 0.02 && x > opX * 0.92) {
@@ -522,8 +542,9 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
         const de2 = ex * ex + ey * ey;
         if (de2 < 6.5) {
           const de = Math.sqrt(de2);
-          k *= 1 - 0.25 * smooth(0.95, 1.08, de) * (1 - smooth(1.15, 1.55, de));
-          if (de < 1) k *= 0.6;
+          // A faint shadowed rim where the eye sits in its orbit (no drawn ring).
+          k *= 1 - 0.12 * smooth(0.92, 1.02, de) * (1 - smooth(1.05, 1.3, de));
+          if (de < 1) k *= 0.75;
           const nx = (ex + 1.55) / 0.16, ny = (ey - 0.45) / 0.16;
           const nn = nx * nx + ny * ny;
           if (nn < 4) k *= 1 - 0.35 * Math.exp(-nn);
@@ -558,7 +579,20 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
       // Low-frequency mottling + fine grain so no surface is flat CG color, and a gentle natural
       // countershading on top of the authored colours: the back a little deeper, the belly paler.
       k *= 1 + 0.1 * (fastNoise(x * 9 + noiseOff, y * hd * 9) - 0.5) + 0.05 * (fastNoise(x * 110, y * hd * 110 + noiseOff) - 0.5);
-      k *= (1 - 0.12 * smooth(0.25, 1, y)) * (1 + 0.06 * smooth(-0.3, -1, y));
+      // Melanophores: fine dark pigment dots, densest over the back and fading toward the belly.
+      const mel = smooth(0.7, 0.92, fastNoise(x * 330 + noiseOff, y * hd * 330)) * (0.25 + 0.75 * smooth(-0.4, 0.8, y));
+      k *= 1 - 0.14 * mel;
+      k *= (1 - 0.14 * smooth(0.25, 1, y)) * (1 + 0.06 * smooth(-0.3, -1, y));
+      // Semi-translucent small fish (tetras, rasboras): the flank muscle lets light through
+      // rather than scattering it back, so it reads darker and greener against the water, with
+      // the shadow of the vertebral column showing along the axis.
+      if (translucent > 0.08 && !transOn) {
+        const flankT = translucent * smooth(-0.1, 0.55, y) * smooth(opX, opX + 0.08, x);
+        k *= 1 - 0.75 * flankT;
+        const spineSh = Math.exp(-((((y - 0.14) * hd) / 0.007) ** 2)) * smooth(opX, opX + 0.1, x) * (1 - smooth(0.9, 1, x));
+        k *= 1 - 0.35 * translucent * spineSh;
+        b.thin[i] = Math.max(b.thin[i], 1.4 * flankT);
+      }
       if (scaleCol && edge > 0) {
         col[i * 3] += (scaleCol[0] - col[i * 3]) * edge;
         col[i * 3 + 1] += (scaleCol[1] - col[i * 3 + 1]) * edge;
@@ -630,7 +664,7 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
   // Clear membranes scatter little light of their own (they read by what shows through them);
   // the bony rays are only a little denser.
   const clearK = clear ? 0.72 : 1;
-  const rayCol: RGB = clear ? mix(finCol, [0.8, 0.78, 0.72], 0.1) : mix(finCol, [finCol[0] * 0.78, finCol[1] * 0.78, finCol[2] * 0.78], 0.7);
+  const rayCol: RGB = clear ? mix(finCol, [finCol[0] * 0.85, finCol[1] * 0.85, finCol[2] * 0.82], 0.5) : mix(finCol, [finCol[0] * 0.78, finCol[1] * 0.78, finCol[2] * 0.78], 0.7);
   const iridFin = clamp(look.iridescence ?? 0, 0, 1) * 0.25;
   for (let r = 0; r < s.h; r++) {
     const y = s.py[r];
@@ -653,22 +687,25 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       // Membrane incisions between spines / reduced webbing.
       const between = Math.abs(rp - ri); // 0 on a ray, 0.5 midway
       let cut = 0;
-      if (spiny && u < spinyEnd) cut = 0.34 * smooth(0.08, 0.5, between);
+      // (the membrane between two spine tips is a rounded, concave notch, not a square cut)
+      const notch = Math.pow(Math.sin(Math.PI * between), 0.8);
+      if (spiny && u < spinyEnd) cut = (spinyEnd < 1 ? 0.2 : 0.3) * notch * smooth(0, 0.04, spinyEnd - u);
       if (crown) cut = 0.45 * smooth(0.06, 0.5, between);
       if (separated) cut = 0.55 * smooth(0.08, 0.5, between);
-      const membrane = x < 1 - cut ? 1 : 0.0;
+      const eLocal = 1 - cut;
+      const membrane = 1 - smooth(eLocal - 0.025, eLocal + 0.01, x);
       // The membrane is a thin, clear-ish film: thinnest midway between rays and toward the
       // margin; rays are bony and denser; the very edge fades out softly.
       const gap = smooth(0.12, 0.5, between);
-      let a = (clear ? op * (0.78 - 0.32 * x) : op * (0.92 - 0.3 * x)) * (1 - (clear ? 0.25 : 0.18) * gap) * membrane;
-      a = Math.max(a, (clear ? Math.min(0.42, op * 1.25 + 0.06) : Math.min(1, op + 0.12)) * ray * (1 - 0.35 * smooth(0.85, 1, x)));
+      let a = (clear ? op * (0.78 - 0.32 * x) : op * (1 - 0.24 * x)) * (1 - (clear ? 0.25 : 0.12) * gap) * membrane;
+      a = Math.max(a, (clear ? Math.min(0.36, op * 0.95 + 0.05) : Math.min(1, op + 0.12)) * ray * (1 - 0.35 * smooth(0.85, 1, x)));
       a = Math.max(a, 0.02);
       let cr = finCol[0], cg = finCol[1], cb = finCol[2];
       cr += (rayCol[0] - cr) * ray * 0.6;
       cg += (rayCol[1] - cg) * ray * 0.6;
       cb += (rayCol[2] - cb) * ray * 0.6;
       // Ray joints: faint pale segment lines (clear fins) or darker nodes (pigmented fins).
-      const jk = clear ? 1 + 0.35 * joint : 1 - 0.12 * joint;
+      const jk = clear ? 1 + 0.25 * joint : 1 - 0.07 * joint;
       cr *= jk;
       cg *= jk;
       cb *= jk;
@@ -680,19 +717,20 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       cr = (cr * deep + (0.9 - cr) * pale) * streak;
       cg = (cg * deep + (0.88 - cg) * pale) * streak;
       cb = (cb * deep + (0.84 - cb) * pale) * streak;
-      // Fleshy fin base takes the body color.
-      const fb = 1 - smooth(0, 0.14, x);
-      cr += (bodyBase[0] - cr) * fb * 0.6;
-      cg += (bodyBase[1] - cg) * fb * 0.6;
-      cb += (bodyBase[2] - cb) * fb * 0.6;
-      a = Math.max(a, 0.85 * fb);
+      // Fleshy fin base takes a little of the body color (the fin still reads as a fin).
+      const fb = 1 - smooth(0, 0.08, x);
+      cr += (bodyBase[0] - cr) * fb * 0.35;
+      cg += (bodyBase[1] - cg) * fb * 0.35;
+      cb += (bodyBase[2] - cb) * fb * 0.35;
+      a = Math.max(a, 0.8 * fb);
       // Edge band.
       if (edgeCol) {
-        const eb = smooth(1 - ew - 0.03, 1 - ew + 0.01, x);
+        // The pigmented margin follows the membrane's own edge (also along incisions).
+        const eb = smooth(eLocal - ew - 0.03, eLocal - ew + 0.01, x);
         cr += (edgeCol[0] - cr) * eb;
         cg += (edgeCol[1] - cg) * eb;
         cb += (edgeCol[2] - cb) * eb;
-        if (membrane > 0 || ray > 0.3) a = Math.max(a, Math.max(op, 0.7) * eb * (1 - 0.3 * gap));
+        a = Math.max(a, Math.max(op, 0.7) * eb * (1 - 0.3 * gap) * Math.max(membrane, ray > 0.3 ? 1 : 0));
       }
       // Soft, transparent outer margin (a pigmented edge band stays crisp to the very edge).
       a *= 1 - (edgeCol ? 0.25 * smooth(0.96, 1, x) : 0.6 * smooth(0.86, 1, x) * (1 - 0.5 * ray));
@@ -753,8 +791,12 @@ function paintEye(b: Bufs, look: Appearance, body: ResolvedBody, seed: number): 
   const [x0, y0, w, h] = rect(cell, b.W, b.H);
   const irisRaw = hex(look.eye, [0.62, 0.58, 0.46]);
   // Iris pigment reads deeper than the authored swatch; very light irises are silvery.
-  const lumI = luma(irisRaw);
-  const iris: RGB = mix([irisRaw[0] * 0.72, irisRaw[1] * 0.72, irisRaw[2] * 0.72], [lumI * 0.7, lumI * 0.7, lumI * 0.72], 0.15);
+  // A near-black authored iris still shows a dim ring (olive-brown, tinted by the head colour)
+  // around the black pupil — real eyes are never a solid black bead.
+  const headC = hex(look.base);
+  const rawLift: RGB = luma(irisRaw) < 0.22 ? mix(irisRaw, mix([0.5, 0.42, 0.24], headC, 0.3), 0.62) : irisRaw;
+  const lumI = luma(rawLift);
+  const iris: RGB = mix([rawLift[0] * 0.72, rawLift[1] * 0.72, rawLift[2] * 0.72], [lumI * 0.7, lumI * 0.7, lumI * 0.72], 0.15);
   const irisDark: RGB = [iris[0] * 0.3, iris[1] * 0.3, iris[2] * 0.3];
   const maskP = (look.patterns ?? []).find((p) => p.type === 'mask') as Extract<Pattern, { type: 'mask' }> | undefined;
   const maskCol = maskP ? hex(maskP.color) : null;
@@ -780,11 +822,11 @@ function paintEye(b: Bufs, look: Appearance, body: ResolvedBody, seed: number): 
         cb = g;
         rough = 0.03;
         metal = 0;
-      } else if (rad < irisOut) {
-        const t = (rad - pupilR) / (irisOut - pupilR);
+      } else if (rad < irisOut + 0.04) {
+        const t = Math.min(1, (rad - pupilR) / (irisOut - pupilR));
         const stri = 0.85 + 0.3 * valueNoise(ang * 14 + 50, t * 4, seed);
         // Thin bright pupillary margin, the iris body, darkening into the limbus.
-        let cc = mix(iris, irisDark, smooth(0.3, 1, t) * 0.9);
+        let cc = mix(iris, irisDark, smooth(0.45, 1, t) * 0.75);
         cc = mix(cc, mix(iris, [0.85, 0.82, 0.72], 0.25), Math.exp(-(((t - 0.05) / 0.06) ** 2)) * 0.4);
         // The upper iris is usually darker (pigment shading the eye from above).
         cc = mix(cc, irisDark, smooth(0.0, 0.9, ey) * 0.4);
@@ -796,10 +838,11 @@ function paintEye(b: Bufs, look: Appearance, body: ResolvedBody, seed: number): 
         // Iridophores silver or gild the iris (reflecting in the iris's own colour).
         metal = (0.15 + 0.3 * silvered) * (1 - smooth(0.4, 1, t));
       } else {
-        // The eyeball's rim sits in a dark socket, blending to the skin only at the very edge.
-        const t = smooth(0.95, 1, rad);
+        // Outside the iris: a narrow dark limbus, then the transparent skin that covers the rim of
+        // the eyeball takes the head colour — the eye sits *in* the head, not on it.
+        const t = smooth(0.87, 0.95, rad);
         const bodyC = hex(look.base);
-        const cc = mix([0.02, 0.02, 0.025], [bodyC[0] * 0.35, bodyC[1] * 0.35, bodyC[2] * 0.35], t);
+        const cc = mix(mix(irisDark, [0.03, 0.03, 0.035], 0.5), [bodyC[0] * 0.8, bodyC[1] * 0.8, bodyC[2] * 0.8], t);
         cr = cc[0];
         cg = cc[1];
         cb = cc[2];
@@ -947,7 +990,10 @@ export function paintFishAtlas(sp: Species, body: ResolvedBody, look: Appearance
   paintEye(b, look, body, ctx.seed);
 
   // Small scales are barely visible in life: relief grows with scale size.
-  const normalStrength = body.skin === 'scaled' ? 0.35 + 2.4 * body.scaleSize * body.scaleSize : body.skin === 'naked' ? 1.5 : body.skin === 'hex' ? 1.6 : 2.2;
+  // Bony scutes / plates / carapaces are real relief, but seen through a mucus film and at
+  // aquarium distances it is a soft one (not a caterpillar or a honeycomb).
+  const normalStrength = body.skin === 'scaled' ? 0.22 + 1.7 * body.scaleSize * body.scaleSize
+    : body.skin === 'naked' ? 1.3 : body.skin === 'hex' ? 0.95 : body.skin === 'scutes' || body.skin === 'plates' ? 1.35 : 1.8;
   const map = tex(packColor(b), b.W, b.H, SRGBColorSpace);
   const normal = tex(packNormal(b, normalStrength * (N / 256)), b.W, b.H, NoColorSpace);
   const orm = tex(packOrm(b), b.W, b.H, NoColorSpace);

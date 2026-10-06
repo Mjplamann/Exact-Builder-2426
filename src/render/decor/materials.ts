@@ -22,13 +22,13 @@ const LOOKS: Record<string, HardscapeLook> = {
     roughness: 0.82,
     detail: {
       freq: 55, bump: 0.0011, ridge: 0.65, pores: 0.08, albedoVar: 0.22, roughVar: 0.12,
-      vein: { dir: [0.32, 0.9, 0.28], freq: 34, width: 0.035, warp: 1.6, strength: 0.75, color: c('#cfd0cb'), patchy: 0.45 },
+      vein: { dir: [0.32, 0.9, 0.28], freq: 26, width: 0.03, warp: 0.35, strength: 0.7, color: c('#d4d6d2'), patchy: 0.3 },
     },
   },
   'dragon-stone': { roughness: 0.93, detail: { freq: 42, bump: 0.0024, ridge: 0.35, pores: 0.55, albedoVar: 0.35, roughVar: 0.08 } },
   lava: { roughness: 0.95, detail: { freq: 85, bump: 0.0018, ridge: 0.15, pores: 0.95, albedoVar: 0.45, roughVar: 0.05 } },
   slate: {
-    roughness: 0.7,
+    roughness: 0.8,
     detail: {
       freq: 30, bump: 0.0005, ridge: 0.2, pores: 0, albedoVar: 0.18, roughVar: 0.18,
       vein: { dir: [0, 1, 0], freq: 520, width: 0.25, warp: 0.6, strength: 0.18, color: c('#6c7074'), patchy: 0.8 },
@@ -48,22 +48,23 @@ const LOOKS: Record<string, HardscapeLook> = {
       vein: { dir: [0.1, 1, 0.05], freq: 110, width: 0.18, warp: 1.2, strength: 0.4, color: c('#9a6a40'), patchy: 0.5 },
     },
   },
-  'live-rock': { roughness: 0.92, detail: { freq: 60, bump: 0.0028, ridge: 0.3, pores: 0.7, albedoVar: 0.35, roughVar: 0.05 } },
+  // Porous reef limestone: fine pores darken only a little (the crusts fill most of them).
+  'live-rock': { roughness: 0.92, detail: { freq: 70, bump: 0.0026, ridge: 0.35, pores: 0.4, albedoVar: 0.22, roughVar: 0.05 } },
   // Wood: aDetail = (arc around, length along, branch) → grain streaks along the length.
-  spiderwood: { roughness: 0.78, detail: { freq: 1, bump: 0.0005, ridge: 0.5, albedoVar: 0.25, roughVar: 0.1, aniso: [260, 22, 1] } },
-  'redmoor-root': { roughness: 0.74, detail: { freq: 1, bump: 0.0005, ridge: 0.5, albedoVar: 0.25, roughVar: 0.1, aniso: [260, 22, 1] } },
-  manzanita: { roughness: 0.55, detail: { freq: 1, bump: 0.0003, ridge: 0.3, albedoVar: 0.15, roughVar: 0.1, aniso: [180, 14, 1] } },
-  mopani: { roughness: 0.6, detail: { freq: 1, bump: 0.0007, ridge: 0.4, albedoVar: 0.18, roughVar: 0.1, aniso: [150, 16, 1] } },
-  malaysian: { roughness: 0.8, detail: { freq: 1, bump: 0.0012, ridge: 0.8, albedoVar: 0.25, roughVar: 0.1, aniso: [220, 12, 1] } },
+  spiderwood: { roughness: 0.78, detail: { freq: 1, bump: 0.0005, ridge: 0.5, albedoVar: 0.25, roughVar: 0.1, aniso: [260, 22, 1], coarse: 0.28, fissure: 0.45 } },
+  'redmoor-root': { roughness: 0.74, detail: { freq: 1, bump: 0.0005, ridge: 0.5, albedoVar: 0.25, roughVar: 0.1, aniso: [260, 22, 1], coarse: 0.25, fissure: 0.4 } },
+  manzanita: { roughness: 0.55, detail: { freq: 1, bump: 0.0003, ridge: 0.3, albedoVar: 0.15, roughVar: 0.1, aniso: [180, 14, 1], coarse: 0.18, fissure: 0.12 } },
+  mopani: { roughness: 0.6, detail: { freq: 1, bump: 0.0007, ridge: 0.4, albedoVar: 0.18, roughVar: 0.1, aniso: [150, 16, 1], coarse: 0.22, fissure: 0.2 } },
+  malaysian: { roughness: 0.8, detail: { freq: 1, bump: 0.0012, ridge: 0.8, albedoVar: 0.25, roughVar: 0.1, aniso: [220, 12, 1], coarse: 0.3, fissure: 0.6 } },
   cholla: {
     roughness: 0.85,
     side: 'double',
     tubeUv: true,
     detail: { freq: 1, bump: 0.0007, ridge: 0.6, albedoVar: 0.25, roughVar: 0.1, aniso: [200, 30, 1], lattice: { around: 7, along: 32, size: 0.2 } },
   },
-  branchwood: { roughness: 0.82, detail: { freq: 1, bump: 0.0009, ridge: 0.6, albedoVar: 0.3, roughVar: 0.1, aniso: [240, 10, 1] } },
+  branchwood: { roughness: 0.82, detail: { freq: 1, bump: 0.0009, ridge: 0.6, albedoVar: 0.3, roughVar: 0.1, aniso: [240, 10, 1], coarse: 0.3, fissure: 0.55 } },
   // Caves & small decor.
-  'slate-cave': { roughness: 0.7, detail: { freq: 30, bump: 0.0005, ridge: 0.2, albedoVar: 0.18, vein: { dir: [0, 1, 0], freq: 520, width: 0.25, warp: 0.6, strength: 0.18, color: c('#6c7074'), patchy: 0.8 } } },
+  'slate-cave': { roughness: 0.8, detail: { freq: 30, bump: 0.0005, ridge: 0.2, albedoVar: 0.18, vein: { dir: [0, 1, 0], freq: 520, width: 0.25, warp: 0.6, strength: 0.18, color: c('#6c7074'), patchy: 0.8 } } },
   'rock-cave': { roughness: 0.88, detail: { freq: 40, bump: 0.0018, ridge: 0.45, pores: 0.25, albedoVar: 0.28 } },
   coconut: { roughness: 0.9, detail: { freq: 1, bump: 0.0009, ridge: 0.7, albedoVar: 0.3, aniso: [160, 160, 160] } },
   'clay-tube': { roughness: 0.92, side: 'double', detail: { freq: 120, bump: 0.0003, pores: 0.15, albedoVar: 0.15 } },
@@ -71,7 +72,7 @@ const LOOKS: Record<string, HardscapeLook> = {
   shell: { roughness: 0.42, side: 'double', detail: { freq: 1, bump: 0.0003, ridge: 0.3, albedoVar: 0.1, aniso: [1, 1, 1] } },
   airstone: { roughness: 0.95, detail: { freq: 400, bump: 0.0002, pores: 0.6, albedoVar: 0.12 } },
   plastic: { roughness: 0.35, detail: { freq: 10, bump: 0, albedoVar: 0.02 } },
-  rubble: { roughness: 0.92, detail: { freq: 1, bump: 0.0009, ridge: 0.2, pores: 0.45, albedoVar: 0.1, aniso: [600, 600, 600] } },
+  rubble: { roughness: 0.92, detail: { freq: 1, bump: 0.0009, ridge: 0.2, pores: 0.3, albedoVar: 0.08, aniso: [600, 600, 600] } },
   // Plants (unique meshes with surface relief: marimo, coral skeletons) reuse this path.
   marimo: { roughness: 1.0, detail: { freq: 700, bump: 0.0004, ridge: 0.2, albedoVar: 0.2 } },
 };

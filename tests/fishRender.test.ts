@@ -3,6 +3,7 @@ import type { BufferAttribute } from 'three';
 import type { Sex, Species } from '../src/core/types';
 import { ARCHETYPES } from '../src/core/enums';
 import { ARCHETYPE_PRESETS, resolveBody, resolveLook, sexMatters } from '../src/render/fish/archetypes';
+import { ATLAS } from '../src/render/fish/atlas';
 import { buildFishGeometry, lodFor } from '../src/render/fish/fishGeometry';
 import { PART } from '../src/render/fish/geometryBuilder';
 import { BodyProfile } from '../src/render/fish/profile';
@@ -203,5 +204,62 @@ describe('pattern DSL: curved bands', () => {
     const flat = new Float32Array(s.w * s.h);
     rasterize({ type: 'bars', color: '#ffffff', count: 1, width: 0.06, x0: 0.25, x1: 0.25, curve: 0 }, s, flat);
     expect(Math.abs(centreX(s, flat, Math.floor(s.h / 2)) - centreX(s, flat, 1))).toBeLessThan(0.005);
+  });
+});
+
+describe('fin & pattern details', () => {
+  it('a long spiny dorsal without a second dorsal gets a lower spiny part and a taller soft lobe', () => {
+    const clown = all.find((s) => s.id === 'amphiprion-ocellaris');
+    if (!clown) return;
+    const body = resolveBody(clown, 'unknown');
+    const g = buildFishGeometry(body, lodFor(11, false));
+    const spine = g.fins.getAttribute('aSpine') as BufferAttribute;
+    // aFin = (w along the ray, u·2−1 along the fin base, side/flow, distance from the base).
+    const fin = g.fins.getAttribute('aFin') as BufferAttribute;
+    let front = 0, rear = 0;
+    for (let i = 0; i < fin.count; i++) {
+      if (Math.round(spine.getY(i)) !== PART.dorsal) continue;
+      const u = (fin.getY(i) + 1) / 2;
+      if (u < 0.5) front = Math.max(front, fin.getW(i));
+      else if (u > 0.62) rear = Math.max(rear, fin.getW(i));
+    }
+    expect(rear).toBeGreaterThan(front);
+  });
+
+  it("a blotch's softness controls its edge (crisp markings stay crisp)", () => {
+    const w = 200, h = 100;
+    const px = new Float32Array(w), py = new Float32Array(h), hd = new Float32Array(w).fill(0.2);
+    for (let i = 0; i < w; i++) px[i] = (i + 0.5) / w;
+    for (let j = 0; j < h; j++) py[j] = 1 - (2 * (j + 0.5)) / h;
+    const s: Surface = { w, h, px, py, hd, seed: 1 };
+    const partial = (soft?: number) => {
+      const m = new Float32Array(w * h);
+      rasterize({ type: 'blotch', color: '#000000', x: 0.5, y: 0, rx: 0.2, ry: 0.6, softness: soft }, s, m);
+      let n = 0;
+      for (const v of m) if (v > 0.05 && v < 0.95) n++;
+      return n;
+    };
+    expect(partial(0.05)).toBeLessThan(partial() * 0.5);
+  });
+
+  it('eyes have no white sclera and a near-black iris still reads as a ring around the pupil', () => {
+    const tang = all.find((s) => s.id === 'paracanthurus-hepatus');
+    if (!tang) return;
+    const body = resolveBody(tang, 'unknown');
+    const g = buildFishGeometry(body, lodFor(25, false));
+    const tex = paintFishAtlas(tang, body, resolveLook(tang, 'unknown'), g.info.profile!, 128);
+    const img = tex.map.image as { data: Uint8Array; width: number; height: number };
+    // Eye cell: sample the pupil centre and a point on the iris ring.
+    const cell = ATLAS.eye;
+    const at = (lx: number, ly: number) => {
+      const x = Math.floor((cell.x + cell.w * lx) * img.width), y = Math.floor((cell.y + cell.h * ly) * img.height);
+      const i = (y * img.width + x) * 4;
+      return (img.data[i] + img.data[i + 1] + img.data[i + 2]) / 3;
+    };
+    const pupil = at(0.5, 0.5), iris = at(0.5 + 0.34, 0.5);
+    expect(iris).toBeGreaterThan(pupil + 8);
+    // Nothing in the eye is near-white.
+    for (let ly = 0.1; ly < 0.9; ly += 0.05) for (let lx = 0.1; lx < 0.9; lx += 0.05) expect(at(lx, ly)).toBeLessThan(200);
+    tex.dispose();
   });
 });

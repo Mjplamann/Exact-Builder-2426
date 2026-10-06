@@ -2,7 +2,7 @@
  * Minimal headless world for behavior tests: reference species, a tank, optional random decor
  * colliders & cover points, and helpers to add animals and step the systems.
  */
-import type { Collider, CoverPoint, FishEntity, TankSize } from '../../src/core/types';
+import type { Collider, CoverPoint, FishEntity, FoodKind, TankSize } from '../../src/core/types';
 import { DEFAULT_SETTINGS, attachFish, createWorld, makeFishEntity, type World } from '../../src/core/world';
 import { substrateHeight, tankBounds } from '../../src/core/tankGeometry';
 import { Rng } from '../../src/core/rng';
@@ -12,6 +12,13 @@ import { newTank } from '../../src/sim/tankFactory';
 import { BehaviorSystem } from '../../src/behavior/BehaviorSystem';
 import { FoodSystem } from '../../src/behavior/FoodSystem';
 import reference from '../../src/data/species/reference.json';
+import { loadBundledSpecies } from '../../src/data/speciesIndex';
+import { loadBundledPlants } from '../../src/data/plantIndex';
+import { PRESETS, buildPresetTank, presetStock } from '../../src/app/presets';
+import { buildColliders } from '../../src/decor/colliders';
+import { LifeSim } from '../../src/sim/LifeSim';
+import { computeEnv } from '../../src/sim/environment';
+import { brainOf } from '../../src/behavior/brain';
 import type { Species } from '../../src/core/types';
 
 export const NOW = Date.UTC(2026, 5, 1, 12, 0, 0);
@@ -148,4 +155,101 @@ export function polarization(fish: FishEntity[]): number {
     z += f.kin.forward[2];
   }
   return Math.hypot(x, y, z) / fish.length;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Realistic worlds: a preset aquascape (real decor colliders & cover), the full species
+// database, the environment computed from the sim clock — driven like App.advance().
+// ---------------------------------------------------------------------------------------------
+
+let bundled: { species: SpeciesIndex; plants: PlantIndex } | null = null;
+function bundledData() {
+  if (!bundled) bundled = { species: loadBundledSpecies(), plants: loadBundledPlants() };
+  return bundled;
+}
+
+export interface PresetSim {
+  world: World;
+  behavior: BehaviorSystem;
+  food: FoodSystem;
+  bites: number;
+  step(dt: number): void;
+  run(seconds: number, dt?: number, each?: () => void): void;
+  add(speciesId: string, count: number): FishEntity[];
+  feed(kind: FoodKind, at?: [number, number, number], pinches?: number): void;
+  /** Rebuild colliders/cover after editing decor or plants (what App does on those events). */
+  rebuild(): void;
+}
+
+/**
+ * A preset tank at the given hour. `stock: false` starts it empty. Animals are settled
+ * residents (no "new arrival" exploring) unless `fresh` is set.
+ */
+export function makePresetSim(presetId: string, opts: { hour?: number; stock?: boolean } = {}): PresetSim {
+  const { species, plants } = bundledData();
+  const preset = PRESETS.find((p) => p.id === presetId)!;
+  const tank = buildPresetTank(preset, plants, 4242);
+  if (opts.hour !== undefined) {
+    const d = new Date(tank.simTime);
+    d.setHours(Math.floor(opts.hour), Math.round((opts.hour % 1) * 60), 0, 0);
+    tank.simTime = d.getTime();
+    tank.createdAt = tank.simTime;
+  }
+  const world = createWorld({ tank, species, plants, settings: { ...DEFAULT_SETTINGS } });
+  const behavior = new BehaviorSystem(world);
+  const food = new FoodSystem();
+  const life = new LifeSim(world);
+  const rebuild = () => {
+    const { colliders, cover } = buildColliders(world.tank, world.plants);
+    world.colliders = colliders;
+    world.cover = cover;
+    behavior.onEnvironmentChanged(world);
+  };
+  rebuild();
+  computeEnv(world);
+  world.events.on('fish-added', ({ fish }) => {
+    if (!fish.state.pos) behavior.placeNewFish(world, fish);
+  });
+  const sim: PresetSim = {
+    world,
+    behavior,
+    food,
+    bites: 0,
+    step(dt: number) {
+      const simDt = world.clock.tick(dt);
+      computeEnv(world);
+      food.update(world, dt, simDt);
+      behavior.update(world, dt);
+    },
+    run(seconds: number, dt = 1 / 30, each?: () => void) {
+      const n = Math.round(seconds / dt);
+      for (let i = 0; i < n; i++) {
+        sim.step(dt);
+        each?.();
+      }
+    },
+    add(speciesId: string, count: number) {
+      const out = life.addFish(world, speciesId, count);
+      for (const f of out) brainOf(f).age = 1000;
+      return out;
+    },
+    feed(kind: FoodKind, at?: [number, number, number], pinches = 1) {
+      const b = tankBounds(world.tank);
+      const p: [number, number, number] = at ?? [0, b.surfaceY, 0];
+      food.drop(world, kind, p, pinches);
+      world.events.emit('food-dropped', { kind, at: p, count: pinches });
+    },
+    rebuild,
+  };
+  behavior.onEat = (fish, f, amount) => {
+    const taken = food.consume(world, f, amount);
+    if (taken > 0) {
+      sim.bites++;
+      life.onEat(world, fish, f, taken);
+    }
+  };
+  world.events.on('decor-changed', () => rebuild());
+  world.events.on('plants-changed', () => rebuild());
+  if (opts.stock !== false) for (const { speciesId, count } of presetStock(preset, species)) sim.add(speciesId, count);
+  return sim;
 }

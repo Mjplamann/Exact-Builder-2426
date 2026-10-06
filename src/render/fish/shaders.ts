@@ -311,6 +311,7 @@ uniform float uFishTime;
 uniform float uTranslucency;
 uniform vec4 uFishSkin;   // wrap (soft terminator), transmission, glint strength, thin-edge rim
 uniform vec4 uFishSkin2;  // scale cells across the body atlas (u, v), saturation, fin (1) / body (0)
+uniform vec4 uFishSkin3;  // x (SL) of the gill-cover edge: scale glints only behind it
 varying vec4 vFishLook;
 varying vec4 vFishState;
 varying vec4 vFishBody;
@@ -371,10 +372,11 @@ void RE_Direct_Fish( const in IncidentLight directLight, const in vec3 geometryP
   // Guanine glints (tight, sparse; fade out once a scale is smaller than a few pixels).
   if ( fishGlint > 0.001 ) {
     float nh = saturate( dot( fishGlintN, halfDir ) );
-    float a2 = 0.0035;
+    // (a scale is a small flat mirror: a lobe a few degrees wide lights most of the scale at once)
+    float a2 = 0.006;
     float dd = nh * nh * ( a2 - 1.0 ) + 1.0;
     float D = a2 / ( PI * dd * dd );
-    reflectedLight.directSpecular += directLight.color * saturate( dot( fishGlintN, L ) ) * D * fishGlint * fishGuanine * 0.014;
+    reflectedLight.directSpecular += directLight.color * saturate( dot( fishGlintN, L ) ) * D * fishGlint * fishGuanine * 0.012;
   }
   // Clear, bulging cornea: one small, crisp catchlight.
   if ( fishEyeLens > 0.5 ) {
@@ -413,7 +415,7 @@ export const FISH_FRAGMENT_COLOR = /* glsl */ `
     // Seen through water, real pigment is a little less saturated than authored swatches;
     // very saturated colours are compressed most.
     float chroma = max(max(c.r, c.g), c.b) - min(min(c.r, c.g), c.b);
-    float sat = vFishLook.z * uFishSkin2.z * (1.0 - 0.12 * smoothstep(0.35, 0.8, chroma));
+    float sat = vFishLook.z * (1.0 - (1.0 - uFishSkin2.z + 0.08) * smoothstep(0.2, 0.75, chroma));
     c = max(mix(vec3(l), c, sat), 0.0) * vFishLook.y;
     // Resting (night) fish pale and dull as chromatophores contract.
     float rest = restK * (1.0 - 0.6 * uNightMix);
@@ -521,7 +523,12 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
       #endif
       float fp = max(fwidth(gc.x), fwidth(gc.y));
       float sparse = step(0.55, fishHash(cell + 3.1));
-      fishGlint = uFishSkin.z * (0.15 + 0.85 * g) * sparse * (1.0 - smoothstep(0.22, 0.6, fp)) * (1.0 - 0.8 * vFishState.w);
+      // The exposed, rounded field of the scale flashes — not a square cell.
+      vec2 lc = fract(gc) - 0.5;
+      sparse *= 1.0 - smoothstep(0.22, 0.48, length(lc * vec2(1.0, 1.15)));
+      // Only the scaled flank glints (not the naked head), never on scales smaller than ~3 px.
+      float flank = smoothstep(uFishSkin3.x - 0.01, uFishSkin3.x + 0.04, vFishBody.x);
+      fishGlint = uFishSkin.z * (0.15 + 0.85 * g) * sparse * flank * (1.0 - smoothstep(0.18, 0.4, fp)) * (1.0 - 0.8 * vFishState.w);
     }
     #endif
   }

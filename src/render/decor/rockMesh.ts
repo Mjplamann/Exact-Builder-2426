@@ -57,19 +57,21 @@ interface RockDetail {
 }
 
 const ROCK_DETAIL: Record<string, RockDetail> = {
-  seiryu: { amp: 0.0046, freq: 26, ridged: 0.95, oct: 3, flute: 0.009, relief: 0.5, palette: { a: '#646c71', b: '#8b9398', dark: '#2a3034' }, film: '#5a6248' },
-  'dragon-stone': { amp: 0.0046, freq: 21, ridged: 0.45, oct: 3, relief: 0.35, pits: { count: 60, r: [0.0022, 0.0058], depth: 0.6 }, palette: { a: '#72553a', b: '#9c7b50', dark: '#3a2818', accent: '#b08c5c' }, film: '#5e5a38' },
+  // Seiryu: mid blue-grey limestone, paler on weathered crests (albedo ≈ 0.2–0.3, not charcoal).
+  seiryu: { amp: 0.0052, freq: 26, ridged: 0.95, oct: 3, flute: 0.009, relief: 0.55, palette: { a: '#78818a', b: '#a1aab0', dark: '#3c434a' }, film: '#66704e' },
+  // Dragon stone (Ohko): crusty hardened clay, craggy and riddled with small and mid-sized holes.
+  'dragon-stone': { amp: 0.006, freq: 24, ridged: 0.62, oct: 3, relief: 0.45, pits: { count: 170, r: [0.0015, 0.0048], depth: 0.7 }, palette: { a: '#7a5c40', b: '#a48458', dark: '#3e2c1c', accent: '#b8966a' }, film: '#64603e' },
   lava: { amp: 0.0034, freq: 28, ridged: 0.2, oct: 3, relief: 0.25, pits: { count: 170, r: [0.0014, 0.0042], depth: 0.7 }, palette: { a: '#3a2622', b: '#5c3226', dark: '#140d0b', accent: '#7a3a26' } },
-  slate: { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, relief: 0.2, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#383c40', b: '#4a4f54', dark: '#202224' }, film: '#3e4636' },
+  slate: { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, relief: 0.25, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#5a6066', b: '#70777d', dark: '#30353a' }, film: '#4a5440' },
   'river-stone': { amp: 0.0014, freq: 8, ridged: 0, oct: 2, palette: { a: '#8a8378', b: '#a59c8c', dark: '#4a463f' } },
   'texas-holey': { amp: 0.0055, freq: 22, ridged: 0.85, oct: 3, relief: 0.4, pits: { count: 130, r: [0.002, 0.0075], depth: 0.6 }, palette: { a: '#cfc3a6', b: '#e4dac2', dark: '#6e624c', accent: '#aaa596' }, film: '#9a9468' },
   'petrified-wood': { amp: 0.0016, freq: 30, ridged: 0.5, oct: 3, relief: 0.3, palette: { a: '#86664a', b: '#a8875e', dark: '#4a3826', accent: '#8a847a' } },
-  'elephant-skin': { amp: 0.0025, freq: 16, ridged: 0, oct: 2, relief: 0.3, crack: 0.0045, palette: { a: '#686158', b: '#837a6d', dark: '#34302a' }, film: '#5a5a40' },
-  frodo: { amp: 0.0032, freq: 24, ridged: 0.7, oct: 3, relief: 0.4, strata: { amp: 0.0013, freq: 260 }, palette: { a: '#665c52', b: '#857766', dark: '#2e2924', accent: '#9a6436' }, film: '#5a5a40' },
+  'elephant-skin': { amp: 0.0025, freq: 16, ridged: 0, oct: 2, relief: 0.3, crack: 0.0045, palette: { a: '#766e64', b: '#928a7c', dark: '#38332c' }, film: '#5a5a40' },
+  frodo: { amp: 0.0034, freq: 24, ridged: 0.7, oct: 3, relief: 0.45, strata: { amp: 0.0013, freq: 260 }, palette: { a: '#72685c', b: '#918270', dark: '#322c26', accent: '#a06a3a' }, film: '#5a5a40' },
   // Reef rock: old coral limestone riddled with borings, cream to tan under the crusts.
-  'live-rock': { amp: 0.0062, freq: 24, ridged: 0.65, oct: 3, relief: 0.45, pits: { count: 230, r: [0.0022, 0.0075], depth: 0.7 }, palette: { a: '#d4c7a6', b: '#b39c76', dark: '#4a3c2c' } },
-  'slate-cave': { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, relief: 0.2, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#383c40', b: '#4a4f54', dark: '#202224' }, film: '#3e4636' },
-  'rock-cave': { amp: 0.0042, freq: 22, ridged: 0.7, oct: 3, relief: 0.45, flute: 0.004, pits: { count: 45, r: [0.002, 0.0055], depth: 0.5 }, palette: { a: '#6e675e', b: '#958c7c', dark: '#2a2622', accent: '#8a7458' }, film: '#5a5a40' },
+  'live-rock': { amp: 0.0068, freq: 26, ridged: 0.7, oct: 3, relief: 0.4, pits: { count: 420, r: [0.0016, 0.0062], depth: 0.75 }, palette: { a: '#ddd2b6', b: '#c3ae8a', dark: '#6e5e48' } },
+  'slate-cave': { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, relief: 0.25, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#5a6066', b: '#70777d', dark: '#30353a' }, film: '#4a5440' },
+  'rock-cave': { amp: 0.0058, freq: 24, ridged: 0.8, oct: 3, relief: 0.5, flute: 0.006, pits: { count: 90, r: [0.0016, 0.005], depth: 0.6 }, palette: { a: '#837b70', b: '#a69c8a', dark: '#3a352e', accent: '#957c5e' }, film: '#5e5e42' },
   coconut: { amp: 0.0007, freq: 70, ridged: 0.3, oct: 2, palette: { a: '#5a3a24', b: '#7a5232', dark: '#24160c', accent: '#c8a87a' } },
 };
 
@@ -128,8 +130,10 @@ function scaleInto(o: RGB, s: number): void {
   o[2] *= s;
 }
 
-const CORALLINE = ['#c46f9c', '#a65596', '#8a4a9a', '#d690ba', '#b86a86'].map(linHex);
-const C_TURF = linHex('#5a6236');
+// Crustose coralline algae as photographed under reef lighting: rose, mauve, lilac and plum —
+// a rock carries two or three of them, never a uniform violet.
+const CORALLINE = ['#d08aa6', '#bf7298', '#a46aa0', '#dba4bc', '#c58a8a', '#c98e98', '#b4768e'].map(linHex);
+const C_TURF = linHex('#7a7448');
 const C_SPONGE = [linHex('#d89a3a'), linHex('#c8503a'), linHex('#e0c070')];
 const C_BARE = linHex('#e8e0cc');
 
@@ -238,7 +242,9 @@ export function meshRock(item: Pick<DecorItem, 'kind' | 'variant' | 'seed'>, cel
   // Each live rock carries its own mix of coralline species.
   const coralA = CORALLINE[Math.floor(rng.next() * CORALLINE.length)];
   const coralB = CORALLINE[Math.floor(rng.next() * CORALLINE.length)];
-  const corallineCover = rng.range(0.42, 0.52);
+  const coralC = CORALLINE[Math.floor(rng.next() * CORALLINE.length)];
+  // Mature reef rock is mostly encrusted (≈55–75 % of the lit surface).
+  const corallineCover = rng.range(0.37, 0.47);
   const sponge = C_SPONGE[Math.floor(rng.next() * C_SPONGE.length)];
   const colors = new Float32Array(mesh.vertexCount * 3);
   const det = new Float32Array(mesh.vertexCount * 3);
@@ -269,20 +275,26 @@ export function meshRock(item: Pick<DecorItem, 'kind' | 'variant' | 'seed'>, cel
     let inPit = 0;
     if (pits) inPit = smoothstep(-0.0015, 0.0008, pits.carve(x, y, z));
     if (style === 'live-rock') {
-      // Coralline algae: pink/purple crusts with crisp margins, strongest on lit upward faces,
-      // plus scattered young crust spots; turf algae on top; sponges inside borings; bleached,
-      // freshly broken patches.
+      // Coralline crusts: broad patches with soft, lobed margins, strongest on lit faces, a
+      // second species mottled through the first, darker plum in the shade; scattered young
+      // crust spots on bare rock; a faint brownish turf film on top; sponges in the borings.
       const up = clamp01(ny * 0.8 + 0.4);
-      const cn = noise.fbm(x * 11 + 5, y * 11, z * 11 - 2, 4) * 0.5 + 0.5;
-      setMix(tmp, coralA, coralB, smoothstep(0.35, 0.65, noise.noise(x * 5 + 1, y * 5, z * 5) * 0.5 + 0.5));
-      const crust = smoothstep(corallineCover, corallineCover + 0.035, cn + (up - 0.6) * 0.12) * (1 - inPit * 0.8);
-      const spots = smoothstep(0.7, 0.74, noise.noise(x * 70 + 3, y * 70, z * 70) * 0.5 + 0.5) * (0.4 + 0.6 * up);
-      mixInto(c, tmp, Math.min(1, crust * 0.92 + spots * 0.85));
-      // Coralline crusts have a pale growing edge.
-      const rim = smoothstep(corallineCover - 0.02, corallineCover + 0.005, cn) * (1 - smoothstep(corallineCover + 0.005, corallineCover + 0.03, cn));
-      mixInto(c, C_BARE, rim * 0.35);
-      const turf = smoothstep(0.64, 0.76, noise.fbm(x * 19, y * 19 + 3, z * 19, 2) * 0.5 + 0.5) * clamp01(ny);
-      mixInto(c, C_TURF, turf * 0.6);
+      const cn = noise.fbm(x * 9 + 5, y * 9, z * 9 - 2, 4) * 0.5 + 0.5;
+      const cn2 = noise.fbm(x * 28 + 1, y * 28 + 4, z * 28, 2) * 0.5 + 0.5;
+      const cv = cn * 0.78 + cn2 * 0.22 + (up - 0.6) * 0.1;
+      const crust = smoothstep(corallineCover, corallineCover + 0.07, cv) * (1 - inPit * 0.85);
+      setMix(tmp, coralA, coralB, smoothstep(0.3, 0.7, noise.noise(x * 6 + 1, y * 6, z * 6) * 0.5 + 0.5));
+      mixInto(tmp, coralC, smoothstep(0.55, 0.8, noise.noise(x * 17 + 9, y * 17, z * 17) * 0.5 + 0.5) * 0.6);
+      // Fine mottling inside the crust, deeper color where it is shaded.
+      scaleInto(tmp, 0.8 + 0.34 * (noise.noise(x * 70, y * 70 + 2, z * 70) * 0.5 + 0.5));
+      scaleInto(tmp, 0.86 + 0.14 * up);
+      const spots = smoothstep(0.68, 0.73, noise.noise(x * 60 + 3, y * 60, z * 60) * 0.5 + 0.5) * (0.35 + 0.65 * up) * (1 - crust);
+      mixInto(c, tmp, Math.min(1, crust * 0.94 + spots * 0.7));
+      // A faint pale growing margin around crust patches.
+      const rim = smoothstep(corallineCover - 0.025, corallineCover + 0.01, cv) * (1 - smoothstep(corallineCover + 0.01, corallineCover + 0.045, cv));
+      mixInto(c, C_BARE, rim * 0.25);
+      const turf = smoothstep(0.66, 0.8, noise.fbm(x * 19, y * 19 + 3, z * 19, 2) * 0.5 + 0.5) * clamp01(ny) * (1 - crust * 0.7);
+      mixInto(c, C_TURF, turf * 0.3);
       mixInto(c, sponge, inPit * smoothstep(0.55, 0.75, noise.noise(x * 25, y * 25, z * 25 + 4) * 0.5 + 0.5) * 0.75);
     }
     if (axis) {

@@ -25,6 +25,7 @@ export function standoff(b: Brain): number {
 }
 
 function setNormal(fish: FishEntity, b: Brain, nx: number, ny: number, nz: number): void {
+  b.attaches++;
   b.nx = nx;
   b.ny = ny;
   b.nz = nz;
@@ -65,7 +66,9 @@ export function attachSubstrate(h: Habitat, fish: FishEntity, b: Brain): void {
   b.surf = SURF_SUBSTRATE;
   b.surfIdx = -1;
   k.pos[1] = h.floor(k.pos[0], k.pos[2]) + so;
-  if (b.p.move !== 'swimmer') stepOutOfDecor(h, fish, b, so);
+  // Never settle inside the buried base of a rock (reproject() would otherwise shove the animal
+  // out a few centimetres on the next step — a visible jump).
+  stepOutOfDecor(h, fish, b, so);
   h.floorNormal(k.pos[0], k.pos[2]);
   setNormal(fish, b, hit.nx, hit.ny, hit.nz);
   k.pos[1] = hit.d + so;
@@ -171,7 +174,10 @@ export function detach(fish: FishEntity, b: Brain): void {
   k.onSurface = false;
   const f = k.forward;
   b.yaw = Math.atan2(f[2], f[0]);
-  b.pitch = clamp(Math.asin(clamp(f[1], -1, 1)), -b.pitchLimit, b.pitchLimit);
+  // Keep the actual body attitude (a goby on a sloping rock, a pleco on the glass) and let the
+  // swimming controller level it out over the next moments — snapping it level would swing the
+  // head or tail into the rock and the body would be shoved out in a single frame.
+  b.pitch = clamp(Math.asin(clamp(f[1], -1, 1)), -1.2, 1.2);
   b.bodyPitch = b.pitch;
   b.yawRate = 0;
 }
@@ -421,9 +427,14 @@ export function reproject(h: Habitat, fish: FishEntity, b: Brain, climbs: boolea
     if (k.pos[1] > B.surfaceY - so - 0.004) {
       k.pos[1] = B.surfaceY - so - 0.004;
     }
-    // Non-climbers can only walk on gentle slopes: slide back down otherwise.
+    // Non-climbers can only stand on gentle slopes: on a steep face they lose their footing
+    // (fish swim off, walkers and crawlers drop — see BehaviorSystem.integrate) rather than
+    // being teleported to the substrate below.
     if (!climbs && ny < 0.35) {
-      attachNearest(h, fish, b, 1, false, false);
+      k.pos[0] += nx * 0.002;
+      k.pos[1] += ny * 0.002;
+      k.pos[2] += nz * 0.002;
+      detach(fish, b);
       return;
     }
     setNormal(fish, b, nx, ny, nz);

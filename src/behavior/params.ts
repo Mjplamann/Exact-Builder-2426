@@ -55,6 +55,11 @@ export interface SpeciesParams {
   readonly postureRest: number;
   /** Swims belly-up (Synodontis nigriventris). */
   readonly inverted: boolean;
+  /**
+   * Upright swimmer (seahorses): the body stays vertical while the animal drifts up, down or
+   * sideways with its dorsal fin, so travel direction is decoupled from body pitch.
+   */
+  readonly upright: boolean;
   /** Max travel pitch (rad). */
   readonly maxPitch: number;
 
@@ -293,6 +298,7 @@ function derive(s: Species): SpeciesParams {
     postureCruise,
     postureRest,
     inverted: t['upside-down'],
+    upright: loco === 'seahorse',
     maxPitch,
     zoneLo,
     zoneHi,

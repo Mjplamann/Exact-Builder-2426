@@ -305,6 +305,13 @@ export interface SurfaceDetail {
   vein?: { dir: [number, number, number]; freq: number; width: number; warp: number; strength: number; color: Color; patchy?: number };
   /** Cholla lattice holes (uses uv: x around 0..1, y along in meters). */
   lattice?: { around: number; along: number; size: number };
+  /**
+   * Coarse albedo streaks (amplitude) at a third of the base frequency, never faded with
+   * distance — the grain that still reads on wood seen from across the room.
+   */
+  coarse?: number;
+  /** Dark checks / fissures along the grain (0..1), antialiased by distance. */
+  fissure?: number;
   /** Selection uniform shared with the highlight overlay (unused when absent). */
 }
 
@@ -313,7 +320,7 @@ export function patchSurfaceDetail(material: Material, d: SurfaceDetail): void {
   const vein = d.vein;
   const uniforms = {
     uDetail: { value: new Vector4(d.freq, d.bump, d.ridge ?? 0, d.pores ?? 0) },
-    uDetail2: { value: new Vector4(d.albedoVar ?? 0.2, d.roughVar ?? 0.15, 0, 0) },
+    uDetail2: { value: new Vector4(d.albedoVar ?? 0.2, d.roughVar ?? 0.15, d.coarse ?? 0, d.fissure ?? 0) },
     uAniso: { value: new Vector3(...(d.aniso ?? [1, 1, 1])) },
     uVeinDir: { value: new Vector4(...(vein?.dir ?? [0, 1, 0]), vein?.freq ?? 0) },
     uVeinP: { value: new Vector4(vein?.width ?? 0, vein?.warp ?? 0, vein?.strength ?? 0, vein?.patchy ?? 0.5) },
@@ -388,6 +395,20 @@ float dcFade;`,
   h -= dcPore * 1.2;
   dcH = h;
   diffuseColor.rgb *= clamp(1.0 + uDetail2.x * (n1 * 0.45 + n3 * 0.4) - dcPore * 0.45, 0.2, 1.6);
+  if (uDetail2.z > 0.0 || uDetail2.w > 0.0) {
+    // Coarse grain and fissures (wood): streaks a few centimetres long that survive distance,
+    // and thin dark checks that fade out before they would alias.
+    vec3 Pc = P * 0.3;
+    vec3 fwc3 = fwidth(Pc);
+    float fwc = max(fwc3.x, max(fwc3.y, fwc3.z));
+    float nc = dcNoise(Pc + 1.7) * 0.7 + dcNoise(Pc * 2.3 + 4.1) * 0.3;
+    diffuseColor.rgb *= 1.0 + uDetail2.z * nc;
+    float fz = 1.0 - abs(dcNoise(Pc * vec3(1.6, 0.7, 1.0) + 5.3));
+    float fis = pow(fz, 10.0) * (1.0 - smoothstep(0.5, 1.6, fwc * 2.0));
+    diffuseColor.rgb *= 1.0 - uDetail2.w * fis;
+    h -= fis * 1.2 * uDetail2.w;
+    dcH = h;
+  }
   if (uVeinDir.w > 0.0) {
     float s = dot(vDetail, uVeinDir.xyz) * uVeinDir.w + n1 * uVeinP.y;
     float v = 1.0 - smoothstep(uVeinP.x, uVeinP.x * 2.2 + 0.02, abs(sin(s)));

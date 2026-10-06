@@ -29,10 +29,10 @@ export function lodFor(adultLengthCm: number, elongated: boolean, quality: 'thum
   const L = adultLengthCm;
   let lod: FishLod;
   if (quality === 'thumb') lod = { rings: 40, radial: 22, finU: 12, finW: 6, eyeLat: 8, eyeLon: 14 };
-  else if (L < 3) lod = { rings: 26, radial: 14, finU: 8, finW: 4, eyeLat: 5, eyeLon: 8 };
-  else if (L < 7) lod = { rings: 34, radial: 18, finU: 10, finW: 5, eyeLat: 6, eyeLon: 10 };
-  else if (L < 18) lod = { rings: 42, radial: 22, finU: 12, finW: 6, eyeLat: 7, eyeLon: 12 };
-  else lod = { rings: 52, radial: 26, finU: 14, finW: 7, eyeLat: 8, eyeLon: 14 };
+  else if (L < 3) lod = { rings: 26, radial: 14, finU: 8, finW: 4, eyeLat: 6, eyeLon: 12 };
+  else if (L < 7) lod = { rings: 34, radial: 18, finU: 10, finW: 5, eyeLat: 7, eyeLon: 14 };
+  else if (L < 18) lod = { rings: 42, radial: 22, finU: 12, finW: 6, eyeLat: 9, eyeLon: 18 };
+  else lod = { rings: 52, radial: 26, finU: 14, finW: 7, eyeLat: 10, eyeLon: 20 };
   if (elongated) lod.rings = Math.round(lod.rings * 1.7);
   return lod;
 }
@@ -403,6 +403,32 @@ function buildExtras(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody): voi
       const rz = side * prof.halfWidth(rx) * 0.7;
       tube(gb, rx, ry, rz, 1, -0.12, side * 0.2, 0.16 * k, 0.015, 0.0015, 0, 6, 6, PART.body, rx, rx, -0.85, 0.5);
     }
+  }
+  // Boxfish & cowfish: a small, protruding pursed mouth with fleshy lips at the front of the box.
+  if (body.skin === 'hex' && body.armored) {
+    const r = clamp(0.035 * body.depth + 0.006, 0.012, 0.03) * (0.7 + 0.4 * clamp(body.lips, 0, 1));
+    const rx = r * 0.75, cx = 0.004 - 0.55 * rx, cy = H.yTip - 0.004;
+    const uv: [number, number] = [0, 0];
+    bodyUV(0.01, -0.05, uv);
+    const i0 = gb.idx.length, v0 = gb.vertexCount;
+    const nLat = 6, nLon = 12;
+    for (let i = 0; i <= nLat; i++) {
+      const th = (i / nLat) * Math.PI;
+      for (let j = 0; j <= nLon; j++) {
+        const ph = (j / nLon) * Math.PI * 2;
+        // A squat ellipsoid with a slit: the pursed lips of a boxfish.
+        const lx = Math.cos(th), ly = Math.sin(th) * Math.cos(ph), lz = Math.sin(th) * Math.sin(ph);
+        const slit = 1 - 0.18 * Math.exp(-((ly / 0.25) ** 2)) * Math.max(0, -lx);
+        gb.v(cx + lx * rx * slit, cy + ly * r * 0.8, lz * r, uv[0], uv[1], cx, PART.body);
+      }
+    }
+    for (let i = 0; i < nLat; i++) {
+      for (let j = 0; j < nLon; j++) {
+        const a = v0 + i * (nLon + 1) + j, b2 = a + nLon + 1;
+        gb.quad(a, b2, b2 + 1, a + 1);
+      }
+    }
+    gb.smoothNormals(i0, v0);
   }
   // Rays: a serrated venomous spine on top of the tail, pointing back.
   if (body.kind === 'ray' && body.tailTaper >= 0.9) {

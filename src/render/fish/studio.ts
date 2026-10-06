@@ -44,27 +44,34 @@ export interface StudioOptions {
   daylight?: number;
 }
 
-let previous: { renderer: WebGLRenderer; canvas: HTMLCanvasElement; fr: FishRenderer } | null = null;
+let previous: { fr: FishRenderer } | null = null;
+/** One renderer + canvas for every studio run (software WebGL runs out of memory otherwise). */
+let shared: { renderer: WebGLRenderer; canvas: HTMLCanvasElement; post: PostFX | null; key: string } | null = null;
 
 export async function runStudio(app: App, filter: string, opts: StudioOptions = {}): Promise<number> {
   (app as unknown as { running: boolean }).running = false;
   if (previous) {
     previous.fr.dispose();
-    previous.renderer.dispose();
-    previous.canvas.remove();
     previous = null;
   }
   const species = pickSpecies(app, filter, opts.limit ?? 48);
   const W = window.innerWidth, H = window.innerHeight;
-  const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;z-index:9999;';
-  document.body.appendChild(canvas);
-  const renderer = new WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(1);
-  renderer.setSize(W, H, false);
-  renderer.toneMapping = ACESFilmicToneMapping;
+  if (!shared || shared.key !== `${W}x${H}`) {
+    shared?.renderer.dispose();
+    shared?.canvas.remove();
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;z-index:9999;';
+    document.body.appendChild(canvas);
+    const r = new WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+    r.setPixelRatio(1);
+    r.setSize(W, H, false);
+    r.toneMapping = ACESFilmicToneMapping;
+    shared = { renderer: r, canvas, post: null, key: `${W}x${H}` };
+  }
+  const renderer = shared.renderer;
   const scene = new Scene();
-  scene.background = new Color(0.006, 0.013, 0.015);
+  // A dark, slightly lit water background (dark fin edges and silhouettes must read against it).
+  scene.background = new Color(0.016, 0.034, 0.038);
   const camera = new PerspectiveCamera(26, W / H, 0.01, 10);
   const day = opts.daylight ?? 1;
 
@@ -121,10 +128,13 @@ export async function runStudio(app: App, filter: string, opts: StudioOptions = 
   }
   const world = { fish, env: { daylight: day, moonlight: 0 }, clock: { simTime: now } } as unknown as World;
   fr.sync(world);
-  previous = { renderer, canvas, fr };
+  previous = { fr };
   let post: PostFX | null = null;
   try {
+    // The post chain holds the scene and camera: rebuild it for each lineup (same renderer).
     post = new PostFX(renderer, scene, camera, { msaa: 4, bloom: true, bloomScale: 0.5 } as ConstructorParameters<typeof PostFX>[3]);
+    (shared.post as unknown as { dispose?: () => void } | null)?.dispose?.();
+    shared.post = post;
   } catch (err) {
     console.warn('[studio] post chain unavailable', err);
   }

@@ -30,7 +30,7 @@ const cm = (v: number | undefined, d: number) => (v ?? d) / 100;
 
 function speciesLeaf(sp: PlantSpecies) {
   const look = leafLook(sp);
-  return leafPart(`${sp.id}/leaf`, look.tex, { rows: look.rows, fold: look.fold, ruffle: look.ruffle, ruffleFreq: look.ruffleFreq, cup: look.cup }, { transl: look.transl, roughness: look.roughness });
+  return leafPart(`${sp.id}/leaf`, look.tex, { rows: look.rows, cols: look.cols, fold: look.fold, ruffle: look.ruffle, ruffleFreq: look.ruffleFreq, cup: look.cup }, { transl: look.transl, roughness: look.roughness });
 }
 
 function phase(rng: Rng): number {
@@ -150,8 +150,10 @@ export function genStem({ sp, p, m, ctx, rng, out }: GenArgs): void {
   // Real internodes: ~0.5× leaf length for opposite-leaved stems, much tighter for whorled ones.
   const internode0 = Math.min(0.035, Math.max(0.0035, leafLen * (fine ? (cabomba ? 0.42 : 0.3) : whorl === 4 ? 0.4 : 0.55)));
   const stemR = Math.min(0.003, Math.max(0.0008, 0.0006 + leafLen * 0.035));
-  const nStemsMax = Math.min(9, Math.max(3, Math.round((sp.spreadCm / 100) / 0.016)));
-  const nStems = Math.max(2, Math.round(nStemsMax * (0.5 + 0.5 * g) * rng.range(0.85, 1.15)));
+  // A planted bunch is a dense clump of stems (≈ one per 1.3 cm of spread), thinned on
+  // low-quality devices.
+  const nStemsMax = Math.min(11, Math.max(3, Math.round((sp.spreadCm / 100) / 0.013)));
+  const nStems = Math.max(2, Math.round(nStemsMax * (0.5 + 0.5 * g) * rng.range(0.85, 1.15) * Math.min(1, ctx.density + 0.25)));
   const flex = flexOf(sp);
   const red = tipColored(sp) ? ratio(sp) : null;
   const baseCol = lin(sp.color);
@@ -312,12 +314,14 @@ export function genCarpet({ sp, p, m, ctx, rng, out }: GenArgs): void {
     const d: V3 = [Math.cos(yaw), 0, Math.sin(yaw)];
     const s = tile * r.range(0.85, 1.25);
     const y = ctx.ground(x, z) + 0.0012 + r.next() * 0.001;
-    pushLeaf(mats, [x - d[0] * s * 0.5, y, z - d[2] * s * 0.5], d, scl(UP, -1), s, s, tint(r, 0.1, p.health, 0.9), [m.anchor[1], 0.02, 0, 0], [0, 0, 0, 0]);
+    // The underlayer is the shaded depth of the mat: darker than the sunlit leaves on top.
+    pushLeaf(mats, [x - d[0] * s * 0.5, y, z - d[2] * s * 0.5], d, scl(UP, -1), s, s, tint(r, 0.1, p.health, 0.62), [m.anchor[1], 0.02, 0, 0], [0, 0, 0, 0]);
   }
   const leafLen = cm(sp.leafLength, 0.6);
   const leafW = cm(sp.leafWidth, sp.leafLength ?? 0.5);
   const Hc = Math.max(0.006, m.height);
-  const slots = Math.min(4000, Math.round(((Math.PI * Rmax * Rmax) / (leafLen * leafW)) * 1.1 * ctx.density));
+  // A healthy carpet is several leaves deep (leaf area ≈ 2–3× the ground it covers).
+  const slots = Math.min(4000, Math.round(((Math.PI * Rmax * Rmax) / (leafLen * leafW)) * 2 * ctx.density));
   const noise = new Noise3(p.seed);
   const flex = flexOf(sp);
   const ph = phase(rng);
@@ -460,7 +464,10 @@ export function genMoss({ sp, p, m, ctx, rng, out }: GenArgs): void {
     const s = r.range(0.55, 1.25);
     const L = sprig * s * (0.6 + 0.4 * g);
     const c = tint(r, 0.16, p.health, 0.5 + 0.5 * layer);
-    pushLeaf(list, base, dir, rnd, L * 0.55, L, c, [m.anchor[1] - 0.02, Math.max(0.04, H * 3), flex, ph + layer * 3], [curv, twist, 0, 0]);
+    // Moss strands are slender: flame and weeping moss grow as narrow, twisted tufts, Java moss
+    // as loose fans; a broad card would read as a leafy shrub from viewing distance.
+    const wr = flame || weeping ? 0.3 : christmas || phoenix ? 0.55 : 0.42;
+    pushLeaf(list, base, dir, rnd, L * wr, L, c, [m.anchor[1] - 0.02, Math.max(0.04, H * 3), flex, ph + layer * 3], [curv, twist, 0, 0]);
   }
 }
 

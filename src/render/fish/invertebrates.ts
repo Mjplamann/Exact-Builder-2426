@@ -166,7 +166,18 @@ function ellipsoid(
       gb.quad(a, a + 1, b + 1, b);
     }
   }
-  if (yExp) gb.smoothNormals(i0, v0);
+  if (yExp) {
+    gb.smoothNormals(i0, v0);
+    // The pole is nLon+1 coincident vertices: give them the one true normal (no pinched "star").
+    for (let j = 0; j <= nLon; j++) {
+      for (const [row, sgn] of [[0, 1], [nLat, -1]] as const) {
+        const vi = v0 + row * (nLon + 1) + j;
+        gb.nor[vi * 3] = ey[0] * sgn;
+        gb.nor[vi * 3 + 1] = ey[1] * sgn;
+        gb.nor[vi * 3 + 2] = ey[2] * sgn;
+      }
+    }
+  }
 }
 
 /** Flat double-sided blade (swimmerets, tail-fan plates, antennal scales, fans). */
@@ -452,6 +463,8 @@ function paintInvertAtlas(sp: Species, look: Appearance, spec: PaintSpec, N: num
       b.col[i * 3 + 2] += (0.68 - b.col[i * 3 + 2]) * sp2;
       b.thin[i] = 0.6;
       b.rough[i] = 0.32;
+      // Soft, wet flesh: barely any relief.
+      b.height[i] *= 0.2;
     }
   }
   // ---- eye ----
@@ -777,8 +790,8 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
     (th, ph) => bodyUV(0.5 - 0.5 * Math.sin(th) * Math.cos(ph), clamp(Math.cos(th) * 1.6, -1, 1)),
     // Squarer outline in plan view (crabs are broad-fronted), a straight front margin.
     (_th, ph) => Math.pow(Math.abs(Math.cos(ph)) ** 4 + Math.abs(Math.sin(ph)) ** 4, -1 / 4) * 0.88 * (Math.cos(ph) > 0.6 ? 1 - 0.08 * (Math.cos(ph) - 0.6) : 1),
-    // A low, flat-topped dome over a flatter underside.
-    [0.55, 0.8]);
+    // A low, flat-topped dome with distinct lateral margins over a flat underside.
+    [0.45, 0.7]);
   if (arrow) {
     // Long rostrum spike.
     tube(gb, spline([[cl * 0.45, cy + ch * 0.2, 0], [cl * 0.9, cy + ch * 0.45, 0], [cl * 1.3, cy + ch * 0.6, 0]], 6), (t) => 0.025 * cw * (1 - t), 4, { ...o, bodyXY: [0.02, 0.8] });
@@ -786,16 +799,18 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
   // Short, stout eyestalks in orbits at the front corners, the dark cornea capping the tip.
   for (const side of [1, -1]) {
     const a: V3 = [cl * 0.4, cy + ch * 0.18, side * cw * (arrow ? 0.18 : 0.24)];
-    const b: V3 = add(a, [0.045, 0.035, side * 0.03]);
-    tube(gb, [a, lerp3(a, b, 0.5), b], (t) => 0.022 * (1 - 0.15 * t), 6, { part: PART.stalk, pivot: a, phase: side, amp: 0.4, bodyXY: [0.08, 0.6] }, false);
+    const b: V3 = add(a, [0.038, 0.03, side * 0.026]);
+    tube(gb, [a, lerp3(a, b, 0.5), b], (t) => 0.022 * (1 - 0.1 * t), 6, { part: PART.stalk, pivot: a, phase: side, amp: 0.4, bodyXY: [0.08, 0.6] }, false);
     const d = norm(sub(b, a));
     const e2 = norm(cross(d, [0, 0, 1]));
     const e3 = cross(d, e2);
-    ellipsoid(gb, add(b, mul(d, 0.008)), e2, d, e3, [0.02, 0.018, 0.02], 5, 8, { part: PART.stalk, pivot: a, phase: side, amp: 0.4 }, eyeUV);
+    // The dark compound cornea caps the stalk (wider than the stalk itself).
+    ellipsoid(gb, add(b, mul(d, 0.012)), e2, d, e3, [0.027, 0.024, 0.027], 6, 10, { part: PART.stalk, pivot: a, phase: side, amp: 0.4 }, eyeUV);
   }
   // Walking legs (4 pairs) radiating from the sides; chelipeds in front.
   const legLen = arrow ? 1.9 : flat ? 0.85 : 0.62;
-  const legR = (arrow ? 0.012 : 0.03) * (flat ? 0.8 : 1);
+  // Walking legs: a broad, flattened merus, thinner carpus/propodus and a pointed dactyl.
+  const legR = (arrow ? 0.012 : 0.036) * (flat ? 0.8 : 1);
   for (let i = 0; i < 4; i++) {
     const ang = 0.55 - i * 0.42; // fore/aft angle of each leg pair
     for (const side of [1, -1]) {
@@ -805,7 +820,7 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
       const ankle = add(add(hip, mul(out, legLen * 0.78)), [0, 0.04, 0]);
       const foot = add(add(hip, mul(out, legLen * 0.95)), [0, 0, 0]);
       foot[1] = yc;
-      leg(gb, [hip, knee, ankle, foot], legR, legR * 0.35, { part: PART.leg, pivot: hip, phase: i * 1.6 + (side > 0 ? 0 : Math.PI), amp: 1, cell: ATLAS.pelvic }, 5, 10);
+      leg(gb, [hip, knee, ankle, foot], legR, legR * 0.3, { part: PART.leg, pivot: hip, phase: i * 1.6 + (side > 0 ? 0 : Math.PI), amp: 1, cell: ATLAS.pelvic }, 6, 12);
     }
   }
   for (const side of [1, -1]) {
@@ -844,11 +859,15 @@ function crab(sp: Species, body: ResolvedBody, look: Appearance, detail: number)
     eye: 'compound',
     normalStrength: 4,
     detail: (x, y, out) => {
-      // Granular carapace with regions (gastric / branchial grooves).
+      // Matte, granular chitin with regions (H-shaped gastric / branchial grooves), irregular
+      // mottling, a paler frontal margin and a darker, duller underside.
       const gran = smooth(0.7, 0.9, valueNoise(x * 90, y * 40, 5));
       const groove = Math.exp(-(((Math.abs(x - 0.5) - 0.12 - 0.08 * y) / 0.015) ** 2)) * smooth(0.2, 0.6, y);
-      out[0] = 1 - 0.12 * groove + 0.05 * gran;
-      out[1] = 0.4 * gran - 0.6 * groove;
+      const hGroove = Math.exp(-(((x - 0.42 - 0.04 * Math.abs(y - 0.6)) / 0.012) ** 2)) * smooth(0.35, 0.7, y) * (1 - smooth(0.15, 0.3, Math.abs(y - 0.75)));
+      const mott = 0.6 * (valueNoise(x * 6, y * 3.5, 17) - 0.5);
+      const front = (1 - smooth(0.04, 0.14, x)) * smooth(-0.1, 0.3, y);
+      out[0] = (1 - 0.14 * groove - 0.1 * hGroove + 0.06 * gran + 0.22 * mott) * (1 + 0.25 * front) * (1 - 0.18 * smooth(-0.1, -0.7, y));
+      out[1] = 0.45 * gran - 0.6 * groove - 0.4 * hGroove;
       out[2] = 1;
     },
   };
@@ -1082,15 +1101,16 @@ function snail(sp: Species, body: ResolvedBody, look: Appearance, detail: number
   const yc = -0.425 * D;
   const width = clamp(body.width, 0.25, 1);
   // Soft body: foot sole on the contact plane, head with tentacles at the front.
-  const footLen = kind === 'cowrie' || kind === 'abalone' ? 1.0 : kind === 'trumpet' ? 0.62 : 0.8;
-  const footW = Math.min(0.45, width * 0.55) * (kind === 'abalone' ? 1.4 : 1);
-  const footH = 0.11;
+  // The sole is about as long as the shell; only the head and a short tail show beyond it.
+  const footLen = kind === 'cowrie' || kind === 'abalone' ? 1.0 : kind === 'trumpet' ? 0.62 : kind === 'nerite' ? 0.68 : 0.78;
+  const footW = Math.min(0.4, width * 0.5) * (kind === 'abalone' ? 1.4 : 1);
+  const footH = 0.095;
   const footO: PartOpts = { part: PART.foot, pivot: [0, 0, 0], phase: 0, amp: 1 };
   // The muscular foot glides on a flat sole: thick under the shell, tapering to a thin tail
   // behind, and rising at the front into the neck and head.
   {
     const i0 = gb.idx.length, v0 = gb.vertexCount;
-    const nS = Math.round(16 * detail), nR = Math.round(14 * detail);
+    const nS = Math.round(24 * detail), nR = Math.round(18 * detail);
     const x0 = 0.04 - footLen / 2;
     for (let i = 0; i <= nS; i++) {
       const t = i / nS; // tail → front
@@ -1102,8 +1122,8 @@ function snail(sp: Species, body: ResolvedBody, look: Appearance, detail: number
         const a = (j / nR) * Math.PI * 2;
         const ca = Math.cos(a), sa = Math.sin(a);
         // Flat sole (a < 0 half), domed back; the sole edge flares slightly.
-        const yy = sa >= 0 ? h * Math.pow(sa, 0.8) : -0.004 * Math.pow(-sa, 0.3);
-        const zz = hw * Math.sign(ca) * Math.pow(Math.abs(ca), sa >= 0 ? 0.9 : 0.35);
+        const yy = sa >= 0 ? h * Math.pow(sa, 0.6) : -0.004 * Math.pow(-sa, 0.3);
+        const zz = hw * Math.sign(ca) * Math.pow(Math.abs(ca), sa >= 0 ? 1 : 0.5);
         const [u, v] = cellUV(ATLAS.dorsal2, t, sa >= 0 ? ca : 0.9 * ca);
         gb.v(x, yc + 0.006 + yy, zz, u, v, t, PART.foot, 1, 0, 0, 0, 0, 0);
       }
@@ -1260,7 +1280,7 @@ function starfish(sp: Species, body: ResolvedBody, look: Appearance, detail: num
     roughness: 0.55,
     specular: 0.2,
     eye: 'snail',
-    normalStrength: 6,
+    normalStrength: 4,
     detail: (x, y, out) => {
       // Granules / ossicles; tube-feet groove on the underside.
       const gran = smooth(0.62, 0.85, valueNoise(x * 120, y * 14, 11));

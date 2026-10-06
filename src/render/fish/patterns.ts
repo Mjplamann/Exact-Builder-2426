@@ -305,13 +305,17 @@ export function rasterize(p: Pattern, s: Surface, m: Float32Array): boolean {
     }
     case 'blotch': {
       // (An ocellus ring, if any, is painted first by the caller via rasterizeRing.)
-      splatEllipse(s, m, p.x, p.y, Math.max(p.rx, ax), Math.max(p.ry, ay), 0.22);
+      // Edge blur relative to the radius, but never sharper than ~1.5 atlas pixels.
+      const rx = Math.max(p.rx, ax), ry = Math.max(p.ry, ay);
+      const soft = Math.max(clamp(p.softness ?? 0.22, 0, 1), (1.5 * ax) / rx, (1.5 * ay) / ry);
+      splatEllipse(s, m, p.x, p.y, rx, ry, soft);
       return true;
     }
     case 'region': {
       const x0 = p.x0 ?? 0, x1 = p.x1 ?? 1, y0 = p.y0 ?? -1, y1 = p.y1 ?? 1;
       const sf = Math.max(p.softness ?? 0.02, 0);
-      const sx = Math.max(sf, ax * 0.75), sy = Math.max(sf * 2, ay * 0.75);
+      // (≥ ~1.5 atlas pixels of anti-aliasing so hard-edged bands never stair-step when magnified)
+      const sx = Math.max(sf, ax * 1.6), sy = Math.max(sf * 2, ay * 1.6);
       const openL = x0 <= 0.001, openR = x1 >= 0.999, openB = y0 <= -0.999, openT = y1 >= 0.999;
       // A full-height band (both x edges inside the body) may curve with the body.
       const band = !openL && !openR && x1 - x0 < 0.3;
