@@ -59,14 +59,37 @@ additive change in `src/core/types.ts` and say so in your report.
 
 ### Frame order (`App.frame`)
 `clock.tick` → `computeEnv` → `LifeSim.update(simDt)` → `FoodSystem.update` → `BehaviorSystem.update`
-→ `Engine.update` → `FishRenderer.update` → `DecorRenderer.update` → `FoodRenderer.update`
-→ `Ambience.update` → `UI.update` → `Engine.render`.
+→ `Tour.update` (when touring) → follow subject refreshed in place → `Engine.update` → `FishRenderer.update`
+→ `DecorRenderer.update` → `FoodRenderer.update` → `Ambience.update` → `UI.update` → `Engine.render`.
+
+### Tank collection & saving
+The keeper can have many tanks. `TankLibrary` (`src/app/tankLibrary.ts`) keeps an index
+(`aquarium.tanks.v1`: summaries, the open tank, recent deletions) plus one body per tank
+(`aquarium.tank.v1:<id>`) in localStorage, migrating the pre-library single save. Inside a
+claude.ai viewer `CloudSave` mirrors it into the viewer's private documents
+(`data/users/<id>/tanks` + `data/users/<id>/tank-<tankId>`, gzip + base64, writes throttled to one a
+minute per document unless forced). At boot `openLibrary` merges the cloud index (newer summary
+wins; deletions are tombstoned so a stale device can't resurrect a tank) and opens the current tank,
+taking whichever copy is newer.
+
+Only the open tank is simulated. Every tank stores `lastSavedReal`; opening one (boot, switching,
+returning to the page) runs `LifeSim.catchUp` over the real time it spent unwatched (capped at two
+years), so every tank keeps living. Presets, imports and the guided builder (`App.createTank(spec)`,
+fed by `biotopes.ts` styles and the `stockAdvisor`) always add a new tank — nothing is overwritten.
+
+### Camera
+`CameraRig` looks through the front glass from outside the tank (refraction modelled with a virtual
+eye), so close-ups behave like a telephoto lens. The App passes one `FollowSubject` whose arrays it
+refreshes in place each frame; `Engine.follow/zoomBy/panBy/resetView` drive the rig, PostFX adds
+depth of field while following or zoomed, and `Tour` (`src/app/tour.ts`) picks subjects for the
+documentary mode. The UI talks only to the AppApi view methods.
 
 ### Events (`src/core/events.ts`)
 `fish-added | fish-removed | fish-died | fish-born` → App calls `FishRenderer.sync`.
 `decor-changed | plants-changed` → App rebuilds `world.colliders/cover` via `buildColliders`, then
 `DecorRenderer.sync` and `BehaviorSystem.onEnvironmentChanged`.
 `tank-reset` → everything rebuilds (App handles the renderer calls).
+`tanks-changed` → the tank menu refreshes; `view-changed` → follow/tour chips update.
 Modules may subscribe to events for their own needs (e.g. UI listens to `journal`, `notify`).
 
 ### Shaders & materials
