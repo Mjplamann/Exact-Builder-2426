@@ -50,6 +50,8 @@ export class App implements AppApi {
   private hiddenAt: number | null = null;
   private failures = new Set<string>();
   private running = false;
+  /** Dev/QA switches (gallery mode, screenshots). */
+  readonly debug = { freezeBehavior: false, freezeLife: false };
 
   constructor(canvas: HTMLCanvasElement, uiRoot: HTMLElement) {
     const species = loadBundledSpecies({ validate: true });
@@ -124,9 +126,9 @@ export class App implements AppApi {
     const w = this.world;
     const simDt = w.clock.tick(dt);
     this.guard('env', () => computeEnv(w));
-    this.guard('life', () => this.life.update(w, simDt));
+    if (!this.debug.freezeLife) this.guard('life', () => this.life.update(w, simDt));
     this.guard('food', () => this.foodSystem.update(w, dt, simDt));
-    this.guard('behavior', () => this.behavior.update(w, dt));
+    if (!this.debug.freezeBehavior) this.guard('behavior', () => this.behavior.update(w, dt));
     if (w.follow) {
       const f = w.fishById.get(w.follow);
       if (f) this.engine.setFocus(new Vector3(...f.kin.pos));
