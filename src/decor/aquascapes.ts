@@ -746,7 +746,7 @@ function malawi(tank: TankState, lib: PlantIndex, seed: number) {
   // Mbuna graze plants — only tough ones: anubias on a rock, onion plant in a corner.
   const host = base[Math.floor(base.length * 0.7)];
   const pts = s.rockPoints(host, 1);
-  if (pts[0]) s.addPlant(s.pick('anubias-barteri', 'anubias-barteri-nana'), pts[0][0], pts[0][2], { attachTo: host });
+  if (pts[0]) s.addPlant(s.fit(0.5, 'anubias-barteri', 'anubias-barteri-nana', 'anubias-nana-petite'), pts[0][0], pts[0][2], { attachTo: host });
   s.addPlant(s.water > 0.25 ? s.pick('crinum-calamistratum', 'vallisneria-americana-gigantea') : s.ribbon(), s.x(0.94), s.z(0.12));
   return s.result();
 }
@@ -789,16 +789,19 @@ function blackwater(tank: TankState, lib: PlantIndex, seed: number) {
 /** Nano shrimp tank: moss-covered wood, small crypts, buce on stone, cholla and leaves. */
 function nanoShrimp(tank: TankState, lib: PlantIndex, seed: number) {
   const s = new Scape(tank, lib, seed);
-  // Shrimp-scale hardscape: it grows with the tank, but stays a grove, not a forest.
-  const k = Math.min(s.k, 0.75 + 0.25 * Math.max(0, s.wf - 1));
+  // Shrimp-scale hardscape: it grows with the tank, but stays a grove, not a forest — a big tank
+  // gets more groves rather than bigger ones.
+  const k = Math.min(s.k, 0.75 + 0.5 * Math.max(0, s.wf - 1));
   const moss = s.pick('vesicularia-montagnei', 'taxiphyllum-barbieri');
   const flame = s.pick('taxiphyllum-flame', 'taxiphyllum-barbieri');
-  /** A mossy wood-and-stone grove around (u, v). */
-  const grove = (u: number, v: number, kk: number) => {
+  /** A mossy wood-and-stone grove around (u, v), its stones `side` of the wood (+1 right). */
+  const grove = (u: number, v: number, kk: number, side = 1) => {
     const wood = s.addDecor('driftwood', 'spiderwood', s.x(u), s.z(v), { scale: kk * 0.9, sink: 0.003 });
-    const stone = s.addDecor('rock', 'dragon-stone', s.x(u + 0.32), s.z(v + 0.05), { scale: kk * 0.9, sink: 0.006 });
-    s.addDecor('rock', 'dragon-stone', s.x(u + 0.44), s.z(v + 0.15), { scale: kk * 0.55, sink: 0.004 });
-    for (const p of s.woodPoints(wood, 0.03, 0.3).slice(0, 5)) s.addPlant(moss, p[0], p[2], { attachTo: wood, growth: s.rng.range(0.7, 1) });
+    // Stones a little apart from the wood: a third of a small tank, at most half a metre or so.
+    const dx = side * (s.flip ? -1 : 1) * Math.min(0.32 * s.W, 0.5 * kk);
+    const stone = s.addDecor('rock', 'dragon-stone', s.x(u) + dx, s.z(v + 0.05), { scale: kk * 0.9, sink: 0.006 });
+    s.addDecor('rock', 'dragon-stone', s.x(u) + dx * 1.35, s.z(v + 0.15), { scale: kk * 0.55, sink: 0.004 });
+    for (const p of s.woodPoints(wood, 0.03, 0.3 * Math.max(1, kk)).slice(0, 5)) s.addPlant(moss, p[0], p[2], { attachTo: wood, growth: s.rng.range(0.7, 1) });
     const tops = s.rockPoints(stone, 3);
     if (tops[0]) s.addPlant(s.pick('bucephalandra-brownie', 'anubias-nana-petite'), tops[0][0], tops[0][2], { attachTo: stone });
     if (tops[1]) s.addPlant(flame, tops[1][0], tops[1][2], { attachTo: stone });
@@ -806,12 +809,18 @@ function nanoShrimp(tank: TankState, lib: PlantIndex, seed: number) {
   };
   grove(1 - PHI, 0.4, k);
   if (s.wf > 1.6) grove(0.08, 0.3, k * 0.7);
+  if (s.wf > 2.2) grove(0.86, 0.32, k * 0.8, -1);
   s.addDecor('driftwood', 'cholla', s.x(0.5), s.z(0.72), { scale: k, rotY: s.rng.range(-0.4, 0.4) });
   s.addDecor('leaf-litter', 'catappa', s.x(0.3), s.z(0.7), { scale: k * 0.7 });
+  if (s.wf > 1.6) s.addDecor('leaf-litter', 'catappa', s.x(0.72), s.z(0.76), { scale: k * 0.6 });
   s.carpet(s.pick('micranthemum-monte-carlo', 'marsilea-hirsuta'), 0.05, 0.4, 0.65, 0.92, 0.8);
   for (let i = 0; i < s.count(1, 3); i++) s.addPlant(s.pick('cryptocoryne-parva', 'cryptocoryne-lutea'), s.x(s.rng.range(0.55, 0.95)), s.z(s.rng.range(0.6, 0.85)));
-  // Kept trimmed below the surface, as a nano keeper would.
+  // Kept trimmed below the surface, as a nano keeper would; a deep tank gets a full background.
   s.band(s.reach(0.6, ['rotala-rotundifolia', 'hygrophila-polysperma', 'bacopa-monnieri']), 0.75, 0.97, 0.15, s.count(1, 2), 0.04, [0.38, 0.5]);
+  if (s.water > 0.4) {
+    s.band(s.ribbon(), 0.03, 0.7, 0.07, s.count(0, 8), 0.04);
+    s.band(s.pick('hygrophila-polysperma', 'rotala-rotundifolia'), 0.45, 0.95, 0.12, s.count(0, 4), 0.04);
+  }
   s.addPlant(s.pick('salvinia-minima', 'lemna-minor'), s.x(0.85), s.z(0.3), { growth: 0.6 });
   return s.result();
 }
@@ -1099,7 +1108,7 @@ export const AQUASCAPES: Aquascape[] = [
   { id: 'goldfish', name: 'Goldfish tank', description: 'Smooth river stones, pebbles and tough, fast plants that stand up to grazing goldfish.', water: 'freshwater', build: goldfish },
   { id: 'nature', name: 'Nature aquarium', description: 'A moss-crowned wood tree among dragon stones, a carpet in front and stems behind.', water: 'freshwater', build: nature },
   { id: 'mangrove', name: 'Mangrove estuary', description: 'A tangle of mangrove prop roots arching into a sand-and-mud bank, fallen leaves and tea-tinted, gently salty water — home of bumblebee gobies, archerfish and puffers.', water: 'brackish', build: mangrove },
-  { id: 'brackish-rock', name: 'Brackish rock & sand', description: 'Rounded estuary stones, slate caves and shells on open sand: territories for gobies and figure-eight puffers.', water: 'brackish', build: brackishRock },
+  { id: 'brackish-rock', name: 'Brackish rock & sand', description: 'Weathered limestone outcrops with an apron of tide-rounded cobbles, a stone cave and shells on open sand: territories for gobies and figure-eight puffers.', water: 'brackish', build: brackishRock },
   { id: 'nano-reef', name: 'Nano reef', description: 'A single live-rock island crowded with soft corals, zoanthids, mushrooms and a few LPS — a whole reef in a small cube.', water: 'marine', build: nanoReef },
   { id: 'fowlr', name: 'Fish-only with live rock', description: 'Big live-rock arches and swim-throughs over wide sand flats, no corals: room for angels, wrasses and puffers that would nip them.', water: 'marine', build: fowlr },
   { id: 'empty', name: 'Empty tank', description: 'Just substrate and water — a clean slate to aquascape yourself.', water: 'freshwater', build: () => ({ decor: [], plants: [] }) },
