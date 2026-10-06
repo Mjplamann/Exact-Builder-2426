@@ -41,6 +41,8 @@ export class AquascapePanel implements Panel {
   readonly id = 'scape' as const;
   readonly title = 'Aquascape';
   readonly el: HTMLElement;
+  /** On phones the sheet lowers to a slim bar while placing, so the substrate is in view. */
+  readonly peekable = true;
   private tab: Tab = 'hardscape';
   private tabBar: ReturnType<typeof tabs<Tab>>;
   private views: Record<Tab, HTMLElement>;
@@ -65,7 +67,14 @@ export class AquascapePanel implements Panel {
     };
     this.hint = h('p', { class: 'aq-scape-hint' });
     this.el = h('div', { class: 'aq-scape' }, this.tabBar.el, this.hint, this.views.hardscape, this.views.plants, this.views.tank);
-    tool.onChange = () => this.syncArmed();
+    let wasArmed = false;
+    tool.onChange = () => {
+      this.syncArmed();
+      // Phones: the sheet covers the substrate — picking an item lowers it out of the way.
+      const armed = !!tool.armed;
+      if (armed && !wasArmed && host.isMobile && host.openPanelId === 'scape') host.setSheetPeek?.(true);
+      wasArmed = armed;
+    };
     host.app.world.events.on('tank-reset', () => {
       this.renderedFor = null;
       if (host.openPanelId === 'scape') this.renderAll();
@@ -188,15 +197,27 @@ export class AquascapePanel implements Panel {
     }
     const a = this.tool.armed;
     const sel = this.tool.selected();
+    const touch = !!this.host.isTouch;
+    const click = touch ? 'Tap' : 'Click';
+    const stop = touch ? '' : ' · Esc to stop';
     let text: string;
     if (a) {
       text =
         a.type === 'plant' && a.placement === 'epiphyte'
-          ? `Click a piece of wood or stone to attach ${a.name}. Esc to stop.`
-          : `Click the substrate to place ${a.name}. Keep clicking to add more · Esc to stop.`;
+          ? `${click} a piece of wood or stone to attach ${a.name}${stop}.`
+          : `${click} the substrate to place ${a.name}. Keep ${touch ? 'tapping' : 'clicking'} to add more${stop}.`;
     } else if (sel) {
-      text = sel.kind === 'decor' ? 'Drag to move · scroll to rotate · shift+scroll to resize · R, [ ], N, Delete' : 'Drag to move · scroll to rotate · N for a new shape · Delete';
-    } else text = 'Pick an item below, then click in the tank to place it. Click anything already in the tank to move or change it.';
+      text = touch
+        ? sel.kind === 'decor'
+          ? 'Drag to move · use the buttons above it to rotate, resize, reshape or remove'
+          : 'Drag to move · use the buttons above it to rotate, reshape or remove'
+        : sel.kind === 'decor'
+          ? 'Drag to move · scroll to rotate · shift+scroll to resize · R, [ ], N, Delete'
+          : 'Drag to move · scroll to rotate · N for a new shape · Delete';
+    } else
+      text = touch
+        ? 'Pick an item, then tap the tank to place it. Tap anything already in the tank to move or change it.'
+        : 'Pick an item below, then click in the tank to place it. Click anything already in the tank to move or change it.';
     this.hint.textContent = text;
   }
 

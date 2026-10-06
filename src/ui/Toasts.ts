@@ -14,6 +14,8 @@ export class Toasts {
   readonly el: HTMLElement;
   private queue: { message: string; level: ToastLevel }[] = [];
   private visible = 0;
+  /** Messages on screen right now (a repeat while one is showing is dropped, not stacked). */
+  private showing = new Set<string>();
   private welcome: HTMLElement | null = null;
 
   constructor(private layer: HTMLElement) {
@@ -22,8 +24,8 @@ export class Toasts {
   }
 
   show(message: string, level: ToastLevel = 'info'): void {
-    // Collapse exact repeats that are already waiting.
-    if (this.queue.some((q) => q.message === message)) return;
+    // Collapse exact repeats that are already waiting or on screen.
+    if (this.showing.has(message) || this.queue.some((q) => q.message === message)) return;
     this.queue.push({ message, level });
     this.pump();
   }
@@ -32,12 +34,15 @@ export class Toasts {
     while (this.visible < MAX_VISIBLE && this.queue.length) {
       const { message, level } = this.queue.shift()!;
       this.visible++;
+      this.showing.add(message);
       const t = h('div', { class: `aq-toast aq-toast-${level}` }, h('span', { class: 'aq-toast-dot', 'aria-hidden': 'true' }), h('span', { class: 'aq-toast-text' }, message));
       this.el.append(t);
       // Two frames so the initial (transparent) state is committed before transitioning in.
       requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('is-in')));
       const ms = Math.min(9000, 3800 + message.length * 45);
       const remove = () => {
+        if (t.classList.contains('is-out')) return;
+        this.showing.delete(message);
         t.classList.remove('is-in');
         t.classList.add('is-out');
         setTimeout(() => {
@@ -55,7 +60,7 @@ export class Toasts {
   }
 
   /** Calm centered card ("While you were away…"); fades on its own or when clicked. */
-  showWelcome(text: string): void {
+  showWelcome(text: string, touch = false): void {
     this.welcome?.remove();
     const card = h(
       'div',
@@ -63,7 +68,7 @@ export class Toasts {
       h('div', { class: 'aq-welcome-icon' }, icon('sparkle', 22)),
       h('h2', { class: 'aq-welcome-title' }, 'Welcome back'),
       h('p', { class: 'aq-welcome-text' }, text),
-      h('div', { class: 'aq-welcome-hint' }, 'Click anywhere to continue'),
+      h('div', { class: 'aq-welcome-hint' }, `${touch ? 'Tap' : 'Click'} anywhere to continue`),
     );
     this.layer.append(card);
     this.welcome = card;

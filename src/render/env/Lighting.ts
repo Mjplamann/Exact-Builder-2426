@@ -63,7 +63,7 @@ export class Lighting {
     this.key.shadow.radius = 5;
     // Density right under an occluder; the soft-shadow lookup fades it further with occluder
     // distance (water scattering), see UW_SHADOW_PARS_GLSL.
-    this.key.shadow.intensity = 0.8;
+    this.key.shadow.intensity = 0.88;
     this.fill = new DirectionalLight(0xffffff, FILL_INTENSITY);
     this.fill.name = 'env.fill';
     this.hemi = new HemisphereLight(0xffffff, 0x886f55, 0.5);

@@ -2,7 +2,9 @@ import { Group, Mesh, Raycaster, type Ray, type Vector3 } from 'three';
 import type { DecorItem, TankState } from '../../core/types';
 import type { World } from '../../core/world';
 import type { Engine } from '../Engine';
-import { buildDecor, disposeDecor, type BuiltDecor } from './hardscape';
+import { buildDecor, disposeDecor, isSdfDecor, rockGeometry, type BuildCtx, type BuiltDecor } from './hardscape';
+import { ROCK_CELLS, type RockMeshData } from './rockMesh';
+import { RockMesher } from './rockMesher';
 import { highlightMaterial } from './materials';
 import { DECOR_UNIFORMS } from './shaders';
 import { PlantSystem } from './plants/PlantSystem';
@@ -39,6 +41,14 @@ export class DecorRenderer {
   private tankSig = '';
   private polyp = 1;
   private quality: string | null = null;
+  private mesher = new RockMesher();
+  private upgrades = new Set<Promise<void>>();
+  /**
+   * Mesh stones off the main thread: a quick low-resolution placeholder appears at once and is
+   * swapped for the detailed mesh when the worker delivers it. Off under automation (QA
+   * screenshots step frames synchronously and expect final meshes) — see `settle()`.
+   */
+  asyncMeshing = typeof Worker !== 'undefined' && !(typeof navigator !== 'undefined' && navigator.webdriver);
 
   constructor(private engine: Engine) {
     this.root.name = 'decor';
@@ -70,9 +80,21 @@ export class DecorRenderer {
       }
       if (cur) disposeDecor(cur.built);
       try {
-        const built = buildDecor(item, { tank, quality });
+        const ctx: BuildCtx = { tank, quality };
+        let deferred = false;
+        if (isSdfDecor(item)) {
+          const cells = ROCK_CELLS[quality];
+          const hit = this.mesher.cached(item, cells);
+          if (hit) ctx.rock = hit;
+          else if (this.asyncMeshing && this.mesher.available) {
+            ctx.rock = this.mesher.meshNow(item, ROCK_CELLS.proxy);
+            deferred = true;
+          } else ctx.rock = this.mesher.meshNow(item, cells);
+        }
+        const built = buildDecor(item, ctx);
         this.hardscape.add(built.object);
         this.items.set(item.id, { key, xform, built });
+        if (deferred) this.deferUpgrade(item, key, ROCK_CELLS[quality]);
       } catch (err) {
         console.error(`[decor] failed to build ${item.kind}/${item.variant}`, err);
         this.items.delete(item.id);
@@ -86,6 +108,33 @@ export class DecorRenderer {
     }
     this.plants.sync(world);
     this.refreshHighlight();
+  }
+
+  /** Request the detailed mesh of a stone shown as a placeholder; swap it in when ready. */
+  private deferUpgrade(item: DecorItem, key: string, cells: number): void {
+    const id = item.id;
+    const p = this.mesher.request(item, cells).then(
+      (data) => this.upgrade(id, key, data),
+      (err) => console.error('[decor] meshing failed', err),
+    );
+    this.upgrades.add(p);
+    void p.finally(() => this.upgrades.delete(p));
+  }
+
+  private upgrade(id: string, key: string, data: RockMeshData): void {
+    const e = this.items.get(id);
+    if (!e || e.key !== key) return; // removed or rebuilt meanwhile
+    const mesh = e.built.meshes[0];
+    if (!mesh) return;
+    const old = mesh.geometry;
+    mesh.geometry = rockGeometry(data);
+    old.dispose();
+    if (this.selected?.kind === 'decor' && this.selected.id === id) this.refreshHighlight();
+  }
+
+  /** Resolves once every stone has its detailed mesh (QA / screenshots). */
+  async settle(): Promise<void> {
+    while (this.upgrades.size) await Promise.all([...this.upgrades]);
   }
 
   /** Plant sway in current, growth scaling, coral polyp pulsing, selection glow. */
@@ -150,6 +199,7 @@ export class DecorRenderer {
   dispose(): void {
     for (const e of this.items.values()) disposeDecor(e.built);
     this.items.clear();
+    this.mesher.dispose();
     this.plants.dispose();
     this.root.removeFromParent();
   }

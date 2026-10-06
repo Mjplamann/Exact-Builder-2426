@@ -21,10 +21,13 @@ export interface PlantMetrics {
   hostId?: string;
 }
 
+/** Largest growth fraction a plant can reach (overgrown, untrimmed). */
+export const MAX_GROWTH = 1.25;
+
 /** Growth clamped to the documented range. */
 export function plantGrowth(p: Pick<PlantInstance, 'growth'>): number {
   const g = Number.isFinite(p.growth) ? p.growth : 0.5;
-  return Math.min(1.25, Math.max(0.05, g));
+  return Math.min(MAX_GROWTH, Math.max(0.05, g));
 }
 
 /** How tall a plant of this form stands relative to its listed max height at a given growth. */
@@ -43,7 +46,8 @@ function heightAt(sp: PlantSpecies, g: number): number {
   }
 }
 
-function spreadAt(sp: PlantSpecies, g: number): number {
+/** Spread (m) of a plant of this species at growth fraction `g` (unclamped). */
+export function spreadAt(sp: PlantSpecies, g: number): number {
   const S = sp.spreadCm / 100;
   switch (sp.form) {
     case 'carpet':

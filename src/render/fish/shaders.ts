@@ -491,7 +491,8 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
     #ifdef USE_NORMALMAP
       thin = texture2D(normalMap, vNormalMapUv).a;
     #endif
-    fishTrans = uFishSkin.y * thin;
+    // Fry and juveniles are far more transparent than adults.
+    fishTrans = (uFishSkin.y + 0.6 * vFishLook.w) * thin;
     fishTransTint = mix(vec3(1.0), clamp(diffuseColor.rgb * 1.6 + vec3(0.12, 0.02, 0.0), 0.0, 1.5), 0.75);
     fishEyeLens = isEye ? 1.0 : 0.0;
     if (isEye) {

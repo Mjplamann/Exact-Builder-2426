@@ -555,8 +555,10 @@ function paintBody(b: Bufs, ctx: BodyCtx, look: Appearance, night: boolean): voi
       }
       // Darker dorsal midline (the nape and the base of the dorsal fin).
       if (y > 0.82) k *= 1 - 0.1 * smooth(0.82, 0.98, y) * smooth(head.snoutLen, opX, x);
-      // Low-frequency mottling + fine grain so no surface is flat CG color.
-      k *= 1 + 0.08 * (fastNoise(x * 14 + noiseOff, y * hd * 14) - 0.5) + 0.04 * (fastNoise(x * 110, y * hd * 110 + noiseOff) - 0.5);
+      // Low-frequency mottling + fine grain so no surface is flat CG color, and a gentle natural
+      // countershading on top of the authored colours: the back a little deeper, the belly paler.
+      k *= 1 + 0.1 * (fastNoise(x * 9 + noiseOff, y * hd * 9) - 0.5) + 0.05 * (fastNoise(x * 110, y * hd * 110 + noiseOff) - 0.5);
+      k *= (1 - 0.12 * smooth(0.25, 1, y)) * (1 + 0.06 * smooth(-0.3, -1, y));
       if (scaleCol && edge > 0) {
         col[i * 3] += (scaleCol[0] - col[i * 3]) * edge;
         col[i * 3 + 1] += (scaleCol[1] - col[i * 3 + 1]) * edge;
@@ -665,11 +667,14 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       cr *= jk;
       cg *= jk;
       cb *= jk;
-      // Membrane: finer streaks along the rays; slightly paler and more transparent toward the edge.
-      const streak = 1 + 0.05 * (fastNoise(x * 3 + (ctx.seed % 17), y * 60) - 0.5);
-      cr *= streak;
-      cg *= streak;
-      cb *= streak;
+      // Membrane: finer streaks along the rays; pigment densest near the base, the thin outer
+      // membrane paler and clearer.
+      const streak = 1 + 0.06 * (fastNoise(x * 3 + (ctx.seed % 17), y * 60) - 0.5);
+      const deep = 1 - 0.14 * (1 - smooth(0.1, 0.7, x)) * (clear ? 0.3 : 1);
+      const pale = 0.12 * smooth(0.5, 1, x) * gap * (clear ? 0.5 : 1);
+      cr = (cr * deep + (0.9 - cr) * pale) * streak;
+      cg = (cg * deep + (0.88 - cg) * pale) * streak;
+      cb = (cb * deep + (0.84 - cb) * pale) * streak;
       // Fleshy fin base takes the body color.
       const fb = 1 - smooth(0, 0.14, x);
       cr += (bodyBase[0] - cr) * fb * 0.6;
@@ -821,7 +826,8 @@ function tex(data: Uint8Array, W: number, H: number, cs: ColorSpace): DataTextur
   t.generateMipmaps = true;
   t.minFilter = LinearMipmapLinearFilter;
   t.magFilter = LinearFilter;
-  t.anisotropy = 4;
+  // Small fish are seen at grazing angles and a few dozen pixels: keep stripes and eyes crisp.
+  t.anisotropy = 8;
   t.flipY = false;
   t.needsUpdate = true;
   return t;

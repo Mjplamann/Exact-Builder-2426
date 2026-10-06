@@ -106,7 +106,7 @@ export class SettingsPanel implements Panel {
       section(
         null,
         h('div', { class: 'aq-about' },
-          button('Keyboard shortcuts', () => host.showShortcuts(), { icon: 'keyboard', variant: 'quiet' }),
+          host.isTouch ? null : button('Keyboard shortcuts', () => host.showShortcuts(), { icon: 'keyboard', variant: 'quiet' }),
           h('p', { class: 'aq-hint' }, `Living Aquarium · ${formatCount(app.world.species.size)} species, ${formatCount(app.world.plants.all.length)} plants & corals. Your tank is saved in this browser.`),
         ),
       ),

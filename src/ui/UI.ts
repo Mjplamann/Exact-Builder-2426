@@ -8,7 +8,7 @@ import { iconButton } from './controls';
 import { h, isTyping, prefs, setAttr, setClass, setText } from './dom';
 import { FishCard } from './FishCard';
 import { foodIcon } from './foodIcons';
-import { formatSimClock, formatSimDate, timeScaleLabel } from './format';
+import { formatSimClock, formatSimDate, localizeUnits, timeScaleLabel } from './format';
 import { icon, type IconName } from './icons';
 import { Notifier } from './Notifier';
 import { bestFood } from './panels/FeedPanel';
@@ -41,6 +41,12 @@ const PINCH_CURSOR = (() => {
 
 /** Seconds of stillness before the chrome fades away. */
 const IDLE_SECONDS = 3.5;
+/** Touch screens have no hover to say "I'm still here": give a little longer. */
+const IDLE_SECONDS_TOUCH = 5;
+/** While an animal's card is open the keeper is probably reading it. */
+const IDLE_SECONDS_CARD = 12;
+/** How long the one-time first-run hint stays (ms). */
+const FIRST_HINT_MS = 9500;
 const CORAL_FORMS = new Set(['soft-coral', 'mushroom-coral', 'zoanthid', 'lps-coral', 'sps-coral', 'gorgonian', 'anemone']);
 
 const DOCK: { id: PanelId; label: string; icon: IconName; key: string }[] = [
@@ -63,7 +69,7 @@ const SHORTCUTS: [string, string][] = [
   ['H', 'Hide the interface'],
   ['Esc', 'Close, stop, deselect'],
   ['Scroll', 'Zoom (rotate in Aquascape)'],
-  ['Right-drag', 'Pan the view'],
+  ['Drag', 'Look around once zoomed in'],
   ['Double-click', 'Tap on the glass'],
   ['R  [  ]  N  Del', 'Rotate, resize, reshape, remove (Aquascape)'],
   ['?', 'This list'],
@@ -104,7 +110,16 @@ export class UI implements UIHost {
   private dock!: HTMLElement;
   private dockBtns = new Map<PanelId, HTMLButtonElement>();
   private modeHint!: HTMLElement;
+  private healthIssueEl!: HTMLElement;
   private shortcutsEl: HTMLElement | null = null;
+  private peekBtn!: HTMLButtonElement;
+  private firstHint: 'pending' | 'shown' | 'done';
+  private firstHintAt = 0;
+  private touchQuery: MediaQueryList;
+  private lastFed: number | null = null;
+  /** Panel footprint (cached from a ResizeObserver; see coveredInsets). */
+  private panelSize = { w: 0, h: 0 };
+  private insets = { right: 0, bottom: 0 };
 
   // Panels
   private panelEl!: HTMLElement;
@@ -137,11 +152,14 @@ export class UI implements UIHost {
   ) {
     this.thumbs = new ThumbnailLoader(app.fishRenderer);
     this.mobileQuery = matchMedia('(max-width: 640px)');
+    this.touchQuery = matchMedia('(hover: none) and (pointer: coarse)');
+    this.firstHint = prefs.get<boolean>('firstHintSeen', false) ? 'done' : 'pending';
+    this.lastFed = this.loadLastFed();
     this.lastFood = prefs.get<FoodKind | null>('lastFood', null) ?? bestFood(app.world.fish, app.world.tank.water);
     if (!FOODS[this.lastFood]) this.lastFood = 'flakes';
     this.lastUnits = app.world.settings.units;
     this.needs = computeNeeds(app.world.fish, app.world.tank.water);
-    this.water = assessWater(app.world.tank.waterParams, app.world.tank.water, this.needs);
+    this.water = assessWater(app.world.tank.waterParams, app.world.tank.water, this.needs, app.world.settings.units);
 
     root.classList.add('aq-root');
     this.layer = root;
@@ -169,6 +187,29 @@ export class UI implements UIHost {
     return this.mobileQuery.matches;
   }
 
+  get isTouch(): boolean {
+    return this.touchQuery.matches;
+  }
+
+  get lastFedAt(): number | null {
+    return this.lastFed;
+  }
+
+  coveredInsets(): { right: number; bottom: number } {
+    const open = !!this.current;
+    this.insets.right = open && !this.isMobile ? this.panelSize.w + 14 : 0;
+    this.insets.bottom = open && this.isMobile ? this.panelSize.h : 0;
+    return this.insets;
+  }
+
+  setSheetPeek(on: boolean): void {
+    const peek = on && !!this.current?.peekable;
+    setClass(this.panelEl, 'is-peek', peek);
+    setAttr(this.peekBtn, 'aria-expanded', String(!peek));
+    setAttr(this.peekBtn, 'aria-label', peek ? 'Show the whole panel' : 'Lower the panel to see the tank');
+    this.peekBtn.title = this.peekBtn.getAttribute('aria-label')!;
+  }
+
   get openPanelId(): PanelId | null {
     return this.current?.id ?? null;
   }
@@ -190,7 +231,7 @@ export class UI implements UIHost {
     const text = this.modeHint.querySelector('.aq-modehint-text')!;
     const ic = this.modeHint.querySelector('.aq-food-icon');
     ic?.replaceWith(foodIcon(f));
-    setText(text, `Click over the tank to drop a pinch of ${f.name.toLowerCase()}`);
+    setText(text, `${this.isTouch ? 'Tap' : 'Click'} over the tank to drop a pinch of ${f.name.toLowerCase()}`);
     this.modeHint.hidden = false;
     this.panels.get('feed')?.refresh?.();
     (this.panels.get('feed') as FeedPanel | undefined)?.sync();
@@ -266,7 +307,13 @@ export class UI implements UIHost {
     );
 
     this.healthLabelEl = h('span', { class: 'aq-health-label' });
-    this.healthBtn = h('button', { type: 'button', class: 'aq-health is-good', 'data-health': 'good' }, h('span', { class: 'aq-health-dot', 'aria-hidden': 'true' }), this.healthLabelEl);
+    this.healthIssueEl = h('span', { class: 'aq-health-issue' });
+    this.healthBtn = h(
+      'button',
+      { type: 'button', class: 'aq-health is-good', 'data-health': 'good' },
+      h('span', { class: 'aq-health-dot', 'aria-hidden': 'true' }),
+      h('span', { class: 'aq-health-text', 'aria-hidden': 'true' }, this.healthLabelEl, this.healthIssueEl),
+    );
     this.healthBtn.addEventListener('click', () => this.togglePanel('care'));
     this.statsEl = h('div', { class: 'aq-stats-readout', hidden: true, 'aria-hidden': 'true' });
     const topRight = h('div', { class: 'aq-topright aq-chrome' }, this.statsEl, this.healthBtn);
@@ -355,7 +402,7 @@ export class UI implements UIHost {
       }
       this.needs = computeNeeds(w.fish, w.tank.water, reef);
     }
-    this.water = assessWater(w.tank.waterParams, w.tank.water, this.needs);
+    this.water = assessWater(w.tank.waterParams, w.tank.water, this.needs, w.settings.units);
     const lvl = this.water.level;
     const label = healthLabel(lvl);
     const issue = this.water.issues[0]?.text;
@@ -363,7 +410,11 @@ export class UI implements UIHost {
     setClass(this.healthBtn, 'is-good', lvl === 'good');
     setClass(this.healthBtn, 'is-caution', lvl === 'caution');
     setClass(this.healthBtn, 'is-bad', lvl === 'bad');
-    setText(this.healthLabelEl, issue && lvl !== 'good' ? issue : label);
+    // A short, persistent word when something needs care (touch screens have no hover);
+    // the specific issue joins it on hover/focus.
+    setText(this.healthLabelEl, label);
+    setText(this.healthIssueEl, issue && lvl !== 'good' ? ` · ${issue}` : '');
+    if (this.healthBtn.title !== (issue ?? label)) this.healthBtn.title = issue ?? label;
     setAttr(this.healthBtn, 'aria-label', `${label}${issue ? ` — ${issue}` : ''}. Open care.`);
     this.notifier.check(this.needs, w.settings.units);
   }
@@ -382,10 +433,25 @@ export class UI implements UIHost {
   private buildPanelHost(): void {
     this.panelTitle = h('h2', { class: 'aq-panel-title', tabindex: '-1' });
     const close = iconButton('close', 'Close panel', () => this.openPanel(null), 'aq-icon-btn aq-panel-close');
+    this.peekBtn = iconButton('chevron', 'Lower the panel to see the tank', () => this.setSheetPeek(!this.panelEl.classList.contains('is-peek')), 'aq-icon-btn aq-panel-peek');
+    this.peekBtn.setAttribute('aria-expanded', 'true');
     this.panelBody = h('div', { class: 'aq-panel-body' });
-    this.panelEl = h('aside', { class: 'aq-panel aq-glass', role: 'region', 'aria-label': 'Panel', 'aria-hidden': 'true' }, h('header', { class: 'aq-panel-head' }, this.panelTitle, close), this.panelBody);
+    this.panelEl = h(
+      'aside',
+      { class: 'aq-panel aq-glass', role: 'region', 'aria-label': 'Panel', 'aria-hidden': 'true' },
+      h('header', { class: 'aq-panel-head' }, this.panelTitle, h('span', { class: 'aq-flex' }), this.peekBtn, close),
+      this.panelBody,
+    );
     this.panelEl.inert = true;
     this.layer.append(this.panelEl);
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver((entries) => {
+        const b = entries[0]?.borderBoxSize?.[0];
+        const r = entries[0]?.contentRect;
+        this.panelSize.w = b ? b.inlineSize : (r?.width ?? 0);
+        this.panelSize.h = b ? b.blockSize : (r?.height ?? 0);
+      }).observe(this.panelEl);
+    }
   }
 
   private makePanel(id: PanelId): Panel {
@@ -426,12 +492,18 @@ export class UI implements UIHost {
     if (id && id !== 'feed') this.stopFeeding();
     this.current = null;
     if (!id) {
+      const hadFocus = this.panelEl.contains(document.activeElement);
       this.panelEl.classList.remove('is-open');
       this.panelEl.setAttribute('aria-hidden', 'true');
       this.panelEl.inert = true;
+      this.setSheetPeek(false);
       setClass(this.root, 'has-panel', false);
       if (this.input.mode === 'scape') this.setMode('view');
-      if (this.panelEl.contains(document.activeElement)) (document.activeElement as HTMLElement).blur();
+      if (hadFocus) {
+        (document.activeElement as HTMLElement).blur();
+        // Keyboard users land back on the dock button they came from.
+        if (prev && !this.isTouch) this.dockBtns.get(prev.id)?.focus({ preventScroll: true });
+      }
       return;
     }
     let p = this.panels.get(id);
@@ -440,6 +512,8 @@ export class UI implements UIHost {
       this.panels.set(id, p);
     }
     this.current = p;
+    this.setSheetPeek(false);
+    setClass(this.panelEl, 'is-peekable', !!p.peekable);
     setText(this.panelTitle, p.title);
     this.panelEl.setAttribute('aria-label', p.title);
     this.panelEl.dataset.panel = id;
@@ -487,6 +561,13 @@ export class UI implements UIHost {
       this.current?.refresh?.();
     });
     ev.on('settings-changed', () => this.applySettings());
+    ev.on('food-dropped', () => {
+      this.lastFed = this.app.world.clock.simTime;
+      prefs.set('lastFed', { tank: this.app.world.tank.id, at: this.lastFed });
+    });
+    ev.on('tank-reset', () => (this.lastFed = this.loadLastFed()));
+    this.touchQuery.addEventListener?.('change', () => setClass(this.root, 'is-touch', this.isTouch));
+    setClass(this.root, 'is-touch', this.isTouch);
     this.mobileQuery.addEventListener('change', () => setClass(this.root, 'is-mobile', this.isMobile));
     setClass(this.root, 'is-mobile', this.isMobile);
   }
@@ -514,6 +595,17 @@ export class UI implements UIHost {
     };
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('pointerdown', () => this.wake(), { passive: true, capture: true });
+    // A finger has no hover: once it lifts it is no longer "over" the controls.
+    const lift = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') this.overUI = false;
+    };
+    window.addEventListener('pointerup', lift, { passive: true });
+    window.addEventListener('pointercancel', lift, { passive: true });
+    // iOS Safari ignores user-scalable=no: a pinch on the glass chrome would zoom the whole page
+    // (and break the full-screen layout). Pinches on the tank zoom the view instead (CanvasInput).
+    const noPageZoom = (e: Event) => e.preventDefault();
+    document.addEventListener('gesturestart', noPageZoom, { passive: false } as AddEventListenerOptions);
+    document.addEventListener('gesturechange', noPageZoom, { passive: false } as AddEventListenerOptions);
     window.addEventListener('wheel', () => this.wake(), { passive: true });
     window.addEventListener('keydown', (e) => this.onKey(e));
     window.addEventListener('blur', () => (this.overUI = false));
@@ -527,6 +619,44 @@ export class UI implements UIHost {
       setClass(this.root, 'is-idle', false);
       document.body.classList.remove('aq-idle');
     }
+  }
+
+  private loadLastFed(): number | null {
+    const v = prefs.get<{ tank: string; at: number } | null>('lastFed', null);
+    return v && v.tank === this.app.world.tank.id && Number.isFinite(v.at) ? v.at : null;
+  }
+
+  private idleSeconds(): number {
+    if (this.card.visible) return IDLE_SECONDS_CARD;
+    return this.isTouch ? IDLE_SECONDS_TOUCH : IDLE_SECONDS;
+  }
+
+  /**
+   * One calm, one-time note (per device) the first time the controls fade: how to bring them back
+   * and the two gestures nobody would guess. Fades by itself; a click dismisses it.
+   */
+  private showFirstHint(): void {
+    this.firstHint = 'shown';
+    this.firstHintAt = performance.now();
+    prefs.set('firstHintSeen', true);
+    const touch = this.isTouch;
+    const auto = this.app.world.settings.uiAutoHide;
+    const lead = auto ? (touch ? 'The controls rest while you watch — tap to bring them back.' : 'The controls rest while you watch — move the mouse to bring them back.') : 'Enjoy the view.';
+    const tips = touch
+      ? 'Swipe to look along the tank · pinch to look closer · double-tap the glass to knock'
+      : 'Double-click the glass to tap it · scroll to look closer · press ? for shortcuts';
+    const el = h('div', { class: 'aq-firsthint aq-glass', role: 'status' }, h('p', { class: 'aq-firsthint-lead' }, lead), h('p', { class: 'aq-firsthint-tips' }, tips));
+    const close = () => {
+      if (!el.isConnected || el.classList.contains('is-out')) return;
+      el.classList.remove('is-in');
+      el.classList.add('is-out');
+      this.firstHint = 'done';
+      setTimeout(() => el.remove(), 1300);
+    };
+    el.addEventListener('click', close);
+    this.layer.append(el);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-in')));
+    setTimeout(close, FIRST_HINT_MS);
   }
 
   private canIdle(): boolean {
@@ -658,6 +788,7 @@ export class UI implements UIHost {
       this.refreshStats();
     }
     if (this.input.mode === 'scape') this.scape.frame();
+    this.input.frame(dt);
 
     this.t4 += dt;
     if (this.t4 >= 0.25) {
@@ -665,11 +796,14 @@ export class UI implements UIHost {
       this.refreshChrome();
       if (this.card.visible) this.card.refresh();
       this.current?.refresh?.();
-      if (!this.idle && !this.manualHidden && this.canIdle() && now - this.lastActivity > IDLE_SECONDS * 1000) {
+      if (!this.idle && !this.manualHidden && this.canIdle() && now - this.lastActivity > this.idleSeconds() * 1000) {
         this.idle = true;
         setClass(this.root, 'is-idle', true);
         document.body.classList.add('aq-idle');
+        if (this.firstHint === 'pending') this.showFirstHint();
       }
+      // With auto-hide off the controls never fade: offer the note once things have settled.
+      if (this.firstHint === 'pending' && !this.app.world.settings.uiAutoHide && this.updates >= 2 && now - this.lastActivity > 8000) this.showFirstHint();
     }
     this.t1 += dt;
     if (this.t1 >= 1) {
@@ -680,6 +814,6 @@ export class UI implements UIHost {
 
   /** Show a one-off message (e.g. the catch-up summary after being away). */
   showWelcomeBack(text: string): void {
-    if (text) this.toasts.showWelcome(text);
+    if (text) this.toasts.showWelcome(localizeUnits(text, this.app.world.settings.units), this.isTouch);
   }
 }

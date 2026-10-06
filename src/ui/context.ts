@@ -14,6 +14,17 @@ export interface UIHost {
   readonly app: AppApi;
   readonly thumbs: ThumbnailLoader;
   readonly isMobile: boolean;
+  /** Touch-first device (no hover, coarse pointer): copy says "tap", not "click". */
+  readonly isTouch?: boolean;
+  /** Sim ms of the last feeding (any food, any source), or null if unknown. */
+  readonly lastFedAt?: number | null;
+  /**
+   * Screen area covered by the open panel (px from the right edge on desktop, from the bottom on
+   * phones), so floating tools can stay clear of it. Cached; no layout reads.
+   */
+  coveredInsets?(): { right: number; bottom: number };
+  /** Phones: shrink the bottom sheet to its header so the tank is visible (aquascaping). */
+  setSheetPeek?(on: boolean): void;
 
   toast(message: string, level?: ToastLevel): void;
 
@@ -55,4 +66,6 @@ export interface Panel {
   onSettingsChanged?(): void;
   /** Esc pressed while open: return true if handled internally (e.g. back from a detail view). */
   onEscape?(): boolean;
+  /** Phones: the sheet can collapse to a slim bar (shows a toggle in the sheet header). */
+  readonly peekable?: boolean;
 }

@@ -171,7 +171,7 @@ export class PostFX {
     this.capture = new CapturePass();
     this.composer.addPass(this.capture);
     if (settings.bloom) {
-      // Threshold in linear HDR: only things brighter than a lit white surface glow.
+      // Soft-knee, exposure-relative threshold (set per frame in render()).
       this.bloom = new UnrealBloomPass(new Vector2(this.size.x * settings.bloomScale, this.size.y * settings.bloomScale), 0.3, 0.5, 3);
       this.bloom.materialHighPassFilter.fragmentShader = SoftKneeHighPass;
       this.bloom.materialHighPassFilter.needsUpdate = true;

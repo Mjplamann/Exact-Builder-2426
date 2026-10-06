@@ -65,6 +65,7 @@ export class FeedPanel implements Panel {
   private listEl: HTMLElement;
   private items = new Map<FoodKind, HTMLButtonElement>();
   private lastFedEl: HTMLElement;
+  /** Fallback when the host doesn't track feedings itself. */
   private lastFedSim: number | null = null;
   private feedNowBtn: HTMLButtonElement;
 
@@ -75,7 +76,7 @@ export class FeedPanel implements Panel {
     this.el = h(
       'div',
       { class: 'aq-feed' },
-      h('p', { class: 'aq-lead' }, 'Choose a food, then click over the water to drop a pinch. Feed what your fish finish in two or three minutes — leftovers foul the water.'),
+      h('p', { class: 'aq-lead' }, `Choose a food, then ${host.isTouch ? 'tap' : 'click'} over the water to drop a pinch. Feed what your fish finish in two or three minutes — leftovers foul the water.`),
       h('div', { class: 'aq-feed-actions' }, this.feedNowBtn, this.lastFedEl),
       this.listEl,
     );
@@ -154,7 +155,8 @@ export class FeedPanel implements Panel {
 
   refresh(): void {
     const now = this.host.app.world.clock.simTime;
-    setText(this.lastFedEl, this.lastFedSim === null ? '' : `Last fed ${formatDuration(now - this.lastFedSim)} ago`);
+    const last = this.host.lastFedAt !== undefined ? this.host.lastFedAt : this.lastFedSim;
+    setText(this.lastFedEl, last === null || last > now ? '' : `Last fed ${formatDuration(now - last)} ago`);
   }
 
   onOpen(): void {

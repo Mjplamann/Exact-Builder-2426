@@ -36,6 +36,12 @@ const FILTER_HUM: Record<Equipment['filter']['type'], number> = {
 };
 
 const LOOKAHEAD = 0.15;
+/**
+ * Events that count as a user activation for starting audio. iOS Safari only unlocks WebAudio
+ * from the end of a touch (touchend / pointerup / click) — not from touchstart/pointerdown — so
+ * we listen to all of them and stay armed until the context is actually running.
+ */
+const GESTURES = ['pointerup', 'touchend', 'click', 'keydown'] as const;
 const PAN_POSITIONS = [-0.65, -0.3, 0, 0.3, 0.65];
 
 interface GrainStream {
@@ -102,7 +108,8 @@ export class Ambience {
         clearTimeout(this.suspendTimer);
         this.suspendTimer = null;
       }
-      if (this.ctx!.state === 'suspended') {
+      if (this.ctx!.state !== 'running') {
+        // 'suspended' (autoplay policy) or iOS 'interrupted' (phone call, backgrounded app).
         this.ctx!.resume().catch(() => this.armGesture());
         if (!(navigator as Navigator & { userActivation?: { isActive: boolean } }).userActivation?.isActive) this.armGesture();
       }
@@ -164,23 +171,32 @@ export class Ambience {
   private armGesture(): void {
     if (this.waitingForGesture || typeof window === 'undefined') return;
     this.waitingForGesture = true;
-    for (const t of ['pointerdown', 'keydown', 'touchend'] as const) window.addEventListener(t, this.onGesture, { capture: true, passive: true });
+    for (const t of GESTURES) window.addEventListener(t, this.onGesture, { capture: true, passive: true });
   }
 
   private disarmGesture(): void {
     if (!this.waitingForGesture) return;
     this.waitingForGesture = false;
-    for (const t of ['pointerdown', 'keydown', 'touchend'] as const) window.removeEventListener(t, this.onGesture, { capture: true });
+    for (const t of GESTURES) window.removeEventListener(t, this.onGesture, { capture: true });
   }
 
   private gesture(): void {
-    this.disarmGesture();
-    if (!this.enabled) return;
-    if (!this.ctx && !this.create()) return;
-    this.ctx!.resume()
-      .then(() => this.applyMaster(this.everStarted ? 0.35 : 1.4))
+    if (!this.enabled) return this.disarmGesture();
+    if (!this.ctx && !this.create()) return this.disarmGesture();
+    const ctx = this.ctx!;
+    // resume() must be called synchronously inside the gesture handler (iOS).
+    ctx
+      .resume()
+      .then(() => {
+        // Only stop listening once audio really runs: an event that didn't count as an
+        // activation leaves us armed for the next one.
+        if (ctx.state === 'running') {
+          this.disarmGesture();
+          this.applyMaster(this.everStarted ? 0.35 : 1.4);
+          this.everStarted = true;
+        }
+      })
       .catch(() => {});
-    this.everStarted = true;
   }
 
   private visibility(): void {
@@ -188,8 +204,9 @@ export class Ambience {
     if (!ctx) return;
     if (document.hidden) {
       if (ctx.state === 'running') ctx.suspend().catch(() => {});
-    } else if (this.enabled && ctx.state === 'suspended') {
-      ctx.resume().catch(() => this.armGesture());
+    } else if (this.enabled && ctx.state !== 'running' && ctx.state !== 'closed') {
+      // iOS reports 'interrupted' after a call or app switch; resuming may need a fresh tap.
+      ctx.resume().then(() => ctx.state !== 'running' && this.armGesture()).catch(() => this.armGesture());
     }
   }
 
@@ -327,6 +344,8 @@ export class Ambience {
     this.levelsDirty = true;
     ctx.addEventListener('statechange', () => {
       if (ctx.state === 'running') this.applyMaster(0.35);
+      // Interrupted by the system while visible (iOS: a call, Siri): wait for the next tap.
+      else if (this.enabled && ctx.state !== 'closed' && typeof document !== 'undefined' && !document.hidden) this.armGesture();
     });
     return true;
   }

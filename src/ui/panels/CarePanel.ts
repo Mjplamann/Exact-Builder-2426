@@ -10,6 +10,7 @@ import { button, section, select, slider, stepper, toggle } from '../controls';
 import { clear, h, setClass, setStyle, setText, throttle } from '../dom';
 import {
   formatDuration,
+  formatFlow,
   formatHour,
   formatRange,
   formatTemp,
@@ -45,6 +46,7 @@ export class CarePanel implements Panel {
   private stockBar!: HTMLElement;
   private stockText!: HTMLElement;
   private equipEl: HTMLElement;
+  private heaterHintEl: HTMLElement | null = null;
   private syncers: (() => void)[] = [];
   private setEquip: (patch: DeepPartial<Equipment>) => void;
 
@@ -247,8 +249,10 @@ export class CarePanel implements Panel {
       value: e.heater.targetC,
       format: (v) => formatTemp(v, units()),
       onInput: (v) => this.setEquip({ heater: { targetC: v } }),
-      hint: this.heaterHint(),
+      hint: ' ',
     });
+    // The hint depends on who lives here and on the units: refreshed with the panel.
+    this.heaterHintEl = heatTarget.el.querySelector('.aq-hint');
     this.syncers.push(() => {
       heaterOn.set(eq().heater.on);
       heatTarget.set(eq().heater.targetC);
@@ -267,7 +271,7 @@ export class CarePanel implements Panel {
       max: Math.round(liters * 12),
       step: 10,
       value: e.filter.flowLph,
-      format: (v) => `${Math.round(v)} L/h · ${(v / liters).toFixed(1)}× tank/hour`,
+      format: (v) => `${formatFlow(v, units())} · ${(v / liters).toFixed(1)}× tank/hour`,
       onInput: (v) => this.setEquip({ filter: { flowLph: v } }),
       hint: marine ? 'Reefs like 8–15× turnover per hour.' : 'Most community tanks do well at 4–6× per hour.',
     });
@@ -284,7 +288,7 @@ export class CarePanel implements Panel {
     const photo = h('div', { class: 'aq-hint aq-field-note' });
     const paintPhoto = () => {
       const L = eq().lights;
-      const hrs = Math.max(0, L.offHour - L.onHour);
+      const hrs = (((L.offHour - L.onHour) % 24) + 24) % 24;
       setText(photo, `${hrs.toFixed(hrs % 1 ? 1 : 0)} hours of light a day${hrs > 10 ? ' — long days feed algae' : hrs < 6 ? ' — plants may struggle' : ''}`);
     };
     paintPhoto();
@@ -383,10 +387,16 @@ export class CarePanel implements Panel {
   refresh(): void {
     this.paintTests();
     this.paintStocking();
+    if (this.heaterHintEl) {
+      const hint = this.heaterHint() ?? '';
+      setText(this.heaterHintEl, hint);
+      if (this.heaterHintEl.hidden !== !hint) this.heaterHintEl.hidden = !hint;
+    }
   }
 
   onSettingsChanged(): void {
     for (const s of this.syncers) s();
+    this.refresh();
   }
 
   onOpen(): void {

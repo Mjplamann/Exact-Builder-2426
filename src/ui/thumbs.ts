@@ -14,6 +14,8 @@ interface Job {
   key: string;
   species: Species;
   size: number;
+  /** Who asked (e.g. 'catalog'), so a list can drop just its own stale requests. */
+  tag: string;
 }
 
 /** Retry an empty result after this long (the renderer may simply not be ready yet). */
@@ -36,7 +38,7 @@ export class ThumbnailLoader {
   }
 
   /** Ask for the real portrait; `cb` fires once if/when it becomes available. */
-  request(sp: Species, size: number, cb: Callback): void {
+  request(sp: Species, size: number, cb: Callback, tag = ''): void {
     const key = `${sp.id}@${size}`;
     const have = this.ready.get(key);
     if (have) {
@@ -54,7 +56,7 @@ export class ThumbnailLoader {
       return;
     }
     this.waiting.set(key, [cb]);
-    this.queue.unshift({ key, species: sp, size });
+    this.queue.unshift({ key, species: sp, size, tag });
     // Forget the oldest requests (scrolled far past) rather than rendering them.
     while (this.queue.length > MAX_QUEUE) {
       const dropped = this.queue.pop()!;
@@ -63,10 +65,28 @@ export class ThumbnailLoader {
     this.pump();
   }
 
-  /** Drop pending requests (e.g. the list was re-filtered). Callbacks for in-flight work still fire. */
-  cancelPending(): void {
-    for (const j of this.queue) this.waiting.delete(j.key);
-    this.queue.length = 0;
+  /**
+   * Drop pending requests (e.g. the list was re-filtered or scrolled on). With a tag, only that
+   * requester's jobs are dropped — except keys in `keep` (rows still on screen). Callbacks for
+   * in-flight work still fire.
+   */
+  cancelPending(tag?: string, keep?: (speciesId: string, size: number) => boolean): void {
+    if (tag === undefined) {
+      for (const j of this.queue) this.waiting.delete(j.key);
+      this.queue.length = 0;
+      return;
+    }
+    let w = 0;
+    for (const j of this.queue) {
+      if (j.tag === tag && !keep?.(j.species.id, j.size)) this.waiting.delete(j.key);
+      else this.queue[w++] = j;
+    }
+    this.queue.length = w;
+  }
+
+  /** Pending (not yet started) requests — for diagnostics/tests. */
+  get pending(): number {
+    return this.queue.length;
   }
 
   private pump(): void {

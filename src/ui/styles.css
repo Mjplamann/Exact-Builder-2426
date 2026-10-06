@@ -39,6 +39,12 @@
   --fade-out: 1200ms;
   --gutter: 22px;
   --panel-w: 396px;
+  /* Room the dock takes at the bottom (toasts and the fish card sit above it). */
+  --dock-space: 76px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
   color-scheme: dark;
 }
 
@@ -48,8 +54,13 @@ html, body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-#tank { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; touch-action: none; }
+/* 100% (not 100vh): on iOS Safari 100vh is the *large* viewport, which would push the bottom of the
+   tank under the toolbar and off-centre the camera. A fixed box at 100% tracks the visible area. */
+#tank { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
 #ui { position: fixed; inset: 0; pointer-events: none; }
+/* No double-tap zoom or 300 ms click delay on the controls; panels still scroll natively. */
+:where(.aq-root), :where(.aq-root) * { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 [hidden] { display: none !important; }
 
 /* Boot overlay (shown by index.html until the first frame) */
@@ -149,10 +160,16 @@ body.aq-idle #tank { cursor: none; }
   box-shadow: 0 0 0 3px rgba(143, 214, 166, 0.14), 0 0 12px rgba(143, 214, 166, 0.35); transition: background 600ms ease, box-shadow 600ms ease; }
 .aq-health.is-caution .aq-health-dot { background: var(--caution); box-shadow: 0 0 0 3px rgba(232, 196, 124, 0.16), 0 0 12px rgba(232, 196, 124, 0.4); }
 .aq-health.is-bad .aq-health-dot { background: var(--bad); box-shadow: 0 0 0 3px rgba(239, 146, 130, 0.18), 0 0 14px rgba(239, 146, 130, 0.45); }
-.aq-health-label { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 12px; opacity: 0;
+.aq-health-text { max-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; opacity: 0;
   transition: max-width 450ms var(--ease), opacity 300ms ease, margin 450ms var(--ease); }
-.aq-health:hover, .aq-health:focus-visible { background: var(--glass); border-color: var(--hair); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
-.aq-health:hover .aq-health-label, .aq-health:focus-visible .aq-health-label { max-width: 320px; opacity: 1; margin-left: 9px; }
+.aq-health-issue { display: none; }
+.aq-health:hover, .aq-health:focus-visible, .aq-health.is-caution, .aq-health.is-bad { background: var(--glass); border-color: var(--hair);
+  -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
+/* When the water needs care a short label stays beside the dot (touch screens have no hover);
+   hovering adds the specific issue. */
+.aq-health.is-caution .aq-health-text, .aq-health.is-bad .aq-health-text { max-width: min(30vw, 220px); opacity: 1; margin-left: 9px; }
+.aq-health:hover .aq-health-text, .aq-health:focus-visible .aq-health-text { max-width: min(46vw, 420px); opacity: 1; margin-left: 9px; }
+.aq-health:hover .aq-health-issue, .aq-health:focus-visible .aq-health-issue { display: inline; }
 .aq-stats-readout { font: 500 11px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--text-3);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); white-space: nowrap; }
 
@@ -169,6 +186,12 @@ body.aq-idle #tank { cursor: none; }
 .aq-dock-btn.is-active::before { content: ""; position: absolute; bottom: 5px; left: 50%; width: 4px; height: 4px; margin-left: -2px;
   border-radius: 50%; background: var(--accent); }
 .aq-dock-label { display: none; }
+/* Touch screens have no tooltips: name each tool under its icon. */
+.aq-root.is-touch { --dock-space: 84px; }
+.aq-root.is-touch .aq-dock-btn { width: 52px; height: 54px; grid-template-rows: 1fr auto; align-content: center; gap: 1px; padding: 5px 0 4px; }
+.aq-root.is-touch .aq-dock-label { display: block; font-size: 9.5px; line-height: 1.1; letter-spacing: 0.01em; color: var(--text-3); }
+.aq-root.is-touch .aq-dock-btn.is-active .aq-dock-label { color: var(--text-2); }
+.aq-root.is-touch .aq-dock-btn.is-active::before { bottom: auto; top: 3px; }
 .aq-dock-btn::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translate(-50%, 4px);
   padding: 5px 10px; border-radius: 8px; background: rgba(6, 12, 16, 0.88); border: 1px solid var(--hair); color: var(--text);
   font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 200ms ease, transform 200ms var(--ease); }
@@ -179,20 +202,29 @@ body.aq-idle #tank { cursor: none; }
    Panel (side sheet on desktop, bottom sheet on phones)
    --------------------------------------------------------------------------------------------- */
 
-.aq-panel { position: fixed; top: 14px; right: 14px; bottom: 14px; width: var(--panel-w); display: flex; flex-direction: column;
+.aq-panel { position: fixed; top: max(14px, var(--safe-t)); right: max(14px, var(--safe-r)); bottom: max(14px, var(--safe-b)); width: var(--panel-w);
+  max-width: calc(100vw - 28px - var(--safe-l) - var(--safe-r)); display: flex; flex-direction: column;
   border-radius: var(--radius); pointer-events: auto; z-index: 25; background: var(--glass-strong);
   opacity: 0; transform: translateX(14px); visibility: hidden;
   transition: opacity 360ms var(--ease), transform 420ms var(--ease), visibility 0s linear 420ms; }
 .aq-panel.is-open { opacity: 1; transform: none; visibility: visible; transition: opacity 360ms var(--ease), transform 420ms var(--ease), visibility 0s; }
-.aq-panel-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 14px 8px 22px; flex: none; }
+.aq-panel-head { display: flex; align-items: center; gap: 2px; padding: 16px 14px 8px 22px; flex: none; }
+.aq-panel-peek { display: none !important; }
+.aq-panel.is-peek .aq-panel-peek .aq-icon { transform: rotate(180deg); }
 .aq-panel-title { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
 .aq-panel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 22px 26px; }
 .aq-panel-body.is-self-scroll { overflow: hidden; padding: 0; display: flex; flex-direction: column; }
 .aq-icon-btn { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; border: 0;
   background: transparent; color: var(--text-2); transition: background 200ms ease, color 200ms ease; }
 .aq-icon-btn:hover:not(:disabled) { background: var(--glass-hover); color: var(--text); }
-@media (max-width: 1180px) and (min-width: 641px) {
-  .aq-panel { bottom: 88px; }
+/* Mid widths (tablets, phones in landscape): slide the dock into the free space beside the panel;
+   only where there is no room for that does the panel stop above the dock. */
+.aq-dock { transition: opacity var(--fade-in) var(--ease), left 420ms var(--ease), visibility 0s linear 0s; }
+@media (max-width: 1180px) and (min-width: 900px) {
+  .aq-root.has-panel:not(.is-mobile) .aq-dock { left: calc((100vw - var(--panel-w) - 28px - var(--safe-r) + var(--safe-l)) / 2); }
+}
+@media (max-width: 899px) and (min-width: 641px) {
+  .aq-panel { bottom: calc(max(18px, var(--safe-b)) + var(--dock-space) - 6px); }
 }
 
 /* Sections & fields */
@@ -625,7 +657,7 @@ body.aq-idle #tank { cursor: none; }
    Toasts, welcome card, shortcuts overlay
    --------------------------------------------------------------------------------------------- */
 
-.aq-toasts { position: fixed; left: 50%; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 76px); transform: translateX(-50%);
+.aq-toasts { position: fixed; left: 50%; bottom: calc(max(18px, env(safe-area-inset-bottom)) + var(--dock-space)); transform: translateX(-50%);
   display: flex; flex-direction: column-reverse; align-items: center; gap: 8px; z-index: 30; pointer-events: none; width: min(560px, calc(100vw - 32px)); }
 .aq-toast { display: flex; align-items: flex-start; gap: 10px; max-width: 100%; padding: 9px 16px 9px 13px; border-radius: 14px; pointer-events: auto;
   background: var(--glass-strong); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--hair);
@@ -667,31 +699,53 @@ body.aq-idle #tank { cursor: none; }
    --------------------------------------------------------------------------------------------- */
 
 @media (max-width: 960px) and (min-width: 641px) {
-  .aq-fishcard { bottom: 92px; }
+  .aq-fishcard { bottom: calc(max(18px, var(--safe-b)) + var(--dock-space)); }
 }
+
+/* One-time first-run note (bottom centre, where the dock rests). */
+.aq-firsthint { position: fixed; left: 50%; bottom: calc(max(18px, var(--safe-b)) + 6px); transform: translate(-50%, 6px);
+  width: max-content; max-width: min(560px, calc(100vw - 32px - var(--safe-l) - var(--safe-r))); padding: 11px 18px 12px; border-radius: 16px;
+  text-align: center; z-index: 19; pointer-events: auto; cursor: default; background: var(--glass-strong);
+  opacity: 0; transition: opacity 900ms var(--ease), transform 900ms var(--ease); }
+.aq-firsthint.is-in { opacity: 1; transform: translate(-50%, 0); }
+.aq-firsthint.is-out { opacity: 0; transition-duration: 1200ms; }
+.aq-firsthint-lead { margin: 0; font-size: 13px; color: var(--text); line-height: 1.45; }
+.aq-firsthint-tips { margin: 4px 0 0; font-size: 12px; color: var(--text-2); line-height: 1.45; }
+.aq-root:not(.is-idle) .aq-firsthint { bottom: calc(max(18px, var(--safe-b)) + var(--dock-space)); }
+.aq-root.is-hidden .aq-firsthint { display: none; }
 
 @media (max-width: 640px) {
   :root { --gutter: 14px; }
-  .aq-topleft { top: max(12px, env(safe-area-inset-top)); max-width: 62vw; }
+  .aq-topleft { top: max(12px, env(safe-area-inset-top)); max-width: 58vw; }
+  .aq-health.is-caution .aq-health-text, .aq-health.is-bad .aq-health-text { max-width: 30vw; }
   .aq-tankname { font-size: 14px; }
   .aq-clockline { font-size: 11.5px; }
   .aq-topright { top: max(10px, env(safe-area-inset-top)); }
-  .aq-dock { left: 8px; right: 8px; transform: none; justify-content: space-between; bottom: max(8px, env(safe-area-inset-bottom)); padding: 4px; border-radius: 18px; }
+  .aq-dock { left: max(8px, var(--safe-l)); right: max(8px, var(--safe-r)); transform: none; justify-content: space-between; bottom: max(8px, env(safe-area-inset-bottom)); padding: 4px; border-radius: 18px; }
   .aq-dock-btn { width: auto; flex: 1; height: 46px; }
+  .aq-root.is-touch .aq-dock-btn { width: auto; height: 54px; }
+  .aq-root.is-touch { --dock-space: 70px; }
   .aq-dock-btn::after { display: none; }
-  .aq-panel { top: auto; left: 0; right: 0; bottom: 0; width: auto; height: min(80vh, 720px); border-radius: 20px 20px 0 0; transform: translateY(24px);
-    padding-bottom: env(safe-area-inset-bottom); }
+  .aq-panel { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-width: none; height: min(80vh, 720px); height: min(80dvh, 720px);
+    border-radius: 20px 20px 0 0; transform: translateY(24px); padding-bottom: env(safe-area-inset-bottom); }
+  /* Collapsed sheet (aquascaping on a phone): just the header and the hint line. */
+  .aq-panel.is-peekable .aq-panel-peek { display: inline-grid !important; }
+  .aq-panel.is-peek, .aq-panel[data-panel="scape"].is-peek { height: auto; max-height: 40dvh; }
+  .aq-panel.is-peek .aq-tabs, .aq-panel.is-peek .aq-scape-view { display: none; }
+  .aq-panel.is-peek .aq-panel-body { padding-bottom: 10px; }
   .aq-panel.is-open { transform: none; }
   .aq-panel-head { padding-top: 12px; }
   .aq-panel-head::before { content: ""; position: absolute; top: 6px; left: 50%; width: 36px; height: 4px; margin-left: -18px; border-radius: 4px; background: rgba(255, 255, 255, 0.18); }
-  .aq-fishcard { left: 8px; right: 8px; width: auto; bottom: calc(max(8px, env(safe-area-inset-bottom)) + 64px); }
+  .aq-fishcard { left: max(8px, var(--safe-l)); right: max(8px, var(--safe-r)); width: auto; bottom: calc(max(8px, env(safe-area-inset-bottom)) + var(--dock-space) - 6px); }
   .aq-root.has-panel .aq-fishcard { opacity: 0; pointer-events: none; }
-  .aq-toasts { bottom: calc(max(8px, env(safe-area-inset-bottom)) + 66px); }
+  .aq-toasts { bottom: calc(max(8px, env(safe-area-inset-bottom)) + var(--dock-space) - 4px); }
+  .aq-firsthint { bottom: calc(max(8px, var(--safe-b)) + 4px); }
+  .aq-root:not(.is-idle) .aq-firsthint { bottom: calc(max(8px, var(--safe-b)) + var(--dock-space)); }
   .aq-modehint-key { display: none; }
   .aq-modehint { top: calc(max(12px, env(safe-area-inset-top)) + 52px); left: 8px; right: 8px; transform: none; justify-content: space-between; }
   .aq-modehint-text { white-space: normal; font-size: 12px; line-height: 1.35; }
   /* While aquascaping on a phone, keep most of the tank visible above the sheet. */
-  .aq-panel[data-panel="scape"] { height: min(48vh, 520px); }
+  .aq-panel[data-panel="scape"] { height: min(48vh, 520px); height: min(48dvh, 520px); }
   .aq-scape-toolbar { padding-left: 8px; }
   .aq-tb-name { display: none; }
   .aq-tb-sep { display: none; }
@@ -702,6 +756,28 @@ body.aq-idle #tank { cursor: none; }
 
 @media (hover: none) {
   .aq-dock-btn::after { display: none; }
+}
+
+/* Fingers: every control at least 44 × 44 px (Apple HIG), inputs at 16 px so iOS never zooms. */
+@media (pointer: coarse) {
+  .aq-icon-btn, .aq-tb-btn, .aq-stepper-btn { width: 44px; height: 44px; }
+  .aq-card-close { width: 44px; height: 44px; margin: -12px -12px 0 0; }
+  .aq-panel-head { padding-top: 10px; padding-bottom: 4px; padding-right: 8px; }
+  .aq-btn, .aq-btn-small, .aq-select, .aq-chip-toggle, .aq-time-chip, .aq-health, .aq-size, .aq-link, .aq-ind-main { min-height: 44px; }
+  .aq-seg-btn { min-height: 40px; }
+  .aq-seg { padding: 2px; }
+  .aq-tab { padding: 13px 0 14px; }
+  .aq-search-input, .aq-tankname-input, .aq-card-name-input { height: 44px; font-size: 16px; }
+  .aq-switch { width: 51px; height: 31px; }
+  .aq-switch-knob { width: 25px; height: 25px; }
+  .aq-switch[aria-checked="true"] .aq-switch-knob { transform: translateX(20px); }
+  .aq-range { height: 44px; }
+  .aq-range::-webkit-slider-thumb { width: 26px; height: 26px; margin-top: -11px; }
+  .aq-range::-moz-range-thumb { width: 26px; height: 26px; }
+  /* Small text-like controls keep their look but get a finger-sized hit area. */
+  .aq-tankname, .aq-speed, .aq-card-name, .aq-card-species { position: relative; }
+  .aq-tankname::after, .aq-speed::after, .aq-card-name::after, .aq-card-species::after { content: ""; position: absolute; inset: -11px -6px; }
+  .aq-hint { font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

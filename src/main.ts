@@ -29,5 +29,12 @@ try {
 } catch (err) {
   console.error(err);
   const bootEl = document.getElementById('boot');
-  if (bootEl) bootEl.innerHTML = `<p>Sorry — the aquarium could not start.<br><small>${String(err)}</small></p>`;
+  if (bootEl) {
+    // textContent, not innerHTML: the error text is not markup.
+    const p = document.createElement('p');
+    const small = document.createElement('small');
+    small.textContent = String(err);
+    p.append('Sorry — the aquarium could not start.', document.createElement('br'), small);
+    bootEl.replaceChildren(p);
+  }
 }

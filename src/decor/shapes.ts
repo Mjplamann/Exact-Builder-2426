@@ -267,8 +267,27 @@ function spheresOf(spec: SdfSpec): Float64Array {
   return b;
 }
 
-/** Signed distance (m, local space, scale 1) to the solid described by `spec` (no surface noise). */
-export function sdfEval(spec: SdfSpec, x: number, y: number, z: number): number {
+/** Bounding spheres of the holes (center xyz, half length + radius). */
+const holeSpheres = new WeakMap<SdfSpec, Float64Array>();
+function holeSpheresOf(spec: SdfSpec): Float64Array {
+  let b = holeSpheres.get(spec);
+  if (b && b.length === spec.holes.length * 4) return b;
+  b = new Float64Array(spec.holes.length * 4);
+  spec.holes.forEach((h, i) => {
+    b!.set([(h.a[0] + h.b[0]) / 2, (h.a[1] + h.b[1]) / 2, (h.a[2] + h.b[2]) / 2, Math.hypot(h.b[0] - h.a[0], h.b[1] - h.a[1], h.b[2] - h.a[2]) / 2 + h.r], i * 4);
+  });
+  holeSpheres.set(spec, b);
+  return b;
+}
+
+/**
+ * Signed distance (m, local space, scale 1) to the solid described by `spec` (no surface noise).
+ *
+ * `cutoff` (optional, meshing hot path): once the smooth union of the primitives is already
+ * farther than `cutoff` outside, the remaining operations (cuts, holes, clipping) can only push
+ * the point farther out, so that union distance is returned as a lower bound of the exact value.
+ */
+export function sdfEval(spec: SdfSpec, x: number, y: number, z: number, cutoff = Infinity): number {
   const warp = spec.warp;
   if (warp) {
     let ox = 0, oy = 0, oz = 0;
@@ -301,6 +320,7 @@ export function sdfEval(spec: SdfSpec, x: number, y: number, z: number): number 
     else di = sdCapsule(x, y, z, p.a, p.b, p.r);
     d = i === 0 ? di : smin(d, di, k);
   }
+  if (d > cutoff && spec.shell === undefined) return d;
   const cuts = spec.cuts;
   for (let i = 0; i < cuts.length; i++) {
     const c = cuts[i];
@@ -308,9 +328,16 @@ export function sdfEval(spec: SdfSpec, x: number, y: number, z: number): number 
   }
   if (spec.shell !== undefined) d = Math.abs(d) - spec.shell;
   const holes = spec.holes;
-  for (let i = 0; i < holes.length; i++) {
-    const h = holes[i];
-    d = smax(d, -sdCapsule(x, y, z, h.a, h.b, h.r), spec.holeBlend);
+  if (holes.length) {
+    const hs = holeSpheresOf(spec);
+    const hb = spec.holeBlend;
+    for (let i = 0; i < holes.length; i++) {
+      // A hole only changes d where its capsule distance is below holeBlend − d.
+      const dx = x - hs[i * 4], dy = y - hs[i * 4 + 1], dz = z - hs[i * 4 + 2];
+      if (Math.sqrt(dx * dx + dy * dy + dz * dz) - hs[i * 4 + 3] > hb - d) continue;
+      const h = holes[i];
+      d = smax(d, -sdCapsule(x, y, z, h.a, h.b, h.r), hb);
+    }
   }
   if (spec.clipBelow !== undefined) d = Math.max(d, spec.clipBelow - y);
   return d;
@@ -813,16 +840,20 @@ interface WoodStyle {
   spiral: number;
   /** Trunks fan out (spread yaw) — 2π for a radial root crown, small for a log. */
   yawSpread: number;
+  /** Chance per step of an abrupt kink (old breaks, growth reversals): wood is never a smooth arc. */
+  kink?: number;
 }
 
 const WOOD: Record<string, WoodStyle> = {
-  spiderwood: { trunks: [5, 7], r0: [0.007, 0.012], len: [0.22, 0.36], elev: [0.35, 1.1], wander: 0.36, upBias: 0.05, arch: 0.25, taper: 0.78, tipR: 0.0018, branchProb: 0.15, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.58, maxDepth: 2, stepLen: 0.014, spiral: 0.35, yawSpread: Math.PI * 2 },
-  'redmoor-root': { trunks: [4, 7], r0: [0.006, 0.012], len: [0.2, 0.3], elev: [0.6, 1.3], wander: 0.35, upBias: 0.09, arch: 0.1, taper: 0.82, tipR: 0.0012, branchProb: 0.26, branchAngle: [0.3, 0.7], childScale: 0.66, childLen: 0.6, maxDepth: 3, stepLen: 0.012, spiral: 0.3, yawSpread: Math.PI * 1.4 },
-  manzanita: { trunks: [1, 2], r0: [0.018, 0.026], len: [0.26, 0.34], elev: [0.9, 1.35], wander: 0.16, upBias: 0.03, arch: 0.05, taper: 0.72, tipR: 0.0025, branchProb: 0.17, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.62, maxDepth: 3, stepLen: 0.016, spiral: 0.1, yawSpread: 1.2 },
-  mopani: { trunks: [1, 2], r0: [0.03, 0.045], len: [0.16, 0.26], elev: [0.05, 0.5], wander: 0.28, upBias: 0.0, arch: 0.15, taper: 0.45, tipR: 0.012, branchProb: 0.1, branchAngle: [0.5, 1.0], childScale: 0.62, childLen: 0.5, maxDepth: 2, stepLen: 0.016, spiral: 0.2, yawSpread: 1.6 },
-  malaysian: { trunks: [1, 2], r0: [0.024, 0.034], len: [0.26, 0.33], elev: [0.15, 0.6], wander: 0.2, upBias: 0.0, arch: 0.2, taper: 0.55, tipR: 0.006, branchProb: 0.12, branchAngle: [0.4, 0.9], childScale: 0.6, childLen: 0.55, maxDepth: 2, stepLen: 0.016, spiral: 0.15, yawSpread: 1.2 },
+  spiderwood: { trunks: [5, 7], r0: [0.007, 0.012], len: [0.22, 0.36], elev: [0.35, 1.1], wander: 0.36, upBias: 0.05, arch: 0.25, taper: 0.8, tipR: 0.0015, branchProb: 0.17, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.62, maxDepth: 2, stepLen: 0.014, spiral: 0.35, yawSpread: Math.PI * 2, kink: 0.06 },
+  'redmoor-root': { trunks: [4, 7], r0: [0.006, 0.012], len: [0.2, 0.3], elev: [0.6, 1.3], wander: 0.35, upBias: 0.09, arch: 0.1, taper: 0.82, tipR: 0.0012, branchProb: 0.26, branchAngle: [0.3, 0.7], childScale: 0.66, childLen: 0.6, maxDepth: 3, stepLen: 0.012, spiral: 0.3, yawSpread: Math.PI * 1.4, kink: 0.05 },
+  // Manzanita: a smooth little tree whose limbs fork repeatedly and taper to fine tips.
+  manzanita: { trunks: [1, 2], r0: [0.018, 0.026], len: [0.26, 0.34], elev: [0.9, 1.35], wander: 0.16, upBias: 0.03, arch: 0.05, taper: 0.86, tipR: 0.0016, branchProb: 0.22, branchAngle: [0.35, 0.75], childScale: 0.64, childLen: 0.78, maxDepth: 3, stepLen: 0.016, spiral: 0.1, yawSpread: 1.2, kink: 0.09 },
+  mopani: { trunks: [1, 2], r0: [0.03, 0.045], len: [0.16, 0.26], elev: [0.05, 0.5], wander: 0.28, upBias: 0.0, arch: 0.15, taper: 0.45, tipR: 0.012, branchProb: 0.1, branchAngle: [0.5, 1.0], childScale: 0.62, childLen: 0.5, maxDepth: 2, stepLen: 0.016, spiral: 0.2, yawSpread: 1.6, kink: 0.1 },
+  malaysian: { trunks: [1, 2], r0: [0.024, 0.034], len: [0.26, 0.33], elev: [0.15, 0.6], wander: 0.2, upBias: 0.0, arch: 0.2, taper: 0.55, tipR: 0.006, branchProb: 0.12, branchAngle: [0.4, 0.9], childScale: 0.6, childLen: 0.55, maxDepth: 2, stepLen: 0.016, spiral: 0.15, yawSpread: 1.2, kink: 0.1 },
   cholla: { trunks: [1, 1], r0: [0.021, 0.026], len: [0.2, 0.25], elev: [0.0, 0.06], wander: 0.03, upBias: 0, arch: 0, taper: 0.06, tipR: 0.018, branchProb: 0, branchAngle: [0, 0], childScale: 0, childLen: 0, maxDepth: 0, stepLen: 0.012, spiral: 0, yawSpread: 0.2 },
-  branchwood: { trunks: [1, 1], r0: [0.012, 0.018], len: [0.42, 0.55], elev: [0.45, 0.75], wander: 0.07, upBias: 0, arch: 1.0, taper: 0.6, tipR: 0.003, branchProb: 0.07, branchAngle: [0.3, 0.6], childScale: 0.5, childLen: 0.35, maxDepth: 2, stepLen: 0.02, spiral: 0, yawSpread: 0.3 },
+  // Fallen igarapé branches: long, weathered, with a few side limbs and abrupt elbows.
+  branchwood: { trunks: [1, 1], r0: [0.012, 0.018], len: [0.42, 0.55], elev: [0.45, 0.75], wander: 0.09, upBias: 0, arch: 1.0, taper: 0.66, tipR: 0.0025, branchProb: 0.1, branchAngle: [0.3, 0.6], childScale: 0.5, childLen: 0.45, maxDepth: 2, stepLen: 0.02, spiral: 0, yawSpread: 0.3, kink: 0.12 },
 };
 
 function growBranch(rng: Rng, st: WoodStyle, out: Branch[], start: V3, dir0: V3, r0: number, len: number, depth: number, parent: number, sizeK: number): void {
@@ -847,6 +878,13 @@ function growBranch(rng: Rng, st: WoodStyle, out: Branch[], start: V3, dir0: V3,
       d[1] + w[1] * st.wander * 0.25 + st.upBias - st.arch * 0.06 * t,
       d[2] + w[2] * st.wander * 0.35 + side[2] * st.spiral * 0.06,
     ]);
+    if (st.kink && rng.chance(st.kink)) {
+      // An elbow: turn sharply around a random axis perpendicular to the branch.
+      const ax = vnorm(vcross(d, randomUnit(rng)));
+      const ang = rng.range(0.22, 0.5);
+      const c = Math.cos(ang), s = Math.sin(ang);
+      d = vnorm(vadd(vadd(vscale(d, c), vscale(vcross(ax, d), s)), vscale(ax, vdot(ax, d) * (1 - c))));
+    }
     // Don't dive into the substrate (allow lying on it).
     const rNow = Math.max(st.tipR * sizeK, r0 * (1 - st.taper * Math.pow(t, 0.9)));
     if (p[1] + d[1] * step < rNow * 0.2 - 0.004) d = vnorm([d[0], Math.max(d[1], 0.05), d[2]]);

@@ -110,6 +110,8 @@ export function icosphere(detail: number): { p: Float32Array; i: Uint32Array } {
 // Swept tubes along branch polylines
 // ---------------------------------------------------------------------------------------------
 
+export type TipStyle = 'round' | 'point' | 'broken' | 'open';
+
 export interface TubeOptions {
   /** Radial segments for a given radius (m). */
   segments: (r: number) => number;
@@ -119,12 +121,29 @@ export interface TubeOptions {
   /** Longitudinal grooves: amplitude relative to radius, count around. */
   grooves?: number;
   grooveCount?: number;
+  /**
+   * Irregular cross-section: oval / three-lobed sections that slowly twist along the branch
+   * (wood is never a perfect cylinder). Amplitude relative to radius.
+   */
+  lobes?: number;
+  /** Knots (bulging, darker branch scars) per meter of branches thicker than 3 mm. */
+  knots?: number;
   /** Round off branch tips. */
   capTips: boolean;
+  /**
+   * Per-branch tip style (default: round when capTips). 'point' tapers to a fine point (twigs),
+   * 'broken' leaves a jagged, splintered break, 'open' leaves the end open.
+   */
+  tip?: (endRadius: number, branch: number, depth: number) => TipStyle;
+  /** Close the start of a branch too (trunk ends lying on the sand); default open. */
+  capStart?: (startRadius: number, branch: number, depth: number, start: V3) => TipStyle;
   /** Subdivide each polyline segment (Catmull-Rom) for smooth curves. */
   subdiv: number;
-  /** Optional per-vertex color. */
-  color?: (p: V3, n: V3, along: number, t: number, branch: number, depth: number, around: number) => [number, number, number];
+  /**
+   * Optional per-vertex color. `mark` is 0..1 where the surface is a knot (> 0 while on a knot)
+   * or a fresh break (negative values, −1 at the broken face).
+   */
+  color?: (p: V3, n: V3, along: number, t: number, branch: number, depth: number, around: number, mark: number) => [number, number, number];
   /** Optional extra per-vertex attribute (e.g. plant sway data). */
   extra?: { name: string; size: number; fn: (p: V3, along: number, t: number, branch: number) => number[] };
   /** Hollow tube (cholla): inner wall at this fraction of the radius, open ends. */
@@ -170,6 +189,25 @@ export function addTubes(gb: GeoBuilder, branches: Branch[], o: TubeOptions): vo
     const L: number[] = [0];
     for (let i = 1; i < m; i++) L.push(L[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1], P[i][2] - P[i - 1][2]));
     const total = L[m - 1] || 1;
+    const tipStyle: TipStyle = o.hollow ? 'open' : o.tip ? o.tip(R[m - 1], bi, br.depth) : o.capTips ? 'round' : 'open';
+    // A pointed tip tapers the last few rings toward the end.
+    if (tipStyle === 'point') {
+      const zone = Math.min(total * 0.5, R[0] * 6 + 0.006);
+      for (let i = 0; i < m; i++) {
+        const u = (total - L[i]) / zone;
+        if (u < 1) R[i] *= 0.35 + 0.65 * Math.sqrt(Math.max(0, u));
+      }
+    }
+    // Knots: a few bulging scars at random places on thicker branches.
+    const knots: { s: number; th: number; size: number }[] = [];
+    if (o.knots && R[0] > 0.003) {
+      const count = Math.floor(total * o.knots + noise.noise(bi * 3.7, 0.5, 0.5) * 0.5 + 0.5);
+      for (let k = 0; k < count; k++) {
+        const h1 = noise.noise(bi * 1.31 + k * 7.1, 2.2, 0.3) * 0.5 + 0.5;
+        const h2 = noise.noise(bi * 0.73 + k * 3.3, 5.1, 0.9) * 0.5 + 0.5;
+        knots.push({ s: total * (0.12 + 0.76 * h1), th: h2 * Math.PI * 2, size: 0.7 + 0.6 * h1 });
+      }
+    }
     // Parallel-transport frames.
     const T: V3[] = [];
     for (let i = 0; i < m; i++) {
@@ -188,6 +226,27 @@ export function addTubes(gb: GeoBuilder, branches: Branch[], o: TubeOptions): vo
     const ringStart: number[] = [];
     const layers = o.hollow ? [1, o.hollow] : [1];
     const startIndexByLayer: number[][] = [];
+    /** Outer radius scale and knot mark at (ring i, angle th). */
+    const shapeAt = (i: number, th: number, c: number, s: number): [number, number] => {
+      const along = L[i];
+      let k = 1 + o.gnarl * noise.noise(along * o.gnarlFreq, c * 0.8 + bi * 1.3, s * 0.8);
+      if (o.grooves) k *= 1 + o.grooves * Math.sin(th * (o.grooveCount ?? 5) + along * 22 + bi);
+      if (o.lobes) {
+        const ph2 = noise.noise(along * 6 + bi * 2.1, 1.7, 0.2) * 3.5, ph3 = noise.noise(along * 9 + bi * 1.4, 4.3, 0.6) * 4;
+        k *= 1 + o.lobes * (0.65 * Math.cos(2 * th + ph2) + 0.35 * Math.cos(3 * th + ph3));
+      }
+      let mark = 0;
+      for (const kn of knots) {
+        const ds = (along - kn.s) / Math.max(0.002, R[i] * 1.1 * kn.size);
+        if (ds > 3 || ds < -3) continue;
+        let dth = Math.abs(th - kn.th) % (Math.PI * 2);
+        if (dth > Math.PI) dth = Math.PI * 2 - dth;
+        const w = Math.exp(-ds * ds - (dth / 0.75) ** 2);
+        k *= 1 + 0.3 * w;
+        mark = Math.max(mark, w);
+      }
+      return [k, mark];
+    };
     for (const layer of layers) {
       const starts: number[] = [];
       for (let i = 0; i < m; i++) {
@@ -199,13 +258,15 @@ export function addTubes(gb: GeoBuilder, branches: Branch[], o: TubeOptions): vo
           const c = Math.cos(th), s = Math.sin(th);
           const dir: V3 = [Ni[0] * c + Bi[0] * s, Ni[1] * c + Bi[1] * s, Ni[2] * c + Bi[2] * s];
           let rr = R[i] * layer;
+          let mark = 0;
           if (layer === 1) {
-            rr *= 1 + o.gnarl * noise.noise(along * o.gnarlFreq, c * 0.8 + bi * 1.3, s * 0.8);
-            if (o.grooves) rr *= 1 + o.grooves * Math.sin(th * (o.grooveCount ?? 5) + along * 22 + bi);
+            const [k, mk] = shapeAt(i, a === segs ? 0 : th, c, s);
+            rr *= k;
+            mark = mk;
           }
           const p: V3 = [P[i][0] + dir[0] * rr, P[i][1] + dir[1] * rr, P[i][2] + dir[2] * rr];
           const nn: V3 = layer === 1 ? dir : [-dir[0], -dir[1], -dir[2]];
-          const col = o.color ? o.color(p, nn, along, along / total, bi, br.depth, a / segs) : undefined;
+          const col = o.color ? o.color(p, nn, along, along / total, bi, br.depth, a / segs, mark) : undefined;
           gb.vertex(p, nn, [a / segs, along], col, [th * R[i], along, bi * 1.37 + (layer === 1 ? 0 : 0.5)]);
           if (o.extra) gb.attr(o.extra.name, o.extra.size, o.extra.fn(p, along, along / total, bi));
         }
@@ -246,37 +307,59 @@ export function addTubes(gb: GeoBuilder, branches: Branch[], o: TubeOptions): vo
       }
       return;
     }
-    if (o.capTips) {
-      // Rounded tip: two extra rings shrinking to a point along the tangent.
-      const i = m - 1;
-      const t = T[i];
+    /** Close an end: i = ring index, sgn = +1 at the tip, −1 at the start (reversed winding). */
+    const cap = (i: number, sgn: 1 | -1, style: TipStyle): void => {
+      if (style === 'open') return;
+      const t: V3 = [T[i][0] * sgn, T[i][1] * sgn, T[i][2] * sgn];
       const { N: Ni, B: Bi } = frames[i];
       let prev = ringStart[i];
       const rTip = R[i];
-      for (const [k, f] of [[0.55, 0.75], [0.9, 0.35]] as const) {
+      const tri = (a: number, b: number, c: number) => (sgn > 0 ? gb.tri(a, b, c) : gb.tri(a, c, b));
+      const ringAt = (k: number, f: number, jag: number, mark: number): void => {
         const start = gb.count;
         for (let a = 0; a <= segs; a++) {
           const th = (a / segs) * Math.PI * 2;
           const c = Math.cos(th), s = Math.sin(th);
           const dir: V3 = [Ni[0] * c + Bi[0] * s, Ni[1] * c + Bi[1] * s, Ni[2] * c + Bi[2] * s];
-          const p: V3 = [P[i][0] + dir[0] * rTip * f + t[0] * rTip * k, P[i][1] + dir[1] * rTip * f + t[1] * rTip * k, P[i][2] + dir[2] * rTip * f + t[2] * rTip * k];
-          const nn = norm3([dir[0] * f + t[0] * k, dir[1] * f + t[1] * k, dir[2] * f + t[2] * k]);
-          const col = o.color ? o.color(p, nn, L[i], 1, bi, br.depth, a / segs) : undefined;
-          gb.vertex(p, nn, [a / segs, L[i] + rTip * k], col, [th * rTip, L[i] + rTip * k, bi * 1.37]);
-          if (o.extra) gb.attr(o.extra.name, o.extra.size, o.extra.fn(p, L[i], 1, bi));
+          // Splinters: the break line wanders along the branch axis.
+          const kk = k + (jag ? jag * (noise.noise(Math.cos(th) * 1.7 + bi + sgn, Math.sin(th) * 1.7, 3.3) * 0.8 + 0.6 * Math.max(0, noise.noise(th * 2.3 + bi, 0.4 + sgn, 7.7))) : 0);
+          const ff = f * (style === 'round' || style === 'broken' ? shapeAt(i, a === segs ? 0 : th, c, s)[0] : 1);
+          const p: V3 = [P[i][0] + dir[0] * rTip * ff + t[0] * rTip * kk, P[i][1] + dir[1] * rTip * ff + t[1] * rTip * kk, P[i][2] + dir[2] * rTip * ff + t[2] * rTip * kk];
+          const nn = style === 'broken' && f < 0.9 ? t : norm3([dir[0] * f + t[0] * k, dir[1] * f + t[1] * k, dir[2] * f + t[2] * k]);
+          const col = o.color ? o.color(p, nn, L[i], i === 0 ? 0 : 1, bi, br.depth, a / segs, mark) : undefined;
+          gb.vertex(p, nn, [a / segs, L[i] + sgn * rTip * kk], col, [th * rTip, L[i] + sgn * rTip * kk, bi * 1.37]);
+          if (o.extra) gb.attr(o.extra.name, o.extra.size, o.extra.fn(p, L[i], i === 0 ? 0 : 1, bi));
         }
         for (let a = 0; a < segs; a++) {
-          gb.tri(prev + a, prev + a + 1, start + a);
-          gb.tri(prev + a + 1, start + a + 1, start + a);
+          tri(prev + a, prev + a + 1, start + a);
+          tri(prev + a + 1, start + a + 1, start + a);
         }
         prev = start;
+      };
+      let tipK: number, tipMark = 0;
+      if (style === 'broken') {
+        // A snapped end: the wall runs on in splinters, then a rough, slightly sunken face.
+        ringAt(0.25, 1.0, 1.1, -0.5);
+        ringAt(0.35, 0.55, 0.9, -1);
+        tipK = 0.1;
+        tipMark = -1;
+      } else if (style === 'point') {
+        ringAt(0.9, 0.6, 0, 0);
+        ringAt(2.2, 0.28, 0, 0);
+        tipK = 3.6;
+      } else {
+        ringAt(0.55, 0.75, 0, 0);
+        ringAt(0.9, 0.35, 0, 0);
+        tipK = 1.05;
       }
-      const tipP: V3 = [P[i][0] + t[0] * rTip * 1.05, P[i][1] + t[1] * rTip * 1.05, P[i][2] + t[2] * rTip * 1.05];
-      const col = o.color ? o.color(tipP, t, L[i], 1, bi, br.depth, 0) : undefined;
-      const tip = gb.vertex(tipP, t, [0.5, L[i] + rTip], col, [0, L[i] + rTip, bi * 1.37]);
-      if (o.extra) gb.attr(o.extra.name, o.extra.size, o.extra.fn(tipP, L[i], 1, bi));
-      for (let a = 0; a < segs; a++) gb.tri(prev + a, prev + a + 1, tip);
-    }
+      const tipP: V3 = [P[i][0] + t[0] * rTip * tipK, P[i][1] + t[1] * rTip * tipK, P[i][2] + t[2] * rTip * tipK];
+      const col = o.color ? o.color(tipP, t, L[i], i === 0 ? 0 : 1, bi, br.depth, 0, tipMark) : undefined;
+      const tip = gb.vertex(tipP, t, [0.5, L[i] + sgn * rTip], col, [0, L[i] + sgn * rTip, bi * 1.37]);
+      if (o.extra) gb.attr(o.extra.name, o.extra.size, o.extra.fn(tipP, L[i], i === 0 ? 0 : 1, bi));
+      for (let a = 0; a < segs; a++) tri(prev + a, prev + a + 1, tip);
+    };
+    cap(m - 1, 1, tipStyle);
+    if (o.capStart) cap(0, -1, o.capStart(R[0], bi, br.depth, P[0]));
   });
 }
 

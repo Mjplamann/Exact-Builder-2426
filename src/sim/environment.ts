@@ -16,14 +16,22 @@ import { clamp, clamp01, lerp, smoothstep } from './simMath';
 
 const MS_PER_HOUR = 3_600_000;
 const MS_PER_DAY = 86_400_000;
-let tzCheckedAt = Number.NaN;
+/** Time-zone offsets only change on quarter-hour UTC boundaries (DST, half-hour zones). */
+const TZ_BUCKET_MS = 900_000;
+let tzBucket = Number.NaN;
 let tzOffsetMs = 0;
 
-/** Local wall-clock offset at `t` (ms to add to UTC), refreshed at most once per sim hour. */
+/**
+ * Local wall-clock offset at `t` (ms to add to UTC), cached per 15-minute UTC bucket: exact across
+ * daylight-saving transitions (a cache keyed on "within an hour of the last check" could apply the
+ * old offset for up to an hour after the clocks change), yet only one Date per sim quarter-hour.
+ */
 function localOffset(t: number): number {
-  if (!(Math.abs(t - tzCheckedAt) < MS_PER_HOUR)) {
-    tzOffsetMs = -new Date(t).getTimezoneOffset() * 60_000;
-    tzCheckedAt = t;
+  const b = Math.floor(t / TZ_BUCKET_MS);
+  if (b !== tzBucket) {
+    const o = -new Date(t).getTimezoneOffset() * 60_000;
+    tzOffsetMs = Number.isFinite(o) ? o : 0;
+    tzBucket = b;
   }
   return tzOffsetMs;
 }

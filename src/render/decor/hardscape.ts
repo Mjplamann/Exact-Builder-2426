@@ -4,17 +4,17 @@
  *
  * Geometry is in the item's local space; the returned group carries the item transform.
  */
-import { BufferGeometry, Color, DoubleSide, Group, LatheGeometry, Mesh, MeshStandardMaterial, Vector2 } from 'three';
+import { BufferAttribute, BufferGeometry, Color, DoubleSide, Group, LatheGeometry, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 import type { DecorItem, Quality, TankState } from '../../core/types';
 import { Rng } from '../../core/rng';
 import { substrateHeight, tankBounds } from '../../core/tankGeometry';
 import { Noise3, smax, smoothstep, clamp01 } from '../../decor/noise';
 import {
   decorShape, itemTransform, projectToSurface, sdfEval, toLocal, toWorld,
-  type DecorShape, type LitterLeaf, type ShellPart, type V3,
+  type Branch, type DecorShape, type LitterLeaf, type ShellPart, type V3,
 } from '../../decor/shapes';
 import { GeoBuilder, addTubes, icosphere } from './geom';
-import { surfaceNets } from './surfaceNets';
+import { ROCK_CELLS, meshRock, type RockMeshData } from './rockMesh';
 import { hardscapeMaterial, tubingMaterial } from './materials';
 import { leafTexture } from './textures';
 import { applyUnderwater } from '../underwater';
@@ -22,6 +22,10 @@ import { applyUnderwater } from '../underwater';
 export interface BuildCtx {
   tank: TankState;
   quality: Quality;
+  /** Pre-meshed SDF data (from the cache or the meshing worker); meshed here when absent. */
+  rock?: RockMeshData;
+  /** Mesh SDF items at this resolution instead of the quality's (placeholders). */
+  rockCells?: number;
 }
 
 export interface BuiltDecor {
@@ -43,242 +47,27 @@ function mul3(a: [number, number, number], s: number): [number, number, number] 
   return [a[0] * s, a[1] * s, a[2] * s];
 }
 
-const QUALITY_CELLS: Record<Quality, number> = { low: 26, medium: 34, high: 42, ultra: 52 };
-
 // ---------------------------------------------------------------------------------------------
-// SDF rocks & caves
+// SDF rocks & caves (meshed by the pure mesher in rockMesh.ts — also run in a worker)
 // ---------------------------------------------------------------------------------------------
 
-interface RockDetail {
-  amp: number;
-  freq: number;
-  ridged: number;
-  oct: number;
-  /** Grooves instead of ridges (elephant skin cracks). */
-  crack?: number;
-  /** Horizontal laminations (slate/frodo). */
-  strata?: { amp: number; freq: number };
-  /** Vertical solution grooves (karren) on weathered limestone (m). */
-  flute?: number;
-  pits?: { count: number; r: [number, number]; depth: number };
-  palette: { a: string; b: string; dark: string; accent?: string };
-  /** Biofilm / algae film on upward faces. */
-  film?: string;
+/** Wrap mesher output in a BufferGeometry (attributes share the typed arrays). */
+export function rockGeometry(data: RockMeshData): BufferGeometry {
+  const g = new BufferGeometry();
+  g.setAttribute('position', new BufferAttribute(data.positions, 3));
+  g.setAttribute('normal', new BufferAttribute(data.normals, 3));
+  g.setAttribute('color', new BufferAttribute(data.colors, 3));
+  g.setAttribute('aDetail', new BufferAttribute(data.det, 3));
+  const n = data.positions.length / 3;
+  g.setIndex(n > 65535 ? new BufferAttribute(data.indices, 1) : new BufferAttribute(Uint16Array.from(data.indices), 1));
+  g.computeBoundingSphere();
+  g.computeBoundingBox();
+  return g;
 }
 
-const ROCK_DETAIL: Record<string, RockDetail> = {
-  seiryu: { amp: 0.0038, freq: 28, ridged: 0.9, oct: 3, flute: 0.0065, palette: { a: '#5c6469', b: '#7e868b', dark: '#33393d' }, film: '#5a6248' },
-  'dragon-stone': { amp: 0.0042, freq: 21, ridged: 0.45, oct: 3, pits: { count: 46, r: [0.0022, 0.0055], depth: 0.6 }, palette: { a: '#72553a', b: '#9c7b50', dark: '#3a2818', accent: '#b08c5c' }, film: '#5e5a38' },
-  lava: { amp: 0.003, freq: 28, ridged: 0.2, oct: 3, pits: { count: 150, r: [0.0014, 0.0042], depth: 0.7 }, palette: { a: '#3a2622', b: '#5c3226', dark: '#140d0b', accent: '#7a3a26' } },
-  slate: { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#383c40', b: '#4a4f54', dark: '#202224' }, film: '#3e4636' },
-  'river-stone': { amp: 0.0014, freq: 8, ridged: 0, oct: 2, palette: { a: '#8a8378', b: '#a59c8c', dark: '#4a463f' } },
-  'texas-holey': { amp: 0.0048, freq: 22, ridged: 0.85, oct: 3, pits: { count: 90, r: [0.002, 0.007], depth: 0.6 }, palette: { a: '#cfc4a8', b: '#e2d9c3', dark: '#7c705a', accent: '#b4ae9e' }, film: '#9a9468' },
-  'petrified-wood': { amp: 0.0016, freq: 30, ridged: 0.5, oct: 3, palette: { a: '#86664a', b: '#a8875e', dark: '#4a3826', accent: '#8a847a' } },
-  'elephant-skin': { amp: 0.0025, freq: 16, ridged: 0, oct: 2, crack: 0.0045, palette: { a: '#686158', b: '#837a6d', dark: '#34302a' }, film: '#5a5a40' },
-  frodo: { amp: 0.0028, freq: 24, ridged: 0.7, oct: 3, strata: { amp: 0.0013, freq: 260 }, palette: { a: '#665c52', b: '#857766', dark: '#2e2924', accent: '#9a6436' }, film: '#5a5a40' },
-  'live-rock': { amp: 0.0045, freq: 24, ridged: 0.6, oct: 3, pits: { count: 140, r: [0.0025, 0.008], depth: 0.7 }, palette: { a: '#d6d0c2', b: '#bcb3a0', dark: '#4a4238', accent: '#8a4a8a' } },
-  'slate-cave': { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#383c40', b: '#4a4f54', dark: '#202224' }, film: '#3e4636' },
-  'rock-cave': { amp: 0.0032, freq: 22, ridged: 0.5, oct: 3, pits: { count: 25, r: [0.002, 0.005], depth: 0.5 }, palette: { a: '#6e675e', b: '#8c8476', dark: '#2e2a26' }, film: '#5a5a40' },
-  coconut: { amp: 0.0007, freq: 70, ridged: 0.3, oct: 2, palette: { a: '#5a3a24', b: '#7a5232', dark: '#24160c', accent: '#c8a87a' } },
-};
-
-/** A spatial hash of spherical pits subtracted from the SDF surface. */
-class PitSet {
-  private cells = new Map<number, number[]>();
-  private data: number[] = [];
-  constructor(private cell: number) {}
-  private key(ix: number, iy: number, iz: number): number {
-    return ((ix + 512) * 1024 + (iy + 512)) * 1024 + (iz + 512);
-  }
-  add(x: number, y: number, z: number, r: number): void {
-    const i = this.data.length / 4;
-    this.data.push(x, y, z, r);
-    const c = this.cell;
-    for (let ix = Math.floor((x - r) / c); ix <= Math.floor((x + r) / c); ix++)
-      for (let iy = Math.floor((y - r) / c); iy <= Math.floor((y + r) / c); iy++)
-        for (let iz = Math.floor((z - r) / c); iz <= Math.floor((z + r) / c); iz++) {
-          const k = this.key(ix, iy, iz);
-          let l = this.cells.get(k);
-          if (!l) this.cells.set(k, (l = []));
-          l.push(i);
-        }
-  }
-  /** Max over pits of (r − distance) (positive inside a pit). */
-  carve(x: number, y: number, z: number): number {
-    const l = this.cells.get(this.key(Math.floor(x / this.cell), Math.floor(y / this.cell), Math.floor(z / this.cell)));
-    if (!l) return -1;
-    let best = -1;
-    for (const i of l) {
-      const d = this.data;
-      const dx = x - d[i * 4], dy = y - d[i * 4 + 1], dz = z - d[i * 4 + 2];
-      const v = d[i * 4 + 3] - Math.sqrt(dx * dx + dy * dy + dz * dz);
-      if (v > best) best = v;
-    }
-    return best;
-  }
-}
-
-function sdfRockGeometry(item: DecorItem, shape: DecorShape, quality: Quality): BufferGeometry {
-  const spec = shape.sdf!;
-  const style = shape.style;
-  const P = ROCK_DETAIL[style] ?? ROCK_DETAIL.seiryu;
-  const noise = new Noise3(item.seed);
-  const rng = new Rng(item.seed ^ 0x51ed270b);
-  const b = shape.bounds;
-  const ext = Math.max(b.max[0] - b.min[0], b.max[1] - b.min[1], b.max[2] - b.min[2]);
-  const cell = Math.min(0.0068, Math.max(0.0021, ext / QUALITY_CELLS[quality]));
-
-  // Pits sit on the (base) surface.
-  let pits: PitSet | null = null;
-  if (P.pits) {
-    pits = new PitSet(P.pits.r[1] * 2.2);
-    const cx = (b.min[0] + b.max[0]) / 2, cy = Math.max(0.01, (b.min[1] + b.max[1]) / 2), cz = (b.min[2] + b.max[2]) / 2;
-    for (let i = 0; i < P.pits.count; i++) {
-      const p: V3 = [cx + rng.range(-0.6, 0.6) * (b.max[0] - b.min[0]), cy + rng.range(-0.2, 0.7) * (b.max[1] - b.min[1]), cz + rng.range(-0.6, 0.6) * (b.max[2] - b.min[2])];
-      projectToSurface(spec, p);
-      if (p[1] < -0.005) continue;
-      // Size distribution skewed toward small pits (like real vesicles/erosion pockets).
-      const r = P.pits.r[0] + (P.pits.r[1] - P.pits.r[0]) * Math.pow(rng.next(), 2.2);
-      pits.add(p[0], p[1], p[2], r);
-    }
-  }
-  // Petrified wood: an orthonormal frame around the log axis for the bark fissures.
-  let axisU: V3 | null = null, axisV: V3 | null = null, axisW: V3 | null = null;
-  const axisA = shape.axis?.a;
-  if (shape.axis) {
-    const ax = shape.axis.b[0] - shape.axis.a[0], ay = shape.axis.b[1] - shape.axis.a[1], az = shape.axis.b[2] - shape.axis.a[2];
-    const l = Math.hypot(ax, ay, az) || 1;
-    axisU = [ax / l, ay / l, az / l];
-    const ref: V3 = Math.abs(axisU[1]) > 0.9 ? [1, 0, 0] : [0, 1, 0];
-    const v: V3 = [axisU[1] * ref[2] - axisU[2] * ref[1], axisU[2] * ref[0] - axisU[0] * ref[2], axisU[0] * ref[1] - axisU[1] * ref[0]];
-    const vl = Math.hypot(v[0], v[1], v[2]) || 1;
-    axisV = [v[0] / vl, v[1] / vl, v[2] / vl];
-    axisW = [axisU[1] * axisV[2] - axisU[2] * axisV[1], axisU[2] * axisV[0] - axisU[0] * axisV[2], axisU[0] * axisV[1] - axisU[1] * axisV[0]];
-  }
-  const band = P.amp * 1.6 + (P.crack ?? 0) + (P.strata?.amp ?? 0) + (P.flute ?? 0) + (P.pits ? P.pits.r[1] : 0) + (shape.axis ? 0.0025 : 0) + cell;
-  const f = P.freq;
-  const field = (x: number, y: number, z: number): number => {
-    let d = sdfEval(spec, x, y, z);
-    if (d < band && d > -band) {
-      const smoothN = noise.fbm(x * f, y * f, z * f, P.oct);
-      let n = smoothN;
-      if (P.ridged > 0) n = n * (1 - P.ridged) + (noise.ridged(x * f * 0.8 + 3.1, y * f * 0.8, z * f * 0.8, 2) - 0.55) * 2 * P.ridged;
-      d -= n * P.amp;
-      if (P.crack) {
-        const cn = 1 - Math.abs(noise.noise(x * f * 1.6 + 9.2, y * f * 1.6, z * f * 1.6));
-        d += P.crack * Math.pow(cn, 10);
-      }
-      if (P.strata) d -= P.strata.amp * Math.sin(y * P.strata.freq + smoothN * 3);
-      if (P.flute) {
-        // Rain-carved flutes run down the faces: noise stretched vertically, sharpened into grooves.
-        const fl = 1 - Math.abs(noise.noise(x * 42 + 1.7, y * 6, z * 42));
-        d += P.flute * Math.pow(fl, 8);
-      }
-      if (axisU) {
-        // Petrified bark: deep fissures running along the trunk.
-        const px = x - axisA![0], py = y - axisA![1], pz = z - axisA![2];
-        const t = px * axisU[0] + py * axisU[1] + pz * axisU[2];
-        const rx = px - axisU[0] * t, ry = py - axisU[1] * t, rz = pz - axisU[2] * t;
-        const ang = Math.atan2(rx * axisV![0] + ry * axisV![1] + rz * axisV![2], rx * axisW![0] + ry * axisW![1] + rz * axisW![2]);
-        d += 0.0022 * Math.pow(Math.abs(Math.sin(ang * 9 + noise.noise(t * 25, ang, 0.4) * 2.5)), 6);
-      }
-      if (pits) {
-        const c = pits.carve(x, y, z);
-        if (c > -0.01) d = smax(d, c, 0.0012);
-      }
-    }
-    // Closed, flat underside a little below the substrate line.
-    return Math.max(d, -0.024 - y);
-  };
-  const pad = band + cell * 2;
-  // Faceted stones get two Newton steps (crisp planes); rounded ones need only one.
-  const faceted = spec.cuts.length > 3 || style === 'slate' || style === 'slate-cave';
-  const mesh = surfaceNets(field, [b.min[0] - pad, Math.max(b.min[1], -0.03) - pad, b.min[2] - pad], [b.max[0] + pad, b.max[1] + pad, b.max[2] + pad], cell, faceted ? 2 : 1);
-
-  // Vertex colors: mottled mineral color, veins of accent, ambient occlusion from the field.
-  const pal = { a: lin(P.palette.a), b: lin(P.palette.b), dark: lin(P.palette.dark), accent: P.palette.accent ? lin(P.palette.accent) : null };
-  const film = P.film ? lin(P.film) : null;
-  // Individual stones differ a little in tone.
-  const toneShift = rng.range(0.88, 1.1);
-  const hueShift: [number, number, number] = [rng.range(0.96, 1.04), 1, rng.range(0.96, 1.04)];
-  let river: [number, number, number] | null = null;
-  if (style === 'river-stone') {
-    const tones = ['#8a8378', '#6e6a64', '#9a8e7a', '#a8a092', '#5e5a54', '#b0a48c', '#7a6a58', '#8c7c6a'];
-    river = lin(tones[Math.floor(rng.next() * tones.length)]);
-  }
-  const colors = new Float32Array(mesh.vertexCount * 3);
-  const det = new Float32Array(mesh.vertexCount * 3);
-  const ao = [0.005, 0.012, 0.024];
-  const coralline = [lin('#a45aa4'), lin('#cc7aa2'), lin('#b04a8c'), lin('#c09ad0')];
-  const axis = shape.axis;
-  for (let v = 0; v < mesh.vertexCount; v++) {
-    const x = mesh.positions[v * 3], y = mesh.positions[v * 3 + 1], z = mesh.positions[v * 3 + 2];
-    const nx = mesh.normals[v * 3], ny = mesh.normals[v * 3 + 1], nz = mesh.normals[v * 3 + 2];
-    det[v * 3] = x;
-    det[v * 3 + 1] = y;
-    det[v * 3 + 2] = z;
-    const m1 = noise.fbm(x * 9 + 11, y * 9, z * 9, 3) * 0.5 + 0.5;
-    const m2 = noise.fbm(x * 31, y * 31 + 7, z * 31, 2) * 0.5 + 0.5;
-    let c = mix3(pal.a, pal.b, smoothstep(0.3, 0.75, m1));
-    if (river) c = mix3(river, mul3(river, 1.15), m1);
-    c = mix3(c, pal.dark, smoothstep(0.62, 0.9, m2) * 0.35);
-    if (pal.accent && style !== 'live-rock') c = mix3(c, pal.accent, smoothstep(0.55, 0.85, noise.fbm(x * 14 + 3, y * 22, z * 14, 2) * 0.5 + 0.5) * 0.55);
-    if (style === 'seiryu') c = mix3(c, mul3(pal.b, 1.15), smoothstep(0.4, 0.95, ny) * 0.25);
-    if (style === 'live-rock') {
-      // Coralline algae: pink/purple crusts, strongest on lit, upward faces; turf algae in patches.
-      const cn = noise.fbm(x * 13 + 5, y * 13, z * 13 - 2, 3) * 0.5 + 0.5;
-      const pick = coralline[Math.floor((noise.noise(x * 4 + 1, y * 4, z * 4) * 0.5 + 0.5) * 3.99)];
-      const cover = smoothstep(0.42, 0.62, cn) * (0.45 + 0.55 * clamp01(ny * 0.8 + 0.4));
-      c = mix3(c, pick, cover * 0.9);
-      const turf = smoothstep(0.62, 0.78, noise.fbm(x * 21, y * 21 + 3, z * 21, 2) * 0.5 + 0.5) * clamp01(ny);
-      c = mix3(c, lin('#5e6a3a'), turf * 0.55);
-      const sponge = smoothstep(0.8, 0.9, noise.noise(x * 30, y * 30, z * 30 + 4) * 0.5 + 0.5);
-      c = mix3(c, lin('#d8a040'), sponge * 0.5);
-    }
-    if (axis) {
-      // Petrified wood: growth rings around the log axis, bark streaks along it.
-      const ax = axis.b[0] - axis.a[0], ay = axis.b[1] - axis.a[1], az = axis.b[2] - axis.a[2];
-      const al = Math.hypot(ax, ay, az) || 1;
-      const ux = ax / al, uy = ay / al, uz = az / al;
-      const px = x - axis.a[0], py = y - axis.a[1], pz = z - axis.a[2];
-      const t = px * ux + py * uy + pz * uz;
-      const rx = px - ux * t, ry = py - uy * t, rz = pz - uz * t;
-      const r = Math.hypot(rx, ry, rz);
-      const ring = 0.5 + 0.5 * Math.sin(r * 1400 + noise.noise(x * 40, y * 40, z * 40) * 4);
-      const endFace = Math.abs(nx * ux + ny * uy + nz * uz);
-      c = mix3(c, mix3(pal.dark, pal.b, ring), smoothstep(0.5, 0.9, endFace) * 0.65);
-      const streak = 0.5 + 0.5 * noise.noise(t * 6, Math.atan2(rz, rx) * 6, 0.5);
-      c = mix3(c, pal.accent ?? pal.dark, (1 - endFace) * streak * 0.35);
-    }
-    if (style === 'coconut') {
-      // Hairy brown husk outside, pale flesh-colored inside (inner shell faces toward the center).
-      const inward = -(x * nx + (y + 0.01) * ny + z * nz) / (Math.hypot(x, y + 0.01, z) || 1);
-      c = mix3(c, pal.accent!, smoothstep(0.2, 0.6, inward) * 0.8);
-    }
-    if (film) c = mix3(c, film, clamp01(ny) * smoothstep(0.45, 0.8, noise.fbm(x * 7, y * 7 + 2, z * 7, 2) * 0.5 + 0.5) * 0.28);
-    // Ambient occlusion: how much solid surrounds the point along its normal (base SDF — the
-    // large-scale shape is what shades crevices; fine relief is handled by the bump shader).
-    let occ = 0;
-    for (let k = 0; k < ao.length; k++) {
-      const s = ao[k];
-      occ += (s - Math.max(sdfEval(spec, x + nx * s, y + ny * s, z + nz * s), -0.024 - (y + ny * s))) / s * (0.55 / (k + 1));
-    }
-    let a = clamp01(1 - occ * 0.55);
-    a = 0.25 + 0.75 * a * a;
-    // Contact darkening where the stone meets the sand.
-    a *= 0.62 + 0.38 * smoothstep(-0.006, 0.02, y);
-    c = mul3(c, a * toneShift);
-    colors[v * 3] = c[0] * hueShift[0];
-    colors[v * 3 + 1] = c[1] * hueShift[1];
-    colors[v * 3 + 2] = c[2] * hueShift[2];
-  }
-  const gb = new GeoBuilder();
-  gb.pos = Array.from(mesh.positions);
-  gb.nrm = Array.from(mesh.normals);
-  gb.col = Array.from(colors);
-  gb.det = Array.from(det);
-  gb.idx = Array.from(mesh.indices);
-  return gb.build();
+/** True if this item is meshed from an SDF (the expensive kind, worth building off-thread). */
+export function isSdfDecor(item: Pick<DecorItem, 'kind' | 'variant' | 'seed'>): boolean {
+  return (item.kind === 'rock' || item.kind === 'cave') && !!decorShape(item).sdf;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -293,53 +82,139 @@ interface WoodLook {
   gnarlFreq: number;
   grooves?: number;
   twoTone?: string;
+  /** Oval / lobed cross-section amplitude. */
+  lobes: number;
+  /** Knots per meter of thicker branches. */
+  knots: number;
+  /** Fine render-only twigs per meter of branches (spiderwood crowns, broken side shoots). */
+  twigs: number;
+  /** Sun-bleached, silvery weathering on upper faces (0..1). */
+  weather: number;
+  /** Color of knots and of fresh breaks. */
+  knot: string;
+  fresh: string;
 }
 
 const WOOD_LOOK: Record<string, WoodLook> = {
-  spiderwood: { a: '#9c7a56', b: '#bc9a70', dark: '#5a4430', gnarl: 0.14, gnarlFreq: 40 },
-  'redmoor-root': { a: '#6c3e2c', b: '#8c5440', dark: '#3a2016', gnarl: 0.12, gnarlFreq: 45 },
-  manzanita: { a: '#6e3a2a', b: '#8e4e38', dark: '#3e2018', gnarl: 0.06, gnarlFreq: 25 },
-  mopani: { a: '#3e2618', b: '#4e301e', dark: '#24160c', gnarl: 0.28, gnarlFreq: 14, twoTone: '#a8855a' },
-  malaysian: { a: '#44301f', b: '#5e422c', dark: '#24180f', gnarl: 0.16, gnarlFreq: 18, grooves: 0.12 },
-  cholla: { a: '#a88c64', b: '#c2a67a', dark: '#5e4a32', gnarl: 0.04, gnarlFreq: 20 },
-  branchwood: { a: '#7c6650', b: '#9c8468', dark: '#40342a', gnarl: 0.09, gnarlFreq: 30 },
-  rubble: { a: '#dcd2bc', b: '#ece4d2', dark: '#9c907a', gnarl: 0.18, gnarlFreq: 60 },
+  spiderwood: { a: '#8e6c4a', b: '#b8966c', dark: '#4e3a28', gnarl: 0.14, gnarlFreq: 40, lobes: 0.12, knots: 4, twigs: 26, weather: 0.25, knot: '#4a3220', fresh: '#c8a878' },
+  'redmoor-root': { a: '#6c3e2c', b: '#8c5440', dark: '#3a2016', gnarl: 0.12, gnarlFreq: 45, lobes: 0.1, knots: 4, twigs: 18, weather: 0.15, knot: '#2e1a10', fresh: '#a8724e' },
+  manzanita: { a: '#6e3a2a', b: '#8e4e38', dark: '#3e2018', gnarl: 0.06, gnarlFreq: 25, lobes: 0.08, knots: 3, twigs: 6, weather: 0.12, knot: '#3a1c12', fresh: '#b07a52' },
+  mopani: { a: '#3e2618', b: '#4e301e', dark: '#24160c', gnarl: 0.28, gnarlFreq: 14, twoTone: '#a8855a', lobes: 0.2, knots: 3, twigs: 0, weather: 0.1, knot: '#1e120a', fresh: '#a8855a' },
+  malaysian: { a: '#44301f', b: '#5e422c', dark: '#24180f', gnarl: 0.16, gnarlFreq: 18, grooves: 0.12, lobes: 0.16, knots: 3, twigs: 0, weather: 0.15, knot: '#1e140c', fresh: '#7a5a3a' },
+  cholla: { a: '#a88c64', b: '#c2a67a', dark: '#5e4a32', gnarl: 0.04, gnarlFreq: 20, lobes: 0.03, knots: 0, twigs: 0, weather: 0.1, knot: '#5e4a32', fresh: '#c2a67a' },
+  branchwood: { a: '#6e5a46', b: '#9a8266', dark: '#3a2e24', gnarl: 0.1, gnarlFreq: 30, lobes: 0.1, knots: 5, twigs: 5, weather: 0.35, knot: '#30241a', fresh: '#b0946c' },
+  rubble: { a: '#dcd2bc', b: '#ece4d2', dark: '#9c907a', gnarl: 0.18, gnarlFreq: 60, lobes: 0.15, knots: 0, twigs: 0, weather: 0, knot: '#9c907a', fresh: '#f2ecdc' },
 };
 
+/**
+ * Render-only fine twigs (not part of the shared shape, so colliders and epiphyte anchors are
+ * unaffected): short, tapering side shoots and broken stubs along the wood.
+ */
+function woodTwigs(branches: Branch[], perMeter: number, seed: number, sizeK: number): Branch[] {
+  if (perMeter <= 0) return [];
+  const rng = new Rng(seed ^ 0x7a1c);
+  const out: Branch[] = [];
+  for (const b of branches) {
+    let len = 0;
+    for (let i = 1; i < b.pts.length; i++) len += Math.hypot(b.pts[i][0] - b.pts[i - 1][0], b.pts[i][1] - b.pts[i - 1][1], b.pts[i][2] - b.pts[i - 1][2]);
+    // Thick trunks carry fewer twigs than the fine crown.
+    const n = Math.floor(len * perMeter * (b.depth > 0 ? 1.4 : 0.6) + rng.next());
+    for (let k = 0; k < n; k++) {
+      const i = 1 + Math.floor(rng.next() * Math.max(1, b.pts.length - 2));
+      if (i >= b.pts.length - 1) continue;
+      const base = b.pts[i];
+      if (base[1] < 0.004) continue; // not under the sand
+      const tan = vnorm3([b.pts[i + 1][0] - b.pts[i - 1][0], b.pts[i + 1][1] - b.pts[i - 1][1], b.pts[i + 1][2] - b.pts[i - 1][2]]);
+      const rnd = vnorm3([rng.range(-1, 1), rng.range(-0.4, 1), rng.range(-1, 1)]);
+      let d = vnorm3([tan[0] * 0.55 + rnd[0], tan[1] * 0.55 + rnd[1] + 0.25, tan[2] * 0.55 + rnd[2]]);
+      const r0 = Math.min(b.r[i] * 0.45, 0.0017 * sizeK) * rng.range(0.7, 1.1);
+      if (r0 < 0.0005) continue;
+      // Some are long, wiry shoots; many are short stubs.
+      const L = (rng.chance(0.35) ? rng.range(0.03, 0.065) : rng.range(0.008, 0.025)) * sizeK;
+      const steps = 4;
+      const pts: V3[] = [[base[0] - d[0] * b.r[i] * 0.5, base[1] - d[1] * b.r[i] * 0.5, base[2] - d[2] * b.r[i] * 0.5]];
+      const rs: number[] = [r0];
+      let p = pts[0];
+      for (let s = 1; s <= steps; s++) {
+        d = vnorm3([d[0] + rng.range(-0.25, 0.25), d[1] + rng.range(-0.2, 0.25), d[2] + rng.range(-0.25, 0.25)]);
+        p = [p[0] + d[0] * (L / steps), p[1] + d[1] * (L / steps), p[2] + d[2] * (L / steps)];
+        if (p[1] < 0.002) p[1] = 0.002;
+        pts.push(p);
+        rs.push(r0 * (1 - 0.55 * (s / steps)));
+      }
+      out.push({ pts, r: rs, parent: -1, depth: b.depth + 1 });
+    }
+  }
+  return out;
+}
+
+function vnorm3(v: V3): V3 {
+  const l = Math.hypot(v[0], v[1], v[2]) || 1;
+  return [v[0] / l, v[1] / l, v[2] / l];
+}
+
 function woodGeometry(item: DecorItem, shape: DecorShape, quality: Quality): BufferGeometry {
-  const look = WOOD_LOOK[shape.kind === 'coral-skeleton' ? 'rubble' : shape.style] ?? WOOD_LOOK.branchwood;
+  const rubble = shape.kind === 'coral-skeleton';
+  const look = WOOD_LOOK[rubble ? 'rubble' : shape.style] ?? WOOD_LOOK.branchwood;
   const noise = new Noise3(item.seed ^ 0x77);
+  const prng = new Rng(item.seed ^ 0x3d17);
   const q = quality === 'low' ? 0.6 : quality === 'medium' ? 0.8 : quality === 'ultra' ? 1.25 : 1;
-  const A = lin(look.a), B = lin(look.b), D = lin(look.dark), T2 = look.twoTone ? lin(look.twoTone) : null;
+  // Every piece of wood has its own tone: lighter/darker, warmer/cooler.
+  const tone = prng.range(0.84, 1.14);
+  const warm: [number, number, number] = [1 + prng.range(-0.05, 0.07), 1, 1 - prng.range(-0.05, 0.08)];
+  const A = mul3(lin(look.a), tone), B = mul3(lin(look.b), tone), D = lin(look.dark), T2 = look.twoTone ? lin(look.twoTone) : null;
+  const K = lin(look.knot), F = lin(look.fresh);
   const gb = new GeoBuilder();
   const branches = shape.branches ?? [];
-  addTubes(gb, branches, {
-    segments: (r) => Math.round((r > 0.02 ? 12 : r > 0.008 ? 9 : r > 0.004 ? 7 : 5) * q),
+  // Twigs are generated in the item's local space at natural size (scale is applied by the group).
+  const twigs = quality === 'low' ? [] : woodTwigs(branches, look.twigs * (quality === 'medium' ? 0.7 : 1), item.seed, 1);
+  const all = twigs.length ? [...branches, ...twigs] : branches;
+  const nShape = branches.length;
+  addTubes(gb, all, {
+    segments: (r) => Math.round((r > 0.02 ? 14 : r > 0.008 ? 10 : r > 0.004 ? 7 : r > 0.0018 ? 5 : 4) * q),
     gnarl: look.gnarl,
     gnarlFreq: look.gnarlFreq,
     grooves: look.grooves,
     grooveCount: 5,
+    lobes: look.lobes,
+    knots: look.knots,
     capTips: !shape.hollow,
+    // Fine ends taper to points; anything thicker ended in a break (driftwood is snapped wood).
+    tip: (r, bi) => (bi >= nShape || r < 0.0028 ? 'point' : rubble ? 'round' : 'broken'),
+    // Trunk butts lying on (not buried in) the sand are snapped off too.
+    capStart: (r, bi, depth, start) => (shape.hollow || depth > 0 || bi >= nShape || start[1] < -r * 0.6 ? 'open' : rubble ? 'round' : 'broken'),
     subdiv: quality === 'low' ? 1 : 2,
     hollow: shape.hollow ? 0.78 : undefined,
     seed: item.seed,
-    color: (p, n, along, t, bi, depth) => {
+    color: (p, n, along, t, bi, depth, _around, mark) => {
       const g = noise.fbm(along * 9 + bi, p[1] * 3, bi * 0.7, 3) * 0.5 + 0.5;
       let c = mix3(A, B, smoothstep(0.25, 0.8, g));
-      // Long streaks along the grain.
-      c = mul3(c, 0.88 + 0.24 * (noise.noise(along * 2.5 + bi * 3, Math.atan2(n[2], n[0]) * 1.2, 0.3) * 0.5 + 0.5));
+      // Grain: long streaks along the fibres, from fine lines to broad bands.
+      const ang = Math.atan2(n[2], n[0]);
+      const streak = noise.noise(along * 2.5 + bi * 3, ang * 1.2, 0.3) * 0.6 + noise.noise(along * 7 + bi, ang * 3.1, 2.7) * 0.4;
+      c = mul3(c, 0.84 + 0.3 * (streak * 0.5 + 0.5));
       if (T2) {
         // Mopani: pale sapwood showing through dark heartwood in sandblasted patches.
         const s = noise.fbm(along * 6 + bi * 2, n[0] * 1.5, n[2] * 1.5 + p[1] * 8, 3) * 0.5 + 0.5;
         c = mix3(c, T2, smoothstep(0.48, 0.6, s) * 0.85);
       }
+      // Weathering: upper faces bleach toward silver-grey, patchily.
+      if (look.weather > 0) {
+        const lum = (c[0] + c[1] + c[2]) / 3;
+        const silver: [number, number, number] = [lum * 1.35, lum * 1.33, lum * 1.28];
+        const patch = smoothstep(0.35, 0.75, noise.fbm(p[0] * 30 + 5, p[1] * 30, p[2] * 30, 2) * 0.5 + 0.5);
+        c = mix3(c, silver, look.weather * smoothstep(0.1, 0.85, n[1]) * (0.4 + 0.6 * patch));
+      }
+      if (mark > 0) c = mix3(c, K, Math.min(1, mark * 1.2) * 0.8);
+      else if (mark < 0) c = mix3(c, F, -mark * 0.75);
       // Crotches (young branch bases) and undersides are shaded; contact with sand darker still.
       let a = 1;
       if (depth > 0) a *= 0.72 + 0.28 * smoothstep(0, 0.12, t);
-      a *= 0.86 + 0.14 * clamp01(n[1] * 0.5 + 0.6);
-      a *= shape.kind === 'coral-skeleton' ? 0.85 + 0.15 * smoothstep(-0.003, 0.01, p[1]) : 0.6 + 0.4 * smoothstep(-0.005, 0.025, p[1]);
+      a *= 0.8 + 0.2 * clamp01(n[1] * 0.5 + 0.6);
+      a *= rubble ? 0.85 + 0.15 * smoothstep(-0.003, 0.01, p[1]) : 0.6 + 0.4 * smoothstep(-0.005, 0.025, p[1]);
       c = mix3(c, D, (1 - a) * 0.6);
-      return mul3(c, 0.75 + 0.25 * a);
+      c = mul3(c, 0.75 + 0.25 * a);
+      return [c[0] * warm[0], c[1] * warm[1], c[2] * warm[2]];
     },
   });
   return gb.build();
@@ -476,7 +351,8 @@ function addShell(gb: GeoBuilder, s: ShellPart, conch: boolean): void {
   const k = Math.log(W) / (Math.PI * 2);
   const ratio = conch ? 0.62 : 0.86; // aperture radius / distance from axis
   const spire = conch ? 1.25 : 0.55; // axial drop per radius
-  const nT = Math.round(turns * 34), nS = 22;
+  // Escargot shells are 3–4 cm: a lighter sweep keeps a cluster of them to a few thousand tris.
+  const nT = Math.round(turns * (conch ? 30 : 20)), nS = conch ? 20 : 14;
   const thetaMax = turns * Math.PI * 2;
   const pts: number[][] = [];
   let maxR = 0;
@@ -687,7 +563,7 @@ export function buildDecor(item: DecorItem, ctx: BuildCtx): BuiltDecor {
   switch (item.kind) {
     case 'rock':
     case 'cave':
-      if (shape.sdf) add(sdfRockGeometry(item, shape, ctx.quality), hardscapeMaterial(shape.style));
+      if (shape.sdf) add(rockGeometry(ctx.rock ?? meshRock(item, ctx.rockCells ?? ROCK_CELLS[ctx.quality])), hardscapeMaterial(shape.style));
       else if (shape.tube) add(clayTubeGeometry(shape, item.seed), hardscapeMaterial('clay-tube'));
       break;
     case 'driftwood':

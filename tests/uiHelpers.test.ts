@@ -11,7 +11,14 @@ import {
   pluralName,
   timeScaleLabel,
   humanActivity,
+  localizeUnits,
+  formatFlow,
+  scheduleIsOn,
 } from '../src/ui/format';
+import { searchRank } from '../src/ui/panels/FishPanel';
+import { birthMessage } from '../src/ui/Notifier';
+import { ThumbnailLoader } from '../src/ui/thumbs';
+import type { FishRenderer } from '../src/render/fish/FishRenderer';
 import { assessWater, computeNeeds } from '../src/ui/waterHealth';
 import { foodMatch, bestFood } from '../src/ui/panels/FeedPanel';
 import { FOODS } from '../src/data/foods';
@@ -152,5 +159,73 @@ describe('audio synthesis', () => {
     const tap = glassTapSamples(8000, rnd);
     expect(tap.every((v) => Number.isFinite(v))).toBe(true);
     expect(bubbleBank(8000, 6, 0.001, 0.003, rnd)).toHaveLength(6);
+  });
+});
+
+describe('review regressions (UI)', () => {
+  it('rewrites metric quantities from other modules for imperial viewers', () => {
+    const u = 'imperial' as const;
+    expect(localizeUnits('Arrow cichlids need at least 300 L; this tank holds about 252 L.', u)).toBe(
+      'Arrow cichlids need at least 79 gal; this tank holds about 67 gal.',
+    );
+    expect(localizeUnits('They like 23–29 °C; the water is 25.5 °C.', u)).toBe('They like 73–84 °F; the water is 77.9 °F.');
+    expect(localizeUnits('Adult Oscars (35 cm) eat anything', u)).toBe('Adult Oscars (14 in) eat anything');
+    expect(localizeUnits('Flow 1,500 L/h', u)).toBe('Flow 396 gal/h');
+    expect(localizeUnits('Ammonia 0.25 mg/L · Lights', u)).toBe('Ammonia 0.25 mg/L · Lights');
+    expect(localizeUnits('They like 23–29 °C', 'metric')).toBe('They like 23–29 °C');
+    expect(formatFlow(1500, 'metric')).toBe('1,500 L/h');
+  });
+
+  it('water issues follow the display units', () => {
+    const needs = computeNeeds(fishOf('paracheirodon-innesi', 10), 'freshwater');
+    const wp = { ...defaultWaterParams('freshwater', 0), temperatureC: 31 };
+    const t = assessWater(wp, 'freshwater', needs, 'imperial').issues.find((i) => i.key === 'temperature')!.text;
+    expect(t).toMatch(/°F/);
+    expect(t).not.toMatch(/°C/);
+  });
+
+  it('light schedules that run past midnight are on after dark', () => {
+    expect(scheduleIsOn(13, 9, 21)).toBe(true);
+    expect(scheduleIsOn(22, 9, 21)).toBe(false);
+    expect(scheduleIsOn(23, 18, 2)).toBe(true);
+    expect(scheduleIsOn(1.5, 18, 2)).toBe(true);
+    expect(scheduleIsOn(12, 18, 2)).toBe(false);
+    expect(scheduleIsOn(12, 8, 8)).toBe(false);
+  });
+
+  it('catalog search puts the exact name first', () => {
+    const names: [string, string][] = [
+      ['Albino Neon Tetra', 'Paracheirodon innesi'],
+      ['Black Neon Tetra', 'Hyphessobrycon herbertaxelrodi'],
+      ['Neon Tetra', 'Paracheirodon innesi'],
+      ['Green Neon Tetra', 'Paracheirodon simulans'],
+    ];
+    const ranked = [...names].sort((a, b) => searchRank(a[0], a[1], 'neon tetra') - searchRank(b[0], b[1], 'neon tetra'));
+    expect(ranked[0][0]).toBe('Neon Tetra');
+    expect(searchRank('Neon Tetra', 'Paracheirodon innesi', 'neon')).toBeLessThan(searchRank('Black Neon Tetra', 'x', 'neon'));
+    expect(searchRank('Cardinal Tetra', 'Paracheirodon axelrodi', 'paracheirodon')).toBe(3);
+    expect(searchRank('Anything', 'x', '')).toBe(0);
+  });
+
+  it('brood messages read naturally for fish and invertebrates', () => {
+    expect(birthMessage('Neon Tetra', 'fish', 1)).toBe('A Neon tetra fry was born');
+    expect(birthMessage('Guppy', 'fish', 7)).toBe('7 Guppy fry were born');
+    expect(birthMessage('Cherry Shrimp', 'shrimp', 12)).toBe('12 young Cherry shrimp appeared');
+    expect(birthMessage('Ramshorn Snail', 'snail', 3)).toBe('3 young Ramshorn snails appeared');
+  });
+
+  it('portrait requests scrolled out of view are dropped, others kept', () => {
+    const never = new Promise<string>(() => {});
+    const loader = new ThumbnailLoader({ thumbnail: () => never } as unknown as FishRenderer);
+    const sp = (id: string) => ({ id }) as unknown as Species;
+    loader.request(sp('a'), 128, () => {}, 'catalog'); // starts rendering immediately
+    loader.request(sp('b'), 128, () => {}, 'catalog');
+    loader.request(sp('c'), 128, () => {}, 'catalog');
+    loader.request(sp('d'), 256, () => {}); // a detail page portrait
+    expect(loader.pending).toBe(3);
+    loader.cancelPending('catalog', (id) => id === 'c');
+    expect(loader.pending).toBe(2); // c (still visible) and d (not the catalog's)
+    loader.cancelPending();
+    expect(loader.pending).toBe(0);
   });
 });

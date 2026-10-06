@@ -371,7 +371,8 @@ function genZoanthid(a: GenArgs, paly: boolean): void {
     stripes: { count: 24, amount: 0.25 },
     seed: 13,
   });
-  const discs = use(out, discPart(`${sp.id}/oral`, (r) => -0.08 * (1 - r) + 0.05 * r * r, { map: tex, transl: 0.4, roughness: 0.35, fluor: fluorOf(sp, 0.9) }));
+  // Polyps are ~1 cm across and there are dozens: a coarse disc is plenty.
+  const discs = use(out, discPart(`${sp.id}/oral`, (r) => -0.08 * (1 - r) + 0.05 * r * r, { map: tex, transl: 0.4, roughness: 0.35, fluor: fluorOf(sp, 0.9) }, { rings: 3, segs: 14 }));
   const tent = use(out, tentaclePart(`${sp.id}/tent`, { rr: 0.14, taper: 0.7, tip: 'point', rows: 3, radial: 4 }, { transl: 0.5, roughness: 0.5, fluor: fluorOf(sp, 0.3) }, { base: lin(sp.color), tip: mulRGB(lin(sp.color), [1.15, 1.15, 1.1]), from: 0.2 }));
   const n = Math.round((paly ? 8 + 30 * g : 12 + 60 * g) * ctx.density);
   const R = Math.max(0.015, m.spread / 2);
@@ -454,7 +455,7 @@ function genDuncan(a: GenArgs): void {
   const sprigs = growSprigs(rng, m.anchor, up, { trunks: Math.round(2 + 4 * g), len: H * 0.7, r0: 0.0055, tipR: 0.0055, spread: 0.6, branchProb: 0.25, angle: [0.3, 0.6], depth: 1, wander: 0.1, upBias: 0.15, step: 0.008 });
   const skel = lin('#7a6e5e');
   uniqueMesh(out, sprigMesh(sprigs, () => skel, [m.anchor[1], 1, 0, 0], 7, false), { roughness: 0.8, transl: 0.05, detail: { freq: 600, bump: 0.0003, pores: 0.5, albedoVar: 0.15 } });
-  const disc = use(out, discPart(`${sp.id}/oral`, (r) => 0.06 * (1 - r * r) - 0.1 * Math.exp(-r * r * 40), { map: radialTexture({ base: sp.color, center: mixHex(sp.color, '#ffffff', 0.35), stripes: { count: 20, amount: 0.3 }, seed: 17 }), transl: 0.5, roughness: 0.35, fluor: fluorOf(sp, 0.5) }));
+  const disc = use(out, discPart(`${sp.id}/oral`, (r) => 0.06 * (1 - r * r) - 0.1 * Math.exp(-r * r * 40), { map: radialTexture({ base: sp.color, center: mixHex(sp.color, '#ffffff', 0.35), stripes: { count: 20, amount: 0.3 }, seed: 17 }), transl: 0.5, roughness: 0.35, fluor: fluorOf(sp, 0.5) }, { rings: 4, segs: 16 }));
   const tent = use(out, tentaclePart(`${sp.id}/tent`, { rr: 0.1, taper: 0.4, tip: 'knob', rows: 4, radial: 5 }, { transl: 0.6, roughness: 0.4, fluor: fluorOf(sp, 0.6) }, { base: lin(sp.color2 ?? sp.color), tip: mulRGB(lin(sp.color2 ?? sp.color), [1.2, 1.2, 1.2]), from: 0.6 }));
   const ph = rng.range(0, 6.28);
   for (const s of sprigs) {

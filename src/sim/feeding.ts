@@ -1,7 +1,46 @@
 import type { FishEntity, FoodKind, FoodType, Species, Zone } from '../core/types';
 import type { World } from '../core/world';
 import { FOODS } from '../data/foods';
-import { FOOD_DRY_MG, massG, stomachCapacityMg } from './biology';
+import {
+  FOOD_DRY_MG,
+  NEED_STOMACHS_PER_DAY_REF,
+  asymptoticLength,
+  massG,
+  metabolicFactor,
+  sizeRateScale,
+  stomachCapacityMg,
+} from './biology';
+
+/**
+ * Daily ration (mg of dry food per day) the current animals need at the current water
+ * temperature — maintenance plus growth, as the life sim meters it. With `adult`, every animal
+ * counts at its adult size: what the tank will need once the stock has grown.
+ */
+export function dailyFoodNeedMg(world: Pick<World, 'fish' | 'tank'>, adult = false): number {
+  const met = metabolicFactor(world.tank.waterParams.temperatureC);
+  let need = 0;
+  for (const f of world.fish) {
+    const w = massG(f.species, adult ? Math.max(f.state.lengthCm, asymptoticLength(f.species, f.state)) : f.state.lengthCm);
+    need += NEED_STOMACHS_PER_DAY_REF * sizeRateScale(w) * met * stomachCapacityMg(w);
+  }
+  return need;
+}
+
+/** Dry mass (mg) of one pinch of `kind`. */
+export function pinchMg(kind: FoodKind): number {
+  const f = FOODS[kind];
+  return f ? f.particlesPerPinch * (FOOD_DRY_MG[kind] ?? 1) : 0;
+}
+
+/**
+ * Auto-feeder portion (pinches per feeding, 1–20) that covers what the stock will need as adults
+ * when fed `feedsPerDay` times a day — the setting an experienced keeper would dial in.
+ */
+export function recommendedPinches(world: Pick<World, 'fish' | 'tank'>, kind: FoodKind, feedsPerDay: number): number {
+  const per = pinchMg(kind);
+  if (!(per > 0) || !(feedsPerDay > 0) || world.fish.length === 0) return 1;
+  return Math.max(1, Math.min(20, Math.round(dailyFoodNeedMg(world, true) / feedsPerDay / per)));
+}
 
 /**
  * Feeding without particles: used by the auto-feeder during catch-up (and at time scales where

@@ -102,7 +102,7 @@ export function createFishMaterials(
   const inv = !!sk.invertebrate;
   const bodySkin = new Vector4(
     inv ? 0.12 + 0.3 * translucency : 0.15 + 0.32 * translucency + 0.08 * smallK,
-    inv ? 0.5 * translucency : 0.7 * translucency + 0.08 * smallK,
+    inv ? 0.5 * translucency : 0.7 * translucency + 0.3 * smallK,
     sk.scaleCols > 0 ? 1 : 0,
     inv ? 0.25 * translucency : 0.3 * smallK + 0.35 * translucency,
   );

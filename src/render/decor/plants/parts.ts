@@ -97,7 +97,9 @@ export function spherePart(kind: 'matte' | 'glossy' | 'vesicle'): PartDef {
       side: FrontSide,
       fluor: kind === 'vesicle' ? new Color(0.25, 0.35, 0.3) : kind === 'glossy' ? new Color(0.5, 0.8, 0.3) : undefined,
     });
-    return { geometry: unitSphere(kind === 'matte' ? 2 : 2), material, depth, bend: false, castShadow: kind !== 'vesicle' };
+    // Grapes, bumps and bulbs are a few millimetres across: 80 triangles are plenty; bubble-coral
+    // vesicles are centimetre-sized and glossy, so they keep the smoother sphere.
+    return { geometry: unitSphere(kind === 'vesicle' ? 2 : 1), material, depth, bend: false, castShadow: kind !== 'vesicle' };
   });
 }
 
@@ -135,10 +137,10 @@ export function tentaclePart(
 }
 
 /** Disc part (mushroom coral, oral disc, lily pad) — profile baked per key. */
-export function discPart(key: string, profile: (r: number, th: number) => number, mat: { map?: Texture; transl: number; roughness: number; fluor?: Color }): PartDef {
+export function discPart(key: string, profile: (r: number, th: number) => number, mat: { map?: Texture; transl: number; roughness: number; fluor?: Color }, res: { rings: number; segs: number } = { rings: 8, segs: 28 }): PartDef {
   return getPart(key, () => {
     const { material, depth } = plantMaterial({ map: mat.map, bend: false, transl: mat.transl, roughness: mat.roughness, fluor: mat.fluor, side: DoubleSide });
-    return { geometry: disc(8, 28, profile, true), material, depth, bend: false, castShadow: true };
+    return { geometry: disc(res.rings, res.segs, profile, true), material, depth, bend: false, castShadow: true };
   });
 }
 

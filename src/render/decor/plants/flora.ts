@@ -12,6 +12,7 @@ import type { PlantSpecies } from '../../../core/types';
 import { Rng } from '../../../core/rng';
 import { Noise3, smoothstep } from '../../../decor/noise';
 import { sampleHostSurface, type V3 } from '../../../decor/shapes';
+import { MAX_GROWTH, spreadAt } from '../../../decor/plantMetrics';
 import { GeoBuilder, icosphere } from '../geom';
 import { applyUnderwater } from '../../underwater';
 import { patchPlant, patchSurfaceDetail } from '../shaders';
@@ -282,55 +283,67 @@ function dotp(a: V3, b: V3): number {
 // Carpets & grasses
 // ---------------------------------------------------------------------------------------------
 
+/**
+ * Carpets spread by runners: every leaf/tile has a fixed spot (an absolute "slot" inside the
+ * largest patch the plant can reach) and simply appears once the patch edge reaches it. Growth
+ * steps therefore add leaves at the rim instead of reshuffling the whole lawn.
+ */
 export function genCarpet({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const list = use(out, speciesLeaf(sp));
   const R = Math.max(0.015, m.spread / 2);
+  const Rmax = Math.max(R, spreadAt(sp, MAX_GROWTH) / 2);
+  const edgeNoise = new Noise3(p.seed ^ 0x2f);
+  const edge = (a: number) => 1 + 0.22 * edgeNoise.noise(Math.cos(a) * 2, Math.sin(a) * 2, 0.5);
   // Underlayer: ground-hugging cards painted with densely packed leaves, so the carpet reads
   // as a closed mat between the individual 3D leaves.
   const matTex = { outline: 'carpet-mat' as const, width: 128, height: 128, base: sp.color, tip: sp.color2 ?? sp.color, seed: 31 };
   const mats = use(out, leafPart(`${sp.id}/mat`, matTex, { rows: 1, cols: 2 }, { transl: 0.2, roughness: 0.75, shadow: false }));
   const tile = 0.032;
-  const nTiles = Math.round(((Math.PI * R * R) / (tile * tile)) * 1.7);
+  const nTiles = Math.min(1500, Math.round(((Math.PI * Rmax * Rmax) / (tile * tile)) * 1.7));
   const matNoise = new Noise3(p.seed ^ 77);
   for (let i = 0; i < nTiles; i++) {
-    const a = rng.range(0, Math.PI * 2);
-    const rr = Math.sqrt(rng.next()) * (R - tile * 0.3);
+    const r = subRng(p.seed ^ 0x6d61, i);
+    const a = r.range(0, Math.PI * 2);
+    const rr = Math.sqrt(r.next()) * Rmax;
+    if (rr > (R - tile * 0.3) * edge(a)) continue;
     const x = m.anchor[0] + Math.cos(a) * rr, z = m.anchor[2] + Math.sin(a) * rr;
     if (matNoise.noise(x * 40, z * 40, 0.7) < -0.35) continue;
-    const yaw = rng.range(0, Math.PI * 2);
+    const yaw = r.range(0, Math.PI * 2);
     const d: V3 = [Math.cos(yaw), 0, Math.sin(yaw)];
-    const s = tile * rng.range(0.85, 1.25);
-    const y = ctx.ground(x, z) + 0.0012 + rng.next() * 0.001;
-    pushLeaf(mats, [x - d[0] * s * 0.5, y, z - d[2] * s * 0.5], d, scl(UP, -1), s, s, tint(rng, 0.1, p.health, 0.9), [m.anchor[1], 0.02, 0, 0], [0, 0, 0, 0]);
+    const s = tile * r.range(0.85, 1.25);
+    const y = ctx.ground(x, z) + 0.0012 + r.next() * 0.001;
+    pushLeaf(mats, [x - d[0] * s * 0.5, y, z - d[2] * s * 0.5], d, scl(UP, -1), s, s, tint(r, 0.1, p.health, 0.9), [m.anchor[1], 0.02, 0, 0], [0, 0, 0, 0]);
   }
   const leafLen = cm(sp.leafLength, 0.6);
   const leafW = cm(sp.leafWidth, sp.leafLength ?? 0.5);
   const Hc = Math.max(0.006, m.height);
-  const area = Math.PI * R * R;
-  const count = Math.min(3000, Math.round((area / (leafLen * leafW)) * 1.1 * ctx.density));
+  const slots = Math.min(4000, Math.round(((Math.PI * Rmax * Rmax) / (leafLen * leafW)) * 1.1 * ctx.density));
   const noise = new Noise3(p.seed);
   const flex = flexOf(sp);
   const ph = phase(rng);
   const upright = has(sp, /glossostigma/) ? 0.5 : 1;
-  for (let i = 0; i < count; i++) {
-    const a = rng.range(0, Math.PI * 2);
-    const rr = Math.sqrt(rng.next());
-    const edge = 1 + 0.22 * noise.noise(Math.cos(a) * 2, Math.sin(a) * 2, 0.5);
-    const x = m.anchor[0] + Math.cos(a) * rr * R * edge;
-    const z = m.anchor[2] + Math.sin(a) * rr * R * edge;
+  for (let i = 0; i < slots; i++) {
+    const r = subRng(p.seed, i);
+    const a = r.range(0, Math.PI * 2);
+    const ra = Math.sqrt(r.next()) * Rmax;
+    const reach = R * edge(a);
+    if (ra > reach) continue;
+    const rr = ra / reach;
+    const x = m.anchor[0] + Math.cos(a) * ra;
+    const z = m.anchor[2] + Math.sin(a) * ra;
     // Clumpy cover: thin out in patches, denser toward the middle.
     const clump = noise.noise(x * 40, z * 40, 1.3) * 0.5 + 0.5;
-    if (rng.next() > 0.35 + 0.65 * clump * (1.1 - rr * 0.4)) continue;
+    if (r.next() > 0.35 + 0.65 * clump * (1.1 - rr * 0.4)) continue;
     const mound = Math.sqrt(Math.max(0, 1 - rr * rr)) * (0.7 + 0.3 * clump);
-    const h = Hc * mound * rng.range(0.15, 1);
+    const h = Hc * mound * r.range(0.15, 1);
     const y = ctx.ground(x, z) + h;
-    const yaw = rng.range(0, Math.PI * 2);
-    const pitch = rng.range(0.7, 1.45) * upright + (1 - upright) * rng.range(0.3, 0.8);
+    const yaw = r.range(0, Math.PI * 2);
+    const pitch = r.range(0.7, 1.45) * upright + (1 - upright) * r.range(0.3, 0.8);
     const { dir, bend } = dirAround(UP, yaw, pitch);
-    const s = rng.range(0.75, 1.15);
+    const s = r.range(0.75, 1.15);
     const depthAO = 0.42 + 0.58 * (h / Hc);
-    const c = tint(rng, 0.14, p.health, depthAO);
-    pushLeaf(list, [x, y, z], dir, bend, leafW * s, leafLen * s, c, [m.anchor[1], Hc + 0.01, flex, ph + x * 30], [rng.range(-0.3, 0.2), rng.range(-0.3, 0.3), 0, 0]);
+    const c = tint(r, 0.14, p.health, depthAO);
+    pushLeaf(list, [x, y, z], dir, bend, leafW * s, leafLen * s, c, [m.anchor[1], Hc + 0.01, flex, ph + x * 30], [r.range(-0.3, 0.2), r.range(-0.3, 0.3), 0, 0]);
   }
 }
 
@@ -377,7 +390,15 @@ export function genMoss({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const g = m.growth;
   const R = Math.max(0.015, m.spread / 2);
   const H = Math.max(0.006, m.height);
-  const count = Math.round((80 + 420 * g) * ctx.density * Math.min(1.6, R / 0.06));
+  // Growth-stable sprigs: slots are laid out once over the largest cushion the moss can reach;
+  // a sprig shows when the cushion's edge has reached its spot and the cushion is dense enough
+  // for it (its threshold), so growing adds sprigs instead of reshuffling them.
+  const Rmax = Math.max(R, spreadAt(sp, MAX_GROWTH) / 2);
+  const fillAt = (gg: number) => 0.16 + 0.84 * ((80 + 420 * gg) / (80 + 420 * MAX_GROWTH));
+  const fill = fillAt(g);
+  // Same sprig density as a mature cushion always had: 500 sprigs per ~12 cm cushion at g = 1.
+  const R1 = Math.max(0.015, spreadAt(sp, 1) / 2);
+  const slots = Math.min(1600, Math.round((500 * ctx.density * Math.min(1.6, R1 / 0.06)) / (fillAt(1) * Math.min(1, (R1 / Rmax) ** 2))));
   const sprig = cm(sp.leafLength, 1.5);
   const christmas = has(sp, /montagnei/);
   const flame = has(sp, /flame/);
@@ -386,42 +407,59 @@ export function genMoss({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const flex = flexOf(sp);
   const ph = phase(rng);
   const host = m.hostId ? ctx.tank.decor.find((d) => d.id === m.hostId) : undefined;
-  const pts = host
-    ? sampleHostSurface(host, m.anchor, R, count, rng)
-    : Array.from({ length: count }, () => {
-        const a = rng.range(0, Math.PI * 2);
-        const rr = Math.sqrt(rng.next());
-        const x = m.anchor[0] + Math.cos(a) * rr * R, z = m.anchor[2] + Math.sin(a) * rr * R * 0.8;
-        const dome = Math.sqrt(Math.max(0, 1 - rr * rr));
-        const y = ctx.ground(x, z) + H * dome * rng.range(0.1, 0.9);
-        return { p: [x, y, z] as V3, n: norm([Math.cos(a) * rr, dome + 0.3, Math.sin(a) * rr]) };
+  const edgeNoise = new Noise3(p.seed ^ 0x3b);
+  const slotRng = new Rng((p.seed ^ 0x51ab) >>> 0);
+  const pts: { p: V3; n: V3; ra: number; a: number }[] = host
+    ? sampleHostSurface(host, m.anchor, Rmax, slots, slotRng).map((s) => {
+        const dx = s.p[0] - m.anchor[0], dy = s.p[1] - m.anchor[1], dz = s.p[2] - m.anchor[2];
+        return { p: s.p, n: s.n, ra: Math.hypot(dx, dy, dz), a: Math.atan2(dz, dx) };
+      })
+    : Array.from({ length: slots }, (_, i) => {
+        const r = subRng(p.seed ^ 0x6d6f, i);
+        const a = r.range(0, Math.PI * 2);
+        const ra = Math.sqrt(r.next()) * Rmax;
+        return { p: [m.anchor[0] + Math.cos(a) * ra, 0, m.anchor[2] + Math.sin(a) * ra * 0.8] as V3, n: UP, ra, a };
       });
-  for (const pt of pts) {
-    const n = pt.n;
-    const layer = rng.next();
-    const base = add(pt.p, n, layer * H * 0.7);
-    const rnd: V3 = [rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)];
+  for (let i = 0; i < pts.length; i++) {
+    const pt = pts[i];
+    const r = subRng(p.seed, i);
+    const reach = R * (1 + 0.18 * edgeNoise.noise(Math.cos(pt.a) * 2, Math.sin(pt.a) * 2, 0.5));
+    if (pt.ra > reach || r.next() > fill) continue;
+    let base: V3, n: V3;
+    const layer = r.next();
+    if (host) {
+      n = pt.n;
+      base = add(pt.p, n, layer * H * 0.7);
+    } else {
+      // Free cushion on the substrate: a low dome.
+      const rr = pt.ra / reach;
+      const dome = Math.sqrt(Math.max(0, 1 - rr * rr));
+      const y = ctx.ground(pt.p[0], pt.p[2]) + H * dome * (0.1 + 0.8 * layer);
+      n = norm([Math.cos(pt.a) * rr, dome + 0.3, Math.sin(pt.a) * rr]);
+      base = [pt.p[0], y, pt.p[2]];
+    }
+    const rnd: V3 = [r.range(-1, 1), r.range(-1, 1), r.range(-1, 1)];
     let dir: V3;
-    let curv = rng.range(-0.3, 0.5), twist = rng.range(-0.4, 0.4);
+    let curv = r.range(-0.3, 0.5), twist = r.range(-0.4, 0.4);
     if (christmas) {
       const [t1] = basis(n);
       dir = norm(add(add(scl(n, 0.3), t1, Math.cos(layer * 20)), rnd, 0.6));
-      curv = rng.range(-0.15, 0.15);
+      curv = r.range(-0.15, 0.15);
     } else if (flame) {
       dir = norm(add(add(scl(n, 0.45), UP, 0.8), rnd, 0.25));
-      twist = rng.range(1.5, 3.5);
-      curv = rng.range(0.2, 0.6);
+      twist = r.range(1.5, 3.5);
+      curv = r.range(0.2, 0.6);
     } else if (weeping) {
       dir = norm(add(add(scl(n, 0.5), UP, -0.55), rnd, 0.3));
-      curv = rng.range(0.3, 0.7);
+      curv = r.range(0.3, 0.7);
     } else if (phoenix) {
       dir = norm(add(add(scl(n, 1), UP, 0.3), rnd, 0.3));
     } else {
       dir = norm(add(n, rnd, 0.95));
     }
-    const s = rng.range(0.55, 1.25);
+    const s = r.range(0.55, 1.25);
     const L = sprig * s * (0.6 + 0.4 * g);
-    const c = tint(rng, 0.16, p.health, 0.5 + 0.5 * layer);
+    const c = tint(r, 0.16, p.health, 0.5 + 0.5 * layer);
     pushLeaf(list, base, dir, rnd, L * 0.55, L, c, [m.anchor[1] - 0.02, Math.max(0.04, H * 3), flex, ph + layer * 3], [curv, twist, 0, 0]);
   }
 }

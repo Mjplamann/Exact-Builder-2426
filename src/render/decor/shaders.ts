@@ -223,7 +223,14 @@ vec3 dcSway(vec3 wp, vec3 leafDir) {
   vec3 dcW = (dcM * vec4(transformed, 1.0)).xyz;
   vec3 dcDir = normalize(mat3(dcM) * vec3(0.0, 1.0, 0.0));
   vec3 dcOff = dcSway(dcW, dcDir);
-  transformed += inverse(mat3(dcM)) * dcOff;
+  // World offset back to object space. Plant matrices have orthogonal columns (rotation × scale),
+  // so the inverse is the transpose with each row divided by its squared scale — far cheaper
+  // per vertex than a general inverse().
+  mat3 dcR = mat3(dcM);
+  transformed += vec3(
+    dot(dcR[0], dcOff) / max(dot(dcR[0], dcR[0]), 1e-12),
+    dot(dcR[1], dcOff) / max(dot(dcR[1], dcR[1]), 1e-12),
+    dot(dcR[2], dcOff) / max(dot(dcR[2], dcR[2]), 1e-12));
   ${opts.depthOnly ? '' : selU ? 'vSel = uSelU;' : 'vSel = aSel;'}
   ${bend ? 'vGlow = aLeaf.z * smoothstep(0.25, 1.0, position.y);' : opts.glowAttr ? 'vGlow = aGlow;' : 'vGlow = 1.0;'}
   vAlong = position.y;

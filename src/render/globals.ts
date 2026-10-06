@@ -73,7 +73,7 @@ export const GLOBALS = {
    * Shadow softness: (penumbra per meter of occluder distance along the LED bar, across it,
    * minimum penumbra m, distance in m over which water scattering fills a shadow by 1/e).
    */
-  uShadowSoft: { value: new Vector4(0.3, 0.12, 0.002, 0.6) },
+  uShadowSoft: { value: new Vector4(0.24, 0.1, 0.002, 0.75) },
   /** Soft-shadow sample counts (blocker search, filter), by quality preset. */
   uShadowTaps: { value: new Vector2(10, 14) },
   /**

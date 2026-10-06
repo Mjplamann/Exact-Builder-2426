@@ -6,7 +6,7 @@ import { TIME_SCALES } from '../../core/clock';
 import type { Panel, UIHost } from '../context';
 import { button } from '../controls';
 import { h, setClass, setText } from '../dom';
-import { formatHour, formatLongDate, formatSimClock } from '../format';
+import { formatHour, formatLongDate, formatSimClock, scheduleIsOn } from '../format';
 import { icon } from '../icons';
 
 export class TimePanel implements Panel {
@@ -75,7 +75,7 @@ export class TimePanel implements Panel {
     const hr = w.env.hour;
     let light: string;
     if (!w.settings.dayNight) light = 'Day/night cycle is off — the lights stay on.';
-    else if (hr >= L.onHour && hr < L.offHour) light = `Lights on · they dim at ${formatHour(L.offHour)}`;
+    else if (scheduleIsOn(hr, L.onHour, L.offHour)) light = `Lights on · they dim at ${formatHour(L.offHour)}`;
     else light = `Night · lights come on at ${formatHour(L.onHour)}`;
     setText(this.lightEl, light);
     const paused = w.clock.paused;

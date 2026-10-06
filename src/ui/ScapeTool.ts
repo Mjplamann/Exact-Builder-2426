@@ -39,6 +39,7 @@ interface DragState {
 }
 
 const ROT_STEP = Math.PI / 12; // 15°
+const NO_COVER = { right: 0, bottom: 0 };
 const MIN_SCALE = 0.3;
 const MAX_SCALE = 3;
 
@@ -296,6 +297,19 @@ export class ScapeTool {
     }
   }
 
+  /**
+   * Abandon an item drag without a click (e.g. a second finger turned it into a pinch): keep
+   * whatever position was reached and bring attached epiphytes along.
+   */
+  cancelDrag(): void {
+    const d = this.drag;
+    if (!d) return;
+    this.drag = null;
+    if (!d.moved) return;
+    (this.applyDrag as unknown as { flush(): void }).flush();
+    if (d.kind === 'decor') this.carryAttached(d.id, d.start, d.last);
+  }
+
   isDragging(): boolean {
     return !!this.drag?.moved;
   }
@@ -330,7 +344,7 @@ export class ScapeTool {
       placed = app.addPlant(a.id, [p[0], p[2]]);
       if (placed && a.placement === 'epiphyte' && !this.warnedSubstrate) {
         this.warnedSubstrate = true;
-        this.host.toast('Tip: epiphytes grow best tied to wood or stone — click a piece of hardscape to attach them.', 'info');
+        this.host.toast(`Tip: epiphytes grow best tied to wood or stone — ${this.host.isTouch ? 'tap' : 'click'} a piece of hardscape to attach them.`, 'info');
       }
     }
     if (placed) app.select({ plantId: placed.id });
@@ -339,7 +353,7 @@ export class ScapeTool {
   private substrateHint(): void {
     if (this.warnedSubstrate) return;
     this.warnedSubstrate = true;
-    this.host.toast('Click on the substrate to place it.', 'info');
+    this.host.toast(`${this.host.isTouch ? 'Tap' : 'Click'} on the substrate to place it.`, 'info');
   }
 
   /** Wheel over the canvas: rotate (or resize with shift) the selection. Returns true if used. */
@@ -414,8 +428,12 @@ export class ScapeTool {
     const r = this.rect;
     const sx = r.left + ((this.v.x + 1) / 2) * r.width;
     const sy = r.top + ((1 - this.v.y) / 2) * r.height;
-    const x = Math.round(Math.min(window.innerWidth - 150, Math.max(150, sx)));
-    const y = Math.round(Math.min(window.innerHeight - 140, Math.max(80, sy - 14)));
+    // Stay clear of the open panel (side sheet on desktop, bottom sheet on phones) — the toolbar
+    // would otherwise slide underneath it. Half-width 150 px covers the toolbar on any screen.
+    const cover = this.host.coveredInsets?.() ?? NO_COVER;
+    const half = Math.min(150, (window.innerWidth - cover.right) / 2);
+    const x = Math.round(Math.min(window.innerWidth - cover.right - half, Math.max(half, sx)));
+    const y = Math.round(Math.min(window.innerHeight - Math.max(140, cover.bottom + 12), Math.max(80, sy - 14)));
     if (this.toolbar.hidden) this.toolbar.hidden = false;
     if (x !== this.tbX || y !== this.tbY) {
       this.tbX = x;

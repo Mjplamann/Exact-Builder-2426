@@ -38,6 +38,7 @@ export class GodRays {
   readonly mesh: Mesh<InstancedBufferGeometry, ShaderMaterial>;
   private material: ShaderMaterial;
   private count = 24;
+  private area = 0.6;
   private shadowMatrix = new Matrix4();
 
   constructor() {
@@ -169,9 +170,15 @@ export class GodRays {
     this.rebuild();
   }
 
-  /** Beams adapt to the tank in the shader; nothing to rebuild per tank. */
+  /** Fit the number of live beams to the tank's surface area (~45 per m², capped by quality). */
   build(tank: TankState): void {
-    void tankBounds(tank);
+    const b = tankBounds(tank);
+    this.area = 4 * b.halfW * b.halfD;
+    this.mesh.geometry.instanceCount = this.liveCount();
+  }
+
+  private liveCount(): number {
+    return Math.min(this.count, Math.max(4, Math.round(this.area * 45)));
   }
 
   private rebuild(): void {
@@ -199,7 +206,7 @@ export class GodRays {
     geo.setIndex(idx);
     geo.setAttribute('aSeed', new InstancedBufferAttribute(seeds, 4));
     geo.setAttribute('aIndex', new InstancedBufferAttribute(index, 1));
-    geo.instanceCount = this.count;
+    geo.instanceCount = this.liveCount();
     this.mesh.geometry.dispose();
     this.mesh.geometry = geo;
   }

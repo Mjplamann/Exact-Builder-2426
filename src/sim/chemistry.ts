@@ -157,6 +157,12 @@ export class Chemistry {
   loadN = 1;
   /** Last step's oxidation rates (mg N/day) for reporting. */
   lastNitrification = 0;
+  /**
+   * Smoothed ammonium the plants actually take up (mg N/day). In a densely planted tank the plants
+   * remove most of the ammonia before the nitrifiers see it, and the filter colony settles at the
+   * smaller share left for it — the tank is still fully "cycled" (ammonia stays at zero).
+   */
+  plantTanN = 0;
   private decor: DecorChem = { tanninRate: 0, bufferRate: 0, airstones: 0, area: 0, caves: 0 };
   private decorSig = -1;
 
@@ -168,6 +174,7 @@ export class Chemistry {
     this.aob = colony;
     this.nob = colony;
     this.pendingN = 0;
+    this.plantTanN = 0;
     this.decorSig = -1;
     this.refreshDecor(tank);
     // Start CO₂ at its equilibrium for the expected respiration, then pin the pH offset so the
@@ -305,14 +312,17 @@ export class Chemistry {
     let sNO3 = Math.max(0, wp.nitrate / NO3_PER_N) + oxN / v;
 
     // --- plant uptake: ammonium preferred, then nitrate ---------------------------------------
+    let plantTan = 0;
     if (inp.plantUptakeN > 0) {
       const cap = (inp.plantUptakeN * days) / v; // mg N/L this step
       const fromA = Math.min(sA * 0.9, cap * (sA / (0.05 + sA)));
       sA -= fromA;
+      plantTan = fromA * v;
       const rest = cap - fromA;
       const fromN = Math.min(sNO3 * 0.9, rest * (sNO3 / (0.4 + sNO3)));
       sNO3 -= fromN;
     }
+    this.plantTanN += (plantTan / Math.max(days, 1e-6) - this.plantTanN) * relax(days, 3);
     // Slow denitrification in anoxic pockets (deep sand, live rock interiors).
     const denit = marine ? 0.03 : 0.004;
     sNO3 *= Math.exp(-denit * days);
@@ -386,9 +396,11 @@ export class Chemistry {
     const lo = marine ? 7.3 : tank.water === 'brackish' ? 6.8 : 4.0;
     wp.ph = clamp(this.modelPh(wp), lo, 9.2);
 
-    // --- bacteria (relative to load) ----------------------------------------------------------
+    // --- biofiltration (relative to load) -----------------------------------------------------
+    // What the keeper's "is my tank cycled?" means: can the tank process the ammonia it makes?
+    // Nitrifier capacity plus the ammonium the plants are taking up, relative to production.
     const load = Math.max(0.3, this.loadN);
-    wp.bacteria = clamp(Math.min(this.aob, this.nob) / load, 0, 3);
+    wp.bacteria = clamp((Math.min(this.aob, this.nob) + this.plantTanN) / load, 0, 3);
 
     if (inp.zen) this.keepPristine(tank);
   }

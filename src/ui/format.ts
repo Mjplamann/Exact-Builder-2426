@@ -56,6 +56,31 @@ export function formatLiters(l: number, units: Units): string {
   return `${formatCount(l)} L`;
 }
 
+/** Volume flow: "1,500 L/h" / "396 gal/h". */
+export function formatFlow(lph: number, units: Units): string {
+  return units === 'imperial' ? `${formatCount(lph / L_PER_USGAL)} gal/h` : `${formatCount(lph)} L/h`;
+}
+
+const C_TO_F = (c: number) => (c * 9) / 5 + 32;
+const decimals = (s: string) => (s.includes('.') ? s.split('.')[1].length : 0);
+
+/**
+ * Messages written by other modules (compatibility notes, journal entries, sim notifications)
+ * use metric units. For imperial viewers, rewrite the quantities in place: "23–29 °C" → "73–84 °F",
+ * "25.5 °C" → "77.9 °F", "6 cm" → "2.4 in", "300 L" → "79 gal", "1,500 L/h" → "396 gal/h".
+ * Metric text is returned unchanged.
+ */
+export function localizeUnits(text: string, units: Units): string {
+  if (units !== 'imperial' || !text) return text;
+  const num = (s: string) => Number(s.replace(/,/g, ''));
+  return text
+    .replace(/(-?\d+(?:\.\d+)?)\s?[–-]\s?(-?\d+(?:\.\d+)?)\s?°C/g, (_m, a: string, b: string) => `${Math.round(C_TO_F(num(a)))}–${Math.round(C_TO_F(num(b)))} °F`)
+    .replace(/(-?\d+(?:\.\d+)?)\s?°C/g, (_m, a: string) => `${C_TO_F(num(a)).toFixed(decimals(a))} °F`)
+    .replace(/(\d[\d,]*(?:\.\d+)?)\s?cm\b/g, (_m, a: string) => formatLength(num(a), 'imperial'))
+    .replace(/(\d[\d,]*(?:\.\d+)?)\s?L\/h\b/g, (_m, a: string) => formatFlow(num(a), 'imperial'))
+    .replace(/(\d[\d,]*(?:\.\d+)?)\s?L\b(?!\/)/g, (_m, a: string) => formatLiters(num(a), 'imperial'));
+}
+
 export function formatRange(r: readonly [number, number], digits = 1): string {
   return `${trimNum(r[0], digits)}–${trimNum(r[1], digits)}`;
 }
@@ -125,6 +150,16 @@ export function formatDuration(ms: number): string {
     return `${hr} ${plural(hr, 'hour')}`;
   }
   return formatAge(ms);
+}
+
+/**
+ * Is a light schedule on at `hour`? Handles schedules that run past midnight (on 18:00 → off
+ * 02:00). Equal on/off hours mean "always off".
+ */
+export function scheduleIsOn(hour: number, onHour: number, offHour: number): boolean {
+  const wrap = (x: number) => ((x % 24) + 24) % 24;
+  const len = wrap(offHour - onHour);
+  return len > 0 && wrap(hour - onHour) < len;
 }
 
 let hourFmt: Intl.DateTimeFormat | null = null;

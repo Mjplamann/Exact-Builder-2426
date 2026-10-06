@@ -56,9 +56,13 @@ export interface SpeciesStats {
   invert: boolean;
   grazeGlass: number;
   grazeSurface: number;
+  /** Share of glass grazing that can scrape hard spot algae (nerites 1, plecos a little). */
+  grazeHard: number;
   plantEater: boolean;
   coralNipper: boolean;
   filterFeeder: boolean;
+  /** Small-prey hunter that picks micro-fauna (copepods, worms, larvae) from plants & substrate. */
+  forager: boolean;
   /** Hot species fields copied here so per-fish loops stay monomorphic (species JSON shapes vary). */
   adultMale: number;
   adultFemale: number;
@@ -197,9 +201,13 @@ export class Census {
       invert: isInvertebrate(sp),
       grazeGlass: g.glass,
       grazeSurface: g.surface,
+      grazeHard: sp.group === 'snail' ? 1 : sp.body.archetype === 'pleco' ? 0.3 : 0,
       plantEater: sp.traits.includes('plant-eater'),
       coralNipper: sp.traits.includes('coral-nipper'),
       filterFeeder: sp.diet === 'filter-feeder',
+      forager:
+        sp.group === 'fish' &&
+        (sp.diet === 'omnivore' || sp.diet === 'insectivore' || sp.diet === 'carnivore' || sp.diet === 'planktivore'),
       adultMale: sp.adultLengthCm * sexLengthScale(sp, 'male'),
       adultFemale: sp.adultLengthCm * sexLengthScale(sp, 'female'),
       adultOther: sp.adultLengthCm,

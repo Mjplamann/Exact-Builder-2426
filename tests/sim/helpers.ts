@@ -55,6 +55,8 @@ export function makeTank(
   });
   // A tank that has been running a couple of months (mature biofilm).
   tank.createdAt = now - 60 * 86_400_000;
+  // New tanks ship with the auto-feeder on; tests opt in explicitly with `feeder()`.
+  tank.equipment.autoFeeder.enabled = false;
   const world = createWorld({ tank, species: SPECIES, plants: PLANTS, settings: { ...DEFAULT_SETTINGS, careMode: opts.careMode ?? 'realistic' } });
   const sim = new LifeSim(world);
   return { world, sim };

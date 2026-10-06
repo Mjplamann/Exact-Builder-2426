@@ -268,7 +268,7 @@ export class Engine {
     // Shadow softness follows the source: the daylight bar is a long, wide emitter (soft,
     // elongated penumbrae); the moonlight is a couple of small LEDs (crisper, fainter shadows).
     const dayW = day / Math.max(1e-3, day + moon * 0.6);
-    GLOBALS.uShadowSoft.value.set(MathUtils.lerp(0.1, 0.3, dayW), MathUtils.lerp(0.05, 0.12, dayW), 0.002, MathUtils.lerp(0.8, 0.6, dayW));
+    GLOBALS.uShadowSoft.value.set(MathUtils.lerp(0.09, 0.24, dayW), MathUtils.lerp(0.05, 0.1, dayW), 0.002, MathUtils.lerp(0.9, 0.75, dayW));
 
     // Veil: light scattered toward the eye by the water itself. Its hue is the light after a
     // typical path through the water (red absorbed first), so it reads blue-green — or amber

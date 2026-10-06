@@ -1,4 +1,4 @@
-import type { BackgroundKind, Equipment, SubstrateKind, TankSize, TankState, WaterParams, WaterType } from '../core/types';
+import type { BackgroundKind, Equipment, FoodKind, SubstrateKind, TankSize, TankState, WaterParams, WaterType } from '../core/types';
 import type { PlantIndex } from '../data/plantIndex';
 import type { SpeciesIndex } from '../data/speciesIndex';
 import { AQUASCAPES } from '../decor/aquascapes';
@@ -21,6 +21,12 @@ export interface TankPreset extends TankPresetInfo {
   water: WaterType;
   waterParams?: Partial<WaterParams>;
   equipment?: { heaterC?: number; heaterOn?: boolean; colorTempK?: number };
+  /**
+   * The auto-feeder ships switched on with a staple the whole community eats, portioned for the
+   * stock once grown (tests/presets.test.ts checks it against the life sim's own ration), so the
+   * tank stays fed through ordinary absences and time-lapse. Hand-feeding adds treats on top.
+   */
+  feeder: { food: FoodKind; pinches: number; hours?: number[] };
   /** Stocking list; ids missing from the species index are skipped. */
   fish: { speciesId: string; count: number }[];
 }
@@ -38,6 +44,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'amazon',
     waterParams: { ph: 6.7, kh: 3, gh: 5 },
     equipment: { heaterC: 26 },
+    feeder: { food: 'flakes', pinches: 8 },
     fish: [
       { speciesId: 'paracheirodon-axelrodi', count: 16 },
       { speciesId: 'petitella-rhodostoma', count: 12 },
@@ -60,6 +67,7 @@ export const PRESETS: TankPreset[] = [
     substrate: 'aragonite',
     background: 'deep-blue',
     aquascape: 'reef',
+    feeder: { food: 'mysis', pinches: 10 },
     fish: [
       { speciesId: 'amphiprion-ocellaris', count: 2 },
       { speciesId: 'zebrasoma-flavescens', count: 1 },
@@ -85,6 +93,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'iwagumi',
     waterParams: { ph: 6.8 },
     equipment: { heaterC: 25 },
+    feeder: { food: 'flakes', pinches: 2 },
     fish: [
       { speciesId: 'trigonostigma-espei', count: 24 },
       { speciesId: 'otocinclus-vittatus', count: 4 },
@@ -104,6 +113,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'dutch',
     waterParams: { ph: 6.9 },
     equipment: { heaterC: 25.5 },
+    feeder: { food: 'flakes', pinches: 6 },
     fish: [
       { speciesId: 'petitella-bleheri', count: 14 },
       { speciesId: 'melanotaenia-praecox', count: 10 },
@@ -124,6 +134,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'malawi',
     waterParams: { ph: 8.0, kh: 10, gh: 12 },
     equipment: { heaterC: 26 },
+    feeder: { food: 'flakes', pinches: 12, hours: [9.5, 14, 18.5] },
     fish: [
       { speciesId: 'labidochromis-caeruleus', count: 8 },
       { speciesId: 'pseudotropheus-sp-acei', count: 7 },
@@ -143,6 +154,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'blackwater',
     waterParams: { ph: 6.0, kh: 1, gh: 2, tannins: 0.45 },
     equipment: { heaterC: 27, colorTempK: 5600 },
+    feeder: { food: 'flakes', pinches: 7 },
     fish: [
       { speciesId: 'dicrossus-filamentosus', count: 3 },
       { speciesId: 'hyphessobrycon-amandae', count: 12 },
@@ -164,6 +176,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'nano-shrimp',
     waterParams: { ph: 7.0, kh: 3, gh: 7 },
     equipment: { heaterC: 24 },
+    feeder: { food: 'micro-pellets', pinches: 2 },
     fish: [
       { speciesId: 'neocaridina-davidi-red-cherry', count: 20 },
       { speciesId: 'boraras-brigittae', count: 15 },
@@ -183,6 +196,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'goldfish',
     waterParams: { ph: 7.4, kh: 6, gh: 10, temperatureC: 21 },
     equipment: { heaterOn: false, heaterC: 20 },
+    feeder: { food: 'sinking-pellets', pinches: 5 },
     fish: [
       { speciesId: 'carassius-auratus-oranda-red-cap', count: 1 },
       { speciesId: 'carassius-auratus-oranda-red', count: 1 },
@@ -201,6 +215,7 @@ export const PRESETS: TankPreset[] = [
     aquascape: 'nature',
     waterParams: { ph: 6.6, kh: 3, gh: 5 },
     equipment: { heaterC: 25.5 },
+    feeder: { food: 'flakes', pinches: 5 },
     fish: [
       { speciesId: 'trigonostigma-heteromorpha', count: 16 },
       { speciesId: 'pangio-kuhlii', count: 6 },
@@ -229,6 +244,12 @@ export function buildPresetTank(preset: TankPreset, plants: PlantIndex, seed?: n
   }
   if (preset.equipment?.heaterOn !== undefined) eq.heater.on = preset.equipment.heaterOn;
   if (preset.equipment?.colorTempK !== undefined) eq.lights.colorTempK = preset.equipment.colorTempK;
+  eq.autoFeeder = {
+    enabled: true,
+    food: preset.feeder.food,
+    hours: [...(preset.feeder.hours ?? [9.5, 18])],
+    pinches: preset.feeder.pinches,
+  };
   const scape = AQUASCAPES.find((a) => a.id === preset.aquascape) ?? AQUASCAPES.find((a) => a.water === preset.water) ?? AQUASCAPES[0];
   const built = scape.build(tank, plants, tank.seed);
   tank.decor = built.decor;

@@ -80,14 +80,16 @@ export function surfaceNets(f: Field, min: [number, number, number], max: [numbe
   const vertexCount = pos.length / 3;
   const positions = new Float32Array(pos);
   const normals = new Float32Array(vertexCount * 3);
-  const e = cell * 0.5;
+  // Tetrahedral gradient: 4 field samples instead of 6 central differences (meshing hot path).
+  const e = cell * 0.29;
   for (let v = 0; v < vertexCount; v++) {
     let x = positions[v * 3], y = positions[v * 3 + 1], z = positions[v * 3 + 2];
     let gx = 0, gy = 0, gz = 0;
     for (let r = 0; r <= refine; r++) {
-      gx = f(x + e, y, z) - f(x - e, y, z);
-      gy = f(x, y + e, z) - f(x, y - e, z);
-      gz = f(x, y, z + e) - f(x, y, z - e);
+      const f1 = f(x + e, y - e, z - e), f2 = f(x - e, y - e, z + e), f3 = f(x - e, y + e, z - e), f4 = f(x + e, y + e, z + e);
+      gx = f1 - f2 - f3 + f4;
+      gy = -f1 - f2 + f3 + f4;
+      gz = -f1 + f2 - f3 + f4;
       const gl = Math.hypot(gx, gy, gz) || 1;
       gx /= gl;
       gy /= gl;

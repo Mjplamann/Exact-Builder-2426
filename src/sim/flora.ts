@@ -49,6 +49,14 @@ const ALGAE_STOCK_MG_M2 = 300;
 /** Background biofilm productivity at full light & maturity (mg dry / m² / day). */
 const BIOFILM_GLASS = 8;
 const BIOFILM_SURFACE = 25;
+/**
+ * Hard "green spot" algae on the glass (Coleochaete): tiny, firmly attached discs that appear in
+ * any brightly lit tank — nutrient-poor planted tanks included — and that otocinclus, plecos and
+ * shrimp can't rasp off (nerite snails can). Growth per day at a full 10-hour light dose: a faint
+ * film after a couple of weeks, which is why every aquarist still wipes the front glass now and
+ * then even with a good clean-up crew.
+ */
+const SPOT_ALGAE_PER_DAY = 0.01;
 
 /** Per-species plant constants used every step. */
 interface PlantStatic {
@@ -127,6 +135,10 @@ export class Flora {
 
   // Grazing pools: demand registered during the fish loop (mg/day), shares handed out next step.
   demandGlass = 0;
+  /** Part of `demandGlass` from grazers that can scrape hard spot algae (snails; plecos a little). */
+  demandGlassHard = 0;
+  /** Hard spot-algae share of `glassAlgae` (hidden state; NaN = take the saved film as hard). */
+  spot = Number.NaN;
   demandSurface = 0;
   demandPlant = 0;
   demandMicro = 0;
@@ -160,7 +172,7 @@ export class Flora {
 
   /** Start a fish loop: zero the demand accumulators (shares from `step` stay valid). */
   resetDemand(): void {
-    this.demandGlass = this.demandSurface = this.demandPlant = this.demandMicro = this.demandCoral = 0;
+    this.demandGlass = this.demandGlassHard = this.demandSurface = this.demandPlant = this.demandMicro = this.demandCoral = 0;
   }
 
   /**
@@ -301,21 +313,32 @@ export class Flora {
     const surfaceArea = floorArea + inp.decorArea + leaf;
     const bioG = glassArea * BIOFILM_GLASS * maturity * (0.4 + 0.6 * Math.min(1, light));
     const bioS = surfaceArea * BIOFILM_SURFACE * maturity * (0.4 + 0.6 * Math.min(1, light)) + inp.detritusMgDay;
-    const stockG = wp.glassAlgae * glassArea * ALGAE_STOCK_MG_M2;
+    const G0 = wp.glassAlgae;
+    // A scrub (or a load) resets the hidden hard share; it can never exceed the film itself.
+    const spot0 = Number.isNaN(this.spot) ? G0 : Math.min(this.spot, G0);
+    const glassStock = glassArea * ALGAE_STOCK_MG_M2;
+    const stockSoft = (G0 - spot0) * glassStock;
+    const stockHard = spot0 * glassStock;
     const stockS = wp.surfaceAlgae * surfaceArea * ALGAE_STOCK_MG_M2;
 
     // Grazers eat a mix of what is there: biofilm/detritus and standing algae in proportion to
-    // their availability (half the algae stock is within reach per day).
-    const availG = bioG + stockG * 0.5;
+    // their availability (half the algae stock is within reach per day). Only snails (and plecos,
+    // a little) can scrape the hard spot algae.
+    const hardFrac = this.demandGlass > 0 ? clamp01(this.demandGlassHard / this.demandGlass) : 0;
+    const reachG = stockSoft + stockHard * hardFrac;
+    const availG = bioG + reachG * 0.5;
     const availS = bioS + stockS * 0.5;
     const consG = Math.min(this.demandGlass, availG);
     const consS = Math.min(this.demandSurface, availS);
-    const eatenG = availG > 0 ? ((consG * stockG * 0.5) / availG) * days : 0;
+    const eatenG = availG > 0 ? ((consG * reachG * 0.5) / availG) * days : 0;
+    const eatenHard = reachG > 0 ? (eatenG * stockHard * hardFrac) / reachG : 0;
     const eatenS = availS > 0 ? ((consS * stockS * 0.5) / availS) * days : 0;
 
-    let G = wp.glassAlgae;
-    G += r * (G + 0.02) * (1 - G) * days - eatenG / (glassArea * ALGAE_STOCK_MG_M2);
+    const spotGrowth = SPOT_ALGAE_PER_DAY * Math.pow(light, 1.5) * (inp.zen ? 0.4 : 1) * (1 - G0) * days;
+    let G = G0;
+    G += r * (G + 0.02) * (1 - G) * days + spotGrowth - eatenG / glassStock;
     wp.glassAlgae = clamp01(G);
+    this.spot = clamp(spot0 + spotGrowth - eatenHard / glassStock, 0, wp.glassAlgae);
     let S = wp.surfaceAlgae;
     S += 0.8 * r * (S + 0.02) * (1 - S) * days - eatenS / (surfaceArea * ALGAE_STOCK_MG_M2);
     wp.surfaceAlgae = clamp01(S);
@@ -344,6 +367,7 @@ export class Flora {
   reset(): void {
     this.lastVisual.clear();
     this.pendingVisualChange = 0;
+    this.spot = Number.NaN;
     this.shareGlass = this.shareSurface = this.shareMicro = 1;
     this.sharePlant = this.shareCoral = 0;
     this.resetDemand();

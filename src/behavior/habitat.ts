@@ -49,6 +49,24 @@ export class Habitat {
   coverUse = new Int32Array(0);
   /** Version counter, bumped on every rebuild (brains re-validate cached indices). */
   version = 0;
+  /**
+   * Bounding sphere of each collider (x, y, z, r): an exact lower bound on its distance field
+   * (a shape inside a ball is never closer than the ball), used to skip most exact SDF
+   * evaluations in `nearestDecor`.
+   */
+  private bsph = new Float64Array(0);
+  /**
+   * Substrate heightfield cache. `substrateHeight` evaluates two octaves of value noise (and
+   * allocates a bounds object) per call, and the behavior/food systems ask for the floor
+   * thousands of times per frame; a 5 mm bilinear grid matches it to ~0.01 mm.
+   */
+  private hf = new Float32Array(0);
+  private hfNx = 2;
+  private hfNz = 2;
+  private hfInvX = 1;
+  private hfInvZ = 1;
+  private hfBare = true;
+  private hfSig = '';
   /** Tank the caches were built for (rebuild on resize / substrate change / tank swap). */
   private sigTank: object | null = null;
   private sigW = 0;
@@ -90,13 +108,30 @@ export class Habitat {
     for (const d of t.decor) kinds.set(d.id, d.kind);
     const plantIds = new Set(t.plants.map((p) => p.id));
     this.colliderKind = this.colliders.map((c) => kinds.get(c.ownerId) ?? (plantIds.has(c.ownerId) ? 'plant' : undefined));
+    this.bsph = new Float64Array(n * 4);
     for (let i = 0; i < n; i++) {
       const c = this.colliders[i];
+      const o = i * 4;
       if (c.type === 'box') {
         this.cosR[i] = Math.cos(c.rotationY);
         this.sinR[i] = Math.sin(c.rotationY);
+        this.bsph[o] = c.center[0];
+        this.bsph[o + 1] = c.center[1];
+        this.bsph[o + 2] = c.center[2];
+        this.bsph[o + 3] = Math.hypot(c.halfExtents[0], c.halfExtents[1], c.halfExtents[2]);
+      } else if (c.type === 'capsule') {
+        this.bsph[o] = (c.a[0] + c.b[0]) / 2;
+        this.bsph[o + 1] = (c.a[1] + c.b[1]) / 2;
+        this.bsph[o + 2] = (c.a[2] + c.b[2]) / 2;
+        this.bsph[o + 3] = Math.hypot(c.b[0] - c.a[0], c.b[1] - c.a[1], c.b[2] - c.a[2]) / 2 + c.radius;
+      } else {
+        this.bsph[o] = c.center[0];
+        this.bsph[o + 1] = c.center[1];
+        this.bsph[o + 2] = c.center[2];
+        this.bsph[o + 3] = c.radius;
       }
     }
+    this.buildHeightfield();
     this.buildGrid();
     this.buildPerches();
     this.coverUse = new Int32Array(this.cover.length);
@@ -245,10 +280,19 @@ export class Habitat {
   nearestIndex = -1;
   nearestDecor(x: number, y: number, z: number, ignoreOwner?: string): number {
     const cell = this.cellRange(x, z);
+    const bs = this.bsph;
     let best = Infinity, bx = 0, by = 1, bz = 0, bi = -1;
     for (let k = this.gStart[cell], e = this.gStart[cell + 1]; k < e; k++) {
       const i = this.gItems[k];
       if (ignoreOwner !== undefined && this.colliders[i].ownerId === ignoreOwner) continue;
+      if (best !== Infinity) {
+        // Exact pruning: sdf_i ≥ |p − c_i| − r_i, so skip when that bound is already ≥ best.
+        const o = i * 4;
+        const lim = best + bs[o + 3];
+        if (lim <= 0) continue;
+        const ex = x - bs[o], ey = y - bs[o + 1], ez = z - bs[o + 2];
+        if (ex * ex + ey * ey + ez * ez >= lim * lim) continue;
+      }
       const d = this.sdf(i, x, y, z);
       if (d < best) {
         best = d;
@@ -282,17 +326,51 @@ export class Habitat {
   // Substrate, walls, surface
   // -------------------------------------------------------------------------------------------
 
+  /** (Re)sample the substrate heightfield when the tank's substrate geometry changed. */
+  private buildHeightfield(): void {
+    const t = this.world.tank;
+    const { halfW, halfD } = this.b;
+    const sig = `${halfW}|${halfD}|${t.substrate}|${t.substrateDepthFrontCm}|${t.substrateDepthBackCm}|${t.seed}`;
+    if (sig === this.hfSig && this.hf.length > 0) return;
+    this.hfSig = sig;
+    this.hfBare = t.substrate === 'bare';
+    const cell = 0.005;
+    const nx = Math.max(2, Math.ceil((2 * halfW) / cell) + 1);
+    const nz = Math.max(2, Math.ceil((2 * halfD) / cell) + 1);
+    this.hfNx = nx;
+    this.hfNz = nz;
+    this.hfInvX = (nx - 1) / Math.max(1e-6, 2 * halfW);
+    this.hfInvZ = (nz - 1) / Math.max(1e-6, 2 * halfD);
+    this.hf = new Float32Array(nx * nz);
+    for (let j = 0; j < nz; j++) {
+      const z = -halfD + j / this.hfInvZ;
+      for (let i = 0; i < nx; i++) this.hf[j * nx + i] = substrateHeight(t, -halfW + i / this.hfInvX, z);
+    }
+  }
+
   floor(x: number, z: number): number {
-    return substrateHeight(this.world.tank, x, z);
+    if (this.hfBare) return this.hf.length > 0 ? 0 : substrateHeight(this.world.tank, x, z);
+    // Outside the glass the substrate formula only depends on the clamped coordinates.
+    const nx = this.hfNx, nz = this.hfNz;
+    let u = (x + this.b.halfW) * this.hfInvX;
+    let v = (z + this.b.halfD) * this.hfInvZ;
+    u = u < 0 ? 0 : u > nx - 1.000001 ? nx - 1.000001 : u;
+    v = v < 0 ? 0 : v > nz - 1.000001 ? nz - 1.000001 : v;
+    const i = u | 0, j = v | 0;
+    const fu = u - i, fv = v - j;
+    const hf = this.hf;
+    const o = j * nx + i;
+    const a = hf[o] + (hf[o + 1] - hf[o]) * fu;
+    const c = hf[o + nx] + (hf[o + nx + 1] - hf[o + nx]) * fu;
+    return a + (c - a) * fv;
   }
 
   /** Substrate surface normal at (x, z) → `hit` (d = height). */
   floorNormal(x: number, z: number): SdfHit {
     const e = 0.01;
-    const t = this.world.tank;
-    const h = substrateHeight(t, x, z);
-    const hx = substrateHeight(t, x + e, z) - substrateHeight(t, x - e, z);
-    const hz = substrateHeight(t, x, z + e) - substrateHeight(t, x, z - e);
+    const h = this.floor(x, z);
+    const hx = this.floor(x + e, z) - this.floor(x - e, z);
+    const hz = this.floor(x, z + e) - this.floor(x, z - e);
     const nx = -hx / (2 * e), nz = -hz / (2 * e);
     const l = Math.sqrt(nx * nx + 1 + nz * nz);
     hit.nx = nx / l;

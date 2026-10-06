@@ -8,7 +8,7 @@
  */
 import type { FishEntity } from '../core/types';
 import type { World } from '../core/world';
-import { formatTemp, pluralName, proseName } from './format';
+import { formatTemp, localizeUnits, pluralName, proseName } from './format';
 import { youngWord } from './phrases';
 import type { ToastLevel } from './Toasts';
 import type { TankNeeds } from './waterHealth';
@@ -19,9 +19,16 @@ const WARN_REAL_MS = 120_000;
 
 type WarnKey = 'ammonia' | 'nitrite' | 'nitrate' | 'temperature' | 'oxygen';
 
+/** "A Neon tetra fry was born", "3 Neon tetra fry were born", "12 young Cherry shrimp appeared". */
+export function birthMessage(name: string, group: FishEntity['species']['group'], n: number): string {
+  const prose = proseName(name);
+  if (group === 'fish') return n === 1 ? `A ${prose} fry was born` : `${n} ${prose} ${youngWord(group)} were born`;
+  return n === 1 ? `A young ${prose} appeared` : `${n} young ${pluralName(prose)} appeared`;
+}
+
 export class Notifier {
   private births = new Map<string, { name: string; group: FishEntity['species']['group']; n: number }>();
-  private deaths: { name: string; species: string; cause: string }[] = [];
+  private deaths: { name: string; species: string; speciesId: string; cause: string }[] = [];
   private birthTimer: ReturnType<typeof setTimeout> | null = null;
   private deathTimer: ReturnType<typeof setTimeout> | null = null;
   private lastWarn = new Map<WarnKey, { sim: number; real: number }>();
@@ -33,7 +40,7 @@ export class Notifier {
   ) {
     const ev = world.events;
     this.offs.push(
-      ev.on('notify', ({ message, level }) => toast(message, level)),
+      ev.on('notify', ({ message, level }) => toast(localizeUnits(message, world.settings.units), level)),
       ev.on('fish-born', ({ fish }) => this.onBorn(fish)),
       ev.on('fish-died', ({ fish, cause }) => this.onDied(fish, cause)),
       ev.on('tank-reset', () => this.lastWarn.clear()),
@@ -50,21 +57,12 @@ export class Notifier {
 
   private flushBirths(): void {
     this.birthTimer = null;
-    for (const { name, group, n } of this.births.values()) {
-      const young = youngWord(group);
-      const msg =
-        n === 1
-          ? group === 'fish'
-            ? `A ${proseName(name)} fry was born`
-            : `A young ${proseName(name)} appeared`
-          : `${n} ${proseName(name)} ${young} ${group === 'fish' ? 'were born' : 'appeared'}`;
-      this.toast(msg, 'success');
-    }
+    for (const { name, group, n } of this.births.values()) this.toast(birthMessage(name, group, n), 'success');
     this.births.clear();
   }
 
   private onDied(fish: FishEntity, cause: string): void {
-    this.deaths.push({ name: fish.state.name ?? '', species: fish.species.commonName, cause });
+    this.deaths.push({ name: fish.state.name ?? '', species: fish.species.commonName, speciesId: fish.species.id, cause });
     this.deathTimer ??= setTimeout(() => this.flushDeaths(), BATCH_MS);
   }
 
@@ -72,8 +70,9 @@ export class Notifier {
     this.deathTimer = null;
     const d = this.deaths;
     if (d.length === 1) {
-      const { name, species, cause } = d[0];
-      const who = name ? `${name}, your ${proseName(species)},` : `One of your ${pluralName(proseName(species))}`;
+      const { name, species, speciesId, cause } = d[0];
+      const others = this.world.fish.some((f) => f.species.id === speciesId);
+      const who = name ? `${name}, your ${proseName(species)},` : others ? `One of your ${pluralName(proseName(species))}` : `Your ${proseName(species)}`;
       this.toast(`${who} passed away${cause ? ` — ${cause}` : ''}.`, 'info');
     } else if (d.length > 1) {
       const species = new Set(d.map((x) => x.species));

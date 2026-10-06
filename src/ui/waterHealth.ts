@@ -8,7 +8,7 @@
  *  - Dissolved oxygen below ~60 % saturation (≈ 5 mg/L at 25 °C) stresses most tropical fish.
  */
 import type { FishEntity, WaterParams, WaterType } from '../core/types';
-import { freeAmmonia } from './format';
+import { formatTempRange, freeAmmonia, type Units } from './format';
 
 export type HealthLevel = 'good' | 'caution' | 'bad';
 
@@ -164,7 +164,7 @@ function lower(v: number, good: number, caution: number): HealthLevel {
 }
 
 /** Assess the water against standard thresholds and the inhabitants' tolerances. */
-export function assessWater(wp: WaterParams, water: WaterType, needs: TankNeeds): WaterAssessment {
+export function assessWater(wp: WaterParams, water: WaterType, needs: TankNeeds, units: Units = 'metric'): WaterAssessment {
   const issues: WaterIssue[] = [];
   const marine = water === 'marine';
   const salty = water !== 'freshwater';
@@ -179,7 +179,7 @@ export function assessWater(wp: WaterParams, water: WaterType, needs: TankNeeds)
     if (l !== 'good') {
       temp = worst(temp, l);
       const warm = wp.temperatureC > s.tempC[1];
-      push('temperature', l, `${warm ? 'Too warm' : 'Too cool'} for the ${s.name} (${s.tempC[0]}–${s.tempC[1]} °C)`);
+      push('temperature', l, `${warm ? 'Too warm' : 'Too cool'} for the ${s.name} (${formatTempRange(s.tempC, units)})`);
       break; // one named example is enough; the dot reflects the worst
     }
   }

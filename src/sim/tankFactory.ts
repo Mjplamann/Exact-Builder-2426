@@ -33,15 +33,17 @@ export function defaultWaterParams(water: WaterType, simTime: number): WaterPara
 
 export function defaultEquipment(water: WaterType, liters: number): Equipment {
   const marine = water === 'marine';
-  // A "pinch" from the food system is ~30 mg of flakes; a real auto-feeder portion grows with
-  // the tank (≈ one pinch per 40 L per feeding keeps a moderately stocked community fed).
-  const pinches = Math.max(1, Math.min(10, Math.round(liters / 40)));
+  // A "pinch" from the food system is ~30 mg of flakes. A moderately stocked community of small
+  // fish eats roughly one pinch per 80 L per feeding, twice a day, once grown. The feeder ships
+  // switched on: fish stay fed through ordinary absences and time-lapse (it idles while the tank
+  // is empty), and the keeper can still feed treats by hand.
+  const pinches = Math.max(1, Math.min(20, Math.round(liters / 80)));
   return {
     filter: { type: liters > 400 ? 'sump' : liters > 120 ? 'canister' : 'hang-on-back', flowLph: Math.round(liters * (marine ? 8 : 5)), on: true },
     heater: { on: true, targetC: marine ? 25.5 : 25 },
     lights: { onHour: 9, offHour: 21, intensity: 0.85, colorTempK: marine ? 14000 : 6800, moonlight: true, rampMinutes: 45 },
     co2: false,
-    autoFeeder: { enabled: false, food: marine ? 'mysis' : 'flakes', hours: [9.5, 18], pinches },
+    autoFeeder: { enabled: true, food: marine ? 'mysis' : 'flakes', hours: [9.5, 18], pinches },
   };
 }
 

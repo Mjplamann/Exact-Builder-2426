@@ -21,6 +21,7 @@ import {
   formatMonths,
   formatRange,
   formatTempRange,
+  localizeUnits,
   plural,
   pluralName,
 } from '../format';
@@ -73,6 +74,8 @@ const ROW_H = 68;
 const THUMB = 128;
 const BIG_THUMB = 256;
 const MIN_LEN = 1;
+/** Thumbnail requests from the virtual list (cancelled when their rows scroll away). */
+const CATALOG_TAG = 'catalog';
 
 const WATER_OPTS: { value: WaterType | 'all'; label: string }[] = [
   { value: 'freshwater', label: 'Fresh' },
@@ -86,6 +89,27 @@ const COMPAT_WORDS: Record<CompatibilityReport['level'], { title: string; text: 
   caution: { title: 'Possible, with some care', text: 'It can work, but keep an eye on the points below.' },
   bad: { title: 'Not a good match for this tank', text: 'It would likely struggle here, or trouble its tankmates.' },
 };
+
+/**
+ * How well a species' names answer a search (lower = better): the exact common or scientific
+ * name first ("neon tetra" → Neon Tetra, not Albino Neon Tetra), then names that start with the
+ * query, then names whose words start with every term, then scientific-name matches, then the
+ * rest (family, region, body type). Ties keep the A–Z order.
+ */
+export function searchRank(commonName: string, scientificName: string, query: string): number {
+  const q = query.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!q) return 0;
+  const c = commonName.toLowerCase();
+  const sci = scientificName.toLowerCase();
+  if (c === q || sci === q) return 0;
+  if (c.startsWith(q)) return 1;
+  const words = c.split(/[\s\-()'’,]+/).filter(Boolean);
+  const terms = q.split(' ');
+  if (terms.every((t) => words.some((w) => w.startsWith(t)))) return 2;
+  if (sci.startsWith(q) || terms.every((t) => sci.includes(t))) return 3;
+  if (terms.every((t) => c.includes(t))) return 4;
+  return 5;
+}
 
 export class FishPanel implements Panel {
   readonly id = 'fish' as const;
@@ -382,8 +406,15 @@ export class FishPanel implements Panel {
     });
     if (this.f.sort === 'size-asc') res.sort((a, b) => a.adultLengthCm - b.adultLengthCm);
     else if (this.f.sort === 'size-desc') res.sort((a, b) => b.adultLengthCm - a.adultLengthCm);
+    else if (this.f.query.trim()) {
+      // A–Z within relevance bands (the index is already A–Z; Array.sort is stable).
+      const q = this.f.query;
+      const rank = new Map<string, number>();
+      for (const s of res) rank.set(s.id, searchRank(s.commonName, s.scientificName, q));
+      res.sort((a, b) => rank.get(a.id)! - rank.get(b.id)!);
+    }
     this.results = res;
-    this.host.thumbs.cancelPending();
+    this.host.thumbs.cancelPending(CATALOG_TAG);
     this.list.setItems(res, resetScroll);
     this.emptyEl.hidden = res.length > 0;
     setText(this.metaCount, `${formatCount(res.length)} ${plural(res.length, 'species', 'species')}`);
@@ -461,6 +492,12 @@ export class FishPanel implements Panel {
   }
 
   private loadVisibleThumbs = debounce(() => {
+    // Rows scrolled away no longer need their portraits: drop those requests first, so the
+    // offscreen renderer only ever works on what is on screen.
+    const visible = this.visibleIds;
+    visible.clear();
+    this.list.forEachVisible((_row, sp) => visible.add(sp.id));
+    this.host.thumbs.cancelPending(CATALOG_TAG, (id) => visible.has(id));
     this.list.forEachVisible((row, sp) => {
       const p = this.rows.get(row);
       if (!p || p.img.classList.contains('is-real')) return;
@@ -468,9 +505,10 @@ export class FishPanel implements Panel {
         if (p.sid !== sp.id) return;
         p.img.src = url;
         p.img.classList.add('is-real');
-      });
+      }, CATALOG_TAG);
     });
   }, 140);
+  private visibleIds = new Set<string>();
 
   private compat(sp: Species): Compat {
     let c = this.compatCache.get(sp.id);
@@ -490,10 +528,11 @@ export class FishPanel implements Panel {
     } catch {
       rep = { level: 'good', issues: [] };
     }
-    const issues = [...rep.issues];
-    let level = rep.level;
     const tank = app.world.tank;
     const units = app.world.settings.units;
+    // The sim writes its notes in metric; show them in the viewer's units.
+    const issues = rep.issues.map((i) => localizeUnits(i, units));
+    let level = rep.level;
     let blocked: string | undefined;
     if (sp.water !== tank.water) {
       const marineMismatch = sp.water === 'marine' || tank.water === 'marine';
@@ -612,9 +651,13 @@ export class FishPanel implements Panel {
     let qty = Math.max(1, Math.min(60, sp.groupSize || 1));
     const qtyCtl = stepper('animals', qty, 1, 60, (v) => (qty = v));
     const add = button('Add to tank', () => {
+      const before = app.world.fish.length;
       app.addFish(sp.id, qty);
-      const name = qty === 1 ? sp.commonName : pluralName(sp.commonName);
-      this.host.toast(`${qty} ${name} added — they’ll explore their new home for a while.`, 'success');
+      // Report what actually arrived (the sim may decline, e.g. an unknown species).
+      const n = app.world.fish.length - before;
+      if (n <= 0) this.host.toast(`${pluralName(sp.commonName)} couldn’t be added right now.`, 'warning');
+      else if (n === 1) this.host.toast(`A ${sp.commonName} joins your tank — it will explore its new home for a while.`, 'success');
+      else this.host.toast(`${n} ${pluralName(sp.commonName)} added — they’ll explore their new home for a while.`, 'success');
     }, { icon: 'plus', variant: 'primary', cls: 'aq-add-btn' });
 
     const renderCompat = () => {
@@ -750,6 +793,7 @@ export class FishPanel implements Panel {
   }
 
   onSettingsChanged(): void {
+    this.compatCache.clear();
     this.list.refresh();
     this.paintSize();
     if (this.detailSpecies) this.openDetail(this.detailSpecies);

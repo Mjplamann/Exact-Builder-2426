@@ -86,11 +86,21 @@ const FLORA_STEP_S = 3600;
 /** Of a meal's satiety, this share is felt at once (gut distension); the rest as it digests. */
 const IMMEDIATE_SATIETY = 0.6;
 /**
- * Days from ravenous to dead for the reference 0.3 g fish (scales with size^0.2): with the day
- * or so it takes to become ravenous, a neon survives ~10 days without food, a 50 g angelfish ~4
- * weeks — the real "holiday" tolerance of healthy adult fish.
+ * Days from ravenous to dead for the reference 0.3 g fish with nothing at all to eat (scales with
+ * size^0.2): with the day or so it takes to become ravenous, a neon in a bare tank survives ~12
+ * days without food, a 50 g angelfish ~5 weeks — the real "holiday" tolerance of healthy adult
+ * fish. Whatever an animal still finds (algae, biofilm, micro-fauna) slows this down, and one
+ * that covers half its needs that way never starves (metabolism halves when food runs short).
  */
-const STARVE_DAYS_REF = 9;
+const STARVE_DAYS_REF = 10;
+/**
+ * Small omnivores, insectivores, carnivores and planktivores pick copepods, worms and insect
+ * larvae from plants and substrate all day: in a mature planted tank that covers a real share of a
+ * small fish's needs (up to this fraction; much less for big fish), shared among everyone hunting.
+ */
+const FORAGE_SHARE = 0.3;
+/** Zen: nobody goes hungry for long — appetite stays keen ("Hungry"), never "Starving". */
+const ZEN_MAX_HUNGER = 0.55;
 /** Fish O₂ consumption at 25 °C: ≈0.3 mg O₂ per g^0.8 per hour. */
 const O2_MG_PER_G08_DAY = 7.2;
 const WREF_POW = Math.pow(REF_MASS_G, -0.2);
@@ -355,6 +365,12 @@ export class LifeSim implements BreedHost {
       this.flora.markVisualSynced(tank);
       world.events.emit('plants-changed', {});
     }
+    // Deaths during catch-up are summarized rather than announced one by one; but if the animal
+    // the keeper had selected or was following is gone, say so (closes its card, frees the camera).
+    const sel = world.selection.fishId;
+    if (sel && !world.fishById.has(sel)) world.events.emit('fish-removed', { fishId: sel });
+    const fol = world.follow;
+    if (fol && fol !== sel && !world.fishById.has(fol)) world.events.emit('fish-removed', { fishId: fol });
 
     let born = 0;
     for (const v of this.tallyBorn.values()) born += v;
@@ -464,6 +480,7 @@ export class LifeSim implements BreedHost {
         const want = needMg * Math.max(st.grazeGlass, st.grazeSurface) * 1.2;
         const gf = st.grazeGlass / gsum;
         flora.demandGlass += want * gf;
+        flora.demandGlassHard += want * gf * st.grazeHard;
         flora.demandSurface += want * (1 - gf);
         intake += appetite * want * (gf * flora.shareGlass + (1 - gf) * flora.shareSurface) * days;
       }
@@ -483,12 +500,19 @@ export class LifeSim implements BreedHost {
         const want = needMg * (st.filterFeeder ? 0.7 : 0.9);
         flora.demandMicro += want;
         intake += appetite * want * flora.shareMicro * days;
+      } else if (st.forager) {
+        const want = needMg * FORAGE_SHARE * (1 - 0.75 * smoothstep(4, 16, L));
+        flora.demandMicro += want;
+        intake += appetite * want * flora.shareMicro * days;
       }
+      // Share of today's needs met by what the tank itself provides (slows starvation).
+      const selfFed = needMg > 0 && days > 0 ? intake / (needMg * days) : 0;
       if (intake > 0) {
         const fill = Math.min(Math.max(0, 1 - s.stomach), intake / cap);
         s.stomach += fill;
         h -= IMMEDIATE_SATIETY * fill;
       }
+      if (mode === 'zen' && h > ZEN_MAX_HUNGER) h = ZEN_MAX_HUNGER;
       s.hunger = clamp01(h);
 
       // --- excretion & respiration -------------------------------------------------------------
@@ -503,9 +527,13 @@ export class LifeSim implements BreedHost {
 
       // --- health: chronic stress sets the condition, toxins & starvation do direct harm -----
       const healthTarget = 1 - smoothstep(0.3, 0.95, s.stress);
-      let hp = s.health + (healthTarget - s.health) * relaxFast(days, healthTarget < s.health ? 12 : 10);
-      const starve = smoothstep(0.85, 1, s.hunger) * (scale / STARVE_DAYS_REF);
-      hp -= (st.acute + starve) * days;
+      const starve = smoothstep(0.85, 1, s.hunger) * (scale / STARVE_DAYS_REF) * clamp01(1 - 2 * selfFed);
+      const harm = st.acute + starve;
+      // A fish that is being poisoned or starved does not mend at the same time.
+      let hp = s.health;
+      if (healthTarget < hp) hp += (healthTarget - hp) * relaxFast(days, 12);
+      else if (harm < 0.02) hp += (healthTarget - hp) * relaxFast(days, 10) * (1 - harm / 0.02);
+      hp -= harm * days;
       if (mode === 'gentle') hp = Math.max(hp, 0.05);
       else if (mode === 'zen') hp = Math.max(hp, 0.6);
       s.health = clamp01(hp);
@@ -763,6 +791,9 @@ export class LifeSim implements BreedHost {
   private autoFeed(world: World, t0: number, t1: number, live: boolean): void {
     const af = world.tank.equipment.autoFeeder;
     if (!af.enabled || !af.hours || af.hours.length === 0 || !(af.pinches > 0)) return;
+    // Nobody to feed (a freshly set-up or emptied tank): the feeder stays idle rather than
+    // dropping food that would only rot.
+    if (world.fish.length === 0) return;
     const h0 = localMs(t0) / 3_600_000;
     const h1 = localMs(t1) / 3_600_000;
     for (let i = 0; i < af.hours.length; i++) {

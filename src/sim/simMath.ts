@@ -2,12 +2,17 @@
  * Tiny numeric helpers shared by the life-sim files. All are allocation-free.
  */
 
+/**
+ * Clamp to [lo, hi]. NaN maps to `lo`: a single bad input (a hand-edited save, a slider glitch)
+ * must never poison the tank's persisted state with NaN, which JSON would then save as null.
+ */
 export function clamp(v: number, lo: number, hi: number): number {
-  return v < lo ? lo : v > hi ? hi : v;
+  return v > lo ? (v < hi ? v : hi) : lo;
 }
 
+/** Clamp to [0, 1]; NaN → 0. */
 export function clamp01(v: number): number {
-  return v < 0 ? 0 : v > 1 ? 1 : v;
+  return v > 0 ? (v < 1 ? v : 1) : 0;
 }
 
 /** Hermite smoothstep; works for edge0 > edge1 too (descending ramp). */

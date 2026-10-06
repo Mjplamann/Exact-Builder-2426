@@ -6,7 +6,7 @@ import type { JournalEntry } from '../../core/types';
 import type { Panel, UIHost } from '../context';
 import { button } from '../controls';
 import { clear, h, setText } from '../dom';
-import { dayKey, formatCount, formatSimClock, relativeDay } from '../format';
+import { dayKey, formatCount, formatSimClock, localizeUnits, relativeDay } from '../format';
 import { icon, type IconName } from '../icons';
 
 const KIND_ICON: Record<JournalEntry['kind'], IconName> = {
@@ -64,7 +64,7 @@ export class JournalPanel implements Panel {
       'article',
       { class: `aq-entry aq-entry-${e.kind}` },
       h('span', { class: 'aq-entry-icon', 'aria-hidden': 'true' }, icon(KIND_ICON[e.kind] ?? 'info', 15)),
-      h('span', { class: 'aq-entry-text' }, e.text),
+      h('span', { class: 'aq-entry-text' }, localizeUnits(e.text, this.host.app.world.settings.units)),
       h('time', { class: 'aq-entry-time', datetime: new Date(e.at).toISOString() }, formatSimClock(e.at)),
     );
   }
@@ -127,5 +127,10 @@ export class JournalPanel implements Panel {
   onOpen(): void {
     if (this.dirty) this.render();
     else this.paintStats();
+  }
+
+  onSettingsChanged(): void {
+    this.dirty = true;
+    if (this.host.openPanelId === 'journal') this.render();
   }
 }
