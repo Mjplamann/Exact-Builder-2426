@@ -217,6 +217,10 @@ export class Brain {
   readonly land = new Float64Array(18);
   /** Perch index (Habitat.perches) in use, or −1. */
   perchIdx = -1;
+  /** Perches a hop recently failed to settle on (skipped when choosing), and the failure streak. */
+  readonly badPerches = new Int32Array([-1, -1, -1, -1]);
+  badPerchNext = 0;
+  perchFails = 0;
 
   // --- surface attachment -------------------------------------------------------------------------
   surf = SURF_NONE;

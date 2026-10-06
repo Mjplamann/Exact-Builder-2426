@@ -141,7 +141,8 @@ describe('behavior realism: a living tank by day', () => {
   it('gobies and hawkfish hop between nearby perches in short darts', () => {
     const sim = makePresetSim('reef', { hour: 13, stock: false });
     const perchers = [...sim.add('paracirrhites-arcatus', 2), ...sim.add('elacatinus-oceanops', 2)];
-    const hops: number[] = [];
+    const attempts: number[] = [];
+    const landed: number[] = [];
     const start = new Map<string, number>();
     let t = 0;
     sim.run(300, 1 / 30, () => {
@@ -151,15 +152,20 @@ describe('behavior realism: a living tank by day', () => {
         const hopping = b.mode === 'perch' && b.surf === 0 && b.label === 'hopping';
         if (hopping && !start.has(f.state.id)) start.set(f.state.id, t);
         else if (!hopping && start.has(f.state.id)) {
-          hops.push(t - start.get(f.state.id)!);
+          const dur = t - start.get(f.state.id)!;
+          attempts.push(dur);
+          if (b.surf !== 0) landed.push(dur);
           start.delete(f.state.id);
         }
       }
     });
-    expect(hops.length).toBeGreaterThan(5);
-    hops.sort((a, b) => a - b);
-    // A hop is a dart of well under a few seconds (no orbiting the perch).
-    expect(hops[Math.floor(hops.length / 2)]).toBeLessThan(2.5);
+    expect(landed.length).toBeGreaterThan(5);
+    // No orbiting the perch: every attempt either lands or gives up within a few seconds…
+    expect(Math.max(...attempts)).toBeLessThan(5);
+    // …most attempts land, and a landing hop is a quick dart.
+    expect(landed.length / attempts.length).toBeGreaterThan(0.4);
+    landed.sort((a, b) => a - b);
+    expect(landed[Math.floor(landed.length / 2)]).toBeLessThan(2.5);
   }, 60_000);
 
   it('seahorses hold on to a holdfast upright, whatever its slope', () => {

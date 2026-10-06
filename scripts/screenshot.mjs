@@ -99,6 +99,8 @@ for (const e of evals) {
   }
 }
 if (advance > 0) await page.evaluate((s) => window.__app.advance(s), advance);
+// Settle smoothed lighting/exposure after pinning the clock or advancing (night/dawn staging).
+if (!live) await page.evaluate(() => window.__app.settle?.());
 
 const files = [];
 for (let s = 0; s < shots; s++) {

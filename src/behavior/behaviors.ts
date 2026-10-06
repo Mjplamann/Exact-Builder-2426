@@ -1873,7 +1873,11 @@ function steerPerch(ctx: Ctx, fish: FishEntity, b: Brain): void {
       // Choose a perch close by (and toward home), else a patch of open substrate.
       const home = fish.state.home;
       let best = -1, bestS = Infinity, bestD = 0;
-      for (let i = 0; i < h.perchCount; i++) {
+      // After two failed hops in a row, settle for open sand (always reachable) once.
+      const perchCount = b.perchFails >= 2 ? 0 : h.perchCount;
+      for (let i = 0; i < perchCount; i++) {
+        const bp = b.badPerches;
+        if (i === bp[0] || i === bp[1] || i === bp[2] || i === bp[3]) continue;
         const px = h.perches[i * 3], py = h.perches[i * 3 + 1], pz = h.perches[i * 3 + 2];
         const dx = px - k.pos[0], dy = py - k.pos[1], dz = pz - k.pos[2];
         const dF = Math.sqrt(dx * dx + dy * dy + dz * dz);
@@ -1902,7 +1906,8 @@ function steerPerch(ctx: Ctx, fish: FishEntity, b: Brain): void {
         pickOpenSand(ctx, b, k.pos[0], k.pos[2], 0.12, 0.08, so);
         b.goalSurf = SURF_SUBSTRATE;
         b.goalSurfIdx = -1;
-        b.sub = 0;
+        // A patch more than a few body lengths away is a short swim, not a hop.
+        b.sub = Math.sqrt(dist2(fish, b.gx, b.gy, b.gz)) > clamp(8 * L, 0.1, 0.3) ? 1 : 0;
       }
       b.hasGoal = true;
       b.subT = 0;
@@ -1923,12 +1928,21 @@ function steerPerch(ctx: Ctx, fish: FishEntity, b: Brain): void {
       b.accelBoost = clamp((0.35 * b.accelBurst) / Math.max(1e-4, b.accel), 1, 6);
     }
     b.label = horse ? 'swimming to a holdfast' : swim ? 'swimming to another perch' : 'hopping';
-    if (d < 0.5 * L + 0.005) {
-      attachToGoalSurface(ctx, fish, b);
+    const giveUp = b.subT > (horse ? 45 : swim ? 20 : 3);
+    if (!giveUp && d < 0.5 * L + 0.005) attachToGoalSurface(ctx, fish, b);
+    if (b.surf !== SURF_NONE) {
       b.perchT = horse ? ctx.rng.range(30, 120) : ctx.rng.range(4, 25);
-    } else if (b.subT > (horse ? 45 : swim ? 20 : 6)) {
-      // Couldn't get there (blocked): choose another spot rather than snapping onto it.
+      b.perchFails = 0;
+    } else if (giveUp) {
+      // Couldn't settle there (blocked, or the spot slides it off — e.g. a reshaped rock):
+      // remember it and pick another spot rather than hovering over or orbiting it.
+      if (b.perchIdx >= 0) {
+        b.badPerches[b.badPerchNext] = b.perchIdx;
+        b.badPerchNext = (b.badPerchNext + 1) & 3;
+      }
+      b.perchFails++;
       b.hasGoal = false;
+      b.label = 'cruising';
     }
     return;
   }

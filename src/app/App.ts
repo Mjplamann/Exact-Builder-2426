@@ -18,6 +18,7 @@ import { newTank, type NewTankOptions } from '../sim/tankFactory';
 import { buildColliders } from '../decor/colliders';
 import { DECOR_CATALOG } from '../decor/catalog';
 import { hostAnchor } from '../decor/shapes';
+import { carryAttached, hostPose } from '../decor/attach';
 import { suggestPlacement } from '../decor/aquascapes';
 import { UI } from '../ui/UI';
 import { Ambience } from '../audio/Ambience';
@@ -140,6 +141,15 @@ export class App implements AppApi {
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
+  }
+
+  /**
+   * QA helper: let time-smoothed visuals (light ramps, eye adaptation) settle at once after a
+   * jump in the sim clock, so a staged night or dawn capture shows the right light.
+   */
+  settle(): void {
+    computeEnv(this.world);
+    this.engine.update(this.world, 30);
   }
 
   /** Stop the requestAnimationFrame loop (QA harnesses then drive frames manually via frame()). */
@@ -410,10 +420,13 @@ export class App implements AppApi {
   updateDecor(id: string, patch: Partial<Omit<DecorItem, 'id'>>): void {
     const item = this.world.tank.decor.find((d) => d.id === id);
     if (!item) return;
+    const before = hostPose(item);
     Object.assign(item, patch);
     if (patch.position && patch.position.length === 3 && patch.position[1] === undefined) {
       item.position[1] = substrateHeight(this.world.tank, item.position[0], item.position[2]);
     }
+    // Epiphytes, mosses and corals ride along with every move, turn or resize of their host.
+    carryAttached(this.world.tank, item, before);
     this.world.events.emit('decor-changed', { item });
   }
 
