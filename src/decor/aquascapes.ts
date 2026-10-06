@@ -516,6 +516,17 @@ function bommie(s: Scape, rk: number, u: number, v: number, width: number, heigh
       list.push(s.addDecor('rock', 'live-rock', x, z, { scale: sc, y, seed: probe.seed, rotY: s.rng.range(0, Math.PI * 2) }));
     }
   }
+  // Too shallow for whole tiers: a smaller crown stone still brings the bommie up to its height,
+  // so the focal bommie always stands tallest.
+  const top = Math.max(...list.map((r) => itemWorldBounds(r).max[1]));
+  if (top < maxY - height * 0.25) {
+    const x = cx + s.rng.range(-0.02, 0.02), z = cz + s.rng.range(-0.03, 0.01);
+    const y = s.supportAt(x, z, list) - 0.02 * rk;
+    const probe: DecorItem = { id: 'probe', kind: 'rock', variant: 'live-rock', seed: s.liveRockSeed('pillar'), position: [x, y, z], rotation: [0, 0, 0], scale: rk * 0.7 };
+    const rise = itemWorldBounds(probe).max[1] - y;
+    const sc = Math.min(rk * 1.1, (probe.scale * (maxY - y)) / Math.max(1e-6, rise));
+    if (sc > rk * 0.25) list.push(s.addDecor('rock', 'live-rock', x, z, { scale: sc, y, seed: probe.seed, rotY: s.rng.range(0, Math.PI * 2) }));
+  }
   return list;
 }
 
@@ -700,19 +711,25 @@ function malawi(tank: TankState, lib: PlantIndex, seed: number) {
     const v = 0.2 + 0.1 * focus + s.rng.range(-0.03, 0.03);
     base.push(s.addDecor('rock', 'texas-holey', s.x(u), s.z(v), { scale: k * (0.95 + 0.45 * focus) * s.rng.range(0.92, 1.08), sink: 0.012 }));
   }
-  // Upper tiers wedged between the rocks below, leaving gaps (caves) — mbuna claim these. Deep
+  // Upper tiers wedged between the rocks below, leaving gaps (caves) — mbuna claim these. They
+  // gather toward the focal point, so the wall rises there and falls away to the sides; deep
   // water gets a third tier, so the wall still reaches about half way up.
+  const uOf = (d: DecorItem) => {
+    const u = (d.position[0] + s.halfW) / s.W;
+    return s.flip ? 1 - u : u;
+  };
   let tier = base;
   const levels = s.water > 0.55 ? 3 : 2;
   for (let level = 0; level < levels; level++) {
     const next: DecorItem[] = [];
     for (let i = 0; i < tier.length - 1; i += 1) {
-      if (s.rng.chance(level === 0 ? 0.25 : 0.5)) continue;
       const a = tier[i], b = tier[i + 1];
+      const focus = Math.exp(-Math.pow(((uOf(a) + uOf(b)) / 2 - (1 - PHI)) / 0.25, 2));
+      if (!s.rng.chance((level === 0 ? 0.45 : 0.15) + 0.55 * focus)) continue;
       const x = (a.position[0] + b.position[0]) / 2, z = (a.position[2] + b.position[2]) / 2 - 0.02 * level + s.rng.range(-0.02, 0.02);
       const y = Math.max(s.topOf(a, x, z), s.topOf(b, x, z)) - 0.03 * k;
       if (y - s.ground(x, z) > s.water * 0.5) continue;
-      next.push(s.addDecor('rock', 'texas-holey', x, z, { scale: k * s.rng.range(0.75, 1.0) * (1 - level * 0.15), y, sink: 0 }));
+      next.push(s.addDecor('rock', 'texas-holey', x, z, { scale: k * s.rng.range(0.75, 1.0) * (1 - level * 0.15) * (0.85 + 0.25 * focus), y, sink: 0 }));
     }
     if (next.length < 2) break;
     tier = next;
@@ -720,7 +737,8 @@ function malawi(tank: TankState, lib: PlantIndex, seed: number) {
   // A few caves and loose stones in front for territories.
   s.addDecor('cave', 'rock-cave', s.x(1 - PHI), s.z(0.48), { scale: k, rotY: s.yaw(s.rng.range(-0.3, 0.3)) });
   s.addDecor('rock', 'texas-holey', s.x(0.8), s.z(0.5), { scale: k * 0.8 });
-  s.addDecor('cave', 'slate-cave', s.x(0.62), s.z(0.58), { scale: k * 0.9, rotY: s.rng.range(-0.3, 0.3) });
+  // The slate cave sits at an angle against the rocks, its mouth half turned away.
+  s.addDecor('cave', 'slate-cave', s.x(0.64), s.z(0.5), { scale: k * 0.85, rotY: s.yaw(0.9 + s.rng.range(-0.2, 0.2)) });
   if (s.wf > 1.8) {
     s.addDecor('cave', 'rock-cave', s.x(PHI + 0.2), s.z(0.45), { scale: k * 0.85, rotY: s.yaw(s.rng.range(-0.3, 0.3)) });
     s.addDecor('rock', 'texas-holey', s.x(0.15), s.z(0.55), { scale: k * 0.7 });
@@ -825,8 +843,11 @@ function nature(tank: TankState, lib: PlantIndex, seed: number) {
   const moss = s.pick('taxiphyllum-barbieri', 'vesicularia-montagnei');
   /** A manzanita "tree" whose upper limbs carry a few moss cushions, spaced apart, so the wood
    *  still reads as a little tree rather than a hedge. */
-  const tree = (u: number, v: number, kk: number) => {
+  const tree = (u: number, v: number, kk: number, maxRise = Infinity) => {
     const t = s.addDecor('driftwood', 'manzanita', s.x(u), s.z(v), { scale: kk, sink: 0.004 });
+    // A companion tree stays smaller than the focal one, whatever shape its seed grew.
+    const rise = itemWorldBounds(t).max[1] - t.position[1];
+    if (rise > maxRise) t.scale *= maxRise / rise;
     const crownPts: V3[] = [];
     for (const p of s.woodPoints(t, 0.14 * kk, 0.6 * kk + 0.1).sort((p1, p2) => p2[1] - p1[1])) {
       if (crownPts.some((q) => Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]) < 0.07 * Math.max(1, kk))) continue;
@@ -834,13 +855,15 @@ function nature(tank: TankState, lib: PlantIndex, seed: number) {
       if (crownPts.length >= 4) break;
     }
     for (const p of crownPts) s.addPlant(moss, p[0], p[2], { attachTo: t, growth: s.rng.range(0.45, 0.75) });
+    return t;
   };
-  tree(1 - PHI, 0.35, k * 1.1);
+  const main = tree(1 - PHI, 0.35, k * 1.1);
+  const mainRise = itemWorldBounds(main).max[1] - main.position[1];
   const r1 = s.addDecor('rock', 'dragon-stone', s.x(1 - PHI - 0.06), s.z(0.48), { scale: k * 1.3, sink: 0.008 });
   s.addDecor('rock', 'dragon-stone', s.x(1 - PHI + 0.1), s.z(0.52), { scale: k * 0.9, sink: 0.006 });
   const r3 = s.addDecor('rock', 'dragon-stone', s.x(0.8), s.z(0.45), { scale: k * 1.1, sink: 0.008 });
   if (s.wf > 1.8) {
-    tree(0.84, 0.3, k * 0.8);
+    tree(0.84, 0.3, k * 0.8, mainRise * 0.7);
     s.addDecor('rock', 'dragon-stone', s.x(0.7), s.z(0.5), { scale: k * 0.8, sink: 0.006 });
   }
   for (const [rock, sp] of [[r1, 'bucephalandra-brownie'], [r3, 'microsorum-pteropus-windelov']] as const) {
@@ -909,7 +932,7 @@ function reef(tank: TankState, lib: PlantIndex, seed: number) {
 function nanoReef(tank: TankState, lib: PlantIndex, seed: number) {
   const s = new Scape(tank, lib, seed);
   const k = s.k;
-  const rk = clamp(k * 0.8, 0.4, 1.3);
+  const rk = clamp(k * 0.8, 0.4, 1.5);
   const rocks: DecorItem[] = [];
   const island = bommie(s, rk, 1 - PHI + 0.04, 0.45, Math.max(0.12, 0.3 * k), s.water * 0.55, true);
   rocks.push(...island);

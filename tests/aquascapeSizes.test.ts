@@ -153,8 +153,8 @@ describe('aquascapes at every tank size', () => {
   it('builds its focal point on a golden section', () => {
     for (const id of ['iwagumi', 'nature', 'malawi', 'reef', 'nano-reef', 'fowlr', 'brackish-rock', 'nano-shrimp']) {
       const water = SCAPES.find((s) => s.id === id)!.water;
-      for (const [sizeName, size] of Object.entries(SIZES)) {
-        const tank = tankFor(id, water, size, 7);
+      for (const [sizeName, size] of Object.entries(SIZES)) for (const seed of [7, 4242, 90210]) {
+        const tank = tankFor(id, water, size, seed);
         const built = AQUASCAPES.find((a) => a.id === id)!.build(tank, plants, tank.seed);
         const b = tankBounds(tank);
         // The tallest piece of hardscape (by its top) is the focal point.
@@ -169,7 +169,7 @@ describe('aquascapes at every tank size', () => {
         }
         const wb = itemWorldBounds(tallest);
         const u = ((wb.min[0] + wb.max[0]) / 2 + b.halfW) / (2 * b.halfW);
-        expect(Math.min(Math.abs(u - 0.382), Math.abs(u - 0.618)), `${id} ${sizeName} focal at u=${u.toFixed(2)}`).toBeLessThan(0.17);
+        expect(Math.min(Math.abs(u - 0.382), Math.abs(u - 0.618)), `${id} ${sizeName} seed ${seed} focal at u=${u.toFixed(2)}`).toBeLessThan(0.17);
       }
     }
   });

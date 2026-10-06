@@ -21,7 +21,7 @@ import type { AquascapeInfo, TankShape, TankSpec } from './tankTypes';
  */
 export const ROOM_TEMP_C = 22;
 
-/** Specific-gravity comfort bands the life sim uses for brackish and marine animals. */
+/** Specific gravity kept well inside the life sim's comfort bands for brackish and marine animals. */
 const SG_RANGE: Record<WaterType, [number, number]> = { freshwater: [1.0, 1.0], brackish: [1.003, 1.015], marine: [1.02, 1.027] };
 /** The life sim's pH floor per water type (carbonate chemistry never drops below it). */
 const PH_FLOOR: Record<WaterType, number> = { freshwater: 4.0, brackish: 6.8, marine: 7.3 };
