@@ -4487,7 +4487,7 @@
    "shy",
    "reef-safe",
    "mucus-cocoon",
-   "territorial"
+   "cave-dweller"
   ],
   "body": {
    "archetype": "wrasse",
@@ -4774,7 +4774,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-Pacific — Red Sea to the Marquesas & Pitcairn",
-  "description": "Creeps through caves and crevices rather than swimming in the open, rarely leaving cover. Yellow-ringed black eyespots on the rear dorsal, anal and pelvic fins likely misdirect predators.",
+  "description": "Creeps through caves and crevices rather than swimming in the open, rarely leaving cover. Yellow-ringed black eyespots on the rear dorsal and anal fins, plus black pelvic fins, likely misdirect predators.",
   "adultLengthCm": 8,
   "birthLengthCm": 0.15,
   "maturityMonths": 9,
@@ -4789,7 +4789,7 @@
   ],
   "minTankLiters": 75,
   "temperament": "peaceful",
-  "zone": "middle",
+  "zone": "bottom",
   "social": "solitary",
   "groupSize": 1,
   "diet": "carnivore",
@@ -4927,7 +4927,7 @@
   ],
   "minTankLiters": 75,
   "temperament": "peaceful",
-  "zone": "middle",
+  "zone": "bottom",
   "social": "solitary",
   "groupSize": 1,
   "diet": "carnivore",
@@ -6813,15 +6813,15 @@
   "family": "Labridae",
   "group": "fish",
   "water": "marine",
-  "region": "Pacific — western Pacific to the Hawaiian Islands",
-  "description": "Green with rows of red-pink scale markings and bold red bands on the head, a colour scheme that earned it the trade name \"Christmas wrasse\". It buries in sand at night and hunts small crustaceans by day.",
+  "region": "Hawaiian Islands & Johnston Atoll",
+  "description": "Green with rows of red-pink scale markings and bold red bands on the head, a colour scheme that earned it the trade name \"Christmas wrasse\". Restricted to Hawaii (the look-alike elsewhere in the Pacific is Claudia's wrasse, H. claudia), it buries in sand at night and hunts small crustaceans by day.",
   "adultLengthCm": 15,
   "birthLengthCm": 0.18,
   "maturityMonths": 12,
   "lifespanYears": 6,
   "tempC": [
    23,
-   27
+   26
   ],
   "ph": [
    8.1,
@@ -25611,7 +25611,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-Pacific — Red Sea & East Africa to Hawaii",
-  "description": "Pale powder-blue to yellowish with a black spot in the centre of the tail; it hovers in pairs or small groups over sand and rubble near its burrow. Often sold as the blue gudgeon.",
+  "description": "Pale powder-blue to yellowish with a black spot in the centre of the tail; it hovers in pairs or small groups over sand and rubble near its burrow.",
   "adultLengthCm": 11,
   "birthLengthCm": 0.25,
   "maturityMonths": 10,
@@ -25720,7 +25720,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-Pacific — East Africa to the Tuamotus, north to southern Japan",
-  "description": "A pale, pearly blue-green dartfish of shallow lagoon sand flats, usually in pairs or small groups that retreat into burrows when disturbed.",
+  "description": "A pale, pearly blue-green dartfish of shallow lagoon sand flats, also called the blue gudgeon, usually seen in pairs or small groups that retreat into burrows when disturbed.",
   "adultLengthCm": 12,
   "birthLengthCm": 0.25,
   "maturityMonths": 10,
