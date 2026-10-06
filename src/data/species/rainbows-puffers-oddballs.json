@@ -6,7 +6,7 @@
   "family": "Melanotaeniidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Ajamaru Lakes & Hain River, Vogelkop Peninsula, West Papua",
+  "region": "Ajamaru & Aitinjo lakes and their streams, Vogelkop Peninsula, West Papua",
   "description": "Restricted to a few clear, hard-water lakes and streams in the Ajamaru region, where wild stocks have been heavily collected. Mature males become very deep-bodied, split into blue-violet front and orange rear, and flash a pale nuchal stripe while displaying at dawn.",
   "adultLengthCm": 9,
   "birthLengthCm": 0.45,
@@ -1163,7 +1163,7 @@
   "family": "Melanotaeniidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Southern New Guinea lowlands & Aru Islands",
+  "region": "Lowland rainforest streams of southern New Guinea",
   "description": "A lowland rainbowfish of rainforest streams, often listed as M. splendida rubrostriata. Narrow red stripes run between the scale rows of its silvery-yellow body.",
   "adultLengthCm": 10,
   "birthLengthCm": 0.45,
@@ -8047,7 +8047,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Kerala, south-western India",
-  "description": "Described in 1999 and long overlooked among imported Pea Puffers, which it closely resembles. Males show a more intricate dark pattern on the flanks and belly than C. travancoricus.",
+  "description": "Described in 1999 from Kerala, it so closely resembles the Pea Puffer that it was long overlooked among imported shipments. Like its relative it picks snails and tiny invertebrates from dense vegetation in slow, weedy waters.",
   "adultLengthCm": 2.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 6,
@@ -9915,7 +9915,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Mekong River basin of Thailand, Laos & Cambodia",
-  "description": "Named for its pointed, arrow-shaped head, it is an ambush predator that sits still on the bottom and changes color between pale tan and dark brown. Often called the Pig-nosed Puffer in the trade.",
+  "description": "An ambush predator of the Mekong basin that sits motionless on the bottom, often half-buried, and shifts between pale tan and dark brown to match its surroundings. Its long, pointed snout earns it the trade name Pig-nosed Puffer.",
   "adultLengthCm": 15,
   "birthLengthCm": 0.25,
   "maturityMonths": 18,
@@ -12229,12 +12229,28 @@
      "y1": 0.8
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#3a2a30",
-     "count": 3,
-     "width": 0.02,
-     "y0": -0.6,
-     "y1": 0.2
+     "y": 0.2,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#3a2a30",
+     "y": 0,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#3a2a30",
+     "y": -0.2,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.3
     }
    ],
    "fins": {
@@ -12362,12 +12378,28 @@
      "y1": 0.9
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#2e241c",
-     "count": 3,
-     "width": 0.02,
-     "y0": -0.5,
-     "y1": 0.3
+     "y": 0.2,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#2e241c",
+     "y": 0,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#2e241c",
+     "y": -0.2,
+     "width": 0.035,
+     "x0": 0.1,
+     "x1": 0.3
     },
     {
      "type": "marble",
@@ -14673,7 +14705,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Widespread in South America, from the Orinoco to the Río de la Plata",
-  "description": "A translucent, peaceful knifefish that lives in groups among floating vegetation and roots, hovering head-down and communicating with weak electric signals. It has been bred in aquaria by simulating a rainy season.",
+  "description": "A translucent, peaceful knifefish that lives in groups among floating vegetation and roots, hovering in mid-water and communicating with weak electric signals. It has been bred in aquaria by simulating a rainy season.",
   "adultLengthCm": 25,
   "birthLengthCm": 0.3,
   "maturityMonths": 12,
@@ -14956,7 +14988,7 @@
   "family": "Gymnotidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Amazon & Orinoco basins and the Guianas, South America",
+  "region": "Guiana Shield rivers of northern South America (the genus spans the Amazon & Orinoco)",
   "description": "Not a true eel but a giant knifefish that can stun prey and deter predators with discharges of several hundred volts. It must surface every few minutes to gulp air, and is a centerpiece of public aquaria.",
   "adultLengthCm": 150,
   "birthLengthCm": 1,
@@ -15100,7 +15132,7 @@
    "peduncle": 0.3,
    "scaleSize": 0.2,
    "caudal": {
-    "shape": "continuous",
+    "shape": "pointed",
     "size": 0.06
    },
    "dorsal": {
@@ -15247,7 +15279,7 @@
    "peduncle": 0.3,
    "scaleSize": 0.2,
    "caudal": {
-    "shape": "continuous",
+    "shape": "pointed",
     "size": 0.06
    },
    "dorsal": {
@@ -15390,7 +15422,7 @@
    "peduncle": 0.3,
    "scaleSize": 0.2,
    "caudal": {
-    "shape": "continuous",
+    "shape": "pointed",
     "size": 0.06
    },
    "dorsal": {
@@ -15507,7 +15539,7 @@
    "peduncle": 0.3,
    "scaleSize": 0.2,
    "caudal": {
-    "shape": "continuous",
+    "shape": "pointed",
     "size": 0.06
    },
    "dorsal": {
@@ -15624,7 +15656,7 @@
    "peduncle": 0.3,
    "scaleSize": 0.2,
    "caudal": {
-    "shape": "continuous",
+    "shape": "pointed",
     "size": 0.06
    },
    "dorsal": {
@@ -15726,7 +15758,7 @@
    "peduncle": 0.3,
    "scaleSize": 0.2,
    "caudal": {
-    "shape": "continuous",
+    "shape": "pointed",
     "size": 0.06
    },
    "dorsal": null,
@@ -15825,7 +15857,7 @@
    "peduncle": 0.3,
    "scaleSize": 0.2,
    "caudal": {
-    "shape": "continuous",
+    "shape": "pointed",
     "size": 0.06
    },
    "dorsal": {
@@ -21116,7 +21148,8 @@
     "end": 0.35,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "barbels": 0
   },
   "look": {
    "base": "#5a4a3a",
@@ -21230,7 +21263,8 @@
     "end": 0.35,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "barbels": 0
   },
   "look": {
    "base": "#8a8458",
@@ -21344,7 +21378,8 @@
     "end": 0.35,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "barbels": 0
   },
   "look": {
    "base": "#8a6e4a",
@@ -21450,7 +21485,8 @@
     "end": 0.35,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "barbels": 0
   },
   "look": {
    "base": "#8a8a5a",
@@ -22683,7 +22719,7 @@
    "depth": 0.07,
    "width": 0.06,
    "headLength": 0.32,
-   "snout": "beak",
+   "snout": "elongate",
    "mouth": "terminal",
    "eyeSize": 0.2,
    "peduncle": 0.6,
@@ -22795,7 +22831,7 @@
    "depth": 0.06,
    "width": 0.05,
    "headLength": 0.3,
-   "snout": "beak",
+   "snout": "elongate",
    "mouth": "terminal",
    "eyeSize": 0.2,
    "peduncle": 0.6,
@@ -23522,7 +23558,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Chao Phraya & Mekong basins, Thailand, Cambodia & Vietnam",
-  "description": "Once common in the trade but now critically endangered in the wild and rarely exported. Its yellow body carries five or six crisp black bars, narrower and more even than in the Indonesian Tigerfish.",
+  "description": "Once common in the trade but now critically endangered in the wild and rarely exported. Its golden-yellow body is crossed by bold black bars, one running through the eye, and it hunts small fish from cover among submerged wood.",
   "adultLengthCm": 40,
   "birthLengthCm": 0.2,
   "maturityMonths": 36,
@@ -24312,13 +24348,28 @@
      "y1": 0.9
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#3aa0d8",
-     "count": 4,
-     "width": 0.012,
-     "wavy": 0.8,
-     "y0": -0.4,
-     "y1": 0.4
+     "y": 0.08,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#3aa0d8",
+     "y": -0.08,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#3aa0d8",
+     "y": -0.24,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
     },
     {
      "type": "region",
@@ -24712,13 +24763,28 @@
    "iridescenceColor": "#40d8a0",
    "patterns": [
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#3ab8a0",
-     "count": 3,
-     "width": 0.015,
-     "wavy": 0.9,
-     "y0": -0.3,
-     "y1": 0.4
+     "y": 0.08,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.32
+    },
+    {
+     "type": "stripe",
+     "color": "#3ab8a0",
+     "y": -0.08,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.32
+    },
+    {
+     "type": "stripe",
+     "color": "#3ab8a0",
+     "y": -0.24,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.32
     },
     {
      "type": "bars",
@@ -24976,13 +25042,20 @@
      "softness": 0.25
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#3a90c8",
-     "count": 3,
-     "width": 0.012,
-     "wavy": 0.7,
-     "y0": -0.2,
-     "y1": 0.4
+     "y": 0.05,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#3a90c8",
+     "y": -0.12,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
     },
     {
      "type": "blotch",
@@ -25093,12 +25166,28 @@
      "amount": 0.45
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#5a2a1e",
-     "count": 3,
-     "width": 0.02,
-     "y0": -0.3,
-     "y1": 0.3
+     "y": 0.25,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.34
+    },
+    {
+     "type": "stripe",
+     "color": "#5a2a1e",
+     "y": 0.08,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.34
+    },
+    {
+     "type": "stripe",
+     "color": "#5a2a1e",
+     "y": -0.08,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.34
     }
    ],
    "fins": {
@@ -25220,13 +25309,28 @@
      "y1": 0.9
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#40c8b0",
-     "count": 3,
-     "width": 0.015,
-     "wavy": 1,
-     "y0": -0.4,
-     "y1": 0.3
+     "y": 0.05,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#40c8b0",
+     "y": -0.1,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#40c8b0",
+     "y": -0.25,
+     "width": 0.03,
+     "x0": 0.03,
+     "x1": 0.3
     },
     {
      "type": "blotch",
@@ -26385,12 +26489,28 @@
      "y1": 1
     },
     {
-     "type": "lines",
+     "type": "stripe",
      "color": "#4a3a22",
-     "count": 3,
-     "width": 0.015,
-     "y0": -0.3,
-     "y1": 0.3
+     "y": 0.22,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.33
+    },
+    {
+     "type": "stripe",
+     "color": "#4a3a22",
+     "y": 0.05,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.33
+    },
+    {
+     "type": "stripe",
+     "color": "#4a3a22",
+     "y": -0.12,
+     "width": 0.03,
+     "x0": 0.12,
+     "x1": 0.33
     }
    ]
   },
@@ -26866,7 +26986,7 @@
     {
      "type": "blotch",
      "color": "#1a1a14",
-     "x": 0.17,
+     "x": 0.11,
      "y": -0.25,
      "rx": 0.015,
      "ry": 0.15
@@ -30695,7 +30815,8 @@
     "end": 0.29,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "dorsal2": null
   },
   "look": {
    "base": "#7a7468",
@@ -30817,7 +30938,8 @@
     "end": 0.29,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "dorsal2": null
   },
   "look": {
    "base": "#6a6a64",
@@ -30931,7 +31053,8 @@
     "end": 0.29,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "dorsal2": null
   },
   "look": {
    "base": "#5e5e4e",
@@ -31045,7 +31168,8 @@
     "end": 0.29,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "dorsal2": null
   },
   "look": {
    "base": "#7a7258",
@@ -31156,7 +31280,8 @@
     "end": 0.29,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "dorsal2": null
   },
   "look": {
    "base": "#b09a70",
@@ -31256,7 +31381,8 @@
     "end": 0.46,
     "height": 0.1,
     "shape": "rounded"
-   }
+   },
+   "dorsal2": null
   },
   "look": {
    "base": "#7a8088",
@@ -32011,7 +32137,8 @@
     "end": 0.76,
     "height": 0.12,
     "shape": "rounded"
-   }
+   },
+   "dorsal2": null
   },
   "look": {
    "base": "#6a5c64",
@@ -32037,7 +32164,7 @@
     {
      "type": "blotch",
      "color": "#1e1820",
-     "x": 0.16,
+     "x": 0.12,
      "y": -0.4,
      "rx": 0.012,
      "ry": 0.25
@@ -32433,7 +32560,7 @@
     "shape": "rounded",
     "size": 0.22
    },
-   "dorsal2": {
+   "dorsal": {
     "start": 0.5,
     "end": 0.85,
     "height": 0.16,
@@ -32915,7 +33042,8 @@
     "end": 0.25,
     "height": 0.09,
     "shape": "rounded"
-   }
+   },
+   "adipose": false
   },
   "look": {
    "base": "#8a7c50",
