@@ -262,10 +262,10 @@ varying float vAlong;
   outgoingLight += dcTr * uTransl * (1.6 * uDaylight + 0.15 * uMoonlight) * uLightColor * (max(-dcNL, 0.0) + 0.25);
   // Fluorescence: excited by the blue part of the light (actinic), faint under moonlight.
   float dcActinic = clamp(uLightColor.b / max(uLightColor.r, 0.05), 0.4, 3.0);
-  outgoingLight += uFluor * vGlow * dcActinic * (0.22 * uDaylight + 0.35 * uMoonlight);
+  outgoingLight += uFluor * vGlow * dcActinic * (0.22 * uDaylight + 0.12 * uMoonlight);
   // Calm selection: soft rim that breathes slowly.
   float dcFres = pow(1.0 - abs(dot(normal, dcV)), 2.0);
-  outgoingLight += uSelColor * vSel * (0.12 + 0.5 * dcFres) * (0.8 + 0.2 * sin(uTime * 1.4));
+  outgoingLight += uSelColor * vSel * (0.04 + 0.28 * dcFres) * (0.8 + 0.2 * sin(uTime * 1.4));
 }
 #include <opaque_fragment>`,
       );

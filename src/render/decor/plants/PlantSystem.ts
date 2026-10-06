@@ -186,6 +186,7 @@ export class PlantSystem {
       if (!batch || batch.capacity < total) {
         if (batch) {
           batch.mesh.removeFromParent();
+          batch.mesh.geometry.dispose();
           batch.mesh.dispose();
         }
         batch = this.makeBatch(lists[0].def, Math.ceil(total * 1.3) + 16);
