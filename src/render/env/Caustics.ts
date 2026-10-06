@@ -40,6 +40,9 @@ export class Caustics {
       depthBuffer: false,
     });
     this.target.texture.name = 'env.caustics';
+    // Floors and walls are seen at grazing angles: without anisotropic filtering the pattern
+    // would mip down to blotches.
+    this.target.texture.anisotropy = 8;
     this.material = new ShaderMaterial({
       name: 'env.causticsGen',
       uniforms: { uTime: { value: 0 } },

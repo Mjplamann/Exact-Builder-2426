@@ -71,8 +71,7 @@ export class SpatialHash {
       starts[c + 1]++;
     }
     for (let c = 0; c < cells; c++) starts[c + 1] += starts[c];
-    // Scatter using a running cursor stored temporarily in cellOf's sign-free copy.
-    // (We reuse `starts` by walking a second time with per-cell offsets.)
+    // Scatter each item into its cell's slot range.
     const fill = this.fillCursor(cells);
     for (let i = 0; i < n; i++) {
       const c = this.cellOf[i];

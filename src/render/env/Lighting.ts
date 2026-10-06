@@ -31,7 +31,7 @@ const MOON_COLOR = new Color(0.1, 0.24, 1.0);
 /** Warm-ish room light, linear RGB. */
 const ROOM_COLOR = new Color(1.0, 0.78, 0.58);
 /** Peak irradiance scale of the main bar at the surface (tuned with ACES exposure 1). */
-const KEY_INTENSITY = 4.2;
+const KEY_INTENSITY = 5.0;
 const FILL_INTENSITY = 1.1;
 const MOON_INTENSITY = 0.55;
 

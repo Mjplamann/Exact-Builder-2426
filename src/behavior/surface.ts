@@ -88,9 +88,15 @@ export function attachGlass(h: Habitat, fish: FishEntity, b: Brain, wall: number
 
 export function attachDecor(h: Habitat, fish: FishEntity, b: Brain, ci: number): void {
   const k = fish.kin;
+  const so = standoff(b);
   b.surf = SURF_DECOR;
   b.surfIdx = ci;
-  h.projectToCollider(ci, k.pos, standoff(b));
+  h.projectToCollider(ci, k.pos, so);
+  // The buried part of a rock is underground: step onto the substrate instead.
+  if (k.pos[1] < h.floor(k.pos[0], k.pos[2]) + so) {
+    attachSubstrate(h, fish, b);
+    return;
+  }
   setNormal(fish, b, hit.nx, hit.ny, hit.nz);
   tangentForward(fish, b);
 }
@@ -275,17 +281,21 @@ export function reproject(h: Habitat, fish: FishEntity, b: Brain, climbs: boolea
     // Decor.
     const dd = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2], b.shelterOwner);
     if (dd < so * 0.9 && h.nearestIndex >= 0) {
+      const ci = h.nearestIndex;
+      const hl = Math.sqrt(hit.nx * hit.nx + hit.nz * hit.nz) || 1;
+      const nx = hit.nx / hl, nz = hit.nz / hl;
       if (climbs) {
-        attachDecor(h, fish, b, h.nearestIndex);
-        return;
+        attachDecor(h, fish, b, ci);
+        if (b.surf === SURF_DECOR) return;
+        // (The contact point was underground: walk around the base instead.)
       }
       const push = so - dd;
-      k.pos[0] += hit.nx * push;
-      k.pos[2] += hit.nz * push;
-      const d = f[0] * hit.nx + f[2] * hit.nz;
+      k.pos[0] += nx * push;
+      k.pos[2] += nz * push;
+      const d = f[0] * nx + f[2] * nz;
       if (d < 0) {
-        f[0] -= 1.6 * d * hit.nx;
-        f[2] -= 1.6 * d * hit.nz;
+        f[0] -= 1.6 * d * nx;
+        f[2] -= 1.6 * d * nz;
       }
     }
     h.floorNormal(k.pos[0], k.pos[2]);
@@ -347,7 +357,7 @@ export function reproject(h: Habitat, fish: FishEntity, b: Brain, climbs: boolea
       return;
     }
     h.projectToCollider(ci, k.pos, so);
-    let nx = hit.nx, ny = hit.ny, nz = hit.nz;
+    const nx = hit.nx, ny = hit.ny, nz = hit.nz;
     // Another decor piece in the way? Step onto it.
     const dd = h.nearestDecor(k.pos[0], k.pos[1], k.pos[2]);
     if (h.nearestIndex >= 0 && h.nearestIndex !== ci && dd < so * 0.7) {
@@ -379,7 +389,6 @@ export function reproject(h: Habitat, fish: FishEntity, b: Brain, climbs: boolea
       return;
     }
     setNormal(fish, b, nx, ny, nz);
-    nx = ny = nz = 0;
   }
 }
 

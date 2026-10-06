@@ -366,6 +366,10 @@ export class CarePanel implements Panel {
     this.paintStocking();
   }
 
+  onSettingsChanged(): void {
+    for (const s of this.syncers) s();
+  }
+
   onOpen(): void {
     for (const s of this.syncers) s();
     this.refresh();

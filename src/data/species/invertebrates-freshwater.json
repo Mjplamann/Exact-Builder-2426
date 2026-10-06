@@ -1426,7 +1426,7 @@
   "group": "shrimp",
   "water": "freshwater",
   "region": "Captive-bred (wild form: southern China — Guangdong & Hong Kong)",
-  "description": "A solid, opaque white form of the bee shrimp, also sold as Snow White, in which the white pigment covers the whole body and hides the bands. Breeders have used it to strengthen the white in crystal red lines.",
+  "description": "A solid, opaque white form of the bee shrimp in which the white pigment covers the whole body and hides the bands; the purest grades are sold as Snow White. Breeders have used it to strengthen the white in crystal red lines.",
   "adultLengthCm": 2.5,
   "birthLengthCm": 0.15,
   "maturityMonths": 5,
@@ -1497,7 +1497,7 @@
   "group": "shrimp",
   "water": "freshwater",
   "region": "Captive-bred, Taiwan (wild form: southern China — Guangdong & Hong Kong)",
-  "description": "A Taiwan Bee variety: a solid, glossy blue-black bee shrimp without white bands, sometimes with a small white spot on the head. Taiwan Bees arose from crystal-shrimp breeding in Taiwan and need the same cool, very soft water.",
+  "description": "A Taiwan Bee variety: a solid, glossy blue-black bee shrimp without the white bands of its crystal ancestors. Taiwan Bees arose from crystal-shrimp breeding in Taiwan and need the same cool, very soft water.",
   "adultLengthCm": 2.5,
   "birthLengthCm": 0.15,
   "maturityMonths": 5,
@@ -2310,7 +2310,7 @@
   "group": "shrimp",
   "water": "freshwater",
   "region": "Indo-West Pacific — coastal island streams from the Ryukyus & Taiwan to Indonesia & the Pacific islands",
-  "description": "A stocky, short-nosed shrimp that can change color within minutes, from red to brown, green or near-black, often with a pale stripe down the back. It is amphidromous: the larvae drift out to sea, so it does not breed in fresh water.",
+  "description": "A stocky shrimp with a finely toothed rostrum that can change color within minutes, from red to brown, green or near-black, often with a pale stripe down the back. It is amphidromous: the larvae drift out to sea, so it does not breed in fresh water.",
   "adultLengthCm": 2.5,
   "birthLengthCm": 0.1,
   "maturityMonths": 6,
@@ -2348,7 +2348,6 @@
    "archetype": "shrimp",
    "depth": 0.26,
    "width": 0.18,
-   "snout": "blunt",
    "caudal": {
     "shape": "fan"
    }
@@ -2393,7 +2392,7 @@
   "group": "shrimp",
   "water": "freshwater",
   "region": "Sulawesi, Indonesia — Lake Matano (endemic)",
-  "description": "Endemic to ancient Lake Matano, where it grazes biofilm on rocks from the shallows down to about 10 m. Its cardinal-red body is dotted with white and its legs are tipped white; it needs warm, alkaline water and produces only small broods.",
+  "description": "Endemic to ancient Lake Matano, where it grazes biofilm on rocks and stones. Its cardinal-red body is dotted with white and its legs are tipped white; it needs warm, alkaline water and produces only small broods.",
   "adultLengthCm": 2.2,
   "birthLengthCm": 0.15,
   "maturityMonths": 5,
@@ -2469,7 +2468,7 @@
   "group": "shrimp",
   "water": "freshwater",
   "region": "Sulawesi, Indonesia — Lake Towuti (endemic)",
-  "description": "Endemic to Lake Towuti, where adults live on rocky bottoms around 3–5 m deep. Its dark, partly translucent red-brown body carries bright yellow patches on the rostrum and cheeks, hence the trade names Yellow Nose, Yellow Cheek and Yellow Goldflake.",
+  "description": "Endemic to Lake Towuti, where it lives on rocky bottoms. Its dark, partly translucent red-brown body carries bright yellow patches on the rostrum and cheeks, hence the trade names Yellow Nose and Yellow Cheek.",
   "adultLengthCm": 2.5,
   "birthLengthCm": 0.15,
   "maturityMonths": 5,
@@ -2562,8 +2561,8 @@
   "family": "Atyidae",
   "group": "shrimp",
   "water": "freshwater",
-  "region": "Sulawesi, Indonesia — western Lake Towuti (endemic)",
-  "description": "A critically endangered endemic of western Lake Towuti, living on rocks in shallow water. It is brown to red with white patches and a conspicuous white band across the abdomen, and was sold as Caridina sp. \"Red Orchid\" before its description in 2009.",
+  "region": "Sulawesi, Indonesia — Lake Towuti (endemic)",
+  "description": "An endemic of Lake Towuti that lives on rocks in shallow water. It is brown to red with white patches and a conspicuous white band across the abdomen, and was sold as Caridina sp. \"Red Orchid\" before its description in 2009.",
   "adultLengthCm": 2.2,
   "birthLengthCm": 0.15,
   "maturityMonths": 5,
@@ -2649,8 +2648,8 @@
   "family": "Atyidae",
   "group": "shrimp",
   "water": "freshwater",
-  "region": "Sulawesi, Indonesia — northwestern arm of Lake Towuti (endemic)",
-  "description": "A tiny shrimp that lives only on a freshwater sponge in the northwest arm of Lake Towuti, one of very few freshwater shrimps known to live as a commensal. Its whitish, partly clear body is patterned with red-brown bands and spots that blend with the sponge.",
+  "region": "Sulawesi, Indonesia — Lake Towuti (endemic)",
+  "description": "A tiny shrimp that lives only on freshwater sponges in Lake Towuti, one of very few freshwater shrimps known to live as a commensal. Its whitish, partly clear body is patterned with red-brown bands and spots that blend with the sponge.",
   "adultLengthCm": 1.5,
   "birthLengthCm": 0.1,
   "maturityMonths": 5,
@@ -3055,7 +3054,7 @@
   "group": "shrimp",
   "water": "freshwater",
   "region": "Eastern USA — coastal-plain lakes, swamps and slow streams, New Jersey to Texas",
-  "description": "A nearly transparent grass shrimp of fresh coastal-plain waters, sold in vast numbers as feeder and clean-up shrimp. Females carry greenish eggs that hatch into tiny free-swimming larvae, which can be raised in fresh water.",
+  "description": "A nearly transparent grass shrimp of fresh coastal-plain waters, sold in vast numbers as feeder and clean-up shrimp (now often placed in the genus Palaemon). Females carry greenish eggs that hatch into tiny free-swimming larvae, which can be raised in fresh water.",
   "adultLengthCm": 3.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 4,
@@ -3362,7 +3361,7 @@
   "group": "crayfish",
   "water": "freshwater",
   "region": "Central Mexico — highland lakes, canals and ditches",
-  "description": "A robust dwarf crayfish of central Mexico’s highland waters, mottled grey-brown to olive with dark speckling. Females grow a little larger than males, to about 3.7 cm.",
+  "description": "A robust dwarf crayfish of central Mexico’s highland lakes and canals, mottled grey-brown to olive with dark speckling. Females grow a little larger than males and carry their eggs under the tail until they hatch as miniature crayfish.",
   "adultLengthCm": 3.5,
   "birthLengthCm": 0.3,
   "maturityMonths": 4,
@@ -3538,7 +3537,7 @@
   "burstSpeed": 8,
   "traits": [
    "digger",
-   "burrower",
+   "predator",
    "territorial",
    "plant-eater",
    "nocturnal-hider",
@@ -3602,7 +3601,7 @@
   "family": "Cambaridae",
   "group": "crayfish",
   "water": "freshwater",
-  "region": "USA — southern Florida wetlands & the Everglades",
+  "region": "USA — peninsular Florida wetlands, including the Everglades",
   "description": "A crayfish of Florida’s seasonally flooded marshes that survives the dry season in burrows. Wild animals are usually brown with dark spots; the vivid blue aquarium form was bred from rare naturally blue individuals.",
   "adultLengthCm": 10,
   "birthLengthCm": 0.4,
@@ -3633,7 +3632,7 @@
   "burstSpeed": 8,
   "traits": [
    "digger",
-   "burrower",
+   "predator",
    "territorial",
    "plant-eater",
    "nocturnal-hider",
@@ -3706,7 +3705,7 @@
   "burstSpeed": 8,
   "traits": [
    "digger",
-   "burrower",
+   "predator",
    "territorial",
    "plant-eater",
    "nocturnal-hider",
@@ -4124,7 +4123,7 @@
   "group": "crayfish",
   "water": "freshwater",
   "region": "West Papua, Indonesia — streams",
-  "description": "One of the most colorful crayfish, with a pink head-shield shading to greenish grey, a dark blue-black tail edged in cream, and blue claws with pale margins. It was described in 2015 from animals already sold as \"Hoa Creek\" or \"Blue Moon\".",
+  "description": "One of the most colorful crayfish, with a pink head-shield shading to greenish grey, a dark blue-black tail edged in cream, and blue claws with pale margins. It was described in 2015 from animals already exported for years as Cherax sp. \"Hoa Creek\".",
   "adultLengthCm": 10,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -4358,7 +4357,7 @@
   "family": "Hymenosomatidae",
   "group": "crab",
   "water": "freshwater",
-  "region": "Central Thailand — Tachin River basin, among roots of floating plants",
+  "region": "Thailand — slow rivers, among the roots of floating plants",
   "description": "One of the smallest freshwater crabs, with a carapace under 1 cm, living among the dangling roots of floating water hyacinth. Fully aquatic and shy, it filters and picks fine particles with its hairy legs and rarely breeds in aquaria.",
   "adultLengthCm": 0.8,
   "birthLengthCm": 0.05,
@@ -4425,7 +4424,7 @@
   "family": "Gecarcinucidae",
   "group": "crab",
   "water": "freshwater",
-  "region": "Sulawesi, Indonesia — Malili lakes (Matano, Mahalona & Towuti)",
+  "region": "Sulawesi, Indonesia — Malili lakes (Matano & Towuti)",
   "description": "A fully aquatic crab from the ancient Malili lakes of Sulawesi, cream to orange-tan with bold black leopard spots. It is territorial and will catch fish and shrimp, so it is best kept singly or in a large species tank.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.4,
@@ -4572,8 +4571,8 @@
   "family": "Potamonautidae",
   "group": "crab",
   "water": "freshwater",
-  "region": "Lake Tanganyika (endemic) — rocky shores at 5–30 m",
-  "description": "The largest crab endemic to Lake Tanganyika, living among rocks at 5–30 m; its heavy claws crush the lake’s thick-shelled snails, and juveniles shelter in empty snail shells. It is kept singly, often alongside Tanganyikan cichlids.",
+  "region": "Lake Tanganyika (endemic) — rocky shores",
+  "description": "The largest of the crabs endemic to Lake Tanganyika, living among rocks; its heavy claws crush the lake’s thick-shelled snails, which have evolved armored shells in response. It is kept singly, often alongside Tanganyikan cichlids in hard, alkaline water.",
   "adultLengthCm": 4.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 12,
@@ -4638,7 +4637,7 @@
   "group": "crab",
   "water": "brackish",
   "region": "Indo-West Pacific — mangroves and estuaries, India to Japan & Indonesia",
-  "description": "A semi-terrestrial mangrove crab, olive to purplish brown with bright red claws, often sold as a freshwater crab although it does best in slightly brackish water with a land area. Its larvae develop in the sea, so it is not bred in aquaria.",
+  "description": "A semi-terrestrial mangrove crab (now often placed in Parasesarma), olive to purplish brown with bright red claws, often sold as a freshwater crab although it does best in slightly brackish water with a land area. Its larvae develop in the sea, so it is not bred in aquaria.",
   "adultLengthCm": 3,
   "birthLengthCm": 0.05,
   "maturityMonths": 12,
@@ -4709,5 +4708,1924 @@
    }
   },
   "availability": "common"
+ },
+ {
+  "id": "neritina-pulligera",
+  "commonName": "Helmet Nerite",
+  "scientificName": "Neritina pulligera",
+  "family": "Neritidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Indo-West Pacific — fast coastal streams, Philippines & Indonesia to the western Pacific islands",
+  "description": "A large nerite with a smooth, glossy, helmet-like shell in black to dark olive, often worn pale at the apex. It grazes biofilm in fast coastal streams; the larvae drift to the sea, so its egg capsules never hatch in fresh water.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.7,
+   "width": 0.75
+  },
+  "look": {
+   "base": "#18180f",
+   "dorsal": "#101008",
+   "ventral": "#2a2a1e",
+   "fin": "#8a8478",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2a2e1c",
+     "density": 10
+    },
+    {
+     "type": "lines",
+     "color": "#26301a",
+     "count": 5,
+     "width": 0.01
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "neritina-reclivata",
+  "commonName": "Olive Nerite",
+  "scientificName": "Neritina reclivata",
+  "family": "Neritidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Florida, the Gulf coast & Caribbean — coastal springs, rivers and estuaries",
+  "description": "A small nerite of Florida and Caribbean coastal springs and estuaries, olive green with fine dark lines and flecks. Like most nerites it lays hard white egg capsules on rocks and glass that do not hatch in fresh water.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.8,
+   "width": 0.75
+  },
+  "look": {
+   "base": "#5e6a2e",
+   "dorsal": "#4e5a24",
+   "ventral": "#7a8448",
+   "fin": "#8a8070",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#22260e",
+     "count": 12,
+     "width": 0.012,
+     "wavy": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#2a2e14",
+     "density": 20
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "vittina-waigiensis",
+  "commonName": "Red Racer Nerite",
+  "scientificName": "Vittina waigiensis",
+  "family": "Neritidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Philippines & Indonesia (Sulawesi & Maluku) — coastal streams and estuaries",
+  "description": "A nerite whose shell is marked with bold black zigzag stripes, like tire tracks, over a red, orange or golden ground, the pattern differing from snail to snail. It lives in coastal streams and estuaries and does not breed in fresh water.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.8,
+   "width": 0.75
+  },
+  "look": {
+   "base": "#b8502a",
+   "dorsal": "#a8441e",
+   "ventral": "#c8683e",
+   "fin": "#8a8070",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#14100c",
+     "count": 10,
+     "width": 0.03
+    },
+    {
+     "type": "speckle",
+     "color": "#5a2010",
+     "density": 10
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "clithon-corona",
+  "commonName": "Horned Nerite",
+  "scientificName": "Clithon corona",
+  "family": "Neritidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Indo-West Pacific — coastal streams and estuaries, Indonesia & the Philippines to the western Pacific",
+  "description": "A small, round nerite banded in yellow and black, with a crown of spines around the top of the shell that can wear down or break with age. Like other nerites it lays white egg capsules that need brackish water to develop.",
+  "adultLengthCm": 1.2,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.9,
+   "width": 0.85
+  },
+  "look": {
+   "base": "#c8a83a",
+   "dorsal": "#b8982c",
+   "ventral": "#d8bc5a",
+   "fin": "#8a8070",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#16120a",
+     "count": 3,
+     "width": 0.12
+    },
+    {
+     "type": "speckle",
+     "color": "#4a3a14",
+     "density": 10
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "septaria-porcellana",
+  "commonName": "Batman Snail",
+  "scientificName": "Septaria porcellana",
+  "family": "Neritidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Indo-West Pacific — fast coastal streams, southern Japan & the Philippines to Indonesia",
+  "description": "A flat, limpet-shaped nerite whose shell has almost lost its coil, an adaptation for clinging to rocks in strong current; the trade name comes from the dark bat-like marking on many shells. The olive to yellow-brown shell is netted with dark purple-black markings; it grazes biofilm and does not breed in fresh water.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.25,
+   "width": 0.7
+  },
+  "look": {
+   "base": "#9a8a4a",
+   "dorsal": "#8a7a3e",
+   "ventral": "#c8c0a0",
+   "fin": "#a89a80",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#2a1a2a",
+     "scale": 4,
+     "thickness": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#4a3a2a",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "faunus-ater",
+  "commonName": "Black Devil Snail",
+  "scientificName": "Faunus ater",
+  "family": "Pachychilidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Indo-West Pacific — lower courses of rivers and estuaries, India to the Philippines & New Guinea",
+  "description": "A large snail with a glossy, jet-black, long-spired shell, living where coastal rivers meet the sea. It grazes biofilm and detritus and often burrows partly into soft sand; it does not breed in a freshwater aquarium.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   6,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "burrower",
+   "algae-eater",
+   "scavenger",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.28,
+   "width": 0.28
+  },
+  "look": {
+   "base": "#0e0e0e",
+   "dorsal": "#060606",
+   "ventral": "#1a1a1a",
+   "fin": "#3a3430",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#1e1e1e",
+     "count": 8,
+     "width": 0.01
+    },
+    {
+     "type": "speckle",
+     "color": "#202020",
+     "density": 8
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "brotia-pagodula",
+  "commonName": "Pagoda Snail",
+  "scientificName": "Brotia pagodula",
+  "family": "Pachychilidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Thailand & Myanmar — clear, fast streams over limestone",
+  "description": "A dark brown snail whose tall shell is ringed with rows of spines, like the tiers of a pagoda. It needs clear, well-oxygenated, flowing water, and females brood their young and release them as tiny crawling snails.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "crepuscular",
+  "reproduction": "livebearer",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.4,
+   "width": 0.4
+  },
+  "look": {
+   "base": "#4a3624",
+   "dorsal": "#3a2a1a",
+   "ventral": "#6a5038",
+   "fin": "#2a2420",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#2a1c10",
+     "count": 4,
+     "width": 0.03
+    },
+    {
+     "type": "speckle",
+     "color": "#6a5a44",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "tylomelania-zemis",
+  "commonName": "Orange Rabbit Snail",
+  "scientificName": "Tylomelania zemis",
+  "family": "Pachychilidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Sulawesi, Indonesia — ancient lakes",
+  "description": "A large Sulawesi lake snail with a dark, tall, ridged shell and a bright orange body; the long snout and drooping tentacles give rabbit snails their name. Females give birth to a single large, fully formed young at a time, released in a white capsule at long intervals.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   25,
+   30
+  ],
+  "ph": [
+   7.2,
+   8.2
+  ],
+  "dGH": [
+   4,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.35,
+   "width": 0.35,
+   "snout": "elongate"
+  },
+  "look": {
+   "base": "#2a2018",
+   "dorsal": "#1e1610",
+   "ventral": "#3a2e22",
+   "fin": "#e8781e",
+   "finOpacity": 1,
+   "eye": "#141414",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#46382a",
+     "count": 6,
+     "width": 0.025
+    },
+    {
+     "type": "speckle",
+     "color": "#120c08",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "melanoides-tuberculata",
+  "commonName": "Malaysian Trumpet Snail",
+  "scientificName": "Melanoides tuberculata",
+  "family": "Thiaridae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Africa, the Middle East & southern Asia to northern Australia (introduced worldwide)",
+  "description": "A tall, cone-shelled snail that spends the day burrowed in the substrate, turning it over and eating detritus, and comes out at night to graze. Most populations are all-female and parthenogenetic, brooding live young, so a few snails soon become hundreds.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   30
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   25
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "nocturnal",
+  "reproduction": "livebearer",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "burrower",
+   "sifter-of-detritus",
+   "scavenger",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.28,
+   "width": 0.28
+  },
+  "look": {
+   "base": "#c8b08a",
+   "dorsal": "#b89a74",
+   "ventral": "#d8c8a8",
+   "fin": "#6a6050",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#8a3a1e",
+     "density": 40,
+     "size": 0.03
+    },
+    {
+     "type": "lines",
+     "color": "#7a5a3a",
+     "count": 6,
+     "width": 0.012
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "tarebia-granifera",
+  "commonName": "Quilted Melania",
+  "scientificName": "Tarebia granifera",
+  "family": "Thiaridae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "South & Southeast Asia (introduced in the Americas, Africa & elsewhere)",
+  "description": "A trumpet-like snail with a shorter, broader shell covered in rows of small granules, which give it a quilted look. Like Melanoides it is parthenogenetic and broods live young, and it has become invasive in many warm regions.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 3,
+  "lifespanYears": 2,
+  "tempC": [
+   18,
+   30
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   25
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "nocturnal",
+  "reproduction": "livebearer",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "scavenger",
+   "sifter-of-detritus",
+   "algae-eater",
+   "burrower"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.36,
+   "width": 0.36
+  },
+  "look": {
+   "base": "#4a3a2a",
+   "dorsal": "#3a2c1e",
+   "ventral": "#6a5a46",
+   "fin": "#5a5048",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#8a7656",
+     "density": 80,
+     "size": 0.02
+    },
+    {
+     "type": "speckle",
+     "color": "#2a1e14",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "anentome-helena",
+  "commonName": "Assassin Snail",
+  "scientificName": "Anentome helena",
+  "family": "Nassariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Southeast Asia — rivers and lakes of Thailand, Malaysia & Indonesia",
+  "description": "A predatory snail that hunts other snails, pushing a long proboscis into the prey’s shell, and also scavenges carrion; it spends much of the day buried with only its siphon showing. Females lay single eggs in small capsules on hard surfaces, and the young burrow for months after hatching.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   6,
+   15
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "invert-eater",
+   "burrower",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.42,
+   "width": 0.42
+  },
+  "look": {
+   "base": "#e0b83a",
+   "dorsal": "#d0a82e",
+   "ventral": "#e8c858",
+   "fin": "#8a8478",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a2210",
+     "count": 3,
+     "width": 0.1
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "pomacea-diffusa",
+  "commonName": "Spike-topped Apple Snail",
+  "scientificName": "Pomacea diffusa",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Amazon basin — Bolivia, Brazil & Peru",
+  "description": "The wild form of the aquarium \"mystery snail\", long sold as Pomacea bridgesii: a tan to olive-brown shell with dark spiral bands. It breathes air through a long siphon raised to the surface and lays clutches of pale pink eggs just above the waterline; unlike some apple snails it rarely damages healthy plants.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "air-gulper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "base": "#8a6a3a",
+   "dorsal": "#6e5228",
+   "ventral": "#a8885a",
+   "fin": "#3a3a36",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a2814",
+     "count": 5,
+     "width": 0.03
+    },
+    {
+     "type": "speckle",
+     "color": "#5a4224",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pomacea-diffusa-gold",
+  "commonName": "Golden Mystery Snail",
+  "scientificName": "Pomacea diffusa",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Amazon basin — Bolivia, Brazil & Peru)",
+  "description": "A captive color form with a bright yellow, unbanded shell over a pale, gold-flecked body. It is the mystery snail most often seen in pet shops.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "air-gulper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "eye": "#151515",
+   "finOpacity": 1,
+   "base": "#e8c03a",
+   "dorsal": "#dcb02a",
+   "ventral": "#f0d468",
+   "fin": "#d8c8a0",
+   "metallic": 0.1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#c89a20",
+     "density": 10
+    }
+   ]
+  },
+  "variantOf": "pomacea-diffusa",
+  "availability": "common"
+ },
+ {
+  "id": "pomacea-diffusa-ivory",
+  "commonName": "Ivory Mystery Snail",
+  "scientificName": "Pomacea diffusa",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Amazon basin — Bolivia, Brazil & Peru)",
+  "description": "A captive color form with a creamy white, unbanded shell and a pale, gold-flecked body. Its shell shows algae and mineral deposits more than darker colors.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "air-gulper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "eye": "#151515",
+   "finOpacity": 1,
+   "base": "#efe6cf",
+   "dorsal": "#f4ecd8",
+   "ventral": "#e4d8bc",
+   "fin": "#e0d6c0",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#d8c8a4",
+     "density": 10
+    }
+   ]
+  },
+  "variantOf": "pomacea-diffusa",
+  "availability": "common"
+ },
+ {
+  "id": "pomacea-diffusa-blue",
+  "commonName": "Blue Mystery Snail",
+  "scientificName": "Pomacea diffusa",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Amazon basin — Bolivia, Brazil & Peru)",
+  "description": "A captive color form in which a dark body shows through a translucent blue-grey shell; faint darker banding is often still visible.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "air-gulper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "eye": "#151515",
+   "finOpacity": 1,
+   "base": "#5a6a86",
+   "dorsal": "#4a5a76",
+   "ventral": "#7a88a0",
+   "fin": "#2a2a2e",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a4660",
+     "count": 4,
+     "width": 0.03
+    },
+    {
+     "type": "speckle",
+     "color": "#2e3a50",
+     "density": 10
+    }
+   ]
+  },
+  "variantOf": "pomacea-diffusa",
+  "availability": "common"
+ },
+ {
+  "id": "pomacea-diffusa-black",
+  "commonName": "Black Mystery Snail",
+  "scientificName": "Pomacea diffusa",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Amazon basin — Bolivia, Brazil & Peru)",
+  "description": "A captive color form with a very dark brown to black shell over a dark body; in strong light the shell often shows deep brown banding.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "air-gulper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "eye": "#151515",
+   "finOpacity": 1,
+   "base": "#1e1a16",
+   "dorsal": "#14110e",
+   "ventral": "#2e2822",
+   "fin": "#2a2a28",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#0e0c0a",
+     "count": 5,
+     "width": 0.03
+    }
+   ]
+  },
+  "variantOf": "pomacea-diffusa",
+  "availability": "uncommon"
+ },
+ {
+  "id": "pomacea-diffusa-purple",
+  "commonName": "Purple Mystery Snail",
+  "scientificName": "Pomacea diffusa",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Amazon basin — Bolivia, Brazil & Peru)",
+  "description": "A captive color form with a thin shell tinted purple to plum over a dark body; it can look nearly black until light catches the shell from the side.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "air-gulper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "eye": "#151515",
+   "finOpacity": 1,
+   "base": "#4a2a4a",
+   "dorsal": "#3a1e3a",
+   "ventral": "#5e3a5a",
+   "fin": "#2a2228",
+   "iridescence": 0.15,
+   "iridescenceColor": "#7a4a8a",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#2a142a",
+     "count": 4,
+     "width": 0.03
+    }
+   ]
+  },
+  "variantOf": "pomacea-diffusa",
+  "availability": "uncommon"
+ },
+ {
+  "id": "pomacea-diffusa-magenta",
+  "commonName": "Magenta Mystery Snail",
+  "scientificName": "Pomacea diffusa",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Amazon basin — Bolivia, Brazil & Peru)",
+  "description": "A captive color form with a pinkish red to magenta shell over a pale body; the depth of color varies from snail to snail.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 6,
+  "lifespanYears": 1.5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "air-gulper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "eye": "#151515",
+   "finOpacity": 1,
+   "base": "#b0485e",
+   "dorsal": "#9a3a50",
+   "ventral": "#c4687a",
+   "fin": "#d8c8a8",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#8a2a40",
+     "density": 10
+    }
+   ]
+  },
+  "variantOf": "pomacea-diffusa",
+  "availability": "uncommon"
+ },
+ {
+  "id": "marisa-cornuarietis",
+  "commonName": "Giant Ramshorn Snail",
+  "scientificName": "Marisa cornuarietis",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Northern South America (introduced in Florida, the Caribbean & elsewhere)",
+  "description": "A large apple snail with a flat, ram’s-horn coiled shell banded dark brown on gold. A voracious plant-eater, it has been released to control water weeds and the snail hosts of schistosomiasis, and it lays clear jelly egg masses under water.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   21,
+   28
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   18
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "plant-eater",
+   "algae-eater",
+   "scavenger",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.9,
+   "width": 0.4
+  },
+  "look": {
+   "base": "#c8a050",
+   "dorsal": "#b89040",
+   "ventral": "#d8b468",
+   "fin": "#b8a078",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a2814",
+     "count": 4,
+     "width": 0.035
+    },
+    {
+     "type": "speckle",
+     "color": "#6a4a24",
+     "density": 10
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "asolene-spixii",
+  "commonName": "Zebra Apple Snail",
+  "scientificName": "Asolene spixii",
+  "family": "Ampullariidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "South America — southern Brazil to Uruguay & northeastern Argentina",
+  "description": "A small apple snail, only about 3 cm across, whose golden-brown shell is striped with dark zigzag bands. Besides algae and detritus it eats the eggs of other snails, and it often digs itself into the substrate.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   20,
+   27
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   6,
+   15
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "burrower"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "base": "#c09a52",
+   "dorsal": "#a8823e",
+   "ventral": "#d0ae6a",
+   "fin": "#8a7a62",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#2a1a0e",
+     "count": 10,
+     "width": 0.035
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "planorbella-duryi",
+  "commonName": "Seminole Ramshorn",
+  "scientificName": "Planorbella duryi",
+  "family": "Planorbidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Florida, USA — springs, lakes and canals",
+  "description": "A small, flat-coiled pulmonate snail from Florida that grazes algae and detritus and lays small jelly egg clutches on plants and glass. Its blood carries hemoglobin, which shows as a red body in the pale aquarium color forms.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 2,
+  "lifespanYears": 1,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   7,
+   8.4
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.9,
+   "width": 0.45
+  },
+  "look": {
+   "base": "#6a4a2e",
+   "dorsal": "#5a3c22",
+   "ventral": "#7e5c3c",
+   "fin": "#3a2a24",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#4a3220",
+     "count": 6,
+     "width": 0.01
+    },
+    {
+     "type": "speckle",
+     "color": "#3a2818",
+     "density": 15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "planorbella-duryi-red",
+  "commonName": "Red Ramshorn Snail",
+  "scientificName": "Planorbella duryi",
+  "family": "Planorbidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Florida)",
+  "description": "A color form of the Seminole ramshorn that lacks dark body pigment, so its hemoglobin-rich blood shows bright red through a translucent brownish-red shell. It is the red ramshorn usually sold in North America.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 2,
+  "lifespanYears": 1,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   7,
+   8.4
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.9,
+   "width": 0.45
+  },
+  "look": {
+   "base": "#a8483a",
+   "dorsal": "#983a2e",
+   "ventral": "#b85848",
+   "fin": "#d02a2a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "translucency": 0.2,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#7a2a20",
+     "count": 6,
+     "width": 0.01
+    }
+   ]
+  },
+  "variantOf": "planorbella-duryi",
+  "availability": "common"
+ },
+ {
+  "id": "planorbella-duryi-pink",
+  "commonName": "Pink Ramshorn Snail",
+  "scientificName": "Planorbella duryi",
+  "family": "Planorbidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Florida)",
+  "description": "A pale-shelled color form of the Seminole ramshorn in which the red, unpigmented body glows through a translucent pink shell.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 2,
+  "lifespanYears": 1,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   7,
+   8.4
+  ],
+  "dGH": [
+   6,
+   18
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.9,
+   "width": 0.45
+  },
+  "look": {
+   "base": "#e8a0a0",
+   "dorsal": "#e09090",
+   "ventral": "#f0b4b0",
+   "fin": "#e04040",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "translucency": 0.3,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#c87070",
+     "count": 6,
+     "width": 0.01
+    }
+   ]
+  },
+  "variantOf": "planorbella-duryi",
+  "availability": "common"
+ },
+ {
+  "id": "planorbarius-corneus",
+  "commonName": "Great Ramshorn Snail",
+  "scientificName": "Planorbarius corneus",
+  "family": "Planorbidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Europe & western Asia — weedy ponds, ditches and slow rivers",
+  "description": "Europe’s largest ramshorn snail, with a thick, dark olive-brown shell up to about 3.5 cm across. It thrives in cool, hard water and lays flat jelly egg clutches on plants and stones.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   10,
+   25
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.9,
+   "width": 0.45
+  },
+  "look": {
+   "base": "#4a4026",
+   "dorsal": "#3a3218",
+   "ventral": "#5e5434",
+   "fin": "#1e1c1a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#2e2a18",
+     "count": 8,
+     "width": 0.01
+    },
+    {
+     "type": "speckle",
+     "color": "#2a2414",
+     "density": 10
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "planorbarius-corneus-red",
+  "commonName": "Red Great Ramshorn Snail",
+  "scientificName": "Planorbarius corneus",
+  "family": "Planorbidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Europe & western Asia)",
+  "description": "A red color form of the great ramshorn that lacks dark pigment, so its hemoglobin-rich blood colors the body bright red under a translucent reddish-brown shell. It is the red ramshorn usually sold in Europe.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   10,
+   25
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.9,
+   "width": 0.45
+  },
+  "look": {
+   "base": "#9a3a2a",
+   "dorsal": "#8a2e20",
+   "ventral": "#aa4a38",
+   "fin": "#cc2a26",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "translucency": 0.2,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a2418",
+     "count": 8,
+     "width": 0.01
+    }
+   ]
+  },
+  "variantOf": "planorbarius-corneus",
+  "availability": "common"
+ },
+ {
+  "id": "physella-acuta",
+  "commonName": "Bladder Snail",
+  "scientificName": "Physella acuta",
+  "family": "Physidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "North America (now cosmopolitan)",
+  "description": "A small, thin-shelled, left-coiling snail that hitchhikes into aquaria on plants and multiplies quickly wherever food is plentiful. It often glides upside down beneath the water surface and can lower itself on a thread of mucus.",
+  "adultLengthCm": 1,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 2,
+  "lifespanYears": 1,
+  "tempC": [
+   15,
+   28
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   4,
+   20
+  ],
+  "minTankLiters": 5,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.6,
+   "width": 0.55
+  },
+  "look": {
+   "base": "#b89a6a",
+   "dorsal": "#a88a5a",
+   "ventral": "#c8b08a",
+   "fin": "#5a5048",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "translucency": 0.35,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a3024",
+     "density": 40
+    },
+    {
+     "type": "spots",
+     "color": "#e8d8a8",
+     "density": 20,
+     "size": 0.02
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "lymnaea-stagnalis",
+  "commonName": "Great Pond Snail",
+  "scientificName": "Lymnaea stagnalis",
+  "family": "Lymnaeidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "Holarctic — ponds, lakes and slow rivers of Europe, northern Asia & North America",
+  "description": "A large air-breathing pond snail with a tall, sharply pointed spire, a staple of school biology and a model animal in neuroscience. It eats plants as well as algae and carrion, and lays sausage-shaped jelly egg masses on leaves.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 4,
+  "lifespanYears": 2,
+  "tempC": [
+   10,
+   24
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "plant-eater",
+   "algae-eater",
+   "scavenger",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.5,
+   "width": 0.5
+  },
+  "look": {
+   "base": "#9a7a4a",
+   "dorsal": "#8a6a3a",
+   "ventral": "#b09468",
+   "fin": "#4a4234",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a5030",
+     "count": 8,
+     "width": 0.01
+    },
+    {
+     "type": "speckle",
+     "color": "#5a4428",
+     "density": 10
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cipangopaludina-chinensis",
+  "commonName": "Chinese Mystery Snail",
+  "scientificName": "Cipangopaludina chinensis",
+  "family": "Viviparidae",
+  "group": "snail",
+  "water": "freshwater",
+  "region": "East Asia — China, Korea & Japan (invasive in North America)",
+  "description": "A large, olive-green pond snail that can seal its shell with a horny lid, kept in garden ponds and coldwater tanks. Females give birth to live, fully formed young, and introduced populations have spread through North American lakes.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   5,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "livebearer",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.75,
+   "width": 0.7
+  },
+  "look": {
+   "base": "#4a5230",
+   "dorsal": "#3a4224",
+   "ventral": "#6a704a",
+   "fin": "#3a3a34",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#2a3018",
+     "count": 6,
+     "width": 0.012
+    },
+    {
+     "type": "speckle",
+     "color": "#2e3420",
+     "density": 10
+    }
+   ]
+  },
+  "availability": "uncommon"
  }
 ]

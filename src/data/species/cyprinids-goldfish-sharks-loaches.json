@@ -4143,7 +4143,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred, Niigata, Japan (wild form: Amur carp, East Asia)",
-  "description": "A three-coloured koi first exhibited in the Taishō era (1910s): a kohaku pattern with small black (sumi) patches on the back, but never on the head. Fine black stripes often mark the tail and dorsal fin.",
+  "description": "A three-coloured koi first exhibited in the Taishō era (1910s): a kohaku pattern with small black (sumi) patches on the back, traditionally none on the head. Fine black stripes often mark the tail and dorsal fin.",
   "adultLengthCm": 60,
   "birthLengthCm": 0.5,
   "maturityMonths": 36,
@@ -6318,7 +6318,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred, Niigata, Japan (wild form: Amur carp, East Asia)",
-  "description": "A doitsu koi whose name means \"dragon in the clouds\". Its black-and-white pattern can change dramatically with season and water temperature, sometimes turning almost all black or all white.",
+  "description": "A doitsu (nearly scaleless) black-and-white koi named after Kumonryū, the dragon-tattooed hero of the Suikoden. Its pattern can change dramatically with season and water temperature, sometimes turning almost all black or all white.",
   "adultLengthCm": 60,
   "birthLengthCm": 0.5,
   "maturityMonths": 36,
@@ -7056,6 +7056,13 @@
    "finOpacity": 0.85,
    "eye": "#b05a20",
    "metallic": 0.05,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#2a2a2e",
+     "contrast": 0.12
+    }
+   ],
    "fins": {
     "caudal": {
      "color": "#d8261c",
@@ -7286,7 +7293,14 @@
    "fin": "#e8401e",
    "finOpacity": 0.85,
    "eye": "#d02a2a",
-   "metallic": 0.15
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#e0c8bc",
+     "contrast": 0.12
+    }
+   ]
   },
   "male": {
    "look": {
@@ -7402,7 +7416,14 @@
    "finOpacity": 0.82,
    "eye": "#c06020",
    "iridescence": 0.3,
-   "iridescenceColor": "#ffb050"
+   "iridescenceColor": "#ffb050",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#e0681a",
+     "contrast": 0.12
+    }
+   ]
   },
   "male": {
    "look": {
@@ -7518,7 +7539,14 @@
    "finOpacity": 0.82,
    "eye": "#c06020",
    "iridescence": 0.3,
-   "iridescenceColor": "#b070ff"
+   "iridescenceColor": "#b070ff",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#4e1e78",
+     "contrast": 0.15
+    }
+   ]
   },
   "male": {
    "look": {
@@ -7709,8 +7737,8 @@
   "family": "Cyprinidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Mekong & Chao Phraya basins, Malay Peninsula, Sumatra & Borneo — large rivers and lakes",
-  "description": "A big-eyed, torpedo-shaped schooling minnow with silver scales and black-edged, yellowish fins. Skittish and a powerful jumper, it grows large and needs a long, covered tank; aquarium fish are farmed.",
+  "region": "Malay Peninsula, Sumatra & Borneo — large rivers and lakes",
+  "description": "A big-eyed, torpedo-shaped schooling minnow with silver scales and black-edged, yellowish fins; the Indochinese populations are now treated as a separate species, B. ambusticauda. Skittish and a powerful jumper, it grows large and needs a long, covered tank; aquarium fish are farmed.",
   "adultLengthCm": 30,
   "birthLengthCm": 0.4,
   "maturityMonths": 30,
@@ -8549,7 +8577,7 @@
     "size": 0.32
    },
    "dorsal": {
-    "start": 0.45,
+    "start": 0.48,
     "end": 0.6,
     "height": 0.16,
     "shape": "rounded"
@@ -8604,8 +8632,8 @@
     {
      "type": "region",
      "color": "#151412",
-     "x0": 0.58,
-     "x1": 0.78,
+     "x0": 0.5,
+     "x1": 0.76,
      "y0": -0.55,
      "y1": 1,
      "softness": 0.04
@@ -9991,8 +10019,8 @@
     {
      "type": "stripe",
      "color": "#1e1c18",
-     "y": 0.3,
-     "width": 0.16,
+     "y": 0.05,
+     "width": 0.14,
      "x0": 0.02,
      "x1": 0.98
     },
@@ -10003,7 +10031,7 @@
      "width": 0.05,
      "x0": 0.1,
      "x1": 0.95,
-     "y0": 0.3,
+     "y0": 0.05,
      "y1": 1
     },
     {
@@ -10407,7 +10435,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Mekong & Chao Phraya basins — Thailand, Laos, Cambodia, Vietnam",
-  "description": "The largest and most aggressive of the commonly sold botiids: golden-green with broad blue-black bars and a red-orange tail. It should be kept in a group in a large tank with tankmates that can hold their own.",
+  "description": "One of the largest and most aggressive botiids in the trade: golden-green with broad blue-black bars and a red-orange tail. It should be kept in a group in a large tank with tankmates that can hold their own.",
   "adultLengthCm": 22,
   "birthLengthCm": 0.4,
   "maturityMonths": 36,
@@ -10648,6 +10676,7578 @@
        "width": 0.12
       }
      ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pangio-semicincta",
+  "commonName": "Half-banded Kuhli Loach",
+  "scientificName": "Pangio semicincta",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Malay Peninsula, Sumatra & Borneo — peat-swamp and forest streams",
+  "description": "Often sold mixed in with true kuhli loaches. Its dark saddles stop part-way down the flank, leaving a plain pinkish-orange belly.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "nocturnal-hider",
+   "shy",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "kuhli",
+   "depth": 0.09,
+   "width": 0.08,
+   "barbels": 6,
+   "barbelLength": 0.03
+  },
+  "look": {
+   "base": "#ec9a5a",
+   "dorsal": "#d8803e",
+   "ventral": "#f6c8a8",
+   "fin": "#e8c0a0",
+   "finOpacity": 0.3,
+   "eye": "#222222",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a1c14",
+     "count": 12,
+     "width": 0.05,
+     "x0": 0.04,
+     "x1": 0.96,
+     "y0": 0.05,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "pangio-oblonga",
+  "commonName": "Black Kuhli Loach",
+  "scientificName": "Pangio oblonga",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southeast Asia — Mekong basin south to Java, Sumatra & Borneo",
+  "description": "A plain chocolate-brown kuhli and one of the few Pangio bred in home aquaria: females scatter bright green eggs among floating plant roots. Like its banded cousins it spends the day buried in sand or leaf litter.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "nocturnal-hider",
+   "shy",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "kuhli",
+   "depth": 0.09,
+   "width": 0.08,
+   "barbels": 6,
+   "barbelLength": 0.03
+  },
+  "look": {
+   "base": "#4a3020",
+   "dorsal": "#3a2418",
+   "ventral": "#6a4a34",
+   "fin": "#6a5040",
+   "finOpacity": 0.35,
+   "eye": "#1e1e1e",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2a1a10",
+     "density": 20
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pangio-myersi",
+  "commonName": "Myers’ Loach (Giant Kuhli)",
+  "scientificName": "Pangio myersi",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mekong & Chao Phraya basins — Thailand, Laos, Cambodia, Vietnam",
+  "description": "The largest commonly sold kuhli, with 10–12 broad black bands that wrap right round the body and are wider than the orange gaps between them.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "nocturnal-hider",
+   "shy",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "kuhli",
+   "depth": 0.09,
+   "width": 0.08,
+   "barbels": 6,
+   "barbelLength": 0.03
+  },
+  "look": {
+   "base": "#e8a050",
+   "dorsal": "#d88838",
+   "ventral": "#f2c490",
+   "fin": "#e0b890",
+   "finOpacity": 0.3,
+   "eye": "#222222",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#1c1410",
+     "count": 11,
+     "width": 0.07,
+     "x0": 0.04,
+     "x1": 0.96,
+     "y0": -1,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pangio-shelfordii",
+  "commonName": "Shelford’s Loach",
+  "scientificName": "Pangio shelfordii",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Borneo, Sumatra & the Malay Peninsula — leaf-littered forest streams",
+  "description": "A kuhli loach mottled with dark blotches and spots on a tan body instead of neat bands. Like its relatives it lives among leaf litter and buries itself in soft sand.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "nocturnal-hider",
+   "shy",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "kuhli",
+   "depth": 0.09,
+   "width": 0.08,
+   "barbels": 6,
+   "barbelLength": 0.03
+  },
+  "look": {
+   "base": "#d2a868",
+   "dorsal": "#a07a44",
+   "ventral": "#ecd8b4",
+   "fin": "#dcc8a8",
+   "finOpacity": 0.3,
+   "eye": "#222222",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2818",
+     "density": 40,
+     "size": 0.06,
+     "x0": 0.03,
+     "x1": 0.97,
+     "y0": -0.4,
+     "y1": 1,
+     "jitter": 0.6
+    },
+    {
+     "type": "bars",
+     "color": "#3a2818",
+     "count": 10,
+     "width": 0.03,
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": 0.4,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pangio-anguillaris",
+  "commonName": "Eel Loach",
+  "scientificName": "Pangio anguillaris",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southeast Asia — Mekong & Chao Phraya basins, Malay Peninsula, Sumatra & Borneo",
+  "description": "A slender, plain brownish kuhli with a fine pepper of dark dots and a pale belly. It is less colourful than banded kuhlis but just as fond of burrowing.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "nocturnal-hider",
+   "shy",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "kuhli",
+   "depth": 0.09,
+   "width": 0.08,
+   "barbels": 6,
+   "barbelLength": 0.03
+  },
+  "look": {
+   "base": "#a08a64",
+   "dorsal": "#7a6646",
+   "ventral": "#d8ccb0",
+   "fin": "#c0b090",
+   "finOpacity": 0.3,
+   "eye": "#222222",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a2e20",
+     "density": 70
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "acantopsis-dialuzona",
+  "commonName": "Horseface Loach",
+  "scientificName": "Acantopsis dialuzona",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Malay Peninsula, Sumatra, Java & Borneo — sandy rivers",
+  "description": "Spends the day buried in sand with only its high-set eyes showing, then ploughs through the substrate with its long, horse-like snout, sifting out small invertebrates.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "burrower",
+   "sand-sifter",
+   "nocturnal-hider",
+   "shy"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.13,
+   "width": 0.1,
+   "depthPos": 0.38,
+   "headLength": 0.25,
+   "snout": "elongate",
+   "mouth": "inferior",
+   "eyeSize": 0.18,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.02,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.55,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#d8c8a0",
+   "dorsal": "#b09a70",
+   "ventral": "#f2ead8",
+   "fin": "#e8e0cc",
+   "finOpacity": 0.3,
+   "eye": "#6a5a40",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2e1c",
+     "density": 12,
+     "size": 0.05,
+     "x0": 0.15,
+     "x1": 0.98,
+     "y0": -0.1,
+     "y1": 0.1,
+     "jitter": 0.2
+    },
+    {
+     "type": "speckle",
+     "color": "#5a4a30",
+     "density": 50
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#5a4a30",
+       "count": 4,
+       "width": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "misgurnus-anguillicaudatus",
+  "commonName": "Dojo Loach (Weather Loach)",
+  "scientificName": "Misgurnus anguillicaudatus",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "East Asia — China, Korea, Japan, Taiwan & the Amur basin; rice paddies and ditches",
+  "description": "Called the weather loach because it grows restless as air pressure drops before storms. It gulps air and absorbs oxygen through its gut, letting it survive in stagnant, oxygen-poor ditches.",
+  "adultLengthCm": 17,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   10,
+   25
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "air-gulper",
+   "scavenger",
+   "curious"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.12,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.18,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.18,
+   "peduncle": 0.5,
+   "barbels": 10,
+   "barbelLength": 0.06,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.47,
+    "end": 0.58,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.77,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.19,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#8a7a50",
+   "dorsal": "#5e5236",
+   "ventral": "#d8ccaa",
+   "fin": "#9a8a62",
+   "finOpacity": 0.5,
+   "eye": "#c8a050",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3e3420",
+     "density": 60,
+     "size": 0.045,
+     "x0": 0.05,
+     "x1": 1,
+     "y0": -0.4,
+     "y1": 1,
+     "jitter": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2418",
+     "x": 0.98,
+     "y": 0.4,
+     "rx": 0.025,
+     "ry": 0.25
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3e3420",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "misgurnus-anguillicaudatus-gold",
+  "commonName": "Golden Dojo Loach",
+  "scientificName": "Misgurnus anguillicaudatus",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: East Asia)",
+  "description": "A golden-orange, xanthic line of the weather loach, popular in coldwater tanks and ponds. It is just as playful, digging and nosing through the substrate and darting to the surface to gulp air.",
+  "adultLengthCm": 17,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   10,
+   25
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "air-gulper",
+   "scavenger",
+   "curious"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.12,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.18,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.18,
+   "peduncle": 0.5,
+   "barbels": 10,
+   "barbelLength": 0.06,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.47,
+    "end": 0.58,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.77,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.19,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#f0b84a",
+   "dorsal": "#e09a30",
+   "ventral": "#f8dc9a",
+   "fin": "#f2c26a",
+   "finOpacity": 0.5,
+   "eye": "#c8a050",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d89838",
+     "density": 30,
+     "size": 0.04,
+     "jitter": 0.9
+    }
+   ]
+  },
+  "variantOf": "misgurnus-anguillicaudatus",
+  "availability": "common"
+ },
+ {
+  "id": "misgurnus-fossilis",
+  "commonName": "European Weatherfish",
+  "scientificName": "Misgurnus fossilis",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe — Seine to Volga basins; muddy, weedy backwaters and ditches",
+  "description": "A long, striped loach of muddy backwaters that survives oxygen-poor, drying ditches by gulping air into its gut and burrowing into mud. It is protected in much of Europe after drainage destroyed its habitat.",
+  "adultLengthCm": 22,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   4,
+   22
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "air-gulper",
+   "nocturnal-hider",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.12,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.18,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.18,
+   "peduncle": 0.5,
+   "barbels": 10,
+   "barbelLength": 0.06,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.47,
+    "end": 0.58,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.77,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.19,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#8a6a3c",
+   "dorsal": "#4a3a22",
+   "ventral": "#e0b860",
+   "fin": "#8a7048",
+   "finOpacity": 0.55,
+   "eye": "#c8a050",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2e2214",
+     "y": 0,
+     "width": 0.14,
+     "x0": 0.12,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#e0c070",
+     "y": 0.25,
+     "width": 0.05,
+     "x0": 0.1,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2214",
+     "y": 0.45,
+     "width": 0.05,
+     "x0": 0.1,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2214",
+     "y": -0.35,
+     "width": 0.05,
+     "x0": 0.15,
+     "x1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#2e2214",
+     "density": 40
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cobitis-taenia",
+  "commonName": "Spined Loach",
+  "scientificName": "Cobitis taenia",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe — clear, sandy rivers and lakes",
+  "description": "Buries itself in fine sand by day and sifts mouthfuls of sediment through its gills for tiny invertebrates. A two-pointed spine below each eye can be raised to deter predators.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 24,
+  "lifespanYears": 6,
+  "tempC": [
+   8,
+   20
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "burrower",
+   "sand-sifter",
+   "nocturnal-hider",
+   "shy"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.12,
+   "width": 0.09,
+   "depthPos": 0.38,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.2,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.55,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#e6d6a8",
+   "dorsal": "#cab68a",
+   "ventral": "#f6f0e0",
+   "fin": "#eee6d0",
+   "finOpacity": 0.35,
+   "eye": "#6a5a40",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#4a3a24",
+     "density": 15,
+     "size": 0.06,
+     "x0": 0.08,
+     "x1": 0.98,
+     "y0": -0.15,
+     "y1": 0.05,
+     "jitter": 0.2
+    },
+    {
+     "type": "spots",
+     "color": "#5a4a30",
+     "density": 25,
+     "size": 0.03,
+     "x0": 0.05,
+     "x1": 1,
+     "y0": 0.4,
+     "y1": 1,
+     "jitter": 0.5
+    },
+    {
+     "type": "stripe",
+     "color": "#5a4a30",
+     "y": 0.12,
+     "width": 0.05,
+     "x0": 0.01,
+     "x1": 0.12
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#5a4a30",
+       "count": 3,
+       "width": 0.06
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#5a4a30",
+       "count": 2,
+       "width": 0.08
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lepidocephalichthys-guntea",
+  "commonName": "Guntea Loach",
+  "scientificName": "Lepidocephalichthys guntea",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South Asia — Pakistan & India to Bangladesh, Nepal & Myanmar; ponds, ditches and slow rivers",
+  "description": "A hardy, sand-burrowing loach of ponds, ditches and slow rivers across South Asia. Males have a distinctive enlarged, bony plate on the pectoral fin.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "burrower",
+   "nocturnal-hider",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.14,
+   "width": 0.1,
+   "depthPos": 0.38,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.25
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.55,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#c8b888",
+   "dorsal": "#9a8a60",
+   "ventral": "#ece6d2",
+   "fin": "#ddd2b4",
+   "finOpacity": 0.35,
+   "eye": "#6a5a40",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a3c26",
+     "density": 60
+    },
+    {
+     "type": "spots",
+     "color": "#3a2e1c",
+     "density": 12,
+     "size": 0.05,
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": -0.1,
+     "y1": 0.1,
+     "jitter": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2218",
+     "x": 0.98,
+     "y": 0.4,
+     "rx": 0.025,
+     "ry": 0.25
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "schistura-reticulofasciata",
+  "commonName": "Reticulated Stone Loach",
+  "scientificName": "Schistura reticulofasciata",
+  "family": "Nemacheilidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Meghalaya, northeastern India — cool, fast streams of the Khasi Hills",
+  "description": "Its dark brown body is crossed by thin cream bands that split and join into a net. Males hold small territories among the rocks and spar with neighbours, mostly with display rather than damage.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "cave-dweller",
+   "bottom-rester",
+   "perches"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.16,
+   "width": 0.13,
+   "depthPos": 0.35,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#3a2c1a",
+   "dorsal": "#2a1e12",
+   "ventral": "#d8c8a0",
+   "fin": "#d8b878",
+   "finOpacity": 0.45,
+   "eye": "#a08050",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e2cf98",
+     "count": 11,
+     "width": 0.025,
+     "x0": 0.06,
+     "x1": 0.96,
+     "y0": -0.7,
+     "y1": 1
+    },
+    {
+     "type": "reticulate",
+     "color": "#e2cf98",
+     "scale": 4,
+     "thickness": 0.2
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a1e12",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a1e12",
+       "count": 2,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "schistura-beavani",
+  "commonName": "Creek Loach",
+  "scientificName": "Schistura beavani",
+  "family": "Nemacheilidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Himalayan foothills — northern India, Nepal & Bangladesh",
+  "description": "A small, boldly barred stone loach of fast, gravelly foothill streams. It hunts insect larvae among the stones and defends a favourite crevice.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "cave-dweller",
+   "bottom-rester",
+   "perches"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.16,
+   "width": 0.13,
+   "depthPos": 0.35,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#dcc48c",
+   "dorsal": "#a68a54",
+   "ventral": "#f2e8d0",
+   "fin": "#e09040",
+   "finOpacity": 0.45,
+   "eye": "#a08050",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a3220",
+     "count": 12,
+     "width": 0.04,
+     "x0": 0.06,
+     "x1": 0.94,
+     "y0": -0.6,
+     "y1": 1
+    },
+    {
+     "type": "bars",
+     "color": "#2a1e12",
+     "count": 1,
+     "width": 0.04,
+     "x0": 0.96,
+     "x1": 1,
+     "y0": -0.8,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#4a3220",
+       "count": 2,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "schistura-corica",
+  "commonName": "Corica Loach",
+  "scientificName": "Schistura corica",
+  "family": "Nemacheilidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Himalayan foothills — northern India, Nepal & Bangladesh",
+  "description": "A tiny stone loach with dark saddles across a sandy back, from shallow, fast foothill streams. It spends much of its time propped on its fins on stones, facing the current.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "cave-dweller",
+   "bottom-rester",
+   "perches"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.16,
+   "width": 0.13,
+   "depthPos": 0.35,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#e0cc9c",
+   "dorsal": "#b09a6a",
+   "ventral": "#f4ecd8",
+   "fin": "#ece2c8",
+   "finOpacity": 0.35,
+   "eye": "#a08050",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a3622",
+     "count": 8,
+     "width": 0.06,
+     "x0": 0.08,
+     "x1": 0.92,
+     "y0": -0.1,
+     "y1": 1
+    },
+    {
+     "type": "bars",
+     "color": "#2a1e12",
+     "count": 1,
+     "width": 0.04,
+     "x0": 0.96,
+     "x1": 1,
+     "y0": -0.8,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "nemacheilus-masyae",
+  "commonName": "Arrow Loach",
+  "scientificName": "Nemacheilus masyae",
+  "family": "Nemacheilidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Thailand & Peninsular Malaysia — clear forest streams",
+  "description": "A slender stone loach of clear forest streams with a row of dark blotches along its flank. It rests on the bottom between short dashes after food.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 9,
+  "traits": [
+   "bottom-rester",
+   "perches",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.14,
+   "width": 0.11,
+   "depthPos": 0.35,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#e2d2a6",
+   "dorsal": "#b8a070",
+   "ventral": "#f4ecd8",
+   "fin": "#ece2c8",
+   "finOpacity": 0.35,
+   "eye": "#a08050",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2c1c",
+     "density": 12,
+     "size": 0.06,
+     "x0": 0.08,
+     "x1": 0.96,
+     "y0": -0.15,
+     "y1": 0.15,
+     "jitter": 0.15
+    },
+    {
+     "type": "bars",
+     "color": "#7a6040",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.1,
+     "x1": 0.95,
+     "y0": 0.3,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "acanthocobitis-botia",
+  "commonName": "Mottled Zipper Loach",
+  "scientificName": "Acanthocobitis botia",
+  "family": "Nemacheilidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South & Southeast Asia — Pakistan to Myanmar & Thailand; sandy streams and pools",
+  "description": "A blotchy dark stripe along the flank and a dark eyespot at the upper base of the tail give it its trade name. It lives over sand and gravel in streams and pools.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 9,
+  "traits": [
+   "bottom-rester",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.14,
+   "width": 0.11,
+   "depthPos": 0.35,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#e0cfa0",
+   "dorsal": "#a89060",
+   "ventral": "#f4eedc",
+   "fin": "#e6dcc0",
+   "finOpacity": 0.35,
+   "eye": "#a08050",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a2c1c",
+     "y": 0,
+     "width": 0.1,
+     "x0": 0.1,
+     "x1": 0.98
+    },
+    {
+     "type": "spots",
+     "color": "#3a2c1c",
+     "density": 30,
+     "size": 0.04,
+     "x0": 0.05,
+     "x1": 1,
+     "y0": 0.2,
+     "y1": 1,
+     "jitter": 0.7
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1810",
+     "x": 0.98,
+     "y": 0.45,
+     "rx": 0.02,
+     "ry": 0.2,
+     "ring": "#e8dcc0"
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#4a3a24",
+       "count": 3,
+       "width": 0.07
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#4a3a24",
+       "count": 2,
+       "width": 0.08
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "mesonoemacheilus-triangularis",
+  "commonName": "Zodiac Loach",
+  "scientificName": "Mesonoemacheilus triangularis",
+  "family": "Nemacheilidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Western Ghats, southern India — fast, clear hill streams",
+  "description": "A Western Ghats stone loach with dark brown bars and triangular saddles over a golden-orange body. It lives in fast, clear streams and does best with plenty of rocky hiding places.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "cave-dweller",
+   "bottom-rester",
+   "perches"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.16,
+   "width": 0.13,
+   "depthPos": 0.35,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#e8a848",
+   "dorsal": "#c08030",
+   "ventral": "#f6dca8",
+   "fin": "#eca850",
+   "finOpacity": 0.5,
+   "eye": "#a08050",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a2414",
+     "count": 9,
+     "width": 0.055,
+     "x0": 0.08,
+     "x1": 0.96,
+     "y0": -0.3,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a2414",
+       "count": 2,
+       "width": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "barbatula-barbatula",
+  "commonName": "Stone Loach",
+  "scientificName": "Barbatula barbatula",
+  "family": "Nemacheilidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe — clean, stony streams and lake shores",
+  "description": "A common bottom-dweller of clean European streams that hides under stones by day and hunts insect larvae by touch and smell at night. It is a useful indicator of good water quality.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 6,
+  "tempC": [
+   6,
+   20
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 8,
+  "traits": [
+   "nocturnal-hider",
+   "bottom-rester",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.15,
+   "width": 0.13,
+   "depthPos": 0.35,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.5,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.78,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.24,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#a08a5c",
+   "dorsal": "#6a5a3a",
+   "ventral": "#e0d6b8",
+   "fin": "#b8a47a",
+   "finOpacity": 0.45,
+   "eye": "#a08050",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a3c24",
+     "scale": 3,
+     "amount": 0.45
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4a3c24",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4a3c24",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "sewellia-lineolata",
+  "commonName": "Reticulated Hillstream Loach",
+  "scientificName": "Sewellia lineolata",
+  "family": "Gastromyzontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central Vietnam — fast, clear, rocky streams",
+  "description": "Its spread paired fins form a suction disc that holds it to rocks in torrents. Gold with a black net of lines and rings, it breeds readily in well-oxygenated aquaria, scattering eggs into gravel crevices.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.12,
+   "width": 0.32,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.2,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.12,
+    "end": 0.42,
+    "height": 0.3,
+    "shape": "fan"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.68,
+    "height": 0.22,
+    "shape": "fan"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#c8a050",
+   "dorsal": "#9a7838",
+   "ventral": "#e8d8b0",
+   "fin": "#c8a050",
+   "finOpacity": 0.7,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#151310",
+     "scale": 6,
+     "thickness": 0.4
+    },
+    {
+     "type": "spots",
+     "color": "#151310",
+     "density": 25,
+     "size": 0.04,
+     "jitter": 0.6
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#151310",
+       "count": 4,
+       "width": 0.08
+      }
+     ]
+    },
+    "pelvic": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#151310",
+       "count": 3,
+       "width": 0.08
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#151310",
+       "count": 2,
+       "width": 0.08
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#151310",
+       "count": 3,
+       "width": 0.08
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "sewellia-speciosa",
+  "commonName": "Spotted Butterfly Hillstream Loach",
+  "scientificName": "Sewellia speciosa",
+  "family": "Gastromyzontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central Vietnam — fast, rocky upland streams",
+  "description": "A Vietnamese butterfly loach with irregular black spots and blotches over a golden-tan body. Like other Sewellia it grazes biofilm from rocks in strong current and needs very clean, cool, well-oxygenated water.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.12,
+   "width": 0.32,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.2,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.12,
+    "end": 0.42,
+    "height": 0.3,
+    "shape": "fan"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.68,
+    "height": 0.22,
+    "shape": "fan"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#d0b070",
+   "dorsal": "#a08048",
+   "ventral": "#ecdcb8",
+   "fin": "#d0b070",
+   "finOpacity": 0.7,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1a1612",
+     "density": 50,
+     "size": 0.05,
+     "jitter": 0.9
+    },
+    {
+     "type": "marble",
+     "color": "#3a2e1e",
+     "scale": 3,
+     "amount": 0.2
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1a1612",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    },
+    "pelvic": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1a1612",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "gastromyzon-punctulatus",
+  "commonName": "Spotted Borneo Sucker Loach",
+  "scientificName": "Gastromyzon punctulatus",
+  "family": "Gastromyzontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Sarawak, Borneo — fast forest streams",
+  "description": "A Bornean sucker loach whose flattened, disc-shaped body and fused paired fins hold it to rocks in fast water. Brown with fine pale dots, it grazes the film of diatoms and microorganisms rather than tough filamentous algae.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.11,
+   "width": 0.36,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.2,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.12,
+    "end": 0.42,
+    "height": 0.3,
+    "shape": "fan"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.68,
+    "height": 0.22,
+    "shape": "fan"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#6a5a40",
+   "dorsal": "#4a3e2c",
+   "ventral": "#c8b898",
+   "fin": "#7a6848",
+   "finOpacity": 0.7,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e0d4a8",
+     "density": 80,
+     "size": 0.025,
+     "jitter": 0.9
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "edge": "#e8c070",
+     "edgeWidth": 0.1
+    },
+    "pelvic": {
+     "edge": "#e8c070",
+     "edgeWidth": 0.1
+    },
+    "dorsal": {
+     "edge": "#e8a050",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "gastromyzon-ctenocephalus",
+  "commonName": "Comb-headed Borneo Sucker Loach",
+  "scientificName": "Gastromyzon ctenocephalus",
+  "family": "Gastromyzontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Sarawak, Borneo — fast forest streams",
+  "description": "Its name means \"comb head\", after the comb-like rows of small tubercles on its snout. Olive-brown with fine dark vermiculation and pale dots, it grazes biofilm on rocks in fast Bornean streams.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.11,
+   "width": 0.36,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.2,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.12,
+    "end": 0.42,
+    "height": 0.3,
+    "shape": "fan"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.68,
+    "height": 0.22,
+    "shape": "fan"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#7a6a48",
+   "dorsal": "#5a4c34",
+   "ventral": "#d0c4a4",
+   "fin": "#857250",
+   "finOpacity": 0.7,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a3020",
+     "count": 8,
+     "width": 0.03,
+     "wavy": 0.6
+    },
+    {
+     "type": "spots",
+     "color": "#d8cca4",
+     "density": 40,
+     "size": 0.025,
+     "jitter": 0.9
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "edge": "#d8c8a0",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "beaufortia-kweichowensis",
+  "commonName": "Butterfly Hillstream Loach",
+  "scientificName": "Beaufortia kweichowensis",
+  "family": "Gastromyzontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern China — fast rocky streams of the Pearl River basin (Guangxi & Guizhou)",
+  "description": "Flat as a pancake, with pectoral and pelvic fins forming a round suction disc. It creeps over rocks in fast streams, grazing biofilm and tiny invertebrates, and tolerates cooler water than tropical hillstream species.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.1,
+   "width": 0.42,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.2,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.1,
+    "end": 0.45,
+    "height": 0.34,
+    "shape": "fan"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.72,
+    "height": 0.26,
+    "shape": "fan"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#6e6448",
+   "dorsal": "#4e4632",
+   "ventral": "#d0c8a8",
+   "fin": "#6e6448",
+   "finOpacity": 0.75,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2418",
+     "density": 45,
+     "size": 0.04,
+     "jitter": 0.9
+    },
+    {
+     "type": "spots",
+     "color": "#d8d0b0",
+     "density": 30,
+     "size": 0.02,
+     "jitter": 0.9
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "edge": "#e8d8b0",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2418",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "pelvic": {
+     "edge": "#e8d8b0",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "pseudogastromyzon-cheni",
+  "commonName": "Chen’s Hillstream Loach",
+  "scientificName": "Pseudogastromyzon cheni",
+  "family": "Gastromyzontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southeastern China — hill streams of Fujian & Guangdong",
+  "description": "One of the hillstream loaches most often bred in aquaria. Males raise a dorsal fin edged in orange-red to court females and to warn rivals off a small patch of stones.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.12,
+   "width": 0.3,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.2,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.12,
+    "end": 0.42,
+    "height": 0.3,
+    "shape": "fan"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.68,
+    "height": 0.22,
+    "shape": "fan"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#6a5a3c",
+   "dorsal": "#4a3e28",
+   "ventral": "#d0c4a0",
+   "fin": "#7a6a48",
+   "finOpacity": 0.7,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#d8c890",
+     "scale": 4,
+     "amount": 0.35
+    },
+    {
+     "type": "spots",
+     "color": "#d8c890",
+     "density": 40,
+     "size": 0.03,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "edge": "#e8a050",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#7a6a48",
+      "opacity": 0.8,
+      "edge": "#e0602a",
+      "edgeWidth": 0.2
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "annamia-normani",
+  "commonName": "Norman’s Hillstream Loach",
+  "scientificName": "Annamia normani",
+  "family": "Gastromyzontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Annamite Mountains — Vietnam & Laos, fast Mekong-tributary streams",
+  "description": "A large, very flat hillstream loach with broad, rounded paired fins, from torrential mountain streams. It needs strong current and cool, highly oxygenated water to thrive.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   24
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.11,
+   "width": 0.36,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.2,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.12,
+    "end": 0.42,
+    "height": 0.3,
+    "shape": "fan"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.68,
+    "height": 0.22,
+    "shape": "fan"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#5a5440",
+   "dorsal": "#3e3a2c",
+   "ventral": "#cac2a4",
+   "fin": "#6a6248",
+   "finOpacity": 0.72,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2a261c",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "spots",
+     "color": "#c8c0a0",
+     "density": 50,
+     "size": 0.03,
+     "jitter": 0.9
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "homaloptera-orthogoniata",
+  "commonName": "Saddled Hillstream Loach",
+  "scientificName": "Homaloptera orthogoniata",
+  "family": "Balitoridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Thailand, Malay Peninsula, Sumatra & Borneo — fast, rocky streams",
+  "description": "An elongated, flattened hillstream loach with dark saddles across its back. It lies motionless on rocks in strong current and pounces on drifting insect larvae rather than grazing algae.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   25
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "perches",
+   "bottom-rester",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.12,
+   "width": 0.2,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.26,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.3,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.52,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#c8a878",
+   "dorsal": "#8a6e48",
+   "ventral": "#ece2cc",
+   "fin": "#d8c0a0",
+   "finOpacity": 0.5,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a2818",
+     "count": 5,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": 0.1,
+     "y1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#5a4428",
+     "density": 40
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#5a4428",
+       "count": 3,
+       "width": 0.08
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#5a4428",
+       "count": 3,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "homalopteroides-smithi",
+  "commonName": "Smith’s Hillstream Loach",
+  "scientificName": "Homalopteroides smithi",
+  "family": "Balitoridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Thailand & Peninsular Malaysia — fast, shallow riffles",
+  "description": "A small balitorid with a flattened head and broad paired fins, mottled brown and cream. It clings in fast riffles and gleans tiny invertebrates from the rocks.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   21,
+   26
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   3,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "perches",
+   "bottom-rester",
+   "shy"
+  ],
+  "body": {
+   "archetype": "hillstream-loach",
+   "depth": 0.12,
+   "width": 0.2,
+   "depthPos": 0.3,
+   "headLength": 0.22,
+   "snout": "rounded",
+   "mouth": "sucker",
+   "eyeSize": 0.26,
+   "peduncle": 0.35,
+   "barbels": 4,
+   "barbelLength": 0.01,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.55,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.8,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.18,
+    "end": 0.3,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.52,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#b89a6c",
+   "dorsal": "#7a6040",
+   "ventral": "#e8dcc4",
+   "fin": "#d0bc98",
+   "finOpacity": 0.5,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a3622",
+     "scale": 3,
+     "amount": 0.4
+    },
+    {
+     "type": "bars",
+     "color": "#4a3622",
+     "count": 4,
+     "width": 0.07,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": 0.2,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#4a3622",
+       "count": 3,
+       "width": 0.08
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#4a3622",
+       "count": 2,
+       "width": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "vaillantella-maassi",
+  "commonName": "Long-finned Loach",
+  "scientificName": "Vaillantella maassi",
+  "family": "Vaillantellidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Malay Peninsula, Sumatra & Borneo — leaf-littered forest streams",
+  "description": "An eel-shaped loach with an extraordinarily long dorsal fin running most of the length of its back, ending before a deeply forked tail. It hides in leaf litter and soft sand by day.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "burrower",
+   "nocturnal-hider",
+   "shy"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.08,
+   "width": 0.07,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.2,
+   "barbels": 6,
+   "barbelLength": 0.03,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.25
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.92,
+    "height": 0.07,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.82,
+    "end": 0.9,
+    "height": 0.06,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.05
+  },
+  "look": {
+   "base": "#8a7448",
+   "dorsal": "#5a4a2c",
+   "ventral": "#d0c4a0",
+   "fin": "#a08a5c",
+   "finOpacity": 0.4,
+   "eye": "#5a4a30",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a2e1c",
+     "count": 14,
+     "width": 0.025,
+     "x0": 0.05,
+     "x1": 0.97,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "rhodeus-amarus",
+  "commonName": "European Bitterling",
+  "scientificName": "Rhodeus amarus",
+  "family": "Acheilognathidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe — weedy lakes, ponds and slow rivers with freshwater mussels",
+  "description": "Females lay their eggs through a long ovipositor into the gills of living freshwater mussels, where the young develop protected. Breeding males turn rosy and violet with an iridescent blue-green flank stripe and defend a mussel.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   5,
+   23
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.36,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.64,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.76,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#c8ccc4",
+   "dorsal": "#8a9488",
+   "ventral": "#eef0ea",
+   "fin": "#d8d4c4",
+   "finOpacity": 0.35,
+   "eye": "#c8a040",
+   "metallic": 0.6,
+   "iridescence": 0.3,
+   "iridescenceColor": "#40c0b0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3cb4a8",
+     "y": 0,
+     "width": 0.08,
+     "x0": 0.5,
+     "x1": 1,
+     "iridescent": true
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#c4b8cc",
+    "ventral": "#d8506a",
+    "eye": "#d03030",
+    "iridescence": 0.6,
+    "iridescenceColor": "#50d0d0",
+    "fins": {
+     "dorsal": {
+      "color": "#d03040",
+      "opacity": 0.6
+     },
+     "anal": {
+      "color": "#d03040",
+      "opacity": 0.6
+     }
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "rhodeus-ocellatus",
+  "commonName": "Rosy Bitterling",
+  "scientificName": "Rhodeus ocellatus",
+  "family": "Acheilognathidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "East Asia — China, Korea, Taiwan & western Japan (subsp. kurumeus); the nominate form introduced elsewhere in Japan",
+  "description": "Breeding males flush rosy pink and violet with red-tipped fins and display over the freshwater mussels in which females lay their eggs. A hardy fish for unheated tanks.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   10,
+   26
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "territorial",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.36,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.64,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.76,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#c4c4c8",
+   "dorsal": "#8a8c94",
+   "ventral": "#eeeef0",
+   "fin": "#dcd6d0",
+   "finOpacity": 0.35,
+   "eye": "#c8a040",
+   "metallic": 0.6,
+   "iridescence": 0.35,
+   "iridescenceColor": "#7a8aff",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#6a8ad8",
+     "y": 0,
+     "width": 0.07,
+     "x0": 0.5,
+     "x1": 1,
+     "iridescent": true
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#d88aa4",
+    "dorsal": "#9a6a8a",
+    "ventral": "#e05a6a",
+    "eye": "#d03030",
+    "iridescence": 0.7,
+    "fins": {
+     "dorsal": {
+      "color": "#e04050",
+      "opacity": 0.6,
+      "edge": "#e02a2a"
+     },
+     "anal": {
+      "color": "#e04050",
+      "opacity": 0.6,
+      "edge": "#e02a2a"
+     }
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "tinca-tinca",
+  "commonName": "Tench",
+  "scientificName": "Tinca tinca",
+  "family": "Tincidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe & western Siberia — weedy lakes, ponds and slow rivers",
+  "description": "A slimy, olive-gold bottom-feeder of weedy, muddy lakes with tiny scales, small red eyes and rounded fins; it tolerates very low oxygen. It was once called the \"doctor fish\" from an old belief that its slime healed other fish.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 36,
+  "lifespanYears": 20,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 1500,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 4,
+  "traits": [
+   "sifter-of-detritus",
+   "invert-eater",
+   "bottom-rester",
+   "shy"
+  ],
+  "body": {
+   "archetype": "carp",
+   "depth": 0.28,
+   "width": 0.16,
+   "depthPos": 0.4,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.16,
+   "peduncle": 0.6,
+   "barbels": 2,
+   "barbelLength": 0.02,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.5,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.25,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.12
+  },
+  "look": {
+   "base": "#5a6a2e",
+   "dorsal": "#2a3418",
+   "ventral": "#b0a858",
+   "fin": "#2e3a1e",
+   "finOpacity": 0.85,
+   "eye": "#c8401a",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#3a4a20",
+     "contrast": 0.12
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "pelvic": {
+     "start": 0.44,
+     "end": 0.5,
+     "height": 0.24,
+     "shape": "rounded"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "tinca-tinca-golden",
+  "commonName": "Golden Tench",
+  "scientificName": "Tinca tinca",
+  "family": "Tincidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, central Europe (wild form: Europe & western Siberia)",
+  "description": "A golden-orange ornamental line of the tench, often with scattered black spots; a hardy, long-lived pond fish. It stays as secretive as the wild form, grubbing through mud at dawn and dusk.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 36,
+  "lifespanYears": 20,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 1500,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 4,
+  "traits": [
+   "sifter-of-detritus",
+   "invert-eater",
+   "bottom-rester",
+   "shy"
+  ],
+  "body": {
+   "archetype": "carp",
+   "depth": 0.28,
+   "width": 0.16,
+   "depthPos": 0.4,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.16,
+   "peduncle": 0.6,
+   "barbels": 2,
+   "barbelLength": 0.02,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.5,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.2,
+    "end": 0.25,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.12
+  },
+  "look": {
+   "base": "#f0b030",
+   "dorsal": "#e0901c",
+   "ventral": "#f8d880",
+   "fin": "#e8a030",
+   "finOpacity": 0.8,
+   "eye": "#c8401a",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1a1a14",
+     "density": 6,
+     "size": 0.04,
+     "x0": 0.1,
+     "x1": 0.9,
+     "y0": -0.2,
+     "y1": 1,
+     "jitter": 0.9
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "pelvic": {
+     "start": 0.44,
+     "end": 0.5,
+     "height": 0.24,
+     "shape": "rounded"
+    }
+   }
+  },
+  "variantOf": "tinca-tinca",
+  "availability": "uncommon"
+ },
+ {
+  "id": "leuciscus-idus",
+  "commonName": "Ide",
+  "scientificName": "Leuciscus idus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe & Siberia — large rivers, lakes and brackish Baltic bays",
+  "description": "A large, shoaling river fish that feeds near the surface on insects and moves upstream in spring to spawn over gravel. Silvery with a dark back and reddish lower fins; the golden orfe is its ornamental form.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 3000,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "jumper",
+   "bold",
+   "surface-skimmer"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.27,
+   "width": 0.13,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.22,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.6,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#c0c4c4",
+   "dorsal": "#4a5458",
+   "ventral": "#eeeee8",
+   "fin": "#b8a090",
+   "finOpacity": 0.55,
+   "eye": "#d8c890",
+   "metallic": 0.7,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#8a9494",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#d06a4a"
+    },
+    "pelvic": {
+     "color": "#d06a4a"
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "leuciscus-idus-golden",
+  "commonName": "Golden Orfe",
+  "scientificName": "Leuciscus idus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, central Europe (wild form: Europe & Siberia)",
+  "description": "A long-established ornamental form of the ide, bred in central Europe. It shoals near the surface of ponds snapping up insects, needs well-oxygenated water and can leap clear of it.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 3000,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "jumper",
+   "bold",
+   "surface-skimmer"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.27,
+   "width": 0.13,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.22,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.6,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#f2a040",
+   "dorsal": "#e87a20",
+   "ventral": "#f6e2cc",
+   "fin": "#f0a060",
+   "finOpacity": 0.6,
+   "eye": "#d8c890",
+   "metallic": 0.6,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1a1a1a",
+     "density": 4,
+     "size": 0.03,
+     "x0": 0.02,
+     "x1": 0.2,
+     "y0": 0.3,
+     "y1": 1,
+     "jitter": 0.8
+    }
+   ]
+  },
+  "variantOf": "leuciscus-idus",
+  "availability": "common"
+ },
+ {
+  "id": "scardinius-erythrophthalmus",
+  "commonName": "Rudd",
+  "scientificName": "Scardinius erythrophthalmus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe & Central Asia — weedy lakes and slow rivers",
+  "description": "Its steeply upturned mouth suits picking insects and plant matter from the surface, and adults eat large amounts of soft water plants, unusual for a European cyprinid. Brassy flanks and blood-red fins make it popular in ponds.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 800,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.9,
+  "burstSpeed": 7,
+  "traits": [
+   "plant-eater",
+   "surface-skimmer",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.33,
+   "width": 0.12,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "upturned",
+   "mouth": "superior",
+   "eyeSize": 0.24,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.52,
+    "end": 0.64,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#c8b878",
+   "dorsal": "#5a5a3c",
+   "ventral": "#ece6cc",
+   "fin": "#d8402a",
+   "finOpacity": 0.8,
+   "eye": "#e0a030",
+   "metallic": 0.65,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#8a7a48",
+     "contrast": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8a5a3c"
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "rutilus-rutilus",
+  "commonName": "Roach",
+  "scientificName": "Rutilus rutilus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe & western Asia — lakes, rivers and ponds",
+  "description": "One of Europe’s most abundant fishes, a silvery shoaler with a red iris. Its dorsal fin begins directly above the pelvic fins, which distinguishes it from the rudd.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 600,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "bold",
+   "sifter-of-detritus",
+   "plant-eater"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.3,
+   "width": 0.12,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.44,
+    "end": 0.56,
+    "height": 0.17,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#c8ccd0",
+   "dorsal": "#4a5868",
+   "ventral": "#f0f0ee",
+   "fin": "#a0a4a8",
+   "finOpacity": 0.55,
+   "eye": "#d02a20",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#8a929a",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#e07a40",
+     "opacity": 0.7
+    },
+    "anal": {
+     "color": "#e07a40",
+     "opacity": 0.7
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "leucaspius-delineatus",
+  "commonName": "Sunbleak (Moderlieschen)",
+  "scientificName": "Leucaspius delineatus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe — ponds, ditches and slow, weedy waters from the Rhine to the Caspian",
+  "description": "A small European shoaler whose females lay eggs in spiral bands around reed and plant stems, which the male then guards. Its lateral line runs along only the first few scales.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "school",
+  "groupSize": 10,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "tight-schooling",
+   "surface-skimmer"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "superior",
+   "eyeSize": 0.32,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#d0d6d8",
+   "dorsal": "#7a8a8a",
+   "ventral": "#f2f4f2",
+   "fin": "#e0e2dc",
+   "finOpacity": 0.2,
+   "eye": "#c8c0a0",
+   "metallic": 0.75,
+   "iridescence": 0.5,
+   "iridescenceColor": "#50c0d0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#5aa8b8",
+     "y": 0.05,
+     "width": 0.07,
+     "x0": 0.15,
+     "x1": 1,
+     "iridescent": true
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "phoxinus-phoxinus",
+  "commonName": "Eurasian Minnow",
+  "scientificName": "Phoxinus phoxinus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe — cool, clear streams and lakes",
+  "description": "A tough little shoaler of cold, clear, well-oxygenated streams. Breeding males turn red-bellied with a black throat and grow white tubercles on the head.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 18,
+  "lifespanYears": 5,
+  "tempC": [
+   4,
+   20
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "school",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 12,
+  "traits": [
+   "tight-schooling",
+   "bold"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.13,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#a8a07a",
+   "dorsal": "#5a5a40",
+   "ventral": "#e8e2cc",
+   "fin": "#c0b898",
+   "finOpacity": 0.35,
+   "eye": "#c8b070",
+   "metallic": 0.4,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a3a28",
+     "count": 10,
+     "width": 0.04,
+     "x0": 0.15,
+     "x1": 0.98,
+     "y0": -0.4,
+     "y1": 0.6
+    },
+    {
+     "type": "stripe",
+     "color": "#d8b850",
+     "y": 0.3,
+     "width": 0.03,
+     "x0": 0.15,
+     "x1": 0.95,
+     "iridescent": true
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "ventral": "#d8402a",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#3a3a28",
+      "count": 10,
+      "width": 0.04,
+      "x0": 0.15,
+      "x1": 0.98,
+      "y0": -0.4,
+      "y1": 0.6
+     },
+     {
+      "type": "stripe",
+      "color": "#d8b850",
+      "y": 0.3,
+      "width": 0.03,
+      "x0": 0.15,
+      "x1": 0.95,
+      "iridescent": true
+     },
+     {
+      "type": "blotch",
+      "color": "#141414",
+      "x": 0.18,
+      "y": -0.7,
+      "rx": 0.06,
+      "ry": 0.3
+     }
+    ],
+    "fins": {
+     "pectoral": {
+      "color": "#f0ece0",
+      "opacity": 0.6
+     },
+     "pelvic": {
+      "color": "#d8402a",
+      "opacity": 0.6
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "gobio-gobio",
+  "commonName": "Gudgeon",
+  "scientificName": "Gobio gobio",
+  "family": "Gobionidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern & western Europe — sandy and gravelly rivers and lakes",
+  "description": "A bottom-hugging minnow with a single pair of barbels at the corners of its mouth, used to taste for insect larvae in sandy and gravelly runs. It shoals over the bottom in clear, flowing water.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 6,
+  "tempC": [
+   6,
+   22
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 8,
+  "traits": [
+   "sand-sifter",
+   "bottom-rester",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.2,
+   "width": 0.14,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.28,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.52,
+    "height": 0.17,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55,
+   "barbels": 2,
+   "barbelLength": 0.04
+  },
+  "look": {
+   "base": "#b8a880",
+   "dorsal": "#6a604a",
+   "ventral": "#ece6d8",
+   "fin": "#c8bca0",
+   "finOpacity": 0.4,
+   "eye": "#c8a860",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a3428",
+     "density": 9,
+     "size": 0.07,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.08,
+     "y1": 0.08,
+     "jitter": 0.1
+    },
+    {
+     "type": "speckle",
+     "color": "#4a4234",
+     "density": 40
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4a4234",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4a4234",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "chrosomus-erythrogaster",
+  "commonName": "Southern Redbelly Dace",
+  "scientificName": "Chrosomus erythrogaster",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern North America — spring-fed headwaters of the Mississippi, Ohio & Great Lakes basins",
+  "description": "A small, cool-water minnow of spring-fed headwaters. In spring males turn scarlet below their two black side stripes and gain lemon-yellow fins, spawning over the gravel nests of other minnows.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   10,
+   22
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.12,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#b8a878",
+   "dorsal": "#5a5a3c",
+   "ventral": "#e8d8a8",
+   "fin": "#e0d4a8",
+   "finOpacity": 0.35,
+   "eye": "#c8a860",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1e16",
+     "y": -0.15,
+     "width": 0.16,
+     "x0": 0.02,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1e16",
+     "y": 0.4,
+     "width": 0.06,
+     "x0": 0.1,
+     "x1": 0.95
+    },
+    {
+     "type": "spots",
+     "color": "#3a3a28",
+     "density": 20,
+     "size": 0.03,
+     "x0": 0.1,
+     "x1": 1,
+     "y0": 0.55,
+     "y1": 1,
+     "jitter": 0.7
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "ventral": "#e0301c",
+    "fin": "#f0d040",
+    "finOpacity": 0.5
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "chrosomus-eos",
+  "commonName": "Northern Redbelly Dace",
+  "scientificName": "Chrosomus eos",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern North America — Canada & northern USA; boggy ponds and slow, tea-stained streams",
+  "description": "The northern cousin of the southern redbelly dace, living in boggy ponds and slow, tannin-stained streams. Its upper side stripe breaks into dots toward the tail, and breeding males have scarlet bellies.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   8,
+   20
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "bold",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.12,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#b0a074",
+   "dorsal": "#4e5036",
+   "ventral": "#e6d8b0",
+   "fin": "#dcd0a8",
+   "finOpacity": 0.35,
+   "eye": "#c8a860",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1e16",
+     "y": -0.15,
+     "width": 0.14,
+     "x0": 0.02,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1e16",
+     "y": 0.35,
+     "width": 0.05,
+     "x0": 0.1,
+     "x1": 0.55
+    },
+    {
+     "type": "spots",
+     "color": "#1e1e16",
+     "density": 8,
+     "size": 0.035,
+     "x0": 0.55,
+     "x1": 0.98,
+     "y0": 0.3,
+     "y1": 0.42,
+     "jitter": 0.2
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "ventral": "#d8341e"
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pimephales-promelas",
+  "commonName": "Fathead Minnow",
+  "scientificName": "Pimephales promelas",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "North America — ponds, lakes and sluggish streams from Canada to northern Mexico",
+  "description": "A widespread bait minnow and a standard test animal in water-quality studies. Breeding males turn dark with pale bands, grow head tubercles and a spongy back pad, and guard eggs stuck under flat stones.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   10,
+   26
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.13,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.6,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#a8a07c",
+   "dorsal": "#5a5a40",
+   "ventral": "#e0dcc8",
+   "fin": "#b8b090",
+   "finOpacity": 0.35,
+   "eye": "#c8a860",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#5a5444",
+     "y": 0,
+     "width": 0.05,
+     "x0": 0.2,
+     "x1": 1
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.15,
+   "body": {
+    "hump": 0.2
+   },
+   "look": {
+    "base": "#3a3a2e",
+    "dorsal": "#1e1e18",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#d8c890",
+      "count": 2,
+      "width": 0.04,
+      "x0": 0.2,
+      "x1": 0.5,
+      "y0": -0.6,
+      "y1": 1
+     }
+    ]
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pimephales-promelas-rosy-red",
+  "commonName": "Rosy Red Minnow",
+  "scientificName": "Pimephales promelas",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, USA (wild form: North America)",
+  "description": "A pink-orange xanthic strain of the fathead minnow, raised in vast numbers as a feeder and bait fish and popular in ponds and unheated tanks. Males still develop the dark head, tubercles and back pad when breeding.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   10,
+   26
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "bold",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.13,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.6,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#f0a080",
+   "dorsal": "#e88a68",
+   "ventral": "#f8d0b8",
+   "fin": "#f0b8a0",
+   "finOpacity": 0.4,
+   "eye": "#2a2a2a",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#d88a6a",
+     "contrast": 0.15
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.15,
+   "body": {
+    "hump": 0.2
+   },
+   "look": {
+    "base": "#e08060",
+    "dorsal": "#8a5040"
+   }
+  },
+  "variantOf": "pimephales-promelas",
+  "availability": "common"
+ },
+ {
+  "id": "notropis-chrosomus",
+  "commonName": "Rainbow Shiner",
+  "scientificName": "Notropis chrosomus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southeastern USA — Mobile basin streams in Alabama, Georgia & Tennessee",
+  "description": "Breeding males are among North America’s most colourful fishes: iridescent blue-violet and pink with a red snout. Shoals spawn over the gravel nests built by chubs.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   12,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "school",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.6,
+  "burstSpeed": 12,
+  "traits": [
+   "tight-schooling",
+   "bold"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.11,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#d8c8d0",
+   "dorsal": "#8aa0b0",
+   "ventral": "#f0e6ea",
+   "fin": "#e8b0b8",
+   "finOpacity": 0.4,
+   "eye": "#c8a0a0",
+   "metallic": 0.5,
+   "iridescence": 0.7,
+   "iridescenceColor": "#8a7aff",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#7a6ad8",
+     "y": 0.15,
+     "width": 0.08,
+     "x0": 0.15,
+     "x1": 1,
+     "iridescent": true
+    },
+    {
+     "type": "stripe",
+     "color": "#e8e0f0",
+     "y": 0.35,
+     "width": 0.05,
+     "x0": 0.15,
+     "x1": 0.95
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "fin": "#e87080",
+    "finOpacity": 0.55,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#7a6ad8",
+      "y": 0.15,
+      "width": 0.08,
+      "x0": 0.15,
+      "x1": 1,
+      "iridescent": true
+     },
+     {
+      "type": "stripe",
+      "color": "#e8e0f0",
+      "y": 0.35,
+      "width": 0.05,
+      "x0": 0.15,
+      "x1": 0.95
+     },
+     {
+      "type": "region",
+      "color": "#e04050",
+      "x0": 0,
+      "x1": 0.08,
+      "y0": -0.2,
+      "y1": 0.8,
+      "softness": 0.05
+     }
+    ]
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pteronotropis-welaka",
+  "commonName": "Bluenose Shiner",
+  "scientificName": "Pteronotropis welaka",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southeastern USA — vegetated Gulf-coast streams from Florida to Mississippi",
+  "description": "Breeding males develop a bright blue snout and a greatly enlarged black dorsal fin, spawning over the nests of sunfishes in quiet, weedy streams. Females and non-breeding fish are plain with a dark side stripe.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   14,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "shy",
+   "tight-schooling"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.2,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#d8c8a0",
+   "dorsal": "#8a7a58",
+   "ventral": "#f0ead8",
+   "fin": "#e8e0c8",
+   "finOpacity": 0.35,
+   "eye": "#c8a860",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1c18",
+     "y": 0,
+     "width": 0.14,
+     "x0": 0.02,
+     "x1": 1
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.46,
+     "end": 0.6,
+     "height": 0.35,
+     "shape": "sail"
+    },
+    "pelvic": {
+     "start": 0.44,
+     "end": 0.49,
+     "height": 0.2,
+     "shape": "rounded"
+    }
+   },
+   "look": {
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#1e1c18",
+      "y": 0,
+      "width": 0.14,
+      "x0": 0.02,
+      "x1": 1
+     },
+     {
+      "type": "region",
+      "color": "#3a7ad8",
+      "x0": 0,
+      "x1": 0.08,
+      "y0": -0.1,
+      "y1": 0.8,
+      "softness": 0.05
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#1a1a1a",
+      "opacity": 0.9,
+      "edge": "#e8e0c0",
+      "edgeWidth": 0.1
+     },
+     "pelvic": {
+      "color": "#f0f0e0",
+      "opacity": 0.7
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "cyprinella-lutrensis",
+  "commonName": "Red Shiner",
+  "scientificName": "Cyprinella lutrensis",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central USA & northern Mexico — Mississippi basin to the Rio Grande; introduced widely",
+  "description": "Breeding males flash steel-blue flanks, a purple shoulder bar and red-orange fins as they defend crevices where females lay their eggs. A hardy bait fish, it has become invasive outside its native range.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   10,
+   28
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "territorial",
+   "bold",
+   "fin-nipper"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.3,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.28,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#a8b4c8",
+   "dorsal": "#6a7a90",
+   "ventral": "#e8e8ea",
+   "fin": "#e8806a",
+   "finOpacity": 0.5,
+   "eye": "#c8b090",
+   "metallic": 0.6,
+   "iridescence": 0.5,
+   "iridescenceColor": "#5a8aff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#c04a8a",
+     "count": 1,
+     "width": 0.04,
+     "x0": 0.22,
+     "x1": 0.26,
+     "y0": -0.5,
+     "y1": 0.9
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "fin": "#e8502a",
+    "finOpacity": 0.65,
+    "iridescence": 0.8
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "notemigonus-crysoleucas",
+  "commonName": "Golden Shiner",
+  "scientificName": "Notemigonus crysoleucas",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern North America — weedy lakes, ponds and slow rivers",
+  "description": "A deep-bodied, brassy-gold shiner with a strongly down-curved lateral line and a scaleless keel along its belly. It is the most widely farmed bait fish in North America and a staple of native-fish displays.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   8,
+   26
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 400,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "school",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "tight-schooling",
+   "shy"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.3,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.35
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 0.6,
+    "height": 0.18,
+    "shape": "falcate"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "falcate"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55,
+   "belly": 0.2
+  },
+  "look": {
+   "base": "#d8c070",
+   "dorsal": "#7a7040",
+   "ventral": "#f0e6c0",
+   "fin": "#e0b860",
+   "finOpacity": 0.45,
+   "eye": "#d8c070",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#a08a40",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "hemigrammocypris-neglectus",
+  "commonName": "Golden Venus Chub",
+  "scientificName": "Hemigrammocypris neglectus",
+  "family": "Xenocyprididae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Western Japan — Honshu, Shikoku & Kyushu; lowland ponds, ditches and slow streams",
+  "description": "A small, gold-sheened minnow endemic to lowland ponds, ditches and slow streams of western Japan, where it is now endangered by habitat loss. It was long known as H. rasborella, a junior synonym of this name, and most individuals live only a year or two.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 10,
+  "lifespanYears": 2,
+  "tempC": [
+   8,
+   26
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "school",
+  "groupSize": 8,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.6,
+  "burstSpeed": 12,
+  "traits": [
+   "tight-schooling",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.76,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#e2c460",
+   "dorsal": "#a89040",
+   "ventral": "#f4ead0",
+   "fin": "#e8c070",
+   "finOpacity": 0.55,
+   "eye": "#c8a050",
+   "metallic": 0.6,
+   "iridescence": 0.3,
+   "iridescenceColor": "#ffe08a",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#c89a3a",
+     "y": 0,
+     "width": 0.06,
+     "x0": 0.2,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "opsarius-bakeri",
+  "commonName": "Malabar Baril (Blue Baril)",
+  "scientificName": "Opsarius bakeri",
+  "family": "Danionidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Western Ghats, southern India — fast, clear streams of Kerala & Karnataka",
+  "description": "A fast, streamlined baril (formerly Barilius bakeri) that is silver with rows of blue-black vertical bars. It needs strong current, high oxygen and a tight lid, and will eat very small tankmates.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "school",
+  "groupSize": 6,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "carangiform",
+  "cruiseSpeed": 2,
+  "burstSpeed": 14,
+  "traits": [
+   "jumper",
+   "tight-schooling",
+   "bold"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.25,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.35
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#c8d0d0",
+   "dorsal": "#5a7a8a",
+   "ventral": "#f0f2f0",
+   "fin": "#e8b070",
+   "finOpacity": 0.45,
+   "eye": "#d0c8a0",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a4a8a",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.2,
+     "y1": 0.7
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "carassius-auratus-shubunkin-american",
+  "commonName": "American Shubunkin",
+  "scientificName": "Carassius auratus",
+  "family": "Cyprinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, USA (wild form: eastern China)",
+  "description": "Essentially a calico comet: a slim single-tailed body and a long, deeply forked tail, mottled blue, red, orange and black. A hardy, fast pond goldfish.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 15,
+  "tempC": [
+   10,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   19
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 8,
+  "traits": [
+   "plant-eater",
+   "sifter-of-detritus",
+   "bold",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "goldfish",
+   "depth": 0.32,
+   "width": 0.15,
+   "depthPos": 0.38,
+   "headLength": 0.26,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "belly": 0.45,
+   "peduncle": 0.42,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.85
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.7,
+    "height": 0.24,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.8,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.45,
+    "end": 0.5,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.25,
+    "end": 0.29,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.8
+  },
+  "look": {
+   "base": "#b6c3d6",
+   "dorsal": "#7f90b4",
+   "ventral": "#ece4e6",
+   "fin": "#dccfc0",
+   "finOpacity": 0.5,
+   "eye": "#8a7a50",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#6f7fb6",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.35,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "marble",
+     "color": "#e2662a",
+     "scale": 3,
+     "amount": 0.38
+    },
+    {
+     "type": "spots",
+     "color": "#1c1c22",
+     "density": 40,
+     "size": 0.06,
+     "jitter": 0.7
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e6d6c6",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1c1c22",
+       "density": 22,
+       "size": 0.07,
+       "jitter": 0.8
+      },
+      {
+       "type": "marble",
+       "color": "#e2662a",
+       "scale": 2,
+       "amount": 0.25
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#e0cfbe",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1c1c22",
+       "density": 14,
+       "size": 0.08,
+       "jitter": 0.8
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "carassius-auratus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "carassius-auratus-azuma-nishiki",
+  "commonName": "Azuma Nishiki (Calico Oranda)",
+  "scientificName": "Carassius auratus",
+  "family": "Cyprinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, Japan (wild form: eastern China)",
+  "description": "The Japanese calico oranda, whose name means \"eastern brocade\": a hooded, dorsal-finned twin-tail with a mosaic of blue, red, orange and black. Its wen usually stays smaller than a red oranda’s.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 12,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   19
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.45,
+  "burstSpeed": 3.5,
+  "traits": [
+   "plant-eater",
+   "sifter-of-detritus",
+   "curious"
+  ],
+  "body": {
+   "archetype": "fancy-goldfish",
+   "depth": 0.6,
+   "width": 0.32,
+   "depthPos": 0.42,
+   "headLength": 0.28,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "belly": 0.8,
+   "backArch": 0.3,
+   "peduncle": 0.35,
+   "caudal": {
+    "shape": "double",
+    "size": 1
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.68,
+    "height": 0.36,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.78,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.26,
+    "end": 0.3,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.75,
+   "hump": 0.45
+  },
+  "look": {
+   "base": "#b6c3d6",
+   "dorsal": "#7f90b4",
+   "ventral": "#ece4e6",
+   "fin": "#dccfc0",
+   "finOpacity": 0.55,
+   "eye": "#8a7a50",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#6f7fb6",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.35,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "marble",
+     "color": "#e2662a",
+     "scale": 3,
+     "amount": 0.38
+    },
+    {
+     "type": "spots",
+     "color": "#1c1c22",
+     "density": 40,
+     "size": 0.06,
+     "jitter": 0.7
+    },
+    {
+     "type": "region",
+     "color": "#e8784a",
+     "x0": 0,
+     "x1": 0.2,
+     "y0": 0.2,
+     "y1": 1,
+     "softness": 0.08
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#e6d6c6",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1c1c22",
+       "density": 22,
+       "size": 0.07,
+       "jitter": 0.8
+      },
+      {
+       "type": "marble",
+       "color": "#e2662a",
+       "scale": 2,
+       "amount": 0.25
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#e0cfbe",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1c1c22",
+       "density": 14,
+       "size": 0.08,
+       "jitter": 0.8
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "carassius-auratus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "carassius-auratus-edonishiki",
+  "commonName": "Edonishiki (Calico Ranchu)",
+  "scientificName": "Carassius auratus",
+  "family": "Cyprinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, Japan (wild form: eastern China)",
+  "description": "A Japanese calico breed with the dorsal-less, arched-back ranchu shape, created by crossing ranchu with azuma nishiki. Its name means \"Edo brocade\".",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 12,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   19
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 3,
+  "traits": [
+   "plant-eater",
+   "sifter-of-detritus",
+   "curious"
+  ],
+  "body": {
+   "archetype": "fancy-goldfish",
+   "depth": 0.58,
+   "width": 0.32,
+   "depthPos": 0.42,
+   "headLength": 0.28,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "belly": 0.8,
+   "backArch": 0.65,
+   "peduncle": 0.45,
+   "caudal": {
+    "shape": "double",
+    "size": 0.45
+   },
+   "dorsal": null,
+   "anal": {
+    "start": 0.66,
+    "end": 0.78,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.26,
+    "end": 0.3,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.75,
+   "hump": 0.6
+  },
+  "look": {
+   "base": "#b6c3d6",
+   "dorsal": "#7f90b4",
+   "ventral": "#ece4e6",
+   "fin": "#dccfc0",
+   "finOpacity": 0.55,
+   "eye": "#8a7a50",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#6f7fb6",
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": 0.35,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "marble",
+     "color": "#e2662a",
+     "scale": 3,
+     "amount": 0.38
+    },
+    {
+     "type": "spots",
+     "color": "#1c1c22",
+     "density": 40,
+     "size": 0.06,
+     "jitter": 0.7
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e0cfbe",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1c1c22",
+       "density": 14,
+       "size": 0.08,
+       "jitter": 0.8
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e6d6c6",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1c1c22",
+       "density": 22,
+       "size": 0.07,
+       "jitter": 0.8
+      },
+      {
+       "type": "marble",
+       "color": "#e2662a",
+       "scale": 2,
+       "amount": 0.25
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "carassius-auratus",
+  "availability": "rare"
+ },
+ {
+  "id": "carassius-auratus-lionchu",
+  "commonName": "Lionchu",
+  "scientificName": "Carassius auratus",
+  "family": "Cyprinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, Thailand (wild form: eastern China)",
+  "description": "A Thai-developed cross of lionhead and ranchu, sold as its own breed: the lionhead’s heavy hood on a ranchu-like arched back with a short, tucked tail.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 12,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   19
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.35,
+  "burstSpeed": 3,
+  "traits": [
+   "plant-eater",
+   "sifter-of-detritus",
+   "curious"
+  ],
+  "body": {
+   "archetype": "fancy-goldfish",
+   "depth": 0.58,
+   "width": 0.32,
+   "depthPos": 0.42,
+   "headLength": 0.28,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "belly": 0.8,
+   "backArch": 0.55,
+   "peduncle": 0.35,
+   "caudal": {
+    "shape": "double",
+    "size": 0.5
+   },
+   "dorsal": null,
+   "anal": {
+    "start": 0.66,
+    "end": 0.78,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.42,
+    "end": 0.47,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.26,
+    "end": 0.3,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.75,
+   "hump": 0.9
+  },
+  "look": {
+   "base": "#f7f3ec",
+   "dorsal": "#f1e8dc",
+   "ventral": "#fbf8f2",
+   "fin": "#f4ece2",
+   "finOpacity": 0.62,
+   "eye": "#c8902c",
+   "metallic": 0.55,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e2401a",
+     "x0": 0.04,
+     "x1": 0.26,
+     "y0": -0.1,
+     "y1": 1,
+     "softness": 0.12
+    },
+    {
+     "type": "region",
+     "color": "#e2401a",
+     "x0": 0.34,
+     "x1": 0.72,
+     "y0": 0.25,
+     "y1": 1,
+     "softness": 0.15
+    },
+    {
+     "type": "scales",
+     "color": "#d8cfc2",
+     "contrast": 0.15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e2401a",
+     "opacity": 0.75
+    },
+    "caudal": {
+     "color": "#f4ece2",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#e2401a",
+       "x0": 0,
+       "x1": 0.4,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "carassius-auratus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "cyprinus-rubrofuscus-gin-rin-kohaku",
+  "commonName": "Koi (Gin Rin Kohaku)",
+  "scientificName": "Cyprinus rubrofuscus",
+  "family": "Cyprinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, Niigata, Japan (wild form: Amur carp, East Asia)",
+  "description": "A kohaku with rows of sparkling, mirror-like scales (gin rin) caused by extra guanine crystals in each scale. The sparkle shows on both the red and the white.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 36,
+  "lifespanYears": 30,
+  "tempC": [
+   6,
+   26
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 4000,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.45,
+  "burstSpeed": 4,
+  "traits": [
+   "bold",
+   "curious",
+   "sifter-of-detritus",
+   "plant-eater"
+  ],
+  "body": {
+   "archetype": "koi",
+   "depth": 0.29,
+   "width": 0.17,
+   "depthPos": 0.38,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "subterminal",
+   "eyeSize": 0.2,
+   "belly": 0.4,
+   "peduncle": 0.45,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.78,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.27,
+    "height": 0.17,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.8
+  },
+  "look": {
+   "base": "#f6f3ee",
+   "dorsal": "#f0ebe4",
+   "ventral": "#faf8f4",
+   "fin": "#f4f0ea",
+   "finOpacity": 0.7,
+   "eye": "#6a5a40",
+   "metallic": 0.45,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d42a1c",
+     "x0": 0.08,
+     "x1": 0.3,
+     "y0": 0.1,
+     "y1": 1,
+     "softness": 0.06
+    },
+    {
+     "type": "region",
+     "color": "#d42a1c",
+     "x0": 0.38,
+     "x1": 0.62,
+     "y0": 0.15,
+     "y1": 1,
+     "softness": 0.06
+    },
+    {
+     "type": "region",
+     "color": "#d42a1c",
+     "x0": 0.68,
+     "x1": 0.86,
+     "y0": 0.25,
+     "y1": 1,
+     "softness": 0.06
+    },
+    {
+     "type": "scales",
+     "color": "#ffffff",
+     "contrast": 0.45
+    }
+   ]
+  },
+  "variantOf": "cyprinus-rubrofuscus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "cyprinus-rubrofuscus-hariwake",
+  "commonName": "Koi (Hariwake)",
+  "scientificName": "Cyprinus rubrofuscus",
+  "family": "Cyprinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, Niigata, Japan (wild form: Amur carp, East Asia)",
+  "description": "A two-tone metallic koi: a platinum base with patterns of metallic gold or orange. It belongs to the hikari moyomono group of patterned metallic varieties.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 36,
+  "lifespanYears": 30,
+  "tempC": [
+   6,
+   26
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 4000,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.45,
+  "burstSpeed": 4,
+  "traits": [
+   "bold",
+   "curious",
+   "sifter-of-detritus",
+   "plant-eater"
+  ],
+  "body": {
+   "archetype": "koi",
+   "depth": 0.29,
+   "width": 0.17,
+   "depthPos": 0.38,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "subterminal",
+   "eyeSize": 0.2,
+   "belly": 0.4,
+   "peduncle": 0.45,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.78,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.27,
+    "height": 0.17,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.8
+  },
+  "look": {
+   "base": "#eceae4",
+   "dorsal": "#d8d6d0",
+   "ventral": "#f6f5f2",
+   "fin": "#eceae4",
+   "finOpacity": 0.75,
+   "eye": "#5a4a30",
+   "metallic": 0.9,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f0a020",
+     "x0": 0.06,
+     "x1": 0.32,
+     "y0": 0.15,
+     "y1": 1,
+     "softness": 0.1
+    },
+    {
+     "type": "region",
+     "color": "#f0a020",
+     "x0": 0.45,
+     "x1": 0.8,
+     "y0": 0.25,
+     "y1": 1,
+     "softness": 0.1
+    },
+    {
+     "type": "scales",
+     "color": "#bcb8b0",
+     "contrast": 0.25
+    }
+   ]
+  },
+  "variantOf": "cyprinus-rubrofuscus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "cyprinus-rubrofuscus-kikokuryu",
+  "commonName": "Koi (Kikokuryu)",
+  "scientificName": "Cyprinus rubrofuscus",
+  "family": "Cyprinidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred, Niigata, Japan (wild form: Amur carp, East Asia)",
+  "description": "The metallic form of the kumonryu, its name meaning \"sparkling black dragon\": black patterns over a platinum-white doitsu skin. Like the kumonryu, its black can spread or retreat with season and temperature.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 36,
+  "lifespanYears": 30,
+  "tempC": [
+   6,
+   26
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 4000,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.45,
+  "burstSpeed": 4,
+  "traits": [
+   "bold",
+   "curious",
+   "sifter-of-detritus",
+   "plant-eater"
+  ],
+  "body": {
+   "archetype": "koi",
+   "depth": 0.29,
+   "width": 0.17,
+   "depthPos": 0.38,
+   "headLength": 0.24,
+   "snout": "rounded",
+   "mouth": "subterminal",
+   "eyeSize": 0.2,
+   "belly": 0.4,
+   "peduncle": 0.45,
+   "barbels": 4,
+   "barbelLength": 0.04,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.78,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.72,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.27,
+    "height": 0.17,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.12
+  },
+  "look": {
+   "base": "#ecebe8",
+   "dorsal": "#2a2a2a",
+   "ventral": "#f6f5f2",
+   "fin": "#e6e4e0",
+   "finOpacity": 0.8,
+   "eye": "#3a3428",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#1a1a1a",
+     "x0": 0.1,
+     "x1": 1,
+     "y0": 0.45,
+     "y1": 1,
+     "softness": 0.25
+    },
+    {
+     "type": "marble",
+     "color": "#1a1a1a",
+     "scale": 3,
+     "amount": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#ecebe8",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#1a1a1a",
+       "x0": 0.3,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "variantOf": "cyprinus-rubrofuscus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "paramisgurnus-dabryanus",
+  "commonName": "Large-scale Loach",
+  "scientificName": "Paramisgurnus dabryanus",
+  "family": "Cobitidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "East Asia — central & southern China, Taiwan & Korea; ponds and rice paddies",
+  "description": "Very like the dojo but with larger scales and pronounced fleshy keels along the tail stalk; many \"golden dojo\" in the trade are in fact this species. It also breathes air through its gut and burrows when ponds dry out.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.35,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   10,
+   25
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "burrower",
+   "air-gulper",
+   "scavenger",
+   "curious"
+  ],
+  "body": {
+   "archetype": "loach",
+   "depth": 0.12,
+   "width": 0.1,
+   "depthPos": 0.4,
+   "headLength": 0.18,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.18,
+   "peduncle": 0.5,
+   "barbels": 10,
+   "barbelLength": 0.06,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.47,
+    "end": 0.58,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.7,
+    "end": 0.77,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.51,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.15,
+    "end": 0.19,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.08
+  },
+  "look": {
+   "base": "#a08a58",
+   "dorsal": "#6e5e3a",
+   "ventral": "#e0d4b0",
+   "fin": "#b09a6a",
+   "finOpacity": 0.5,
+   "eye": "#c8a050",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#4a3c24",
+     "density": 20,
+     "size": 0.04,
+     "x0": 0.1,
+     "x1": 1,
+     "y0": -0.2,
+     "y1": 1,
+     "jitter": 0.9
+    },
+    {
+     "type": "scales",
+     "color": "#7a6a44",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3e3420",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "rhinichthys-atratulus",
+  "commonName": "Blacknose Dace",
+  "scientificName": "Rhinichthys atratulus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern North America — cool, fast riffles of small streams",
+  "description": "A small, quick riffle minnow of cool eastern streams with a black stripe from snout to tail. Breeding males turn rusty-orange along the stripe and on the pectoral fins.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   8,
+   20
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "bold",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.2,
+   "width": 0.12,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "subterminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.28
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#b0a47c",
+   "dorsal": "#5a5440",
+   "ventral": "#ece6d4",
+   "fin": "#d0c8aa",
+   "finOpacity": 0.35,
+   "eye": "#c8a860",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#1e1c16",
+     "y": 0,
+     "width": 0.14,
+     "x0": 0,
+     "x1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#3a3428",
+     "density": 40
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "pectoral": {
+      "color": "#d8702a",
+      "opacity": 0.6
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "semotilus-atromaculatus",
+  "commonName": "Creek Chub",
+  "scientificName": "Semotilus atromaculatus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern & central North America — small streams and creeks",
+  "description": "A bold, big-mouthed minnow with a black spot at the front of its dorsal fin. Breeding males grow large head tubercles and build long pit-and-ridge gravel nests that many other minnows also spawn in.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 6,
+  "tempC": [
+   8,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1,
+  "burstSpeed": 9,
+  "traits": [
+   "predator",
+   "bold",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.14,
+   "depthPos": 0.4,
+   "headLength": 0.26,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.22,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#b0a888",
+   "dorsal": "#5a5a48",
+   "ventral": "#eceadc",
+   "fin": "#c8c0a8",
+   "finOpacity": 0.4,
+   "eye": "#c8a860",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a3a30",
+     "y": 0,
+     "width": 0.08,
+     "x0": 0.15,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1e1a",
+     "x": 0.99,
+     "y": 0,
+     "rx": 0.025,
+     "ry": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141414",
+       "x": 0.25,
+       "y": 0.6,
+       "rx": 0.2,
+       "ry": 0.35
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "lengthScale": 1.1,
+   "look": {
+    "ventral": "#e8b0a0"
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "campostoma-anomalum",
+  "commonName": "Central Stoneroller",
+  "scientificName": "Campostoma anomalum",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central & eastern North America — riffles of rocky streams",
+  "description": "Scrapes algae from stones with a hard ridge on its lower jaw. Breeding males grow huge head tubercles, show orange-and-black banded dorsal and anal fins, and carry stones to dig spawning pits.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 4,
+  "tempC": [
+   8,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 9,
+  "traits": [
+   "surface-grazer",
+   "algae-eater",
+   "digger"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.14,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "blunt",
+   "mouth": "inferior",
+   "eyeSize": 0.22,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#a89a74",
+   "dorsal": "#5a5440",
+   "ventral": "#e6e0cc",
+   "fin": "#c8bc98",
+   "finOpacity": 0.4,
+   "eye": "#c8a860",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a3428",
+     "density": 60
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.1,
+   "look": {
+    "fins": {
+     "dorsal": {
+      "color": "#e07a2a",
+      "opacity": 0.7,
+      "patterns": [
+       {
+        "type": "bars",
+        "color": "#141414",
+        "count": 1,
+        "width": 0.3,
+        "x0": 0.3,
+        "x1": 0.6
+       }
+      ]
+     },
+     "anal": {
+      "color": "#e07a2a",
+      "opacity": 0.7,
+      "patterns": [
+       {
+        "type": "bars",
+        "color": "#141414",
+        "count": 1,
+        "width": 0.3,
+        "x0": 0.3,
+        "x1": 0.6
+       }
+      ]
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "alburnus-alburnus",
+  "commonName": "Bleak",
+  "scientificName": "Alburnus alburnus",
+  "family": "Leuciscidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Europe — open water of lakes and slow rivers",
+  "description": "A slender, intensely silvery surface shoaler of European lakes and rivers. Its scale crystals were once scraped off to make \"essence d’Orient\", used to coat artificial pearls.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 24,
+  "lifespanYears": 6,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 400,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "school",
+  "groupSize": 8,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.4,
+  "burstSpeed": 10,
+  "traits": [
+   "tight-schooling",
+   "surface-skimmer",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.09,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.3,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#d6dce0",
+   "dorsal": "#6a7c84",
+   "ventral": "#f4f6f6",
+   "fin": "#dcdcd6",
+   "finOpacity": 0.3,
+   "eye": "#d8d4c0",
+   "metallic": 0.95,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#aab4ba",
+     "contrast": 0.15
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pseudorasbora-parva",
+  "commonName": "Topmouth Gudgeon (Stone Moroko)",
+  "scientificName": "Pseudorasbora parva",
+  "family": "Gobionidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "East Asia — China, Korea, Japan & the Amur basin; invasive across Europe",
+  "description": "A small, adaptable minnow with an upturned mouth and a dark side stripe. Males guard eggs stuck to stones and plants; accidentally spread with carp stocks, it is now an invasive pest across Europe.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   5,
+   26
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.2,
+  "burstSpeed": 10,
+  "traits": [
+   "fin-nipper",
+   "bold",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.22,
+   "width": 0.12,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "pointed",
+   "mouth": "superior",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.3
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.66,
+    "end": 0.76,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#b8b8a8",
+   "dorsal": "#6a6c5c",
+   "ventral": "#eceee6",
+   "fin": "#d0ccbc",
+   "finOpacity": 0.35,
+   "eye": "#c8b890",
+   "metallic": 0.5,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a3a34",
+     "y": 0,
+     "width": 0.07,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "scales",
+     "color": "#5a5a50",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.1,
+   "look": {
+    "base": "#6a6a60",
+    "dorsal": "#3a3a34"
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "zacco-platypus",
+  "commonName": "Pale Chub",
+  "scientificName": "Zacco platypus",
+  "family": "Xenocyprididae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "East Asia — China, Korea, Japan & Taiwan; gravelly rivers",
+  "description": "A common East Asian river minnow. Breeding males turn blue-green and salmon-pink with vertical bars, grow head tubercles and a greatly enlarged anal fin, and spawn over clean gravel.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 18,
+  "lifespanYears": 4,
+  "tempC": [
+   8,
+   26
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 250,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 1.5,
+  "burstSpeed": 11,
+  "traits": [
+   "jumper",
+   "bold"
+  ],
+  "body": {
+   "archetype": "minnow",
+   "depth": 0.24,
+   "width": 0.11,
+   "depthPos": 0.4,
+   "headLength": 0.23,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.4,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.32
+   },
+   "dorsal": {
+    "start": 0.46,
+    "end": 0.58,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.76,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.44,
+    "end": 0.49,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.26,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "scaleSize": 0.55
+  },
+  "look": {
+   "base": "#c8d0d0",
+   "dorsal": "#6a8088",
+   "ventral": "#f2f2ee",
+   "fin": "#dcd8cc",
+   "finOpacity": 0.35,
+   "eye": "#d0b890",
+   "metallic": 0.7,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#7a9aa8",
+     "count": 10,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.8
+    }
+   ]
+  },
+  "male": {
+   "lengthScale": 1.15,
+   "body": {
+    "anal": {
+     "start": 0.62,
+     "end": 0.76,
+     "height": 0.3,
+     "shape": "flowing",
+     "trail": 0.1
+    }
+   },
+   "look": {
+    "base": "#e89a8a",
+    "dorsal": "#4a7a7a",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#3a8a90",
+      "count": 10,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.95,
+      "y0": -0.6,
+      "y1": 1
+     }
+    ],
+    "fins": {
+     "anal": {
+      "color": "#e88070",
+      "opacity": 0.7
+     },
+     "pelvic": {
+      "color": "#e88070",
+      "opacity": 0.7
+     }
     }
    }
   },

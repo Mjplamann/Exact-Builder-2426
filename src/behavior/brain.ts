@@ -65,6 +65,14 @@ export class Brain {
   modeT = 0;
   modeDur = 10;
   thinkT = 0;
+  /** Sub-state within a mode (approach / act / leave…) and its timer & planned duration. */
+  sub = 0;
+  subT = 0;
+  subDur = 0;
+  /** Rest flavour (RK_* in behaviors.ts). */
+  restKind = 0;
+  /** Human-readable activity for kin.activity. */
+  label = 'cruising';
   /** Index into world.fish this frame. */
   idx = 0;
 
@@ -89,6 +97,12 @@ export class Brain {
   floorOk = false;
   /** Owner id of the shelter we may slip inside (ignore its colliders). */
   shelterOwner: string | undefined = undefined;
+  /** Allowed close to the glass (investigating the viewer, grazing). */
+  glassOk = false;
+  /** 0..1 how deep the animal has dug into the substrate (sand-sleepers, burrowers). */
+  buried = 0;
+  /** Client posing for a cleaner (s). */
+  pose = 0;
 
   // --- locomotion state ----------------------------------------------------------------------
   yaw = 0;
@@ -156,10 +170,15 @@ export class Brain {
 
   // --- rest ------------------------------------------------------------------------------------
   rest = 0;
+  restInit = false;
+  /** Length (cm) the size-derived limits were computed for. */
+  sizeFor = -1;
 
   // --- home / cover ------------------------------------------------------------------------------
   coverIdx = -1;
   coverVersion = -1;
+  /** Perch index (Habitat.perches) in use, or −1. */
+  perchIdx = -1;
 
   // --- surface attachment -------------------------------------------------------------------------
   surf = SURF_NONE;
@@ -179,6 +198,9 @@ export class Brain {
   hasSurfTarget = false;
   /** Fall velocity for dropped snails. */
   fallV = 0;
+  /** Surface the animal is heading for (SURF_*) and its wall/collider index. */
+  goalSurf = 0;
+  goalSurfIdx = -1;
 
   // --- trait timers --------------------------------------------------------------------------------
   airT = 0;

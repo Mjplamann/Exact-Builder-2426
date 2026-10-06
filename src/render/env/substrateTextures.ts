@@ -65,6 +65,8 @@ export interface SubstrateSpec {
   normalScale: number;
   /** Gentle mid-scale undulation of the surface (fraction of tile). */
   undulation: number;
+  /** How much crevice occlusion is baked into albedo (sand ≈ 0.3, coarse gravel ≈ 0.55). */
+  creviceDark?: number;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -101,20 +103,20 @@ export const SUBSTRATE_SPECS: Record<Exclude<SubstrateKind, 'bare'>, SubstrateSp
     ], 0.18, 0.36, { roughness: 0.45 })],
   },
   'river-sand': {
-    tile: 0.1, voidColor: [0.3, 0.26, 0.21], macroAmp: 0.1, macroTint: [1.0, 0.9, 0.78], normalScale: 1.1, undulation: 0.01,
+    tile: 0.1, voidColor: [0.42, 0.35, 0.26], macroAmp: 0.1, macroTint: [1.0, 0.9, 0.78], normalScale: 1.1, undulation: 0.01,
     layers: [
-      sand([{ c: [0.6, 0.53, 0.43], w: 3 }, { c: [0.45, 0.39, 0.31], w: 2 }], 0.12, 0.22, { coverage: 1.4 }),
+      sand([{ c: [0.66, 0.57, 0.44], w: 3 }, { c: [0.55, 0.46, 0.35], w: 2 }], 0.12, 0.22, { coverage: 2.0 }),
       sand([
-        { c: [0.78, 0.68, 0.52], w: 4 }, { c: [0.56, 0.43, 0.31], w: 2.5 }, { c: [0.62, 0.61, 0.58], w: 2.2 },
-        { c: [0.9, 0.88, 0.83], w: 1.6 }, { c: [0.27, 0.24, 0.21], w: 1.2 }, { c: [0.68, 0.45, 0.3], w: 1.1 },
-        { c: [0.83, 0.77, 0.64], w: 2 },
-      ], 0.25, 0.8, { coverage: 2.0, rough: 0.16, height: 0.65, roughness: 0.55 }),
+        { c: [0.8, 0.69, 0.52], w: 5 }, { c: [0.62, 0.48, 0.34], w: 2.5 }, { c: [0.66, 0.63, 0.57], w: 1.6 },
+        { c: [0.9, 0.86, 0.78], w: 1.6 }, { c: [0.36, 0.31, 0.26], w: 0.8 }, { c: [0.72, 0.5, 0.34], w: 1.1 },
+        { c: [0.85, 0.76, 0.6], w: 2.5 },
+      ], 0.25, 0.8, { coverage: 2.2, rough: 0.16, height: 0.65, roughness: 0.55 }),
     ],
   },
   'fine-gravel': {
-    tile: 0.12, voidColor: [0.16, 0.14, 0.12], macroAmp: 0.09, macroTint: [1.0, 0.9, 0.8], normalScale: 1.3, undulation: 0.008,
+    tile: 0.12, creviceDark: 0.45, voidColor: [0.16, 0.14, 0.12], macroAmp: 0.09, macroTint: [1.0, 0.9, 0.8], normalScale: 1.3, undulation: 0.008,
     layers: [
-      sand([{ c: [0.42, 0.37, 0.3], w: 1 }], 0.15, 0.3, { coverage: 1.2 }),
+      sand([{ c: [0.42, 0.37, 0.3], w: 1 }], 0.15, 0.3, { coverage: 2.0 }),
       {
         coverage: 2.1, rMin: 0.7, rMax: 1.7, aspect: [1, 1.6], rough: 0.14, profile: 'dome', height: 0.75, speckle: 0.08, jitter: 0.08,
         roughness: 0.42,
@@ -126,22 +128,22 @@ export const SUBSTRATE_SPECS: Record<Exclude<SubstrateKind, 'bare'>, SubstrateSp
     ],
   },
   'pea-gravel': {
-    tile: 0.22, voidColor: [0.09, 0.08, 0.07], macroAmp: 0.08, macroTint: [1.0, 0.92, 0.82], normalScale: 1.5, undulation: 0.006,
+    tile: 0.22, creviceDark: 0.55, voidColor: [0.16, 0.14, 0.12], macroAmp: 0.08, macroTint: [1.0, 0.92, 0.82], normalScale: 1.5, undulation: 0.006,
     layers: [
-      sand([{ c: [0.4, 0.35, 0.29], w: 1 }], 0.3, 0.7, { coverage: 1.2 }),
+      sand([{ c: [0.46, 0.41, 0.34], w: 1 }, { c: [0.36, 0.32, 0.27], w: 1 }], 0.3, 0.7, { coverage: 2.0 }),
       {
-        coverage: 1.9, rMin: 2.2, rMax: 4.6, aspect: [1.05, 1.55], rough: 0.1, profile: 'dome', height: 0.8, speckle: 0.07, jitter: 0.06,
+        coverage: 2.6, rMin: 2.2, rMax: 4.6, aspect: [1.05, 1.55], rough: 0.1, profile: 'dome', height: 0.8, speckle: 0.07, jitter: 0.06,
         roughness: 0.36,
         palette: [
           { c: [0.76, 0.61, 0.43], w: 3 }, { c: [0.87, 0.81, 0.7], w: 2.2 }, { c: [0.55, 0.4, 0.28], w: 2 },
-          { c: [0.63, 0.61, 0.58], w: 2 }, { c: [0.72, 0.46, 0.31], w: 1.4 }, { c: [0.36, 0.33, 0.31], w: 1.2 },
+          { c: [0.63, 0.61, 0.58], w: 2 }, { c: [0.68, 0.48, 0.34], w: 1.2 }, { c: [0.36, 0.33, 0.31], w: 1.2 },
           { c: [0.82, 0.7, 0.5], w: 1.5 },
         ],
       },
     ],
   },
   'aqua-soil': {
-    tile: 0.14, voidColor: [0.035, 0.028, 0.022], macroAmp: 0.07, macroTint: [1.0, 0.9, 0.8], normalScale: 1.4, undulation: 0.008,
+    tile: 0.14, creviceDark: 0.45, voidColor: [0.035, 0.028, 0.022], macroAmp: 0.07, macroTint: [1.0, 0.9, 0.8], normalScale: 1.4, undulation: 0.008,
     layers: [{
       coverage: 2.3, rMin: 0.9, rMax: 2.0, aspect: [1, 1.35], rough: 0.2, profile: 'dome', height: 0.65, speckle: 0.12, jitter: 0.1,
       roughness: 0.9,
@@ -152,9 +154,9 @@ export const SUBSTRATE_SPECS: Record<Exclude<SubstrateKind, 'bare'>, SubstrateSp
     }],
   },
   'black-gravel': {
-    tile: 0.16, voidColor: [0.02, 0.02, 0.022], macroAmp: 0.05, macroTint: [0.92, 0.95, 1.0], normalScale: 1.5, undulation: 0.006,
+    tile: 0.16, creviceDark: 0.45, voidColor: [0.02, 0.02, 0.022], macroAmp: 0.05, macroTint: [0.92, 0.95, 1.0], normalScale: 1.5, undulation: 0.006,
     layers: [
-      sand([{ c: [0.06, 0.06, 0.065], w: 1 }], 0.25, 0.5, { coverage: 1.2 }),
+      sand([{ c: [0.06, 0.06, 0.065], w: 1 }], 0.25, 0.5, { coverage: 2.0 }),
       {
         coverage: 2.0, rMin: 1.2, rMax: 2.6, aspect: [1.1, 1.8], rough: 0.3, profile: 'facet', height: 0.6, speckle: 0.1, jitter: 0.12,
         roughness: 0.32,
@@ -166,15 +168,15 @@ export const SUBSTRATE_SPECS: Record<Exclude<SubstrateKind, 'bare'>, SubstrateSp
     ],
   },
   'crushed-coral': {
-    tile: 0.2, voidColor: [0.48, 0.45, 0.4], macroAmp: 0.07, macroTint: [1.0, 0.94, 0.88], normalScale: 1.4, undulation: 0.006,
+    tile: 0.2, creviceDark: 0.35, voidColor: [0.62, 0.59, 0.53], macroAmp: 0.07, macroTint: [1.0, 0.94, 0.88], normalScale: 1.4, undulation: 0.006,
     layers: [
-      sand([{ c: [0.86, 0.83, 0.76], w: 3 }, { c: [0.78, 0.74, 0.66], w: 2 }], 0.25, 0.6, { coverage: 1.5 }),
+      sand([{ c: [0.86, 0.83, 0.76], w: 3 }, { c: [0.78, 0.74, 0.66], w: 2 }], 0.25, 0.6, { coverage: 2.2 }),
       {
         coverage: 1.7, rMin: 1.2, rMax: 3.8, aspect: [1.1, 2.0], rough: 0.32, profile: 'facet', height: 0.55, speckle: 0.09, jitter: 0.07,
         roughness: 0.7,
         palette: [
           { c: [0.93, 0.91, 0.87], w: 4 }, { c: [0.88, 0.82, 0.72], w: 2.5 }, { c: [0.88, 0.76, 0.72], w: 1.2 },
-          { c: [0.82, 0.74, 0.62], w: 1.5 }, { c: [0.72, 0.62, 0.68], w: 0.5 }, { c: [0.96, 0.95, 0.92], w: 1.5 },
+          { c: [0.82, 0.74, 0.62], w: 1.5 }, { c: [0.76, 0.68, 0.72], w: 0.3 }, { c: [0.96, 0.95, 0.92], w: 1.5 },
         ],
       },
       {
@@ -217,6 +219,13 @@ export interface SubstrateTextures {
 }
 
 const cache = new Map<string, SubstrateTextures>();
+
+/** Cheap integer hash → [0,1) (per-pixel speckle without consuming the grain RNG). */
+function hash01(a: number, b: number): number {
+  let h = Math.imul(a ^ 0x27d4eb2d, 0x165667b1) ^ Math.imul(b + 0x9e3779b9, 0x85ebca6b);
+  h = Math.imul(h ^ (h >>> 15), 0x2c1b3c6d);
+  return ((h ^ (h >>> 13)) >>> 0) / 4294967296;
+}
 
 function srgbToLinear(c: number): number {
   return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
@@ -332,7 +341,7 @@ export function substrateTextures(kind: Exclude<SubstrateKind, 'bare'>, size: nu
           if (h <= height[idx]) continue;
           height[idx] = h;
           // Shading baked into albedo: slightly lighter crowns, darker rims, speckle.
-          const spk = 1 + (rng.next() - 0.5) * 2 * layer.speckle;
+          const spk = 1 + (hash01(idx, g) - 0.5) * 2 * layer.speckle;
           let shade = (0.84 + 0.16 * prof) * spk * (d > 0.82 ? 1 - (d - 0.82) * 0.9 : 1);
           if (bandF > 0) shade *= 0.93 + 0.07 * Math.sin(lx * 9 * bandF + ly * 2);
           col[idx * 3] = gr * shade;
@@ -397,7 +406,8 @@ export function substrateTextures(kind: Exclude<SubstrateKind, 'bare'>, size: nu
       const ao = Math.max(0.25, Math.min(1, 1 - cav * cavK));
       // Crevices are also shadowed from the direct light, which a normal map cannot do: bake
       // part of the occlusion into albedo.
-      const dark = 0.45 + 0.55 * ao;
+      const cd = spec.creviceDark ?? 0.3;
+      const dark = 1 - cd + cd * ao;
       const r = col[i * 3] * dark, g = col[i * 3 + 1] * dark, b = col[i * 3 + 2] * dark;
       albedo[i * 4] = Math.round(Math.min(1, r) * 255);
       albedo[i * 4 + 1] = Math.round(Math.min(1, g) * 255);

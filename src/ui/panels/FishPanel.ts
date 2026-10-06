@@ -10,7 +10,7 @@ import { waterLiters } from '../../core/tankGeometry';
 import type { CompatibilityReport } from '../../sim/LifeSim';
 import type { Panel, UIHost } from '../context';
 import { button, confirmButton, iconButton, segmented, select, stepper, tabs } from '../controls';
-import { clear, debounce, h, prefs, setClass, setText } from '../dom';
+import { append, clear, debounce, h, prefs, setClass, setText } from '../dom';
 import {
   formatAge,
   formatCount,
@@ -39,6 +39,8 @@ import {
 import { VirtualList } from '../VirtualList';
 
 type SortKey = 'name' | 'size-asc' | 'size-desc';
+/** LifeSim's report plus a hard block the UI applies (e.g. marine animal in freshwater). */
+type Compat = CompatibilityReport & { blocked?: string };
 type Tab = 'catalog' | 'tank';
 
 interface Filters {
@@ -101,7 +103,7 @@ export class FishPanel implements Panel {
   private results: Species[] = [];
   private f: Filters;
   private maxLenAll = 100;
-  private compatCache = new Map<string, CompatibilityReport>();
+  private compatCache = new Map<string, Compat>();
   private counts = new Map<string, number>();
   private detailSpecies: Species | null = null;
   private detailRefresh: (() => void) | null = null;
@@ -467,7 +469,7 @@ export class FishPanel implements Panel {
     });
   }, 140);
 
-  private compat(sp: Species): CompatibilityReport {
+  private compat(sp: Species): Compat {
     let c = this.compatCache.get(sp.id);
     if (!c) {
       c = this.compatibility(sp);
@@ -477,7 +479,7 @@ export class FishPanel implements Panel {
   }
 
   /** LifeSim's report, plus hard limits the UI enforces itself (wrong water, tank too small). */
-  private compatibility(sp: Species): CompatibilityReport & { blocked?: string } {
+  private compatibility(sp: Species): Compat {
     const app = this.host.app;
     let rep: CompatibilityReport;
     try {
@@ -613,14 +615,14 @@ export class FishPanel implements Panel {
     }, { icon: 'plus', variant: 'primary', cls: 'aq-add-btn' });
 
     const renderCompat = () => {
-      const c = this.compat(sp) as CompatibilityReport & { blocked?: string };
+      const c = this.compat(sp);
       clear(compatBox);
       compatBox.className = `aq-compat is-${c.level}`;
-      compatBox.append(
+      append(compatBox, [
         h('div', { class: 'aq-compat-head' }, h('span', { class: `aq-compat-dot is-${c.level}`, 'aria-hidden': 'true' }), h('strong', null, COMPAT_WORDS[c.level].title)),
         h('p', { class: 'aq-compat-text' }, c.issues.length ? COMPAT_WORDS[c.level].text : COMPAT_WORDS.good.text),
         c.issues.length ? h('ul', { class: 'aq-compat-issues' }, ...c.issues.slice(0, 6).map((i) => h('li', null, i))) : null,
-      );
+      ]);
       add.disabled = !!c.blocked;
       add.title = c.blocked ?? '';
       const n = this.counts.get(sp.id) ?? 0;
@@ -742,6 +744,14 @@ export class FishPanel implements Panel {
     if (this.tab === 'catalog' && !this.detailSpecies && !this.host.isMobile) {
       requestAnimationFrame(() => this.searchInput.focus({ preventScroll: true }));
     }
+  }
+
+  onSettingsChanged(): void {
+    this.list.refresh();
+    this.paintSize();
+    if (this.detailSpecies) this.openDetail(this.detailSpecies);
+    this.dirtyTank = true;
+    if (this.tab === 'tank' && this.host.openPanelId === 'fish') this.renderTank();
   }
 
   onEscape(): boolean {

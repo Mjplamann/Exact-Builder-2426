@@ -27,7 +27,7 @@
   "groupSize": 2,
   "diet": "scavenger",
   "activity": "diurnal",
-  "reproduction": "egg-carrier",
+  "reproduction": "none",
   "locomotion": "walker",
   "cruiseSpeed": 0.3,
   "burstSpeed": 10,
@@ -122,7 +122,7 @@
   "groupSize": 2,
   "diet": "scavenger",
   "activity": "diurnal",
-  "reproduction": "egg-carrier",
+  "reproduction": "none",
   "locomotion": "walker",
   "cruiseSpeed": 0.3,
   "burstSpeed": 10,
@@ -217,7 +217,7 @@
   "groupSize": 2,
   "diet": "scavenger",
   "activity": "nocturnal",
-  "reproduction": "egg-carrier",
+  "reproduction": "none",
   "locomotion": "walker",
   "cruiseSpeed": 0.25,
   "burstSpeed": 10,
@@ -600,7 +600,8 @@
       }
      ]
     }
-   }
+   },
+   "ventral": "#f8f4ee"
   },
   "availability": "common"
  },
@@ -702,7 +703,9 @@
       }
      ]
     }
-   }
+   },
+   "dorsal": "#ece4dc",
+   "ventral": "#f6f2ec"
   },
   "availability": "uncommon"
  },
@@ -1343,7 +1346,7 @@
   "group": "shrimp",
   "water": "marine",
   "region": "Caribbean, Bahamas & southern Florida",
-  "description": "A transparent shrimp with brown-and-white saddle markings, boldly red-purple-and-white striped legs and black-banded white antennae. It lives among the tentacles of Caribbean anemones and sways to attract fish to clean.",
+  "description": "A transparent shrimp with brown-and-white saddle markings and boldly purple-and-white banded legs and claws. It lives among the tentacles of Caribbean anemones and sways and waves its antennae to attract fish to clean.",
   "adultLengthCm": 2.5,
   "birthLengthCm": 0.1,
   "maturityMonths": 6,
@@ -1667,7 +1670,8 @@
       }
      ]
     }
-   }
+   },
+   "ventral": "#faf6f0"
   },
   "availability": "uncommon"
  },
@@ -1945,5 +1949,6615 @@
    }
   },
   "availability": "uncommon"
+ },
+ {
+  "id": "alpheus-randalli",
+  "commonName": "Randall's Pistol Shrimp",
+  "scientificName": "Alpheus randalli",
+  "family": "Alpheidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A white shrimp banded in red that shares a sand burrow with a goby such as Stonogobiops: the near-blind shrimp digs and maintains the tunnel while keeping an antenna on its partner, which watches for danger. Its enlarged claw snaps shut with a loud pop that stuns small prey.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "digger",
+   "burrower",
+   "shy",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.2,
+   "width": 0.16,
+   "eyeSize": 0.12,
+   "snout": "blunt",
+   "barbels": 4,
+   "barbelLength": 0.8
+  },
+  "look": {
+   "base": "#f6f2ea",
+   "fin": "#f2e6da",
+   "finOpacity": 0.6,
+   "eye": "#2a1a10",
+   "translucency": 0.25,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#d8401e",
+     "count": 9,
+     "width": 0.055,
+     "x0": 0.05,
+     "x1": 0.98
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f6f0e6",
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d8401e",
+       "count": 5,
+       "width": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#f6f0e6",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d8401e",
+       "count": 2,
+       "width": 0.18
+      }
+     ]
+    }
+   },
+   "dorsal": "#f0e8de",
+   "ventral": "#faf6f0"
+  },
+  "availability": "common"
+ },
+ {
+  "id": "alpheus-bellulus",
+  "commonName": "Tiger Pistol Shrimp",
+  "scientificName": "Alpheus bellulus",
+  "family": "Alpheidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A cream shrimp patterned with large, gold-rimmed dark blotches that pairs with watchman gobies such as Cryptocentrus and Amblyeleotris, digging the shared burrow while the goby stands guard. Like all pistol shrimp it stuns prey with a bubble shot from its snapping claw.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "digger",
+   "burrower",
+   "shy",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.21,
+   "width": 0.17,
+   "eyeSize": 0.12,
+   "snout": "blunt",
+   "barbels": 4,
+   "barbelLength": 0.8
+  },
+  "look": {
+   "base": "#efe2c4",
+   "dorsal": "#e8d8b4",
+   "fin": "#e6cfa8",
+   "finOpacity": 0.7,
+   "eye": "#2a1a10",
+   "translucency": 0.15,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#4a2a24",
+     "x": 0.2,
+     "y": 0.5,
+     "rx": 0.1,
+     "ry": 0.45,
+     "ring": "#d8902a"
+    },
+    {
+     "type": "blotch",
+     "color": "#4a2a24",
+     "x": 0.45,
+     "y": 0.2,
+     "rx": 0.09,
+     "ry": 0.5,
+     "ring": "#d8902a"
+    },
+    {
+     "type": "blotch",
+     "color": "#4a2a24",
+     "x": 0.68,
+     "y": 0.5,
+     "rx": 0.08,
+     "ry": 0.4,
+     "ring": "#d8902a"
+    },
+    {
+     "type": "blotch",
+     "color": "#4a2a24",
+     "x": 0.88,
+     "y": 0.2,
+     "rx": 0.06,
+     "ry": 0.35,
+     "ring": "#d8902a"
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e8c070",
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#4a2a24",
+       "x": 0.5,
+       "y": 0,
+       "rx": 0.25,
+       "ry": 0.4,
+       "ring": "#d8902a"
+      }
+     ]
+    }
+   },
+   "ventral": "#f4ead4"
+  },
+  "availability": "common"
+ },
+ {
+  "id": "alpheus-soror",
+  "commonName": "Bullseye Pistol Shrimp",
+  "scientificName": "Alpheus soror",
+  "family": "Alpheidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "A yellow-orange pistol shrimp with purple legs and claws and a large deep-red spot ringed in white on each side of the body — the 'bullseye'. It lives hidden in rubble and crevices and stuns small prey with a snap of its enlarged claw.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "digger",
+   "shy",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.21,
+   "width": 0.17,
+   "eyeSize": 0.12,
+   "snout": "blunt",
+   "barbels": 4,
+   "barbelLength": 0.8
+  },
+  "look": {
+   "base": "#f0a830",
+   "dorsal": "#e8962a",
+   "ventral": "#f6c860",
+   "fin": "#8a4ab0",
+   "finOpacity": 0.9,
+   "eye": "#2a1a10",
+   "translucency": 0.1,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#a01828",
+     "x": 0.42,
+     "y": 0,
+     "rx": 0.08,
+     "ry": 0.35,
+     "ring": "#f8f4ee"
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#8a4ab0",
+     "opacity": 1
+    },
+    "caudal": {
+     "color": "#f0a830",
+     "opacity": 0.8
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "odontodactylus-scyllarus",
+  "commonName": "Peacock Mantis Shrimp",
+  "scientificName": "Odontodactylus scyllarus",
+  "family": "Odontodactylidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "A brilliantly coloured 'smasher' whose club-like raptorial appendages strike fast enough to form cavitation bubbles, shattering snail and crab shells — and occasionally aquarium glass. Its stalked eyes carry about a dozen kinds of colour receptor, and it lives in a U-shaped burrow in rubble.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 18,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "predator",
+   "invert-eater",
+   "digger",
+   "cave-dweller",
+   "curious",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.15,
+   "width": 0.2,
+   "headLength": 0.22,
+   "eyeSize": 0.35,
+   "snout": "blunt",
+   "barbels": 4,
+   "barbelLength": 0.6
+  },
+  "look": {
+   "base": "#3a8a3a",
+   "dorsal": "#2e7a34",
+   "ventral": "#7ab45a",
+   "fin": "#f07a3a",
+   "finOpacity": 0.9,
+   "eye": "#4a7a6a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#40b0c0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1a3a1a",
+     "density": 30,
+     "size": 0.025,
+     "x0": 0,
+     "x1": 0.28
+    },
+    {
+     "type": "bars",
+     "color": "#2a6a2e",
+     "count": 8,
+     "width": 0.03,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "region",
+     "color": "#d84a2a",
+     "x0": 0,
+     "x1": 0.06,
+     "y0": -0.5,
+     "y1": 0.8,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e85a2a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0e0c0",
+       "density": 6,
+       "size": 0.08
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#f07a3a",
+     "opacity": 0.9
+    },
+    "caudal": {
+     "color": "#e05a2a",
+     "opacity": 0.95,
+     "edge": "#2a6ad0",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "lysiosquillina-maculata",
+  "commonName": "Zebra Mantis Shrimp",
+  "scientificName": "Lysiosquillina maculata",
+  "family": "Lysiosquillidae",
+  "group": "shrimp",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "The largest mantis shrimp, a 'spearer' that waits at the mouth of a deep vertical burrow in sand and impales passing fish with barbed raptorial claws. Its pale body is crossed by dark zebra bands.",
+  "adultLengthCm": 28,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 24,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 3,
+  "traits": [
+   "ambush",
+   "predator",
+   "burrower",
+   "digger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "shrimp",
+   "depth": 0.12,
+   "width": 0.18,
+   "headLength": 0.18,
+   "eyeSize": 0.3,
+   "snout": "blunt",
+   "barbels": 4,
+   "barbelLength": 0.5
+  },
+  "look": {
+   "base": "#e2d49a",
+   "dorsal": "#d8c888",
+   "ventral": "#ece2b8",
+   "fin": "#e8dcae",
+   "finOpacity": 0.85,
+   "eye": "#3a4a3a",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a241c",
+     "count": 12,
+     "width": 0.035,
+     "x0": 0.08,
+     "x1": 0.98
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#e8dcae",
+     "opacity": 1
+    },
+    "caudal": {
+     "color": "#e2d49a",
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a241c",
+       "x": 0.5,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.25
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "mithraculus-sculptus",
+  "commonName": "Emerald Crab",
+  "scientificName": "Mithraculus sculptus",
+  "family": "Mithracidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Western Atlantic — Florida, Bahamas & Caribbean",
+  "description": "A small, flattened green crab with hairy legs and spoon-tipped claws, stocked in reef tanks to pick off bubble algae (Valonia). It wedges itself into rock crevices by day and forages mostly at night.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 2.5,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "nocturnal-hider",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.45
+  },
+  "look": {
+   "base": "#3e7a2c",
+   "dorsal": "#356c26",
+   "ventral": "#c8c49a",
+   "fin": "#3c7430",
+   "finOpacity": 1,
+   "eye": "#2a1a10",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#24501c",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#3e7a2c",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#efe8cc",
+       "x0": 0.85,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "mithraculus-forceps",
+  "commonName": "Red-ridged Clinging Crab",
+  "scientificName": "Mithraculus forceps",
+  "family": "Mithracidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Western Atlantic — Bermuda & North Carolina to Brazil",
+  "description": "A small red cousin of the emerald crab whose carapace is sculpted into raised ridges, with spoon-tipped claws and hairy legs. It hides deep in rock crevices and grazes algae and detritus at night.",
+  "adultLengthCm": 2.2,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 2.5,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "nocturnal-hider",
+   "shy",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.45
+  },
+  "look": {
+   "base": "#a03a24",
+   "dorsal": "#8a3020",
+   "ventral": "#d8a080",
+   "fin": "#a8442a",
+   "finOpacity": 1,
+   "eye": "#2a1a10",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#c86a48",
+     "count": 3,
+     "width": 0.04,
+     "wavy": 0.3,
+     "y0": 0.2,
+     "y1": 0.9
+    },
+    {
+     "type": "speckle",
+     "color": "#6a2014",
+     "density": 25
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#a03a24",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#efe2cc",
+       "x0": 0.85,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "maguimithrax-spinosissimus",
+  "commonName": "Caribbean King Crab",
+  "scientificName": "Maguimithrax spinosissimus",
+  "family": "Mithracidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Western Atlantic — Florida, Gulf of Mexico & Caribbean",
+  "description": "The largest reef crab of the Caribbean (formerly Mithrax spinosissimus), a spiny reddish-brown spider crab that eats chemically defended and calcified algae other grazers avoid. It is being farmed and released to clear algae from Caribbean reefs and suits only large public displays.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 750,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 1.5,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.5
+  },
+  "look": {
+   "base": "#8a3a2a",
+   "dorsal": "#7a3022",
+   "ventral": "#c88a6a",
+   "fin": "#8a4030",
+   "finOpacity": 1,
+   "eye": "#2a1a10",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a1a14",
+     "density": 40
+    },
+    {
+     "type": "spots",
+     "color": "#b85a40",
+     "density": 30,
+     "size": 0.03
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#8a3a2a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#2a1a14",
+       "x0": 0.85,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "neopetrolisthes-maculatus",
+  "commonName": "Porcelain Anemone Crab",
+  "scientificName": "Neopetrolisthes maculatus",
+  "family": "Porcellanidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A spotted porcelain crab that lives in pairs among the tentacles of carpet anemones, sweeping the water with feathery mouthparts to catch plankton. Though crab-shaped it is closer to the squat lobsters, and like other porcelain crabs it readily drops a leg to escape.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "filter-feeder",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 3,
+  "traits": [
+   "anemone-host",
+   "pair-bonding",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.35
+  },
+  "look": {
+   "base": "#f2ece2",
+   "dorsal": "#f0e8dc",
+   "ventral": "#f6f2ea",
+   "fin": "#f2ece2",
+   "finOpacity": 1,
+   "eye": "#2a1a1a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#b0283a",
+     "density": 25,
+     "size": 0.06
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f2ece2",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#b0283a",
+       "density": 12,
+       "size": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#f2ece2",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#b0283a",
+       "density": 8,
+       "size": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "lybia-tessellata",
+  "commonName": "Pom-pom Crab",
+  "scientificName": "Lybia tessellata",
+  "family": "Xanthidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "Carries a tiny sea anemone in each claw and waves them at intruders like boxing gloves or pom-poms; the anemones also snare food, which the crab steals from them. Its pink-and-yellow shell is tessellated with dark-outlined polygons.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 2,
+  "traits": [
+   "shy",
+   "nocturnal-hider",
+   "scavenger",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.45
+  },
+  "look": {
+   "base": "#f0c8a8",
+   "dorsal": "#eebc98",
+   "ventral": "#f6e2d0",
+   "fin": "#e8d0c0",
+   "finOpacity": 1,
+   "eye": "#2a1a1a",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#6a2a3a",
+     "scale": 4,
+     "thickness": 0.15
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#e8d0c0",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#5a2a6a",
+       "count": 4,
+       "width": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#e0c8d0",
+     "opacity": 0.9
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "lybia-edmondsoni",
+  "commonName": "Hawaiian Pom-pom Crab",
+  "scientificName": "Lybia edmondsoni",
+  "family": "Xanthidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Hawaiian Islands (endemic)",
+  "description": "Hawaii's own boxer crab, barely over a centimetre across, which carries a small anemone in each claw for defence and food gathering. Its shell is patterned with pink, brown and yellow polygons and its legs are banded dark purple, making it almost invisible on rubble.",
+  "adultLengthCm": 1.3,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 2,
+  "traits": [
+   "shy",
+   "nocturnal-hider",
+   "scavenger",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.45
+  },
+  "look": {
+   "base": "#e8b0a0",
+   "dorsal": "#d8a088",
+   "ventral": "#f2dccc",
+   "fin": "#e0c8b8",
+   "finOpacity": 1,
+   "eye": "#2a1a1a",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#7a4a2a",
+     "scale": 5,
+     "thickness": 0.12
+    },
+    {
+     "type": "spots",
+     "color": "#e8c860",
+     "density": 12,
+     "size": 0.06
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#e0c8b8",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#4a1e4a",
+       "count": 4,
+       "width": 0.14
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#e0c8d0",
+     "opacity": 0.9
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "trapezia-rufopunctata",
+  "commonName": "Red-spotted Coral Crab",
+  "scientificName": "Trapezia rufopunctata",
+  "family": "Trapeziidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-Pacific & Red Sea",
+  "description": "Lives only among the branches of Pocillopora corals, which give it shelter and nutritious mucus; in return the crab defends its host by pinching the tube feet of coral-eating crown-of-thorns starfish. Its smooth cream shell is covered with red-orange spots.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 2,
+  "traits": [
+   "territorial",
+   "cave-dweller",
+   "reef-safe",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.4
+  },
+  "look": {
+   "base": "#f2e8d8",
+   "dorsal": "#f0e2cc",
+   "ventral": "#f6efe4",
+   "fin": "#f2e8d8",
+   "finOpacity": 1,
+   "eye": "#3a1a1a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d83a1a",
+     "density": 22,
+     "size": 0.07
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f2e8d8",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d83a1a",
+       "density": 10,
+       "size": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "percnon-gibbesi",
+  "commonName": "Sally Lightfoot Crab",
+  "scientificName": "Percnon gibbesi",
+  "family": "Percnidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Tropical Atlantic & eastern Pacific; invasive in the Mediterranean",
+  "description": "An extremely flat crab (also called the nimble spray crab) with long gold-ringed legs that skitters sideways over surge-swept rocks grazing algae. Native to both sides of the tropical Atlantic and the eastern Pacific, it has spread through the Mediterranean since the late 1990s.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 10,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 8,
+  "traits": [
+   "algae-eater",
+   "shy",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.2
+  },
+  "look": {
+   "base": "#4a4a26",
+   "dorsal": "#3e4220",
+   "ventral": "#c8b880",
+   "fin": "#5a3a1e",
+   "finOpacity": 1,
+   "eye": "#2a2a1a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#6a7a3a",
+     "density": 25
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#5a3a1e",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e8b030",
+       "count": 5,
+       "width": 0.08
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#c86a2a",
+     "opacity": 1
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "stenorhynchus-seticornis",
+  "commonName": "Yellowline Arrow Crab",
+  "scientificName": "Stenorhynchus seticornis",
+  "family": "Inachoididae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina to Brazil",
+  "description": "A spindly spider crab with a long pointed rostrum, a triangular body striped gold and dark brown, and violet-tipped claws, often perched on sponges and anemones. It is kept to eat bristleworms, but large individuals also catch small shrimp and sleeping fish.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 1.5,
+  "traits": [
+   "invert-eater",
+   "scavenger",
+   "territorial",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 0.35,
+   "depth": 0.35,
+   "snout": "elongate"
+  },
+  "look": {
+   "base": "#e8d4a0",
+   "dorsal": "#d8c088",
+   "ventral": "#f0e2c0",
+   "fin": "#e0c890",
+   "finOpacity": 1,
+   "eye": "#2a1a10",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a2418",
+     "count": 6,
+     "width": 0.025
+    },
+    {
+     "type": "lines",
+     "color": "#e8b030",
+     "count": 5,
+     "width": 0.015
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#d8c088",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#7a5ac0",
+       "x0": 0.7,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e0c890",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#c8602a",
+       "count": 3,
+       "width": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "camposcia-retusa",
+  "commonName": "Decorator Crab",
+  "scientificName": "Camposcia retusa",
+  "family": "Inachidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-West Pacific & Red Sea",
+  "description": "A spider crab that snips off bits of sponge, algae and debris and hooks them onto velcro-like hairs on its body and legs, becoming a walking piece of reef. It redecorates after every molt, using whatever it can find.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 10,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.5,
+  "traits": [
+   "nocturnal-hider",
+   "shy",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 0.8,
+   "depth": 0.6
+  },
+  "look": {
+   "base": "#8a6a4a",
+   "dorsal": "#7a5e40",
+   "ventral": "#a88a6a",
+   "fin": "#8a6a4a",
+   "finOpacity": 1,
+   "eye": "#2a1a10",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#c8503a",
+     "scale": 2,
+     "amount": 0.4
+    },
+    {
+     "type": "spots",
+     "color": "#6a8a3a",
+     "density": 20,
+     "size": 0.1,
+     "jitter": 0.8
+    },
+    {
+     "type": "speckle",
+     "color": "#e8b84a",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#8a6a4a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c8503a",
+       "density": 10,
+       "size": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "lissocarcinus-laevis",
+  "commonName": "Anemone Swimming Crab",
+  "scientificName": "Lissocarcinus laevis",
+  "family": "Portunidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A small swimming crab with paddle-shaped hind legs that lives commensally on tube anemones (Cerianthus) and Actinodendron anemones. Its reddish shell is covered with large white blotches and its legs are semi-transparent white.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 3,
+  "traits": [
+   "anemone-host",
+   "shy",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.4
+  },
+  "look": {
+   "base": "#a8382a",
+   "dorsal": "#983024",
+   "ventral": "#e8d8cc",
+   "fin": "#f0ece6",
+   "finOpacity": 0.6,
+   "eye": "#1a1414",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#f6f2ec",
+     "x": 0.3,
+     "y": 0.5,
+     "rx": 0.14,
+     "ry": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#f6f2ec",
+     "x": 0.65,
+     "y": 0.6,
+     "rx": 0.12,
+     "ry": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#f6f2ec",
+     "x": 0.5,
+     "y": -0.2,
+     "rx": 0.18,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#a8382a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#f6f2ec",
+       "x": 0.4,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lissocarcinus-orbicularis",
+  "commonName": "Sea Cucumber Crab",
+  "scientificName": "Lissocarcinus orbicularis",
+  "family": "Portunidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "A rounded little swimming crab boldly patched in white and maroon-brown that lives on large sea cucumbers, sheltering on their skin and even in the mouth or cloaca. Paddle-like hind legs let it swim between hosts.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 3,
+  "traits": [
+   "shy",
+   "scavenger",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "crab",
+   "width": 1,
+   "depth": 0.4
+  },
+  "look": {
+   "base": "#f4f0ea",
+   "ventral": "#f6f4f0",
+   "fin": "#f0e6e0",
+   "finOpacity": 0.9,
+   "eye": "#2a1a1a",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#6a2a2a",
+     "x": 0.25,
+     "y": 0.4,
+     "rx": 0.15,
+     "ry": 0.45
+    },
+    {
+     "type": "blotch",
+     "color": "#6a2a2a",
+     "x": 0.6,
+     "y": 0.6,
+     "rx": 0.16,
+     "ry": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#6a2a2a",
+     "x": 0.75,
+     "y": -0.3,
+     "rx": 0.12,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#f4f0ea",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#6a2a2a",
+       "x0": 0,
+       "x1": 0.5,
+       "softness": 0.2
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#f0e6e0",
+     "opacity": 0.9,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#6a2a2a",
+       "count": 2,
+       "width": 0.15
+      }
+     ]
+    }
+   },
+   "dorsal": "#ece6de"
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "clibanarius-tricolor",
+  "commonName": "Blue-legged Hermit Crab",
+  "scientificName": "Clibanarius tricolor",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Western Atlantic — Florida, Bahamas & Caribbean",
+  "description": "The classic Caribbean clean-up hermit, with bright blue legs banded orange-yellow and orange antennae, living in large aggregations on shallow rubble. It grazes film algae and scavenges leftovers, and competes with snails for shells.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.7,
+   "width": 0.6
+  },
+  "look": {
+   "base": "#6a5a48",
+   "dorsal": "#5a4a3a",
+   "ventral": "#a89880",
+   "fin": "#2a5ad0",
+   "finOpacity": 1,
+   "eye": "#1a1a2a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a3a2a",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#2a5ad0",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#f0a020",
+       "count": 3,
+       "width": 0.08
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#2a4a9a",
+     "opacity": 1
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "clibanarius-digueti",
+  "commonName": "Red-legged Hermit Crab",
+  "scientificName": "Clibanarius digueti",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Gulf of California & Pacific Mexico",
+  "description": "The red-legged hermit of the Gulf of California, with red to red-brown legs and claws and red antennae. Hardy and tolerant, it is sold in reef clean-up crews to eat film algae and detritus, though it will also take snails for their shells.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 1,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.7,
+   "width": 0.6
+  },
+  "look": {
+   "base": "#7a6a58",
+   "dorsal": "#685a4a",
+   "ventral": "#b0a088",
+   "fin": "#a8361e",
+   "finOpacity": 1,
+   "eye": "#1a1a1a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a3a2a",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#a8361e",
+     "opacity": 1
+    },
+    "pectoral": {
+     "color": "#8e2c1a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c8402a",
+       "x0": 0.8,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "clibanarius-vittatus",
+  "commonName": "Thinstripe Hermit Crab",
+  "scientificName": "Clibanarius vittatus",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Western Atlantic — Virginia to Brazil",
+  "description": "A large hermit of seagrass beds, oyster reefs and mud flats, recognised by thin pale stripes running lengthwise down its olive-brown legs. It is a powerful scavenger that will kill snails for food or shells, so it suits only robust tanks.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   18,
+   30
+  ],
+  "ph": [
+   7.9,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 0.8,
+  "traits": [
+   "scavenger",
+   "invert-eater",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.7,
+   "width": 0.6
+  },
+  "look": {
+   "base": "#7a6a50",
+   "dorsal": "#6a5a42",
+   "ventral": "#b4a480",
+   "fin": "#4e4a2a",
+   "finOpacity": 1,
+   "eye": "#2a2a1a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a3a2a",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#4e4a2a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#e8e0c8",
+       "count": 4,
+       "width": 0.06
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#5a5230",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#e8e0c8",
+       "count": 3,
+       "width": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "calcinus-laevimanus",
+  "commonName": "Left-handed Hermit Crab",
+  "scientificName": "Calcinus laevimanus",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-West Pacific — East Africa to Hawaii",
+  "description": "An intertidal reef-flat hermit whose left claw is far larger than the right and plugs the shell opening when it withdraws. Its purplish-brown claws have white fingertips and its eyestalks are blue at the base and orange at the tip; it fights readily over shells.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 1.2,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "territorial",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.7,
+   "width": 0.6
+  },
+  "look": {
+   "base": "#706050",
+   "dorsal": "#5e5040",
+   "ventral": "#ac9c84",
+   "fin": "#7a4a2a",
+   "finOpacity": 1,
+   "eye": "#e88a2a",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a3a2a",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#7a4a2a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#f2eee6",
+       "x0": 0.78,
+       "x1": 1,
+       "softness": 0.15
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#5a3a4a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#f2eee6",
+       "x0": 0.82,
+       "x1": 1,
+       "softness": 0.15
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "calcinus-elegans",
+  "commonName": "Electric Blue Hermit Crab",
+  "scientificName": "Calcinus elegans",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii & French Polynesia",
+  "description": "Its walking legs are ringed in alternating electric blue and black, its claws olive-green speckled with white, and its antennae orange; Hawaiian animals often show orange instead of blue bands. It lives on shallow reef flats and rubble, grazing algae and scavenging.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 1.2,
+  "traits": [
+   "scavenger",
+   "algae-eater",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.7,
+   "width": 0.6
+  },
+  "look": {
+   "base": "#6a5e50",
+   "dorsal": "#5a4e42",
+   "ventral": "#a89a86",
+   "fin": "#141418",
+   "finOpacity": 1,
+   "eye": "#3a8ae0",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a3028",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#141418",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a8ae8",
+       "count": 4,
+       "width": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#5a6a3a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f2f0e6",
+       "density": 10,
+       "size": 0.06,
+       "x0": 0.6,
+       "x1": 1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "paguristes-cadenati",
+  "commonName": "Scarlet Reef Hermit Crab",
+  "scientificName": "Paguristes cadenati",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Caribbean & Bahamas",
+  "description": "A small, entirely scarlet Caribbean hermit with bright yellow eyestalks that lives on reefs rather than on shallow flats. It is among the gentlest clean-up hermits and grazes hair algae, cyanobacteria and detritus.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 1,
+  "traits": [
+   "algae-eater",
+   "scavenger",
+   "reef-safe",
+   "climbs",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.7,
+   "width": 0.6
+  },
+  "look": {
+   "base": "#706254",
+   "dorsal": "#605244",
+   "ventral": "#b0a28a",
+   "fin": "#c81e1e",
+   "finOpacity": 1,
+   "eye": "#f0d020",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a3a2a",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#c81e1e",
+     "opacity": 1
+    },
+    "pectoral": {
+     "color": "#c01c1c",
+     "opacity": 1
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "dardanus-megistos",
+  "commonName": "White-spotted Hermit Crab",
+  "scientificName": "Dardanus megistos",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii",
+  "description": "A huge hermit, red-orange and covered with black-edged white spots and stiff bristles, that moves into ever larger shells such as tritons and big turbans. It is a voracious scavenger and predator that will eat snails, crabs and sleeping fish.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 0.6,
+  "traits": [
+   "predator",
+   "invert-eater",
+   "scavenger",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.75,
+   "width": 0.65
+  },
+  "look": {
+   "base": "#8a7a62",
+   "dorsal": "#786a54",
+   "ventral": "#c8b898",
+   "fin": "#c8401e",
+   "finOpacity": 1,
+   "eye": "#2a1a10",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#5a4a3a",
+     "scale": 2,
+     "amount": 0.3
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#c8401e",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "speckle",
+       "color": "#1a1210",
+       "density": 40
+      },
+      {
+       "type": "spots",
+       "color": "#f6f0e6",
+       "density": 12,
+       "size": 0.1
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#c03a1c",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "speckle",
+       "color": "#1a1210",
+       "density": 40
+      },
+      {
+       "type": "spots",
+       "color": "#f6f0e6",
+       "density": 10,
+       "size": 0.12
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "dardanus-pedunculatus",
+  "commonName": "Anemone Hermit Crab",
+  "scientificName": "Dardanus pedunculatus",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "Plants sea anemones (Calliactis polypus) on its shell for protection, coaxing each one off the rock by tapping and massaging its base and carrying it along to every new shell. It has short red-and-white banded eyestalks and large pinkish claws.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.15,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 0.7,
+  "traits": [
+   "scavenger",
+   "invert-eater",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.75,
+   "width": 0.65
+  },
+  "look": {
+   "base": "#a08070",
+   "dorsal": "#907264",
+   "ventral": "#c8b0a0",
+   "fin": "#c86a5a",
+   "finOpacity": 1,
+   "eye": "#c8302a",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#e8b8a8",
+     "x": 0.3,
+     "y": 0.6,
+     "rx": 0.18,
+     "ry": 0.45
+    },
+    {
+     "type": "blotch",
+     "color": "#e8c0b0",
+     "x": 0.65,
+     "y": 0.5,
+     "rx": 0.16,
+     "ry": 0.4
+    },
+    {
+     "type": "speckle",
+     "color": "#f6eee6",
+     "density": 20
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#c86a5a",
+     "opacity": 1
+    },
+    "pectoral": {
+     "color": "#e89a9a",
+     "opacity": 1
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ciliopagurus-strigatus",
+  "commonName": "Halloween Hermit Crab",
+  "scientificName": "Ciliopagurus strigatus",
+  "family": "Diogenidae",
+  "group": "crab",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii",
+  "description": "The most brightly coloured hermit in the hobby, with red legs striped lengthwise in orange-yellow and dark-tipped pincers. Its flattened body and claws let it use narrow-mouthed shells such as cones; it is more scavenger than algae eater.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.1,
+  "maturityMonths": 10,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "walker",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 1,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "molts"
+  ],
+  "body": {
+   "archetype": "hermit-crab",
+   "depth": 0.55,
+   "width": 0.5
+  },
+  "look": {
+   "base": "#b89870",
+   "dorsal": "#a8885e",
+   "ventral": "#e0ccb0",
+   "fin": "#c81e1a",
+   "finOpacity": 1,
+   "eye": "#2a1a10",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#6a4a2a",
+     "density": 20,
+     "size": 0.04
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#c81e1a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#f0a020",
+       "count": 3,
+       "width": 0.12
+      }
+     ]
+    },
+    "pectoral": {
+     "color": "#c81e1a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#f0a020",
+       "count": 3,
+       "width": 0.1
+      },
+      {
+       "type": "region",
+       "color": "#1a1414",
+       "x0": 0.88,
+       "x1": 1,
+       "softness": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "turbo-fluctuosus",
+  "commonName": "Mexican Turbo Snail",
+  "scientificName": "Turbo fluctuosus",
+  "family": "Turbinidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Gulf of California & Pacific coast of Mexico",
+  "description": "A heavy turban snail prized for mowing down hair algae; its rounded shell is mottled green-brown with dark wavy bands. Like other turbans it seals its shell with a thick, chalky operculum when disturbed.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   20,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.09,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.85
+  },
+  "look": {
+   "base": "#6a6a48",
+   "dorsal": "#5a5a3a",
+   "ventral": "#d8d0b0",
+   "fin": "#6a5a48",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a2a1a",
+     "count": 6,
+     "width": 0.04,
+     "wavy": 0.6
+    },
+    {
+     "type": "marble",
+     "color": "#8a8a5a",
+     "scale": 2,
+     "amount": 0.3
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "turbo-castanea",
+  "commonName": "Chestnut Turban",
+  "scientificName": "Turbo castanea",
+  "family": "Turbinidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina to Brazil, Gulf of Mexico & Caribbean",
+  "description": "A small turban with spiral rows of beads, tan to light brown with patches of reddish-brown and cream (some are all orange). It grazes film algae and diatoms on rubble and seagrass beds.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.09,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.8
+  },
+  "look": {
+   "base": "#b88a5a",
+   "dorsal": "#a87a4a",
+   "ventral": "#e2d2b8",
+   "fin": "#8a7058",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#d8c4a0",
+     "count": 7,
+     "width": 0.025
+    },
+    {
+     "type": "marble",
+     "color": "#7a3a22",
+     "scale": 2.5,
+     "amount": 0.35
+    },
+    {
+     "type": "spots",
+     "color": "#f0e4cc",
+     "density": 25,
+     "size": 0.03
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "lithopoma-tectum",
+  "commonName": "Astraea Snail",
+  "scientificName": "Lithopoma tectum",
+  "family": "Turbinidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Florida, Bahamas & Caribbean",
+  "description": "The cone-shaped 'Astraea' of reef clean-up crews, a Caribbean grazer of film algae and diatoms on rock and glass. Its tall, ribbed pyramid shell is often overgrown with algae, and if it lands on its back it frequently cannot right itself.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.8,
+   "width": 0.85
+  },
+  "look": {
+   "base": "#9a9a88",
+   "dorsal": "#7a7a68",
+   "ventral": "#e0dccc",
+   "fin": "#8a7a62",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#c8c4b0",
+     "count": 14,
+     "width": 0.03,
+     "slant": 0.3
+    },
+    {
+     "type": "marble",
+     "color": "#5a7a4a",
+     "scale": 2,
+     "amount": 0.3
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "lithopoma-americanum",
+  "commonName": "American Star Shell",
+  "scientificName": "Lithopoma americanum",
+  "family": "Turbinidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Florida, Bahamas & Yucatán",
+  "description": "A small, strongly ribbed star shell, white to greenish and often fouled with algae, that grazes diatoms and film algae. It is sold alongside the larger Astraea snail and shares its trouble righting itself when knocked over.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.75,
+   "width": 0.85
+  },
+  "look": {
+   "base": "#d8d6c8",
+   "dorsal": "#b8bca8",
+   "ventral": "#eeeadc",
+   "fin": "#8a7a62",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#f2f0e6",
+     "count": 16,
+     "width": 0.025,
+     "slant": 0.3
+    },
+    {
+     "type": "marble",
+     "color": "#6a8a5a",
+     "scale": 2,
+     "amount": 0.25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "trochus-maculatus",
+  "commonName": "Maculated Top Shell",
+  "scientificName": "Trochus maculatus",
+  "family": "Trochidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-West Pacific & Red Sea",
+  "description": "A conical top shell with beaded spiral ribs mottled red, green and cream, grazing film algae from glass and rock. Unlike turbans it can flip itself upright, and it often spawns in reef tanks.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.9
+  },
+  "look": {
+   "base": "#a8806a",
+   "dorsal": "#986e5a",
+   "ventral": "#e8dcc8",
+   "fin": "#9a8a78",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a7a4a",
+     "scale": 2,
+     "amount": 0.4
+    },
+    {
+     "type": "lines",
+     "color": "#e8dcc8",
+     "count": 8,
+     "width": 0.02
+    },
+    {
+     "type": "spots",
+     "color": "#a82a2a",
+     "density": 30,
+     "size": 0.03
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "tectus-fenestratus",
+  "commonName": "Fenestrate Top Shell",
+  "scientificName": "Tectus fenestratus",
+  "family": "Tegulidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Central & western Pacific — Indo-Malaysia to New Caledonia",
+  "description": "A solid, pyramid-shaped top shell with thick oblique ribs, white to grey mottled with green, brown or olive over a plain white base; the foot is white with fine black dots. Sold as the 'Tectus' or 'Trochus' snail, it grazes film algae and can right itself if flipped.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.1,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.85,
+   "width": 0.95
+  },
+  "look": {
+   "base": "#d0ccc0",
+   "dorsal": "#b8b4a4",
+   "ventral": "#f4f2ec",
+   "fin": "#f2f0ea",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e8e6dc",
+     "count": 12,
+     "width": 0.03,
+     "slant": 0.5
+    },
+    {
+     "type": "marble",
+     "color": "#5a6a3a",
+     "scale": 2,
+     "amount": 0.4
+    },
+    {
+     "type": "region",
+     "color": "#f4f2ec",
+     "x0": 0,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.7,
+     "softness": 0.1
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cerithium-atratum",
+  "commonName": "Dark Cerith",
+  "scientificName": "Cerithium atratum",
+  "family": "Cerithiidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina to Brazil & Gulf of Mexico",
+  "description": "A slender, tall-spired snail of seagrass beds and rubble, whitish with rows of dark brown beads and spots. It grazes diatoms, film algae and detritus, burrows into sand at times, and its egg strings on the glass often hatch in reef tanks.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 9,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.09,
+  "traits": [
+   "algae-eater",
+   "sand-sifter",
+   "glass-grazer",
+   "burrower"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.35,
+   "width": 0.35
+  },
+  "look": {
+   "base": "#c8beac",
+   "dorsal": "#a89a88",
+   "ventral": "#e2dace",
+   "fin": "#8a7a6a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#6a5040",
+     "count": 6,
+     "width": 0.02
+    },
+    {
+     "type": "spots",
+     "color": "#3a2a20",
+     "density": 40,
+     "size": 0.03,
+     "jitter": 0.3
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "cerithium-litteratum",
+  "commonName": "Stocky Cerith",
+  "scientificName": "Cerithium litteratum",
+  "family": "Cerithiidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Western Atlantic — Florida, Bahamas & Caribbean",
+  "description": "A stout cerith with a row of blunt knobs on each whorl, white with neat spiral rows of square black spots, as if lettered. It grazes film algae and detritus in shallow rubble and seagrass.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 9,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.09,
+  "traits": [
+   "algae-eater",
+   "sand-sifter",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.42,
+   "width": 0.42
+  },
+  "look": {
+   "base": "#eeeae0",
+   "dorsal": "#e2ded2",
+   "ventral": "#f4f2ea",
+   "fin": "#8a7a6a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#1a1a1a",
+     "density": 50,
+     "size": 0.035,
+     "jitter": 0.1
+    },
+    {
+     "type": "lines",
+     "color": "#cac4b4",
+     "count": 5,
+     "width": 0.015
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "nassarius-vibex",
+  "commonName": "Bruised Nassa",
+  "scientificName": "Nassarius vibex",
+  "family": "Nassariidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Western Atlantic — Cape Cod to Brazil",
+  "description": "A small, thick-shelled mud snail that lies buried with only its siphon showing, then erupts from the sand within seconds of food hitting the water. It keeps sand beds stirred and cleans up uneaten food and carrion.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.08,
+  "burstSpeed": 0.25,
+  "traits": [
+   "burrower",
+   "scavenger",
+   "sand-sifter",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.6,
+   "width": 0.55,
+   "snout": "tubular"
+  },
+  "look": {
+   "base": "#8a7a68",
+   "dorsal": "#6a5a4a",
+   "ventral": "#efe8da",
+   "fin": "#e8dcc8",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#5a4a3a",
+     "count": 12,
+     "width": 0.03
+    },
+    {
+     "type": "blotch",
+     "color": "#5a3a4a",
+     "x": 0.55,
+     "y": 0.4,
+     "rx": 0.15,
+     "ry": 0.35
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "nassarius-distortus",
+  "commonName": "Tongan Nassarius",
+  "scientificName": "Nassarius distortus",
+  "family": "Nassariidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "A larger nassarius with a smooth, polished cream shell banded in rose, which spends most of its time buried with only a long siphon above the sand. It scavenges carrion and leftovers and ploughs through the sand bed as it goes.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.08,
+  "burstSpeed": 0.25,
+  "traits": [
+   "burrower",
+   "scavenger",
+   "sand-sifter",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.6,
+   "width": 0.55,
+   "snout": "tubular"
+  },
+  "look": {
+   "base": "#efe6d4",
+   "dorsal": "#e6dac4",
+   "ventral": "#f6f0e4",
+   "fin": "#e8dccc",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#d89a90",
+     "y": 0.7,
+     "width": 0.12
+    },
+    {
+     "type": "stripe",
+     "color": "#d89a90",
+     "y": 0,
+     "width": 0.14
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "conomurex-luhuanus",
+  "commonName": "Strawberry Conch",
+  "scientificName": "Conomurex luhuanus",
+  "family": "Strombidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A small conch named for the strawberry-red mouth of its shell, edged in black; the outside is cream streaked with orange-brown. It ploughs over sand grazing film algae and detritus, peering out on long eyestalks, and can leap away using its sickle-shaped operculum.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 18,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.5,
+  "traits": [
+   "sand-sifter",
+   "algae-eater",
+   "hops",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.55,
+   "width": 0.5,
+   "eyeSize": 0.35
+  },
+  "look": {
+   "base": "#e8dcc4",
+   "dorsal": "#d8c4a4",
+   "ventral": "#e8483a",
+   "fin": "#7a6a5a",
+   "finOpacity": 1,
+   "eye": "#d8a830",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#b8642a",
+     "count": 6,
+     "width": 0.04,
+     "wavy": 0.7
+    },
+    {
+     "type": "region",
+     "color": "#1a1414",
+     "x0": 0.2,
+     "x1": 0.9,
+     "y0": -1,
+     "y1": -0.85,
+     "softness": 0.1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "strombus-alatus",
+  "commonName": "Florida Fighting Conch",
+  "scientificName": "Strombus alatus",
+  "family": "Strombidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Southeastern USA & Gulf of Mexico",
+  "description": "A sturdy chestnut to orange-brown conch (sometimes treated as Strombus pugilis alatus) with short spines on the shoulders and a salmon-coloured aperture. It sifts sand for diatoms and detritus and moves in jerky vaults by planting its sickle-shaped operculum.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 18,
+  "lifespanYears": 5,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.5,
+  "traits": [
+   "sand-sifter",
+   "algae-eater",
+   "hops",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.55,
+   "width": 0.55,
+   "eyeSize": 0.35
+  },
+  "look": {
+   "base": "#a8603a",
+   "dorsal": "#94502e",
+   "ventral": "#f0a080",
+   "fin": "#6a5a4a",
+   "finOpacity": 1,
+   "eye": "#d8a830",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#d89060",
+     "scale": 2,
+     "amount": 0.35
+    },
+    {
+     "type": "lines",
+     "color": "#7a3a20",
+     "count": 5,
+     "width": 0.03,
+     "wavy": 0.3
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "aliger-gigas",
+  "commonName": "Queen Conch",
+  "scientificName": "Aliger gigas",
+  "family": "Strombidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Caribbean, Bahamas, Florida & Bermuda",
+  "description": "The Caribbean's iconic conch (long known as Strombus or Lobatus gigas), with a heavy knobbed spire, a flaring lip and a glossy pink aperture. It grazes algae and detritus on seagrass and sand; overfishing means aquarium animals are hatchery-reared juveniles.",
+  "adultLengthCm": 22,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 42,
+  "lifespanYears": 20,
+  "tempC": [
+   23,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 1000,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.03,
+  "burstSpeed": 0.3,
+  "traits": [
+   "sand-sifter",
+   "algae-eater",
+   "hops",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.6,
+   "width": 0.65,
+   "eyeSize": 0.3
+  },
+  "look": {
+   "base": "#d8b890",
+   "dorsal": "#c8a070",
+   "ventral": "#f0a090",
+   "fin": "#6a5a4a",
+   "finOpacity": 1,
+   "eye": "#d8b040",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#a8784a",
+     "count": 5,
+     "width": 0.04,
+     "wavy": 0.3
+    },
+    {
+     "type": "region",
+     "color": "#f4b8a8",
+     "x0": 0,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.5,
+     "softness": 0.4
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lambis-lambis",
+  "commonName": "Common Spider Conch",
+  "scientificName": "Lambis lambis",
+  "family": "Strombidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A heavy conch whose flared lip bears six long, curved finger-like spines; the outside is mottled brown and cream and the aperture glossy pink-orange. It grazes algae and detritus on reef flats and seagrass beds.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.03,
+  "burstSpeed": 0.3,
+  "traits": [
+   "sand-sifter",
+   "algae-eater",
+   "hops"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.35,
+   "width": 0.75,
+   "eyeSize": 0.3
+  },
+  "look": {
+   "base": "#c8ae88",
+   "dorsal": "#a88a64",
+   "ventral": "#f0a070",
+   "fin": "#6a5a4a",
+   "finOpacity": 1,
+   "eye": "#d8b040",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#6a4a2a",
+     "scale": 2.5,
+     "amount": 0.45
+    },
+    {
+     "type": "region",
+     "color": "#f4b48a",
+     "x0": 0,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.6,
+     "softness": 0.3
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "cypraea-tigris",
+  "commonName": "Tiger Cowrie",
+  "scientificName": "Cypraea tigris",
+  "family": "Cypraeidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to Hawaii",
+  "description": "A large cowrie whose glossy white shell is heavily spotted in dark brown; at night it wraps the shell in a brown mantle studded with white-tipped papillae, which keeps the gloss polished. It grazes algae and sponges and may nibble soft corals.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "nocturnal-hider",
+   "algae-eater",
+   "coral-nipper",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.55,
+   "width": 0.65
+  },
+  "look": {
+   "base": "#ece6dc",
+   "dorsal": "#d8d0c4",
+   "ventral": "#f4f0e8",
+   "fin": "#6a4a32",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#6a4a32",
+     "density": 30,
+     "size": 0.04,
+     "jitter": 0.6
+    },
+    {
+     "type": "spots",
+     "color": "#2a1a14",
+     "density": 40,
+     "size": 0.06,
+     "jitter": 0.6
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "mauritia-arabica",
+  "commonName": "Arabian Cowrie",
+  "scientificName": "Mauritia arabica",
+  "family": "Cypraeidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to Polynesia",
+  "description": "Named for the dense brown markings on its glossy back that look like Arabic script, over a fawn and bluish-grey ground with dark-spotted margins. It shelters in crevices by day and grazes algae at night.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "nocturnal-hider",
+   "algae-eater",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.5,
+   "width": 0.6
+  },
+  "look": {
+   "base": "#b8a890",
+   "dorsal": "#a8987c",
+   "ventral": "#d8c8a8",
+   "fin": "#3a3a3a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#5a3a22",
+     "count": 14,
+     "width": 0.015,
+     "wavy": 0.6,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#3a2418",
+     "density": 20,
+     "size": 0.03,
+     "y0": -1,
+     "y1": -0.6
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "monetaria-moneta",
+  "commonName": "Money Cowrie",
+  "scientificName": "Monetaria moneta",
+  "family": "Cypraeidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to the Galápagos",
+  "description": "A small, flattened cowrie with a pale yellow shell and thick, knobby margins, used as currency across Africa and Asia for centuries. It lives on shallow reef flats and grazes algae.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.4,
+   "width": 0.75
+  },
+  "look": {
+   "base": "#ece0a8",
+   "dorsal": "#e8d898",
+   "ventral": "#f6f0dc",
+   "fin": "#4a4a40",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#d6cc96",
+     "y": 0.5,
+     "width": 0.15
+    },
+    {
+     "type": "region",
+     "color": "#f6f0dc",
+     "x0": 0,
+     "x1": 1,
+     "y0": -1,
+     "y1": -0.55,
+     "softness": 0.3
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "monetaria-annulus",
+  "commonName": "Gold-ringer Cowrie",
+  "scientificName": "Monetaria annulus",
+  "family": "Cypraeidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to Polynesia",
+  "description": "A small cowrie whose grey-blue to white back is encircled by a bright golden ring, also once traded as shell money. It grazes algae on rock and rubble on shallow reef flats.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.45,
+   "width": 0.7
+  },
+  "look": {
+   "base": "#dde2e4",
+   "dorsal": "#c8d0d6",
+   "ventral": "#f6f2ea",
+   "fin": "#6a6a62",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#c8d0d6",
+     "x": 0.5,
+     "y": 0.5,
+     "rx": 0.35,
+     "ry": 0.45,
+     "ring": "#e8a020"
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "macrocypraea-zebra",
+  "commonName": "Measled Cowrie",
+  "scientificName": "Macrocypraea zebra",
+  "family": "Cypraeidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Western Atlantic — Florida & Caribbean to Brazil",
+  "description": "A large, elongate cowrie, glossy brown dotted with round white spots, those low on the sides with dark centres. It hides under ledges by day and grazes algae at night.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 18,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "nocturnal-hider",
+   "algae-eater",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.5,
+   "width": 0.55
+  },
+  "look": {
+   "base": "#8a5a34",
+   "dorsal": "#7a4c2c",
+   "ventral": "#c8a07a",
+   "fin": "#4a3a2a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f2eadc",
+     "density": 40,
+     "size": 0.04,
+     "y0": -0.3,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#f2eadc",
+     "density": 14,
+     "size": 0.05,
+     "y0": -0.9,
+     "y1": -0.4
+    },
+    {
+     "type": "spots",
+     "color": "#5a3a22",
+     "density": 14,
+     "size": 0.02,
+     "y0": -0.9,
+     "y1": -0.4
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "haliotis-asinina",
+  "commonName": "Donkey's Ear Abalone",
+  "scientificName": "Haliotis asinina",
+  "family": "Haliotidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "An elongate, ear-shaped abalone whose olive-and-brown shell is too small to cover its large green-and-brown foot; it breathes through a row of open holes along the shell edge. It grazes algae at night and clamps hard to rock by day.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "herbivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.12,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "nocturnal-hider",
+   "clings"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.25,
+   "width": 0.55
+  },
+  "look": {
+   "base": "#6a7a4a",
+   "dorsal": "#5a6a3a",
+   "ventral": "#e8e2c8",
+   "fin": "#5a6a3a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.3,
+   "iridescence": 0.4,
+   "iridescenceColor": "#7ac0b0",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#8a6a3a",
+     "count": 8,
+     "width": 0.04
+    },
+    {
+     "type": "spots",
+     "color": "#2a2a1a",
+     "density": 8,
+     "size": 0.03,
+     "y0": 0.55,
+     "y1": 0.65
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "haliotis-varia",
+  "commonName": "Variable Abalone",
+  "scientificName": "Haliotis varia",
+  "family": "Haliotidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A small abalone with a variably mottled shell — green, brown, cream or red — that often arrives as a hitchhiker on live rock. It hides under rocks by day and grazes film algae at night, breathing through a row of shell holes.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.12,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "nocturnal-hider",
+   "clings"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.28,
+   "width": 0.7
+  },
+  "look": {
+   "base": "#7a6a4a",
+   "dorsal": "#6a5e40",
+   "ventral": "#e6e0cc",
+   "fin": "#7a6a52",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.25,
+   "iridescence": 0.4,
+   "iridescenceColor": "#9ac8b0",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a7a4a",
+     "scale": 2,
+     "amount": 0.4
+    },
+    {
+     "type": "marble",
+     "color": "#a84a3a",
+     "scale": 3,
+     "amount": 0.25
+    },
+    {
+     "type": "spots",
+     "color": "#2a2a1a",
+     "density": 6,
+     "size": 0.03,
+     "y0": 0.55,
+     "y1": 0.65
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "stomatella-varia",
+  "commonName": "Stomatella Snail",
+  "scientificName": "Stomatella varia",
+  "family": "Trochidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "A fast little snail with a flattened, ear-shaped shell too small to withdraw into; when grabbed it sheds the end of its foot like a lizard's tail. It hitchhikes in on live rock, breeds freely in reef tanks and grazes film algae at night.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 4,
+  "lifespanYears": 1.5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "pelagic-spawner",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.08,
+  "burstSpeed": 0.15,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "nocturnal-hider",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.3,
+   "width": 0.65
+  },
+  "look": {
+   "base": "#8a7a6a",
+   "dorsal": "#7a6a5a",
+   "ventral": "#d8ccbc",
+   "fin": "#a8988a",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#c8b8a0",
+     "scale": 2.5,
+     "amount": 0.45
+    },
+    {
+     "type": "speckle",
+     "color": "#3a2e24",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "margarites-pupillus",
+  "commonName": "Margarita Snail",
+  "scientificName": "Margarites pupillus",
+  "family": "Margaritidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Northeastern Pacific — Alaska to California",
+  "description": "A small snail from cold Pacific shores, its spiral-ridged grey-tan shell showing pearly nacre where worn. Widely sold as a reef-tank grazer, it is a cold-water animal and rarely lives long at tropical temperatures.",
+  "adultLengthCm": 1.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   8,
+   20
+  ],
+  "ph": [
+   7.9,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.8,
+   "width": 0.85
+  },
+  "look": {
+   "base": "#a89a8e",
+   "dorsal": "#988a7e",
+   "ventral": "#ded6cc",
+   "fin": "#c8b8a8",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "metallic": 0.2,
+   "iridescence": 0.5,
+   "iridescenceColor": "#c8b0d8",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#c8bcae",
+     "count": 8,
+     "width": 0.02
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "nerita-versicolor",
+  "commonName": "Four-toothed Nerite",
+  "scientificName": "Nerita versicolor",
+  "family": "Neritidae",
+  "group": "snail",
+  "water": "marine",
+  "region": "Florida, Bermuda & Caribbean",
+  "description": "An intertidal Caribbean nerite whose rounded white shell is painted with spiral rows of black and red dashes; the aperture bears four teeth. It grazes film algae on rock and glass and often climbs out above the waterline.",
+  "adultLengthCm": 2.5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.05,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "snail",
+   "depth": 0.8,
+   "width": 0.85
+  },
+  "look": {
+   "base": "#e8e4dc",
+   "dorsal": "#d8d4cc",
+   "ventral": "#f2eee6",
+   "fin": "#7a7268",
+   "finOpacity": 1,
+   "eye": "#151515",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#1a1a1a",
+     "count": 7,
+     "width": 0.025,
+     "wavy": 0.1
+    },
+    {
+     "type": "spots",
+     "color": "#b02a24",
+     "density": 30,
+     "size": 0.025,
+     "jitter": 0.3
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "fromia-milleporella",
+  "commonName": "Red Fromia Sea Star",
+  "scientificName": "Fromia milleporella",
+  "family": "Goniasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A small, flat sea star with five rounded arms, red to orange with tiny dark pores scattered over its granular surface. It feeds on biofilm, detritus and microalgae and is one of the few sea stars that suit an established reef tank.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "reef-safe",
+   "sifter-of-detritus",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.12,
+   "width": 0.22
+  },
+  "look": {
+   "base": "#d02a1e",
+   "dorsal": "#c82418",
+   "ventral": "#e8a080",
+   "fin": "#e88070",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a1a14",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "fromia-monilis",
+  "commonName": "Tile Sea Star",
+  "scientificName": "Fromia monilis",
+  "family": "Goniasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "Its red-orange skin is set with rows of pale cream plates like tiles, ending in solid red arm tips; it is also sold as the peppermint or necklace sea star. It grazes biofilm and detritus and does well in mature reef tanks if acclimated slowly.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "reef-safe",
+   "sifter-of-detritus",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.12,
+   "width": 0.22
+  },
+  "look": {
+   "base": "#d03a24",
+   "dorsal": "#c83420",
+   "ventral": "#e8a088",
+   "fin": "#e88a78",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f2dcc0",
+     "density": 40,
+     "size": 0.05,
+     "x0": 0,
+     "x1": 0.85,
+     "jitter": 0.2
+    },
+    {
+     "type": "region",
+     "color": "#c82a1a",
+     "x0": 0.85,
+     "x1": 1,
+     "softness": 0.2
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "fromia-indica",
+  "commonName": "Indian Sea Star",
+  "scientificName": "Fromia indica",
+  "family": "Goniasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "A deep red to orange sea star marbled with paler cream and tipped with black or dark brown on all five arms; some show a fine black lattice on top. It grazes biofilm and detritus and is among the better sea stars for mature reef tanks.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "reef-safe",
+   "sifter-of-detritus",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.12,
+   "width": 0.22
+  },
+  "look": {
+   "base": "#c82a1e",
+   "dorsal": "#b82418",
+   "ventral": "#e89a80",
+   "fin": "#e8806a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#e8a080",
+     "scale": 2.5,
+     "amount": 0.35
+    },
+    {
+     "type": "region",
+     "color": "#1e1612",
+     "x0": 0.88,
+     "x1": 1,
+     "softness": 0.25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "linckia-laevigata",
+  "commonName": "Blue Linckia Sea Star",
+  "scientificName": "Linckia laevigata",
+  "family": "Ophidiasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii",
+  "description": "A brilliant blue sea star with five long, smooth, sausage-like arms, common on Indo-Pacific reef flats. It feeds on biofilm and detritus, ships poorly, and often slowly starves in anything but a large, mature system.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 36,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "reef-safe",
+   "sifter-of-detritus",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.08,
+   "width": 0.1
+  },
+  "look": {
+   "base": "#2a5ad0",
+   "dorsal": "#2450c0",
+   "ventral": "#6a8ad8",
+   "fin": "#f0d8a0",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#1a3a9a",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "linckia-multifora",
+  "commonName": "Multicolor Linckia Sea Star",
+  "scientificName": "Linckia multifora",
+  "family": "Ophidiasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-Pacific — Red Sea & East Africa to Hawaii",
+  "description": "A small, slender-armed linckia mottled in red, orange and purple with darker spots. It reproduces by shedding arms that regrow into new stars, so many individuals are lopsided 'comets' with one long arm.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.015,
+  "burstSpeed": 0.05,
+  "traits": [
+   "reef-safe",
+   "sifter-of-detritus",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.08,
+   "width": 0.11
+  },
+  "look": {
+   "base": "#d0502a",
+   "dorsal": "#c04424",
+   "ventral": "#e8a080",
+   "fin": "#f0c8a0",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#8a3a6a",
+     "scale": 3,
+     "amount": 0.35
+    },
+    {
+     "type": "spots",
+     "color": "#6a1e1a",
+     "density": 40,
+     "size": 0.025
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "linckia-guildingi",
+  "commonName": "Guilding's Sea Star",
+  "scientificName": "Linckia guildingi",
+  "family": "Ophidiasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Circumtropical — Indo-Pacific & tropical Atlantic",
+  "description": "A long-armed orange-red to brownish linckia found on reefs around the tropics, often with arms of unequal length from regeneration. Like its relatives it grazes biofilm and needs a large, mature tank.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 30,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "reef-safe",
+   "sifter-of-detritus",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.07,
+   "width": 0.09
+  },
+  "look": {
+   "base": "#d8602a",
+   "dorsal": "#c85424",
+   "ventral": "#eca880",
+   "fin": "#f0c8a0",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#8a3418",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "archaster-typicus",
+  "commonName": "Sand-sifting Sea Star",
+  "scientificName": "Archaster typicus",
+  "family": "Archasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A flat, grey-beige sea star edged with marginal spines that spends much of the day buried, ploughing through sand to eat detritus and tiny animals. At spawning time males climb onto females and stay in this 'pseudocopulation' pose for days.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.04,
+  "burstSpeed": 0.08,
+  "traits": [
+   "sand-sifter",
+   "burrower",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.08,
+   "width": 0.2
+  },
+  "look": {
+   "base": "#b8aa8a",
+   "dorsal": "#a8987a",
+   "ventral": "#e8dcc4",
+   "fin": "#d8c8a8",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#6a5a40",
+     "count": 4,
+     "width": 0.08,
+     "x0": 0.1,
+     "x1": 0.95
+    },
+    {
+     "type": "speckle",
+     "color": "#5a4a34",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "astropecten-polyacanthus",
+  "commonName": "Comb Sea Star",
+  "scientificName": "Astropecten polyacanthus",
+  "family": "Astropectinidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific & Red Sea",
+  "description": "A fast, flat sea star fringed with stiff comb-like marginal spines, purplish-brown along the middle of each arm with pale orange edges. It burrows in sand and swallows small snails, clams and crustaceans whole, and its tissues contain tetrodotoxin.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.06,
+  "burstSpeed": 0.12,
+  "traits": [
+   "burrower",
+   "invert-eater",
+   "sand-sifter"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.07,
+   "width": 0.18
+  },
+  "look": {
+   "base": "#e8a060",
+   "dorsal": "#6a3a4a",
+   "ventral": "#f2d8b8",
+   "fin": "#f0d0a8",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#5a2e40",
+     "y": 0,
+     "width": 0.5,
+     "x0": 0,
+     "x1": 0.95
+    },
+    {
+     "type": "region",
+     "color": "#5a2e40",
+     "x0": 0,
+     "x1": 0.2,
+     "softness": 0.3
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "protoreaster-nodosus",
+  "commonName": "Chocolate Chip Sea Star",
+  "scientificName": "Protoreaster nodosus",
+  "family": "Oreasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A stiff, five-armed sea star with a tan body studded with dark brown conical knobs like chocolate chips, common on shallow seagrass and sand flats. It will eat corals, sponges, clams and other sessile animals, so it belongs in fish-only systems.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 36,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "invert-eater",
+   "coral-nipper",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.25,
+   "width": 0.3
+  },
+  "look": {
+   "base": "#d8bf96",
+   "dorsal": "#c8ae84",
+   "ventral": "#ece0c8",
+   "fin": "#e8d8b8",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a1a14",
+     "density": 25,
+     "size": 0.06,
+     "y0": 0.2,
+     "y1": 1,
+     "jitter": 0.15
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "protoreaster-lincki",
+  "commonName": "African Red Knob Sea Star",
+  "scientificName": "Protoreaster lincki",
+  "family": "Oreasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Western Indian Ocean — East Africa & Madagascar",
+  "description": "A grey sea star patterned with a network of bright red ridges linking red conical knobs along each arm, from shallow East African lagoons. It preys on corals, sponges, clams and even other sea stars, so it suits only fish-only tanks.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 36,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "invert-eater",
+   "coral-nipper",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.25,
+   "width": 0.3
+  },
+  "look": {
+   "base": "#9a9a9a",
+   "dorsal": "#8a8a8a",
+   "ventral": "#d8d0c8",
+   "fin": "#d8c8c0",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#c82a1a",
+     "scale": 3,
+     "thickness": 0.2
+    },
+    {
+     "type": "spots",
+     "color": "#d0301e",
+     "density": 20,
+     "size": 0.07,
+     "y0": 0.2,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "oreaster-reticulatus",
+  "commonName": "Red Cushion Sea Star",
+  "scientificName": "Oreaster reticulatus",
+  "family": "Oreasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina & Bahamas to Brazil",
+  "description": "A massive, thick-bodied sea star whose upper surface is a raised net of knobs, orange-red to tan in adults and mottled olive-green in juveniles. It roams seagrass and sand flats, turning its stomach out over sediment films, sponges and detritus.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 36,
+  "lifespanYears": 12,
+  "tempC": [
+   23,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 750,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "sifter-of-detritus",
+   "sand-sifter"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.35,
+   "width": 0.4
+  },
+  "look": {
+   "base": "#d86a2a",
+   "dorsal": "#c85a20",
+   "ventral": "#f0c8a0",
+   "fin": "#f0d0a8",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#a83a1a",
+     "scale": 3,
+     "thickness": 0.25
+    },
+    {
+     "type": "spots",
+     "color": "#e89850",
+     "density": 30,
+     "size": 0.05
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "culcita-novaeguineae",
+  "commonName": "Cushion Star",
+  "scientificName": "Culcita novaeguineae",
+  "family": "Oreasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "An inflated, nearly armless sea star shaped like a pentagonal pillow, mottled tan, orange, green or red. It feeds largely on live coral by everting its stomach over the colony, so it is unsuitable for reef tanks.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 36,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "coral-nipper",
+   "invert-eater",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.45,
+   "width": 1
+  },
+  "look": {
+   "base": "#c8884a",
+   "dorsal": "#b8783e",
+   "ventral": "#e8c8a0",
+   "fin": "#e8d0b0",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#6a7a3a",
+     "scale": 2,
+     "amount": 0.4
+    },
+    {
+     "type": "spots",
+     "color": "#6a3a1e",
+     "density": 40,
+     "size": 0.03
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "choriaster-granulatus",
+  "commonName": "Doughboy Sea Star",
+  "scientificName": "Choriaster granulatus",
+  "family": "Oreasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific & Red Sea",
+  "description": "A plump sea star with short, finger-like arms and smooth granular skin, pinkish-tan to orange with darker red arm tips. It scavenges detritus and biofilm but may also feed on sessile invertebrates, so it is best kept away from corals.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 36,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "sifter-of-detritus",
+   "invert-eater"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.3,
+   "width": 0.3
+  },
+  "look": {
+   "base": "#e8a07a",
+   "dorsal": "#e0946c",
+   "ventral": "#f2cdb4",
+   "fin": "#f0d0b8",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#b8402a",
+     "x0": 0.8,
+     "x1": 1,
+     "softness": 0.4
+    },
+    {
+     "type": "speckle",
+     "color": "#c87050",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "aquilonastra-anomala",
+  "commonName": "Asterina Star",
+  "scientificName": "Aquilonastra anomala",
+  "family": "Asterinidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "A tiny, often lopsided sea star — usually with six or seven unequal arms — that arrives on live rock and multiplies by splitting in two. Most graze film algae and detritus on glass and rock, but some populations nibble zoanthids and Acropora.",
+  "adultLengthCm": 1.2,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 4,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "colony",
+  "groupSize": 5,
+  "diet": "detritivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.08,
+  "burstSpeed": 0.15,
+  "traits": [
+   "glass-grazer",
+   "algae-eater",
+   "climbs",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.15,
+   "width": 0.3
+  },
+  "look": {
+   "base": "#e6dcc8",
+   "dorsal": "#dcd0b8",
+   "ventral": "#f0e8da",
+   "fin": "#f0e6d4",
+   "finOpacity": 1,
+   "translucency": 0.2,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#8a9a7a",
+     "scale": 3,
+     "amount": 0.4
+    },
+    {
+     "type": "speckle",
+     "color": "#6a5a4a",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "echinaster-sentus",
+  "commonName": "Caribbean Spiny Sea Star",
+  "scientificName": "Echinaster sentus",
+  "family": "Echinasteridae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Western Atlantic — Florida, Gulf of Mexico & Caribbean",
+  "description": "A slender-armed sea star, red-orange to brick-brown and rough with rows of short conical spines, found in seagrass beds, bays and rubble. It feeds on detritus, biofilm and small encrusting invertebrates.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "detritivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.015,
+  "burstSpeed": 0.05,
+  "traits": [
+   "sifter-of-detritus",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.12,
+   "width": 0.15
+  },
+  "look": {
+   "base": "#c84a24",
+   "dorsal": "#b8401e",
+   "ventral": "#e8a080",
+   "fin": "#f0b890",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#8a2a14",
+     "density": 40,
+     "size": 0.03,
+     "jitter": 0.2
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "pisaster-ochraceus",
+  "commonName": "Ochre Sea Star",
+  "scientificName": "Pisaster ochraceus",
+  "family": "Asteriidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Northeastern Pacific — Alaska to Baja California",
+  "description": "The keystone predator of Pacific rocky shores, prying mussels apart with its tube feet; Robert Paine's removal experiments with it founded the keystone-species concept. Purple or orange with a lacy net of white spines, it was hit hard by sea star wasting disease from 2013.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 60,
+  "lifespanYears": 20,
+  "tempC": [
+   8,
+   15
+  ],
+  "ph": [
+   7.8,
+   8.3
+  ],
+  "minTankLiters": 400,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "invert-eater",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.2,
+   "width": 0.25
+  },
+  "look": {
+   "base": "#6a2a6a",
+   "dorsal": "#5a2260",
+   "ventral": "#d8a8c8",
+   "fin": "#e8c8a0",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#f2ece4",
+     "scale": 4,
+     "thickness": 0.15
+    },
+    {
+     "type": "spots",
+     "color": "#f2ece4",
+     "density": 40,
+     "size": 0.02
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "patiria-miniata",
+  "commonName": "Bat Star",
+  "scientificName": "Patiria miniata",
+  "family": "Asterinidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Northeastern Pacific — Alaska to Baja California",
+  "description": "A webbed, short-armed sea star of Pacific kelp forests and rocky shores, coloured anything from red, orange and yellow to purple, often mottled. It scavenges by turning its stomach out over algae, detritus and dead animals, and is a fixture of aquarium touch pools.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   8,
+   17
+  ],
+  "ph": [
+   7.8,
+   8.3
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "scavenger",
+   "sifter-of-detritus",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "starfish",
+   "depth": 0.12,
+   "width": 0.45
+  },
+  "look": {
+   "base": "#e0602a",
+   "dorsal": "#d45424",
+   "ventral": "#f0b490",
+   "fin": "#f0c8a0",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#a82a3a",
+     "scale": 2,
+     "amount": 0.3
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ophiarachna-incrassata",
+  "commonName": "Green Brittle Star",
+  "scientificName": "Ophiarachna incrassata",
+  "family": "Ophiodermatidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A big, bright green brittle star with banded arms that hides under rock with only its arm tips showing, then pins and eats small fish, shrimp and anything else it can catch. A fine scavenger alongside large fish, it is a known killer of gobies and other small tankmates.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 0.8,
+  "traits": [
+   "predator",
+   "ambush",
+   "scavenger",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "brittle-star",
+   "depth": 0.04,
+   "width": 0.05
+  },
+  "look": {
+   "base": "#4a8a2a",
+   "dorsal": "#3e7a24",
+   "ventral": "#a8c070",
+   "fin": "#8ab060",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e8d040",
+     "count": 10,
+     "width": 0.03,
+     "x0": 0.15,
+     "x1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#1a2a10",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "ophiolepis-superba",
+  "commonName": "Superb Brittle Star",
+  "scientificName": "Ophiolepis superba",
+  "family": "Ophiolepididae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-West Pacific — western Indian Ocean to New Caledonia",
+  "description": "A beige to yellow-orange brittle star with bold purple-black bands across its arms and a variably patterned disc, living under coral rubble on shallow reefs. It is a shy, harmless scavenger of detritus and leftover food.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 0.6,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "shy",
+   "reef-safe",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "brittle-star",
+   "depth": 0.04,
+   "width": 0.05
+  },
+  "look": {
+   "base": "#e8c08a",
+   "dorsal": "#e0b47a",
+   "ventral": "#f2dcb8",
+   "fin": "#d8b080",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a1e3a",
+     "count": 10,
+     "width": 0.05,
+     "x0": 0.15,
+     "x1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#3a1e3a",
+     "x": 0.05,
+     "y": 0,
+     "rx": 0.06,
+     "ry": 0.5
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ophiocoma-erinaceus",
+  "commonName": "Black Brittle Star",
+  "scientificName": "Ophiocoma erinaceus",
+  "family": "Ophiocomidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii",
+  "description": "A uniformly black brittle star bristling with stout arm spines, readily told from its relatives by its bright red tube feet. It hides under rocks and dead coral by day and sweeps its arms over the bottom for detritus at night.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 0.6,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "shy",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "brittle-star",
+   "depth": 0.04,
+   "width": 0.05
+  },
+  "look": {
+   "base": "#141414",
+   "dorsal": "#101010",
+   "ventral": "#2a2422",
+   "fin": "#d0281e",
+   "finOpacity": 0.9,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2e2a28",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ophioderma-squamosissimum",
+  "commonName": "Red Serpent Star",
+  "scientificName": "Ophioderma squamosissimum",
+  "family": "Ophiodermatidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Caribbean & Bahamas",
+  "description": "A smooth, solid scarlet serpent star whose scale-covered arms lack the bristling spines of most other brittle stars. A hardy scavenger, it snakes its arms toward food as soon as any reaches the bottom.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 0.7,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "reef-safe",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "brittle-star",
+   "depth": 0.04,
+   "width": 0.05
+  },
+  "look": {
+   "base": "#d8301e",
+   "dorsal": "#c82818",
+   "ventral": "#e86a4a",
+   "fin": "#e85a3a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#a8200e",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ophioderma-appressum",
+  "commonName": "Harlequin Brittle Star",
+  "scientificName": "Ophioderma appressum",
+  "family": "Ophiodermatidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Western Atlantic — Bermuda & Florida to Brazil",
+  "description": "A smooth-armed serpent star with grey arms ringed by pale bands and a grey, brown or white disc that is often spotted. It lives under rocks and coral rubble and scavenges detritus and leftovers at night.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 0.7,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "reef-safe",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "brittle-star",
+   "depth": 0.04,
+   "width": 0.05
+  },
+  "look": {
+   "base": "#5e5e58",
+   "dorsal": "#545450",
+   "ventral": "#9a948a",
+   "fin": "#9a948a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e8e4dc",
+     "count": 12,
+     "width": 0.04,
+     "x0": 0.15,
+     "x1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#e8e4dc",
+     "density": 10,
+     "size": 0.03,
+     "x0": 0,
+     "x1": 0.15
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ophioderma-rubicundum",
+  "commonName": "Ruby Brittle Star",
+  "scientificName": "Ophioderma rubicundum",
+  "family": "Ophiodermatidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Caribbean",
+  "description": "A large, smooth-armed serpent star of Caribbean outer reefs, ruby red with narrow cream bands along its arms. It shelters in crevices by day and forages over the reef at night.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 8,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "scavenger",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 0.7,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "reef-safe",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "brittle-star",
+   "depth": 0.04,
+   "width": 0.05
+  },
+  "look": {
+   "base": "#a8182a",
+   "dorsal": "#981424",
+   "ventral": "#c84a50",
+   "fin": "#c84a4a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#f0dcc0",
+     "count": 12,
+     "width": 0.025,
+     "x0": 0.15,
+     "x1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "ophiactis-savignyi",
+  "commonName": "Savigny's Brittle Star",
+  "scientificName": "Ophiactis savignyi",
+  "family": "Ophiactidae",
+  "group": "starfish",
+  "water": "marine",
+  "region": "Circumtropical",
+  "description": "The tiny six-armed brittle star that colonises almost every reef tank, hitching in on live rock and multiplying by splitting across the disc. Mottled green and tan with banded arms, it hides in rock and sponge crevices and harmlessly scavenges detritus.",
+  "adultLengthCm": 2,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 6,
+  "lifespanYears": 2,
+  "tempC": [
+   22,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 10,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 10,
+  "diet": "detritivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.1,
+  "burstSpeed": 0.5,
+  "traits": [
+   "scavenger",
+   "nocturnal-hider",
+   "shy",
+   "reef-safe",
+   "sifter-of-detritus"
+  ],
+  "body": {
+   "archetype": "brittle-star",
+   "depth": 0.05,
+   "width": 0.07
+  },
+  "look": {
+   "base": "#7a8a5a",
+   "dorsal": "#6a7a4a",
+   "ventral": "#c8c8a8",
+   "fin": "#b8b890",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a4a2a",
+     "count": 6,
+     "width": 0.06,
+     "x0": 0.2,
+     "x1": 1
+    },
+    {
+     "type": "marble",
+     "color": "#c8b890",
+     "scale": 2,
+     "amount": 0.3
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "mespilia-globulus",
+  "commonName": "Tuxedo Urchin",
+  "scientificName": "Mespilia globulus",
+  "family": "Temnopleuridae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A small, round urchin whose test has ten bare blue-green bands between tracts of short dark spines, like a dinner jacket. It grazes film and coralline algae and often carries bits of shell or rubble on top for shade and camouflage.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.85,
+   "width": 1
+  },
+  "look": {
+   "base": "#3a2024",
+   "dorsal": "#341c20",
+   "ventral": "#4a2a2e",
+   "fin": "#3a1a1e",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a8a9a",
+     "count": 10,
+     "width": 0.05
+    }
+   ]
+  },
+  "availability": "common"
+ },
+ {
+  "id": "salmacis-sphaeroides",
+  "commonName": "Green-spined Salmacis Urchin",
+  "scientificName": "Salmacis sphaeroides",
+  "family": "Temnopleuridae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-West Pacific",
+  "description": "A pale, round-tested urchin covered in short spines banded green and maroon (or white and maroon), common in seagrass beds and on muddy sand. It grazes algae, bryozoans and detritus and often carries shells and debris for cover.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.8,
+   "width": 1
+  },
+  "look": {
+   "base": "#e8e4d8",
+   "dorsal": "#dcd8cc",
+   "ventral": "#f0ece2",
+   "fin": "#6a9a4a",
+   "finOpacity": 1,
+   "fins": {
+    "dorsal": {
+     "color": "#6a9a4a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#6a2a2a",
+       "count": 3,
+       "width": 0.15
+      }
+     ]
+    }
+   },
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#6a2a2a",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "diadema-setosum",
+  "commonName": "Long-spined Sea Urchin",
+  "scientificName": "Diadema setosum",
+  "family": "Diadematidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-Pacific & Red Sea",
+  "description": "A black urchin with hollow, needle-sharp spines up to 30 cm long that snap off in skin, recognised by five white spots on the test and a bright orange ring around the anal cone. It hides in crevices by day and grazes algae at night, and small fish shelter among its spines.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.03,
+  "burstSpeed": 0.1,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.5,
+   "width": 1
+  },
+  "look": {
+   "base": "#1a1a1e",
+   "dorsal": "#16161a",
+   "ventral": "#222226",
+   "fin": "#141416",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#f2f2ee",
+     "density": 5,
+     "size": 0.06,
+     "y0": 0.4,
+     "y1": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1a1e",
+     "x": 0.5,
+     "y": 1,
+     "rx": 0.12,
+     "ry": 0.12,
+     "ring": "#f08a1e"
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "diadema-savignyi",
+  "commonName": "Savigny's Long-spined Urchin",
+  "scientificName": "Diadema savignyi",
+  "family": "Diadematidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-Pacific",
+  "description": "Very like Diadema setosum but lacking the orange anal ring; instead its dark test is marked with brilliant iridescent blue lines. It shelters in groups in crevices by day and comes out to graze algae at night.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.03,
+  "burstSpeed": 0.1,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.5,
+   "width": 1
+  },
+  "look": {
+   "base": "#1a1a24",
+   "dorsal": "#16161e",
+   "ventral": "#22222a",
+   "fin": "#141418",
+   "finOpacity": 1,
+   "iridescence": 0.7,
+   "iridescenceColor": "#3aa0e8",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a7ad8",
+     "count": 10,
+     "width": 0.02,
+     "y0": 0,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "diadema-antillarum",
+  "commonName": "Caribbean Long-spined Urchin",
+  "scientificName": "Diadema antillarum",
+  "family": "Diadematidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Tropical western Atlantic — Florida & Bermuda to Brazil",
+  "description": "Once the Caribbean's dominant algae grazer, this black, long-spined urchin was all but wiped out by a disease in 1983–84, after which many reefs became choked with seaweed. Hatchery-reared animals are now released to help restore reefs.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.03,
+  "burstSpeed": 0.1,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.5,
+   "width": 1
+  },
+  "look": {
+   "base": "#1a1a1e",
+   "dorsal": "#16161a",
+   "ventral": "#24242a",
+   "fin": "#121214",
+   "finOpacity": 1,
+   "iridescence": 0.3,
+   "iridescenceColor": "#3a7ad0",
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#2a3a5a",
+     "density": 20
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "echinothrix-calamaris",
+  "commonName": "Banded Sea Urchin",
+  "scientificName": "Echinothrix calamaris",
+  "family": "Diadematidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-Pacific & Red Sea",
+  "description": "A large diadematid with two kinds of spine: long, thick primaries often banded brown and white, and short, fine venomous secondaries; a big bronze anal sac speckled with white sits on top. It shelters in crevices by day and grazes algae at night.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.03,
+  "burstSpeed": 0.08,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.5,
+   "width": 1
+  },
+  "look": {
+   "base": "#5a3e2a",
+   "dorsal": "#4e3424",
+   "ventral": "#6a4a34",
+   "fin": "#5a3e2a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#8a6a3a",
+     "x": 0.5,
+     "y": 1,
+     "rx": 0.15,
+     "ry": 0.15
+    },
+    {
+     "type": "speckle",
+     "color": "#f0ece4",
+     "density": 15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#e8e0d0",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#5a3e2a",
+       "count": 5,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "astropyga-radiata",
+  "commonName": "Radiant Sea Urchin",
+  "scientificName": "Astropyga radiata",
+  "family": "Diadematidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-West Pacific & Red Sea",
+  "description": "A large, flattened urchin with a red-brown test marked by five V-shaped rows of iridescent blue dots and long, banded venomous spines. It roams open sand and rubble with juvenile fish and shrimp sheltering among its spines, and small ones are sometimes carried about on the backs of carrier crabs.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 18,
+  "lifespanYears": 6,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.06,
+  "traits": [
+   "algae-eater",
+   "sifter-of-detritus",
+   "bold"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.4,
+   "width": 1
+  },
+  "look": {
+   "base": "#8a3a2a",
+   "dorsal": "#7a3022",
+   "ventral": "#9a4a36",
+   "fin": "#6a2a20",
+   "finOpacity": 1,
+   "iridescence": 0.6,
+   "iridescenceColor": "#3aa8e8",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#3aa8e8",
+     "count": 5,
+     "width": 0.03
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#6a2a20",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#d8b8a0",
+       "count": 5,
+       "width": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "echinometra-mathaei",
+  "commonName": "Burrowing Urchin",
+  "scientificName": "Echinometra mathaei",
+  "family": "Echinometridae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-Pacific & Red Sea",
+  "description": "An oval-tested urchin that grinds a burrow into reef rock with its spines and teeth and may stay in it for life. Its spines vary from green to purple or brown, each with a pale ring at the base; it grazes drift and turf algae near its hole.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "digger",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.5,
+   "width": 0.8
+  },
+  "look": {
+   "base": "#4a2a3a",
+   "dorsal": "#422434",
+   "ventral": "#5a3446",
+   "fin": "#6a3a5a",
+   "finOpacity": 1,
+   "fins": {
+    "dorsal": {
+     "color": "#6a3a5a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#e8e0d0",
+       "x0": 0,
+       "x1": 0.15,
+       "softness": 0.2
+      }
+     ]
+    }
+   },
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#e8e0d0",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "echinometra-lucunter",
+  "commonName": "Rock-boring Urchin",
+  "scientificName": "Echinometra lucunter",
+  "family": "Echinometridae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Tropical Atlantic — Florida & Caribbean to Brazil, and West Africa",
+  "description": "A common shallow-water urchin of the tropical Atlantic, oval and black to reddish-brown, that bores cup-shaped hollows into intertidal and shallow reef rock. It stays in its burrow by day and grazes drift algae trapped by its spines.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "digger",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.5,
+   "width": 0.8
+  },
+  "look": {
+   "base": "#2a1a1a",
+   "dorsal": "#241616",
+   "ventral": "#3a2424",
+   "fin": "#3a1e1c",
+   "finOpacity": 1,
+   "fins": {
+    "dorsal": {
+     "color": "#4a201c",
+     "opacity": 1
+    }
+   },
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a2420",
+     "density": 25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "heterocentrotus-mamillatus",
+  "commonName": "Slate Pencil Urchin",
+  "scientificName": "Heterocentrotus mamillatus",
+  "family": "Echinometridae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-Pacific — East Africa to Hawaii",
+  "description": "Named for its thick, blunt primary spines, once used as pencils for writing on slates; they are red-brown with pale rings. It wedges itself into surge-zone crevices by day and grazes coralline and turf algae at night, but may also eat sessile invertebrates.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 36,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "nocturnal-hider",
+   "coral-nipper"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.6,
+   "width": 0.9
+  },
+  "look": {
+   "base": "#6a2a24",
+   "dorsal": "#5e241e",
+   "ventral": "#7a3a30",
+   "fin": "#8a2a20",
+   "finOpacity": 1,
+   "fins": {
+    "dorsal": {
+     "color": "#8a2a20",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#e8d8c0",
+       "count": 3,
+       "width": 0.06
+      }
+     ]
+    }
+   },
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a1a14",
+     "density": 20
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "tripneustes-gratilla",
+  "commonName": "Collector Urchin",
+  "scientificName": "Tripneustes gratilla",
+  "family": "Toxopneustidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Indo-Pacific & Red Sea",
+  "description": "A big, short-spined urchin that heaps shells and algae fragments on its back, which gives it its name. A voracious grazer of macroalgae, it is hatchery-reared in Hawaii and released to clear invasive seaweeds from reefs.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 10,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 300,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.6,
+   "width": 1
+  },
+  "look": {
+   "base": "#3a2448",
+   "dorsal": "#341f42",
+   "ventral": "#4a3058",
+   "fin": "#f0e8dc",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a1a36",
+     "count": 10,
+     "width": 0.03
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f0e8dc",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#e8862a",
+       "x0": 0.8,
+       "x1": 1,
+       "softness": 0.2
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "tripneustes-ventricosus",
+  "commonName": "West Indian Sea Egg",
+  "scientificName": "Tripneustes ventricosus",
+  "family": "Toxopneustidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Tropical Atlantic — Florida & Caribbean to Brazil, and West Africa",
+  "description": "A large urchin with a dark test densely covered in short white spines, grazing turtle grass and algae on shallow seagrass beds. It is harvested for its roe in parts of the Caribbean, where overfishing has depleted some populations.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   23,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 400,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "plant-eater"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.6,
+   "width": 1
+  },
+  "look": {
+   "base": "#2a1e2a",
+   "dorsal": "#241a24",
+   "ventral": "#3a2a3a",
+   "fin": "#f2eee6",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#f2eee6",
+     "density": 40
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lytechinus-variegatus",
+  "commonName": "Variegated Sea Urchin",
+  "scientificName": "Lytechinus variegatus",
+  "family": "Toxopneustidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Western Atlantic — North Carolina & Bermuda to Brazil",
+  "description": "A short-spined urchin, green, white, purple or red, that covers itself with seagrass blades and shell fragments as it grazes seagrass and algae. It is also a classic model animal in developmental biology.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   29
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "glass-grazer",
+   "climbs"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.55,
+   "width": 1
+  },
+  "look": {
+   "base": "#a8b88a",
+   "dorsal": "#98a87a",
+   "ventral": "#c8d0b0",
+   "fin": "#5a8a4a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e8e8dc",
+     "count": 10,
+     "width": 0.03
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#5a8a4a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#9a6aa8",
+       "x0": 0.75,
+       "x1": 1,
+       "softness": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "lytechinus-williamsi",
+  "commonName": "Jewel Urchin",
+  "scientificName": "Lytechinus williamsi",
+  "family": "Toxopneustidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Caribbean, Bahamas & Florida",
+  "description": "A small urchin with deep green or white spines and conspicuous purple pedicellariae and tube feet between them, giving it a jewelled look. It hides under rubble by day and grazes film and turf algae.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 75,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.02,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "surface-grazer",
+   "climbs",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.6,
+   "width": 1
+  },
+  "look": {
+   "base": "#c8a888",
+   "dorsal": "#b89878",
+   "ventral": "#d8bc9e",
+   "fin": "#2a6a3a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#8a2a1e",
+     "count": 10,
+     "width": 0.015
+    },
+    {
+     "type": "spots",
+     "color": "#7a3a9a",
+     "density": 30,
+     "size": 0.03
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "eucidaris-tribuloides",
+  "commonName": "Caribbean Pencil Urchin",
+  "scientificName": "Eucidaris tribuloides",
+  "family": "Cidaridae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Tropical Atlantic — North Carolina to Brazil, and West Africa",
+  "description": "A cidarid urchin with a few thick, blunt primary spines, often encrusted with algae and sponges, set on a red-brown test. It hides in crevices by day and at night eats coralline algae, sponges, carrion and sometimes corals.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 110,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "nocturnal-hider",
+   "coral-nipper",
+   "scavenger",
+   "algae-eater"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.7,
+   "width": 1
+  },
+  "look": {
+   "base": "#8a3a2a",
+   "dorsal": "#7a3224",
+   "ventral": "#9a4a36",
+   "fin": "#7a5a3a",
+   "finOpacity": 1,
+   "fins": {
+    "dorsal": {
+     "color": "#7a5a3a",
+     "opacity": 1,
+     "patterns": [
+      {
+       "type": "speckle",
+       "color": "#6a8a5a",
+       "density": 30
+      }
+     ]
+    }
+   },
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#c8a090",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "strongylocentrotus-purpuratus",
+  "commonName": "Purple Sea Urchin",
+  "scientificName": "Strongylocentrotus purpuratus",
+  "family": "Strongylocentrotidae",
+  "group": "urchin",
+  "water": "marine",
+  "region": "Northeastern Pacific — British Columbia to Baja California",
+  "description": "The purple urchin of Pacific rocky shores, which scrapes pits into rock and, when predators such as sea otters and sunflower stars decline, multiplies into 'urchin barrens' that strip kelp forests. Individuals can live for decades.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.05,
+  "maturityMonths": 24,
+  "lifespanYears": 20,
+  "tempC": [
+   8,
+   16
+  ],
+  "ph": [
+   7.8,
+   8.3
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "algae-grazer",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "crawler",
+  "cruiseSpeed": 0.01,
+  "burstSpeed": 0.05,
+  "traits": [
+   "algae-eater",
+   "surface-grazer",
+   "digger"
+  ],
+  "body": {
+   "archetype": "urchin",
+   "depth": 0.5,
+   "width": 1
+  },
+  "look": {
+   "base": "#5a2a6a",
+   "dorsal": "#52245f",
+   "ventral": "#6a3a7a",
+   "fin": "#7a3a9a",
+   "finOpacity": 1,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a1a4a",
+     "density": 20
+    }
+   ]
+  },
+  "availability": "rare"
  }
 ]

@@ -188,8 +188,8 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Venezuela (trade form; now mostly captive-bred)",
-  "description": "A naturally dark aeneus-group form sold as \"Black Venezuela\", sooty black all over with only a faint greenish sheen. Most fish in the trade are now captive-bred, and they behave like a bronze cory.",
+  "region": "Captive-bred (reportedly of Venezuelan origin)",
+  "description": "A uniformly sooty-black aeneus-group cory sold as \"Black Venezuela\", with only a faint greenish sheen. Whether it began as a wild population or as a melanistic line selected in captivity is unclear; virtually all fish in the trade are captive-bred and behave like the bronze cory.",
   "adultLengthCm": 6.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -267,8 +267,8 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "South America (exact collecting locality uncertain)",
-  "description": "An undescribed member of the bronze-cory group, catalogued in the CW series as \"Gold Laser\" for the vivid orange-gold stripe along its dark olive flank. It forages in groups and spawns in the T-position like its relatives.",
+  "region": "Peru (exact collecting locality unpublished)",
+  "description": "An undescribed member of the bronze-cory group (now often placed in Osteogaster), catalogued in the CW series as \"Gold Laser\" for the vivid orange-gold stripe along its dark metallic flank. It forages in groups and spawns in the T-position like its relatives.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -358,7 +358,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Central Amazon, Brazil",
-  "description": "An aeneus-group cory from the central Brazilian Amazon, slimmer than the bronze cory and with a broad blue-green iridescent band along the flank. Rarely exported; it forages in groups over sand like its relatives.",
+  "description": "The \"horseman\" cory of the central Brazilian Amazon (described from Codajás), an aeneus-group species named for the orange band that crosses the head behind the eyes like a rider's sash, above a large saddle-shaped dark green-brown patch on the flank. It is rarely exported and is kept like the bronze cory.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -394,7 +394,7 @@
   ],
   "body": {
    "archetype": "corydoras",
-   "depth": 0.35,
+   "depth": 0.38,
    "width": 0.22,
    "armored": true,
    "adipose": true,
@@ -415,20 +415,19 @@
    "patterns": [
     {
      "type": "blotch",
-     "color": "#b97a3c",
-     "x": 0.2,
-     "y": 0.45,
-     "rx": 0.08,
-     "ry": 0.3
+     "color": "#d0802e",
+     "x": 0.24,
+     "y": 0.3,
+     "rx": 0.05,
+     "ry": 0.75
     },
     {
-     "type": "stripe",
+     "type": "blotch",
      "color": "#24302c",
-     "y": 0.15,
-     "width": 0.42,
-     "x0": 0.25,
-     "x1": 1,
-     "iridescent": true
+     "x": 0.56,
+     "y": 0.22,
+     "rx": 0.26,
+     "ry": 0.5
     }
    ]
   },
@@ -448,7 +447,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Amazon, Peru, Colombia & Brazil",
-  "description": "A rust-orange member of the bronze-cory group with a black band running from the dorsal fin back along the top of the tail stem. It forages in loose groups in clear forest streams of the upper Amazon.",
+  "description": "A rust-orange member of the bronze-cory group with a matt black band that starts at the dorsal fin, runs back along the top of the body and turns down across the tail stem. It forages in loose groups in clear forest streams of the upper Amazon.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -518,6 +517,14 @@
      "y": 0.8,
      "rx": 0.07,
      "ry": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#1d1a17",
+     "x": 0.93,
+     "y": 0.15,
+     "rx": 0.05,
+     "ry": 0.55
     }
    ],
    "fins": {
@@ -543,7 +550,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Amazon, Peru",
-  "description": "Closely related to C. rabauti but with the black band set lower, running along the middle of the orange flank from beneath the dorsal fin to the tail. Native to Peruvian tributaries of the upper Amazon.",
+  "description": "Very like C. rabauti, but its dark band along the upper flank has a metallic green sheen and ends on the tail stem without turning down across it. Native to Peruvian tributaries of the upper Amazon.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -601,10 +608,11 @@
     {
      "type": "stripe",
      "color": "#1c1916",
-     "y": 0.25,
+     "y": 0.35,
      "width": 0.35,
      "x0": 0.3,
-     "x1": 1
+     "x1": 0.95,
+     "iridescent": true
     }
    ]
   },
@@ -624,7 +632,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Río Meta basin, Colombia",
-  "description": "An aeneus-group cory from the Río Meta drainage of Colombia, golden-bronze with the dark green band along the flank that gives it its name (\"black stripe\"). It is kept and spawned like the bronze cory but is rarely exported.",
+  "description": "An aeneus-group cory from a few tributaries of the Río Meta in Colombia: the upper half of the body is metallic green below a pale yellow back ridge, a green mask crosses the eyes and the fins are yellow-ochre. Its name means \"black band\"; it is kept and spawned like the bronze cory but is rarely exported.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -660,7 +668,7 @@
   ],
   "body": {
    "archetype": "corydoras",
-   "depth": 0.38,
+   "depth": 0.35,
    "width": 0.22,
    "armored": true,
    "adipose": true,
@@ -669,32 +677,37 @@
    "mouth": "inferior"
   },
   "look": {
-   "base": "#9a8a52",
-   "dorsal": "#5a5a3a",
-   "ventral": "#e8d6b4",
-   "fin": "#d0c6a8",
-   "finOpacity": 0.35,
+   "base": "#b9a26a",
+   "dorsal": "#d8c27e",
+   "ventral": "#efe2c4",
+   "fin": "#d8b860",
+   "finOpacity": 0.45,
    "eye": "#c49a4a",
    "metallic": 0.45,
-   "iridescence": 0.5,
-   "iridescenceColor": "#4caa7a",
+   "iridescence": 0.6,
+   "iridescenceColor": "#48b07a",
    "patterns": [
     {
-     "type": "blotch",
-     "color": "#d49a48",
-     "x": 0.2,
-     "y": 0.35,
-     "rx": 0.09,
-     "ry": 0.35
+     "type": "mask",
+     "color": "#2f5a40",
+     "width": 0.08
     },
     {
      "type": "stripe",
-     "color": "#24332c",
-     "y": 0.12,
-     "width": 0.25,
-     "x0": 0.28,
+     "color": "#2f5a40",
+     "y": 0.4,
+     "width": 0.55,
+     "x0": 0.22,
      "x1": 1,
      "iridescent": true
+    },
+    {
+     "type": "blotch",
+     "color": "#d89a48",
+     "x": 0.25,
+     "y": 0.8,
+     "rx": 0.06,
+     "ry": 0.2
     }
    ]
   },
@@ -714,7 +727,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Northern Venezuela",
-  "description": "An aeneus-group cory from northern Venezuela, warm orange-bronze with a broad dark greenish band along the upper flank. In the trade it is easily confused with orange-toned bronze cory forms.",
+  "description": "An aeneus-group cory from northern Venezuela, warm orange-bronze with its dark greenish colour confined to a large oval patch on the shoulder rather than a full-length band. In the trade it is easily confused with orange-toned bronze cory forms sold as \"Venezuela orange\".",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -770,13 +783,12 @@
    "iridescenceColor": "#3a8a78",
    "patterns": [
     {
-     "type": "stripe",
+     "type": "blotch",
      "color": "#2d3c34",
-     "y": 0.35,
-     "width": 0.4,
-     "x0": 0.3,
-     "x1": 1,
-     "iridescent": true
+     "x": 0.42,
+     "y": 0.2,
+     "rx": 0.15,
+     "ry": 0.45
     }
    ]
   },
@@ -1072,7 +1084,7 @@
    },
    "caudal": {
     "shape": "forked",
-    "size": 1.5
+    "size": 0.45
    }
   },
   "look": {
@@ -1480,7 +1492,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Coastal rivers of southeastern Brazil",
-  "description": "The blue cory of Brazil's Atlantic coastal rivers, silvery blue-grey with a dark band along the rear flank. It prefers slightly cooler, well-oxygenated water than Amazonian corydoras.",
+  "description": "The blue cory of Brazil's Atlantic coastal rivers, silvery blue-grey with a dark band along the middle of the flank from behind the head to the tail. It prefers slightly cooler, well-oxygenated water than Amazonian corydoras.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -1540,7 +1552,7 @@
      "color": "#2b3036",
      "y": 0.05,
      "width": 0.14,
-     "x0": 0.3,
+     "x0": 0.22,
      "x1": 1
     },
     {
@@ -1568,8 +1580,8 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Orinoco basin, Venezuela",
-  "description": "The slate cory is almost uniformly slate-grey, lacking the spots and bands of most relatives, as its name (\"one colour\") says. An uncommon import from Venezuela, kept like other round-snouted corydoras.",
+  "region": "Western Orinoco tributaries, Venezuela",
+  "description": "The slate cory is almost uniformly slate- to blue-grey, lacking the spots and bands of most relatives (\"concolor\" means one colour), with a rusty-orange tinge to the fins. It is known only from western tributaries of the Orinoco in Venezuela.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -1614,15 +1626,15 @@
    "mouth": "inferior"
   },
   "look": {
-   "base": "#615b56",
-   "dorsal": "#45403c",
-   "ventral": "#bfb5a8",
-   "fin": "#a59a8c",
-   "finOpacity": 0.4,
+   "base": "#5e6266",
+   "dorsal": "#43474c",
+   "ventral": "#c4c0b8",
+   "fin": "#c48a5a",
+   "finOpacity": 0.45,
    "eye": "#4a4440",
    "metallic": 0.2,
-   "iridescence": 0.2,
-   "iridescenceColor": "#8a7a9a",
+   "iridescence": 0.3,
+   "iridescenceColor": "#5a8a9a",
    "patterns": [
     {
      "type": "scales",
@@ -1992,7 +2004,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Suriname & French Guiana",
-  "description": "One of the earliest corydoras described (by Bloch in 1794, from Suriname): a pale body dotted with round dark spots, a dark bar through the eye and a black blotch in the dorsal fin. It is rarely exported.",
+  "description": "The first corydoras ever described (by Bloch in 1794, from Suriname): a pale grey-tan body evenly dotted with fine black spots and a black blotch on the upper part of the dorsal fin. It is rarely exported.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -2048,15 +2060,10 @@
    "iridescenceColor": "#a0b8b0",
    "patterns": [
     {
-     "type": "mask",
-     "color": "#262420",
-     "width": 0.07
-    },
-    {
      "type": "spots",
      "color": "#262420",
-     "density": 60,
-     "size": 0.035,
+     "density": 90,
+     "size": 0.028,
      "y0": -0.4,
      "y1": 1
     }
@@ -2104,7 +2111,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Amazon, Peru, Colombia & Brazil",
-  "description": "Named after the Río Ampiyacu (formerly \"Ambiyacu\") in Peru, this spotted cory has a dark bar through the eye and a black blotch in the dorsal fin. It is one of several near-identical spotted species from the upper Amazon that are often mixed in imports.",
+  "description": "Named after the Río Ampiyacu (formerly \"Ambiyacu\") in Peru, this spotted cory has sparse, brownish spots, a dark bar through the eye and a black blotch at the base of the dorsal fin that reaches only about halfway up the fin. It is one of several near-identical spotted species from the upper Amazon that are often mixed in imports.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -2166,19 +2173,11 @@
     },
     {
      "type": "spots",
-     "color": "#262420",
-     "density": 80,
-     "size": 0.03,
+     "color": "#4a3c2e",
+     "density": 60,
+     "size": 0.024,
      "y0": -0.4,
      "y1": 1
-    },
-    {
-     "type": "stripe",
-     "color": "#2e2b26",
-     "y": 0.1,
-     "width": 0.1,
-     "x0": 0.5,
-     "x1": 1
     }
    ],
    "fins": {
@@ -2187,10 +2186,10 @@
       {
        "type": "blotch",
        "color": "#262420",
-       "x": 0.55,
+       "x": 0.2,
        "y": 0,
-       "rx": 0.4,
-       "ry": 0.8
+       "rx": 0.3,
+       "ry": 0.9
       }
      ]
     },
@@ -2224,7 +2223,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Amazon, Brazil & Peru",
-  "description": "Agassiz's cory is spotted like its upper-Amazon relatives but has a dark band dropping from the dorsal fin base down the flank. It is named after the Swiss-American naturalist Louis Agassiz.",
+  "description": "Agassiz's cory is spotted like its upper-Amazon relatives, its larger black spots tending to form rows, with a black mark on the upper flank below the dorsal fin that extends up the first rays of the fin. It is named after the Swiss-American naturalist Louis Agassiz.",
   "adultLengthCm": 6.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -2287,8 +2286,8 @@
     {
      "type": "spots",
      "color": "#262420",
-     "density": 80,
-     "size": 0.03,
+     "density": 60,
+     "size": 0.035,
      "y0": -0.4,
      "y1": 1
     },
@@ -2456,7 +2455,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Rio Purus basin, Brazil",
-  "description": "A pale, spotted cory from the Rio Purus drainage with a broad dark band along the upper flank from the dorsal fin to the tail and a bar through the eye. Usually wild-caught and somewhat sensitive until settled.",
+  "description": "A pale, pearly cory from the lower Rio Purus with a black bar through the eye, dark spots that merge into a band along the upper flank toward the tail, and a widened black spot just below the dorsal fin. Usually wild-caught and somewhat sensitive until settled.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -2527,10 +2526,18 @@
     {
      "type": "stripe",
      "color": "#23211d",
-     "y": 0.5,
-     "width": 0.32,
-     "x0": 0.38,
+     "y": 0.45,
+     "width": 0.2,
+     "x0": 0.45,
      "x1": 0.98
+    },
+    {
+     "type": "blotch",
+     "color": "#23211d",
+     "x": 0.4,
+     "y": 0.7,
+     "rx": 0.07,
+     "ry": 0.22
     }
    ],
    "fins": {
@@ -2575,9 +2582,9 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Orinoco & Essequibo basins, Venezuela & Guyana",
-  "description": "The black-sail cory has a pale, finely peppered body, a dark bar through the eye and a black patch running from the front of the dorsal fin down onto the flank. It lives in clear, sandy streams of the Orinoco and Essequibo basins.",
-  "adultLengthCm": 5.5,
+  "region": "Guianas: Essequibo basin to French Guiana",
+  "description": "The black-sail cory (\"melanistius\" refers to the black dorsal fin) has a pale, finely peppered body, a dark bar through the eye and a black patch running from the front of the dorsal fin down onto the flank. It lives in clear, sandy streams of the Guianas and was described from the Essequibo River.",
+  "adultLengthCm": 5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
   "lifespanYears": 8,
@@ -2695,8 +2702,8 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Upper Amazon, Peru & Brazil",
-  "description": "The reticulated or mosaic cory is covered in a fine dark net pattern and carries a large black blotch in the dorsal fin. It shares upper-Amazon rivers with the very similar C. sodalis.",
+  "region": "Amazon basin, Brazil, Peru & Colombia",
+  "description": "The reticulated or mosaic cory is covered in a fine dark net pattern and carries a large black blotch in the dorsal fin. Described from the lower Amazon at Monte Alegre, it is imported mainly from Peru, often alongside the very similar C. sodalis.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -2807,7 +2814,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Amazon (Javari basin), Peru & Brazil",
-  "description": "Its name means \"companion\": it lives alongside and closely resembles the reticulated cory, with a dark net pattern, darker mid-flank and a black dorsal blotch. The two are often imported together.",
+  "description": "Its name means \"companion\", for its close resemblance to the reticulated cory: it has the same dark net pattern with a darker stripe along the mid-flank, but lacks the black blotch in the dorsal fin. The two are often imported together from Peru.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -2878,18 +2885,6 @@
     }
    ],
    "fins": {
-    "dorsal": {
-     "patterns": [
-      {
-       "type": "blotch",
-       "color": "#1c1a18",
-       "x": 0.6,
-       "y": 0,
-       "rx": 0.35,
-       "ry": 0.7
-      }
-     ]
-    },
     "caudal": {
      "patterns": [
       {
@@ -2918,7 +2913,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Rio Madeira basin (Rondônia), Brazil",
-  "description": "The violet or smudge-spot cory has a finely dotted head, a lavender-grey body and a dark smudge on the tail stem. It comes from tributaries of the Rio Madeira and is peaceful and hardy once settled.",
+  "description": "The violet or smudge-spot cory has a finely dotted head, a greyish body that takes on a violet tone with age and a dark blue-violet smudge covering the tail stem from the adipose fin to the tail. It comes from tributaries of the Rio Madeira in Rondônia and is peaceful and hardy once settled.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
@@ -2963,9 +2958,9 @@
    "mouth": "inferior"
   },
   "look": {
-   "base": "#8e8592",
-   "dorsal": "#6a6270",
-   "ventral": "#e4dfe0",
+   "base": "#b2a6b0",
+   "dorsal": "#857a88",
+   "ventral": "#ece6e6",
    "fin": "#d8d2d0",
    "finOpacity": 0.3,
    "eye": "#3a3838",
@@ -2975,7 +2970,7 @@
    "patterns": [
     {
      "type": "spots",
-     "color": "#2a2628",
+     "color": "#3a3036",
      "density": 150,
      "size": 0.018,
      "x0": 0,
@@ -2983,21 +2978,21 @@
     },
     {
      "type": "spots",
-     "color": "#3a3438",
-     "density": 60,
+     "color": "#5a4c50",
+     "density": 50,
      "size": 0.02,
      "x0": 0.3,
-     "x1": 1,
+     "x1": 0.8,
      "y0": -0.2,
      "y1": 1
     },
     {
      "type": "blotch",
-     "color": "#2a2628",
-     "x": 0.9,
+     "color": "#3a3450",
+     "x": 0.88,
      "y": 0.15,
-     "rx": 0.09,
-     "ry": 0.45
+     "rx": 0.13,
+     "ry": 0.5
     }
    ]
   },
@@ -3105,7 +3100,7 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Upper Amazon, Ecuador & Peru",
+  "region": "Tigre & Nanay drainages, Ecuador & Peru",
   "description": "The masked cory has bold black spots and a broad black bar through the eyes (\"atropersonatus\" means black-masked). It is a sought-after but infrequent import from Ecuador and Peru.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.4,
@@ -3180,21 +3175,9 @@
      "patterns": [
       {
        "type": "spots",
-       "color": "#1c1a18",
-       "density": 25,
-       "size": 0.06
-      }
-     ]
-    },
-    "caudal": {
-     "patterns": [
-      {
-       "type": "bars",
-       "color": "#1c1a18",
-       "count": 4,
-       "width": 0.08,
-       "x0": 0.05,
-       "x1": 1
+       "color": "#7a7468",
+       "density": 20,
+       "size": 0.05
       }
      ]
     }
@@ -3216,8 +3199,8 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Río Meta basin, Colombia",
-  "description": "A small, tan cory from the Río Meta in Colombia with a single dark stripe running the length of the flank. It is named after the aquarium publisher Herbert R. Axelrod.",
-  "adultLengthCm": 5,
+  "description": "A small, pinkish-tan cory endemic to the Río Meta in Colombia (also sold as the pink cory), with one to three dark stripes that begin below the dorsal fin and run back into the lower lobe of the tail. It is named after the aquarium publisher Herbert R. Axelrod.",
+  "adultLengthCm": 4.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 8,
   "lifespanYears": 7,
@@ -3261,9 +3244,9 @@
    "mouth": "inferior"
   },
   "look": {
-   "base": "#d3bf96",
-   "dorsal": "#9a8662",
-   "ventral": "#efe6d2",
+   "base": "#dcc2a2",
+   "dorsal": "#a88e70",
+   "ventral": "#f4e8dc",
    "fin": "#e2d8c4",
    "finOpacity": 0.3,
    "eye": "#4a3e30",
@@ -3272,27 +3255,34 @@
    "iridescenceColor": "#c0b080",
    "patterns": [
     {
-     "type": "mask",
-     "color": "#4a3e30",
-     "width": 0.05
-    },
-    {
      "type": "stripe",
      "color": "#2a241c",
-     "y": 0.02,
+     "y": 0.0,
      "width": 0.1,
-     "x0": 0.2,
+     "x0": 0.36,
      "x1": 1
     },
     {
      "type": "stripe",
-     "color": "#6a5a44",
-     "y": 0.55,
+     "color": "#4a3e30",
+     "y": 0.5,
      "width": 0.06,
-     "x0": 0.35,
+     "x0": 0.42,
      "x1": 1
     }
-   ]
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#2a241c",
+       "y": -0.35,
+       "width": 0.15
+      }
+     ]
+    }
+   }
   },
   "female": {
    "lengthScale": 1.1,
@@ -3310,7 +3300,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Middle Rio Negro, Brazil",
-  "description": "The bannertail cory from the middle Rio Negro is unmistakable for the bold black-and-white horizontal stripes across its tail fin. It is a fairly slender species that needs soft, acidic water.",
+  "description": "The bannertail cory from the Rio Aiuanã, a southern tributary of the middle Rio Negro, is the only corydoradine with bold black-and-white horizontal stripes across its tail fin; its silvery-grey body carries rows of black blotches from head to tail. It needs soft, acidic water.",
   "adultLengthCm": 6.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 10,
@@ -3356,9 +3346,9 @@
    "headLength": 0.3
   },
   "look": {
-   "base": "#d8d0c0",
-   "dorsal": "#a8a090",
-   "ventral": "#f2eee6",
+   "base": "#cfcbc2",
+   "dorsal": "#9e988c",
+   "ventral": "#f4f2ee",
    "fin": "#e4dfd4",
    "finOpacity": 0.3,
    "eye": "#3a3a36",
@@ -3375,20 +3365,13 @@
      "x1": 0.3
     },
     {
-     "type": "stripe",
+     "type": "lines",
      "color": "#1e1c1a",
-     "y": 0.05,
-     "width": 0.1,
-     "x0": 0.2,
-     "x1": 1
-    },
-    {
-     "type": "stripe",
-     "color": "#1e1c1a",
-     "y": 0.82,
-     "width": 0.1,
-     "x0": 0.3,
-     "x1": 1
+     "count": 4,
+     "width": 0.06,
+     "wavy": 0.15,
+     "y0": -0.45,
+     "y1": 0.8
     }
    ],
    "fins": {
@@ -3407,12 +3390,12 @@
     "dorsal": {
      "patterns": [
       {
-       "type": "blotch",
+       "type": "bars",
        "color": "#1e1c1a",
-       "x": 0.35,
-       "y": 0,
-       "rx": 0.3,
-       "ry": 0.6
+       "count": 3,
+       "width": 0.12,
+       "x0": 0.1,
+       "x1": 0.95
       }
      ]
     }
@@ -3433,7 +3416,7 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Upper Amazon, Peru & Brazil",
+  "region": "Upper Amazon, Peru, Ecuador & Brazil",
   "description": "A long-snouted cory densely spotted like a leopard, with a dark stripe on the rear flank and a black-tipped dorsal fin. Like other long-nosed species it probes deeper into the sand than round-snouted corydoras.",
   "adultLengthCm": 6.5,
   "birthLengthCm": 0.4,
@@ -4429,8 +4412,8 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Rio Negro basin, Brazil",
-  "description": "Named after the catfish author David Sands, this cory has a pinkish-orange body with a dark band along the upper flank and an orange-tinted head. It comes from the Rio Negro drainage and prefers soft, acidic water.",
+  "region": "Rio Unini (Rio Negro basin), Brazil",
+  "description": "Named after the catfish author David Sands, this Rio Unini (Rio Negro) cory has the \"melini\" pattern: a black eye mask and a black band slanting from the dorsal fin to the lower lobe of the tail, with the nape between mask and dorsal fin washed pale orange-red. It prefers soft, acidic water.",
   "adultLengthCm": 5.5,
   "birthLengthCm": 0.4,
   "maturityMonths": 10,
@@ -4475,34 +4458,85 @@
    "mouth": "inferior"
   },
   "look": {
-   "base": "#e2c4a2",
-   "dorsal": "#c49a72",
-   "ventral": "#f6ece0",
-   "fin": "#ecdcc8",
+   "base": "#e2d6c2",
+   "dorsal": "#cbbba2",
+   "ventral": "#f8f4ee",
+   "fin": "#ece6dc",
    "finOpacity": 0.3,
-   "eye": "#3a2e26",
+   "eye": "#1c1a18",
    "metallic": 0.35,
    "iridescence": 0.2,
    "iridescenceColor": "#e0e8e0",
    "patterns": [
     {
-     "type": "region",
-     "color": "#e08848",
-     "x0": 0,
-     "x1": 0.3,
-     "y0": -0.2,
-     "y1": 1,
-     "softness": 0.6
+     "type": "mask",
+     "color": "#151413",
+     "width": 0.09
     },
     {
-     "type": "stripe",
-     "color": "#2a2420",
-     "y": 0.5,
-     "width": 0.26,
-     "x0": 0.2,
-     "x1": 1
+     "type": "blotch",
+     "color": "#e08a5a",
+     "x": 0.25,
+     "y": 0.72,
+     "rx": 0.09,
+     "ry": 0.25
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.47,
+     "y": 0.72,
+     "rx": 0.1,
+     "ry": 0.28
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.63,
+     "y": 0.447,
+     "rx": 0.1,
+     "ry": 0.28
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.79,
+     "y": 0.173,
+     "rx": 0.1,
+     "ry": 0.28
+    },
+    {
+     "type": "blotch",
+     "color": "#151413",
+     "x": 0.95,
+     "y": -0.1,
+     "rx": 0.1,
+     "ry": 0.28
     }
-   ]
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#151413",
+       "x0": 0,
+       "x1": 0.35,
+       "softness": 0.4
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#151413",
+       "y": -0.45,
+       "width": 0.18
+      }
+     ]
+    }
+   }
   },
   "female": {
    "lengthScale": 1.1,
@@ -4740,15 +4774,15 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Upper Urubamba basin (Cusco), Peru",
-  "description": "A yellowish cory from the foothills near Cusco, Peru, resembling a panda cory with a black eye mask and dark saddles below the dorsal fin and on the tail stem. Its upland origin means it prefers cooler water than most corydoras.",
+  "region": "Cusco region, southeastern Peru",
+  "description": "The \"two-saddle\" cory from the Andean foothills of Cusco, Peru: beige with a black eye band, a dark face and two black saddles, a large one below the dorsal fin and a smaller one below the adipose fin, much like a panda cory. Long known only from old museum specimens, it was rediscovered near Quincemil in 2004.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.4,
   "maturityMonths": 9,
   "lifespanYears": 8,
   "tempC": [
-   20,
-   24
+   21,
+   25
   ],
   "ph": [
    6,
@@ -4786,8 +4820,8 @@
    "mouth": "inferior"
   },
   "look": {
-   "base": "#e0c890",
-   "dorsal": "#c8aa70",
+   "base": "#d8c4a0",
+   "dorsal": "#b8a07a",
    "ventral": "#f4ead6",
    "fin": "#ece2cc",
    "finOpacity": 0.3,
@@ -4799,12 +4833,12 @@
     {
      "type": "mask",
      "color": "#151413",
-     "width": 0.09
+     "width": 0.1
     },
     {
      "type": "blotch",
      "color": "#151413",
-     "x": 0.44,
+     "x": 0.42,
      "y": 0.55,
      "rx": 0.1,
      "ry": 0.45
@@ -4812,8 +4846,8 @@
     {
      "type": "blotch",
      "color": "#151413",
-     "x": 0.9,
-     "y": 0.45,
+     "x": 0.82,
+     "y": 0.55,
      "rx": 0.07,
      "ry": 0.4
     }
@@ -5095,7 +5129,7 @@
   "social": "shoal",
   "groupSize": 10,
   "diet": "omnivore",
-  "activity": "crepuscular",
+  "activity": "diurnal",
   "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1.5,
@@ -5185,7 +5219,7 @@
   "social": "shoal",
   "groupSize": 10,
   "diet": "omnivore",
-  "activity": "crepuscular",
+  "activity": "diurnal",
   "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1.4,
@@ -5251,9 +5285,9 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Rio Madeira basin (Rondônia), Brazil",
-  "description": "A slender dwarf cory from Rondônia in the Rio Madeira basin, pale with a thin black stripe along the flank. It spends more time swimming in open water than most corydoras.",
-  "adultLengthCm": 3,
+  "region": "Rio Aripuanã drainage (Rio Madeira basin), Brazil",
+  "description": "A slender dwarf cory from the Rio Aripuanã in the Madeira basin, pale with a single dark stripe that arches from the snout along the upper flank to the base of the tail, a miniature of the skunk cory's pattern. It spends more time swimming in open water than most corydoras.",
+  "adultLengthCm": 3.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 6,
   "lifespanYears": 4,
@@ -5275,7 +5309,7 @@
   "social": "shoal",
   "groupSize": 8,
   "diet": "omnivore",
-  "activity": "crepuscular",
+  "activity": "diurnal",
   "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1.2,
@@ -5309,18 +5343,26 @@
     {
      "type": "stripe",
      "color": "#1e1c1a",
-     "y": 0.02,
-     "width": 0.08,
-     "x0": 0.15,
-     "x1": 1
+     "y": 0.45,
+     "width": 0.1,
+     "x0": 0.02,
+     "x1": 0.55
     },
     {
-     "type": "spots",
-     "color": "#4a4440",
-     "density": 60,
-     "size": 0.015,
-     "y0": 0.3,
-     "y1": 1
+     "type": "stripe",
+     "color": "#1e1c1a",
+     "y": 0.32,
+     "width": 0.1,
+     "x0": 0.5,
+     "x1": 0.82
+    },
+    {
+     "type": "stripe",
+     "color": "#1e1c1a",
+     "y": 0.15,
+     "width": 0.1,
+     "x0": 0.78,
+     "x1": 1
     }
    ]
   },
@@ -5340,8 +5382,8 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Rio Guaporé basin, Brazil & Bolivia",
-  "description": "A small cory from the Rio Guaporé that shoals in midwater like the pygmy species; its spotted body ends in a large black blotch at the base of the tail.",
-  "adultLengthCm": 4,
+  "description": "A small cory from the Rio Guaporé that shoals in midwater like the pygmy species, with a larger eye and more strongly forked tail than bottom-dwelling relatives; its sandy, finely spotted body ends in a blue-black blotch on the tail stem, and the tail fin is banded with rows of spots.",
+  "adultLengthCm": 4.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 7,
   "lifespanYears": 5,
@@ -5363,7 +5405,7 @@
   "social": "shoal",
   "groupSize": 8,
   "diet": "omnivore",
-  "activity": "crepuscular",
+  "activity": "diurnal",
   "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1.2,
@@ -5383,11 +5425,15 @@
    "barbels": 6,
    "barbelLength": 0.08,
    "mouth": "inferior",
-   "eyeSize": 0.36
+   "eyeSize": 0.36,
+   "caudal": {
+    "shape": "deeply-forked",
+    "size": 0.3
+   }
   },
   "look": {
-   "base": "#c8c2b0",
-   "dorsal": "#8a8270",
+   "base": "#d2c4a2",
+   "dorsal": "#9a8c6e",
    "ventral": "#f0ece2",
    "fin": "#e2dccf",
    "finOpacity": 0.25,
@@ -5399,20 +5445,46 @@
     {
      "type": "spots",
      "color": "#2e2a24",
-     "density": 60,
-     "size": 0.022,
+     "density": 130,
+     "size": 0.014,
      "y0": -0.3,
      "y1": 1
     },
     {
      "type": "blotch",
-     "color": "#151413",
+     "color": "#16181c",
      "x": 0.95,
      "y": 0,
      "rx": 0.08,
      "ry": 0.45
     }
-   ]
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a342a",
+       "count": 3,
+       "width": 0.08,
+       "x0": 0.1,
+       "x1": 0.95
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a342a",
+       "count": 8,
+       "width": 0.04,
+       "x0": 0.05,
+       "x1": 1
+      }
+     ]
+    }
+   }
   },
   "female": {
    "lengthScale": 1.1,
@@ -5430,7 +5502,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Amazon, Peru, Ecuador, Colombia & Brazil",
-  "description": "A slim upper-Amazon cory that spends much of its time in open water, its greenish flanks marked with dark longitudinal bands. It gives its name to the elegans group, now often treated as the genus Gastrodermus.",
+  "description": "A slim upper-Amazon cory that spends much of its time in open water: yellowish with a dark, wedge-shaped band from behind the head to the tail stem above a pale stripe edged below by a row of dark spots, and males carry black bands in the dorsal fin. It gives its name to the elegans group, now often treated as the genus Gastrodermus.",
   "adultLengthCm": 5,
   "birthLengthCm": 0.3,
   "maturityMonths": 8,
@@ -5453,7 +5525,7 @@
   "social": "shoal",
   "groupSize": 8,
   "diet": "omnivore",
-  "activity": "crepuscular",
+  "activity": "diurnal",
   "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1,
@@ -5476,55 +5548,44 @@
    "eyeSize": 0.32
   },
   "look": {
-   "base": "#a69e84",
-   "dorsal": "#6a6450",
-   "ventral": "#ece6d6",
+   "base": "#c2b48a",
+   "dorsal": "#9a8a62",
+   "ventral": "#f2ecdc",
    "fin": "#ddd6c4",
    "finOpacity": 0.3,
    "eye": "#3a3830",
    "metallic": 0.4,
-   "iridescence": 0.45,
-   "iridescenceColor": "#5aa080",
+   "iridescence": 0.35,
+   "iridescenceColor": "#6aa888",
    "patterns": [
     {
      "type": "stripe",
-     "color": "#2a2a24",
-     "y": 0.1,
-     "width": 0.1,
-     "x0": 0.2,
-     "x1": 1
-    },
-    {
-     "type": "stripe",
-     "color": "#3a3a30",
-     "y": 0.55,
-     "width": 0.07,
-     "x0": 0.3,
+     "color": "#2e2c24",
+     "y": 0.25,
+     "width": 0.24,
+     "x0": 0.22,
      "x1": 1
     },
     {
      "type": "spots",
-     "color": "#2a2a24",
+     "color": "#2e2c24",
+     "density": 45,
+     "size": 0.022,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": -0.32,
+     "y1": -0.12
+    },
+    {
+     "type": "spots",
+     "color": "#2e2c24",
      "density": 60,
      "size": 0.02,
      "x0": 0,
-     "x1": 0.35
+     "x1": 0.3
     }
    ],
-   "fins": {
-    "dorsal": {
-     "patterns": [
-      {
-       "type": "blotch",
-       "color": "#2a2a24",
-       "x": 0.65,
-       "y": 0,
-       "rx": 0.35,
-       "ry": 0.7
-      }
-     ]
-    }
-   }
+   "fins": {}
   },
   "female": {
    "lengthScale": 1.1,
@@ -5532,7 +5593,25 @@
     "belly": 0.6
    }
   },
-  "availability": "uncommon"
+  "availability": "uncommon",
+  "male": {
+   "look": {
+    "fins": {
+     "dorsal": {
+      "patterns": [
+       {
+        "type": "bars",
+        "color": "#1e1c18",
+        "count": 3,
+        "width": 0.12,
+        "x0": 0.1,
+        "x1": 0.95
+       }
+      ]
+     }
+    }
+   }
+  }
  },
  {
   "id": "corydoras-nanus",
@@ -5565,7 +5644,7 @@
   "social": "shoal",
   "groupSize": 8,
   "diet": "omnivore",
-  "activity": "crepuscular",
+  "activity": "diurnal",
   "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1,
@@ -5646,7 +5725,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Río Napo basin, Ecuador & Peru",
-  "description": "A member of the elegans group from the Río Napo, pale grey with a row of dark blotches along the flank. It shoals more actively in open water than typical bottom-dwelling corydoras.",
+  "description": "A member of the elegans group from the Río Napo, silvery-gold with two or three irregular dark stripes along the flank and a mottled head and back; males carry a black blotch in the dorsal fin. It shoals more actively in open water than typical bottom-dwelling corydoras.",
   "adultLengthCm": 4.5,
   "birthLengthCm": 0.3,
   "maturityMonths": 8,
@@ -5669,7 +5748,7 @@
   "social": "shoal",
   "groupSize": 8,
   "diet": "omnivore",
-  "activity": "crepuscular",
+  "activity": "diurnal",
   "reproduction": "egg-depositor",
   "locomotion": "subcarangiform",
   "cruiseSpeed": 1,
@@ -5701,14 +5780,13 @@
    "metallic": 0.4,
    "patterns": [
     {
-     "type": "bars",
+     "type": "lines",
      "color": "#2e2a24",
-     "count": 5,
+     "count": 3,
      "width": 0.05,
-     "x0": 0.3,
-     "x1": 0.95,
-     "y0": -0.25,
-     "y1": 0.35
+     "wavy": 0.3,
+     "y0": -0.35,
+     "y1": 0.55
     },
     {
      "type": "spots",
@@ -5717,6 +5795,11 @@
      "size": 0.015,
      "x0": 0,
      "x1": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#4a4438",
+     "density": 30
     }
    ],
    "fins": {
@@ -5724,11 +5807,11 @@
      "patterns": [
       {
        "type": "blotch",
-       "color": "#2e2a24",
+       "color": "#8a8270",
        "x": 0.6,
        "y": 0,
-       "rx": 0.35,
-       "ry": 0.7
+       "rx": 0.3,
+       "ry": 0.6
       }
      ]
     },
@@ -5752,7 +5835,25 @@
     "belly": 0.6
    }
   },
-  "availability": "rare"
+  "availability": "rare",
+  "male": {
+   "look": {
+    "fins": {
+     "dorsal": {
+      "patterns": [
+       {
+        "type": "blotch",
+        "color": "#1e1c18",
+        "x": 0.55,
+        "y": 0,
+        "rx": 0.4,
+        "ry": 0.8
+       }
+      ]
+     }
+    }
+   }
+  }
  },
  {
   "id": "corydoras-undulatus",
@@ -5857,7 +5958,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Coastal rivers of southeastern Brazil (Rio de Janeiro to Santa Catarina)",
-  "description": "The bearded or banded cory of Brazil's Atlantic coastal streams is one of the largest corydoradines; mature males grow bristly cheek odontodes and a golden stripe from the snout along the back. It needs cool, well-oxygenated water.",
+  "description": "The bearded or banded cory of Brazil's Atlantic coastal streams is one of the largest corydoradines; mature males grow bristly cheek odontodes and a charcoal head with gold markings, including a broad golden streak from between the eyes to the snout tip. It needs cool, well-oxygenated water.",
   "adultLengthCm": 10,
   "birthLengthCm": 0.5,
   "maturityMonths": 12,
@@ -5974,17 +6075,17 @@
      {
       "type": "stripe",
       "color": "#e8c050",
-      "y": 0.85,
+      "y": 0.8,
       "width": 0.12,
       "x0": 0,
-      "x1": 0.45,
+      "x1": 0.24,
       "glow": 0.3
      }
     ]
    }
   },
   "female": {
-   "lengthScale": 1.1,
+   "lengthScale": 1.05,
    "body": {
     "belly": 0.6
    }
@@ -5998,8 +6099,8 @@
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
-  "region": "Coastal rivers of southeastern Brazil",
-  "description": "A coastal Brazilian Scleromystax with a pale body covered in dark spots and blotches; as in its relatives, mature males grow bristle-like odontodes on the cheeks. It comes from cool, clear Atlantic-forest streams.",
+  "region": "Coastal rivers of southeastern Brazil (Espírito Santo to São Paulo)",
+  "description": "A Scleromystax from coastal rivers of Espírito Santo, Rio de Janeiro, Minas Gerais and São Paulo, pale with dark spots and blotches and a metallic blue band along the flank; as in its relatives, mature males grow bristle-like odontodes on the cheeks. It lives in clear and whitewater lowland streams.",
   "adultLengthCm": 7,
   "birthLengthCm": 0.45,
   "maturityMonths": 12,
@@ -6052,7 +6153,7 @@
    "fin": "#ddd2bc",
    "finOpacity": 0.35,
    "eye": "#4a3e2e",
-   "metallic": 0.3,
+   "metallic": 0.4,
    "patterns": [
     {
      "type": "marble",
@@ -6067,6 +6168,15 @@
      "size": 0.03,
      "y0": -0.4,
      "y1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#4a6a8a",
+     "y": 0.02,
+     "width": 0.16,
+     "x0": 0.25,
+     "x1": 1,
+     "iridescent": true
     }
    ],
    "fins": {
@@ -6092,7 +6202,9 @@
       }
      ]
     }
-   }
+   },
+   "iridescence": 0.5,
+   "iridescenceColor": "#5a8ac8"
   },
   "female": {
    "lengthScale": 1.1,
@@ -6347,14 +6459,14 @@
   "availability": "rare"
  },
  {
-  "id": "aspidoras-pauciradiatus",
+  "id": "corydoras-pauciradiatus",
   "commonName": "Pauciradiatus Cory",
-  "scientificName": "Aspidoras pauciradiatus",
+  "scientificName": "Corydoras pauciradiatus",
   "family": "Callichthyidae",
   "group": "fish",
   "water": "freshwater",
   "region": "Rio Araguaia basin, Brazil",
-  "description": "A tiny, slender corydoras relative with a dark blotch in the dorsal fin, long sold as \"Corydoras pauciradiatus\". Aspidoras differ from Corydoras in skull details and tend to be livelier and more skittish.",
+  "description": "A tiny, slender cory with dark irregular spots, dark chevrons toward the tail and a large black spot at the base of the dorsal fin, which has only six branched rays (\"pauciradiatus\" means few-rayed). Long sold as Aspidoras pauciradiatus, it is a true corydoradine of the elegans group, now placed in Gastrodermus.",
   "adultLengthCm": 3,
   "birthLengthCm": 0.3,
   "maturityMonths": 7,
@@ -6416,15 +6528,16 @@
      "density": 50,
      "size": 0.025,
      "y0": -0.2,
-     "y1": 1
+     "y1": 1,
+     "jitter": 0.6
     },
     {
-     "type": "stripe",
-     "color": "#4a3c2c",
-     "y": 0.02,
-     "width": 0.06,
-     "x0": 0.3,
-     "x1": 1
+     "type": "chevrons",
+     "color": "#3a2e22",
+     "count": 3,
+     "width": 0.05,
+     "x0": 0.6,
+     "x1": 0.95
     }
    ],
    "fins": {
@@ -6433,10 +6546,10 @@
       {
        "type": "blotch",
        "color": "#1e1a16",
-       "x": 0.45,
+       "x": 0.25,
        "y": 0,
-       "rx": 0.35,
-       "ry": 0.7
+       "rx": 0.3,
+       "ry": 0.8
       }
      ]
     }
@@ -6672,7 +6785,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Upper Rio Tocantins basin (Goiás), Brazil",
-  "description": "A small Aspidoras from the upper Rio Tocantins, pale with a row of dark blotches along the flank. Like its relatives it is lively and forages in groups over sand.",
+  "description": "A small Aspidoras from the upper Rio Tocantins in Goiás, whitish with about four bold, oblique dark bars on the flank (\"albater\" means white and black). Cave populations with reduced eyes and pigment are known from the São Domingos karst nearby.",
   "adultLengthCm": 3.5,
   "birthLengthCm": 0.3,
   "maturityMonths": 7,
@@ -6731,17 +6844,18 @@
     {
      "type": "bars",
      "color": "#2e261e",
-     "count": 5,
-     "width": 0.05,
+     "count": 4,
+     "width": 0.07,
      "x0": 0.3,
      "x1": 0.95,
-     "y0": -0.2,
-     "y1": 0.4
+     "slant": 0.35,
+     "y0": -0.45,
+     "y1": 0.85
     },
     {
      "type": "speckle",
      "color": "#5a4c3a",
-     "density": 40
+     "density": 30
     }
    ],
    "fins": {
@@ -6766,5 +6880,2191 @@
    }
   },
   "availability": "rare"
+ },
+ {
+  "id": "brochis-splendens",
+  "commonName": "Emerald Catfish",
+  "scientificName": "Brochis splendens",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Ecuador, Colombia & Brazil",
+  "description": "A large, deep-bodied relative of the corydoras with a long-based dorsal fin of 10–12 rays and an intensely iridescent emerald body; it is sometimes listed as Corydoras splendens. It shoals over soft bottoms in the upper Amazon and gulps air at the surface like corydoras.",
+  "adultLengthCm": 7.5,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.42,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.56,
+    "height": 0.24,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#3e7a5e",
+   "dorsal": "#2a4e40",
+   "ventral": "#e8b890",
+   "fin": "#c4a07a",
+   "finOpacity": 0.4,
+   "eye": "#b08a50",
+   "metallic": 0.55,
+   "iridescence": 0.8,
+   "iridescenceColor": "#40c090",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e2a070",
+     "x0": 0.1,
+     "x1": 0.8,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.6
+    },
+    {
+     "type": "scales",
+     "color": "#1e3a2e",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "brochis-multiradiatus",
+  "commonName": "Hog-nosed Brochis",
+  "scientificName": "Brochis multiradiatus",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Napo basin, Ecuador & Peru",
+  "description": "The hog-nosed brochis has a long, pointed snout and a very long dorsal fin with 17–18 rays. It comes from the Río Napo drainage of Ecuador and Peru and is imported only occasionally.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.4,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "snout": "elongate",
+   "headLength": 0.33,
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.62,
+    "height": 0.24,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#3e7a5e",
+   "dorsal": "#2a4e40",
+   "ventral": "#e8b890",
+   "fin": "#c4a07a",
+   "finOpacity": 0.4,
+   "eye": "#b08a50",
+   "metallic": 0.55,
+   "iridescence": 0.8,
+   "iridescenceColor": "#40c090",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e2a070",
+     "x0": 0.1,
+     "x1": 0.8,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.6
+    },
+    {
+     "type": "scales",
+     "color": "#1e3a2e",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "brochis-britskii",
+  "commonName": "Britski's Brochis",
+  "scientificName": "Brochis britskii",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Paraguay basin (Mato Grosso), Brazil",
+  "description": "The largest brochis, from the upper Paraguay basin, with a long dorsal fin of 15–18 rays and the underside of the head covered by a broad bony shield. It is named after the Brazilian ichthyologist Heraldo Britski.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "bottom-rester",
+   "sand-sifter",
+   "air-gulper",
+   "scavenger"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.42,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 6,
+   "barbelLength": 0.08,
+   "mouth": "inferior",
+   "dorsal": {
+    "start": 0.28,
+    "end": 0.6,
+    "height": 0.25,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#3a7258",
+   "dorsal": "#2a4e40",
+   "ventral": "#e8b890",
+   "fin": "#c4a07a",
+   "finOpacity": 0.4,
+   "eye": "#b08a50",
+   "metallic": 0.55,
+   "iridescence": 0.75,
+   "iridescenceColor": "#40c090",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e2a070",
+     "x0": 0.1,
+     "x1": 0.8,
+     "y0": -1,
+     "y1": -0.45,
+     "softness": 0.6
+    },
+    {
+     "type": "scales",
+     "color": "#1e3a2e",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.6
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "callichthys-callichthys",
+  "commonName": "Cascarudo",
+  "scientificName": "Callichthys callichthys",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Widespread in South America east of the Andes; Trinidad",
+  "description": "An elongate, heavily armoured catfish found across most of South America east of the Andes, able to wriggle overland between pools on wet nights. Males build a floating bubble nest under a leaf and guard the eggs.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 12,
+  "lifespanYears": 12,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "nocturnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "nocturnal-hider",
+   "air-gulper",
+   "scavenger",
+   "jumper",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.22,
+   "width": 0.2,
+   "armored": true,
+   "adipose": true,
+   "barbels": 4,
+   "barbelLength": 0.2,
+   "mouth": "subterminal",
+   "headLength": 0.22,
+   "snout": "blunt",
+   "eyeSize": 0.15,
+   "caudal": {
+    "shape": "rounded"
+   },
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.58,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#4a4840",
+   "dorsal": "#2e2d2a",
+   "ventral": "#8a8478",
+   "fin": "#3a3934",
+   "finOpacity": 0.6,
+   "eye": "#b0a070",
+   "metallic": 0.15,
+   "iridescence": 0.15,
+   "iridescenceColor": "#5a6a6a",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#1e1d1b",
+     "contrast": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#1e1d1b",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#1e1d1b",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "pectoral": {
+     "start": 0.18,
+     "end": 0.24,
+     "height": 0.2,
+     "shape": "pointed"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hoplosternum-littorale",
+  "commonName": "Hoplo Catfish",
+  "scientificName": "Hoplosternum littorale",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Widespread in South America east of the Andes; Trinidad",
+  "description": "The hoplo or atipa is a robust armoured catfish of swamps and floodplains that breathes air through its gut and thrives in oxygen-poor water. Males build large floating bubble nests of plant fragments, guard them fiercely and develop thick, reddish pectoral spines in the breeding season.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 12,
+  "lifespanYears": 12,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "air-gulper",
+   "scavenger",
+   "sand-sifter",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.3,
+   "width": 0.24,
+   "armored": true,
+   "adipose": true,
+   "barbels": 4,
+   "barbelLength": 0.28,
+   "mouth": "subterminal",
+   "headLength": 0.25,
+   "snout": "blunt",
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "emarginate"
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#6a5a44",
+   "dorsal": "#3e3428",
+   "ventral": "#d8ccb6",
+   "fin": "#5a4c3a",
+   "finOpacity": 0.5,
+   "eye": "#a08a5a",
+   "metallic": 0.2,
+   "iridescence": 0.15,
+   "iridescenceColor": "#6a7a5a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a221a",
+     "density": 50,
+     "size": 0.03,
+     "y0": -0.5,
+     "y1": 1
+    },
+    {
+     "type": "scales",
+     "color": "#2a221a",
+     "contrast": 0.25
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a221a",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a221a",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "pectoral": {
+      "color": "#c8642a",
+      "opacity": 0.85
+     }
+    }
+   },
+   "body": {
+    "pectoral": {
+     "start": 0.18,
+     "end": 0.24,
+     "height": 0.22,
+     "shape": "pointed"
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "megalechis-thoracata",
+  "commonName": "Port Hoplo",
+  "scientificName": "Megalechis thoracata",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon, Orinoco & Guiana coastal basins",
+  "description": "The port hoplo is a dark, black-spotted armoured catfish with a squared-off tail, living in still, swampy waters of the Amazon, Orinoco and the Guianas. Breeding males develop greatly thickened pectoral spines and a bluish belly, build a floating bubble nest among plants and guard it aggressively.",
+  "adultLengthCm": 14,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "air-gulper",
+   "scavenger",
+   "sand-sifter",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.28,
+   "width": 0.23,
+   "armored": true,
+   "adipose": true,
+   "barbels": 4,
+   "barbelLength": 0.25,
+   "mouth": "subterminal",
+   "headLength": 0.25,
+   "snout": "blunt",
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "truncate"
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#4c4840",
+   "dorsal": "#2e2c28",
+   "ventral": "#b8b0a0",
+   "fin": "#3c3a34",
+   "finOpacity": 0.55,
+   "eye": "#9a8a60",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#141412",
+     "density": 70,
+     "size": 0.025,
+     "y0": -0.6,
+     "y1": 1
+    },
+    {
+     "type": "scales",
+     "color": "#1e1d1b",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#2a2826",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141412",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "ventral": "#a9bccc"
+   },
+   "body": {
+    "pectoral": {
+     "start": 0.18,
+     "end": 0.24,
+     "height": 0.22,
+     "shape": "pointed"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "dianema-longibarbis",
+  "commonName": "Porthole Catfish",
+  "scientificName": "Dianema longibarbis",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper & central Amazon, Peru & Brazil",
+  "description": "A slim callichthyid that hovers in midwater in small groups, unlike its bottom-dwelling relatives, sensing food with very long barbels. It builds a bubble nest beneath floating leaves.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.26,
+   "width": 0.18,
+   "armored": true,
+   "adipose": true,
+   "barbels": 4,
+   "barbelLength": 0.35,
+   "mouth": "subterminal",
+   "headLength": 0.24,
+   "snout": "pointed",
+   "eyeSize": 0.32,
+   "caudal": {
+    "shape": "forked"
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.45,
+    "height": 0.2,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#c8b494",
+   "dorsal": "#8a7458",
+   "ventral": "#efe6d6",
+   "fin": "#e2d8c6",
+   "finOpacity": 0.25,
+   "eye": "#4a4030",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2218",
+     "density": 35,
+     "size": 0.03,
+     "y0": -0.2,
+     "y1": 0.6
+    },
+    {
+     "type": "speckle",
+     "color": "#5a4a38",
+     "density": 30
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "dianema-urostriatum",
+  "commonName": "Flagtail Porthole Catfish",
+  "scientificName": "Dianema urostriatum",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Rio Negro & central Amazon, Brazil",
+  "description": "The flagtail porthole catfish is named for the bold black-and-white horizontal stripes on its forked tail. It comes from the central Brazilian Amazon and, like D. longibarbis, hovers in small midwater groups.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "scavenger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.26,
+   "width": 0.18,
+   "armored": true,
+   "adipose": true,
+   "barbels": 4,
+   "barbelLength": 0.35,
+   "mouth": "subterminal",
+   "headLength": 0.24,
+   "snout": "pointed",
+   "eyeSize": 0.32,
+   "caudal": {
+    "shape": "forked"
+   },
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.45,
+    "height": 0.2,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#b8a07a",
+   "dorsal": "#7a6448",
+   "ventral": "#ece2d0",
+   "fin": "#e0d6c4",
+   "finOpacity": 0.3,
+   "eye": "#4a4030",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#3a2e22",
+     "density": 50
+    },
+    {
+     "type": "spots",
+     "color": "#2a2218",
+     "density": 30,
+     "size": 0.025,
+     "y0": -0.2,
+     "y1": 0.6
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#f2eee6",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#141412",
+       "count": 5,
+       "width": 0.1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "lepthoplosternum-pectorale",
+  "commonName": "Pectorale Hoplo",
+  "scientificName": "Lepthoplosternum pectorale",
+  "family": "Callichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Paraguay & lower Paraná basins, Paraguay, Brazil & Argentina",
+  "description": "A small hoplo-like callichthyid from the Paraguay and lower Paraná basins, brown with dark spots and a rounded tail. Males, recognisable by their thickened, milky-white pectoral fins, build bubble nests among floating plants in swampy backwaters and become territorial when breeding.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "omnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "air-gulper",
+   "scavenger",
+   "sand-sifter",
+   "bottom-rester"
+  ],
+  "body": {
+   "archetype": "corydoras",
+   "depth": 0.28,
+   "width": 0.22,
+   "armored": true,
+   "adipose": true,
+   "barbels": 4,
+   "barbelLength": 0.2,
+   "mouth": "subterminal",
+   "headLength": 0.25,
+   "snout": "blunt",
+   "eyeSize": 0.2,
+   "caudal": {
+    "shape": "rounded"
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.5,
+    "height": 0.18,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#6a5c48",
+   "dorsal": "#3e3428",
+   "ventral": "#cfc2aa",
+   "fin": "#5e5242",
+   "finOpacity": 0.45,
+   "eye": "#9a8a60",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#241e16",
+     "density": 60,
+     "size": 0.028,
+     "y0": -0.5,
+     "y1": 1
+    },
+    {
+     "type": "scales",
+     "color": "#241e16",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#241e16",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "pectoral": {
+      "color": "#e2ded2",
+      "opacity": 0.75
+     }
+    }
+   },
+   "body": {
+    "pectoral": {
+     "start": 0.18,
+     "end": 0.24,
+     "height": 0.22,
+     "shape": "pointed"
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "otocinclus-affinis",
+  "commonName": "Golden Otocinclus",
+  "scientificName": "Otocinclus affinis",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of southeastern Brazil",
+  "description": "The true Otocinclus affinis from coastal streams of southeastern Brazil, briefly placed in the genus Macrotocinclus (now a synonym of Otocinclus). It prefers cooler water than Amazonian otos, and most fish sold under this name are actually other species such as O. vittatus.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#b8a070",
+   "dorsal": "#5a4a30",
+   "ventral": "#f0e8d4",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.16,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#4a3e2a",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a2418",
+       "x": 0.18,
+       "y": 0,
+       "rx": 0.22,
+       "ry": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "otocinclus-macrospilus",
+  "commonName": "Macrospilus Oto",
+  "scientificName": "Otocinclus macrospilus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Amazon, Peru, Ecuador, Colombia & Brazil",
+  "description": "A widespread upper-Amazon oto whose name means \"large spot\", for the big round black blotch at the base of the tail, separate from the lateral stripe. It is one of the species regularly imported as \"common otocinclus\".",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#a89a78",
+   "dorsal": "#5e523a",
+   "ventral": "#efe8d6",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.14,
+     "x0": 0.05,
+     "x1": 0.86
+    },
+    {
+     "type": "blotch",
+     "color": "#161412",
+     "x": 0.96,
+     "y": 0,
+     "rx": 0.06,
+     "ry": 0.55
+    },
+    {
+     "type": "speckle",
+     "color": "#4a4030",
+     "density": 35
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#161412",
+       "x": 0.1,
+       "y": 0,
+       "rx": 0.18,
+       "ry": 0.45
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "otocinclus-cocama",
+  "commonName": "Zebra Otocinclus",
+  "scientificName": "Otocinclus cocama",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Ucayali & Marañón basins, Peru",
+  "description": "Described only in 2004 from Peru, the zebra oto is creamy white with bold black blotches that run from the back down to the lower flanks, a dark head and a W-shaped black mark on the tail fin, quite unlike other otocinclus. It needs clean, well-oxygenated water and a steady supply of biofilm.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#ece8dc",
+   "dorsal": "#d8d2c4",
+   "ventral": "#f8f6f0",
+   "fin": "#e8e4da",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#141414",
+     "x0": 0,
+     "x1": 0.15,
+     "y0": -0.1,
+     "y1": 1,
+     "softness": 0.3
+    },
+    {
+     "type": "bars",
+     "color": "#141414",
+     "count": 4,
+     "width": 0.09,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.65,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141414",
+       "x": 0.3,
+       "y": 0.45,
+       "rx": 0.35,
+       "ry": 0.18
+      },
+      {
+       "type": "blotch",
+       "color": "#141414",
+       "x": 0.3,
+       "y": -0.45,
+       "rx": 0.35,
+       "ry": 0.18
+      },
+      {
+       "type": "blotch",
+       "color": "#141414",
+       "x": 0.15,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.3
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "otocinclus-hoppei",
+  "commonName": "Hoppei Oto",
+  "scientificName": "Otocinclus hoppei",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Madeira, Tocantins & upper Paraguay basins and coastal Pará, Brazil",
+  "description": "A small oto whose dark lateral stripe stops short of a small, separate spot on the tail stem that does not run onto the tail fin. It is often found mixed into shipments of other otocinclus and grazes biofilm from leaves, wood and glass.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#b0a282",
+   "dorsal": "#5e523a",
+   "ventral": "#efe8d6",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.13,
+     "x0": 0.05,
+     "x1": 0.86
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2418",
+     "x": 0.95,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.35
+    },
+    {
+     "type": "speckle",
+     "color": "#4a4030",
+     "density": 30
+    }
+   ],
+   "fins": {}
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "otocinclus-mariae",
+  "commonName": "Mariae Oto",
+  "scientificName": "Otocinclus mariae",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Paraguay & Madeira basins, Bolivia, Brazil & Paraguay",
+  "description": "A small oto from Bolivia, Paraguay and Brazil with a broad dark lateral stripe and a mottled back. It grazes biofilm on leaves and glass like its relatives.",
+  "adultLengthCm": 3.2,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#aa9c7a",
+   "dorsal": "#5e523a",
+   "ventral": "#efe8d6",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.18,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "marble",
+     "color": "#4a4030",
+     "scale": 3,
+     "amount": 0.25
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a2418",
+       "x": 0.18,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "otocinclus-vestitus",
+  "commonName": "Vestitus Oto",
+  "scientificName": "Otocinclus vestitus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper & central Amazon, Peru & Brazil",
+  "description": "A tiny Amazonian oto, olive-brown with a dark lateral stripe, that turns up regularly among imports of other otocinclus. Like its relatives it relies on a constant supply of algae and biofilm.",
+  "adultLengthCm": 3,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#a49874",
+   "dorsal": "#58503a",
+   "ventral": "#efe8d6",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.15,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#4a4030",
+     "density": 35
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a2418",
+       "x": 0.18,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "otocinclus-arnoldi",
+  "commonName": "Arnold's Oto",
+  "scientificName": "Otocinclus arnoldi",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "La Plata basin (lower Paraná & Uruguay), Argentina, Brazil & Uruguay",
+  "description": "A subtropical oto from the La Plata basin with a broad, irregular lateral stripe and a mottled back. It was treated as a synonym of O. flexilis until it was revalidated in 2010, and it tolerates cooler water than Amazonian species.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#a8986e",
+   "dorsal": "#4e4430",
+   "ventral": "#efe8d6",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#3a3222",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.2,
+     "x0": 0.05,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#2a2418",
+       "x": 0.18,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.45
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "otocinclus-flexilis",
+  "commonName": "Flexilis Oto",
+  "scientificName": "Otocinclus flexilis",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Uruguay & lower Paraná basins, Brazil, Uruguay & Argentina",
+  "description": "One of the largest otocinclus, from subtropical rivers of southern Brazil, Uruguay and Argentina, mottled brown with an irregular lateral band. It is suited to cooler aquaria than its Amazonian relatives.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 10,
+  "lifespanYears": 5,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6,
+   7.8
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#9a8a64",
+   "dorsal": "#4a4030",
+   "ventral": "#efe8d6",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2e281c",
+     "scale": 3,
+     "amount": 0.4
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.18,
+     "x0": 0.05,
+     "x1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2418",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "otocinclus-batmani",
+  "commonName": "Batman Oto",
+  "scientificName": "Otocinclus batmani",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Río Puré (Colombia) & Amazon tributaries near Iquitos, Peru",
+  "description": "Described in 2006, this oto is named for the single bat-shaped, W-like black mark on its tail fin, recalling the Batman logo; it also has three dark saddles on the back between the dorsal fin and the tail. It turns up occasionally among otocinclus imported from Peru and Colombia.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#ada07c",
+   "dorsal": "#5e523a",
+   "ventral": "#efe8d6",
+   "fin": "#d8d2c0",
+   "finOpacity": 0.3,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0,
+     "width": 0.14,
+     "x0": 0.05,
+     "x1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#4a4030",
+     "density": 30
+    },
+    {
+     "type": "bars",
+     "color": "#2a2418",
+     "count": 3,
+     "width": 0.06,
+     "x0": 0.5,
+     "x1": 0.95,
+     "y0": 0.45,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141210",
+       "x": 0.3,
+       "y": 0.4,
+       "rx": 0.35,
+       "ry": 0.2
+      },
+      {
+       "type": "blotch",
+       "color": "#141210",
+       "x": 0.3,
+       "y": -0.4,
+       "rx": 0.35,
+       "ry": 0.2
+      },
+      {
+       "type": "blotch",
+       "color": "#141210",
+       "x": 0.15,
+       "y": 0,
+       "rx": 0.2,
+       "ry": 0.35
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parotocinclus-maculicauda",
+  "commonName": "Red-fin Otocinclus",
+  "scientificName": "Parotocinclus maculicauda",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal rivers of southeastern Brazil",
+  "description": "The red-fin oto comes from cool, clear coastal streams of southeastern Brazil: mottled golden-brown with darker blotches along the side, red-tinged leading fin rays and a red blotch at the base of the tail (\"maculicauda\" means spotted tail). Unlike Otocinclus it has a small adipose fin; it needs well-oxygenated water and grazes algae like an oto.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   20,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true,
+   "adipose": true
+  },
+  "look": {
+   "base": "#9a8458",
+   "dorsal": "#5a4a32",
+   "ventral": "#ece2cc",
+   "fin": "#c86a42",
+   "finOpacity": 0.45,
+   "eye": "#2c2c2a",
+   "metallic": 0.1,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#3a2e20",
+     "scale": 3,
+     "amount": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#c8402a",
+     "x": 0.95,
+     "y": 0,
+     "rx": 0.06,
+     "ry": 0.45
+    },
+    {
+     "type": "speckle",
+     "color": "#2e281e",
+     "density": 25
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#c8603a",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#c8402a",
+       "x": 0.1,
+       "y": 0,
+       "rx": 0.15,
+       "ry": 0.4
+      },
+      {
+       "type": "spots",
+       "color": "#3a2a1c",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#cc5030",
+     "opacity": 0.6
+    },
+    "anal": {
+     "color": "#cc5030",
+     "opacity": 0.6
+    },
+    "pectoral": {
+     "color": "#c85a34",
+     "opacity": 0.55,
+     "edge": "#d2402a",
+     "edgeWidth": 0.15
+    },
+    "dorsal": {
+     "color": "#b06040",
+     "opacity": 0.5,
+     "edge": "#d2402a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a2a1c",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hisonotus-leucofrenatus",
+  "commonName": "Leucofrenatus Oto",
+  "scientificName": "Hisonotus leucofrenatus",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic coastal drainages of southern Brazil (São Paulo to Rio Grande do Sul)",
+  "description": "A hypoptopomatine from cool coastal rivers of southern Brazil, mottled and faintly striped brown, named (\"white-bridled\") for the pair of pale yellow lines running from the snout tip to the eyes. It grazes algae and biofilm on plants and stones like an otocinclus and needs well-oxygenated water.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 9,
+  "lifespanYears": 5,
+  "tempC": [
+   18,
+   24
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 6,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "clings",
+   "glass-grazer",
+   "algae-eater",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true
+  },
+  "look": {
+   "base": "#6a5a42",
+   "dorsal": "#3a3024",
+   "ventral": "#ece4d2",
+   "fin": "#c8bca4",
+   "finOpacity": 0.35,
+   "eye": "#2c2c2a",
+   "metallic": 0.1,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2a2218",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2218",
+     "y": 0,
+     "width": 0.1,
+     "x0": 0.25,
+     "x1": 1
+    },
+    {
+     "type": "stripe",
+     "color": "#e2cf8a",
+     "y": 0.55,
+     "width": 0.07,
+     "x0": 0,
+     "x1": 0.2
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2218",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "hypoptopoma-thoracatum",
+  "commonName": "Hypoptopoma",
+  "scientificName": "Hypoptopoma thoracatum",
+  "family": "Loricariidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Amazon basin, Brazil, Peru & Bolivia",
+  "description": "A flattened, broad-snouted relative of the otocinclus whose eyes sit on the sides of the head, visible from below. It grows much larger than otos and likes to cling to thin plant stems and wood in midwater, grazing biofilm while watching around them.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "all",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "algae-grazer",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "clings",
+   "algae-eater",
+   "glass-grazer",
+   "shy"
+  ],
+  "body": {
+   "archetype": "otocinclus",
+   "mouth": "sucker",
+   "armored": true,
+   "depth": 0.18,
+   "width": 0.24,
+   "snout": "duckbill",
+   "headLength": 0.28,
+   "eyeSize": 0.3,
+   "adipose": true
+  },
+  "look": {
+   "base": "#8a8270",
+   "dorsal": "#4e4a3e",
+   "ventral": "#ece8dc",
+   "fin": "#c8c2b0",
+   "finOpacity": 0.35,
+   "eye": "#2c2c2a",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#3a362c",
+     "scale": 3,
+     "amount": 0.3
+    },
+    {
+     "type": "speckle",
+     "color": "#3a362c",
+     "density": 30
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a362c",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a362c",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 1.08,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "uncommon"
  }
 ]

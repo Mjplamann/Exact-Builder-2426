@@ -38,11 +38,7 @@ export function stepToward(v: number, target: number, maxStep: number): number {
   return d > maxStep ? v + maxStep : d < -maxStep ? v - maxStep : target;
 }
 
-/**
- * Per-entity PRNG (mulberry32) whose whole state is one uint32 stored on the entity, so brains
- * can be plain objects without allocating closures. Usage: `b.seed = rngNext(b)`… we keep it simple
- * with a small class whose only field is the state.
- */
+/** Small seedable PRNG (mulberry32) — one per brain / system, deterministic for tests. */
 export class FastRng {
   s: number;
   constructor(seed: number) {

@@ -99,7 +99,7 @@ export class CameraRig {
     let frontSub = 0;
     for (let i = 0; i <= 8; i++) frontSub += substrateHeight(tank, (i / 8 - 0.5) * 2 * b.halfW * 0.9, b.halfD);
     frontSub /= 9;
-    this.yMin = tank.substrate === 'bare' ? 0.004 : frontSub * 0.42;
+    this.yMin = tank.substrate === 'bare' ? 0.004 : frontSub * 0.2;
     this.yMax = b.surfaceY + 0.007;
     const rectW = 2 * b.halfW;
     const rectH = this.yMax - this.yMin;

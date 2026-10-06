@@ -69,6 +69,12 @@ export const UW_FUNCTIONS_GLSL = /* glsl */ `
 #define UW_FUNCTIONS
 
 #define UW_CAUSTIC_MEAN ${CAUSTIC_MEAN.toFixed(4)}
+// Biased lookups exist only in fragment shaders; vertex users #define UW_VERTEX first.
+#ifdef UW_VERTEX
+#define UW_TEXB(s, uv, b) textureLod(s, uv, b)
+#else
+#define UW_TEXB(s, uv, b) texture(s, uv, b)
+#endif
 
 // Extinction per meter per channel: absorption implied by the tint (its value is the
 // transmittance over ~1 m) plus wavelength-neutral scattering from suspended matter.
@@ -95,23 +101,34 @@ vec3 uwCaustics(vec3 p, vec3 n) {
   vec2 sA = uwSurfaceEntry(p, uwLightDir);
   vec2 sB = uwSurfaceEntry(p, uwLightDir2());
   // Tile sizes (m): cells of 2–5 cm, as from filter ripples of 3–8 cm wavelength.
-  vec2 uvA = sA * (1.0 / 0.19) + uwCausticDrift.xy;
-  vec2 uvB = mat2(0.8, 0.6, -0.6, 0.8) * sB * (1.0 / 0.27) + uwCausticDrift.zw;
+  vec2 uvA = sA * (1.0 / 0.13) + uwCausticDrift.xy;
+  vec2 uvB = mat2(0.8, 0.6, -0.6, 0.8) * sB * (1.0 / 0.17) + uwCausticDrift.zw;
   // Focus: the pattern sharpens over the first ~8 cm, then blurs slowly (mip bias) with depth.
-  float blur = clamp((depth - 0.10) * 4.5, 0.0, 2.6);
+  float blur = clamp((depth - 0.18) * 2.2, 0.0, 1.4);
   // Chromatic dispersion: red and blue focus at slightly different points.
   vec2 disp = vec2(0.0045, 0.003) * (0.6 + depth * 4.0);
   vec3 a = vec3(
-    texture(uwCausticMap, uvA + disp, blur).r,
-    texture(uwCausticMap, uvA, blur).r,
-    texture(uwCausticMap, uvA - disp, blur).r);
-  float b = texture(uwCausticMap, uvB, blur + 0.4).b;
+    UW_TEXB(uwCausticMap, uvA + disp, blur).r,
+    UW_TEXB(uwCausticMap, uvA, blur).r,
+    UW_TEXB(uwCausticMap, uvA - disp, blur).r);
+  float b = UW_TEXB(uwCausticMap, uvB, blur + 0.4).b;
   vec3 c = (a + vec3(b)) * (0.5 / UW_CAUSTIC_MEAN);
   // Contrast: develops below the surface, fades as the pattern blurs deep down.
-  float contrast = smoothstep(0.0, 0.07, depth) * mix(0.95, 0.45, clamp(depth / 0.6, 0.0, 1.0));
+  float contrast = smoothstep(0.0, 0.07, depth) * mix(1.0, 0.62, clamp(depth / 0.6, 0.0, 1.0));
   // Vertical faces see stretched, weaker caustics; downward faces get none (no direct light anyway).
   contrast *= mix(0.35, 1.0, smoothstep(-0.1, 0.75, n.y));
   return max(vec3(0.0), vec3(1.0) + (c - 1.0) * contrast * strength);
+}
+
+// Light-shaft field (mean ≈ 1) at p in the water column: the slow caustic layer seen at a coarse
+// mip, projected along both LED directions, so streaks line up with the light like real shafts.
+// Uses textureLod so it also works in vertex shaders.
+float uwShaft(vec3 p, float lod) {
+  vec2 sA = uwSurfaceEntry(p, uwLightDir);
+  vec2 sB = uwSurfaceEntry(p, uwLightDir2());
+  float a = textureLod(uwCausticMap, sA * (1.0 / 0.24) + uwCausticDrift.xy * 0.35, lod).g;
+  float b = textureLod(uwCausticMap, mat2(0.8, 0.6, -0.6, 0.8) * sB * (1.0 / 0.33) + uwCausticDrift.zw * 0.35, lod).g;
+  return (a + b) * (0.5 / UW_CAUSTIC_MEAN);
 }
 
 // Downwelling-light attenuation with depth (spectral absorption + fixture beam spread).
@@ -122,18 +139,31 @@ vec3 uwDepthAtten(float depth) {
   return absorb * spread;
 }
 
-// Blend a shaded color toward the water veil for the path p → front glass → camera.
-vec3 uwVeil(vec3 col, vec3 p) {
+// Length of water (m) on the view path p → front glass → camera, and the mean height of that path.
+float uwViewPath(vec3 p, out float ymid) {
   vec3 d = uwCameraPos - p;
-  if (d.z <= 1e-4) return col;
+  ymid = p.y;
+  if (d.z <= 1e-4) return 0.0;
   float t = clamp((uwTankHalf.z - p.z) / d.z, 0.0, 1.0);   // fraction of the segment inside the tank
   float y0 = p.y, y1 = p.y + d.y * t;
   float lo = min(y0, y1), hi = max(y0, y1);
   float wet = hi - lo < 1e-5 ? step(lo, uwVeilCeiling) : clamp((uwVeilCeiling - lo) / (hi - lo), 0.0, 1.0);
-  float L = length(d) * t * wet;
+  ymid = 0.5 * (y0 + y1);
+  return length(d) * t * wet;
+}
+
+// Fraction of light from p that reaches the viewer (for additive effects: shafts, glints).
+vec3 uwTransmittance(vec3 p) {
+  float ym;
+  return exp(-uwExtinction() * uwViewPath(p, ym));
+}
+
+// Blend a shaded color toward the water veil for the path p → front glass → camera.
+vec3 uwVeil(vec3 col, vec3 p) {
+  float ym;
+  float L = uwViewPath(p, ym);
   vec3 T = exp(-uwExtinction() * L);
   // In-scattered light is brighter near the lamp-lit surface than near the floor.
-  float ym = 0.5 * (y0 + y1);
   float bright = mix(0.6, 1.15, clamp(ym / max(uwSurfaceY, 0.05), 0.0, 1.0));
   return col * T + uwVeilColor * bright * (1.0 - T);
 }

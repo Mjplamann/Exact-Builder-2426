@@ -9711,7 +9711,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred (wild form: central Thailand floodplains)",
-  "description": "Developed in West Java in the late 1990s, crowntails have reduced webbing between the fin rays, so each ray projects like the point of a crown. Rays that branch two or more times give the fuller \"double-ray\" crowns breeders prize.",
+  "description": "Developed in Indonesia in the late 1990s, crowntails have reduced webbing between the fin rays, so each ray projects like the point of a crown. Rays that branch two or more times give the fuller \"double-ray\" crowns breeders prize.",
   "adultLengthCm": 6.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 4,
@@ -11687,7 +11687,7 @@
   "group": "fish",
   "water": "freshwater",
   "region": "Captive-bred (wild form: central Thailand floodplains)",
-  "description": "Developed in the 2000s using wild Betta mahachaiensis bloodlines, dragon scales grow a thick metallic-white coating over each scale like armour plating. When overdone the coating can spread over the eyes and blind the fish.",
+  "description": "Generally traced to crosses with wild Betta mahachaiensis, dragon scales grow a thick metallic-white coating over each scale like armour plating. When overdone the coating can spread over the eyes and blind the fish.",
   "adultLengthCm": 6.5,
   "birthLengthCm": 0.25,
   "maturityMonths": 4,
@@ -13601,6 +13601,9684 @@
    }
   },
   "variantOf": "betta-splendens",
+  "availability": "uncommon"
+ },
+ {
+  "id": "trichogaster-lalius",
+  "commonName": "Dwarf Gourami",
+  "scientificName": "Trichogaster lalius",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "India, Bangladesh & Pakistan — slow, heavily vegetated rivers, lakes and ditches",
+  "description": "Males build sturdy bubble nests reinforced with bits of plant and guard the eggs and fry alone. Wild-type males are crossed by slanting bands of red-orange and iridescent blue, with a turquoise throat.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.46,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.84,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.2
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#d8502a",
+   "dorsal": "#a8402a",
+   "ventral": "#4a8ad0",
+   "fin": "#d86a3a",
+   "finOpacity": 0.7,
+   "eye": "#c86a2a",
+   "metallic": 0.2,
+   "iridescence": 0.6,
+   "iridescenceColor": "#40a0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3aa0e0",
+     "count": 12,
+     "width": 0.025,
+     "x0": 0.25,
+     "x1": 0.95,
+     "slant": 0.35
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#d86a3a",
+     "opacity": 0.7,
+     "edge": "#e04a2a",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3aa0e0",
+       "density": 40,
+       "size": 0.04
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c85a30",
+     "opacity": 0.72,
+     "edge": "#e02a20",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3aa0e0",
+       "density": 40,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#d86a3a",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3aa0e0",
+       "density": 40,
+       "size": 0.04
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#e05a2a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#a8a8a0",
+    "dorsal": "#808478",
+    "ventral": "#d8d8d0",
+    "fin": "#c8c8c0",
+    "finOpacity": 0.35,
+    "iridescence": 0.25,
+    "iridescenceColor": "#a0c8ff",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#c8a070",
+      "count": 12,
+      "width": 0.02,
+      "x0": 0.25,
+      "x1": 0.95,
+      "slant": 0.35
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "caudal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "anal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "pelvic": {
+      "color": "#c8c8c0",
+      "opacity": 0.39999999999999997
+     }
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "trichogaster-lalius-powder-blue",
+  "commonName": "Powder Blue Dwarf Gourami",
+  "scientificName": "Trichogaster lalius",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: India & Bangladesh)",
+  "description": "A line-bred dwarf gourami in which the iridescent blue bands have spread over almost the whole male, leaving only faint traces of red. Females remain silvery grey.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.46,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.84,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.2
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#4a8ad8",
+   "dorsal": "#3a6aa8",
+   "ventral": "#5aa0e0",
+   "fin": "#4a8ad0",
+   "finOpacity": 0.7,
+   "eye": "#c86a2a",
+   "metallic": 0.25,
+   "iridescence": 0.75,
+   "iridescenceColor": "#60c0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#a0505a",
+     "count": 12,
+     "width": 0.012,
+     "x0": 0.25,
+     "x1": 0.95,
+     "slant": 0.35
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#4a8ad0",
+     "opacity": 0.7,
+     "edge": "#c0404a",
+     "edgeWidth": 0.05
+    },
+    "anal": {
+     "color": "#4a8ad0",
+     "opacity": 0.72,
+     "edge": "#c0404a",
+     "edgeWidth": 0.07
+    },
+    "caudal": {
+     "color": "#4a8ad0",
+     "opacity": 0.7
+    },
+    "pelvic": {
+     "color": "#d0604a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#a8a8a0",
+    "dorsal": "#808478",
+    "ventral": "#d8d8d0",
+    "fin": "#c8c8c0",
+    "finOpacity": 0.35,
+    "iridescence": 0.25,
+    "iridescenceColor": "#a0c8ff",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#c8a070",
+      "count": 12,
+      "width": 0.02,
+      "x0": 0.25,
+      "x1": 0.95,
+      "slant": 0.35
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "caudal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "anal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "pelvic": {
+      "color": "#c8c8c0",
+      "opacity": 0.39999999999999997
+     }
+    }
+   }
+  },
+  "variantOf": "trichogaster-lalius",
+  "availability": "common"
+ },
+ {
+  "id": "trichogaster-lalius-flame",
+  "commonName": "Flame Dwarf Gourami",
+  "scientificName": "Trichogaster lalius",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: India & Bangladesh)",
+  "description": "Bred for maximum red: the male is solid flame-red to orange from snout to tail, keeping blue only on the throat and dorsal fin. Females stay silvery.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   12
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.46,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.84,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.2
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#e0401e",
+   "dorsal": "#b8301a",
+   "ventral": "#3a7ad0",
+   "fin": "#e04a24",
+   "finOpacity": 0.75,
+   "eye": "#c86a2a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#40a0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#c8301a",
+     "count": 12,
+     "width": 0.02,
+     "x0": 0.25,
+     "x1": 0.95,
+     "slant": 0.35
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3a8ad8",
+     "opacity": 0.75,
+     "edge": "#e04a24",
+     "edgeWidth": 0.06
+    },
+    "anal": {
+     "color": "#e04a24",
+     "opacity": 0.75,
+     "edge": "#c8201a",
+     "edgeWidth": 0.07
+    },
+    "caudal": {
+     "color": "#e04a24",
+     "opacity": 0.72
+    },
+    "pelvic": {
+     "color": "#e0401e",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "look": {
+    "base": "#a8a8a0",
+    "dorsal": "#808478",
+    "ventral": "#d8d8d0",
+    "fin": "#c8c8c0",
+    "finOpacity": 0.35,
+    "iridescence": 0.25,
+    "iridescenceColor": "#a0c8ff",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#c8a070",
+      "count": 12,
+      "width": 0.02,
+      "x0": 0.25,
+      "x1": 0.95,
+      "slant": 0.35
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "caudal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "anal": {
+      "color": "#c8c8c0",
+      "opacity": 0.35
+     },
+     "pelvic": {
+      "color": "#c8c8c0",
+      "opacity": 0.39999999999999997
+     }
+    }
+   }
+  },
+  "variantOf": "trichogaster-lalius",
+  "availability": "common"
+ },
+ {
+  "id": "trichogaster-chuna",
+  "commonName": "Honey Gourami",
+  "scientificName": "Trichogaster chuna",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northeastern India & Bangladesh — vegetated ponds, lakes and ditches",
+  "description": "One of the most peaceful gouramis. In breeding dress the male turns honey-orange with a sooty black face, throat and belly and a lemon-yellow dorsal fin; females and resting males are silvery-brown with a dark lengthwise stripe.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.82,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.92,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.6,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#e08a2a",
+   "dorsal": "#c07020",
+   "ventral": "#1e1e2a",
+   "fin": "#e09a3a",
+   "finOpacity": 0.65,
+   "eye": "#c8702a",
+   "metallic": 0.15,
+   "iridescence": 0.3,
+   "iridescenceColor": "#3a5ab0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#1a1a24",
+     "x0": 0.02,
+     "x1": 0.6,
+     "y0": -1,
+     "y1": -0.2,
+     "softness": 0.5
+    },
+    {
+     "type": "region",
+     "color": "#1a1a24",
+     "x0": 0,
+     "x1": 0.22,
+     "y0": -1,
+     "y1": 0.15,
+     "softness": 0.4
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f2e040",
+     "opacity": 0.75
+    },
+    "anal": {
+     "color": "#1a1a24",
+     "opacity": 0.75,
+     "edge": "#e08a2a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#e09a3a",
+     "opacity": 0.6
+    },
+    "pelvic": {
+     "color": "#e08a2a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "look": {
+    "base": "#b0a080",
+    "dorsal": "#8a7a5a",
+    "ventral": "#e0d8c0",
+    "fin": "#c8b890",
+    "finOpacity": 0.35,
+    "patterns": [
+     {
+      "type": "stripe",
+      "color": "#6a4a2a",
+      "y": 0,
+      "width": 0.12,
+      "x0": 0.08,
+      "x1": 0.95
+     }
+    ],
+    "fins": {
+     "dorsal": {
+      "color": "#c8b890",
+      "opacity": 0.35
+     },
+     "caudal": {
+      "color": "#c8b890",
+      "opacity": 0.35
+     },
+     "anal": {
+      "color": "#c8b890",
+      "opacity": 0.35
+     },
+     "pelvic": {
+      "color": "#c8b890",
+      "opacity": 0.39999999999999997
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "trichogaster-chuna-gold",
+  "commonName": "Gold Honey Gourami",
+  "scientificName": "Trichogaster chuna",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: northeastern India & Bangladesh)",
+  "description": "The honey gourami usually sold today: a xanthistic line in which both sexes are golden yellow and males lack most of the black throat colour, deepening to rich orange when breeding.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.82,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.92,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.6,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#f0b830",
+   "dorsal": "#d89a20",
+   "ventral": "#f6d060",
+   "fin": "#f2c040",
+   "finOpacity": 0.6,
+   "eye": "#c8702a",
+   "metallic": 0.2,
+   "iridescence": 0.15,
+   "iridescenceColor": "#ffe080",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8902a",
+     "x0": 0.05,
+     "x1": 0.6,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.6
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f6e050",
+     "opacity": 0.7
+    },
+    "anal": {
+     "color": "#e8a030",
+     "opacity": 0.65,
+     "edge": "#f8e070",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#f2c040",
+     "opacity": 0.55
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "look": {
+    "base": "#e8c060",
+    "dorsal": "#c8a040",
+    "ventral": "#f4dc90",
+    "fin": "#f0d070",
+    "finOpacity": 0.4,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0d070",
+      "opacity": 0.4
+     },
+     "caudal": {
+      "color": "#f0d070",
+      "opacity": 0.4
+     },
+     "anal": {
+      "color": "#f0d070",
+      "opacity": 0.4
+     },
+     "pelvic": {
+      "color": "#f0d070",
+      "opacity": 0.45
+     }
+    }
+   }
+  },
+  "variantOf": "trichogaster-chuna",
+  "availability": "common"
+ },
+ {
+  "id": "trichogaster-chuna-sunset",
+  "commonName": "Sunset Honey Gourami (Red)",
+  "scientificName": "Trichogaster chuna",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: northeastern India & Bangladesh)",
+  "description": "A deeper red-orange line bred from gold honey gouramis; males glow red-orange from snout to tail while females are a paler orange.",
+  "adultLengthCm": 4.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.82,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.92,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.6,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#e8601e",
+   "dorsal": "#c8481a",
+   "ventral": "#f07a2a",
+   "fin": "#f07028",
+   "finOpacity": 0.65,
+   "eye": "#c8502a",
+   "metallic": 0.15,
+   "iridescence": 0.15,
+   "iridescenceColor": "#ffb070",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#c8401a",
+     "x0": 0.02,
+     "x1": 0.5,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.6
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#f4c040",
+     "opacity": 0.72
+    },
+    "anal": {
+     "color": "#e05a1e",
+     "opacity": 0.68,
+     "edge": "#f8c050",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#f07028",
+     "opacity": 0.6
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "look": {
+    "base": "#e89a50",
+    "dorsal": "#c87a38",
+    "ventral": "#f4c088",
+    "fin": "#f0b070",
+    "finOpacity": 0.4,
+    "patterns": [],
+    "fins": {
+     "dorsal": {
+      "color": "#f0b070",
+      "opacity": 0.4
+     },
+     "caudal": {
+      "color": "#f0b070",
+      "opacity": 0.4
+     },
+     "anal": {
+      "color": "#f0b070",
+      "opacity": 0.4
+     },
+     "pelvic": {
+      "color": "#f0b070",
+      "opacity": 0.45
+     }
+    }
+   }
+  },
+  "variantOf": "trichogaster-chuna",
+  "availability": "common"
+ },
+ {
+  "id": "trichogaster-fasciata",
+  "commonName": "Banded Gourami",
+  "scientificName": "Trichogaster fasciata",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Pakistan, India, Nepal, Bangladesh & Myanmar — rivers, ponds and ditches",
+  "description": "A larger cousin of the dwarf gourami: greenish-silver, crossed by slanting orange and blue-green bands. Breeding males darken, with a red-edged anal fin and blue-black throat, and build a large bubble nest.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.42,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.82,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.7,
+    "shape": "filament",
+    "trail": 0.2
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#8a9a70",
+   "dorsal": "#5a6a48",
+   "ventral": "#c8c8b0",
+   "fin": "#a8a888",
+   "finOpacity": 0.5,
+   "eye": "#c87a3a",
+   "metallic": 0.2,
+   "iridescence": 0.5,
+   "iridescenceColor": "#40c0b0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e07a3a",
+     "count": 12,
+     "width": 0.025,
+     "x0": 0.22,
+     "x1": 0.95,
+     "slant": 0.35
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#a89a78",
+     "opacity": 0.55,
+     "edge": "#d83a2a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e07a3a",
+       "density": 25,
+       "size": 0.04
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#a8a888",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e07a3a",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8a888",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e07a3a",
+       "density": 30,
+       "size": 0.035
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "ventral": "#2a3048"
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#a0a888",
+    "iridescence": 0.25
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "trichogaster-labiosa",
+  "commonName": "Thick-lipped Gourami",
+  "scientificName": "Trichogaster labiosa",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern Myanmar — Irrawaddy & Sittang basins",
+  "description": "Named for the male's thickened lips, this Burmese gourami looks like a stockier banded gourami. Males are brown-orange with faint blue bars and a red-edged anal fin, and build bubble nests among floating plants.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 5,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   4,
+   15
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.44,
+   "width": 0.12,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.82,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.17,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.7,
+    "shape": "filament",
+    "trail": 0.2
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#b07a4a",
+   "dorsal": "#7a5030",
+   "ventral": "#d0a070",
+   "fin": "#c08a50",
+   "finOpacity": 0.55,
+   "eye": "#c86a2a",
+   "metallic": 0.15,
+   "iridescence": 0.35,
+   "iridescenceColor": "#4ab0c0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a9ab0",
+     "count": 10,
+     "width": 0.02,
+     "x0": 0.25,
+     "x1": 0.95,
+     "slant": 0.3
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#b07a4a",
+     "opacity": 0.6,
+     "edge": "#d83020",
+     "edgeWidth": 0.08
+    },
+    "dorsal": {
+     "color": "#c08a50",
+     "opacity": 0.55,
+     "edge": "#e0603a",
+     "edgeWidth": 0.05
+    },
+    "caudal": {
+     "color": "#c08a50",
+     "opacity": 0.55
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#a89070",
+    "iridescence": 0.15,
+    "fins": {
+     "dorsal": {
+      "color": "#c0a880",
+      "opacity": 0.45
+     },
+     "caudal": {
+      "color": "#c0a880",
+      "opacity": 0.45
+     },
+     "anal": {
+      "color": "#c0a880",
+      "opacity": 0.45
+     },
+     "pelvic": {
+      "color": "#c0a880",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "trichopodus-trichopterus",
+  "commonName": "Three-spot Gourami",
+  "scientificName": "Trichopodus trichopterus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mekong basin & Sundaland — Thailand, Cambodia, Vietnam, Malaysia & Indonesia",
+  "description": "Hardy and adaptable, it is named for two dark spots on the flank, with the eye counted as the third. Its long, thread-like pelvic fins carry taste cells and are used to feel through vegetation.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.3
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#94a0b0",
+   "dorsal": "#6a7484",
+   "ventral": "#d0d8e0",
+   "fin": "#a0aab8",
+   "finOpacity": 0.5,
+   "eye": "#d06a3a",
+   "metallic": 0.35,
+   "iridescence": 0.35,
+   "iridescenceColor": "#8ab0ff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#6a7a90",
+     "count": 12,
+     "width": 0.025,
+     "x0": 0.2,
+     "x1": 0.95,
+     "slant": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#141418",
+     "x": 0.5,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.12
+    },
+    {
+     "type": "blotch",
+     "color": "#141418",
+     "x": 0.95,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.11
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#a0aab8",
+     "opacity": 0.55,
+     "edge": "#e09030",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0f0e8",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#a0aab8",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0f0e8",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a0aab8",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#f0f0e8",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.48,
+     "end": 0.7,
+     "height": 0.26,
+     "shape": "pointed"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.92,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "trichopodus-trichopterus-blue",
+  "commonName": "Blue Gourami",
+  "scientificName": "Trichopodus trichopterus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mekong basin & Sundaland)",
+  "description": "The common blue strain of the three-spot gourami, selected for an even steel-blue body with darker, marbled crossbars; the two black body spots remain.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.3
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#5a7ab0",
+   "dorsal": "#3a5486",
+   "ventral": "#9ab0d8",
+   "fin": "#7a90c0",
+   "finOpacity": 0.5,
+   "eye": "#d06a3a",
+   "metallic": 0.3,
+   "iridescence": 0.45,
+   "iridescenceColor": "#6a9aff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a5486",
+     "count": 12,
+     "width": 0.03,
+     "x0": 0.2,
+     "x1": 0.95,
+     "slant": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#101828",
+     "x": 0.5,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.12
+    },
+    {
+     "type": "blotch",
+     "color": "#101828",
+     "x": 0.95,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.11
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#7a90c0",
+     "opacity": 0.55,
+     "edge": "#e09030",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8f0ff",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#7a90c0",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8f0ff",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#7a90c0",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8f0ff",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.48,
+     "end": 0.7,
+     "height": 0.26,
+     "shape": "pointed"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.92,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "variantOf": "trichopodus-trichopterus",
+  "availability": "common"
+ },
+ {
+  "id": "trichopodus-trichopterus-gold",
+  "commonName": "Gold Gourami",
+  "scientificName": "Trichopodus trichopterus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mekong basin & Sundaland)",
+  "description": "A xanthistic strain of the three-spot gourami: black pigment is lost, so the body turns golden with faint darker marbling and the two body spots disappear.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.3
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#e0b448",
+   "dorsal": "#c08a2a",
+   "ventral": "#f0d488",
+   "fin": "#e8c060",
+   "finOpacity": 0.5,
+   "eye": "#d06a3a",
+   "metallic": 0.35,
+   "iridescence": 0.2,
+   "iridescenceColor": "#fff0a0",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#c08a2a",
+     "scale": 4,
+     "amount": 0.3
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#e8c060",
+     "opacity": 0.55,
+     "edge": "#e88a30",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fff4d0",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#e8c060",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fff4d0",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#e8c060",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#fff4d0",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.48,
+     "end": 0.7,
+     "height": 0.26,
+     "shape": "pointed"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.92,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "variantOf": "trichopodus-trichopterus",
+  "availability": "common"
+ },
+ {
+  "id": "trichopodus-trichopterus-opaline",
+  "commonName": "Opaline Gourami (Cosby)",
+  "scientificName": "Trichopodus trichopterus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mekong basin & Sundaland)",
+  "description": "The opaline or \"Cosby\" strain is light blue overlaid with heavy, dark blue marbling across the flanks in place of the wild-type spots and bars.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.3
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#7a9ac8",
+   "dorsal": "#4a6a9a",
+   "ventral": "#b0c4e4",
+   "fin": "#8aa4d0",
+   "finOpacity": 0.5,
+   "eye": "#d06a3a",
+   "metallic": 0.3,
+   "iridescence": 0.45,
+   "iridescenceColor": "#6a9aff",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#2e4a80",
+     "scale": 3,
+     "amount": 0.45
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#8aa4d0",
+     "opacity": 0.55,
+     "edge": "#e09030",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8f0ff",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#8aa4d0",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "marble",
+       "color": "#2e4a80",
+       "scale": 3,
+       "amount": 0.3
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#8aa4d0",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#e8f0ff",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.48,
+     "end": 0.7,
+     "height": 0.26,
+     "shape": "pointed"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.92,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "variantOf": "trichopodus-trichopterus",
+  "availability": "common"
+ },
+ {
+  "id": "trichopodus-trichopterus-platinum",
+  "commonName": "Platinum Gourami",
+  "scientificName": "Trichopodus trichopterus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Mekong basin & Sundaland)",
+  "description": "A pale, silvery-white strain of the three-spot gourami with a pearly sheen and little or no pattern. Its iris keeps the species' orange-red colour.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 7,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 110,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.8,
+    "shape": "filament",
+    "trail": 0.3
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#e0e2e4",
+   "dorsal": "#c8ccd0",
+   "ventral": "#f2f4f4",
+   "fin": "#e4e6e8",
+   "finOpacity": 0.45,
+   "eye": "#d06a3a",
+   "metallic": 0.7,
+   "iridescence": 0.35,
+   "iridescenceColor": "#e0d8ff",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#d0d4d8",
+     "contrast": 0.2
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#e4e6e8",
+     "opacity": 0.5,
+     "edge": "#f0c080",
+     "edgeWidth": 0.05
+    },
+    "dorsal": {
+     "color": "#e4e6e8",
+     "opacity": 0.45
+    },
+    "caudal": {
+     "color": "#e4e6e8",
+     "opacity": 0.45
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.48,
+     "end": 0.7,
+     "height": 0.26,
+     "shape": "pointed"
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.92,
+   "body": {
+    "belly": 0.55
+   }
+  },
+  "variantOf": "trichopodus-trichopterus",
+  "availability": "uncommon"
+ },
+ {
+  "id": "trichopodus-microlepis",
+  "commonName": "Moonlight Gourami",
+  "scientificName": "Trichopodus microlepis",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mekong & Chao Phraya basins — Thailand, Cambodia & Vietnam: swamps and lakes",
+  "description": "A plain but elegant gourami whose tiny scales give its silvery body a soft, moonlit sheen. Breeding males develop orange-red pelvic threads and build large nests of bubbles and plant fragments.",
+  "adultLengthCm": 13,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.42,
+   "width": 0.1,
+   "snout": "upturned",
+   "mouth": "superior",
+   "scaleSize": 0.1,
+   "dorsal": {
+    "start": 0.5,
+    "end": 0.7,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.9,
+    "shape": "filament",
+    "trail": 0.3
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#c8ccc8",
+   "dorsal": "#9aa09a",
+   "ventral": "#e8ece8",
+   "fin": "#d0d4d0",
+   "finOpacity": 0.35,
+   "eye": "#c8502a",
+   "metallic": 0.6,
+   "iridescence": 0.35,
+   "iridescenceColor": "#c0d8ff",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#b8bcb8",
+     "contrast": 0.1
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#e8e8e0",
+     "opacity": 0.5
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "fins": {
+     "pelvic": {
+      "color": "#e0602a",
+      "opacity": 0.85
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "trichopodus-pectoralis",
+  "commonName": "Snakeskin Gourami",
+  "scientificName": "Trichopodus pectoralis",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mekong & Chao Phraya basins; introduced widely — swamps and rice paddies",
+  "description": "The largest Trichopodus, farmed across Southeast Asia as a food fish and sold dried in Thailand as \"pla salid\". Named for the zig-zag oblique bars and broken dark stripe that recall snakeskin.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 10,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   4,
+   18
+  ],
+  "minTankLiters": 200,
+  "temperament": "peaceful",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "hoverer",
+   "air-gulper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.36,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.7,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.3,
+    "height": 0.7,
+    "shape": "filament",
+    "trail": 0.2
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#8a8a6a",
+   "dorsal": "#5a5a40",
+   "ventral": "#c8c4a8",
+   "fin": "#a8a48a",
+   "finOpacity": 0.5,
+   "eye": "#c8a040",
+   "metallic": 0.25,
+   "iridescence": 0.2,
+   "iridescenceColor": "#c0d0a0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a3a2a",
+     "count": 14,
+     "width": 0.025,
+     "x0": 0.15,
+     "x1": 0.95,
+     "slant": 0.4
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a1e",
+     "y": 0,
+     "width": 0.08,
+     "x0": 0.08,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#a8a48a",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4a4a38",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a8a48a",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#4a4a38",
+       "density": 25,
+       "size": 0.035
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "osphronemus-goramy",
+  "commonName": "Giant Gourami",
+  "scientificName": "Osphronemus goramy",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Sundaland — Sumatra, Java, Borneo & the Malay Peninsula; farmed widely",
+  "description": "A huge, long-lived gourami farmed for food across Southeast Asia; old males develop a bulging forehead hump and thick lips. Pairs build a spherical nest of plant material rather than a simple bubble nest.",
+  "adultLengthCm": 45,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 30,
+  "lifespanYears": 20,
+  "tempC": [
+   20,
+   30
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 1000,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 3,
+  "traits": [
+   "air-gulper",
+   "bold",
+   "curious",
+   "plant-eater"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.45,
+   "width": 0.16,
+   "headLength": 0.25,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "hump": 0.2,
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.75,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.31,
+    "height": 0.6,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#9a9078",
+   "dorsal": "#5a5444",
+   "ventral": "#d8d0b8",
+   "fin": "#7a7060",
+   "finOpacity": 0.75,
+   "eye": "#c8a040",
+   "metallic": 0.25,
+   "iridescence": 0.1,
+   "iridescenceColor": "#d0c8a0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a6250",
+     "contrast": 0.4
+    }
+   ]
+  },
+  "male": {
+   "body": {
+    "hump": 0.45
+   }
+  },
+  "female": {
+   "body": {
+    "hump": 0.08
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "osphronemus-laticlavius",
+  "commonName": "Red-tail Giant Gourami",
+  "scientificName": "Osphronemus laticlavius",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Sabah, northern Borneo — Kinabatangan & neighbouring rivers",
+  "description": "A Bornean giant gourami that keeps striking colours into adulthood: a dark grey-brown body with a broad red margin to the tail and other unpaired fins. Adult males develop a pronounced forehead hump.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 30,
+  "lifespanYears": 20,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   6.5,
+   7.8
+  ],
+  "dGH": [
+   4,
+   20
+  ],
+  "minTankLiters": 1000,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 3,
+  "traits": [
+   "air-gulper",
+   "bold",
+   "curious",
+   "plant-eater"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.45,
+   "width": 0.16,
+   "headLength": 0.25,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "hump": 0.2,
+   "dorsal": {
+    "start": 0.4,
+    "end": 0.75,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.31,
+    "height": 0.6,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#4a4a48",
+   "dorsal": "#2e2e2c",
+   "ventral": "#8a8478",
+   "fin": "#3a3a38",
+   "finOpacity": 0.8,
+   "eye": "#c84030",
+   "metallic": 0.15,
+   "iridescence": 0.1,
+   "iridescenceColor": "#a0a0a0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#3a3a38",
+     "contrast": 0.35
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#3a3a38",
+     "opacity": 0.85,
+     "edge": "#c82a1e",
+     "edgeWidth": 0.25
+    },
+    "anal": {
+     "color": "#3a3a38",
+     "opacity": 0.85,
+     "edge": "#c82a1e",
+     "edgeWidth": 0.2
+    },
+    "dorsal": {
+     "color": "#3a3a38",
+     "opacity": 0.85,
+     "edge": "#c82a1e",
+     "edgeWidth": 0.15
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "hump": 0.45
+   }
+  },
+  "female": {
+   "body": {
+    "hump": 0.08
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "sphaerichthys-osphromenoides",
+  "commonName": "Chocolate Gourami",
+  "scientificName": "Sphaerichthys osphromenoides",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Malay Peninsula, Sumatra & Borneo — peat-swamp blackwater",
+  "description": "A delicate peat-swamp gourami that needs very soft, acidic, warm water. Unusually for a gourami the female, not the male, broods the eggs in her mouth for about two weeks.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   25,
+   30
+  ],
+  "ph": [
+   4,
+   6.5
+  ],
+  "dGH": [
+   0,
+   4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "shy",
+   "hoverer",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.45,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.72,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.92,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#5a3a24",
+   "dorsal": "#3a2414",
+   "ventral": "#7a5a3a",
+   "fin": "#6a4a30",
+   "finOpacity": 0.6,
+   "eye": "#c8a040",
+   "metallic": 0.1,
+   "iridescence": 0.15,
+   "iridescenceColor": "#d0b070",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e8d8a8",
+     "count": 4,
+     "width": 0.035,
+     "x0": 0.15,
+     "x1": 0.85
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#6a4a30",
+     "opacity": 0.6,
+     "edge": "#e8d8a8",
+     "edgeWidth": 0.06
+    },
+    "caudal": {
+     "color": "#6a4a30",
+     "opacity": 0.6,
+     "edge": "#e8d8a8",
+     "edgeWidth": 0.05
+    },
+    "dorsal": {
+     "color": "#5a3a24",
+     "opacity": 0.6
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "sphaerichthys-vaillanti",
+  "commonName": "Vaillant's Chocolate Gourami",
+  "scientificName": "Sphaerichthys vaillanti",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Western Kalimantan, Borneo — blackwater swamps",
+  "description": "Shows reversed sexual dimorphism: the female is the showy one, turning brick-red with green-blue bands when courting, while the male stays brownish. The male broods the eggs in his mouth, his throat distending to hold them.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   25,
+   30
+  ],
+  "ph": [
+   4,
+   6
+  ],
+  "dGH": [
+   0,
+   3
+  ],
+  "minTankLiters": 50,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "shy",
+   "hoverer",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.4,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.72,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.92,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#6a4a30",
+   "dorsal": "#4a3020",
+   "ventral": "#8a6a4a",
+   "fin": "#7a5a3a",
+   "finOpacity": 0.5,
+   "eye": "#c8a040",
+   "metallic": 0.1,
+   "iridescence": 0.15,
+   "iridescenceColor": "#d0b070",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a2414",
+     "count": 4,
+     "width": 0.03,
+     "x0": 0.2,
+     "x1": 0.85
+    },
+    {
+     "type": "stripe",
+     "color": "#3a2414",
+     "y": 0,
+     "width": 0.06,
+     "x0": 0.05,
+     "x1": 0.3
+    }
+   ]
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "look": {
+    "base": "#c83a24",
+    "dorsal": "#8a2a18",
+    "ventral": "#d85a3a",
+    "fin": "#b84a30",
+    "finOpacity": 0.6,
+    "iridescence": 0.6,
+    "iridescenceColor": "#30d0a0",
+    "patterns": [
+     {
+      "type": "bars",
+      "color": "#30b8a0",
+      "count": 3,
+      "width": 0.05,
+      "x0": 0.25,
+      "x1": 0.8
+     }
+    ]
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "sphaerichthys-selatanensis",
+  "commonName": "Crossband Chocolate Gourami",
+  "scientificName": "Sphaerichthys selatanensis",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern & Central Kalimantan, Borneo — blackwater swamps",
+  "description": "A chocolate gourami from the blackwater swamps of southern Borneo (selatan means \"south\"), chocolate-brown crossed by thin pale bands. Like its relatives it is a mouthbrooder that needs very soft, acidic water.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   25,
+   30
+  ],
+  "ph": [
+   4,
+   6.5
+  ],
+  "dGH": [
+   0,
+   4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "shy",
+   "hoverer",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.45,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.72,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.92,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#5e3c26",
+   "dorsal": "#3c2616",
+   "ventral": "#7e5c3c",
+   "fin": "#6e4c32",
+   "finOpacity": 0.58,
+   "eye": "#c8a040",
+   "metallic": 0.1,
+   "iridescence": 0.2,
+   "iridescenceColor": "#d8c080",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e8d8a0",
+     "count": 5,
+     "width": 0.02,
+     "x0": 0.15,
+     "x1": 0.88
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#6e4c32",
+     "opacity": 0.6,
+     "edge": "#e8d8a0",
+     "edgeWidth": 0.05
+    },
+    "caudal": {
+     "color": "#6e4c32",
+     "opacity": 0.58,
+     "edge": "#e8d8a0",
+     "edgeWidth": 0.05
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "sphaerichthys-acrostoma",
+  "commonName": "Giant Chocolate Gourami",
+  "scientificName": "Sphaerichthys acrostoma",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Kalimantan, Borneo — blackwater swamps",
+  "description": "The largest Sphaerichthys, with a pointed, upturned mouth. The male broods the eggs; displaying females show a dark spot behind the head and vertical stripes over a yellowish belly, while males may show a horizontal stripe.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 8,
+  "lifespanYears": 4,
+  "tempC": [
+   25,
+   30
+  ],
+  "ph": [
+   4,
+   6.5
+  ],
+  "dGH": [
+   0,
+   4
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "shy",
+   "hoverer",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.42,
+   "width": 0.12,
+   "snout": "upturned",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.72,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.92,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#6a4a2e",
+   "dorsal": "#44301c",
+   "ventral": "#a88a5a",
+   "fin": "#7a5a3a",
+   "finOpacity": 0.55,
+   "eye": "#c8a040",
+   "metallic": 0.1,
+   "iridescence": 0.15,
+   "iridescenceColor": "#d0b070",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a2414",
+     "y": 0,
+     "width": 0.06,
+     "x0": 0.05,
+     "x1": 0.95
+    }
+   ]
+  },
+  "female": {
+   "look": {
+    "ventral": "#d8c070",
+    "patterns": [
+     {
+      "type": "blotch",
+      "color": "#2a1a10",
+      "x": 0.3,
+      "y": 0.3,
+      "rx": 0.05,
+      "ry": 0.25
+     },
+     {
+      "type": "bars",
+      "color": "#3a2414",
+      "count": 4,
+      "width": 0.025,
+      "x0": 0.3,
+      "x1": 0.85,
+      "y0": -1,
+      "y1": 0
+     }
+    ]
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parasphaerichthys-ocellatus",
+  "commonName": "Eyespot Gourami",
+  "scientificName": "Parasphaerichthys ocellatus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Myanmar — vegetated streams and lake margins of the Irrawaddy basin",
+  "description": "A tiny, rarely kept relative of the chocolate gouramis, grey-brown with a large gold-ringed dark eyespot in the middle of the flank. It is delicate in captivity and has rarely, if ever, been bred.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6.5,
+   7.5
+  ],
+  "dGH": [
+   5,
+   15
+  ],
+  "minTankLiters": 30,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "hoverer",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.42,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.72,
+    "height": 0.16,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.92,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#8a7a60",
+   "dorsal": "#5a4e3c",
+   "ventral": "#c8b898",
+   "fin": "#a89878",
+   "finOpacity": 0.35,
+   "eye": "#c8a040",
+   "metallic": 0.1,
+   "iridescence": 0.1,
+   "iridescenceColor": "#d0c090",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#5a4e3c",
+     "scale": 14,
+     "thickness": 0.3
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2018",
+     "x": 0.5,
+     "y": 0.05,
+     "rx": 0.08,
+     "ry": 0.25,
+     "ring": "#e0b840"
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parosphromenus-deissneri",
+  "commonName": "Deissner's Licorice Gourami",
+  "scientificName": "Parosphromenus deissneri",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Bangka Island, Indonesia — blackwater peat swamps",
+  "description": "The first licorice gourami to be described, from blackwater swamps on Bangka. Males have a lanceolate tail with a filament-like central ray; many fish sold under this name are actually other species, such as the round-tailed P. bintan.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   4,
+   6
+  ],
+  "dGH": [
+   0,
+   2
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.26,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.92,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.7
+   },
+   "scaleSize": 0.4
+  },
+  "look": {
+   "base": "#a08a68",
+   "dorsal": "#6a5a44",
+   "ventral": "#d0c0a0",
+   "fin": "#8a6a4a",
+   "finOpacity": 0.7,
+   "eye": "#3a2a1a",
+   "metallic": 0.05,
+   "iridescence": 0.4,
+   "iridescenceColor": "#4ab0e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": 0.15,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": -0.25,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#7a4a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#7a4a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#7a4a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#4ab0e0",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.5
+    }
+   },
+   "look": {
+    "base": "#a89070",
+    "fin": "#c8b8a0",
+    "finOpacity": 0.3,
+    "fins": {
+     "dorsal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "caudal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "anal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "pelvic": {
+      "color": "#c8b8a0",
+      "opacity": 0.35
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parosphromenus-linkei",
+  "commonName": "Linke's Licorice Gourami",
+  "scientificName": "Parosphromenus linkei",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central Kalimantan, Borneo — blackwater swamps",
+  "description": "Like all licorice gouramis it spawns upside-down in a tiny cave, sticking the eggs to the roof beneath a few bubbles. Males take longer than most species to develop their full fin colours of red-brown, black and iridescent blue.",
+  "adultLengthCm": 3.8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   4,
+   6
+  ],
+  "dGH": [
+   0,
+   2
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.26,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.92,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.55
+   },
+   "scaleSize": 0.4
+  },
+  "look": {
+   "base": "#9a8264",
+   "dorsal": "#665640",
+   "ventral": "#ccbc9c",
+   "fin": "#8a5a3a",
+   "finOpacity": 0.7,
+   "eye": "#3a2a1a",
+   "metallic": 0.05,
+   "iridescence": 0.4,
+   "iridescenceColor": "#4ab0e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": 0.15,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": -0.25,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a83a24",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#a83a24",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a83a24",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#4ab0e0",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.5
+    }
+   },
+   "look": {
+    "base": "#a89070",
+    "fin": "#c8b8a0",
+    "finOpacity": 0.3,
+    "fins": {
+     "dorsal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "caudal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "anal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "pelvic": {
+      "color": "#c8b8a0",
+      "opacity": 0.35
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parosphromenus-harveyi",
+  "commonName": "Harvey's Licorice Gourami",
+  "scientificName": "Parosphromenus harveyi",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Peninsular Malaysia — peat swamp forest",
+  "description": "A Malaysian licorice gourami whose males display broad red and black bands edged in iridescent blue on the dorsal, anal and tail fins. Males and females look much alike until they are well grown.",
+  "adultLengthCm": 3.8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   4,
+   6
+  ],
+  "dGH": [
+   0,
+   2
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.26,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.92,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.55
+   },
+   "scaleSize": 0.4
+  },
+  "look": {
+   "base": "#9a8466",
+   "dorsal": "#665640",
+   "ventral": "#ccbc9c",
+   "fin": "#b8402a",
+   "finOpacity": 0.72,
+   "eye": "#3a2a1a",
+   "metallic": 0.05,
+   "iridescence": 0.4,
+   "iridescenceColor": "#4ab8e8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": 0.15,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": -0.25,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c8402a",
+     "opacity": 0.78,
+     "edge": "#4ab8e8",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c8402a",
+     "opacity": 0.78,
+     "edge": "#4ab8e8",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c8402a",
+     "opacity": 0.78,
+     "edge": "#4ab8e8",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#4ab8e8",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.5
+    }
+   },
+   "look": {
+    "base": "#a89070",
+    "fin": "#c8b8a0",
+    "finOpacity": 0.3,
+    "fins": {
+     "dorsal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "caudal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "anal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "pelvic": {
+      "color": "#c8b8a0",
+      "opacity": 0.35
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parosphromenus-ornaticauda",
+  "commonName": "Ornate-tail Licorice Gourami",
+  "scientificName": "Parosphromenus ornaticauda",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "West Kalimantan, Borneo — blackwater swamps",
+  "description": "Named for the ornately banded tail: the male's rounded caudal fin carries bands of red-orange, black and iridescent blue. It lives among leaf litter in shallow, extremely soft blackwater.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   4,
+   6
+  ],
+  "dGH": [
+   0,
+   2
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.26,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.92,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.6
+   },
+   "scaleSize": 0.4
+  },
+  "look": {
+   "base": "#9a8264",
+   "dorsal": "#665640",
+   "ventral": "#ccbc9c",
+   "fin": "#c85a2a",
+   "finOpacity": 0.72,
+   "eye": "#3a2a1a",
+   "metallic": 0.05,
+   "iridescence": 0.4,
+   "iridescenceColor": "#4ab0e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": 0.15,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": -0.25,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8a4a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#8a4a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#d8602a",
+     "opacity": 0.8,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#141010",
+       "count": 2,
+       "width": 0.1,
+       "x0": 0.35,
+       "x1": 0.85
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#4ab0e0",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.5
+    }
+   },
+   "look": {
+    "base": "#a89070",
+    "fin": "#c8b8a0",
+    "finOpacity": 0.3,
+    "fins": {
+     "dorsal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "caudal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "anal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "pelvic": {
+      "color": "#c8b8a0",
+      "opacity": 0.35
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parosphromenus-filamentosus",
+  "commonName": "Spike-tailed Licorice Gourami",
+  "scientificName": "Parosphromenus filamentosus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern & Central Kalimantan, Borneo — blackwater swamps",
+  "description": "Distinguished by a lanceolate tail with a long, unbranched central filament and by reddish unpaired fins banded in black and blue. Like other licorice gouramis it spawns in tiny caves and needs very acidic water.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   4,
+   6
+  ],
+  "dGH": [
+   0,
+   2
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.26,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.92,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.85
+   },
+   "scaleSize": 0.4
+  },
+  "look": {
+   "base": "#9a8264",
+   "dorsal": "#665640",
+   "ventral": "#ccbc9c",
+   "fin": "#a83a2a",
+   "finOpacity": 0.72,
+   "eye": "#3a2a1a",
+   "metallic": 0.05,
+   "iridescence": 0.4,
+   "iridescenceColor": "#4ab0e0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": 0.15,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": -0.25,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a83a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#a83a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a83a2a",
+     "opacity": 0.78,
+     "edge": "#4ab0e0",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#141010",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#4ab0e0",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.5
+    }
+   },
+   "look": {
+    "base": "#a89070",
+    "fin": "#c8b8a0",
+    "finOpacity": 0.3,
+    "fins": {
+     "dorsal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "caudal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "anal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "pelvic": {
+      "color": "#c8b8a0",
+      "opacity": 0.35
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "parosphromenus-nagyi",
+  "commonName": "Nagy's Licorice Gourami",
+  "scientificName": "Parosphromenus nagyi",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern Peninsular Malaysia — peat-swamp streams",
+  "description": "Displaying males turn very dark, with a black band through the dorsal, anal and tail fins bordered on both sides by iridescent blue, and emerald-green pelvic fins. It lives in acidic peat-swamp streams of eastern Peninsular Malaysia.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 3,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   4,
+   6
+  ],
+  "dGH": [
+   0,
+   2
+  ],
+  "minTankLiters": 20,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "cave-dweller",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.26,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.92,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.55
+   },
+   "scaleSize": 0.4
+  },
+  "look": {
+   "base": "#4a3a30",
+   "dorsal": "#2e2420",
+   "ventral": "#6a5a4a",
+   "fin": "#2a2220",
+   "finOpacity": 0.8,
+   "eye": "#3a2a1a",
+   "metallic": 0.05,
+   "iridescence": 0.45,
+   "iridescenceColor": "#4ab8e8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": 0.15,
+     "width": 0.1,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2018",
+     "y": -0.25,
+     "width": 0.08,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2a2220",
+     "opacity": 0.78,
+     "edge": "#4ab8e8",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#0e0a0a",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      },
+      {
+       "type": "region",
+       "color": "#3a90c8",
+       "x0": 0.3,
+       "x1": 0.52,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#2a2220",
+     "opacity": 0.78,
+     "edge": "#4ab8e8",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#0e0a0a",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      },
+      {
+       "type": "region",
+       "color": "#3a90c8",
+       "x0": 0.3,
+       "x1": 0.52,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#2a2220",
+     "opacity": 0.78,
+     "edge": "#4ab8e8",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#0e0a0a",
+       "x0": 0.55,
+       "x1": 0.85,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      },
+      {
+       "type": "region",
+       "color": "#3a90c8",
+       "x0": 0.3,
+       "x1": 0.52,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#30c890",
+     "opacity": 0.85
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.95,
+   "body": {
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.5
+    }
+   },
+   "look": {
+    "base": "#9a8668",
+    "fin": "#c8b8a0",
+    "finOpacity": 0.3,
+    "fins": {
+     "dorsal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "caudal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "anal": {
+      "color": "#c8b8a0",
+      "opacity": 0.3
+     },
+     "pelvic": {
+      "color": "#c8b8a0",
+      "opacity": 0.35
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "trichopsis-vittata",
+  "commonName": "Croaking Gourami",
+  "scientificName": "Trichopsis vittata",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mainland Southeast Asia & Sundaland — paddies, ditches and swamps",
+  "description": "Makes audible croaking sounds by snapping specialised tendons over its pectoral fin rays during displays. It is brownish-olive with dark lengthwise stripes, iridescent blue eyes and red- and blue-flecked fins.",
+  "adultLengthCm": 6.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "shy",
+   "air-gulper",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.32,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.31,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "pectoral": {
+    "start": 0.26,
+    "end": 0.3,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.6
+   }
+  },
+  "look": {
+   "base": "#8a7a5a",
+   "dorsal": "#5a4e38",
+   "ventral": "#c8b898",
+   "fin": "#9a8a6a",
+   "finOpacity": 0.5,
+   "eye": "#3a7ad0",
+   "metallic": 0.2,
+   "iridescence": 0.45,
+   "iridescenceColor": "#5aa0e8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a2e20",
+     "y": 0.25,
+     "width": 0.06,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#3a2e20",
+     "y": -0.05,
+     "width": 0.08,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "spots",
+     "color": "#5aa0e8",
+     "density": 30,
+     "size": 0.02,
+     "y0": -0.5,
+     "y1": 0.6
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#9a7a5a",
+     "opacity": 0.55,
+     "edge": "#5aa0e8",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c84a2a",
+       "density": 25,
+       "size": 0.04
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#9a8a6a",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c84a2a",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#9a8a6a",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c84a2a",
+       "density": 25,
+       "size": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "trichopsis-pumila",
+  "commonName": "Sparkling Gourami",
+  "scientificName": "Trichopsis pumila",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mekong & Chao Phraya basins, Malay Peninsula & Sumatra — vegetated swamps and ditches",
+  "description": "One of the smallest gouramis, its fins and flanks spangled with iridescent blue-green and red dots. Males croak audibly when displaying, and the bubble nest is built beneath a leaf rather than at the open surface.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 25,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "shy",
+   "air-gulper",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.33,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.31,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "pectoral": {
+    "start": 0.26,
+    "end": 0.3,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.6
+   }
+  },
+  "look": {
+   "base": "#9a8a68",
+   "dorsal": "#6a5a44",
+   "ventral": "#d0c4a8",
+   "fin": "#b0a080",
+   "finOpacity": 0.45,
+   "eye": "#3a7ad0",
+   "metallic": 0.2,
+   "iridescence": 0.6,
+   "iridescenceColor": "#40d0c0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#4a3a28",
+     "y": 0,
+     "width": 0.07,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "spots",
+     "color": "#40d0c0",
+     "density": 50,
+     "size": 0.02,
+     "y0": -0.6,
+     "y1": 0.7
+    },
+    {
+     "type": "spots",
+     "color": "#d8402a",
+     "density": 20,
+     "size": 0.018,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": 0.2,
+     "y1": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#b0a080",
+     "opacity": 0.5,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#40d0c0",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "color": "#b0a080",
+     "opacity": 0.5,
+     "edge": "#40c0e0",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d84a2a",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#b0a080",
+     "opacity": 0.45,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#40d0c0",
+       "density": 25,
+       "size": 0.04
+      },
+      {
+       "type": "spots",
+       "color": "#d84a2a",
+       "density": 15,
+       "size": 0.035
+      }
+     ]
+    }
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "trichopsis-schalleri",
+  "commonName": "Three-striped Croaking Gourami",
+  "scientificName": "Trichopsis schalleri",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Thailand, Laos & Cambodia — middle Mekong basin",
+  "description": "A croaking gourami with three bold dark lengthwise stripes, from the middle Mekong basin. Like its relatives, males make audible croaking sounds with their pectoral fins during displays.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "shy",
+   "air-gulper",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.32,
+   "width": 0.1,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.48,
+    "end": 0.68,
+    "height": 0.16,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.31,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "pectoral": {
+    "start": 0.26,
+    "end": 0.3,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.6
+   }
+  },
+  "look": {
+   "base": "#a08e6a",
+   "dorsal": "#6a5a40",
+   "ventral": "#d4c8a8",
+   "fin": "#aa9a78",
+   "finOpacity": 0.5,
+   "eye": "#3a7ad0",
+   "metallic": 0.2,
+   "iridescence": 0.4,
+   "iridescenceColor": "#5aa0e8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2e2418",
+     "y": 0.4,
+     "width": 0.06,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2418",
+     "y": 0.02,
+     "width": 0.08,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2418",
+     "y": -0.38,
+     "width": 0.06,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#aa8a68",
+     "opacity": 0.55,
+     "edge": "#5aa0e8",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c84a2a",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#aa9a78",
+     "opacity": 0.5,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c84a2a",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "ctenops-nobilis",
+  "commonName": "Frail Gourami",
+  "scientificName": "Ctenops nobilis",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northeastern India & Bangladesh — Ganges & Brahmaputra floodplains",
+  "description": "A slender, angular-headed gourami with a pointed snout and large mouth, brown with an interrupted silvery-white stripe from the eye to the tail. The male broods the few, large eggs in his mouth and turns a marbled pattern while brooding.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 9,
+  "lifespanYears": 4,
+  "tempC": [
+   18,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   10
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.3,
+   "width": 0.12,
+   "headLength": 0.32,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.5,
+    "end": 0.68,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.32,
+    "end": 0.93,
+    "height": 0.18,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#6a5038",
+   "dorsal": "#4a3624",
+   "ventral": "#a88a68",
+   "fin": "#7a6048",
+   "finOpacity": 0.5,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "iridescence": 0.1,
+   "iridescenceColor": "#d0d0c0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#e8e4d8",
+     "y": 0,
+     "width": 0.06,
+     "x0": 0.1,
+     "x1": 0.97
+    },
+    {
+     "type": "speckle",
+     "color": "#3a2a1a",
+     "density": 0.25
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "belontia-signata",
+  "commonName": "Ceylonese Combtail",
+  "scientificName": "Belontia signata",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Sri Lanka — wet-zone forest streams",
+  "description": "Endemic to Sri Lanka, this robust, territorial labyrinth fish is named for the comb-like fringe of extended rays on its tail. The male builds a bubble nest under a leaf or rocky overhang and guards the eggs, driving off even the female.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 8,
+  "lifespanYears": 6,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "territorial",
+   "air-gulper",
+   "predator"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.4,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.85,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.3,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "crowntail",
+    "size": 0.65
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#8a3a24",
+   "dorsal": "#5a2416",
+   "ventral": "#b86a4a",
+   "fin": "#9a4a2a",
+   "finOpacity": 0.75,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.15,
+   "iridescenceColor": "#d08060",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a2a1a",
+     "contrast": 0.4
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#9a4a2a",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "lines",
+       "color": "#5a2416",
+       "count": 12,
+       "width": 0.03
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#8a3e24",
+     "opacity": 0.75
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "belontia-hasselti",
+  "commonName": "Java Combtail",
+  "scientificName": "Belontia hasselti",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Malay Peninsula, Sumatra, Java & Borneo — rivers and swamps",
+  "description": "The larger of the two combtails: greyish-brown with a dark net pattern over the scales and comb-like ray extensions on the tail. A hardy but rather predatory bubble-nester that needs a large tank.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.25,
+  "maturityMonths": 9,
+  "lifespanYears": 7,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "territorial",
+   "air-gulper",
+   "predator"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.4,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.85,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.38,
+    "end": 0.93,
+    "height": 0.2,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.3,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "crowntail",
+    "size": 0.65
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#8a8270",
+   "dorsal": "#5a5446",
+   "ventral": "#c8c0a8",
+   "fin": "#8a8270",
+   "finOpacity": 0.65,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "iridescence": 0.1,
+   "iridescenceColor": "#c0c0b0",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#3a362c",
+     "scale": 16,
+     "thickness": 0.45
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#8a8270",
+     "opacity": 0.65,
+     "patterns": [
+      {
+       "type": "reticulate",
+       "color": "#3a362c",
+       "scale": 10,
+       "thickness": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "malpulutta-kretseri",
+  "commonName": "Ornate Paradise Fish",
+  "scientificName": "Malpulutta kretseri",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Sri Lanka — shaded wet-zone forest streams",
+  "description": "A small, secretive Sri Lankan endemic whose males carry long, pointed extensions on the dorsal, anal and tail fins. It lives among leaf litter and roots in shaded rainforest streams and spawns under a small bubble nest in a sheltered spot.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   27
+  ],
+  "ph": [
+   5.5,
+   7
+  ],
+  "dGH": [
+   1,
+   8
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.42,
+    "end": 0.8,
+    "height": 0.25,
+    "shape": "pointed",
+    "trail": 0.25
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.25,
+    "shape": "pointed",
+    "trail": 0.2
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.3,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 1
+   }
+  },
+  "look": {
+   "base": "#6a5a52",
+   "dorsal": "#44382f",
+   "ventral": "#a8968a",
+   "fin": "#5a6a9a",
+   "finOpacity": 0.65,
+   "eye": "#c8a040",
+   "metallic": 0.1,
+   "iridescence": 0.4,
+   "iridescenceColor": "#7a8ad0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a1e18",
+     "density": 40,
+     "size": 0.03,
+     "y0": -0.5,
+     "y1": 0.8,
+     "jitter": 0.6
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#5a6a9a",
+     "opacity": 0.65,
+     "edge": "#6aa0e8",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a1e18",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "color": "#5a6a9a",
+     "opacity": 0.65,
+     "edge": "#6aa0e8",
+     "edgeWidth": 0.06,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a1e18",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#5a6a9a",
+     "opacity": 0.65,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a1e18",
+       "density": 30,
+       "size": 0.045
+      }
+     ]
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.8,
+   "body": {
+    "dorsal": {
+     "start": 0.44,
+     "end": 0.78,
+     "height": 0.16,
+     "shape": "rounded"
+    },
+    "anal": {
+     "start": 0.37,
+     "end": 0.92,
+     "height": 0.16,
+     "shape": "rounded"
+    },
+    "caudal": {
+     "shape": "rounded",
+     "size": 0.5
+    }
+   },
+   "look": {
+    "fin": "#8a7a6a",
+    "finOpacity": 0.4,
+    "iridescence": 0.1,
+    "fins": {
+     "dorsal": {
+      "color": "#8a7a6a",
+      "opacity": 0.4
+     },
+     "caudal": {
+      "color": "#8a7a6a",
+      "opacity": 0.4
+     },
+     "anal": {
+      "color": "#8a7a6a",
+      "opacity": 0.4
+     },
+     "pelvic": {
+      "color": "#8a7a6a",
+      "opacity": 0.45
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "macropodus-opercularis",
+  "commonName": "Paradise Fish",
+  "scientificName": "Macropodus opercularis",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern & eastern China, Taiwan, Korea & northern Vietnam — paddies, ponds and slow streams",
+  "description": "One of the first ornamental fish kept in Europe (imported to France in 1869), it thrives in unheated water. Males are banded blue and red-orange, with a dark, orange-ringed spot on the gill cover and long, forked tail streamers.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 7,
+  "tempC": [
+   16,
+   26
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "territorial",
+   "air-gulper",
+   "flarer",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.82,
+    "height": 0.22,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.24,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.95
+   }
+  },
+  "look": {
+   "base": "#3a5a8a",
+   "dorsal": "#2a3a5a",
+   "ventral": "#6a7aa0",
+   "fin": "#d8502a",
+   "finOpacity": 0.75,
+   "eye": "#c84a2a",
+   "metallic": 0.15,
+   "iridescence": 0.5,
+   "iridescenceColor": "#4a8ae0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#d8502a",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#101828",
+     "x": 0.2,
+     "y": 0.1,
+     "rx": 0.035,
+     "ry": 0.12,
+     "ring": "#e06a2a"
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#d8502a",
+     "opacity": 0.78,
+     "edge": "#3a6ab0",
+     "edgeWidth": 0.06
+    },
+    "dorsal": {
+     "color": "#3a4a7a",
+     "opacity": 0.75,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#d8502a",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "color": "#3a4a7a",
+     "opacity": 0.75,
+     "edge": "#d84a2a",
+     "edgeWidth": 0.08
+    },
+    "pelvic": {
+     "color": "#e0602a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "body": {
+    "dorsal": {
+     "start": 0.47,
+     "end": 0.8,
+     "height": 0.16,
+     "shape": "rounded"
+    },
+    "anal": {
+     "start": 0.37,
+     "end": 0.92,
+     "height": 0.17,
+     "shape": "rounded"
+    },
+    "caudal": {
+     "shape": "forked",
+     "size": 0.6
+    }
+   },
+   "look": {
+    "finOpacity": 0.55,
+    "base": "#5a6a80",
+    "fin": "#b0603a",
+    "iridescence": 0.25
+   }
+  },
+  "availability": "common"
+ },
+ {
+  "id": "macropodus-opercularis-albino",
+  "commonName": "Albino Paradise Fish",
+  "scientificName": "Macropodus opercularis",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern China & Taiwan)",
+  "description": "A long-established albino strain: dark pigment is missing, leaving a cream body crossed by pale red-orange bands and pink eyes. It is just as hardy and quarrelsome as the wild form.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 7,
+  "tempC": [
+   16,
+   26
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "territorial",
+   "air-gulper",
+   "flarer",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.82,
+    "height": 0.22,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.24,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.95
+   }
+  },
+  "look": {
+   "base": "#f0e2d0",
+   "dorsal": "#e6d2bc",
+   "ventral": "#f6eee4",
+   "fin": "#f0b090",
+   "finOpacity": 0.65,
+   "eye": "#e05a6a",
+   "metallic": 0.15,
+   "iridescence": 0.15,
+   "iridescenceColor": "#ffe0d0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#e8805a",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#f0a080",
+     "opacity": 0.65
+    },
+    "dorsal": {
+     "color": "#f0d0c0",
+     "opacity": 0.6,
+     "edge": "#e8805a",
+     "edgeWidth": 0.08
+    },
+    "anal": {
+     "color": "#f0d0c0",
+     "opacity": 0.6,
+     "edge": "#e8805a",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "body": {
+    "dorsal": {
+     "start": 0.47,
+     "end": 0.8,
+     "height": 0.16,
+     "shape": "rounded"
+    },
+    "anal": {
+     "start": 0.37,
+     "end": 0.92,
+     "height": 0.17,
+     "shape": "rounded"
+    },
+    "caudal": {
+     "shape": "forked",
+     "size": 0.6
+    }
+   },
+   "look": {
+    "finOpacity": 0.55,
+    "base": "#f2e8dc"
+   }
+  },
+  "variantOf": "macropodus-opercularis",
+  "availability": "uncommon"
+ },
+ {
+  "id": "macropodus-opercularis-blue",
+  "commonName": "Blue Paradise Fish",
+  "scientificName": "Macropodus opercularis",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: southern China & Taiwan)",
+  "description": "A strain in which red pigment is suppressed, leaving the body and fins in shades of blue to blue-black with darker bars. The opercular spot and long tail streamers of the wild form remain.",
+  "adultLengthCm": 9,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 7,
+  "tempC": [
+   16,
+   26
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "territorial",
+   "air-gulper",
+   "flarer",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.82,
+    "height": 0.22,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.24,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 0.95
+   }
+  },
+  "look": {
+   "base": "#2e4a7a",
+   "dorsal": "#1e2e50",
+   "ventral": "#5a6a90",
+   "fin": "#3a5a9a",
+   "finOpacity": 0.75,
+   "eye": "#3a3a4a",
+   "metallic": 0.2,
+   "iridescence": 0.6,
+   "iridescenceColor": "#5a9aff",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#16223a",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#0e1420",
+     "x": 0.2,
+     "y": 0.1,
+     "rx": 0.035,
+     "ry": 0.12,
+     "ring": "#5a8ad0"
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#3a5a9a",
+     "opacity": 0.78,
+     "edge": "#8ab0f0",
+     "edgeWidth": 0.05
+    },
+    "dorsal": {
+     "color": "#2e4a7a",
+     "opacity": 0.75,
+     "edge": "#8ab0f0",
+     "edgeWidth": 0.06
+    },
+    "anal": {
+     "color": "#2e4a7a",
+     "opacity": 0.75,
+     "edge": "#8ab0f0",
+     "edgeWidth": 0.06
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "body": {
+    "dorsal": {
+     "start": 0.47,
+     "end": 0.8,
+     "height": 0.16,
+     "shape": "rounded"
+    },
+    "anal": {
+     "start": 0.37,
+     "end": 0.92,
+     "height": 0.17,
+     "shape": "rounded"
+    },
+    "caudal": {
+     "shape": "forked",
+     "size": 0.6
+    }
+   },
+   "look": {
+    "finOpacity": 0.55,
+    "base": "#4a5a78"
+   }
+  },
+  "variantOf": "macropodus-opercularis",
+  "availability": "uncommon"
+ },
+ {
+  "id": "macropodus-ocellatus",
+  "commonName": "Round-tailed Paradise Fish",
+  "scientificName": "Macropodus ocellatus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern China & Korea — ponds, paddies and ditches",
+  "description": "Probably the most cold-tolerant labyrinth fish, surviving winters at around 5 °C in its native ponds and paddies. Unlike the common paradise fish it has a rounded tail and is brownish without bold bars.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 6,
+  "tempC": [
+   10,
+   24
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "territorial",
+   "air-gulper",
+   "flarer",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.82,
+    "height": 0.22,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.24,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.6
+   }
+  },
+  "look": {
+   "base": "#6a5a48",
+   "dorsal": "#4a3e30",
+   "ventral": "#a8987e",
+   "fin": "#7a5a48",
+   "finOpacity": 0.7,
+   "eye": "#c8702a",
+   "metallic": 0.1,
+   "iridescence": 0.35,
+   "iridescenceColor": "#5a8ad0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a3a2c",
+     "count": 8,
+     "width": 0.025,
+     "x0": 0.3,
+     "x1": 0.95
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1410",
+     "x": 0.2,
+     "y": 0.1,
+     "rx": 0.03,
+     "ry": 0.1,
+     "ring": "#c86a3a"
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#7a5a48",
+     "opacity": 0.72,
+     "edge": "#c84a2a",
+     "edgeWidth": 0.05
+    },
+    "anal": {
+     "color": "#5a4a40",
+     "opacity": 0.72,
+     "edge": "#5a8ad0",
+     "edgeWidth": 0.06
+    },
+    "pelvic": {
+     "color": "#d0502a",
+     "opacity": 0.8
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "body": {
+    "dorsal": {
+     "start": 0.47,
+     "end": 0.8,
+     "height": 0.16,
+     "shape": "rounded"
+    },
+    "anal": {
+     "start": 0.37,
+     "end": 0.92,
+     "height": 0.17,
+     "shape": "rounded"
+    },
+    "caudal": {
+     "shape": "forked",
+     "size": 0.6
+    }
+   },
+   "look": {
+    "finOpacity": 0.55,
+    "base": "#7a6a58"
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "macropodus-spechti",
+  "commonName": "Black Paradise Fish",
+  "scientificName": "Macropodus spechti",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern Vietnam — ponds and slow streams",
+  "description": "Long sold as M. concolor, the black paradise fish is dark grey-brown to almost black, with a forked tail whose filamentous rays carry white or black tips over blue membranes. It lacks red in the unpaired fins, unlike the similar M. erythropterus.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 6,
+  "lifespanYears": 7,
+  "tempC": [
+   18,
+   26
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "top",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 7,
+  "traits": [
+   "territorial",
+   "air-gulper",
+   "flarer",
+   "jumper"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.82,
+    "height": 0.22,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.24,
+    "shape": "pointed",
+    "trail": 0.15
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.35,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "lyre",
+    "size": 1.05
+   }
+  },
+  "look": {
+   "base": "#2a2826",
+   "dorsal": "#1a1816",
+   "ventral": "#3e3a36",
+   "fin": "#2a3450",
+   "finOpacity": 0.8,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.3,
+   "iridescenceColor": "#4a6ab0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#141210",
+     "contrast": 0.5
+    },
+    {
+     "type": "bars",
+     "color": "#1a1816",
+     "count": 6,
+     "width": 0.02,
+     "x0": 0.3,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "color": "#2a3a60",
+     "opacity": 0.8,
+     "edge": "#f0f0f0",
+     "edgeWidth": 0.04,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#101010",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#2a3450",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#101010",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    },
+    "anal": {
+     "color": "#2a3450",
+     "opacity": 0.8
+    },
+    "pelvic": {
+     "color": "#2a2826",
+     "opacity": 0.85,
+     "edge": "#c8302a",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.85,
+   "body": {
+    "dorsal": {
+     "start": 0.47,
+     "end": 0.8,
+     "height": 0.16,
+     "shape": "rounded"
+    },
+    "anal": {
+     "start": 0.37,
+     "end": 0.92,
+     "height": 0.17,
+     "shape": "rounded"
+    },
+    "caudal": {
+     "shape": "forked",
+     "size": 0.6
+    }
+   },
+   "look": {
+    "finOpacity": 0.55,
+    "base": "#4a4440"
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudosphromenus-cupanus",
+  "commonName": "Spiketail Paradise Fish",
+  "scientificName": "Pseudosphromenus cupanus",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern India & Sri Lanka — coastal swamps, paddies and ditches",
+  "description": "A small, hardy labyrinth fish whose rounded tail ends in a short central point. Breeding males turn deep red-brown with blue-edged fins and spawn under a small bubble nest, often in a cave or beneath a leaf.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "air-gulper",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.3,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.65
+   }
+  },
+  "look": {
+   "base": "#6a3a28",
+   "dorsal": "#4a281c",
+   "ventral": "#9a5a3a",
+   "fin": "#7a3a2a",
+   "finOpacity": 0.7,
+   "eye": "#c84a2a",
+   "metallic": 0.05,
+   "iridescence": 0.3,
+   "iridescenceColor": "#4a9ad8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#3a1e14",
+     "y": 0.05,
+     "width": 0.06,
+     "x0": 0.05,
+     "x1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#7a3a2a",
+     "opacity": 0.72,
+     "edge": "#4a9ad8",
+     "edgeWidth": 0.07
+    },
+    "anal": {
+     "color": "#7a3a2a",
+     "opacity": 0.72,
+     "edge": "#4a9ad8",
+     "edgeWidth": 0.08
+    },
+    "caudal": {
+     "color": "#7a3a2a",
+     "opacity": 0.7,
+     "edge": "#4a9ad8",
+     "edgeWidth": 0.05
+    },
+    "pelvic": {
+     "color": "#c82a2a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "male": {
+   "look": {
+    "base": "#8a2a1e",
+    "ventral": "#a8402a"
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pseudosphromenus-dayi",
+  "commonName": "Day's Paradise Fish",
+  "scientificName": "Pseudosphromenus dayi",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southwestern India (Kerala) — coastal swamps and ditches",
+  "description": "Brown with two dark lengthwise stripes, it has extended central tail rays and blue-edged fins with a red band inside the margin. Pairs spawn under a small bubble nest in a sheltered spot and the male guards the eggs.",
+  "adultLengthCm": 7.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 5,
+  "lifespanYears": 4,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   15
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "air-gulper",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "paradise-fish",
+   "depth": 0.3,
+   "width": 0.11,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.45,
+    "end": 0.82,
+    "height": 0.2,
+    "shape": "pointed"
+   },
+   "anal": {
+    "start": 0.35,
+    "end": 0.93,
+    "height": 0.22,
+    "shape": "pointed"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.3,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "spade",
+    "size": 0.8
+   }
+  },
+  "look": {
+   "base": "#8a6a4a",
+   "dorsal": "#5a4430",
+   "ventral": "#c0a080",
+   "fin": "#8a5a3a",
+   "finOpacity": 0.7,
+   "eye": "#c84a2a",
+   "metallic": 0.05,
+   "iridescence": 0.3,
+   "iridescenceColor": "#4a9ad8",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2e2016",
+     "y": 0.15,
+     "width": 0.08,
+     "x0": 0.05,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2016",
+     "y": -0.25,
+     "width": 0.07,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8a5a3a",
+     "opacity": 0.72,
+     "edge": "#4a9ad8",
+     "edgeWidth": 0.07,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c8302a",
+       "x0": 0.65,
+       "x1": 0.9,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "anal": {
+     "color": "#8a5a3a",
+     "opacity": 0.72,
+     "edge": "#4a9ad8",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c8302a",
+       "x0": 0.65,
+       "x1": 0.9,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#8a5a3a",
+     "opacity": 0.7,
+     "edge": "#4a9ad8",
+     "edgeWidth": 0.05,
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#c8302a",
+       "x0": 0.7,
+       "x1": 0.92,
+       "y0": -1,
+       "y1": 1,
+       "softness": 0.1
+      }
+     ]
+    },
+    "pelvic": {
+     "color": "#c82a2a",
+     "opacity": 0.85
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "luciocephalus-pulcher",
+  "commonName": "Pikehead",
+  "scientificName": "Luciocephalus pulcher",
+  "family": "Osphronemidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Malay Peninsula, Sumatra, Bangka, Belitung & Borneo — blackwater swamps and streams",
+  "description": "A slender ambush predator that hangs motionless among vegetation, then shoots out an enormously protrusible mouth to engulf small fish. Although it belongs to the gourami family it has only a simple air-breathing chamber rather than a true labyrinth, and it is a mouthbrooder.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   4.5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   5
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "top",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 10,
+  "traits": [
+   "ambush",
+   "predator",
+   "shy"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.17,
+   "width": 0.09,
+   "headLength": 0.33,
+   "snout": "pointed",
+   "mouth": "superior",
+   "dorsal": {
+    "start": 0.68,
+    "end": 0.78,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.92,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.25,
+    "shape": "filament"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.4
+  },
+  "look": {
+   "base": "#8a7050",
+   "dorsal": "#5a4630",
+   "ventral": "#d8c8a8",
+   "fin": "#9a8060",
+   "finOpacity": 0.45,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "iridescence": 0.1,
+   "iridescenceColor": "#d0c090",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#2a1e14",
+     "y": 0.02,
+     "width": 0.08,
+     "x0": 0,
+     "x1": 0.97
+    },
+    {
+     "type": "stripe",
+     "color": "#e8dcc0",
+     "y": -0.22,
+     "width": 0.04,
+     "x0": 0.05,
+     "x1": 0.95
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "helostoma-temminckii",
+  "commonName": "Kissing Gourami (Green)",
+  "scientificName": "Helostoma temminckii",
+  "family": "Helostomatidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Thailand, Cambodia, Malay Peninsula, Sumatra, Java & Borneo — sluggish rivers and swamps",
+  "description": "Famous for \"kissing\" bouts in which two fish press their lips together — actually a trial of strength between rivals. The lips bear horny teeth for rasping algae, and fine gill rakers strain plankton; it scatters floating eggs without building a nest.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "plant-eater",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.45,
+   "width": 0.13,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.85,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.92,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#a8b090",
+   "dorsal": "#7a8460",
+   "ventral": "#d8dcc8",
+   "fin": "#b8b8a0",
+   "finOpacity": 0.45,
+   "eye": "#c8a040",
+   "metallic": 0.35,
+   "iridescence": 0.15,
+   "iridescenceColor": "#d0e0c0",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#7a8460",
+     "count": 6,
+     "width": 0.02,
+     "y0": -0.4,
+     "y1": 0.6
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "helostoma-temminckii-pink",
+  "commonName": "Kissing Gourami (Pink)",
+  "scientificName": "Helostoma temminckii",
+  "family": "Helostomatidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Captive-bred (wild form: Southeast Asia)",
+  "description": "The familiar pink kisser is a leucistic farmed strain with a pinkish-white body and clear fins; its eyes stay dark. It behaves exactly like the green wild form, grazing algae and sparring lip-to-lip.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 200,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 5,
+  "traits": [
+   "algae-eater",
+   "glass-grazer",
+   "plant-eater",
+   "air-gulper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "gourami",
+   "depth": 0.45,
+   "width": 0.13,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.35,
+    "end": 0.85,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.3,
+    "end": 0.92,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.55
+   }
+  },
+  "look": {
+   "base": "#f0c8b8",
+   "dorsal": "#e4b0a0",
+   "ventral": "#f6dcd0",
+   "fin": "#f0d4c8",
+   "finOpacity": 0.4,
+   "eye": "#2a2a2a",
+   "metallic": 0.3,
+   "iridescence": 0.1,
+   "iridescenceColor": "#ffe8e0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#e4b4a4",
+     "contrast": 0.2
+    }
+   ]
+  },
+  "variantOf": "helostoma-temminckii",
+  "availability": "common"
+ },
+ {
+  "id": "anabas-testudineus",
+  "commonName": "Climbing Perch",
+  "scientificName": "Anabas testudineus",
+  "family": "Anabantidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South & Southeast Asia — India to southern China, Indonesia & the Philippines: swamps, paddies and canals",
+  "description": "A tough air-breathing perch that can survive out of water for days and moves overland between pools, levering itself along with its spiny gill covers and fins. It is an important food fish across South and Southeast Asia.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 8,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   4,
+   20
+  ],
+  "minTankLiters": 150,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 6,
+  "traits": [
+   "air-gulper",
+   "jumper",
+   "predator",
+   "bold"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.3,
+   "width": 0.15,
+   "headLength": 0.3,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.85,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.88,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.7
+  },
+  "look": {
+   "base": "#7a8060",
+   "dorsal": "#4a5038",
+   "ventral": "#c8c4a0",
+   "fin": "#8a8a6a",
+   "finOpacity": 0.55,
+   "eye": "#c88a3a",
+   "metallic": 0.25,
+   "iridescence": 0.1,
+   "iridescenceColor": "#c0d0a0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#4a5038",
+     "contrast": 0.4
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1a14",
+     "x": 0.97,
+     "y": 0,
+     "rx": 0.035,
+     "ry": 0.13
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1a14",
+     "x": 0.29,
+     "y": 0.2,
+     "rx": 0.03,
+     "ry": 0.1
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ctenopoma-acutirostre",
+  "commonName": "Leopard Bushfish",
+  "scientificName": "Ctenopoma acutirostre",
+  "family": "Anabantidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Congo River basin, Central Africa",
+  "description": "A patient ambush predator from the Congo basin that drifts slowly, head angled down like a dead leaf, before snapping up small fish. Its tan body is covered in dark leopard spots, with a dark spot at the tail base.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "drifter",
+   "predator",
+   "shy"
+  ],
+  "body": {
+   "archetype": "leaffish",
+   "depth": 0.45,
+   "width": 0.12,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.9,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   }
+  },
+  "look": {
+   "base": "#a88a5a",
+   "dorsal": "#7a6440",
+   "ventral": "#d0c098",
+   "fin": "#a88a5a",
+   "finOpacity": 0.6,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0,
+   "iridescenceColor": "#c0a070",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a2a18",
+     "density": 40,
+     "size": 0.05,
+     "jitter": 0.6
+    },
+    {
+     "type": "blotch",
+     "color": "#2a1e12",
+     "x": 0.97,
+     "y": 0,
+     "rx": 0.04,
+     "ry": 0.15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#a88a5a",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a2a18",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    },
+    "anal": {
+     "color": "#a88a5a",
+     "opacity": 0.6,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a2a18",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#a88a5a",
+     "opacity": 0.55,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#3a2a18",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ctenopoma-kingsleyae",
+  "commonName": "Tailspot Bushfish",
+  "scientificName": "Ctenopoma kingsleyae",
+  "family": "Anabantidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "West & Central Africa — Senegal to the Congo basin",
+  "description": "A robust grey-brown bushfish with a dark, pale-ringed spot at the tail base, found in rivers and swamps across West and Central Africa. Pairs spawn at night without a nest, releasing thousands of oily, floating eggs that receive no care.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 200,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "egg-scatterer",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "predator",
+   "shy",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.38,
+   "width": 0.13,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.9,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#7a7a70",
+   "dorsal": "#4e4e46",
+   "ventral": "#c8c4b4",
+   "fin": "#7a7a70",
+   "finOpacity": 0.6,
+   "eye": "#c8a040",
+   "metallic": 0.15,
+   "iridescence": 0.1,
+   "iridescenceColor": "#b0b0a0",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#4e4e46",
+     "contrast": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1a18",
+     "x": 0.96,
+     "y": 0.02,
+     "rx": 0.045,
+     "ry": 0.16,
+     "ring": "#d8d0b0"
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "ctenopoma-ocellatum",
+  "commonName": "Eyespot Bushfish",
+  "scientificName": "Ctenopoma ocellatum",
+  "family": "Anabantidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Congo River basin, Central Africa",
+  "description": "Named for the ringed eyespot near its tail, this Congo bushfish is mottled brown with darker bands. Like its relatives it is a stealthy predator that lurks among roots and plants in dim water.",
+  "adultLengthCm": 15,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 10,
+  "tempC": [
+   23,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "shy"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.4,
+   "width": 0.13,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.88,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.55,
+    "end": 0.9,
+    "height": 0.15,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#8a7050",
+   "dorsal": "#5a4a34",
+   "ventral": "#c8b898",
+   "fin": "#8a7050",
+   "finOpacity": 0.6,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0,
+   "iridescenceColor": "#c0a070",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a3a28",
+     "scale": 4,
+     "amount": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#4a3a28",
+     "count": 6,
+     "width": 0.05,
+     "x0": 0.3,
+     "x1": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#1a1410",
+     "x": 0.88,
+     "y": 0.1,
+     "rx": 0.05,
+     "ry": 0.2,
+     "ring": "#e0c890"
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "microctenopoma-ansorgii",
+  "commonName": "Ornate Bushfish",
+  "scientificName": "Microctenopoma ansorgii",
+  "family": "Anabantidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lower Congo basin & Chiloango River, Central Africa — forest streams",
+  "description": "Settled adults glow orange-red crossed by dark bars, and mature males grow white-edged, extended dorsal and anal fins. The male builds a small bubble nest among plants at the surface, much like a paradise fish.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7
+  ],
+  "dGH": [
+   2,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.36,
+   "width": 0.12,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.85,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.5,
+    "end": 0.9,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#c8602a",
+   "dorsal": "#8a3a1a",
+   "ventral": "#d8803a",
+   "fin": "#c84a24",
+   "finOpacity": 0.75,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.2,
+   "iridescenceColor": "#40c0a0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a1a10",
+     "count": 8,
+     "width": 0.045,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#c84a24",
+     "opacity": 0.78,
+     "edge": "#f2f2f2",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a1a10",
+       "count": 4,
+       "width": 0.06
+      }
+     ]
+    },
+    "anal": {
+     "color": "#c84a24",
+     "opacity": 0.78,
+     "edge": "#f2f2f2",
+     "edgeWidth": 0.08,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a1a10",
+       "count": 4,
+       "width": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c85a2a",
+     "opacity": 0.72
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.22,
+     "shape": "pointed"
+    },
+    "anal": {
+     "start": 0.5,
+     "end": 0.92,
+     "height": 0.22,
+     "shape": "pointed"
+    }
+   }
+  },
+  "female": {
+   "look": {
+    "base": "#9a8060",
+    "ventral": "#c8b090",
+    "fin": "#a08a6a",
+    "finOpacity": 0.5,
+    "fins": {
+     "dorsal": {
+      "color": "#a08a6a",
+      "opacity": 0.5
+     },
+     "anal": {
+      "color": "#a08a6a",
+      "opacity": 0.5
+     },
+     "caudal": {
+      "color": "#a08a6a",
+      "opacity": 0.5
+     }
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "microctenopoma-fasciolatum",
+  "commonName": "Banded Bushfish",
+  "scientificName": "Microctenopoma fasciolatum",
+  "family": "Anabantidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Congo River basin, Central Africa — swampy forest streams",
+  "description": "A small bubble-nesting bushfish whose tan-to-brown body is crossed by dark vertical bars. Males grow longer, pointed dorsal and anal fins and guard the nest and eggs alone.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7
+  ],
+  "dGH": [
+   2,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.38,
+   "width": 0.12,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.85,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.5,
+    "end": 0.9,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#8a6e4e",
+   "dorsal": "#5a4630",
+   "ventral": "#c0a888",
+   "fin": "#7a6248",
+   "finOpacity": 0.65,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.3,
+   "iridescenceColor": "#4a8ac0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e2216",
+     "count": 8,
+     "width": 0.045,
+     "x0": 0.2,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#6a5440",
+     "opacity": 0.68,
+     "edge": "#5a8ac0",
+     "edgeWidth": 0.06
+    },
+    "anal": {
+     "color": "#6a5440",
+     "opacity": 0.68,
+     "edge": "#5a8ac0",
+     "edgeWidth": 0.06
+    }
+   }
+  },
+  "male": {
+   "body": {
+    "dorsal": {
+     "start": 0.3,
+     "end": 0.86,
+     "height": 0.22,
+     "shape": "pointed"
+    },
+    "anal": {
+     "start": 0.5,
+     "end": 0.92,
+     "height": 0.22,
+     "shape": "pointed"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "microctenopoma-nanum",
+  "commonName": "Dwarf Bushfish",
+  "scientificName": "Microctenopoma nanum",
+  "family": "Anabantidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central Africa — Cameroon to the Congo basin: dim forest streams",
+  "description": "A small, shy bushfish of shaded forest streams, dark brown with indistinct darker bars. Males build a bubble nest at the surface and guard the eggs.",
+  "adultLengthCm": 7.5,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 8,
+  "lifespanYears": 5,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   7
+  ],
+  "dGH": [
+   2,
+   10
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "insectivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 6,
+  "traits": [
+   "shy",
+   "air-gulper"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.36,
+   "width": 0.12,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.85,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.5,
+    "end": 0.9,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.15,
+    "shape": "pointed"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.5
+   },
+   "scaleSize": 0.6
+  },
+  "look": {
+   "base": "#5e4a38",
+   "dorsal": "#3a2e22",
+   "ventral": "#9a8468",
+   "fin": "#5a4636",
+   "finOpacity": 0.65,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.2,
+   "iridescenceColor": "#5a8ac0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a2018",
+     "count": 7,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95
+    }
+   ],
+   "fins": {
+    "anal": {
+     "color": "#4e3c2e",
+     "opacity": 0.68,
+     "edge": "#c8b8a0",
+     "edgeWidth": 0.05
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "channa-asiatica",
+  "commonName": "Small Snakehead",
+  "scientificName": "Channa asiatica",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Southern China & Taiwan — hill streams, ponds and ditches",
+  "description": "A hardy, cool-tolerant snakehead with no pelvic fins, olive-brown with dark chevrons, fine pale spots and a ringed eyespot at the tail base. Pairs guard a mass of floating eggs and then the fry at the surface.",
+  "adultLengthCm": 28,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   15,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 250,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": null,
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#5a5a40",
+   "dorsal": "#3a3a2a",
+   "ventral": "#a8a080",
+   "fin": "#5a5a42",
+   "finOpacity": 0.75,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.1,
+   "iridescenceColor": "#a0b090",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#2a2a1e",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.92
+    },
+    {
+     "type": "spots",
+     "color": "#e8e4c8",
+     "density": 50,
+     "size": 0.02
+    },
+    {
+     "type": "blotch",
+     "color": "#141410",
+     "x": 0.95,
+     "y": 0.05,
+     "rx": 0.04,
+     "ry": 0.18,
+     "ring": "#e8d8a0"
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-bleheri",
+  "commonName": "Rainbow Snakehead",
+  "scientificName": "Channa bleheri",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Brahmaputra basin, Assam (India) & Bhutan",
+  "description": "A dwarf snakehead with no pelvic fins, a brilliant orange-red wash on the lower flanks, a blue-speckled body and orange-edged fins. Unlike its look-alike C. andrao it guards floating eggs rather than mouthbrooding, and it does best in cool water.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   16,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": null,
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#5a6a7a",
+   "dorsal": "#3a4450",
+   "ventral": "#d8602a",
+   "fin": "#4a5a6a",
+   "finOpacity": 0.8,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.45,
+   "iridescenceColor": "#40b0e0",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#d8602a",
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": -1,
+     "y1": -0.25,
+     "softness": 0.5
+    },
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 40,
+     "size": 0.025,
+     "y0": -0.3,
+     "y1": 0.9
+    },
+    {
+     "type": "spots",
+     "color": "#3ab0d0",
+     "density": 40,
+     "size": 0.015
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#4a5a6a",
+     "opacity": 0.8,
+     "edge": "#e0602a",
+     "edgeWidth": 0.15,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "color": "#4a5a6a",
+     "opacity": 0.8,
+     "edge": "#e0602a",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#4a5a6a",
+     "opacity": 0.8,
+     "edge": "#e0602a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#141414",
+       "density": 15,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-andrao",
+  "commonName": "Blue Rainbow Snakehead",
+  "scientificName": "Channa andrao",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern West Bengal & Assam, India — swamps of the Brahmaputra basin",
+  "description": "Described in 2013 from the Lefraguri swamp in West Bengal, it is one of the smallest snakeheads at around 10 cm. It lacks pelvic fins and, unlike the similar C. bleheri, is a mouthbrooder; the unpaired fins carry an electric-blue margin.",
+  "adultLengthCm": 11,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 12,
+  "lifespanYears": 7,
+  "tempC": [
+   16,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 100,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": null,
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#3a3e48",
+   "dorsal": "#24272e",
+   "ventral": "#c8c0a8",
+   "fin": "#2e323c",
+   "finOpacity": 0.82,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.5,
+   "iridescenceColor": "#3a8ae8",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#8a3a2a",
+     "x0": 0.3,
+     "x1": 0.9,
+     "y0": -0.6,
+     "y1": -0.1,
+     "softness": 0.6
+    },
+    {
+     "type": "spots",
+     "color": "#141418",
+     "density": 30,
+     "size": 0.02,
+     "y0": -0.2,
+     "y1": 0.9
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2e323c",
+     "opacity": 0.85,
+     "edge": "#3a8ae8",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "color": "#2e323c",
+     "opacity": 0.85,
+     "edge": "#3a8ae8",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "color": "#2e323c",
+     "opacity": 0.85,
+     "edge": "#3a8ae8",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "channa-pulchra",
+  "commonName": "Beautiful Snakehead",
+  "scientificName": "Channa pulchra",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rakhine State, western Myanmar — hill streams",
+  "description": "Described in 2007, a grey dwarf snakehead peppered with black dots and patched with reddish-orange, with semicircular white bands on the pectoral fins. The male picks up the floating eggs and broods them in his mouth while the female guards the territory.",
+  "adultLengthCm": 22,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   18,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 200,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#7a828a",
+   "dorsal": "#4a5058",
+   "ventral": "#c8c8c0",
+   "fin": "#5a6068",
+   "finOpacity": 0.8,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.3,
+   "iridescenceColor": "#6aa0d0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 120,
+     "size": 0.015
+    },
+    {
+     "type": "spots",
+     "color": "#e0602a",
+     "density": 12,
+     "size": 0.06,
+     "x0": 0.3,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.7,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#5a6068",
+     "opacity": 0.8,
+     "edge": "#e0602a",
+     "edgeWidth": 0.12,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#101010",
+       "x": 0.4,
+       "y": -0.65,
+       "rx": 0.3,
+       "ry": 0.2
+      }
+     ]
+    },
+    "anal": {
+     "color": "#5a6068",
+     "opacity": 0.8,
+     "edge": "#e0602a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#5a6068",
+     "opacity": 0.8,
+     "edge": "#e0602a",
+     "edgeWidth": 0.1
+    },
+    "pectoral": {
+     "color": "#4a5058",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#f0f0f0",
+       "count": 4,
+       "width": 0.06,
+       "x0": 0.15,
+       "x1": 0.95
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-ornatipinnis",
+  "commonName": "Ornate Snakehead",
+  "scientificName": "Channa ornatipinnis",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rakhine State, western Myanmar — Waloun Chaung hill streams",
+  "description": "Told apart by the large black spots on its cheeks, golden-orange lips, red rim to the gill cover and 5–7 alternating white and dark bands on each pectoral fin. Its body scales are a mix of red and bluish-grey, peppered with black spots.",
+  "adultLengthCm": 22,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 200,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#6a6e7e",
+   "dorsal": "#44485a",
+   "ventral": "#c0b8b0",
+   "fin": "#5a5e6e",
+   "finOpacity": 0.8,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.3,
+   "iridescenceColor": "#7aa0d0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#b83a2a",
+     "density": 50,
+     "size": 0.025,
+     "x0": 0.25,
+     "x1": 0.95,
+     "jitter": 0.6
+    },
+    {
+     "type": "spots",
+     "color": "#121212",
+     "density": 80,
+     "size": 0.018
+    },
+    {
+     "type": "spots",
+     "color": "#121212",
+     "density": 12,
+     "size": 0.035,
+     "x0": 0.05,
+     "x1": 0.24,
+     "y0": -0.6,
+     "y1": 0.4
+    },
+    {
+     "type": "region",
+     "color": "#e0902a",
+     "x0": 0,
+     "x1": 0.06,
+     "y0": -0.3,
+     "y1": 0.2,
+     "softness": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#5a5e6e",
+     "opacity": 0.8,
+     "edge": "#d8602a",
+     "edgeWidth": 0.1,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#101010",
+       "density": 3,
+       "size": 0.15,
+       "x0": 0,
+       "x1": 0.3
+      }
+     ]
+    },
+    "anal": {
+     "color": "#5a5e6e",
+     "opacity": 0.8,
+     "edge": "#d8602a",
+     "edgeWidth": 0.1
+    },
+    "caudal": {
+     "color": "#5a5e6e",
+     "opacity": 0.8,
+     "edge": "#d8602a",
+     "edgeWidth": 0.08
+    },
+    "pectoral": {
+     "color": "#3a3e4a",
+     "opacity": 0.78,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#f0f0f0",
+       "count": 6,
+       "width": 0.04,
+       "x0": 0.1,
+       "x1": 0.95
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "channa-stewartii",
+  "commonName": "Assamese Snakehead",
+  "scientificName": "Channa stewartii",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Assam & northeastern India — hill streams and tea-garden channels",
+  "description": "A dwarf snakehead of Assam's hill streams, chocolate-brown with broken dark bars and orange-edged unpaired fins. The male broods the eggs and young in his mouth for two to three weeks.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   16,
+   25
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 150,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#5a4434",
+   "dorsal": "#3a2c22",
+   "ventral": "#a88a6a",
+   "fin": "#4e3c30",
+   "finOpacity": 0.8,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.35,
+   "iridescenceColor": "#40b0a0",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a1e16",
+     "count": 9,
+     "width": 0.03,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.8
+    },
+    {
+     "type": "spots",
+     "color": "#141010",
+     "density": 30,
+     "size": 0.02
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#4e3c30",
+     "opacity": 0.8,
+     "edge": "#e0702a",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#4e3c30",
+     "opacity": 0.8,
+     "edge": "#e0702a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#4e3c30",
+     "opacity": 0.8,
+     "edge": "#e0702a",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-gachua",
+  "commonName": "Dwarf Snakehead",
+  "scientificName": "Channa gachua",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South Asia — India, Bangladesh & neighbouring countries: hill streams, ponds and ditches",
+  "description": "A small, hardy snakehead with orange-edged dorsal, anal and tail fins over a dark olive-grey body. The male broods the eggs and fry in his mouth, and the female feeds the young with infertile \"trophic\" eggs.",
+  "adultLengthCm": 18,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   18,
+   28
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 120,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "mouthbrooder",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#4a5048",
+   "dorsal": "#2e322c",
+   "ventral": "#9a9a88",
+   "fin": "#3e423c",
+   "finOpacity": 0.8,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.3,
+   "iridescenceColor": "#5a90b0",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#262a24",
+     "count": 8,
+     "width": 0.035,
+     "x0": 0.3,
+     "x1": 0.92
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#3e423c",
+     "opacity": 0.8,
+     "edge": "#e0702a",
+     "edgeWidth": 0.14
+    },
+    "anal": {
+     "color": "#3e423c",
+     "opacity": 0.8,
+     "edge": "#e0702a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#3e423c",
+     "opacity": 0.8,
+     "edge": "#e0702a",
+     "edgeWidth": 0.12
+    },
+    "pectoral": {
+     "color": "#3a3e38",
+     "opacity": 0.7,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#1a1a18",
+       "count": 4,
+       "width": 0.06,
+       "x0": 0.2,
+       "x1": 0.95
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-punctata",
+  "commonName": "Spotted Snakehead",
+  "scientificName": "Channa punctata",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South Asia — Pakistan to Bangladesh & Sri Lanka: swamps, ponds and paddies",
+  "description": "A tough, widespread South Asian snakehead that can survive the dry season buried in damp mud. Olive-brown with dark spots and blotches, it guards its floating eggs and fry at the surface.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 12,
+  "lifespanYears": 8,
+  "tempC": [
+   20,
+   30
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   12
+  ],
+  "minTankLiters": 250,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "pair",
+  "groupSize": 2,
+  "diet": "carnivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.19,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#6a6a4a",
+   "dorsal": "#44442e",
+   "ventral": "#c8c4a4",
+   "fin": "#5a5a40",
+   "finOpacity": 0.75,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.05,
+   "iridescenceColor": "#b0b090",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2a1c",
+     "density": 25,
+     "size": 0.04,
+     "y0": -0.4,
+     "y1": 0.9,
+     "jitter": 0.7
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2a1c",
+     "y": 0.05,
+     "width": 0.04,
+     "x0": 0.05,
+     "x1": 0.25
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#5a5a40",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a1c",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#5a5a40",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a1c",
+       "density": 20,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-striata",
+  "commonName": "Striped Snakehead",
+  "scientificName": "Channa striata",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South & Southeast Asia; widely farmed and introduced — swamps, paddies and rivers",
+  "description": "One of the most important food fishes of South and Southeast Asia, able to survive in the mud of drying swamps by breathing air. Both parents guard the orange-and-black fry as they shoal at the surface; adults are brown with dark chevron bars.",
+  "adultLengthCm": 50,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   22,
+   30
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 800,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.17,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#6a5a40",
+   "dorsal": "#3e3424",
+   "ventral": "#e0d8c0",
+   "fin": "#5a4c38",
+   "finOpacity": 0.75,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.05,
+   "iridescenceColor": "#b0a080",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#2a2218",
+     "count": 10,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.93
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2218",
+     "y": 0.05,
+     "width": 0.04,
+     "x0": 0.05,
+     "x1": 0.25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-lucius",
+  "commonName": "Splendid Snakehead",
+  "scientificName": "Channa lucius",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mekong basin & Sundaland — forest streams and peat swamps",
+  "description": "A slender, long-snouted snakehead of shaded forest streams and peat swamps, tan with a row of dark blotches along the side and darker mottling above. Its pike-like head suits a patient hunter among dense, overhanging cover.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 500,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.16,
+   "width": 0.14,
+   "headLength": 0.28,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#a08a60",
+   "dorsal": "#6a5a3a",
+   "ventral": "#e0d8c0",
+   "fin": "#8a7650",
+   "finOpacity": 0.7,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.05,
+   "iridescenceColor": "#c0b080",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e2418",
+     "count": 8,
+     "width": 0.045,
+     "x0": 0.25,
+     "x1": 0.92,
+     "y0": -0.25,
+     "y1": 0.35
+    },
+    {
+     "type": "marble",
+     "color": "#5a4a30",
+     "scale": 4,
+     "amount": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#2e2418",
+     "y": 0.05,
+     "width": 0.04,
+     "x0": 0.02,
+     "x1": 0.26
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-pleurophthalma",
+  "commonName": "Ocellated Snakehead",
+  "scientificName": "Channa pleurophthalma",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Sumatra & Borneo — blackwater rivers and swamps",
+  "description": "A Sundaland snakehead with two or three large, orange-ringed black eyespots along each flank and another at the tail base. It lives in slow blackwater rivers and swamps and is seldom bred in captivity.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   7
+  ],
+  "dGH": [
+   1,
+   10
+  ],
+  "minTankLiters": 500,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.19,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#a0905a",
+   "dorsal": "#6a5a3a",
+   "ventral": "#e0d8b8",
+   "fin": "#8a7a50",
+   "finOpacity": 0.7,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.25,
+   "iridescenceColor": "#40b0a0",
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#141010",
+     "x": 0.4,
+     "y": 0.1,
+     "rx": 0.05,
+     "ry": 0.22,
+     "ring": "#e08a2a"
+    },
+    {
+     "type": "blotch",
+     "color": "#141010",
+     "x": 0.62,
+     "y": 0.1,
+     "rx": 0.05,
+     "ry": 0.22,
+     "ring": "#e08a2a"
+    },
+    {
+     "type": "blotch",
+     "color": "#141010",
+     "x": 0.8,
+     "y": 0.05,
+     "rx": 0.045,
+     "ry": 0.2,
+     "ring": "#e08a2a"
+    },
+    {
+     "type": "blotch",
+     "color": "#141010",
+     "x": 0.96,
+     "y": 0.05,
+     "rx": 0.035,
+     "ry": 0.16,
+     "ring": "#e08a2a"
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "channa-melasoma",
+  "commonName": "Black Snakehead",
+  "scientificName": "Channa melasoma",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Malay Peninsula, Sumatra, Borneo & Palawan — blackwater swamps and forest streams",
+  "description": "A dark, almost uniformly black-brown snakehead of acidic blackwater swamps and forest streams in Sundaland; melasoma means \"black body\". It hides among roots and leaf litter by day.",
+  "adultLengthCm": 28,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   5,
+   6.5
+  ],
+  "dGH": [
+   0,
+   6
+  ],
+  "minTankLiters": 300,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "nocturnal-hider"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#222020",
+   "dorsal": "#141212",
+   "ventral": "#3a3634",
+   "fin": "#1a1818",
+   "finOpacity": 0.85,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.15,
+   "iridescenceColor": "#4a6a8a",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#2e2a28",
+     "contrast": 0.25
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "channa-aurantimaculata",
+  "commonName": "Orange-spotted Snakehead",
+  "scientificName": "Channa aurantimaculata",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Brahmaputra basin, Assam, India (type locality Dibrugarh)",
+  "description": "Endemic to the upper Brahmaputra, its dark brown-to-black upper body bears seven or eight large, irregular orange blotches. The pectoral fins are boldly banded in black.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 24,
+  "lifespanYears": 12,
+  "tempC": [
+   16,
+   26
+  ],
+  "ph": [
+   6,
+   7.5
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 600,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.19,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#3a2e24",
+   "dorsal": "#1e1814",
+   "ventral": "#c8b898",
+   "fin": "#2e2620",
+   "finOpacity": 0.82,
+   "eye": "#c84a2a",
+   "metallic": 0.05,
+   "iridescence": 0.1,
+   "iridescenceColor": "#6a8a9a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e08a2a",
+     "density": 8,
+     "size": 0.07,
+     "x0": 0.2,
+     "x1": 0.92,
+     "y0": -0.2,
+     "y1": 0.7,
+     "jitter": 0.8
+    }
+   ],
+   "fins": {
+    "pectoral": {
+     "color": "#c8a070",
+     "opacity": 0.8,
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#101010",
+       "count": 5,
+       "width": 0.06,
+       "x0": 0.05,
+       "x1": 0.95
+      }
+     ]
+    },
+    "dorsal": {
+     "color": "#2e2620",
+     "opacity": 0.82,
+     "edge": "#e08a2a",
+     "edgeWidth": 0.06
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "channa-barca",
+  "commonName": "Barca Snakehead",
+  "scientificName": "Channa barca",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Upper Brahmaputra floodplains — Assam (India) & Bangladesh",
+  "description": "A prized and very expensive snakehead that lives in burrows in the mud banks of the Brahmaputra floodplain. It is dark above with black spots crowding the upper flanks, a pale unspotted belly and red-edged dorsal, anal and tail fins.",
+  "adultLengthCm": 50,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   18,
+   26
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 800,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.19,
+   "width": 0.14,
+   "headLength": 0.27,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#3a3048",
+   "dorsal": "#221c2a",
+   "ventral": "#c8b080",
+   "fin": "#2a2230",
+   "finOpacity": 0.85,
+   "eye": "#c84a2a",
+   "metallic": 0.1,
+   "iridescence": 0.35,
+   "iridescenceColor": "#8a7ad0",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#101010",
+     "density": 60,
+     "size": 0.03,
+     "y0": 0,
+     "y1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#8a7ad0",
+     "density": 40,
+     "size": 0.015,
+     "y0": -0.2,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#2a2230",
+     "opacity": 0.85,
+     "edge": "#e0502a",
+     "edgeWidth": 0.12
+    },
+    "anal": {
+     "color": "#2a2230",
+     "opacity": 0.85,
+     "edge": "#e0502a",
+     "edgeWidth": 0.12
+    },
+    "caudal": {
+     "color": "#2a2230",
+     "opacity": 0.85,
+     "edge": "#e0502a",
+     "edgeWidth": 0.1
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "channa-marulius",
+  "commonName": "Bullseye Snakehead",
+  "scientificName": "Channa marulius",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "India, Pakistan, Sri Lanka & Bangladesh — deep rivers, lakes and reservoirs",
+  "description": "A giant predatory snakehead named for the large, orange-ringed black \"bullseye\" at the base of the tail. It exceeds a metre in the wild, and both parents fiercely guard the floating eggs and fry.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   22,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 1500,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.19,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#4a4a40",
+   "dorsal": "#2a2a24",
+   "ventral": "#d0c8b0",
+   "fin": "#3a3a32",
+   "finOpacity": 0.8,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.1,
+   "iridescenceColor": "#8a9a8a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#141414",
+     "density": 10,
+     "size": 0.07,
+     "y0": -0.4,
+     "y1": 0.8,
+     "jitter": 0.8
+    },
+    {
+     "type": "spots",
+     "color": "#e8e0c8",
+     "density": 30,
+     "size": 0.02
+    },
+    {
+     "type": "blotch",
+     "color": "#101010",
+     "x": 0.95,
+     "y": 0.05,
+     "rx": 0.05,
+     "ry": 0.25,
+     "ring": "#e08a2a"
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-micropeltes",
+  "commonName": "Giant Snakehead",
+  "scientificName": "Channa micropeltes",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mainland Southeast Asia & Sundaland — large rivers, lakes and reservoirs",
+  "description": "The largest snakehead, sold as the \"red snakehead\" when young for its orange juveniles banded with two black stripes. Adults turn blue-black above and pale below and defend their floating eggs and fry ferociously.",
+  "adultLengthCm": 80,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   24,
+   30
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 3000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.15,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#3a4050",
+   "dorsal": "#1a1e28",
+   "ventral": "#e0e0d8",
+   "fin": "#2a2e3a",
+   "finOpacity": 0.8,
+   "eye": "#c84a2a",
+   "metallic": 0.2,
+   "iridescence": 0.2,
+   "iridescenceColor": "#5a7ab0",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#101418",
+     "y": 0.15,
+     "width": 0.12,
+     "x0": 0.1,
+     "x1": 0.95
+    },
+    {
+     "type": "stripe",
+     "color": "#101418",
+     "y": 0.02,
+     "width": 0.05,
+     "x0": 0,
+     "x1": 0.22
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "channa-argus",
+  "commonName": "Northern Snakehead",
+  "scientificName": "Channa argus",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "China, Korea & the Russian Far East (Amur & Yangtze basins); invasive in the USA",
+  "description": "A cold-hardy snakehead that tolerates near-freezing water and breathes air in stagnant ponds. Tan with large, dark, python-like blotches; its spread through U.S. waters made it a notorious invasive species, and keeping it is banned in many places.",
+  "adultLengthCm": 55,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 30,
+  "lifespanYears": 15,
+  "tempC": [
+   10,
+   26
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 1500,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#a08a60",
+   "dorsal": "#6a5a3a",
+   "ventral": "#e0d8c0",
+   "fin": "#8a7650",
+   "finOpacity": 0.75,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.05,
+   "iridescenceColor": "#c0b080",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2014",
+     "density": 12,
+     "size": 0.08,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": -0.5,
+     "y1": 0.9,
+     "jitter": 0.9
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2014",
+     "y": 0.05,
+     "width": 0.04,
+     "x0": 0.02,
+     "x1": 0.26
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#8a7650",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2014",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    },
+    "anal": {
+     "color": "#8a7650",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2014",
+       "density": 15,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#8a7650",
+     "opacity": 0.75,
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2014",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "parachanna-obscura",
+  "commonName": "African Snakehead",
+  "scientificName": "Parachanna obscura",
+  "family": "Channidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "West & Central Africa — Senegal to the Congo basin, Lake Chad & upper Nile",
+  "description": "An African snakehead of swamps and slow, vegetated rivers, olive-brown with a row of dark blotches along the side and dark lines behind the eye. Like Asian snakeheads it breathes air, and pairs guard their floating eggs.",
+  "adultLengthCm": 35,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 18,
+  "lifespanYears": 10,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   2,
+   18
+  ],
+  "minTankLiters": 400,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "bubble-nester",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.25,
+  "burstSpeed": 6,
+  "traits": [
+   "ambush",
+   "predator",
+   "air-gulper",
+   "jumper",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "snakehead",
+   "depth": 0.18,
+   "width": 0.14,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.95,
+    "height": 0.12,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.52,
+    "end": 0.95,
+    "height": 0.1,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.3,
+    "height": 0.15,
+    "shape": "rounded"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.45
+   },
+   "scaleSize": 0.5
+  },
+  "look": {
+   "base": "#7a6e50",
+   "dorsal": "#4a4230",
+   "ventral": "#d0c4a0",
+   "fin": "#6a6046",
+   "finOpacity": 0.75,
+   "eye": "#c8a040",
+   "metallic": 0.05,
+   "iridescence": 0.05,
+   "iridescenceColor": "#b0a880",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a2418",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.93,
+     "y0": -0.3,
+     "y1": 0.4
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": 0.08,
+     "width": 0.035,
+     "x0": 0.05,
+     "x1": 0.25
+    },
+    {
+     "type": "stripe",
+     "color": "#2a2418",
+     "y": -0.2,
+     "width": 0.03,
+     "x0": 0.08,
+     "x1": 0.25
+    }
+   ]
+  },
   "availability": "uncommon"
  }
 ]

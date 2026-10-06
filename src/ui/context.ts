@@ -51,6 +51,8 @@ export interface Panel {
   onClose?(): void;
   /** Called ~4 Hz while the panel is open. */
   refresh?(): void;
+  /** Settings (units, quality…) changed — refresh anything that displays them. */
+  onSettingsChanged?(): void;
   /** Esc pressed while open: return true if handled internally (e.g. back from a detail view). */
   onEscape?(): boolean;
 }

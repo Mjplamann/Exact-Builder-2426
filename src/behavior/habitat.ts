@@ -49,20 +49,36 @@ export class Habitat {
   coverUse = new Int32Array(0);
   /** Version counter, bumped on every rebuild (brains re-validate cached indices). */
   version = 0;
-  private sig = '';
+  /** Tank the caches were built for (rebuild on resize / substrate change / tank swap). */
+  private sigTank: object | null = null;
+  private sigW = 0;
+  private sigH = 0;
+  private sigD = 0;
+  private sigSub = '';
+  private sigF = 0;
+  private sigB = 0;
 
-  /** Refresh per-frame derived values; rebuild caches if the tank was resized. */
+  /** Refresh per-frame derived values; rebuild caches if the tank changed (allocation-free check). */
   sync(world: World): void {
     this.world = world;
     const t = world.tank;
-    const sig = `${t.size.widthCm}x${t.size.heightCm}x${t.size.depthCm}:${t.substrate}:${t.substrateDepthFrontCm}:${t.substrateDepthBackCm}`;
-    if (sig !== this.sig || this.colliders !== world.colliders || this.cover !== world.cover) this.rebuild(world);
+    if (
+      t !== this.sigTank || t.size.widthCm !== this.sigW || t.size.heightCm !== this.sigH || t.size.depthCm !== this.sigD ||
+      t.substrate !== this.sigSub || t.substrateDepthFrontCm !== this.sigF || t.substrateDepthBackCm !== this.sigB ||
+      this.colliders !== world.colliders || this.cover !== world.cover
+    ) this.rebuild(world);
   }
 
   rebuild(world: World): void {
     const t = world.tank;
     this.world = world;
-    this.sig = `${t.size.widthCm}x${t.size.heightCm}x${t.size.depthCm}:${t.substrate}:${t.substrateDepthFrontCm}:${t.substrateDepthBackCm}`;
+    this.sigTank = t;
+    this.sigW = t.size.widthCm;
+    this.sigH = t.size.heightCm;
+    this.sigD = t.size.depthCm;
+    this.sigSub = t.substrate;
+    this.sigF = t.substrateDepthFrontCm;
+    this.sigB = t.substrateDepthBackCm;
     this.b = tankBounds(t);
     this.colliders = world.colliders;
     this.cover = world.cover;
