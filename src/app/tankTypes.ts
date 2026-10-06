@@ -64,6 +64,8 @@ export interface StockSuggestion {
   level: CompatibilityReport['level'];
   /** Fraction of the tank's stocking capacity this community uses (adult size). */
   stocking: number;
+  /** Why a 'caution' community is still worth considering (the life sim's own words). */
+  notes?: string[];
 }
 
 /** Validation of a hand-picked stock list against a spec. */

@@ -197,6 +197,59 @@ class Scape {
     return item;
   }
 
+  /** Signed distance (m) from a world point to a stone's surface (negative inside). */
+  private stoneDistance(item: DecorItem, x: number, y: number, z: number): number {
+    const shape = decorShape(item);
+    if (!shape.sdf) return Infinity;
+    const xf = itemTransform(item);
+    toLocal(xf, [x, y, z], _l);
+    return sdfEval(shape.sdf, _l[0], _l[1], _l[2]) * xf.s;
+  }
+
+  /** How deep (m) an item would sink into the stones already placed, sampled through its solid. */
+  crowding(item: DecorItem): number {
+    const a = itemWorldBounds(item);
+    let worst = 0;
+    for (const d of this.decor) {
+      if (d.kind !== 'rock' && d.kind !== 'cave') continue;
+      const b = itemWorldBounds(d);
+      if (a.max[0] < b.min[0] || a.min[0] > b.max[0] || a.max[1] < b.min[1] || a.min[1] > b.max[1] || a.max[2] < b.min[2] || a.min[2] > b.max[2]) continue;
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 3; j++) {
+          for (let k = 0; k < 4; k++) {
+            const x = a.min[0] + ((i + 0.5) / 4) * (a.max[0] - a.min[0]);
+            const y = a.min[1] + ((j + 0.5) / 3) * (a.max[1] - a.min[1]);
+            const z = a.min[2] + ((k + 0.5) / 4) * (a.max[2] - a.min[2]);
+            const pen = Math.min(-this.stoneDistance(item, x, y, z), -this.stoneDistance(d, x, y, z));
+            if (pen > worst) worst = pen;
+          }
+        }
+      }
+    }
+    return worst;
+  }
+
+  /**
+   * A loose stone somewhere in a u/v window, resting beside the stones already there rather than
+   * sunk into them (a few seeded tries; the least crowded spot wins).
+   */
+  loose(kind: DecorKind, variant: string, u: [number, number], v: [number, number], o: DecorOpts = {}, maxCrowding = 0.005): DecorItem {
+    const seed = o.seed ?? this.rng.int(1, 2 ** 31 - 2);
+    const rotY = o.rotY ?? this.rng.range(0, Math.PI * 2);
+    let best: [number, number] = [this.x((u[0] + u[1]) / 2), this.z((v[0] + v[1]) / 2)];
+    let least = Infinity;
+    for (let i = 0; i < 10 && least > maxCrowding; i++) {
+      const x = this.x(this.rng.range(u[0], u[1])), z = this.z(this.rng.range(v[0], v[1]));
+      const probe: DecorItem = { id: 'probe', kind, variant, seed, position: [x, this.ground(x, z) - (o.sink ?? 0), z], rotation: [o.rotX ?? 0, rotY, o.rotZ ?? 0], scale: o.scale ?? 1 };
+      const crowd = this.crowding(probe);
+      if (crowd < least) {
+        least = crowd;
+        best = [x, z];
+      }
+    }
+    return this.addDecor(kind, variant, best[0], best[1], { ...o, seed, rotY });
+  }
+
   /** A seed whose live-rock silhouette is the wanted form. */
   liveRockSeed(form: LiveRockForm): number {
     for (let i = 0; i < 64; i++) {
@@ -297,9 +350,11 @@ class Scape {
       px = a.p[0];
       pz = a.p[2];
       y = a.p[1];
-    } else if (!floating && this.inStone(px, y + 0.005, pz)) {
-      // Roots can't go into stone: this spot is under a rock.
-      return null;
+    } else {
+      // Roots can't go into stone, and one plant per spot (floaters too).
+      if (!floating && this.inStone(px, y + 0.005, pz)) return null;
+      const room = Math.max(0.01, (sp.spreadCm / 100) * 0.12);
+      for (const q of this.plants) if (q.speciesId === speciesId && !q.attachedTo && Math.hypot(q.position[0] - px, q.position[2] - pz) < room) return null;
     }
     let growth = Math.min(1, Math.max(0.05, o.growth ?? this.rng.range(0.7, 0.95)));
     if (!floating && sp.form !== 'lily') {
@@ -437,7 +492,13 @@ function bommie(s: Scape, rk: number, u: number, v: number, width: number, heigh
     const t = nBase > 1 ? i / (nBase - 1) - 0.5 : 0;
     const x = cx + t * width + s.rng.range(-0.02, 0.02);
     const z = cz + s.rng.range(-0.05, 0.05) + Math.abs(t) * 0.06;
-    list.push(s.addDecor('rock', 'live-rock', x, z, { scale: rk * s.rng.range(0.8, 1.05), seed: s.liveRockSeed(i % 2 ? 'shelf' : 'mound'), sink: 0.01 }));
+    const seed = s.liveRockSeed(i % 2 ? 'shelf' : 'mound');
+    let scale = rk * s.rng.range(0.8, 1.05);
+    // Even the base stays within the bommie's height (a low outcrop in shallow water).
+    const y = s.ground(x, z) - 0.01;
+    const top = itemWorldBounds({ id: 'probe', kind: 'rock', variant: 'live-rock', seed, position: [x, y, z], rotation: [0, 0, 0], scale }).max[1];
+    if (top > maxY) scale *= Math.max(0.5, (maxY - y) / Math.max(1e-6, top - y));
+    list.push(s.addDecor('rock', 'live-rock', x, z, { scale, seed, sink: 0.01 }));
   }
   const tiers = clamp(Math.round(height / (0.11 * rk)), 2, 6);
   for (let tier = 1; tier <= tiers; tier++) {
@@ -634,9 +695,10 @@ function malawi(tank: TankState, lib: PlantIndex, seed: number) {
   const n = clamp(Math.round(7 * k + 1), 4, 14);
   for (let i = 0; i < n; i++) {
     const u = 0.06 + (i / (n - 1)) * 0.88;
-    // A gentle wave so the wall is deeper at the golden-section focal point.
-    const v = 0.2 + 0.1 * Math.exp(-Math.pow((u - (1 - PHI)) / 0.15, 2)) + s.rng.range(-0.03, 0.03);
-    base.push(s.addDecor('rock', 'texas-holey', s.x(u), s.z(v), { scale: k * s.rng.range(1.0, 1.4), sink: 0.012 }));
+    // A gentle wave so the wall is deeper — and rises highest — at the golden-section focal point.
+    const focus = Math.exp(-Math.pow((u - (1 - PHI)) / 0.15, 2));
+    const v = 0.2 + 0.1 * focus + s.rng.range(-0.03, 0.03);
+    base.push(s.addDecor('rock', 'texas-holey', s.x(u), s.z(v), { scale: k * (0.95 + 0.45 * focus) * s.rng.range(0.92, 1.08), sink: 0.012 }));
   }
   // Upper tiers wedged between the rocks below, leaving gaps (caves) — mbuna claim these. Deep
   // water gets a third tier, so the wall still reaches about half way up.
@@ -741,9 +803,7 @@ function goldfish(tank: TankState, lib: PlantIndex, seed: number) {
   const s = new Scape(tank, lib, seed);
   const k = s.k;
   const stones: DecorItem[] = [];
-  for (let i = 0; i < s.count(2, 4); i++) {
-    stones.push(s.addDecor('rock', 'river-stone', s.x(s.rng.range(0.1, 0.9)), s.z(s.rng.range(0.25, 0.55)), { scale: k * s.rng.range(1.0, 2.2) }));
-  }
+  for (let i = 0; i < s.count(2, 4); i++) stones.push(s.loose('rock', 'river-stone', [0.1, 0.9], [0.25, 0.55], { scale: k * s.rng.range(1.0, 2.2) }, 0.004));
   s.addDecor('pebbles', 'river', s.x(1 - PHI), s.z(0.68), { scale: k * 1.2 });
   s.addDecor('pebbles', 'river', s.x(0.8), s.z(0.72), { scale: k });
   s.band(s.ribbon(), 0.05, 0.95, 0.1, s.count(3, 10));
@@ -788,9 +848,10 @@ function nature(tank: TankState, lib: PlantIndex, seed: number) {
     if (p) s.addPlant(s.pick(sp, 'anubias-barteri-nana'), p[0], p[2], { attachTo: rock });
   }
   s.carpet(s.pick('micranthemum-monte-carlo', 'hemianthus-callitrichoides-cuba'), 0.03, 0.97, 0.62, 0.94, 1);
-  // Background stems sized to the water: tall ones in a deep tank, short bushy ones in a nano.
-  s.band(s.reach(0.8, ['rotala-rotundifolia', 'limnophila-sessiliflora', 'hygrophila-corymbosa', 'bacopa-monnieri']), 0.05, 0.4, 0.1, s.count(2, 5));
-  s.band(s.reach(0.75, ['hygrophila-polysperma', 'limnophila-sessiliflora', 'hygrophila-difformis', 'pogostemon-erectus']), 0.6, 0.95, 0.1, s.count(2, 4));
+  // Bushy background stems; a deep tank gets the tall growers so they still reach toward the light.
+  const deep = s.water > 0.5;
+  s.band(deep ? s.reach(0.8, ['rotala-rotundifolia', 'limnophila-sessiliflora', 'hygrophila-corymbosa']) : s.pick('rotala-rotundifolia'), 0.05, 0.4, 0.1, s.count(4, 8));
+  s.band(deep ? s.reach(0.75, ['hygrophila-polysperma', 'limnophila-sessiliflora', 'hygrophila-difformis']) : s.pick('hygrophila-polysperma', 'limnophila-sessiliflora'), 0.6, 0.95, 0.1, s.count(3, 7));
   s.band(s.reach(0.65, ['ludwigia-palustris-super-red', 'rotala-macrandra', 'alternanthera-reineckii-mini']), 0.42, 0.58, 0.14, s.count(1, 1));
   for (let i = 0; i < s.count(2, 2); i++) s.addPlant(s.pick('cryptocoryne-wendtii-green', 'cryptocoryne-lutea'), s.x(s.rng.range(0.6, 0.95)), s.z(s.rng.range(0.45, 0.58)));
   s.band(s.pick('eleocharis-acicularis'), 0.1, 0.35, 0.56, s.count(2, 2), 0.03);
@@ -804,8 +865,9 @@ function reef(tank: TankState, lib: PlantIndex, seed: number) {
   const rk = clamp(k * 0.85, 0.55, 1.45);
   const rocks: DecorItem[] = [];
   const reach = s.water * 0.6;
-  rocks.push(...bommie(s, rk, 1 - PHI, 0.42, 0.42 * k, reach, true));
-  const second = bommie(s, rk, 0.8, 0.45, 0.26 * k, reach * 0.72, false);
+  // Bommie widths follow the tank but leave open water around them in a narrow cube.
+  rocks.push(...bommie(s, rk, 1 - PHI, 0.42, Math.min(0.42 * k, 0.3 * s.W), reach, true));
+  const second = bommie(s, rk, 0.8, 0.45, Math.min(0.26 * k, 0.18 * s.W), reach * 0.72, false);
   rocks.push(...second);
   if (k > 0.9) rocks.push(...bommie(s, rk, 0.1, 0.32, 0.14 * k, reach * 0.45, false));
   if (s.wf > 1.8) rocks.push(...bommie(s, rk, PHI + 0.04, 0.3, 0.16 * k, reach * 0.55, false));
@@ -847,7 +909,7 @@ function reef(tank: TankState, lib: PlantIndex, seed: number) {
 function nanoReef(tank: TankState, lib: PlantIndex, seed: number) {
   const s = new Scape(tank, lib, seed);
   const k = s.k;
-  const rk = clamp(k * 0.8, 0.4, 1.1);
+  const rk = clamp(k * 0.8, 0.4, 1.3);
   const rocks: DecorItem[] = [];
   const island = bommie(s, rk, 1 - PHI + 0.04, 0.45, Math.max(0.12, 0.3 * k), s.water * 0.55, true);
   rocks.push(...island);
@@ -881,9 +943,14 @@ function fowlr(tank: TankState, lib: PlantIndex, seed: number) {
   const k = s.k;
   const rk = clamp(k * 0.9, 0.5, 1.6);
   /** An arch flanked by pillars and mounds, rising to `height` above the sand. */
-  const structure = (u: number, v: number, kk: number, height: number) => {
+  const structure = (u: number, v: number, size: number, height: number) => {
     const cx = s.x(u), cz = s.z(v);
-    s.addDecor('rock', 'live-rock', cx, cz, { scale: kk * 2.1, seed: s.liveRockSeed('arch'), rotY: s.yaw(s.rng.range(-0.25, 0.25)), sink: 0.012 });
+    const seed = s.liveRockSeed('arch');
+    // In a narrow or shallow tank the whole structure shrinks, so the arch spans at most about
+    // half the width and stays within its height (the main structure always the tallest).
+    const wb = itemWorldBounds({ id: 'probe', kind: 'rock', variant: 'live-rock', seed, position: [0, 0, 0], rotation: [0, 0, 0], scale: size * 2.1 });
+    const kk = size * Math.min(1, (0.5 * s.W) / Math.max(0.01, wb.max[0] - wb.min[0]), height / Math.max(0.01, wb.max[1]));
+    s.addDecor('rock', 'live-rock', cx, cz, { scale: kk * 2.1, seed, rotY: s.yaw(s.rng.range(-0.25, 0.25)), sink: 0.012 });
     const feet: DecorItem[] = [];
     for (const side of [-1, 1]) {
       const x = cx + side * 0.26 * kk + s.rng.range(-0.02, 0.02);
@@ -981,10 +1048,7 @@ function brackishRock(tank: TankState, lib: PlantIndex, seed: number) {
       const side = i % 2 ? 1 : -1;
       s.addDecor('rock', 'seiryu', s.x(u + side * (0.07 + 0.03 * i)), s.z(v + 0.04 + 0.04 * i), { scale: kk * s.rng.range(0.9, 1.4) / (1 + i * 0.2), rotY: strata + s.rng.range(-0.5, 0.5), sink: 0.008 });
     }
-    for (let i = 0; i < cobbles; i++) {
-      const t = s.rng.range(-1, 1);
-      s.addDecor('rock', 'river-stone', s.x(u + t * 0.14), s.z(v + 0.12 + Math.abs(t) * 0.05 + s.rng.range(0, 0.14)), { scale: kk * s.rng.range(0.7, 1.5) * (1 - Math.abs(t) * 0.35), sink: 0.004 });
-    }
+    for (let i = 0; i < cobbles; i++) s.loose('rock', 'river-stone', [u - 0.2, u + 0.2], [v + 0.08, v + 0.34], { scale: kk * s.rng.range(0.7, 1.4), sink: 0.004 }, 0.008);
   };
   outcrop(fu, 0.3, k, s.W > 0.5 ? 4 : 3, s.W > 0.5 ? 6 : 3);
   s.addDecor('rock', 'slate', s.x(fu + 0.13), s.z(0.38), { scale: k * 0.9, rotY: s.yaw(0.5), rotZ: s.rng.range(0.3, 0.5) * (s.flip ? -1 : 1), sink: 0.025 });
