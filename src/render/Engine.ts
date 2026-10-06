@@ -54,6 +54,13 @@ interface QualityPreset {
   maxPixels: number;
 }
 
+/** A moving subject for the camera: live arrays read every frame (no per-frame allocation). */
+export interface FollowSubject {
+  pos: [number, number, number];
+  lengthM: number;
+  forward?: [number, number, number];
+}
+
 export const QUALITY_PRESETS: Record<Quality, QualityPreset> = {
   low: { maxPixels: 1.2e6, dpr: 1.5, shadows: false, shadowMap: 1024, post: false, msaa: 0, bloom: false, caustics: 256, motes: 110, rays: 10, reflection: 0, substrateTexture: 256, frontReflections: false, shadowTaps: [4, 4] },
   medium: { maxPixels: 2.3e6, dpr: 2, shadows: true, shadowMap: 1024, post: true, msaa: 2, bloom: true, caustics: 512, motes: 220, rays: 16, reflection: 0.35, substrateTexture: 512, frontReflections: true, shadowTaps: [6, 8] },
@@ -259,6 +266,7 @@ export class Engine {
 
   /** Per-frame environment update (lights by time of day, caustics, particles, bubbles, camera drift). */
   update(world: World, dt: number): void {
+    this.updateSubject();
     if (world !== this.world || this.needsRebuild(world)) this.rebuildTank(world);
     this.dt = dt;
     const env = world.env;
@@ -404,6 +412,63 @@ export class Engine {
     const origin = new Vector3().setFromMatrixPosition(this.camera.matrixWorld);
     const dir = this.tmpV.set(nx, ny, 0.5).unproject(this.camera).sub(origin).normalize();
     return new Ray(origin, dir.clone());
+  }
+
+  // ------------------------------------------------------------------------------------------
+  // View API (zoom / pan / follow). OWNER: camera module — stubs over the original rig until
+  // the close-up camera lands.
+  // ------------------------------------------------------------------------------------------
+
+  private subject: FollowSubject | null = null;
+  private subjectV = new Vector3();
+
+  /**
+   * Follow a moving subject (its arrays are read every frame — pass live references, e.g. a
+   * fish's kin.pos/forward). `fill` = fraction of the screen width the subject should span
+   * (≈0.08 distant … 0.45 tight close-up). null returns to the whole-tank view.
+   */
+  follow(subject: FollowSubject | null, opts: { fill?: number } = {}): void {
+    void opts;
+    this.subject = subject;
+    if (!subject) this.rig.setFocus(null);
+  }
+
+  /** Change how tightly the followed subject is framed (pinch/wheel while following). */
+  setFollowFill(fill: number): void {
+    void fill;
+  }
+
+  /** Zoom by wheel-notch steps (+ closer), optionally toward a screen point. */
+  zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number): void {
+    void anchorClientX;
+    void anchorClientY;
+    this.rig.nudge(0, 0, steps);
+  }
+
+  setZoom(zoom: number): void {
+    void zoom;
+  }
+
+  /** 1 = the whole tank framed; `max` = closest telephoto framing. */
+  getZoom(): { zoom: number; min: number; max: number } {
+    return { zoom: 1, min: 1, max: 2.6 };
+  }
+
+  /** Pan by fractions of the visible half-width/height (positive = view moves right/up). */
+  panBy(dx: number, dy: number): void {
+    this.rig.nudge(dx, dy, 0);
+  }
+
+  /** Back to the whole-tank view (stops following). */
+  resetView(): void {
+    this.subject = null;
+    this.rig.setFocus(null);
+    this.rig.resetView();
+  }
+
+  /** Called from update(): feed the follow subject to the rig. */
+  private updateSubject(): void {
+    if (this.subject) this.rig.setFocus(this.subjectV.set(this.subject.pos[0], this.subject.pos[1], this.subject.pos[2]));
   }
 
   /** Smoothly move the camera to keep `target` in view (fish follow), or back to the tank view when null. */

@@ -15,6 +15,9 @@ function fakeClaude(store: Map<string, Record<string, unknown>>, uid: string | n
           if (JSON.stringify(data).length > 256 * 1024) throw { code: 'invalid_argument' };
           store.set(path, data);
         },
+        async delete() {
+          store.delete(path);
+        },
       };
     },
   };
@@ -50,8 +53,26 @@ describe('cloud save', () => {
     cloud!.save(tank, true);
     // let the async flush finish
     for (let i = 0; i < 50 && !store.size; i++) await new Promise((r) => setTimeout(r, 20));
-    expect([...store.keys()]).toEqual(['data/users/u1/aquarium']);
-    const back = await cloud!.load();
+    expect([...store.keys()]).toEqual([`data/users/u1/tank-${tank.id}`]);
+    const back = await cloud!.loadTank(tank.id);
     expect(JSON.parse(back!).fish).toHaveLength(400);
+  });
+
+  it('keeps an index of tanks, deletes queued behind saves, and reads the pre-library save', async () => {
+    const store = new Map<string, Record<string, unknown>>();
+    const legacy = newTank({ size: { widthCm: 60, heightCm: 36, depthCm: 30 }, water: 'freshwater', seed: 1, now: 5 });
+    store.set('data/users/u1/aquarium', { json: JSON.stringify(legacy) });
+    g.claude = fakeClaude(store);
+    const cloud = (await CloudSave.connect(500))!;
+    expect(JSON.parse((await cloud.loadLegacy())!).id).toBe(legacy.id);
+    expect(await cloud.loadIndex()).toBeNull();
+
+    cloud.saveIndex({ currentId: 'a', tanks: [], deleted: ['z'] }, true);
+    const t = newTank({ size: { widthCm: 45, heightCm: 30, depthCm: 30 }, water: 'marine', seed: 2, now: 9 });
+    cloud.save(t, true);
+    cloud.deleteTank(t.id);
+    for (let i = 0; i < 50; i++) await new Promise((r) => setTimeout(r, 10));
+    expect(store.has(`data/users/u1/tank-${t.id}`)).toBe(false);
+    expect(await cloud.loadIndex()).toEqual({ currentId: 'a', tanks: [], deleted: ['z'] });
   });
 });

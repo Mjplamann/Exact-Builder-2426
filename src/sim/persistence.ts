@@ -311,6 +311,7 @@ export function sanitizeTank(t: Raw): TankState {
   const statsRaw = isObj(t.stats) ? t.stats : {};
   const marine = water === 'marine';
   const heightCm = size.heightCm;
+  const aquascape = typeof t.aquascape === 'string' && /^[a-z0-9-]{1,40}$/.test(t.aquascape) ? t.aquascape : undefined;
   return {
     version: 1,
     id: str(t.id, `tank_${now.toString(36)}`, 80),
@@ -338,6 +339,7 @@ export function sanitizeTank(t: Raw): TankState {
       waterChanges: num(statsRaw.waterChanges, 0, 0),
     },
     seed: num(t.seed, hashString(str(t.id, 'tank')), 0, 2 ** 32) >>> 0,
+    ...(aquascape ? { aquascape } : {}),
   };
 }
 

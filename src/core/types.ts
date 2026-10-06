@@ -723,6 +723,8 @@ export interface TankState {
   journal: JournalEntry[];
   stats: { births: number; deaths: number; feedings: number; waterChanges: number };
   seed: number;
+  /** AQUASCAPES id the tank was built from (informational; shown in the tank menu). */
+  aquascape?: string;
 }
 
 // ---------------------------------------------------------------------------------------------

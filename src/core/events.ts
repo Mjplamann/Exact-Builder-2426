@@ -21,6 +21,10 @@ export interface EventMap {
   'journal': { entry: JournalEntry };
   'notify': { message: string; level: 'info' | 'success' | 'warning' | 'danger' };
   'time-scale-changed': { timeScale: number };
+  /** The keeper's tank collection changed (created, renamed, duplicated, deleted, switched). */
+  'tanks-changed': Record<string, never>;
+  /** Camera mode changed: following an animal and/or touring. */
+  'view-changed': { following: string | null; touring: boolean };
 }
 
 type Handler<T> = (payload: T) => void;

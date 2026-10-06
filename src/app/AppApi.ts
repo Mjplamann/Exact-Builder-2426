@@ -7,6 +7,7 @@ import type {
   PlantInstance,
   Settings,
   TankState,
+  WaterType,
 } from '../core/types';
 import type { World } from '../core/world';
 import type { Engine } from '../render/Engine';
@@ -14,6 +15,8 @@ import type { FishRenderer } from '../render/fish/FishRenderer';
 import type { DecorRenderer } from '../render/decor/DecorRenderer';
 import type { CompatibilityReport, StockingReport } from '../sim/LifeSim';
 import type { NewTankOptions } from '../sim/tankFactory';
+import type { SHAPE_SIZES } from './biotopes';
+import type { AquascapeInfo, StockCheck, StockSuggestion, TankSpec, TankSummary } from './tankTypes';
 
 export type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
@@ -74,7 +77,29 @@ export interface AppApi {
 
   // Selection & camera
   select(sel: { fishId?: string; decorId?: string; plantId?: string }): void;
-  follow(fishId: string | null): void;
+  /**
+   * Follow an animal closely (null = stop). `fill` = fraction of the screen width it should span
+   * (≈0.08 distant … 0.45 tight close-up; default chosen by the camera). Ends a tour.
+   * Emits 'view-changed'.
+   */
+  follow(fishId: string | null, opts?: { fill?: number }): void;
+  /** Tighter/looser framing of the followed animal. */
+  setFollowFill(fill: number): void;
+  /**
+   * Zoom by wheel-notch steps (positive = closer), toward a screen point when given (pinch centre,
+   * cursor). While following, zoom changes how tightly the animal is framed.
+   */
+  zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number): void;
+  setZoom(zoom: number): void;
+  /** 1 = whole tank; `max` ≈ 8× telephoto through the front glass. */
+  getZoom(): { zoom: number; min: number; max: number };
+  /** Pan a zoomed view by fractions of the visible half-width/height (ends a tour). */
+  panBy(dx: number, dy: number): void;
+  /** Back to the whole-tank view (stops following and touring). */
+  resetView(): void;
+  /** Documentary tour: the camera drifts between interesting animals. Emits 'view-changed'. */
+  setTour(on: boolean): void;
+  isTouring(): boolean;
   pickAt(clientX: number, clientY: number): PickResult;
   /** Where a ray through the screen point meets the substrate / the water surface. */
   substratePointAt(clientX: number, clientY: number): [number, number, number] | null;
@@ -82,11 +107,37 @@ export interface AppApi {
 
   // Tank lifecycle
   presets(): TankPresetInfo[];
+  /** Set up a ready-made tank as a NEW tank in the collection and switch to it. */
   loadPreset(presetId: string): void;
+  /** Add an empty tank to the collection and switch to it. */
   newTank(opts: NewTankOptions): void;
   exportTank(): string;
+  /** Import a saved tank as a NEW tank in the collection and switch to it. Throws on bad input. */
   importTank(json: string): void;
   save(): void;
+
+  // Tank collection (every tank keeps living while another is open). All emit 'tanks-changed'.
+  listTanks(): TankSummary[];
+  currentTankId(): string;
+  /** Open another tank (it catches up on the time it spent unwatched). false if it can't be loaded. */
+  switchTank(id: string): Promise<boolean>;
+  /** Build a tank from the guided builder's spec, add it to the collection and switch to it. Returns its id. */
+  createTank(spec: TankSpec): string;
+  renameTank(id: string, name: string): Promise<void>;
+  /** Copy a tank (not opened). Returns the copy's id. */
+  duplicateTank(id: string): Promise<string | null>;
+  /** Delete a tank (switching away first if it is open). false for the last remaining tank. */
+  deleteTank(id: string): Promise<boolean>;
+
+  // Guided tank builder
+  /** Aquascape styles for a water type (with suggested substrate/background/chemistry/equipment). */
+  aquascapes(water: WaterType): AquascapeInfo[];
+  /** Starting dimensions per tank shape. */
+  shapeSizes(): typeof SHAPE_SIZES;
+  /** Communities that genuinely suit the planned tank, best first. */
+  suggestStock(spec: TankSpec): StockSuggestion[];
+  /** Validate a hand-picked stock list against the planned tank. */
+  checkStock(spec: TankSpec, stock: TankSpec['stock']): StockCheck;
 
   // Settings
   updateSettings(patch: Partial<Settings>): void;

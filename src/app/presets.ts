@@ -257,6 +257,7 @@ export function buildPresetTank(preset: TankPreset, plants: PlantIndex, seed?: n
   const built = scape.build(tank, plants, tank.seed);
   tank.decor = built.decor;
   tank.plants = built.plants;
+  tank.aquascape = scape.id;
   return tank;
 }
 

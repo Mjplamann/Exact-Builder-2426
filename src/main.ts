@@ -1,5 +1,6 @@
 import { App } from './app/App';
 import { CloudSave } from './app/cloudSave';
+import { openLibrary } from './app/openLibrary';
 
 declare global {
   interface Window {
@@ -10,10 +11,10 @@ declare global {
 async function boot() {
   const canvas = document.getElementById('tank') as HTMLCanvasElement;
   const ui = document.getElementById('ui') as HTMLElement;
-  // Inside a claude.ai viewer, fetch the person's cloud-saved tank first (resolves at once elsewhere).
+  // Inside a claude.ai viewer, merge the person's cloud-saved tanks first (resolves at once elsewhere).
   const cloud = await CloudSave.connect();
-  const cloudTankJson = cloud ? await cloud.load() : null;
-  const app = new App(canvas, ui, { cloud, cloudTankJson });
+  const { library, tank } = await openLibrary(cloud);
+  const app = new App(canvas, ui, { cloud, library, tank });
   window.__app = app;
   app.start();
   // Dev harnesses: ?gallery (species lineup for visual QA).

@@ -1,11 +1,11 @@
 import { Plane, Vector3 } from 'three';
-import type { DecorItem, DecorKind, Equipment, FoodKind, PlantInstance, Settings, TankState } from '../core/types';
+import type { DecorItem, DecorKind, Equipment, FishEntity, FoodKind, PlantInstance, Settings, TankState, WaterParams, WaterType } from '../core/types';
 import { createWorld, rebuildFishEntities, type World } from '../core/world';
 import { substrateHeight, tankBounds } from '../core/tankGeometry';
 import { newId } from '../core/rng';
 import { loadBundledSpecies } from '../data/speciesIndex';
 import { loadBundledPlants } from '../data/plantIndex';
-import { Engine } from '../render/Engine';
+import { Engine, type FollowSubject } from '../render/Engine';
 import { FishRenderer } from '../render/fish/FishRenderer';
 import { DecorRenderer } from '../render/decor/DecorRenderer';
 import { FoodRenderer } from '../render/food/FoodRenderer';
@@ -13,22 +13,38 @@ import { BehaviorSystem } from '../behavior/BehaviorSystem';
 import { FoodSystem } from '../behavior/FoodSystem';
 import { LifeSim, type CompatibilityReport, type StockingReport } from '../sim/LifeSim';
 import { computeEnv } from '../sim/environment';
-import { exportTank, importTank, loadSettings, loadTank, saveSettings, saveTank } from '../sim/persistence';
+import { exportTank, importTank, loadSettings, saveSettings } from '../sim/persistence';
 import { newTank, type NewTankOptions } from '../sim/tankFactory';
 import { buildColliders } from '../decor/colliders';
 import { DECOR_CATALOG } from '../decor/catalog';
 import { hostAnchor } from '../decor/shapes';
 import { carryAttached, hostPose } from '../decor/attach';
-import { suggestPlacement } from '../decor/aquascapes';
+import { AQUASCAPES, suggestPlacement } from '../decor/aquascapes';
 import { UI } from '../ui/UI';
 import { Ambience } from '../audio/Ambience';
 import type { AppApi, DeepPartial, PickResult, TankPresetInfo } from './AppApi';
 import { PRESETS, buildPresetTank, presetStock } from './presets';
 import type { CloudSave } from './cloudSave';
+import { TankLibrary } from './tankLibrary';
+import { fetchTank } from './openLibrary';
+import { SHAPE_SIZES, aquascapesFor } from './biotopes';
+import { checkStock, suggestStock } from './stockAdvisor';
+import { Tour } from './tour';
+import type { AquascapeInfo, StockCheck, StockSuggestion, TankSpec, TankSummary } from './tankTypes';
 
 const AUTOSAVE_SECONDS = 15;
 /** Longest absence we fast-forward (sim time), to keep catch-up bounded. */
 const MAX_CATCHUP_SIM_SECONDS = 2 * 365 * 86400;
+
+/** Biotope chemistry for a new tank (the nitrogen cycle and algae stay as the factory set them). */
+function applyChemistry(wp: WaterParams, patch?: Partial<WaterParams>): void {
+  if (!patch) return;
+  const keys = ['temperatureC', 'ph', 'gh', 'kh', 'salinitySG', 'tannins'] as const;
+  for (const k of keys) {
+    const v = patch[k];
+    if (typeof v === 'number' && Number.isFinite(v)) wp[k] = v;
+  }
+}
 
 function deepMerge<T>(target: T, patch: DeepPartial<T>): void {
   for (const [k, v] of Object.entries(patch as Record<string, unknown>)) {
@@ -58,33 +74,35 @@ export class App implements AppApi {
   readonly debug = { freezeBehavior: false, freezeLife: false };
 
   private cloud: CloudSave | null;
+  private library: TankLibrary;
+  private tour: Tour;
+  private switching = false;
+  /** What the camera follows: refreshed in place every frame from the followed animal. */
+  private followSubject: FollowSubject = { pos: [0, 0, 0], lengthM: 0.05, forward: [1, 0, 0] };
 
   /**
-   * @param opts.cloud         claude.ai cloud save (null outside a claude.ai viewer)
-   * @param opts.cloudTankJson the tank saved in the cloud, if any — used when newer than the local copy
+   * @param opts.cloud   claude.ai cloud save (null outside a claude.ai viewer)
+   * @param opts.library the keeper's tank collection (opened at boot, merged with the cloud)
+   * @param opts.tank    the tank to open (default: the library's current tank; none → starter tank)
    */
-  constructor(canvas: HTMLCanvasElement, uiRoot: HTMLElement, opts: { cloud?: CloudSave | null; cloudTankJson?: string | null } = {}) {
+  constructor(canvas: HTMLCanvasElement, uiRoot: HTMLElement, opts: { cloud?: CloudSave | null; library?: TankLibrary; tank?: TankState | null } = {}) {
     this.cloud = opts.cloud ?? null;
+    this.library = opts.library ?? new TankLibrary();
     // Data files are validated by the test suite; re-validate at runtime only in development.
     const species = loadBundledSpecies({ validate: import.meta.env.DEV });
     const plants = loadBundledPlants({ validate: import.meta.env.DEV });
     const settings = loadSettings();
 
-    let tank = loadTank();
-    if (opts.cloudTankJson) {
-      try {
-        const remote = importTank(opts.cloudTankJson);
-        if (!tank || remote.lastSavedReal > tank.lastSavedReal + 1000) tank = remote;
-      } catch (err) {
-        console.warn('[app] cloud save unreadable — using the local tank', err);
-      }
-    }
+    let tank = opts.tank !== undefined ? opts.tank : this.library.currentId ? this.library.get(this.library.currentId) : null;
     let firstRun = false;
     if (!tank) {
       firstRun = true;
       tank = buildPresetTank(PRESETS[0], plants);
+      tank.id = newId('tank');
     }
+    this.library.setCurrent(tank.id);
     this.world = createWorld({ tank, species, plants, settings });
+    this.tour = new Tour({ world: this.world, followAnimal: (id, fill) => this.followAnimal(id, fill) });
 
     this.engine = new Engine(canvas, this.world);
     this.fishRenderer = new FishRenderer(this.engine);
@@ -123,6 +141,8 @@ export class App implements AppApi {
     window.addEventListener('resize', () => this.engine.resize());
     document.addEventListener('visibilitychange', () => this.onVisibility());
     window.addEventListener('pagehide', () => this.save(true));
+    // Make sure the open tank is in the collection (first run, or a fresh device).
+    this.save();
   }
 
   // ------------------------------------------------------------------------------------------
@@ -181,10 +201,11 @@ export class App implements AppApi {
     if (!this.debug.freezeLife) this.guard('life', () => this.life.update(w, simDt));
     this.guard('food', () => this.foodSystem.update(w, dt, simDt));
     if (!this.debug.freezeBehavior) this.guard('behavior', () => this.behavior.update(w, dt));
+    if (this.tour.active) this.guard('tour', () => this.tour.update(dt));
     if (w.follow) {
       const f = w.fishById.get(w.follow);
-      if (f) this.engine.setFocus(new Vector3(...f.kin.pos));
-      else this.follow(null);
+      if (f) this.trackSubject(f);
+      else this.followAnimal(null);
     }
     this.guard('engine', () => this.engine.update(w, dt));
     this.guard('fishRenderer', () => this.fishRenderer.update(w, dt));
@@ -246,7 +267,7 @@ export class App implements AppApi {
     // A selected or followed animal that dies or is removed must not stay selected/followed.
     const gone = (id: string) => {
       if (this.world.selection.fishId === id) this.select({});
-      if (this.world.follow === id) this.follow(null);
+      if (this.world.follow === id) this.followAnimal(null);
     };
     ev.on('fish-removed', ({ fishId }) => {
       gone(fishId);
@@ -272,26 +293,34 @@ export class App implements AppApi {
     this.behavior.onEnvironmentChanged(this.world);
   }
 
-  private resetTank(tank: TankState, stock: { speciesId: string; count: number }[] = []): void {
+  /**
+   * Show another tank: replace the world's tank, rebuild everything, add `stock`, and (for a tank
+   * that has been living unwatched) catch up on the time since `catchUpFrom` (real ms).
+   */
+  private openTank(tank: TankState, stock: { speciesId: string; count: number }[] = [], catchUpFrom?: number): void {
     const w = this.world;
+    this.library.setCurrent(tank.id);
     w.tank = tank;
     w.clock.simTime = tank.simTime;
     w.clock.timeScale = tank.timeScale;
     w.food.length = 0;
     w.selection = {};
-    w.follow = null;
-    this.engine.setFocus(null);
+    this.select({});
+    this.followAnimal(null);
     rebuildFishEntities(w);
     this.engine.rebuildTank(w);
     this.rebuildEnvironment();
     for (const { speciesId, count } of stock) this.life.addFish(w, speciesId, count);
     for (const f of w.fish) if (!f.state.pos) this.behavior.placeNewFish(w, f);
     this.fishRenderer.sync(w);
+    if (catchUpFrom !== undefined) this.catchUpSince(catchUpFrom);
     w.events.emit('tank-reset', {});
-    this.save();
+    w.events.emit('time-scale-changed', { timeScale: w.clock.timeScale });
+    this.save(true);
+    w.events.emit('tanks-changed', {});
   }
 
-  /** Persist locally (always) and to the cloud (throttled; `force` on leaving the page). */
+  /** Persist locally (always) and to the cloud (throttled; `force` on leaving the page or switching). */
   save(force = false): void {
     const w = this.world;
     for (const f of w.fish) {
@@ -300,8 +329,10 @@ export class App implements AppApi {
     }
     w.tank.simTime = w.clock.simTime;
     w.tank.timeScale = w.clock.timeScale;
-    saveTank(w.tank);
+    w.tank.lastSavedReal = Date.now();
+    this.library.put(w.tank);
     this.cloud?.save(w.tank, force);
+    this.cloud?.saveIndex(this.library.snapshot(), force);
   }
 
   // ------------------------------------------------------------------------------------------
@@ -519,9 +550,76 @@ export class App implements AppApi {
     this.world.events.emit('selection-changed', { ...sel });
   }
 
-  follow(fishId: string | null): void {
-    this.world.follow = fishId;
-    if (!fishId) this.engine.setFocus(null);
+  follow(fishId: string | null, opts: { fill?: number } = {}): void {
+    // Choosing an animal yourself ends the tour (the camera stays on your choice).
+    if (this.tour.active) this.tour.stop();
+    this.followAnimal(fishId, opts.fill);
+  }
+
+  /** Follow without touching the tour (the tour itself and housekeeping use this). */
+  private followAnimal(fishId: string | null, fill?: number): void {
+    const f = fishId ? this.world.fishById.get(fishId) : undefined;
+    const prev = this.world.follow;
+    this.world.follow = f ? f.state.id : null;
+    if (f) {
+      this.trackSubject(f);
+      this.engine.follow(this.followSubject, { fill });
+    } else if (prev) {
+      this.engine.follow(null);
+    }
+    if (prev !== this.world.follow) this.world.events.emit('view-changed', { following: this.world.follow, touring: this.tour.active });
+  }
+
+  private trackSubject(f: FishEntity): void {
+    const s = this.followSubject;
+    const p = f.kin.pos;
+    const d = f.kin.forward;
+    s.pos[0] = p[0];
+    s.pos[1] = p[1];
+    s.pos[2] = p[2];
+    s.forward![0] = d[0];
+    s.forward![1] = d[1];
+    s.forward![2] = d[2];
+    s.lengthM = Math.max(0.005, f.state.lengthCm / 100);
+  }
+
+  setFollowFill(fill: number): void {
+    this.engine.setFollowFill(fill);
+  }
+
+  zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number): void {
+    this.engine.zoomBy(steps, anchorClientX, anchorClientY);
+  }
+
+  setZoom(zoom: number): void {
+    this.engine.setZoom(zoom);
+  }
+
+  getZoom(): { zoom: number; min: number; max: number } {
+    return this.engine.getZoom();
+  }
+
+  panBy(dx: number, dy: number): void {
+    if (this.tour.active) this.setTour(false);
+    this.engine.panBy(dx, dy);
+  }
+
+  resetView(): void {
+    if (this.tour.active) this.tour.stop();
+    this.followAnimal(null);
+    this.engine.resetView();
+    this.world.events.emit('view-changed', { following: null, touring: false });
+  }
+
+  setTour(on: boolean): void {
+    if (on === this.tour.active) return;
+    if (on) this.tour.start();
+    else this.tour.stop();
+    this.world.events.emit('view-changed', { following: this.world.follow, touring: this.tour.active });
+  }
+
+  isTouring(): boolean {
+    return this.tour.active;
   }
 
   pickAt(clientX: number, clientY: number): PickResult {
@@ -589,16 +687,23 @@ export class App implements AppApi {
     return PRESETS.map(({ id, name, description, water }) => ({ id, name, description, water }));
   }
 
+  /** Set up a ready-made tank as a new tank in the collection, and switch to it. */
   loadPreset(presetId: string): void {
     const p = PRESETS.find((q) => q.id === presetId);
     if (!p) return;
     const tank = buildPresetTank(p, this.world.plants);
-    this.resetTank(tank, presetStock(p, this.world.species));
+    tank.id = newId('tank');
+    this.save(true);
+    this.openTank(tank, presetStock(p, this.world.species));
     this.journal('info', `Set up “${p.name}”`);
   }
 
+  /** Add an empty tank to the collection and switch to it. */
   newTank(opts: NewTankOptions): void {
-    this.resetTank(newTank(opts));
+    const tank = newTank(opts);
+    tank.id = newId('tank');
+    this.save(true);
+    this.openTank(tank);
     this.journal('info', 'Set up a new tank');
   }
 
@@ -607,9 +712,153 @@ export class App implements AppApi {
     return exportTank(this.world.tank);
   }
 
+  /** Import a saved tank as a new tank in the collection (never overwrites one), and switch to it. */
   importTank(json: string): void {
     const tank = importTank(json);
-    this.resetTank(tank);
+    if (tank.id === this.world.tank.id || this.library.has(tank.id)) tank.id = newId('tank');
+    this.save(true);
+    this.openTank(tank);
+  }
+
+  // ------------------------------------------------------------------------------------------
+  // Tank collection
+  // ------------------------------------------------------------------------------------------
+
+  listTanks(): TankSummary[] {
+    this.library.touch(this.world.tank);
+    return this.library.list();
+  }
+
+  currentTankId(): string {
+    return this.world.tank.id;
+  }
+
+  async switchTank(id: string): Promise<boolean> {
+    return this.switchTo(id, false);
+  }
+
+  private async switchTo(id: string, discardCurrent: boolean): Promise<boolean> {
+    if (id === this.world.tank.id) return true;
+    if (this.switching) return false;
+    this.switching = true;
+    try {
+      const tank = await fetchTank(this.library, this.cloud, id);
+      if (!tank) {
+        this.world.events.emit('notify', { message: 'That tank could not be loaded.', level: 'warning' });
+        return false;
+      }
+      if (!discardCurrent) this.save(true);
+      // It kept living while you were away: catch up on the time since it was last open.
+      this.openTank(tank, [], tank.lastSavedReal);
+      return true;
+    } finally {
+      this.switching = false;
+    }
+  }
+
+  createTank(spec: TankSpec): string {
+    const tank = newTank({
+      name: spec.name.trim().slice(0, 80) || undefined,
+      size: spec.size,
+      water: spec.water,
+      substrate: spec.substrate,
+      background: spec.background,
+      cycled: spec.cycled,
+    });
+    tank.id = newId('tank');
+    const h = tank.size.heightCm;
+    if (spec.substrateDepthFrontCm !== undefined) tank.substrateDepthFrontCm = Math.max(0, Math.min(h * 0.4, spec.substrateDepthFrontCm));
+    if (spec.substrateDepthBackCm !== undefined) tank.substrateDepthBackCm = Math.max(0, Math.min(h * 0.5, spec.substrateDepthBackCm));
+    applyChemistry(tank.waterParams, spec.waterParams);
+    if (spec.equipment) {
+      deepMerge(tank.equipment, spec.equipment);
+      if (spec.equipment.heater?.targetC !== undefined && spec.waterParams?.temperatureC === undefined) tank.waterParams.temperatureC = tank.equipment.heater.targetC;
+    }
+    const scape = AQUASCAPES.find((a) => a.id === spec.aquascape);
+    if (scape) {
+      const built = scape.build(tank, this.world.plants, tank.seed);
+      tank.decor = built.decor;
+      tank.plants = built.plants;
+      tank.aquascape = scape.id;
+    }
+    const stock = spec.stock.filter((q) => q.count > 0 && this.world.species.get(q.speciesId));
+    this.save(true);
+    this.openTank(tank, stock);
+    const liters = Math.round((tank.size.widthCm * tank.size.heightCm * tank.size.depthCm) / 1000);
+    this.journal('info', `Set up “${tank.name}”: ${tank.size.widthCm}×${tank.size.depthCm}×${tank.size.heightCm} cm, ${liters} L ${tank.water}${scape && scape.id !== 'empty' ? `, ${scape.name}` : ''}${spec.cycled ? '' : ' — fishless cycle started'}`);
+    for (const q of stock) this.journal('added', `Added ${q.count} × ${this.world.species.get(q.speciesId)!.commonName}`);
+    this.save(true);
+    return tank.id;
+  }
+
+  async renameTank(id: string, name: string): Promise<void> {
+    const n = name.trim().slice(0, 80);
+    if (!n) return;
+    if (id === this.world.tank.id) {
+      this.world.tank.name = n;
+      this.world.events.emit('tank-settings-changed', {});
+      this.save(true);
+    } else {
+      const tank = await fetchTank(this.library, this.cloud, id);
+      if (tank) {
+        tank.name = n;
+        this.library.put(tank);
+        this.cloud?.save(tank, true);
+      } else this.library.rename(id, n);
+      this.cloud?.saveIndex(this.library.snapshot(), true);
+    }
+    this.world.events.emit('tanks-changed', {});
+  }
+
+  async duplicateTank(id: string): Promise<string | null> {
+    if (id === this.world.tank.id) this.save();
+    const src = id === this.world.tank.id ? this.world.tank : await fetchTank(this.library, this.cloud, id);
+    if (!src) return null;
+    const copy = JSON.parse(JSON.stringify(src)) as TankState;
+    copy.id = newId('tank');
+    copy.name = `${src.name} (copy)`.slice(0, 80);
+    copy.createdAt = Date.now();
+    // Same last-open time as the original, so both catch up on the same unwatched time.
+    copy.journal.push({ at: copy.simTime, kind: 'info', text: `Copied from “${src.name}”` });
+    this.library.put(copy);
+    this.cloud?.save(copy, true);
+    this.cloud?.saveIndex(this.library.snapshot(), true);
+    this.world.events.emit('tanks-changed', {});
+    return copy.id;
+  }
+
+  async deleteTank(id: string): Promise<boolean> {
+    const others = this.listTanks().filter((t) => t.id !== id);
+    if (!others.length) return false;
+    if (id === this.world.tank.id) {
+      const next = others.sort((a, b) => b.lastSavedReal - a.lastSavedReal)[0];
+      if (!(await this.switchTo(next.id, true))) return false;
+    }
+    this.library.remove(id);
+    this.cloud?.deleteTank(id);
+    this.cloud?.saveIndex(this.library.snapshot(), true);
+    this.world.events.emit('tanks-changed', {});
+    return true;
+  }
+
+  // ------------------------------------------------------------------------------------------
+  // Tank builder helpers
+  // ------------------------------------------------------------------------------------------
+
+  aquascapes(water: WaterType): AquascapeInfo[] {
+    return aquascapesFor(water);
+  }
+
+  shapeSizes(): typeof SHAPE_SIZES {
+    return SHAPE_SIZES;
+  }
+
+  suggestStock(spec: TankSpec): StockSuggestion[] {
+    return suggestStock(spec, this.world.species, this.world.plants);
+  }
+
+  checkStock(spec: TankSpec, stock: TankSpec['stock']): StockCheck {
+    return checkStock(spec, stock, this.world.species, this.world.plants);
   }
 
   updateSettings(patch: Partial<Settings>): void {
