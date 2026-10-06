@@ -12,7 +12,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "validate:data": "vitest run tests/speciesData.test.ts tests/plantData.test.ts",
-    "shot": "node scripts/screenshot.mjs"
+    "shot": "node scripts/screenshot.mjs",
+    "build:artifact": "vite build --mode single && node scripts/build-artifact.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "three": "^0.186.1"
