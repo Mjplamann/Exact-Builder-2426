@@ -58,6 +58,8 @@ interface RockDetail {
   crack?: number;
   /** Horizontal laminations (slate/frodo). */
   strata?: { amp: number; freq: number };
+  /** Vertical solution grooves (karren) on weathered limestone (m). */
+  flute?: number;
   pits?: { count: number; r: [number, number]; depth: number };
   palette: { a: string; b: string; dark: string; accent?: string };
   /** Biofilm / algae film on upward faces. */
@@ -65,12 +67,12 @@ interface RockDetail {
 }
 
 const ROCK_DETAIL: Record<string, RockDetail> = {
-  seiryu: { amp: 0.0026, freq: 26, ridged: 0.8, oct: 3, palette: { a: '#5c6469', b: '#7e868b', dark: '#33393d' }, film: '#5a6248' },
+  seiryu: { amp: 0.0038, freq: 28, ridged: 0.9, oct: 3, flute: 0.0065, palette: { a: '#5c6469', b: '#7e868b', dark: '#33393d' }, film: '#5a6248' },
   'dragon-stone': { amp: 0.0042, freq: 21, ridged: 0.45, oct: 3, pits: { count: 46, r: [0.0022, 0.0055], depth: 0.6 }, palette: { a: '#72553a', b: '#9c7b50', dark: '#3a2818', accent: '#b08c5c' }, film: '#5e5a38' },
   lava: { amp: 0.003, freq: 28, ridged: 0.2, oct: 3, pits: { count: 150, r: [0.0014, 0.0042], depth: 0.7 }, palette: { a: '#3a2622', b: '#5c3226', dark: '#140d0b', accent: '#7a3a26' } },
   slate: { amp: 0.0011, freq: 16, ridged: 0.3, oct: 2, strata: { amp: 0.0007, freq: 700 }, palette: { a: '#383c40', b: '#4a4f54', dark: '#202224' }, film: '#3e4636' },
   'river-stone': { amp: 0.0014, freq: 8, ridged: 0, oct: 2, palette: { a: '#8a8378', b: '#a59c8c', dark: '#4a463f' } },
-  'texas-holey': { amp: 0.0034, freq: 20, ridged: 0.6, oct: 3, pits: { count: 55, r: [0.002, 0.006], depth: 0.6 }, palette: { a: '#cfc4a8', b: '#e2d9c3', dark: '#7c705a', accent: '#b4ae9e' }, film: '#9a9468' },
+  'texas-holey': { amp: 0.0048, freq: 22, ridged: 0.85, oct: 3, pits: { count: 90, r: [0.002, 0.007], depth: 0.6 }, palette: { a: '#cfc4a8', b: '#e2d9c3', dark: '#7c705a', accent: '#b4ae9e' }, film: '#9a9468' },
   'petrified-wood': { amp: 0.0016, freq: 30, ridged: 0.5, oct: 3, palette: { a: '#86664a', b: '#a8875e', dark: '#4a3826', accent: '#8a847a' } },
   'elephant-skin': { amp: 0.0025, freq: 16, ridged: 0, oct: 2, crack: 0.0045, palette: { a: '#686158', b: '#837a6d', dark: '#34302a' }, film: '#5a5a40' },
   frodo: { amp: 0.0028, freq: 24, ridged: 0.7, oct: 3, strata: { amp: 0.0013, freq: 260 }, palette: { a: '#665c52', b: '#857766', dark: '#2e2924', accent: '#9a6436' }, film: '#5a5a40' },
@@ -153,7 +155,7 @@ function sdfRockGeometry(item: DecorItem, shape: DecorShape, quality: Quality): 
     axisV = [v[0] / vl, v[1] / vl, v[2] / vl];
     axisW = [axisU[1] * axisV[2] - axisU[2] * axisV[1], axisU[2] * axisV[0] - axisU[0] * axisV[2], axisU[0] * axisV[1] - axisU[1] * axisV[0]];
   }
-  const band = P.amp * 1.6 + (P.crack ?? 0) + (P.strata?.amp ?? 0) + (P.pits ? P.pits.r[1] : 0) + (shape.axis ? 0.0025 : 0) + cell;
+  const band = P.amp * 1.6 + (P.crack ?? 0) + (P.strata?.amp ?? 0) + (P.flute ?? 0) + (P.pits ? P.pits.r[1] : 0) + (shape.axis ? 0.0025 : 0) + cell;
   const f = P.freq;
   const field = (x: number, y: number, z: number): number => {
     let d = sdfEval(spec, x, y, z);
@@ -167,6 +169,11 @@ function sdfRockGeometry(item: DecorItem, shape: DecorShape, quality: Quality): 
         d += P.crack * Math.pow(cn, 10);
       }
       if (P.strata) d -= P.strata.amp * Math.sin(y * P.strata.freq + smoothN * 3);
+      if (P.flute) {
+        // Rain-carved flutes run down the faces: noise stretched vertically, sharpened into grooves.
+        const fl = 1 - Math.abs(noise.noise(x * 42 + 1.7, y * 6, z * 42));
+        d += P.flute * Math.pow(fl, 8);
+      }
       if (axisU) {
         // Petrified bark: deep fissures running along the trunk.
         const px = x - axisA![0], py = y - axisA![1], pz = z - axisA![2];

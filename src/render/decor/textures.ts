@@ -421,7 +421,7 @@ function paintMoss(ctx: CanvasRenderingContext2D, W: number, H: number, base: [n
       const nx = px + Math.sin(ang) * (len / steps), ny = py - Math.cos(ang) * (len / steps);
       const t = (H - ny) / H;
       ctx.strokeStyle = rgb(mix(scale(base, 0.75), tip, t * 0.8));
-      ctx.lineWidth = Math.max(0.8, W * 0.02);
+      ctx.lineWidth = Math.max(1.5, W * 0.04);
       ctx.beginPath();
       ctx.moveTo(px, py);
       ctx.lineTo(nx, ny);
@@ -430,10 +430,10 @@ function paintMoss(ctx: CanvasRenderingContext2D, W: number, H: number, base: [n
       for (const side of [-1, 1]) {
         ctx.fillStyle = rgb(mix(base, tip, t * 0.7 + rng.range(-0.1, 0.1)), 0.9);
         ctx.beginPath();
-        ctx.ellipse(nx + side * W * 0.025, ny, W * 0.03, H * 0.012, ang + side * 0.6, 0, Math.PI * 2);
+        ctx.ellipse(nx + side * W * 0.04, ny, W * 0.055, H * 0.02, ang + side * 0.7, 0, Math.PI * 2);
         ctx.fill();
       }
-      if (depth < 2 && rng.chance(0.18)) branch(nx, ny, ang + rng.range(0.4, 0.9) * (rng.chance(0.5) ? 1 : -1), len * rng.range(0.35, 0.55), depth + 1);
+      if (depth < 2 && rng.chance(0.3)) branch(nx, ny, ang + rng.range(0.4, 0.9) * (rng.chance(0.5) ? 1 : -1), len * rng.range(0.35, 0.55), depth + 1);
       px = nx;
       py = ny;
     }
@@ -510,19 +510,19 @@ function paintFernFrond(ctx: CanvasRenderingContext2D, W: number, H: number, bas
   const cx = W / 2;
   ctx.lineCap = 'round';
   ctx.strokeStyle = rgb(scale(base, 0.8));
-  ctx.lineWidth = Math.max(1, W * 0.03);
+  ctx.lineWidth = Math.max(2, W * 0.05);
   ctx.beginPath();
   ctx.moveTo(cx, H);
   ctx.lineTo(cx, 2);
   ctx.stroke();
-  const n = 16;
+  const n = 14;
   for (let i = 1; i < n; i++) {
     const v = i / n;
     const y = H - v * H;
     const len = (1 - v) * W * 0.46 + W * 0.04;
     for (const side of [-1, 1]) {
       ctx.strokeStyle = rgb(mix(base, tip, v + rng.range(-0.1, 0.1)));
-      ctx.lineWidth = Math.max(1, W * 0.035);
+      ctx.lineWidth = Math.max(2, W * 0.07);
       ctx.beginPath();
       ctx.moveTo(cx, y);
       ctx.quadraticCurveTo(cx + side * len * 0.6, y - H * 0.01, cx + side * len, y - H * 0.03);

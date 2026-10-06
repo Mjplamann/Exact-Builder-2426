@@ -446,8 +446,8 @@ function rockSeiryu(rng: Rng, S: number): SdfSpec {
       ell([side * w * rng.range(0.45, 0.7), h * rng.range(0.15, 0.3) - bury, rng.range(-0.3, 0.3) * d], [w * rng.range(0.4, 0.6), h * rng.range(0.3, 0.45), d * rng.range(0.6, 0.85)], rng.range(-0.2, 0.2), rng.range(0, Math.PI), rng.range(-0.4, 0.4)),
     );
   }
-  addCuts(spec, rng, rng.int(8, 12), -0.25, [0.7, 0.9]);
-  spec.cutBlend = 0.0025;
+  addCuts(spec, rng, rng.int(10, 14), -0.25, [0.66, 0.88]);
+  spec.cutBlend = 0.002;
   addWarp(spec, rng, S * 0.035, S * 0.8);
   return spec;
 }
@@ -538,9 +538,11 @@ function rockTexas(rng: Rng, S: number): SdfSpec {
     const rr = i === 0 ? 0 : w * rng.range(0.3, 0.55);
     spec.prims.push(ell([Math.cos(a) * rr, h * rng.range(0.3, 0.5) - bury, Math.sin(a) * rr * 0.6], [w * rng.range(0.45, 0.65), h * rng.range(0.35, 0.55), w * rng.range(0.4, 0.55)], rng.range(-0.3, 0.3), rng.range(0, 3), rng.range(-0.3, 0.3)));
   }
-  addCuts(spec, rng, rng.int(0, 3), 0, [0.85, 0.95]);
-  addTunnels(spec, rng, rng.int(2, 5), [S * 0.04, S * 0.085], [0, h * 0.4 - bury, 0], w);
-  addPockets(spec, rng, rng.int(3, 6), [S * 0.03, S * 0.06], [0.2, 0.45], [0, h * 0.4 - bury, 0]);
+  // Eroded limestone: broken faces, tunnels right through and deep solution pockets.
+  addCuts(spec, rng, rng.int(2, 5), -0.1, [0.8, 0.94]);
+  spec.cutBlend = 0.006;
+  addTunnels(spec, rng, rng.int(3, 6), [S * 0.045, S * 0.095], [0, h * 0.4 - bury, 0], w);
+  addPockets(spec, rng, rng.int(7, 13), [S * 0.03, S * 0.07], [0.25, 0.55], [0, h * 0.4 - bury, 0]);
   spec.holeBlend = 0.008;
   addWarp(spec, rng, S * 0.07, S * 0.6, 4);
   return spec;
@@ -814,7 +816,7 @@ interface WoodStyle {
 }
 
 const WOOD: Record<string, WoodStyle> = {
-  spiderwood: { trunks: [4, 6], r0: [0.007, 0.012], len: [0.22, 0.36], elev: [0.35, 1.1], wander: 0.36, upBias: 0.05, arch: 0.25, taper: 0.78, tipR: 0.0018, branchProb: 0.11, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.55, maxDepth: 2, stepLen: 0.014, spiral: 0.35, yawSpread: Math.PI * 2 },
+  spiderwood: { trunks: [5, 7], r0: [0.007, 0.012], len: [0.22, 0.36], elev: [0.35, 1.1], wander: 0.36, upBias: 0.05, arch: 0.25, taper: 0.78, tipR: 0.0018, branchProb: 0.15, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.58, maxDepth: 2, stepLen: 0.014, spiral: 0.35, yawSpread: Math.PI * 2 },
   'redmoor-root': { trunks: [4, 7], r0: [0.006, 0.012], len: [0.2, 0.3], elev: [0.6, 1.3], wander: 0.35, upBias: 0.09, arch: 0.1, taper: 0.82, tipR: 0.0012, branchProb: 0.26, branchAngle: [0.3, 0.7], childScale: 0.66, childLen: 0.6, maxDepth: 3, stepLen: 0.012, spiral: 0.3, yawSpread: Math.PI * 1.4 },
   manzanita: { trunks: [1, 2], r0: [0.018, 0.026], len: [0.26, 0.34], elev: [0.9, 1.35], wander: 0.16, upBias: 0.03, arch: 0.05, taper: 0.72, tipR: 0.0025, branchProb: 0.17, branchAngle: [0.35, 0.75], childScale: 0.66, childLen: 0.62, maxDepth: 3, stepLen: 0.016, spiral: 0.1, yawSpread: 1.2 },
   mopani: { trunks: [1, 2], r0: [0.03, 0.045], len: [0.16, 0.26], elev: [0.05, 0.5], wander: 0.28, upBias: 0.0, arch: 0.15, taper: 0.45, tipR: 0.012, branchProb: 0.1, branchAngle: [0.5, 1.0], childScale: 0.62, childLen: 0.5, maxDepth: 2, stepLen: 0.016, spiral: 0.2, yawSpread: 1.6 },

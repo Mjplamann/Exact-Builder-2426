@@ -377,7 +377,7 @@ export function genMoss({ sp, p, m, ctx, rng, out }: GenArgs): void {
   const g = m.growth;
   const R = Math.max(0.015, m.spread / 2);
   const H = Math.max(0.006, m.height);
-  const count = Math.round((50 + 330 * g) * ctx.density * Math.min(1.6, R / 0.06));
+  const count = Math.round((80 + 420 * g) * ctx.density * Math.min(1.6, R / 0.06));
   const sprig = cm(sp.leafLength, 1.5);
   const christmas = has(sp, /montagnei/);
   const flame = has(sp, /flame/);

@@ -419,13 +419,14 @@ function genEuphyllia(a: GenArgs, style: 'hammer' | 'frogspawn' | 'torch' | 'ele
   const ph = rng.range(0, 6.28);
   const H = Math.max(0.04, m.height);
   const L0 = cm(sp.leafLength, 6);
-  const skel = lin('#8c8478');
+  // Corallite walls: pale aragonite, mostly hidden under the extended flesh.
+  const skel = lin('#c4beb2');
   for (let hI = 0; hI < heads; hI++) {
     const off = hI === 0 ? [0, 0] : [rng.range(-1, 1) * m.spread * 0.22, rng.range(-1, 1) * m.spread * 0.22];
     const [t1, t2] = basis(up);
     const baseP = add(add(m.anchor, t1, off[0]), t2, off[1]);
     const hr = rng.range(0.012, 0.02);
-    const top = add(baseP, norm(add(up, [rng.range(-0.3, 0.3), 0, rng.range(-0.3, 0.3)], 1)), style === 'elegance' ? 0.006 : rng.range(0.015, 0.035));
+    const top = add(baseP, norm(add(up, [rng.range(-0.3, 0.3), 0, rng.range(-0.3, 0.3)], 1)), style === 'elegance' ? 0.006 : rng.range(0.008, 0.02));
     if (style !== 'elegance') pushSegment(stems, baseP, top, hr, skel, [m.anchor[1], 1, 0, 0]);
     else {
       const disc = use(out, discPart(`${sp.id}/disc`, (r, th) => 0.1 * Math.sin(th * 3) * r * r, { map: radialTexture({ base: sp.color, center: mixHex(sp.color, '#ffffff', 0.2), stripes: { count: 28, amount: 0.3 }, seed: 9 }), transl: 0.5, roughness: 0.35, fluor: fluorOf(sp, 0.3) }));

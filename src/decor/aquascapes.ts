@@ -327,6 +327,21 @@ function amazon(tank: TankState, lib: PlantIndex, seed: number) {
   return s.result();
 }
 
+/** A seiryu seed whose stone is tall and pointed (good oyaishi). */
+function tallSeiryu(s: Scape): number {
+  let best = s.rng.int(1, 2 ** 31 - 2), bestH = 0;
+  for (let i = 0; i < 24; i++) {
+    const seed = s.rng.int(1, 2 ** 31 - 2);
+    const b = decorShape({ kind: 'rock', variant: 'seiryu', seed }).bounds;
+    const ratio = b.max[1] / Math.max(b.max[0] - b.min[0], b.max[2] - b.min[2]);
+    if (ratio > bestH) {
+      bestH = ratio;
+      best = seed;
+    }
+  }
+  return best;
+}
+
 /** Classic Iwagumi: oyaishi, fukuishi, soeishi in seiryu, a carpet and hairgrass. */
 function iwagumi(tank: TankState, lib: PlantIndex, seed: number) {
   const s = new Scape(tank, lib, seed);
@@ -334,9 +349,9 @@ function iwagumi(tank: TankState, lib: PlantIndex, seed: number) {
   const lean = s.rng.range(-0.18, -0.08);
   const strata = s.rng.range(0, Math.PI * 2);
   // Oyaishi: the main stone on the golden section, tallest, leaning into the open space.
-  const main = s.addDecor('rock', 'seiryu', s.x(1 - PHI), s.z(0.4), { scale: 1.9 * k, rotY: strata, rotZ: s.flip ? -lean : lean, sink: 0.01 });
+  const main = s.addDecor('rock', 'seiryu', s.x(1 - PHI), s.z(0.4), { scale: 2.5 * k, rotY: strata, rotZ: s.flip ? -lean : lean, sink: 0.012, seed: tallSeiryu(s) });
   // Fukuishi: second stone beside it, lower, facing the same way.
-  const second = s.addDecor('rock', 'seiryu', s.x(1 - PHI + 0.15), s.z(0.47), { scale: 1.25 * k, rotY: strata + 0.3, rotZ: s.flip ? -lean : lean, sink: 0.01 });
+  const second = s.addDecor('rock', 'seiryu', s.x(1 - PHI + 0.16), s.z(0.47), { scale: 1.6 * k, rotY: strata + 0.3, rotZ: s.flip ? -lean : lean, sink: 0.01 });
   // Soeishi: the accent stone in front of the main.
   s.addDecor('rock', 'seiryu', s.x(1 - PHI - 0.1), s.z(0.6), { scale: 0.8 * k, rotY: strata - 0.4, sink: 0.008 });
   // Suteishi: small stones that echo the group elsewhere.
@@ -363,7 +378,7 @@ function dutch(tank: TankState, lib: PlantIndex, seed: number) {
   const back = ['rotala-rotundifolia', 'hygrophila-corymbosa', 'ludwigia-palustris-super-red', 'limnophila-sessiliflora', 'rotala-hra', 'cabomba-caroliniana', 'hygrophila-difformis'];
   const mid = ['alternanthera-reineckii-rosaefolia', 'rotala-macrandra', 'pogostemon-erectus', 'bacopa-caroliniana', 'ludwigia-arcuata', 'limnophila-aromatica'];
   const front = ['staurogyne-repens', 'hemianthus-micranthemoides', 'cryptocoryne-parva', 'lilaeopsis-brasiliensis', 'alternanthera-reineckii-mini', 'pogostemon-helferi'];
-  const groups = (list: string[], v0: number, v1: number, n: number, perGroup: number) => {
+  const groups = (list: string[], v0: number, v1: number, n: number, perGroup: number, trim: [number, number]) => {
     const avail = list.filter((id) => s.has(id));
     if (!avail.length) return;
     for (let i = 0; i < n; i++) {
@@ -374,17 +389,16 @@ function dutch(tank: TankState, lib: PlantIndex, seed: number) {
         const t = j / Math.max(1, perGroup - 1);
         const u = u0 + (u1 - u0) * s.rng.range(0, 1);
         const v = v0 + (v1 - v0) * t + (u - 0.5) * 0.08;
-        s.addPlant(sp, s.x(u), s.z(v), { growth: s.rng.range(0.75, 1) });
+        s.addPlant(sp, s.x(u), s.z(v), { growth: s.rng.range(trim[0], trim[1]) });
       }
     }
   };
-  groups(back, 0.06, 0.22, Math.max(3, Math.round(6 * k)), 3);
-  groups(mid, 0.3, 0.46, Math.max(3, Math.round(5 * k)), 3);
-  groups(front, 0.58, 0.85, Math.max(3, Math.round(5 * k)), 3);
-  // A single sword as a solitaire, and a few stones edging a terrace.
+  // Dutch terraces are dense, trimmed bushes: many bunches per street, kept at stepped heights.
+  groups(back, 0.06, 0.22, Math.max(3, Math.round(6 * k)), 5, [0.75, 0.95]);
+  groups(mid, 0.3, 0.46, Math.max(3, Math.round(5 * k)), 5, [0.5, 0.7]);
+  groups(front, 0.58, 0.85, Math.max(3, Math.round(5 * k)), 4, [0.6, 0.85]);
+  // A single sword as a solitaire on the golden section.
   s.addPlant(s.pick('echinodorus-rubin', 'echinodorus-grisebachii-bleherae'), s.x(PHI), s.z(0.4), { growth: 0.9 });
-  s.addDecor('rock', 'river-stone', s.x(0.3), s.z(0.56), { scale: 0.9 * k });
-  s.addDecor('rock', 'river-stone', s.x(0.36), s.z(0.6), { scale: 0.6 * k });
   return s.result();
 }
 
@@ -400,13 +414,20 @@ function malawi(tank: TankState, lib: PlantIndex, seed: number) {
     const v = 0.2 + 0.1 * Math.exp(-Math.pow((u - (1 - PHI)) / 0.15, 2)) + s.rng.range(-0.03, 0.03);
     base.push(s.addDecor('rock', 'texas-holey', s.x(u), s.z(v), { scale: k * s.rng.range(1.0, 1.4), sink: 0.012 }));
   }
-  // Second tier on top of the base rocks, leaving gaps (caves) between them.
-  for (let i = 0; i < base.length - 1; i += 1) {
-    if (s.rng.chance(0.3)) continue;
-    const a = base[i], b = base[i + 1];
-    const x = (a.position[0] + b.position[0]) / 2, z = (a.position[2] + b.position[2]) / 2 + s.rng.range(-0.02, 0.02);
-    const y = Math.max(s.topOf(a, x, z), s.topOf(b, x, z)) - 0.03 * k;
-    s.addDecor('rock', 'texas-holey', x, z, { scale: k * s.rng.range(0.8, 1.1), y, sink: 0 });
+  // Upper tiers wedged between the rocks below, leaving gaps (caves) — mbuna claim these.
+  let tier = base;
+  for (let level = 0; level < 2; level++) {
+    const next: DecorItem[] = [];
+    for (let i = 0; i < tier.length - 1; i += 1) {
+      if (s.rng.chance(level === 0 ? 0.25 : 0.5)) continue;
+      const a = tier[i], b = tier[i + 1];
+      const x = (a.position[0] + b.position[0]) / 2, z = (a.position[2] + b.position[2]) / 2 - 0.02 * level + s.rng.range(-0.02, 0.02);
+      const y = Math.max(s.topOf(a, x, z), s.topOf(b, x, z)) - 0.03 * k;
+      if (y - s.ground(x, z) > s.H * 0.5) continue;
+      next.push(s.addDecor('rock', 'texas-holey', x, z, { scale: k * s.rng.range(0.75, 1.0) * (1 - level * 0.15), y, sink: 0 }));
+    }
+    if (next.length < 2) break;
+    tier = next;
   }
   // A few caves and loose stones in front for territories.
   s.addDecor('cave', 'rock-cave', s.x(1 - PHI), s.z(0.48), { scale: k, rotY: s.yaw(s.rng.range(-0.3, 0.3)) });
@@ -430,10 +451,14 @@ function blackwater(tank: TankState, lib: PlantIndex, seed: number) {
     s.addDecor('driftwood', 'branchwood', s.x(0.2), s.z(0.3), { scale: k, rotY: s.yaw(-0.4), sink: 0.004 }),
     s.addDecor('driftwood', 'malaysian', s.x(0.55), s.z(0.45), { scale: k * 0.9, rotY: s.rng.range(0, 6.28), sink: 0.006 }),
   ];
+  // A near-continuous carpet of fallen leaves, densest under the roots.
   const litter = ['catappa', 'oak', 'guava', 'catappa', 'oak'];
-  for (let i = 0; i < Math.round(6 * k + 3); i++) {
-    s.addDecor('leaf-litter', litter[i % litter.length], s.x(s.rng.range(0.08, 0.92)), s.z(s.rng.range(0.35, 0.85)), { scale: k * s.rng.range(0.8, 1.2) });
+  const nLitter = Math.round(14 * k + 5);
+  for (let i = 0; i < nLitter; i++) {
+    const u = 0.06 + ((i + s.rng.range(0, 1)) / nLitter) * 0.88;
+    s.addDecor('leaf-litter', litter[i % litter.length], s.x(u), s.z(s.rng.range(0.3, 0.88)), { scale: k * s.rng.range(0.9, 1.3) });
   }
+  s.addDecor('driftwood', 'spiderwood', s.x(0.38), s.z(0.22), { scale: k * 0.8, sink: 0.004 });
   const crypts = s.pick('cryptocoryne-wendtii-brown', 'cryptocoryne-beckettii');
   for (let i = 0; i < Math.round(3 * k + 1); i++) s.addPlant(crypts, s.x(s.rng.range(0.25, 0.75)), s.z(s.rng.range(0.25, 0.45)));
   const pts = roots.flatMap((r) => s.woodPoints(r, 0.04, 0.25).map((p) => ({ p, host: r })));
@@ -465,7 +490,8 @@ function nanoShrimp(tank: TankState, lib: PlantIndex, seed: number) {
   if (tops[2]) s.addPlant(s.pick('anubias-nana-petite', 'bucephalandra-wavy-green'), tops[2][0], tops[2][2], { attachTo: stone });
   s.carpet(s.pick('micranthemum-monte-carlo', 'marsilea-hirsuta'), 0.05, 0.4, 0.65, 0.92, 0.8);
   for (let i = 0; i < 4; i++) s.addPlant(s.pick('cryptocoryne-parva', 'cryptocoryne-lutea'), s.x(s.rng.range(0.55, 0.95)), s.z(s.rng.range(0.6, 0.85)));
-  s.band(s.pick('rotala-rotundifolia', 'hygrophila-polysperma'), 0.75, 0.97, 0.15, 3);
+  // Kept trimmed below the surface, as a nano keeper would.
+  s.band(s.pick('rotala-rotundifolia', 'hygrophila-polysperma'), 0.75, 0.97, 0.15, 3, 0.04, [0.38, 0.5]);
   s.addPlant(s.pick('salvinia-minima', 'lemna-minor'), s.x(0.85), s.z(0.3), { growth: 0.6 });
   return s.result();
 }

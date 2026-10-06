@@ -54,6 +54,8 @@ export class PlantSystem {
   private dirtyParts = new Set<string>();
   private selected: string | null = null;
   private checkTimer = 0;
+  /** Plants in the tank at the last sync (including ones whose species is unknown). */
+  private syncedCount = -1;
 
   constructor() {
     this.root.name = 'plants';
@@ -90,6 +92,7 @@ export class PlantSystem {
       }
     }
     for (const [id, b] of [...this.built]) if (!seen.has(id)) this.drop(id, b);
+    this.syncedCount = tank.plants.length;
     this.flush();
     if (this.selected) this.applySelection(this.selected, 1);
   }
@@ -249,11 +252,12 @@ export class PlantSystem {
     // Growth & health change in sim time (LifeSim); positions change through events (sync).
     // Allocation-free scan; a full keyed sync only when something actually moved or grew.
     const tank = world.tank;
-    let changed = this.built.size !== tank.plants.length;
+    let changed = this.syncedCount !== tank.plants.length;
     for (let i = 0; i < tank.plants.length && !changed; i++) {
       const p = tank.plants[i];
       const b = this.built.get(p.id);
-      changed = !b || b.g !== Math.round(p.growth / GROWTH_STEP) || b.h !== Math.round(p.health * 8) || b.x !== p.position[0] || b.z !== p.position[2] || b.r !== p.rotationY;
+      if (!b) continue; // unknown species — never built, nothing to update
+      changed = b.g !== Math.round(p.growth / GROWTH_STEP) || b.h !== Math.round(p.health * 8) || b.x !== p.position[0] || b.z !== p.position[2] || b.r !== p.rotationY;
     }
     if (changed) this.sync(world);
   }
