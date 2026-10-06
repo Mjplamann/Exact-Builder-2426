@@ -49,8 +49,21 @@ export function caudalFlow(shape: CaudalShape, size: number): number {
 // ---------------------------------------------------------------------------------------------
 
 /** Ray rake (rad from vertical, toward the tail) and length at base fraction u. */
-function medianRay(shape: FinShape, u: number, H: number, trail: number, out: [number, number]): void {
+function medianRay(shape: FinShape, u: number, H: number, trail: number, out: [number, number], compound = false): void {
   let rake: number, len: number;
+  if (shape === 'spiny' && compound) {
+    // One continuous perciform dorsal (cichlids, damsels, clownfish, basslets): a lower spiny
+    // part, a shallow notch, then the taller, rounded soft part that ends in a rear lobe.
+    rake = 0.42 + 0.38 * u;
+    const spiny = H * (0.6 + 0.1 * Math.sin((Math.PI * Math.min(u, 0.58)) / 0.58)) * (0.45 + 0.55 * smooth(0, 0.1, u));
+    const soft = H * (0.55 + 0.45 * Math.sin(Math.PI * clamp((u - 0.48) / 0.5, 0, 1))) * (1 - 0.5 * smooth(0.84, 1, u));
+    const w = smooth(0.5, 0.62, u);
+    len = (spiny * (1 - w) + soft * w) * (1 - 0.16 * Math.exp(-(((u - 0.56) / 0.035) ** 2)));
+    if (trail > 0) len += trail * Math.pow(u, 2);
+    out[0] = rake;
+    out[1] = Math.max(len, 0.004);
+    return;
+  }
   switch (shape) {
     case 'pointed':
       rake = 0.5 + 0.5 * u;
@@ -142,7 +155,7 @@ export function buildMedianFin(
   cell: Cell,
   ventral: boolean,
   opts: FinBuildOpts,
-  extra: { rake?: number; flow?: number; twin?: boolean; adipose?: boolean; envelope?: FinEnvelope } = {},
+  extra: { rake?: number; flow?: number; twin?: boolean; adipose?: boolean; envelope?: FinEnvelope; compound?: boolean } = {},
 ): void {
   const sheets = extra.twin ? [-1, 1] : [0];
   const flow = extra.flow ?? finFlow(fin.shape, fin.trail);
@@ -161,7 +174,7 @@ export function buildMedianFin(
     }
     for (let i = 0; i <= nu; i++) {
       const u = i / nu;
-      medianRay(extra.adipose ? 'rounded' : fin.shape, u, fin.height, fin.trail, ray);
+      medianRay(extra.adipose ? 'rounded' : fin.shape, u, fin.height, fin.trail, ray, extra.compound);
       let rake = ray[0] + (extra.rake ?? 0);
       let len = ray[1];
       // Flowing fins: rays curve back progressively (soft rays bend under their own drag).
@@ -522,6 +535,12 @@ export function buildPairedFins(
     }
     gb.smoothNormals(idx0, v0);
   }
+}
+
+/** A long spiny dorsal with no separate second dorsal carries its soft part too. */
+export function compoundDorsal(body: ResolvedBody): boolean {
+  const d = body.dorsal;
+  return !!d && d.shape === 'spiny' && !body.dorsal2 && d.end - d.start > 0.35;
 }
 
 /** Number of fin rays to paint for a fin of base length `baseLen` (SL units). */

@@ -485,7 +485,9 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
     material.diffuseContribution = diffuseColor.rgb * (1.0 - 0.7 * g);
     // Direct lobe: a faint wet sheen plus a weak, broad guanine sheen (never a blown blob).
     material.specularColorBlended = mix(material.specularColor, fishGuanine * 0.07, g);
-    material.specularF90 = mix(material.specularF90, 0.6, g);
+    // Skin, mucus and cornea differ from water by a few % in refractive index, so even at grazing
+    // angles they reflect little: no glassy white rim around the silhouette (shells a bit more).
+    material.specularF90 = min(material.specularF90, 0.18 + 0.4 * g + 0.35 * max(0.0, material.specularF90 - 0.5));
     fishWrap = uFishSkin.x;
     float thin = 1.0;
     #ifdef USE_NORMALMAP
@@ -496,11 +498,13 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
     fishTransTint = mix(vec3(1.0), clamp(diffuseColor.rgb * 1.6 + vec3(0.12, 0.02, 0.0), 0.0, 1.5), 0.75);
     fishEyeLens = isEye ? 1.0 : 0.0;
     if (isEye) {
-      // The cornea mirrors the bright window of the surface above as a small, sharp catchlight.
+      // The cornea is clear and nearly index-matched to water: it shows the iris undistorted and
+      // only a small, sharp catchlight of the bright surface above (added in RE_Direct_Fish) —
+      // never a glassy white ring around a bulging ball.
       material.roughness = mix(material.roughness, 0.07, 0.85);
-      material.specularColor = vec3(0.07);
-      material.specularColorBlended = mix(vec3(0.07), material.specularColorBlended, g);
-      material.specularF90 = 1.0;
+      material.specularColor = vec3(0.012);
+      material.specularColorBlended = mix(vec3(0.012), fishGuanine * 0.6, g);
+      material.specularF90 = 0.12;
     }
     #ifdef USE_MAP
     if (isBody && uFishSkin2.x > 0.0) {

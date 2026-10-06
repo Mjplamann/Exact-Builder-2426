@@ -5,7 +5,8 @@ import { attachFish, makeFishEntity } from '../../core/world';
 import { substrateHeight } from '../../core/tankGeometry';
 import { tankBounds } from '../../core/tankGeometry';
 import reference from '../../data/species/reference.json';
-import { sexMatters } from './archetypes';
+import { resolveBody, sexMatters } from './archetypes';
+import { caudalWebLength } from './fins';
 
 /**
  * Visual-QA harness (`/?gallery=<filter>`): freezes behavior and lines up one animal per species
@@ -69,6 +70,19 @@ export function pickSpecies(app: App, filter: string, limit: number): Species[] 
   return out.slice(0, limit);
 }
 
+/**
+ * Total length (cm) that fits an animal into a cell of cellW × cellH (m): deep-bodied fish with
+ * tall fins are limited by the cell height, slender ones by its width.
+ */
+export function fitLengthCm(sp: Species, sex: Sex, cellW: number, cellH: number): number {
+  if (sp.group !== 'fish') return Math.min(cellW * 0.6, cellH * 1.1) * 100;
+  const b = resolveBody(sp, sex);
+  const tl = 1 + caudalWebLength(b.caudal.shape, b.caudal.size);
+  const fins = 0.7 * ((b.dorsal?.height ?? 0) + (b.anal?.height ?? 0) * 0.8) + 0.4 * (b.pelvic?.height ?? 0);
+  const h = b.kind === 'ray' ? 0.35 : b.kind === 'seahorse' ? 1.6 : (b.depth + fins) / tl;
+  return Math.min(cellW * 0.84, (cellH * 0.86) / Math.max(0.12, h)) * 100;
+}
+
 export function runGallery(app: App, filter: string, opts: GalleryOptions = {}): void {
   cancelAnimationFrame(raf);
   app.debug.freezeBehavior = true;
@@ -112,9 +126,7 @@ export function runGallery(app: App, filter: string, opts: GalleryOptions = {}):
     const c = i % cols, r = Math.floor(i / cols);
     // The species entry describes the showier sex; a female override marks the duller one.
     const sex: Sex = opts.sex ?? (sexMatters(sp, 'male') ? 'male' : 'unknown');
-    const fit = Math.min(cellW * 0.78, cellH * 1.5) * 100;
-    const inv = sp.group !== 'fish';
-    const lengthCm = opts.realSize ? sp.adultLengthCm * 0.85 : Math.min(fit * (inv ? 0.7 : 1), 60);
+    const lengthCm = opts.realSize ? sp.adultLengthCm * 0.85 : Math.min(fitLengthCm(sp, sex, cellW, cellH), 60);
     const state: FishState = {
       id: `gallery-${i}-${sp.id}`,
       speciesId: sp.id,

@@ -16,7 +16,7 @@ import { GLOBALS } from '../globals';
 import { PostFX } from '../env/PostFX';
 import { sexMatters } from './archetypes';
 import { FishRenderer } from './FishRenderer';
-import { pickSpecies } from './gallery';
+import { fitLengthCm, pickSpecies } from './gallery';
 
 /**
  * Visual-QA "studio" (dev only, never imported by the app): the gallery lineup rendered by its
@@ -98,11 +98,9 @@ export async function runStudio(app: App, filter: string, opts: StudioOptions = 
     const sp = species[i];
     const c = i % cols, r = Math.floor(i / cols);
     const sex: Sex = sexMatters(sp, 'male') ? 'male' : 'unknown';
-    const inv = sp.group !== 'fish';
-    const fit = Math.min(cellW * 0.8, cellH * 1.45) * 100;
     const state: FishState = {
       id: `studio-${i}-${sp.id}`, speciesId: sp.id, sex, bornAt: now - 365 * 86_400_000, addedAt: now,
-      lengthCm: opts.realSize ? sp.adultLengthCm * 0.9 : Math.min(fit * (inv ? 0.72 : 1), 60), sizeFactor: 1,
+      lengthCm: opts.realSize ? sp.adultLengthCm * 0.9 : Math.min(fitLengthCm(sp, sex, cellW, cellH), 60), sizeFactor: 1,
       colorSeed: 1000 + i * 7919, hunger: 0, health: 1, stress: 0, stomach: 0.5, generation: 0,
       pos: [-halfW + (c + 0.5) * cellW, midY + halfH - (r + 0.5) * cellH, planeZ], heading: 0,
     };

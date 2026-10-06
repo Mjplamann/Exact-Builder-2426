@@ -1,7 +1,7 @@
 import type { BufferGeometry } from 'three';
 import type { ResolvedBody } from './archetypes';
 import { ATLAS, bodyUV, cellUV } from './atlas';
-import { buildCaudalFin, buildMedianFin, buildPairedFins, caudalWebLength, finEnvelope, packSideFlow } from './fins';
+import { buildCaudalFin, buildMedianFin, buildPairedFins, caudalWebLength, compoundDorsal, finEnvelope, packSideFlow } from './fins';
 import { GeoBuilder, PART } from './geometryBuilder';
 import { BodyProfile } from './profile';
 
@@ -209,8 +209,9 @@ function buildEyes(gb: GeoBuilder, prof: BodyProfile, lod: FishLod): void {
   t1 = [t1[0] / l1, t1[1] / l1, t1[2] / l1];
   const t2 = [N[1] * t1[2] - N[2] * t1[1], N[2] * t1[0] - N[0] * t1[2], N[0] * t1[1] - N[1] * t1[0]];
   // Fish eyes sit nearly flush in the socket; the clear cornea bulges over the lens.
-  const cx = H.eyeX + N[0] * -0.22 * R, cy = H.eyeY + N[1] * -0.22 * R, cz = H.eyeZ + N[2] * -0.22 * R;
-  const depthR = 0.58 * R;
+  // (Only a low dome stands proud of the head — a big protruding ball reads as a cartoon eye.)
+  const cx = H.eyeX + N[0] * -0.3 * R, cy = H.eyeY + N[1] * -0.3 * R, cz = H.eyeZ + N[2] * -0.3 * R;
+  const depthR = 0.52 * R;
   const nLat = lod.eyeLat, nLon = lod.eyeLon;
   const uv: [number, number] = [0, 0];
   for (const side of [1, -1]) {
@@ -514,7 +515,7 @@ export function buildFishParts(body: ResolvedBody, lod: FishLod): { gb: GeoBuild
   const nuFor = (f: { start: number; end: number }) => Math.max(4, Math.round(fo.nu * clamp((f.end - f.start) * 4 + 0.5, 0.6, 1.6)));
   if (body.dorsal) {
     const envelope = finEnvelope(prof, body, body.dorsal, false) ?? undefined;
-    buildMedianFin(fb, prof, body.dorsal, PART.dorsal, ATLAS.dorsal, false, { nu: nuFor(body.dorsal) + (envelope ? 4 : 0), nw: fo.nw }, { envelope });
+    buildMedianFin(fb, prof, body.dorsal, PART.dorsal, ATLAS.dorsal, false, { nu: nuFor(body.dorsal) + (envelope ? 4 : 0) + (compoundDorsal(body) ? 6 : 0), nw: fo.nw }, { envelope, compound: compoundDorsal(body) });
   }
   if (body.dorsal2) buildMedianFin(fb, prof, body.dorsal2, PART.dorsal2, ATLAS.dorsal2, false, fo);
   if (body.anal) {

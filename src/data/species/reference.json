@@ -912,7 +912,7 @@
       "depth": 0.42,
       "width": 0.15,
       "snout": "rounded",
-      "dorsal": { "start": 0.3, "end": 0.9, "height": 0.22, "shape": "rounded" },
+      "dorsal": { "start": 0.3, "end": 0.9, "height": 0.24, "shape": "spiny" },
       "caudal": { "shape": "rounded", "size": 0.3 }
     },
     "look": {

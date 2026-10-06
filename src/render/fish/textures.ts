@@ -13,7 +13,7 @@ import { hashString } from '../../core/rng';
 import type { FinDef, ResolvedBody } from './archetypes';
 import { ATLAS, cellLocal, type Cell } from './atlas';
 import { hex, luma, mix, type RGB } from './color';
-import { rayCount } from './fins';
+import { compoundDorsal, rayCount } from './fins';
 import { fastNoise, hash2, rasterize, rasterizeRing, smooth, valueNoise, type Surface } from './patterns';
 import type { BodyProfile } from './profile';
 
@@ -622,10 +622,15 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
   const { s, x0, y0 } = cellSurface(cell, b.W, b.H, (lx) => lx, (ly) => ly * 2 - 1, () => (across * 0.5) / len, ctx.seed + hashString(name), true);
   const { W, col, alpha, height, rough, metal, irid } = b;
   const spiny = shape === 'spiny';
+  // Incised spiny membrane: the spiny part of a compound dorsal, or the whole of a spiny fin.
+  const spinyEnd = name === 'dorsal' && compoundDorsal(body) ? 0.56 : name === 'dorsal' || name === 'dorsal2' ? 1 : 0.6;
   const crown = shape === 'crowntail';
   const separated = shape === 'fan' && body.finRays < 0.9; // lionfish-style free rays
   const clear = op < 0.35;
-  const rayCol: RGB = clear ? mix(finCol, [0.92, 0.9, 0.85], 0.2) : mix(finCol, [finCol[0] * 0.78, finCol[1] * 0.78, finCol[2] * 0.78], 0.7);
+  // Clear membranes scatter little light of their own (they read by what shows through them);
+  // the bony rays are only a little denser.
+  const clearK = clear ? 0.72 : 1;
+  const rayCol: RGB = clear ? mix(finCol, [0.8, 0.78, 0.72], 0.1) : mix(finCol, [finCol[0] * 0.78, finCol[1] * 0.78, finCol[2] * 0.78], 0.7);
   const iridFin = clamp(look.iridescence ?? 0, 0, 1) * 0.25;
   for (let r = 0; r < s.h; r++) {
     const y = s.py[r];
@@ -648,7 +653,7 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       // Membrane incisions between spines / reduced webbing.
       const between = Math.abs(rp - ri); // 0 on a ray, 0.5 midway
       let cut = 0;
-      if (spiny && u < 0.6) cut = 0.34 * smooth(0.08, 0.5, between);
+      if (spiny && u < spinyEnd) cut = 0.34 * smooth(0.08, 0.5, between);
       if (crown) cut = 0.45 * smooth(0.06, 0.5, between);
       if (separated) cut = 0.55 * smooth(0.08, 0.5, between);
       const membrane = x < 1 - cut ? 1 : 0.0;
@@ -656,7 +661,7 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       // margin; rays are bony and denser; the very edge fades out softly.
       const gap = smooth(0.12, 0.5, between);
       let a = (clear ? op * (0.78 - 0.32 * x) : op * (0.92 - 0.3 * x)) * (1 - (clear ? 0.25 : 0.18) * gap) * membrane;
-      a = Math.max(a, (clear ? Math.max(op * 1.9, 0.3) : Math.min(1, op + 0.12)) * ray * (1 - 0.35 * smooth(0.85, 1, x)));
+      a = Math.max(a, (clear ? Math.min(0.42, op * 1.25 + 0.06) : Math.min(1, op + 0.12)) * ray * (1 - 0.35 * smooth(0.85, 1, x)));
       a = Math.max(a, 0.02);
       let cr = finCol[0], cg = finCol[1], cb = finCol[2];
       cr += (rayCol[0] - cr) * ray * 0.6;
@@ -689,9 +694,9 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
         cb += (edgeCol[2] - cb) * eb;
         if (membrane > 0 || ray > 0.3) a = Math.max(a, Math.max(op, 0.7) * eb * (1 - 0.3 * gap));
       }
-      // Soft, transparent outer margin.
-      a *= 1 - 0.6 * smooth(0.86, 1, x) * (1 - 0.5 * ray);
-      const n = 1 + 0.06 * (fastNoise(x * 18 + (ctx.seed % 31), y * 30) - 0.5);
+      // Soft, transparent outer margin (a pigmented edge band stays crisp to the very edge).
+      a *= 1 - (edgeCol ? 0.25 * smooth(0.96, 1, x) : 0.6 * smooth(0.86, 1, x) * (1 - 0.5 * ray));
+      const n = (1 + 0.06 * (fastNoise(x * 18 + (ctx.seed % 31), y * 30) - 0.5)) * (clearK + (1 - clearK) * fb);
       col[i * 3] = cr * n;
       col[i * 3 + 1] = cg * n;
       col[i * 3 + 2] = cb * n;
