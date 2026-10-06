@@ -26999,5 +26999,3000 @@
    ]
   },
   "availability": "rare"
+ },
+ {
+  "id": "etheostoma-caeruleum",
+  "commonName": "Rainbow Darter",
+  "scientificName": "Etheostoma caeruleum",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Great Lakes & Mississippi basins, North America",
+  "description": "A small, bottom-hugging perch of clear gravel riffles that props itself on its pectoral fins and darts between stones. Breeding males are banded in alternating blue-green and orange-red, with red-and-blue striped fins.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   8,
+   22
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 80,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 4,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#3a9a8a",
+   "dorsal": "#4a6a4a",
+   "ventral": "#e8803a",
+   "fin": "#d8603a",
+   "finOpacity": 0.65,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a5ab0",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.8,
+     "y1": 0.6
+    },
+    {
+     "type": "region",
+     "color": "#e0702a",
+     "x0": 0.15,
+     "x1": 0.9,
+     "y0": -1,
+     "y1": -0.5,
+     "softness": 0.2
+    },
+    {
+     "type": "speckle",
+     "color": "#2a3a2a",
+     "density": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#d83a2a",
+       "y": 0.2,
+       "width": 0.3
+      }
+     ],
+     "edge": "#2a6ad0",
+     "edgeWidth": 0.2
+    },
+    "anal": {
+     "color": "#2a6ad0",
+     "opacity": 0.7
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#a89470",
+    "dorsal": "#6a5a40",
+    "ventral": "#e8e0cc",
+    "fin": "#c8b898",
+    "finOpacity": 0.35,
+    "patterns": [
+     {
+      "type": "marble",
+      "color": "#4a3e2a",
+      "scale": 6,
+      "amount": 0.4
+     },
+     {
+      "type": "bars",
+      "color": "#4a3e2a",
+      "count": 8,
+      "width": 0.03,
+      "x0": 0.25,
+      "x1": 0.95,
+      "y0": -0.3,
+      "y1": 0.9
+     }
+    ],
+    "fins": {}
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-spectabile",
+  "commonName": "Orangethroat Darter",
+  "scientificName": "Etheostoma spectabile",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mississippi basin & Ozark streams of the central USA",
+  "description": "A darter of spring-fed gravel creeks whose breeding males show a bright orange throat and blue-green bars with orange spaces between them. Eggs are buried in gravel riffles and left unguarded.",
+  "adultLengthCm": 5.5,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   10,
+   22
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 4,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#6a8a6a",
+   "dorsal": "#4a5a3a",
+   "ventral": "#e8803a",
+   "fin": "#d8703a",
+   "finOpacity": 0.6,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a6a8a",
+     "count": 8,
+     "width": 0.045,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.7,
+     "y1": 0.6
+    },
+    {
+     "type": "region",
+     "color": "#f0802a",
+     "x0": 0.1,
+     "x1": 0.35,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.15
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#e0602a",
+       "y": 0.2,
+       "width": 0.3
+      }
+     ],
+     "edge": "#2a6a9a",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#a8987a",
+    "dorsal": "#6a5a40",
+    "ventral": "#e8e0cc",
+    "fin": "#c8b898",
+    "finOpacity": 0.35,
+    "patterns": [
+     {
+      "type": "marble",
+      "color": "#4a3e2a",
+      "scale": 6,
+      "amount": 0.4
+     },
+     {
+      "type": "bars",
+      "color": "#4a3e2a",
+      "count": 8,
+      "width": 0.03,
+      "x0": 0.25,
+      "x1": 0.95,
+      "y0": -0.3,
+      "y1": 0.9
+     }
+    ],
+    "fins": {}
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-blennioides",
+  "commonName": "Greenside Darter",
+  "scientificName": "Etheostoma blennioides",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Great Lakes, Ohio & Tennessee basins and Ozarks, North America",
+  "description": "One of the largest darters, perching on algae-covered rocks in swift riffles. Its pale body is marked with dark green W- and U-shaped blotches, and breeding males turn vivid green.",
+  "adultLengthCm": 10,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   8,
+   22
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 100,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 9,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "rounded",
+   "mouth": "inferior",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#c8d0a0",
+   "dorsal": "#6a7a4a",
+   "ventral": "#ecf0dc",
+   "fin": "#7aa060",
+   "finOpacity": 0.5,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#3a7a3a",
+     "count": 7,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.95
+    },
+    {
+     "type": "bars",
+     "color": "#4a5a34",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": 0.6,
+     "y1": 1
+    },
+    {
+     "type": "speckle",
+     "color": "#c8603a",
+     "density": 0.15
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#5aa060",
+    "fin": "#3a9a50",
+    "finOpacity": 0.7
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-nigrum",
+  "commonName": "Johnny Darter",
+  "scientificName": "Etheostoma nigrum",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central & eastern North America, from Hudson Bay to the Gulf states",
+  "description": "A common, plain little darter of sandy and muddy pools, its pale body marked with small dark X- and W-shaped flecks. The male cleans the underside of a stone, where females lay eggs that he guards.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   8,
+   22
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#d8ccaa",
+   "dorsal": "#8a7a5a",
+   "ventral": "#f0ece0",
+   "fin": "#d8d0b8",
+   "finOpacity": 0.3,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "chevrons",
+     "color": "#3a3024",
+     "count": 9,
+     "width": 0.02,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "speckle",
+     "color": "#3a3024",
+     "density": 0.3
+    },
+    {
+     "type": "mask",
+     "color": "#3a3024",
+     "width": 0.02
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "dorsal": "#3a3024",
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#2a2218",
+      "x0": 0,
+      "x1": 0.28,
+      "y0": -1,
+      "y1": 1,
+      "softness": 0.2
+     },
+     {
+      "type": "chevrons",
+      "color": "#3a3024",
+      "count": 9,
+      "width": 0.025,
+      "x0": 0.2,
+      "x1": 0.95
+     }
+    ]
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-flabellare",
+  "commonName": "Fantail Darter",
+  "scientificName": "Etheostoma flabellare",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern North America, from the Great Lakes to the Tennessee basin",
+  "description": "A riffle darter with a rounded, finely barred tail. Breeding males grow yellowish knobs on the tips of their dorsal spines that may mimic eggs, and guard clutches laid on the underside of flat rocks.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   8,
+   22
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 9,
+  "traits": [
+   "perches",
+   "bottom-rester",
+   "cave-dweller",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.08,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#a89070",
+   "dorsal": "#6a5640",
+   "ventral": "#e0d4bc",
+   "fin": "#a89070",
+   "finOpacity": 0.5,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#4a3a28",
+     "count": 6,
+     "width": 0.015,
+     "y0": -0.5,
+     "y1": 0.7
+    },
+    {
+     "type": "bars",
+     "color": "#4a3a28",
+     "count": 9,
+     "width": 0.025,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#3a2e20",
+       "count": 5,
+       "width": 0.05
+      }
+     ]
+    },
+    "dorsal": {
+     "edge": "#e8c860",
+     "edgeWidth": 0.12
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-zonale",
+  "commonName": "Banded Darter",
+  "scientificName": "Etheostoma zonale",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Mississippi & Ohio basins, North America",
+  "description": "A darter of fast, rocky riffles, often among moss and algae. Dark green bands wrap right around its body, and breeding males turn bright green with a red spot at the base of the first dorsal fin.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   10,
+   22
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#c8cc98",
+   "dorsal": "#6a7244",
+   "ventral": "#e8ecd0",
+   "fin": "#8aa060",
+   "finOpacity": 0.5,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e7a3e",
+     "count": 10,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.97,
+     "y0": -1,
+     "y1": 0.6
+    },
+    {
+     "type": "bars",
+     "color": "#4a4a2c",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": 0.6,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "region",
+       "color": "#d8302a",
+       "x0": 0,
+       "x1": 0.35,
+       "y0": -1,
+       "y1": 1
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-olmstedi",
+  "commonName": "Tessellated Darter",
+  "scientificName": "Etheostoma olmstedi",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic slope of eastern North America, from Quebec to Florida",
+  "description": "A pale, sand-colored darter covered in small X- and W-shaped marks that form a mosaic, or tessellated, pattern. Males guard eggs stuck to the underside of stones in slow pools.",
+  "adultLengthCm": 7,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   8,
+   24
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "cave-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 9,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#d8ccaa",
+   "dorsal": "#8a7a5a",
+   "ventral": "#f2ece0",
+   "fin": "#d8d0b8",
+   "finOpacity": 0.3,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#5a4a34",
+     "scale": 14,
+     "thickness": 0.25
+    },
+    {
+     "type": "chevrons",
+     "color": "#3a3024",
+     "count": 9,
+     "width": 0.02,
+     "x0": 0.2,
+     "x1": 0.95
+    },
+    {
+     "type": "bars",
+     "color": "#4a3e2a",
+     "count": 6,
+     "width": 0.04,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": 0.6,
+     "y1": 1
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-camurum",
+  "commonName": "Bluebreast Darter",
+  "scientificName": "Etheostoma camurum",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Ohio & Tennessee river basins, eastern USA",
+  "description": "A stocky darter of swift, boulder riffles in clear rivers. Breeding males are olive-green speckled with bright red dots, with a deep blue breast and red-edged fins.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   10,
+   22
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   8,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 10,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.17,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#5a7a5a",
+   "dorsal": "#3e5238",
+   "ventral": "#2a4a8a",
+   "fin": "#5a6a4a",
+   "finOpacity": 0.6,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e0302a",
+     "density": 55,
+     "size": 0.022,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.8
+    },
+    {
+     "type": "region",
+     "color": "#2a4aa0",
+     "x0": 0.1,
+     "x1": 0.4,
+     "y0": -1,
+     "y1": -0.4,
+     "softness": 0.2
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "edge": "#d83a2a",
+     "edgeWidth": 0.15
+    },
+    "anal": {
+     "edge": "#d83a2a",
+     "edgeWidth": 0.15
+    },
+    "caudal": {
+     "edge": "#d83a2a",
+     "edgeWidth": 0.08
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#8a8a6a",
+    "dorsal": "#6a5a40",
+    "ventral": "#e8e0cc",
+    "fin": "#c8b898",
+    "finOpacity": 0.35,
+    "patterns": [
+     {
+      "type": "marble",
+      "color": "#4a3e2a",
+      "scale": 6,
+      "amount": 0.4
+     },
+     {
+      "type": "bars",
+      "color": "#4a3e2a",
+      "count": 8,
+      "width": 0.03,
+      "x0": 0.25,
+      "x1": 0.95,
+      "y0": -0.3,
+      "y1": 0.9
+     }
+    ],
+    "fins": {}
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "etheostoma-exile",
+  "commonName": "Iowa Darter",
+  "scientificName": "Etheostoma exile",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern North America — Great Lakes, upper Mississippi & Hudson Bay drainages",
+  "description": "A darter of clear, weedy lakes and slow streams, more at home among plants than in riffles. Breeding males are barred blue and brick-red with an orange-yellow belly.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   6,
+   22
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 9,
+  "traits": [
+   "perches",
+   "hops",
+   "bottom-rester",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.16,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#9a6a4a",
+   "dorsal": "#5a4a34",
+   "ventral": "#e8b05a",
+   "fin": "#a87a50",
+   "finOpacity": 0.5,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a5aa0",
+     "count": 9,
+     "width": 0.04,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.7,
+     "y1": 0.6
+    },
+    {
+     "type": "mask",
+     "color": "#2a2218",
+     "width": 0.025
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "stripe",
+       "color": "#c84a2a",
+       "y": 0,
+       "width": 0.3
+      }
+     ],
+     "edge": "#3a5aa0",
+     "edgeWidth": 0.2
+    }
+   }
+  },
+  "female": {
+   "lengthScale": 0.9,
+   "look": {
+    "base": "#a8987a",
+    "dorsal": "#6a5a40",
+    "ventral": "#e8e0cc",
+    "fin": "#c8b898",
+    "finOpacity": 0.35,
+    "patterns": [
+     {
+      "type": "marble",
+      "color": "#4a3e2a",
+      "scale": 6,
+      "amount": 0.4
+     },
+     {
+      "type": "bars",
+      "color": "#4a3e2a",
+      "count": 8,
+      "width": 0.03,
+      "x0": 0.25,
+      "x1": 0.95,
+      "y0": -0.3,
+      "y1": 0.9
+     }
+    ],
+    "fins": {}
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "percina-caprodes",
+  "commonName": "Logperch",
+  "scientificName": "Percina caprodes",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern North America, from Canada to the Gulf states",
+  "description": "A large darter with a pig-like conical snout that it uses to flip over stones and catch the insect larvae hiding beneath. Many narrow dark bars, alternating long and short, cross its yellowish body.",
+  "adultLengthCm": 12,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 18,
+  "lifespanYears": 4,
+  "tempC": [
+   8,
+   24
+  ],
+  "ph": [
+   6.5,
+   8.2
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 120,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "insectivore",
+  "activity": "diurnal",
+  "reproduction": "egg-depositor",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 9,
+  "traits": [
+   "perches",
+   "bottom-rester",
+   "digger",
+   "invert-eater"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.14,
+   "width": 0.11,
+   "headLength": 0.26,
+   "snout": "pointed",
+   "mouth": "inferior",
+   "eyeSize": 0.32,
+   "peduncle": 0.5,
+   "scaleSize": 0.4,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.52,
+    "height": 0.12,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.55,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.28,
+    "end": 0.32,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   }
+  },
+  "look": {
+   "base": "#d8c890",
+   "dorsal": "#8a7a50",
+   "ventral": "#f0ead8",
+   "fin": "#d8d0b0",
+   "finOpacity": 0.35,
+   "eye": "#4a4a3a",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2a2418",
+     "count": 18,
+     "width": 0.02,
+     "x0": 0.18,
+     "x1": 0.97,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2418",
+     "x": 0.98,
+     "y": 0,
+     "rx": 0.02,
+     "ry": 0.12
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2418",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "bars",
+       "color": "#2a2418",
+       "count": 4,
+       "width": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "perca-fluviatilis",
+  "commonName": "European Perch",
+  "scientificName": "Perca fluviatilis",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Lakes & rivers across Europe and northern Asia",
+  "description": "A shoaling predator of European lakes and slow rivers, with dark bars on greenish flanks, a black spot at the rear of the spiny dorsal fin and red-orange lower fins. Females drape long ribbons of eggs over submerged plants and branches.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 30,
+  "lifespanYears": 12,
+  "tempC": [
+   6,
+   22
+  ],
+  "ph": [
+   7,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 600,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "predator",
+   "bold",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.3,
+   "width": 0.13,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8b878",
+   "dorsal": "#4e5a34",
+   "ventral": "#f0ecd8",
+   "fin": "#d8603a",
+   "finOpacity": 0.65,
+   "eye": "#d8a040",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e3420",
+     "count": 7,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#7a7a5a",
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141410",
+       "x": 0.5,
+       "y": 0.8,
+       "rx": 0.3,
+       "ry": 0.25
+      }
+     ]
+    },
+    "caudal": {
+     "color": "#c0a060",
+     "opacity": 0.55
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "perca-flavescens",
+  "commonName": "Yellow Perch",
+  "scientificName": "Perca flavescens",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern & eastern North America; widely introduced",
+  "description": "The North American counterpart of the European Perch, golden-yellow with six to eight dark saddles reaching down its sides. It forms loose schools in lakes and slow rivers and feeds on insects, crayfish and small fish.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 30,
+  "lifespanYears": 10,
+  "tempC": [
+   6,
+   24
+  ],
+  "ph": [
+   6.5,
+   8.2
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 500,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "predator",
+   "bold",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.28,
+   "width": 0.13,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.4,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#e0c860",
+   "dorsal": "#6a6a34",
+   "ventral": "#f4eedc",
+   "fin": "#d8a050",
+   "finOpacity": 0.6,
+   "eye": "#d8a040",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e3220",
+     "count": 7,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "pelvic": {
+     "color": "#e8802a",
+     "opacity": 0.7
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "sander-lucioperca",
+  "commonName": "Zander",
+  "scientificName": "Sander lucioperca",
+  "family": "Percidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central & eastern Europe and western Asia; introduced elsewhere",
+  "description": "A slender, fanged predator of large, turbid lakes and rivers, hunting mostly at dusk and night with eyes that have a reflective layer for low light. Dark bars cross its greenish-grey flanks and both dorsal fins are rowed with dark spots.",
+  "adultLengthCm": 50,
+  "birthLengthCm": 0.6,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   6,
+   24
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 2000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "piscivore",
+  "activity": "crepuscular",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 7,
+  "traits": [
+   "predator",
+   "shy",
+   "ambush"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.22,
+   "width": 0.12,
+   "headLength": 0.28,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.24,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.1,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.3,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.8,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.33,
+    "end": 0.37,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8b0a0",
+   "dorsal": "#4e5a4a",
+   "ventral": "#eef0ea",
+   "fin": "#a8a898",
+   "finOpacity": 0.5,
+   "eye": "#d8d0b0",
+   "metallic": 0.45,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#3a4236",
+     "count": 10,
+     "width": 0.035,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.3,
+     "y1": 1
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a24",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a24",
+       "density": 25,
+       "size": 0.05
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "gasterosteus-aculeatus",
+  "commonName": "Three-spined Stickleback",
+  "scientificName": "Gasterosteus aculeatus",
+  "family": "Gasterosteidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coasts and fresh waters across the northern hemisphere",
+  "description": "A classic of animal-behavior research: in spring the male turns red-throated and blue-eyed, builds a tunnel nest of plant fragments glued with a kidney secretion, zig-zag dances to lead females in, and fans and guards the eggs.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   4,
+   20
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 10,
+  "traits": [
+   "territorial",
+   "flarer",
+   "digger",
+   "bold"
+  ],
+  "body": {
+   "archetype": "stickleback",
+   "depth": 0.22,
+   "width": 0.1,
+   "headLength": 0.28,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "peduncle": 0.25,
+   "scaleSize": 0.1,
+   "armored": true,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.34,
+    "end": 0.56,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.6,
+    "end": 0.82,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.82,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.36,
+    "end": 0.4,
+    "height": 0.12,
+    "shape": "spiny"
+   }
+  },
+  "look": {
+   "base": "#b8bca0",
+   "dorsal": "#5a6a48",
+   "ventral": "#eeefe4",
+   "fin": "#d8d8c8",
+   "finOpacity": 0.25,
+   "eye": "#c8b880",
+   "metallic": 0.45,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#5a6248",
+     "count": 6,
+     "width": 0.03,
+     "x0": 0.25,
+     "x1": 0.9,
+     "y0": 0,
+     "y1": 1
+    },
+    {
+     "type": "scales",
+     "color": "#8a8e78",
+     "contrast": 0.25
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "dorsal": "#3a8a8a",
+    "ventral": "#e0302a",
+    "eye": "#3a9aff",
+    "iridescence": 0.6,
+    "iridescenceColor": "#40c8e0",
+    "patterns": [
+     {
+      "type": "region",
+      "color": "#e0302a",
+      "x0": 0.05,
+      "x1": 0.6,
+      "y0": -1,
+      "y1": -0.2,
+      "softness": 0.2
+     },
+     {
+      "type": "scales",
+      "color": "#4a7a7a",
+      "contrast": 0.25
+     }
+    ]
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "pungitius-pungitius",
+  "commonName": "Ninespine Stickleback",
+  "scientificName": "Pungitius pungitius",
+  "family": "Gasterosteidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Circumpolar — northern North America, Europe & Asia",
+  "description": "A slim stickleback with a row of seven to twelve small dorsal spines. Breeding males turn black with white pelvic spines and build a nest among plants above the bottom.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   4,
+   20
+  ],
+  "ph": [
+   7,
+   8.2
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 60,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 10,
+  "traits": [
+   "territorial",
+   "flarer",
+   "shy"
+  ],
+  "body": {
+   "archetype": "stickleback",
+   "depth": 0.17,
+   "width": 0.1,
+   "headLength": 0.28,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "peduncle": 0.2,
+   "scaleSize": 0.1,
+   "armored": false,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.58,
+    "height": 0.06,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.6,
+    "end": 0.82,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.82,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.36,
+    "end": 0.4,
+    "height": 0.12,
+    "shape": "spiny"
+   }
+  },
+  "look": {
+   "base": "#a8a888",
+   "dorsal": "#5a5a40",
+   "ventral": "#e8e8d8",
+   "fin": "#d0d0c0",
+   "finOpacity": 0.25,
+   "eye": "#b8a870",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#4a4a34",
+     "scale": 6,
+     "amount": 0.4
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#2a2a26",
+    "dorsal": "#1a1a18",
+    "ventral": "#3a3a34",
+    "patterns": [
+     {
+      "type": "speckle",
+      "color": "#141412",
+      "density": 0.2
+     }
+    ],
+    "fins": {
+     "pelvic": {
+      "color": "#f0f0ea",
+      "opacity": 0.9
+     }
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "culaea-inconstans",
+  "commonName": "Brook Stickleback",
+  "scientificName": "Culaea inconstans",
+  "family": "Gasterosteidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Northern North America, from the Great Lakes to the Northwest Territories",
+  "description": "A small, plump stickleback of cool, weedy ponds and spring-fed streams, with only four to six short dorsal spines. Breeding males darken to almost black and build a ball-shaped nest attached to plant stems.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.45,
+  "maturityMonths": 12,
+  "lifespanYears": 3,
+  "tempC": [
+   4,
+   20
+  ],
+  "ph": [
+   6.5,
+   8.2
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 50,
+  "temperament": "semi-aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 5,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.8,
+  "burstSpeed": 10,
+  "traits": [
+   "territorial",
+   "flarer",
+   "shy"
+  ],
+  "body": {
+   "archetype": "stickleback",
+   "depth": 0.22,
+   "width": 0.1,
+   "headLength": 0.28,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.34,
+   "peduncle": 0.25,
+   "scaleSize": 0.1,
+   "armored": false,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.38,
+    "end": 0.56,
+    "height": 0.06,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.6,
+    "end": 0.82,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.82,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.36,
+    "end": 0.4,
+    "height": 0.12,
+    "shape": "spiny"
+   }
+  },
+  "look": {
+   "base": "#8a8a5a",
+   "dorsal": "#4e5034",
+   "ventral": "#dcdcc4",
+   "fin": "#c8c8b0",
+   "finOpacity": 0.3,
+   "eye": "#b8a870",
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#d8d8b0",
+     "density": 35,
+     "size": 0.025,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.8
+    },
+    {
+     "type": "lines",
+     "color": "#4a4a30",
+     "count": 3,
+     "width": 0.012,
+     "wavy": 0.7,
+     "y0": -0.4,
+     "y1": 0.6
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#2a2a22",
+    "dorsal": "#18180f",
+    "ventral": "#4a3028"
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "esox-lucius",
+  "commonName": "Northern Pike",
+  "scientificName": "Esox lucius",
+  "family": "Esocidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Cool fresh waters across North America, Europe & northern Asia",
+  "description": "The classic lie-in-wait predator, hanging motionless among weeds before an explosive lunge. Rows of pale bean-shaped spots mark its olive-green flanks, and its duck-billed jaws are lined with backward-pointing teeth.",
+  "adultLengthCm": 60,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 36,
+  "lifespanYears": 15,
+  "tempC": [
+   4,
+   22
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 3000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 9,
+  "traits": [
+   "ambush",
+   "predator",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.16,
+   "width": 0.11,
+   "headLength": 0.28,
+   "snout": "duckbill",
+   "mouth": "terminal",
+   "eyeSize": 0.2,
+   "peduncle": 0.55,
+   "scaleSize": 0.3,
+   "backArch": -0.6,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.72,
+    "end": 0.86,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.5,
+    "end": 0.54,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.27,
+    "end": 0.3,
+    "height": 0.08,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7a8a52",
+   "dorsal": "#3e4a2a",
+   "ventral": "#f0eedc",
+   "fin": "#8a8a52",
+   "finOpacity": 0.6,
+   "eye": "#d8b040",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#e0dca0",
+     "density": 60,
+     "size": 0.025,
+     "x0": 0.25,
+     "x1": 0.97,
+     "y0": -0.6,
+     "y1": 0.85,
+     "jitter": 0.5
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a1a",
+       "density": 25,
+       "size": 0.06
+      }
+     ]
+    },
+    "caudal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a1a",
+       "density": 30,
+       "size": 0.05
+      }
+     ]
+    },
+    "anal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#2a2a1a",
+       "density": 20,
+       "size": 0.06
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "esox-niger",
+  "commonName": "Chain Pickerel",
+  "scientificName": "Esox niger",
+  "family": "Esocidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic & Gulf slopes of eastern North America, from Nova Scotia to Florida",
+  "description": "A slender pike of weedy, clear and tea-stained waters, named for the dark chain-like network over its golden-olive sides. A dark vertical bar drops below each eye.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.8,
+  "maturityMonths": 24,
+  "lifespanYears": 8,
+  "tempC": [
+   6,
+   26
+  ],
+  "ph": [
+   5.5,
+   8
+  ],
+  "dGH": [
+   2,
+   20
+  ],
+  "minTankLiters": 1000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 9,
+  "traits": [
+   "ambush",
+   "predator",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.15,
+   "width": 0.11,
+   "headLength": 0.28,
+   "snout": "duckbill",
+   "mouth": "terminal",
+   "eyeSize": 0.2,
+   "peduncle": 0.55,
+   "scaleSize": 0.3,
+   "backArch": -0.6,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.72,
+    "end": 0.86,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.5,
+    "end": 0.54,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.27,
+    "end": 0.3,
+    "height": 0.08,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8b870",
+   "dorsal": "#5a5a30",
+   "ventral": "#f0ecd8",
+   "fin": "#a89a60",
+   "finOpacity": 0.5,
+   "eye": "#d8b040",
+   "metallic": 0.3,
+   "patterns": [
+    {
+     "type": "reticulate",
+     "color": "#2a2a18",
+     "scale": 10,
+     "thickness": 0.35
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1e14",
+     "x": 0.17,
+     "y": -0.45,
+     "rx": 0.012,
+     "ry": 0.3
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "esox-americanus",
+  "commonName": "Redfin Pickerel",
+  "scientificName": "Esox americanus",
+  "family": "Esocidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Eastern North America — Atlantic slope (redfin) and Mississippi basin (grass pickerel)",
+  "description": "The smallest pike, small enough for a large home aquarium, living among dense vegetation in slow streams and swamps. Dark wavy bars cross its olive sides, and the eastern subspecies has red-orange lower fins.",
+  "adultLengthCm": 25,
+  "birthLengthCm": 0.7,
+  "maturityMonths": 18,
+  "lifespanYears": 7,
+  "tempC": [
+   8,
+   26
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   3,
+   20
+  ],
+  "minTankLiters": 400,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.15,
+  "burstSpeed": 9,
+  "traits": [
+   "ambush",
+   "predator",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.15,
+   "width": 0.11,
+   "headLength": 0.28,
+   "snout": "duckbill",
+   "mouth": "terminal",
+   "eyeSize": 0.2,
+   "peduncle": 0.55,
+   "scaleSize": 0.3,
+   "backArch": -0.6,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.72,
+    "end": 0.86,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.5,
+    "end": 0.54,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.27,
+    "end": 0.3,
+    "height": 0.08,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8a8a5a",
+   "dorsal": "#4a4a30",
+   "ventral": "#e8e4cc",
+   "fin": "#c8603a",
+   "finOpacity": 0.55,
+   "eye": "#d8b040",
+   "metallic": 0.2,
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#2e2e1e",
+     "count": 16,
+     "width": 0.02,
+     "x0": 0.25,
+     "x1": 0.97,
+     "y0": -0.6,
+     "y1": 0.9,
+     "slant": 0.2
+    },
+    {
+     "type": "blotch",
+     "color": "#1e1e14",
+     "x": 0.17,
+     "y": -0.45,
+     "rx": 0.012,
+     "ry": 0.3
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "color": "#6a6a48"
+    },
+    "caudal": {
+     "color": "#8a7a50"
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "esox-masquinongy",
+  "commonName": "Muskellunge",
+  "scientificName": "Esox masquinongy",
+  "family": "Esocidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Great Lakes, St Lawrence & upper Mississippi basins, North America",
+  "description": "The largest pike, a solitary ambush predator of clear lakes and large rivers that can exceed 1.5 m. Its light greenish-silver sides may be plain, spotted or barred with dark marks.",
+  "adultLengthCm": 100,
+  "birthLengthCm": 0.9,
+  "maturityMonths": 48,
+  "lifespanYears": 20,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 10000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.12,
+  "burstSpeed": 8,
+  "traits": [
+   "ambush",
+   "predator",
+   "hoverer"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.16,
+   "width": 0.11,
+   "headLength": 0.28,
+   "snout": "duckbill",
+   "mouth": "terminal",
+   "eyeSize": 0.2,
+   "peduncle": 0.55,
+   "scaleSize": 0.3,
+   "backArch": -0.6,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.72,
+    "end": 0.86,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.74,
+    "end": 0.88,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.5,
+    "end": 0.54,
+    "height": 0.08,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.27,
+    "end": 0.3,
+    "height": 0.08,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#a8b090",
+   "dorsal": "#4e5a3e",
+   "ventral": "#f0f0e4",
+   "fin": "#a87a50",
+   "finOpacity": 0.55,
+   "eye": "#d8b040",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#2a2e20",
+     "density": 40,
+     "size": 0.03,
+     "x0": 0.25,
+     "x1": 0.97,
+     "y0": -0.5,
+     "y1": 0.9,
+     "jitter": 0.8
+    },
+    {
+     "type": "bars",
+     "color": "#3e4630",
+     "count": 10,
+     "width": 0.02,
+     "x0": 0.25,
+     "x1": 0.95,
+     "y0": -0.4,
+     "y1": 0.9
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "umbra-krameri",
+  "commonName": "European Mudminnow",
+  "scientificName": "Umbra krameri",
+  "family": "Umbridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Danube & Dniester basins, central & eastern Europe",
+  "description": "A small, endangered fish of overgrown marshes and oxbows that can gulp air to survive warm, oxygen-poor summers. The female guards its eggs in a shallow nest among plants.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   4,
+   22
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 7,
+  "traits": [
+   "air-gulper",
+   "shy",
+   "bottom-rester",
+   "invert-eater"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.2,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.6,
+   "scaleSize": 0.4,
+   "backArch": -0.2,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 0.66,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.72,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8a6e4a",
+   "dorsal": "#4e3e2a",
+   "ventral": "#d8c8a8",
+   "fin": "#8a7050",
+   "finOpacity": 0.5,
+   "eye": "#b89050",
+   "patterns": [
+    {
+     "type": "stripe",
+     "color": "#c8b080",
+     "y": 0,
+     "width": 0.05,
+     "x0": 0.25,
+     "x1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#2e2418",
+     "density": 35,
+     "size": 0.025,
+     "x0": 0.15,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.9
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "umbra-pygmaea",
+  "commonName": "Eastern Mudminnow",
+  "scientificName": "Umbra pygmaea",
+  "family": "Umbridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic coastal plain, from New York to northern Florida",
+  "description": "A hardy little fish of acidic swamps, bogs and ditches that buries itself in mud when ponds dry or freeze and can breathe air. Ten or more thin dark stripes run along its brown body, ending at a dark bar on the tail base.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 4,
+  "tempC": [
+   4,
+   24
+  ],
+  "ph": [
+   4.5,
+   7.5
+  ],
+  "dGH": [
+   1,
+   12
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 7,
+  "traits": [
+   "air-gulper",
+   "burrower",
+   "bottom-rester",
+   "invert-eater"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.2,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.6,
+   "scaleSize": 0.4,
+   "backArch": -0.2,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 0.66,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.72,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7a6448",
+   "dorsal": "#4a3a28",
+   "ventral": "#c8b898",
+   "fin": "#7a6448",
+   "finOpacity": 0.5,
+   "eye": "#b89050",
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#3a2c1e",
+     "count": 10,
+     "width": 0.015,
+     "y0": -0.7,
+     "y1": 0.8
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2016",
+     "x": 0.98,
+     "y": 0,
+     "rx": 0.02,
+     "ry": 0.3
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "umbra-limi",
+  "commonName": "Central Mudminnow",
+  "scientificName": "Umbra limi",
+  "family": "Umbridae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Great Lakes, upper Mississippi & Hudson Bay drainages, North America",
+  "description": "A cold-tolerant mudminnow of bogs, marshes and weedy creeks that remains active under ice and survives low oxygen by gulping air. Faint mottled bars mark its olive-brown sides, with a dark bar at the tail base.",
+  "adultLengthCm": 8,
+  "birthLengthCm": 0.5,
+  "maturityMonths": 12,
+  "lifespanYears": 5,
+  "tempC": [
+   2,
+   22
+  ],
+  "ph": [
+   6,
+   8
+  ],
+  "dGH": [
+   3,
+   20
+  ],
+  "minTankLiters": 60,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 4,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.3,
+  "burstSpeed": 7,
+  "traits": [
+   "air-gulper",
+   "shy",
+   "bottom-rester",
+   "invert-eater"
+  ],
+  "body": {
+   "archetype": "pike",
+   "depth": 0.2,
+   "width": 0.12,
+   "headLength": 0.26,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.26,
+   "peduncle": 0.6,
+   "scaleSize": 0.4,
+   "backArch": -0.2,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.5,
+    "end": 0.66,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.62,
+    "end": 0.72,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.46,
+    "end": 0.5,
+    "height": 0.08,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#7e7050",
+   "dorsal": "#4a4030",
+   "ventral": "#d0c4a4",
+   "fin": "#7a6c50",
+   "finOpacity": 0.5,
+   "eye": "#b89050",
+   "patterns": [
+    {
+     "type": "bars",
+     "color": "#4a3e2a",
+     "count": 12,
+     "width": 0.025,
+     "x0": 0.2,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.9
+    },
+    {
+     "type": "blotch",
+     "color": "#2a2016",
+     "x": 0.98,
+     "y": 0,
+     "rx": 0.02,
+     "ry": 0.3
+    }
+   ]
+  },
+  "availability": "rare"
  }
 ]

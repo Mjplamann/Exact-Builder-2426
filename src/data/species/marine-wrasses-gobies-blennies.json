@@ -13456,7 +13456,23 @@
    "ventral": "#e88a8a",
    "fin": "#c04a56",
    "finOpacity": 0.85,
-   "eye": "#e05030"
+   "eye": "#e05030",
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#b03a46",
+     "contrast": 0.25
+    },
+    {
+     "type": "region",
+     "color": "#f0e0dc",
+     "x0": 0,
+     "x1": 0.1,
+     "y0": -1,
+     "y1": -0.4,
+     "softness": 0.1
+    }
+   ]
   },
   "male": {
    "lengthScale": 1.2,
@@ -21818,7 +21834,18 @@
    "ventral": "#f8e060",
    "fin": "#f4d420",
    "finOpacity": 0.75,
-   "eye": "#e0a030"
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f8e890",
+     "x0": 0,
+     "x1": 0.3,
+     "y0": -1,
+     "y1": -0.3,
+     "softness": 0.2
+    }
+   ]
   },
   "availability": "common"
  },
@@ -25655,6 +25682,17 @@
    "eye": "#e0c060",
    "iridescence": 0.3,
    "iridescenceColor": "#8ac8ff",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e0d898",
+     "x0": 0,
+     "x1": 0.35,
+     "y0": 0.2,
+     "y1": 1,
+     "softness": 0.3
+    }
+   ],
    "fins": {
     "caudal": {
      "color": "#c8dcec",
@@ -28314,7 +28352,18 @@
    "ventral": "#f8e050",
    "fin": "#f4d418",
    "finOpacity": 0.8,
-   "eye": "#e0a030"
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#f8e478",
+     "x0": 0,
+     "x1": 0.25,
+     "y0": -1,
+     "y1": -0.2,
+     "softness": 0.2
+    }
+   ]
   },
   "availability": "uncommon"
  },
@@ -29720,5 +29769,628 @@
    ]
   },
   "availability": "uncommon"
+ },
+ {
+  "id": "acanthemblemaria-maria",
+  "commonName": "Secretary Blenny",
+  "scientificName": "Acanthemblemaria maria",
+  "family": "Chaenopsidae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — Bahamas & the Caribbean",
+  "description": "Lives in an abandoned worm or barnacle hole in living coral, with only its spiny, cirri-crowned head showing as it snaps plankton from the passing current.",
+  "adultLengthCm": 6,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "demersal-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 8,
+  "traits": [
+   "cave-dweller",
+   "perches",
+   "shy",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "blenny",
+   "depth": 0.15,
+   "width": 0.1,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.4,
+   "scaleSize": 0,
+   "dorsal": {
+    "start": 0.2,
+    "end": 0.92,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.45,
+    "end": 0.92,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   }
+  },
+  "look": {
+   "base": "#a8885a",
+   "dorsal": "#8a6a40",
+   "ventral": "#d0b890",
+   "fin": "#c0a070",
+   "finOpacity": 0.55,
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#e8c040",
+     "x0": 0,
+     "x1": 0.22,
+     "y0": -0.6,
+     "y1": 1,
+     "softness": 0.12
+    },
+    {
+     "type": "spots",
+     "color": "#3a2a1a",
+     "density": 50,
+     "size": 0.02,
+     "x0": 0.25,
+     "x1": 1
+    },
+    {
+     "type": "spots",
+     "color": "#f0f0e8",
+     "density": 30,
+     "size": 0.015,
+     "x0": 0,
+     "x1": 0.22
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "acanthemblemaria-spinosa",
+  "commonName": "Spinyhead Blenny",
+  "scientificName": "Acanthemblemaria spinosa",
+  "family": "Chaenopsidae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — Bahamas & the Caribbean",
+  "description": "A tiny tube blenny with a cluster of spines on top of its head; it occupies empty worm holes high on living coral heads and darts out after plankton.",
+  "adultLengthCm": 3.5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "demersal-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 8,
+  "traits": [
+   "cave-dweller",
+   "perches",
+   "shy",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "blenny",
+   "depth": 0.15,
+   "width": 0.1,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.4,
+   "scaleSize": 0,
+   "dorsal": {
+    "start": 0.2,
+    "end": 0.92,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.45,
+    "end": 0.92,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   }
+  },
+  "look": {
+   "base": "#b89a6a",
+   "dorsal": "#9a7a50",
+   "ventral": "#dcc8a8",
+   "fin": "#d0b890",
+   "finOpacity": 0.5,
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#6a4a2a",
+     "x0": 0,
+     "x1": 0.22,
+     "y0": -0.4,
+     "y1": 1,
+     "softness": 0.12
+    },
+    {
+     "type": "speckle",
+     "color": "#5a3a1a",
+     "density": 0.25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "acanthemblemaria-aspera",
+  "commonName": "Roughhead Blenny",
+  "scientificName": "Acanthemblemaria aspera",
+  "family": "Chaenopsidae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — Florida & the Bahamas through the Caribbean",
+  "description": "Named for the rough, spiny crown on its head; it lives in vacated holes in coral, and males defend their hole by flaring their fins at intruders.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "demersal-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 8,
+  "traits": [
+   "cave-dweller",
+   "perches",
+   "flarer",
+   "reef-safe"
+  ],
+  "body": {
+   "archetype": "blenny",
+   "depth": 0.15,
+   "width": 0.1,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.4,
+   "scaleSize": 0,
+   "dorsal": {
+    "start": 0.2,
+    "end": 0.92,
+    "height": 0.14,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.45,
+    "end": 0.92,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   }
+  },
+  "look": {
+   "base": "#7a6a4a",
+   "dorsal": "#5a4a30",
+   "ventral": "#b0a080",
+   "fin": "#8a7a5a",
+   "finOpacity": 0.55,
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "region",
+     "color": "#3a2a1a",
+     "x0": 0,
+     "x1": 0.22,
+     "y0": -0.2,
+     "y1": 1,
+     "softness": 0.12
+    },
+    {
+     "type": "spots",
+     "color": "#e8e0c8",
+     "density": 40,
+     "size": 0.012
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "emblemaria-pandionis",
+  "commonName": "Sailfin Blenny",
+  "scientificName": "Emblemaria pandionis",
+  "family": "Chaenopsidae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — Florida & the Gulf of Mexico through the Caribbean",
+  "description": "Males live in vacated worm holes and repeatedly pop out to flash a huge, sail-like dorsal fin, courting females and warning rivals.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "demersal-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 8,
+  "traits": [
+   "cave-dweller",
+   "flarer",
+   "perches",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "blenny",
+   "depth": 0.15,
+   "width": 0.1,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.4,
+   "scaleSize": 0,
+   "dorsal": {
+    "start": 0.16,
+    "end": 0.92,
+    "height": 0.24,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.45,
+    "end": 0.92,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   }
+  },
+  "look": {
+   "base": "#a89a7a",
+   "dorsal": "#8a7a5a",
+   "ventral": "#d0c8b0",
+   "fin": "#c0b090",
+   "finOpacity": 0.55,
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#6a5a40",
+     "scale": 3,
+     "amount": 0.35
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#3a3430",
+    "dorsal": "#2a2420",
+    "ventral": "#5a5048",
+    "fin": "#2a2a2a",
+    "finOpacity": 0.85,
+    "fins": {
+     "dorsal": {
+      "color": "#2a2a2a",
+      "opacity": 0.85,
+      "edge": "#e8d8b0",
+      "edgeWidth": 0.1,
+      "patterns": [
+       {
+        "type": "spots",
+        "color": "#e8d8b0",
+        "density": 15,
+        "size": 0.05
+       }
+      ]
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.14,
+     "end": 0.92,
+     "height": 0.55,
+     "shape": "sail"
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "emblemaria-hypacanthus",
+  "commonName": "Signal Blenny",
+  "scientificName": "Emblemaria hypacanthus",
+  "family": "Chaenopsidae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Eastern Pacific — Gulf of California",
+  "description": "The Gulf of California counterpart of the sailfin blenny; males signal from the mouth of their hole by repeatedly raising a tall, dark dorsal fin.",
+  "adultLengthCm": 5,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   20,
+   27
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "planktivore",
+  "activity": "diurnal",
+  "reproduction": "demersal-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 8,
+  "traits": [
+   "cave-dweller",
+   "flarer",
+   "perches",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "blenny",
+   "depth": 0.15,
+   "width": 0.1,
+   "headLength": 0.22,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.4,
+   "scaleSize": 0,
+   "dorsal": {
+    "start": 0.16,
+    "end": 0.92,
+    "height": 0.22,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.45,
+    "end": 0.92,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   }
+  },
+  "look": {
+   "base": "#a89070",
+   "dorsal": "#8a7050",
+   "ventral": "#d0c0a0",
+   "fin": "#c0a888",
+   "finOpacity": 0.55,
+   "eye": "#e0a030",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#6a5038",
+     "scale": 3,
+     "amount": 0.35
+    }
+   ]
+  },
+  "male": {
+   "look": {
+    "base": "#4a3a30",
+    "fin": "#2a2420",
+    "finOpacity": 0.85,
+    "fins": {
+     "dorsal": {
+      "color": "#2a2420",
+      "opacity": 0.85,
+      "edge": "#f0d040",
+      "edgeWidth": 0.1
+     }
+    }
+   },
+   "body": {
+    "dorsal": {
+     "start": 0.14,
+     "end": 0.92,
+     "height": 0.45,
+     "shape": "sail"
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lucayablennius-zingaro",
+  "commonName": "Arrow Blenny",
+  "scientificName": "Lucayablennius zingaro",
+  "family": "Chaenopsidae",
+  "group": "fish",
+  "water": "marine",
+  "region": "Western Atlantic — Bahamas & the Caribbean",
+  "description": "A slender, translucent orange blenny that hovers near reef walls with its tail curled to one side, then straightens it to lunge at tiny fish and shrimp — an unusual predatory lifestyle for a blenny.",
+  "adultLengthCm": 4,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 8,
+  "lifespanYears": 3,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   8.1,
+   8.4
+  ],
+  "minTankLiters": 40,
+  "temperament": "peaceful",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "demersal-spawner",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 10,
+  "traits": [
+   "predator",
+   "hoverer",
+   "ambush",
+   "shy"
+  ],
+  "body": {
+   "archetype": "blenny",
+   "depth": 0.1,
+   "width": 0.07,
+   "headLength": 0.22,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.4,
+   "scaleSize": 0,
+   "dorsal": {
+    "start": 0.25,
+    "end": 0.9,
+    "height": 0.08,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.45,
+    "end": 0.92,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pectoral": {
+    "start": 0.24,
+    "end": 0.28,
+    "height": 0.2,
+    "shape": "fan"
+   },
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   }
+  },
+  "look": {
+   "base": "#e8804a",
+   "dorsal": "#e07038",
+   "ventral": "#f0a070",
+   "fin": "#f0b080",
+   "finOpacity": 0.35,
+   "eye": "#e0a030",
+   "translucency": 0.45,
+   "patterns": [
+    {
+     "type": "blotch",
+     "color": "#1a1a1a",
+     "x": 0.96,
+     "y": 0,
+     "rx": 0.02,
+     "ry": 0.15
+    }
+   ]
+  },
+  "availability": "rare"
  }
 ]

@@ -76,8 +76,12 @@ const CATCHUP_MIN_STEP_S = 300;
 const CATCHUP_MAX_STEP_S = 7200;
 /** Of a meal's satiety, this share is felt at once (gut distension); the rest as it digests. */
 const IMMEDIATE_SATIETY = 0.6;
-/** Days from ravenous to dead for the reference 0.3 g fish (scales with size^0.2). */
-const STARVE_DAYS_REF = 6;
+/**
+ * Days from ravenous to dead for the reference 0.3 g fish (scales with size^0.2): with the day
+ * or so it takes to become ravenous, a neon survives ~10 days without food, a 50 g angelfish ~4
+ * weeks — the real "holiday" tolerance of healthy adult fish.
+ */
+const STARVE_DAYS_REF = 9;
 /** Fish O₂ consumption at 25 °C: ≈0.3 mg O₂ per g^0.8 per hour. */
 const O2_MG_PER_G08_DAY = 7.2;
 const WREF_POW = Math.pow(REF_MASS_G, -0.2);
