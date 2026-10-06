@@ -329,6 +329,20 @@ describe('camera follow', () => {
     expect(defaultFill(0.06)).toBeLessThan(0.3);
   });
 
+  it('focuses the free view where it is told (zoom anchor, centre autofocus)', () => {
+    const rig = makeRig();
+    rig.setZoom(4);
+    run(rig, 1);
+    for (const z of [0.1, -0.12]) {
+      rig.focusAt(z);
+      run(rig, 2);
+      const cam = rig.camera;
+      const dir = new Vector3(0, 0, -1).transformDirection(cam.matrixWorld);
+      expect(rig.focusDistance).toBeCloseTo((cam.position.z - z) / -dir.z, 3);
+    }
+    expect(rig.dofAmount).toBeGreaterThan(0.99);
+  });
+
   it('focuses on the subject and shows depth of field when following', () => {
     const rig = makeRig();
     expect(rig.dofAmount).toBe(0);

@@ -426,8 +426,10 @@ export class PostFX {
     if (this.dof) this.dof.enabled = dofOn;
     fu.uDofOn.value = dofOn ? 1 : 0;
     if (dofOn) {
+      // dof.scale is a CoC diameter as a fraction of the frame height; the shaders work with
+      // radii in half-resolution pixels (÷2 twice).
       const halfH = this.size.y / 2;
-      const scale = dof!.scale * halfH;
+      const scale = (dof!.scale * halfH) / 2;
       const inv = 1 / Math.max(1e-3, dof!.focus);
       const cap = Math.max(2, Math.min(MAX_COC_PX, MAX_COC_FRAC * halfH));
       fu.uCoc.value.set(scale, inv, cap);

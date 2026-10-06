@@ -317,6 +317,10 @@ export class Engine {
     // line of sight passes (see CameraRig), which is also the eye for water path lengths.
     this.rig.drift = world.settings.cameraDrift;
     this.rig.update(dt);
+    if (this.refocusT >= 0) {
+      this.refocusT -= dt;
+      if (this.refocusT < 0) this.refocus();
+    }
     GLOBALS.uCameraPos.value.copy(this.camera.position);
 
     // Bubbles, surface, motes, glass.
@@ -428,6 +432,10 @@ export class Engine {
 
   /** Zoom anchor of the current gesture (re-picked when the pointer moves or after a pause). */
   private anchor = { x: 0, y: 0, time: -1e9, point: new Vector3(), valid: false };
+  /** What lies under a client point (from the App, via zoomBy): zoom anchors and autofocus. */
+  private picker: ((clientX: number, clientY: number) => Vector3 | null) | null = null;
+  /** Seconds until the lens refocuses on the frame centre (after a zoom or pan without an anchor); < 0 = none. */
+  private refocusT = -1;
 
   /**
    * Follow a moving subject (its arrays are read every frame — pass live references, refreshed in
@@ -452,8 +460,10 @@ export class Engine {
    * own geometry is used. While following, zoom frames the subject tighter or looser.
    */
   zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number, pickAnchor?: (clientX: number, clientY: number) => Vector3 | null): void {
+    if (pickAnchor) this.picker = pickAnchor;
     if (anchorClientX === undefined || anchorClientY === undefined || this.rig.isFollowing) {
       this.rig.zoomBy(steps);
+      this.refocusSoon();
       return;
     }
     const rect = this.canvas.getBoundingClientRect();
@@ -470,7 +480,24 @@ export class Engine {
     }
     a.time = now;
     if (a.valid) this.rig.zoomBy(steps, nx, ny, a.point);
-    else this.rig.zoomBy(steps);
+    else {
+      this.rig.zoomBy(steps);
+      this.refocusSoon();
+    }
+  }
+
+  /** Autofocus on the frame centre once the view has settled (like a camera's centre AF point). */
+  private refocusSoon(): void {
+    if (!this.rig.isFollowing) this.refocusT = 0.35;
+  }
+
+  private refocus(): void {
+    if (this.rig.isFollowing || this.rig.targetZoom < 1.3) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const p = this.picker?.(x, y) ?? (this.anchorInTank(this.rayFromScreen(x, y), this.tmpV) ? this.tmpV : null);
+    if (p) this.rig.focusAt(p.z);
   }
 
   /**
@@ -514,6 +541,7 @@ export class Engine {
   /** Absolute zoom (1 = whole tank … 8). While following, scales the framing to match. */
   setZoom(zoom: number): void {
     this.rig.setZoom(zoom);
+    this.refocusSoon();
   }
 
   /** The TARGET zoom (what the view is heading for): 1 = the whole tank framed; `max` = closest telephoto framing. */
@@ -529,6 +557,7 @@ export class Engine {
   /** Pan by fractions of the visible half-width/height (positive = view moves right/up). Ignored while following. */
   panBy(dx: number, dy: number): void {
     this.rig.panBy(dx, dy);
+    this.refocusSoon();
   }
 
   /** Back to the whole-tank view (stops following). `gentle`: a slow documentary pull-back. */
@@ -549,6 +578,7 @@ export class Engine {
    */
   nudgeView(dx: number, dy: number, dz: number): void {
     this.rig.nudge(dx, dy, dz);
+    this.refocusSoon();
   }
 
   dispose(): void {

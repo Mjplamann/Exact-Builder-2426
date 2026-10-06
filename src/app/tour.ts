@@ -1,6 +1,5 @@
 import type { World } from '../core/world';
 import type { FishEntity, Species } from '../core/types';
-import { tankBounds } from '../core/tankGeometry';
 
 /**
  * Documentary "tour" mode: the camera drifts from one interesting animal to the next (an active
@@ -187,8 +186,8 @@ export function scoreAnimal(world: World, f: FishEntity): number {
   s *= 0.6 + 0.4 * clamp01(Math.log2(lenCm / 2) / 3);
   s *= 0.55 + 0.45 * colourfulness(sp);
   // In plain view: toward the front glass, out of cover, not behind decor.
-  const b = tankBounds(world.tank);
-  s *= 0.4 + 0.6 * clamp01((k.pos[2] + b.halfD) / (2 * b.halfD));
+  const halfD = world.tank.size.depthCm / 200;
+  s *= 0.4 + 0.6 * clamp01((k.pos[2] + halfD) / (2 * halfD));
   if (inCover(world, f)) s *= 0.3;
   if (occluded(world, f)) s *= 0.3;
   // Time of day.

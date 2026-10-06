@@ -73,8 +73,9 @@ export const FILL_MAX = 0.6;
 const OMEGA_USER = 22;
 /** "Back to the whole tank". */
 const OMEGA_RESET = 6;
-/** Following: framing position and zoom… */
+/** Following: framing position and zoom (faster, up to the max, for animals that cross the frame quickly)… */
 const OMEGA_FOLLOW = 1.9;
+const OMEGA_FOLLOW_MAX = 4.5;
 /** …a user's change of framing while following… */
 const OMEGA_FILL = 7;
 /** …and the aim, which takes up what the slow framing lags behind. */
@@ -87,8 +88,8 @@ const OMEGA_SETTLE = 2.6;
 const AIM_MAX = 0.35;
 /** Rule of thirds: the subject sits this far (NDC) from the centre, away from where it is heading. */
 const LEAD = 0.26;
-/** Velocity look-ahead (s) of the framing target: takes up much of the slow spring's lag. */
-const PREDICT = 0.5;
+/** Velocity look-ahead of the framing target, as a share of the spring's lag (2/ω) it takes up. */
+const PREDICT = 0.7;
 /**
  * Depth of field: effective aperture h/(4N) of a full-frame sensor (h = 24 mm) at f/16 (m) — the
  * stopped-down lens of an aquarium macro photographer.
@@ -175,6 +176,8 @@ export class CameraRig {
   private followTarget = new Vector3();
   /** 0..1 how much we are following (eased; drives depth of field). */
   private followW = 0;
+  /** Framing spring rate for the current subject (eased with how fast it crosses the frame). */
+  private followOmega = OMEGA_FOLLOW;
 
   // Framing transition (start/switch/end of a follow): elapsed, length, kind, where it started.
   private transT = 0;
@@ -542,6 +545,7 @@ export class CameraRig {
       this.sv.set(0, 0, 0);
       const f = subject.forward;
       if (f) this.sf.set(f[0], f[1], f[2]);
+      this.followOmega = OMEGA_FOLLOW;
       this.startTransition(was !== null);
       this.followTargetFor(this.followTarget);
     } else if (was) {
@@ -586,6 +590,11 @@ export class CameraRig {
     this.setFollowFill(MathUtils.clamp(cur * factor, Math.min(lo, hi), Math.max(lo, hi)));
   }
 
+  /** Focus the free view at this true-space depth (z), e.g. what lies under the frame centre. */
+  focusAt(z: number): void {
+    if (Number.isFinite(z)) this.freeFocusZ = MathUtils.clamp(z, this.backTrue, this.frontZ);
+  }
+
   /** Old API: keep a still point in view (null = back to the free view). */
   setFocus(target: Vector3 | null): void {
     const s = this.pointSubject;
@@ -615,7 +624,7 @@ export class CameraRig {
     const s = this.subject!;
     const b = this.tmp2;
     // Predicted position, kept inside the tank.
-    b.copy(this.sv).multiplyScalar(PREDICT).add(this.sp);
+    b.copy(this.sv).multiplyScalar((PREDICT * 2) / this.followOmega).add(this.sp);
     b.x = MathUtils.clamp(b.x, -this.halfW, this.halfW);
     b.z = MathUtils.clamp(b.z, this.backTrue, this.frontZ);
     const dS = (this.frontZ - b.z) / this.n;
@@ -716,9 +725,13 @@ export class CameraRig {
     // Targets and spring rates.
     if (this.subject) {
       this.trackSubject(dt);
+      // Tighter tracking when the animal crosses the frame quickly (a small, busy fish at high zoom).
+      const across = Math.hypot(this.sv.x, this.sv.y) / this.widthAt(this.view.pos.z, Math.max(0, this.frontZ - this.sp.z) / this.n);
+      const wSteady = Math.min(OMEGA_FOLLOW_MAX, OMEGA_FOLLOW * (1 + 3 * across));
+      this.followOmega += (wSteady - this.followOmega) * (1 - Math.exp(-dt / 1.2));
       this.followTargetFor(this.followTarget);
       this.desired.copy(this.followTarget);
-      const w = MathUtils.lerp(OMEGA_TRANSITION, OMEGA_FOLLOW, k);
+      const w = MathUtils.lerp(OMEGA_TRANSITION, this.followOmega, k);
       this.fillT = Math.max(0, this.fillT - dt);
       this.view.step(this.desired, dt, w, w, this.fillT > 0 ? Math.max(w, OMEGA_FILL) : w);
       if (this.clampView(this.view.pos)) this.view.vel.set(0, 0, this.view.vel.z);
@@ -772,17 +785,17 @@ export class CameraRig {
     cam.lookAt(this.tmp2.copy(cam.position).add(dir));
     this.applyProjection();
 
-    // Focus: the followed animal, else the zoom anchor's depth (or the tank middle). Pulled like
-    // a calm autofocus, evenly in diopters.
+    // Focus: the followed animal (its quick track: the depth of field is a few mm at 8×), else
+    // the zoom anchor's depth (or the tank middle). Pulled like an autofocus, evenly in diopters.
     let fd: number;
-    if (this.subject) fd = this.tmp.copy(this.sp).sub(cam.position).dot(this.viewDir);
+    if (this.subject) fd = this.tmp.copy(this.spFast).sub(cam.position).dot(this.viewDir);
     else fd = (cam.position.z - this.freeFocusZ) / Math.max(0.2, -this.viewDir.z);
     fd = MathUtils.clamp(fd, this.glassDistance + 0.005, this.backDistance + 0.05);
     if (!this.focusReady) {
       this.focusInv = 1 / fd;
       this.focusReady = true;
     } else {
-      this.focusInv += (1 / fd - this.focusInv) * (1 - Math.exp(-dt / 0.25));
+      this.focusInv += (1 / fd - this.focusInv) * (1 - Math.exp(-dt / (this.subject ? 0.1 : 0.25)));
     }
   }
 }
