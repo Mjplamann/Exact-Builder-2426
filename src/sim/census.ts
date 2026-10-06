@@ -368,7 +368,7 @@ export class Census {
       if (o === st) continue;
       const os = o.species;
       // A predator big enough to swallow us keeps us nervous.
-      if (!st.invert && os.adultLengthCm * o.gapeRatio > sp.adultLengthCm * 0.9 && o.predator) this.acc(0.3, 'tankmates');
+      if (!st.invert && os.adultLengthCm * o.gapeRatio > sp.adultLengthCm * 0.9 && o.predator) this.acc(0.2, 'tankmates');
       if (st.invert && o.invertEater) this.acc(0.4, 'tankmates');
       if (o.species.traits.includes('fin-nipper') && st.longFinned) this.acc(0.35, 'tankmates');
       if ((os.temperament === 'aggressive' || os.temperament === 'predatory') && sp.temperament === 'peaceful' && !st.invert)

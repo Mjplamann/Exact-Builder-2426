@@ -32493,5 +32493,1036 @@
    }
   },
   "availability": "uncommon"
+ },
+ {
+  "id": "lepomis-microlophus",
+  "commonName": "Redear Sunfish",
+  "scientificName": "Lepomis microlophus",
+  "family": "Centrarchidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "South-eastern USA; widely stocked elsewhere",
+  "description": "Nicknamed the \"shellcracker\" for the heavy throat teeth it uses to crush snails and small clams. Males show a black ear flap rimmed in red, without the wavy cheek lines of the Pumpkinseed.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 24,
+  "lifespanYears": 8,
+  "tempC": [
+   10,
+   28
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 300,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "colony",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "substrate-spawner",
+  "locomotion": "labriform",
+  "cruiseSpeed": 0.5,
+  "burstSpeed": 7,
+  "traits": [
+   "invert-eater",
+   "territorial",
+   "digger",
+   "shy"
+  ],
+  "body": {
+   "archetype": "sunfish",
+   "depth": 0.42,
+   "width": 0.13,
+   "depthPos": 0.4,
+   "headLength": 0.3,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.32,
+   "peduncle": 0.38,
+   "scaleSize": 0.55,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.25
+   },
+   "dorsal": {
+    "start": 0.36,
+    "end": 0.85,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "anal": {
+    "start": 0.6,
+    "end": 0.86,
+    "height": 0.14,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.36,
+    "end": 0.4,
+    "height": 0.12,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.34,
+    "height": 0.2,
+    "shape": "pointed"
+   }
+  },
+  "look": {
+   "base": "#a8a070",
+   "dorsal": "#5a5a3a",
+   "ventral": "#e8d8a0",
+   "fin": "#8a8462",
+   "finOpacity": 0.55,
+   "eye": "#c8a050",
+   "metallic": 0.25,
+   "patterns": [
+    {
+     "type": "speckle",
+     "color": "#4a4228",
+     "density": 0.35
+    },
+    {
+     "type": "bars",
+     "color": "#5a5436",
+     "count": 7,
+     "width": 0.035,
+     "x0": 0.25,
+     "x1": 0.92,
+     "y0": -0.4,
+     "y1": 1
+    },
+    {
+     "type": "blotch",
+     "color": "#121210",
+     "x": 0.3,
+     "y": 0.18,
+     "rx": 0.03,
+     "ry": 0.05,
+     "ring": "#e0402a"
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "morone-saxatilis",
+  "commonName": "Striped Bass",
+  "scientificName": "Morone saxatilis",
+  "family": "Moronidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Atlantic & Gulf coasts of North America; landlocked in many reservoirs",
+  "description": "A powerful schooling predator that runs up rivers from the sea to spawn, with seven or eight dark stripes along its silvery sides. Landlocked populations thrive in large lakes, and it is a familiar sight in North American public aquaria.",
+  "adultLengthCm": 70,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 48,
+  "lifespanYears": 20,
+  "tempC": [
+   10,
+   24
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 8000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "predator",
+   "bold"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.26,
+   "width": 0.13,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.24,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.2,
+   "caudal": {
+    "shape": "forked",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.11,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8ccc8",
+   "dorsal": "#4a5a60",
+   "ventral": "#f2f4f2",
+   "fin": "#8a9090",
+   "finOpacity": 0.6,
+   "eye": "#c8c0a0",
+   "metallic": 0.75,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#2a3034",
+     "count": 7,
+     "width": 0.022,
+     "y0": -0.6,
+     "y1": 0.75
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "aplodinotus-grunniens",
+  "commonName": "Freshwater Drum",
+  "scientificName": "Aplodinotus grunniens",
+  "family": "Sciaenidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Central & eastern North America, from Hudson Bay to Guatemala",
+  "description": "The only North American croaker confined to fresh water; males drum loudly with muscles vibrating the swim bladder. A humpbacked, silvery bottom feeder that crushes snails and mussels with its throat teeth.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 48,
+  "lifespanYears": 15,
+  "tempC": [
+   8,
+   26
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 2000,
+  "temperament": "semi-aggressive",
+  "zone": "bottom",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "invert-eater",
+   "sand-sifter",
+   "shy"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.36,
+   "width": 0.13,
+   "headLength": 0.26,
+   "snout": "blunt",
+   "mouth": "inferior",
+   "eyeSize": 0.24,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.7,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.48,
+    "height": 0.18,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.5,
+    "end": 0.92,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.68,
+    "end": 0.8,
+    "height": 0.1,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.11,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b4b8b0",
+   "dorsal": "#5a6670",
+   "ventral": "#f0f0ec",
+   "fin": "#9aa0a0",
+   "finOpacity": 0.5,
+   "eye": "#c8c0a0",
+   "metallic": 0.65,
+   "patterns": [
+    {
+     "type": "lines",
+     "color": "#7a8086",
+     "count": 8,
+     "width": 0.01,
+     "y0": -0.4,
+     "y1": 0.8
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lota-lota",
+  "commonName": "Burbot",
+  "scientificName": "Lota lota",
+  "family": "Lotidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Cold rivers & lakes across northern Eurasia and North America",
+  "description": "The only freshwater member of the cod order, a mottled, eel-like night predator with a single chin barbel. It is most active in winter and spawns under the ice in a writhing ball of fish.",
+  "adultLengthCm": 50,
+  "birthLengthCm": 0.4,
+  "maturityMonths": 48,
+  "lifespanYears": 15,
+  "tempC": [
+   2,
+   16
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 1000,
+  "temperament": "predatory",
+  "zone": "bottom",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "nocturnal",
+  "reproduction": "none",
+  "locomotion": "anguilliform",
+  "cruiseSpeed": 0.2,
+  "burstSpeed": 4,
+  "traits": [
+   "nocturnal-hider",
+   "predator",
+   "bottom-rester",
+   "cave-dweller"
+  ],
+  "body": {
+   "archetype": "catfish",
+   "depth": 0.14,
+   "width": 0.13,
+   "headLength": 0.2,
+   "snout": "rounded",
+   "mouth": "terminal",
+   "eyeSize": 0.16,
+   "peduncle": 0.5,
+   "scaleSize": 0.05,
+   "barbels": 1,
+   "barbelLength": 0.05,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.16
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.42,
+    "height": 0.06,
+    "shape": "rounded"
+   },
+   "dorsal2": {
+    "start": 0.44,
+    "end": 0.96,
+    "height": 0.07,
+    "shape": "low"
+   },
+   "anal": {
+    "start": 0.48,
+    "end": 0.96,
+    "height": 0.07,
+    "shape": "low"
+   },
+   "pelvic": {
+    "start": 0.18,
+    "end": 0.2,
+    "height": 0.08,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.22,
+    "end": 0.25,
+    "height": 0.09,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#8a7c50",
+   "dorsal": "#4e4630",
+   "ventral": "#e0d8b8",
+   "fin": "#7a6e48",
+   "finOpacity": 0.7,
+   "eye": "#a89060",
+   "patterns": [
+    {
+     "type": "marble",
+     "color": "#3a321e",
+     "scale": 5,
+     "amount": 0.55
+    },
+    {
+     "type": "spots",
+     "color": "#d8c880",
+     "density": 30,
+     "size": 0.025,
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -0.5,
+     "y1": 0.9,
+     "jitter": 0.8
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "macquaria-ambigua",
+  "commonName": "Golden Perch",
+  "scientificName": "Macquaria ambigua",
+  "family": "Percichthyidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Murray–Darling & Lake Eyre basins, Australia",
+  "description": "A deep-bodied native perch, also called the Yellowbelly, of turbid inland rivers and lakes. After heavy flooding it migrates long distances upstream to spawn drifting eggs.",
+  "adultLengthCm": 40,
+  "birthLengthCm": 0.3,
+  "maturityMonths": 36,
+  "lifespanYears": 20,
+  "tempC": [
+   12,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 1500,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "predator",
+   "ambush",
+   "shy"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.38,
+   "width": 0.13,
+   "headLength": 0.28,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.18,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.6,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.11,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8a460",
+   "dorsal": "#5e5a34",
+   "ventral": "#f0d878",
+   "fin": "#8a7c4a",
+   "finOpacity": 0.65,
+   "eye": "#c8a050",
+   "metallic": 0.35,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#5a5030",
+     "contrast": 0.3
+    },
+    {
+     "type": "region",
+     "color": "#f0d070",
+     "x0": 0.1,
+     "x1": 0.85,
+     "y0": -1,
+     "y1": -0.35,
+     "softness": 0.25
+    }
+   ]
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "leiopotherapon-unicolor",
+  "commonName": "Spangled Perch",
+  "scientificName": "Leiopotherapon unicolor",
+  "family": "Terapontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Most of mainland Australia except the far south-east",
+  "description": "Australia's most widespread freshwater fish, able to survive hot, shrinking desert waterholes and recolonize new pools after floods. Small rust-orange spots spangle its silvery-bronze body.",
+  "adultLengthCm": 20,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 12,
+  "lifespanYears": 6,
+  "tempC": [
+   15,
+   32
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "dGH": [
+   5,
+   25
+  ],
+  "minTankLiters": 300,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "fin-nipper",
+   "bold",
+   "predator"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.32,
+   "width": 0.13,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.24,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.3,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.11,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8b4a0",
+   "dorsal": "#6a6650",
+   "ventral": "#ecebe2",
+   "fin": "#a8a088",
+   "finOpacity": 0.5,
+   "eye": "#c8a050",
+   "metallic": 0.5,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#c8602a",
+     "density": 60,
+     "size": 0.018,
+     "x0": 0.05,
+     "x1": 0.95,
+     "y0": -0.6,
+     "y1": 0.95,
+     "jitter": 0.6
+    }
+   ],
+   "fins": {
+    "dorsal": {
+     "patterns": [
+      {
+       "type": "spots",
+       "color": "#c8602a",
+       "density": 20,
+       "size": 0.04
+      }
+     ]
+    }
+   }
+  },
+  "availability": "uncommon"
+ },
+ {
+  "id": "hephaestus-fuliginosus",
+  "commonName": "Sooty Grunter",
+  "scientificName": "Hephaestus fuliginosus",
+  "family": "Terapontidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Rivers of northern Australia, from the Kimberley to north-eastern Queensland",
+  "description": "A thick-lipped, sooty-brown to black grunter of rocky river pools, feeding on everything from fruit and algae to shrimps and small fish. It is a popular sport fish and a hardy, aggressive tank fish.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   20,
+   30
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 600,
+  "temperament": "aggressive",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "omnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.6,
+  "burstSpeed": 6,
+  "traits": [
+   "bold",
+   "predator",
+   "territorial"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.4,
+   "width": 0.13,
+   "headLength": 0.3,
+   "snout": "blunt",
+   "mouth": "terminal",
+   "eyeSize": 0.24,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.5,
+   "caudal": {
+    "shape": "truncate",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.11,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#3e3a34",
+   "dorsal": "#24221e",
+   "ventral": "#6a645a",
+   "fin": "#2e2c28",
+   "finOpacity": 0.8,
+   "eye": "#c8a050",
+   "metallic": 0.15,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#1e1c18",
+     "contrast": 0.35
+    }
+   ]
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "kuhlia-rupestris",
+  "commonName": "Jungle Perch",
+  "scientificName": "Kuhlia rupestris",
+  "family": "Kuhliidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Coastal streams of the Indo-West Pacific, from East Africa to Samoa and north-eastern Australia",
+  "description": "A silvery perch of clear, fast rainforest streams that migrates to estuaries to spawn. Each scale carries a dark center, and two bold black blotches mark the lobes of its tail.",
+  "adultLengthCm": 30,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 24,
+  "lifespanYears": 10,
+  "tempC": [
+   20,
+   28
+  ],
+  "ph": [
+   6.5,
+   8
+  ],
+  "dGH": [
+   3,
+   15
+  ],
+  "minTankLiters": 800,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "shoal",
+  "groupSize": 3,
+  "diet": "carnivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.7,
+  "burstSpeed": 7,
+  "traits": [
+   "predator",
+   "jumper",
+   "shy"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.34,
+   "width": 0.13,
+   "headLength": 0.3,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.3,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.3,
+   "caudal": {
+    "shape": "emarginate",
+    "size": 0.24
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.11,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#c8ccc8",
+   "dorsal": "#5a6464",
+   "ventral": "#f2f2f0",
+   "fin": "#a8acaa",
+   "finOpacity": 0.5,
+   "eye": "#c8c0a0",
+   "metallic": 0.7,
+   "patterns": [
+    {
+     "type": "spots",
+     "color": "#3a3a36",
+     "density": 110,
+     "size": 0.015,
+     "x0": 0.15,
+     "x1": 0.97,
+     "y0": -0.6,
+     "y1": 0.95
+    }
+   ],
+   "fins": {
+    "caudal": {
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#121210",
+       "x": 0.6,
+       "y": 0.55,
+       "rx": 0.3,
+       "ry": 0.25
+      },
+      {
+       "type": "blotch",
+       "color": "#121210",
+       "x": 0.6,
+       "y": -0.55,
+       "rx": 0.3,
+       "ry": 0.25
+      }
+     ]
+    }
+   }
+  },
+  "availability": "rare"
+ },
+ {
+  "id": "lates-niloticus",
+  "commonName": "Nile Perch",
+  "scientificName": "Lates niloticus",
+  "family": "Latidae",
+  "group": "fish",
+  "water": "freshwater",
+  "region": "Nile, Congo, Niger, Volta & Lake Chad basins; introduced to Lake Victoria",
+  "description": "One of the largest freshwater fishes of Africa, whose introduction to Lake Victoria wiped out hundreds of endemic cichlid species. A silvery, concave-headed predator kept in a few large public aquaria.",
+  "adultLengthCm": 100,
+  "birthLengthCm": 0.2,
+  "maturityMonths": 36,
+  "lifespanYears": 16,
+  "tempC": [
+   24,
+   28
+  ],
+  "ph": [
+   7,
+   8.5
+  ],
+  "dGH": [
+   5,
+   20
+  ],
+  "minTankLiters": 10000,
+  "temperament": "predatory",
+  "zone": "middle",
+  "social": "solitary",
+  "groupSize": 1,
+  "diet": "piscivore",
+  "activity": "diurnal",
+  "reproduction": "none",
+  "locomotion": "subcarangiform",
+  "cruiseSpeed": 0.4,
+  "burstSpeed": 5,
+  "traits": [
+   "predator",
+   "ambush",
+   "bold"
+  ],
+  "body": {
+   "archetype": "perch",
+   "depth": 0.3,
+   "width": 0.13,
+   "headLength": 0.32,
+   "snout": "pointed",
+   "mouth": "terminal",
+   "eyeSize": 0.2,
+   "peduncle": 0.42,
+   "scaleSize": 0.4,
+   "backArch": 0.5,
+   "caudal": {
+    "shape": "rounded",
+    "size": 0.22
+   },
+   "dorsal": {
+    "start": 0.32,
+    "end": 0.56,
+    "height": 0.16,
+    "shape": "spiny"
+   },
+   "dorsal2": {
+    "start": 0.58,
+    "end": 0.82,
+    "height": 0.13,
+    "shape": "rounded"
+   },
+   "anal": {
+    "start": 0.64,
+    "end": 0.82,
+    "height": 0.12,
+    "shape": "rounded"
+   },
+   "pelvic": {
+    "start": 0.34,
+    "end": 0.38,
+    "height": 0.11,
+    "shape": "pointed"
+   },
+   "pectoral": {
+    "start": 0.3,
+    "end": 0.33,
+    "height": 0.12,
+    "shape": "rounded"
+   }
+  },
+  "look": {
+   "base": "#b8bec0",
+   "dorsal": "#5a6670",
+   "ventral": "#f0f2f0",
+   "fin": "#7a8288",
+   "finOpacity": 0.65,
+   "eye": "#d8b040",
+   "metallic": 0.7,
+   "patterns": [
+    {
+     "type": "scales",
+     "color": "#6a7278",
+     "contrast": 0.3
+    }
+   ]
+  },
+  "availability": "rare"
  }
 ]

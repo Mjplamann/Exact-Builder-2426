@@ -16,7 +16,7 @@ import { UW_PARS_GLSL, uwUniforms } from './glsl';
 
 const CAPACITY = 640;
 /** Bubbles released per second per air stone (a fine "curtain"). */
-const RATE = 26;
+const RATE = 45;
 /** Atmospheric pressure (Pa), water density, g. */
 const P0 = 101325, RHO = 1000, G = 9.81;
 
@@ -109,7 +109,7 @@ export class Bubbles {
           float rpx = r * uPixelScale / max(-mv.z, 0.01);
           float grow = max(1.0, 1.6 / max(rpx, 1e-3));
           vSmall = clamp((3.0 - rpx) / 2.0, 0.0, 1.0);
-          vParams.z /= grow * grow;
+          vParams.z /= grow; // (not grow²: glints and bloom make tiny bubbles read brighter than their area)
           mv.xy += corner * r * grow;
           gl_Position = projectionMatrix * mv;
         }`,
@@ -121,7 +121,7 @@ export class Bubbles {
         varying float vSmall;
         void main() {
           vec3 lamp = uwLightColor * uwDaylight + vec3(0.1, 0.24, 1.0) * uwMoonlight * 0.3;
-          vec3 env = uwVeilColor * 3.5 + lamp * 0.22;   // what the bubble wall mirrors
+          vec3 env = uwVeilColor * 4.0 + lamp * 0.45;   // what the bubble wall mirrors
           vec3 T = uwTransmittance(vWorld);
           vec3 rgb;
           float a;
@@ -143,7 +143,7 @@ export class Bubbles {
             float spec = exp(-dot(h, h) * 55.0);
             vec2 f = q - vec2(0.22, -0.5);
             float focus = exp(-dot(f, f) * 22.0) * 0.45;
-            rgb = env * rim * 1.25 + lamp * (spec * 3.2 + focus);
+            rgb = env * rim * 1.3 + lamp * (spec * 4.0 + focus);
             a = rim * 0.75 + band * 0.22 + spec * 0.6 + focus * 0.2;
             // Tiny bubbles read as soft silvery points.
             float pt = 1.0 - d * d;

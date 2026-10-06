@@ -182,8 +182,8 @@ export function select<T extends string>(
 export function stepper(aria: string, value: number, min: number, max: number, onChange: (v: number) => void, format = (v: number) => String(v)): Control<number> {
   let cur = value;
   const out = h('output', { class: 'aq-stepper-value', 'aria-live': 'polite' }, format(cur));
-  const dec = iconButton('minus', `Fewer ${aria}`, () => change(-1), 'aq-stepper-btn');
-  const inc = iconButton('plus', `More ${aria}`, () => change(1), 'aq-stepper-btn');
+  const dec = iconButton('minus', `Fewer ${aria}`, () => change(-1), 'aq-icon-btn aq-stepper-btn');
+  const inc = iconButton('plus', `More ${aria}`, () => change(1), 'aq-icon-btn aq-stepper-btn');
   const sync = () => {
     setText(out, format(cur));
     dec.disabled = cur <= min;

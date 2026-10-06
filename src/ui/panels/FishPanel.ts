@@ -13,6 +13,7 @@ import { button, confirmButton, iconButton, segmented, select, stepper, tabs } f
 import { append, clear, debounce, h, prefs, setClass, setText } from '../dom';
 import {
   formatAge,
+  formatAgeRange,
   formatCount,
   formatLength,
   formatLifespan,
@@ -692,7 +693,7 @@ export class FishPanel implements Panel {
       const ages = list.map((f) => now - f.state.bornAt);
       const minA = Math.min(...ages);
       const maxA = Math.max(...ages);
-      const ageText = formatAge(minA) === formatAge(maxA) ? formatAge(minA) : `${formatAge(minA)} – ${formatAge(maxA)}`;
+      const ageText = formatAgeRange(minA, maxA);
       const open = this.expanded.has(sp.id);
       const thumb = this.host.thumbs.immediate(sp, THUMB);
       const img = h('img', { class: `aq-srow-img${thumb.real ? ' is-real' : ''}`, src: thumb.url, alt: '', width: 72, height: 46 });

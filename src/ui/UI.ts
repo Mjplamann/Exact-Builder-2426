@@ -127,6 +127,7 @@ export class UI implements UIHost {
   private fpsT0 = performance.now();
   private fps = 0;
   private needsDirty = true;
+  private firstUpdate = true;
 
   constructor(
     private root: HTMLElement,
@@ -639,6 +640,11 @@ export class UI implements UIHost {
     // FPS from wall-clock frame count (dt is clamped by the app).
     this.frames++;
     const now = performance.now();
+    if (this.firstUpdate) {
+      // First impression: let the controls be seen for a little longer once the tank appears.
+      this.firstUpdate = false;
+      this.lastActivity = now + 2500;
+    }
     if (now - this.fpsT0 >= 1000) {
       this.fps = (this.frames * 1000) / (now - this.fpsT0);
       this.frames = 0;

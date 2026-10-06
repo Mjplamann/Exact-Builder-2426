@@ -77,6 +77,8 @@ export interface PlantPatchOptions {
   depthOnly?: boolean;
   /** Per-material selection uniform instead of the `aSel` attribute (unique meshes). */
   selUniform?: { value: number };
+  /** Unique meshes: per-vertex fluorescence weight from an `aGlow` attribute. */
+  glowAttr?: boolean;
 }
 
 /**
@@ -117,6 +119,7 @@ export function patchPlant(material: Material, opts: PlantPatchOptions = {}): vo
 attribute vec4 aSway;
 ${bend ? 'attribute vec4 aLeaf;' : ''}
 ${selU || opts.depthOnly ? '' : 'attribute float aSel;'}
+${opts.glowAttr ? 'attribute float aGlow;' : ''}
 uniform float uTime;
 uniform vec2 uCurrent;
 uniform float uSurfaceY;
@@ -133,14 +136,20 @@ ${
   bend
     ? `  float ext = aLeaf.w;
   float sy = 1.0;
+  float kMul = 1.0;
   if (ext > 0.0) sy = mix(1.0 - ext, 1.0, uPolyp);
-  else if (ext < 0.0) sy = 1.0 + ext * (0.5 + 0.5 * sin(uTime * 2.2 + aSway.w * 3.0));
+  else if (ext < 0.0) {
+    // Pulsing polyps (xenia): arms fold inward and reopen roughly every 1.5–3 s.
+    float pulse = pow(0.5 + 0.5 * sin(uTime * 2.4 + aSway.w * 5.0), 3.0);
+    sy = 1.0 + ext * 0.35 * pulse;
+    kMul = 1.0 - 2.4 * pulse * (-ext);
+  }
   p.y *= sy;
   float tw = aLeaf.y * p.y;
   float ct = cos(tw), st = sin(tw);
   p.xz = mat2(ct, -st, st, ct) * p.xz;
   n.xz = mat2(ct, -st, st, ct) * n.xz;
-  float k = aLeaf.x;
+  float k = aLeaf.x * kMul;
   if (abs(k) > 1e-3) {
     float a = k * p.y;
     float sa = sin(a), ca = cos(a);
@@ -210,7 +219,7 @@ vec3 dcSway(vec3 wp, vec3 leafDir) {
   vec3 dcOff = dcSway(dcW, dcDir);
   transformed += inverse(mat3(dcM)) * dcOff;
   ${opts.depthOnly ? '' : selU ? 'vSel = uSelU;' : 'vSel = aSel;'}
-  ${bend ? 'vGlow = aLeaf.z * smoothstep(0.25, 1.0, position.y);' : 'vGlow = 1.0;'}
+  ${bend ? 'vGlow = aLeaf.z * smoothstep(0.25, 1.0, position.y);' : opts.glowAttr ? 'vGlow = aGlow;' : 'vGlow = 1.0;'}
   vAlong = position.y;
 }`,
       );

@@ -13614,7 +13614,17 @@
    "fins": {
     "dorsal": {
      "color": "#f4c818",
-     "opacity": 0.95
+     "opacity": 0.95,
+     "patterns": [
+      {
+       "type": "blotch",
+       "color": "#141416",
+       "x": 0.42,
+       "y": 0.72,
+       "rx": 0.16,
+       "ry": 0.13
+      }
+     ]
     },
     "caudal": {
      "color": "#f4c818",

@@ -515,9 +515,12 @@ export class LifeSim implements BreedHost {
       // --- reproduction -------------------------------------------------------------------------
       breedingTick(this, f, st, now, days, this.capacityRatio);
 
-      // --- young animals get eaten (realistic; quietly) ---------------------------------------
-      if (realistic && L < maxGape && sp.group !== 'snail' && (now - s.bornAt) / MS_PER_MONTH < sp.maturityMonths) {
-        const hz = fryPredationHazard(census, L, cover);
+      // --- tank-born fry get eaten (realistic; quietly) ----------------------------------------
+      // Only young born here: store-bought juveniles are already past the most vulnerable size,
+      // and adult predation risk is surfaced by `compatibility` rather than staged as carnage.
+      // Prey approaching the biggest mouth in the tank is increasingly hard to catch.
+      if (realistic && s.generation > 0 && L < maxGape && sp.group !== 'snail' && (now - s.bornAt) / MS_PER_MONTH < sp.maturityMonths) {
+        const hz = fryPredationHazard(census, L, cover) * (1 - smoothstep(0.3, 1, L / maxGape));
         if (hz > 0 && this.rng.next() < 1 - Math.exp(-hz * days)) {
           if (this.eatenCount < this.eaten.length) this.eaten[this.eatenCount] = f;
           else this.eaten.push(f);

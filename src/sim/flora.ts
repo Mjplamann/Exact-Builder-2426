@@ -238,10 +238,14 @@ export class Flora {
     const stockG = wp.glassAlgae * glassArea * ALGAE_STOCK_MG_M2;
     const stockS = wp.surfaceAlgae * surfaceArea * ALGAE_STOCK_MG_M2;
 
-    const consG = Math.min(this.demandGlass, bioG + stockG * 0.5);
-    const consS = Math.min(this.demandSurface, bioS + stockS * 0.5);
-    const eatenG = Math.max(0, consG - bioG) * days;
-    const eatenS = Math.max(0, consS - bioS) * days;
+    // Grazers eat a mix of what is there: biofilm/detritus and standing algae in proportion to
+    // their availability (half the algae stock is within reach per day).
+    const availG = bioG + stockG * 0.5;
+    const availS = bioS + stockS * 0.5;
+    const consG = Math.min(this.demandGlass, availG);
+    const consS = Math.min(this.demandSurface, availS);
+    const eatenG = availG > 0 ? ((consG * stockG * 0.5) / availG) * days : 0;
+    const eatenS = availS > 0 ? ((consS * stockS * 0.5) / availS) * days : 0;
 
     let G = wp.glassAlgae;
     G += r * (G + 0.02) * (1 - G) * days - eatenG / (glassArea * ALGAE_STOCK_MG_M2);

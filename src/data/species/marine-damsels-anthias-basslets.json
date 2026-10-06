@@ -2715,7 +2715,7 @@
   "group": "fish",
   "water": "marine",
   "region": "Indo-West Pacific — western Indonesia & the Andaman Sea to Taiwan, Vanuatu & the Great Barrier Reef",
-  "description": "The largest and most aggressive clownfish, recognised by a sharp spine below each eye; dark maroon females can be twice the length of their brighter red males. In the wild it lives only in the bubble-tip anemone.",
+  "description": "The largest and most aggressive clownfish, recognised by a sharp spine below each eye (now often placed in Amphiprion as A. biaculeatus); dark maroon females can be twice the length of their brighter red males. In the wild it lives only in the bubble-tip anemone.",
   "adultLengthCm": 15,
   "birthLengthCm": 0.35,
   "maturityMonths": 18,
@@ -4056,8 +4056,8 @@
   "family": "Pomacentridae",
   "group": "fish",
   "water": "marine",
-  "region": "Captive-bred",
-  "description": "A captive-bred percula line in which the black borders around the bars spread across much of the body and fins, giving an orange fish heavily overlaid with black.",
+  "region": "Captive-bred; from naturally heavily pigmented percula of Papua New Guinea & the Solomon Islands",
+  "description": "Line-bred from the naturally heavily pigmented percula of Papua New Guinea and the Solomon Islands: the black borders around the white bars spread across much of the body and fins, leaving an orange fish heavily overlaid with black.",
   "adultLengthCm": 8,
   "birthLengthCm": 0.35,
   "maturityMonths": 12,
@@ -4730,7 +4730,7 @@
   "family": "Pomacentridae",
   "group": "fish",
   "water": "marine",
-  "region": "Eastern Indian Ocean & western Pacific — Indonesia, the Philippines & northwestern Australia",
+  "region": "Eastern Indian Ocean & western Pacific — Indonesia & northwestern Australia (Rowley Shoals, Scott Reef)",
   "description": "Bright blue on the head and upper body and vivid yellow below, the boundary running diagonally back from the snout. Lives on sheltered reefs among branching corals.",
   "adultLengthCm": 6,
   "birthLengthCm": 0.25,
@@ -7278,7 +7278,7 @@
   "water": "marine",
   "region": "Western Atlantic — Florida, the Bahamas & the Caribbean",
   "description": "Dark brown to black on the front half and white behind, often with a yellow patch on the lower flank. Males defend nest sites on the reef and court passing females with looping dips and \"signal jumps\".",
-  "adultLengthCm": 9,
+  "adultLengthCm": 8,
   "birthLengthCm": 0.25,
   "maturityMonths": 9,
   "lifespanYears": 6,
@@ -9160,17 +9160,7 @@
    "ventral": "#f6c6a0",
    "fin": "#f6b07a",
    "finOpacity": 0.8,
-   "eye": "#c85a3a",
-   "patterns": [
-    {
-     "type": "stripe",
-     "color": "#a88ae0",
-     "y": 0.05,
-     "width": 0.04,
-     "x0": 0,
-     "x1": 0.3
-    }
-   ]
+   "eye": "#c85a3a"
   },
   "male": {
    "lengthScale": 1.15,
@@ -9582,7 +9572,6 @@
   },
   "male": {
    "lengthScale": 1.15,
-   "look": null,
    "body": {
     "dorsal": {
      "start": 0.25,
@@ -12635,7 +12624,7 @@
      "color": "#141414",
      "x0": 0.56,
      "x1": 0.68,
-     "y0": -0.4,
+     "y0": -1,
      "y1": 1,
      "softness": 0.04
     },

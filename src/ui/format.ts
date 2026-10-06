@@ -82,6 +82,17 @@ export function formatAge(ms: number): string {
   return `${years} ${plural(years, 'year')} ${rem} ${plural(rem, 'month')}`;
 }
 
+/** An age range that reads naturally: "4–7 months", "3 weeks – 2 months", "5 months". */
+export function formatAgeRange(minMs: number, maxMs: number): string {
+  const a = formatAge(minMs);
+  const b = formatAge(maxMs);
+  if (a === b) return a;
+  const ma = /^(\d+) (\w+)$/.exec(a);
+  const mb = /^(\d+) (\w+)$/.exec(b);
+  if (ma && mb && ma[2].replace(/s$/, '') === mb[2].replace(/s$/, '')) return `${ma[1]}–${mb[1]} ${mb[2]}`;
+  return `${a} – ${b}`;
+}
+
 /** "about 5 years", "about 18 months", "about 8 months". */
 export function formatLifespan(years: number): string {
   if (years < 1.5) {
@@ -142,7 +153,7 @@ export function formatLongDate(ms: number): string {
 
 /** "13:42" (or "1:42 PM" in 12-hour locales). */
 export function formatSimClock(ms: number): string {
-  clockFmt ??= new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' });
+  clockFmt ??= new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
   return clockFmt.format(ms);
 }
 
