@@ -1,9 +1,7 @@
 import type { PathogenProfile } from '../types'
 
-// TODO(verify): revised without live web verification (the shared WebSearch budget was exhausted). Before
-// release, confirm by search: every source URL, the current CDC childhood schedule status for hepatitis A
-// under the March 2026 court order, and the status of the post-2016 person-to-person outbreaks. Minnesota
-// year-to-date counts come from CDC's NNDSS weekly table (data.cdc.gov x9gk-5huc), as of 2026-09-26.
+// Minnesota year-to-date counts in watchNotes come from CDC's provisional NNDSS weekly table
+// (data.cdc.gov x9gk-5huc), as of 2026-09-26.
 
 const profile: PathogenProfile = {
   id: 'hepatitis-a',
@@ -190,9 +188,9 @@ const profile: PathogenProfile = {
     'Hepatitis A is tracked mainly by counting confirmed cases reported to MDH and CDC. It is not on the BioFire stomach panel, and there is no test positivity or emergency visit percentage for it. MN Pulse shows Minnesota cases from CDC’s weekly notifiable disease tables. These counts are provisional, and Minnesota often adds cases to earlier weeks, so a blank week does not mean zero. The year-to-date total is the better guide. Because symptoms take 2 to 7 weeks to appear, a case reported today usually reflects an exposure weeks earlier, and outbreaks can take a while to recognize. Many young children have no symptoms and are never tested, so case counts miss some infections. MN Pulse also shows how many Minnesota treatment plants in the WastewaterSCAN program found hepatitis A genetic material each week. As of October 2026 there are 4 of these plants, in Rochester, Mankato, Red Wing and St. Cloud, and none serve the Twin Cities. One infected person or a visitor can cause a detection. It is an early alert, not a case count, and a week with no detection does not rule out cases. A rise in cases usually means a cluster or outbreak, such as spread among people who are experiencing homelessness or using drugs, or illness linked to a contaminated food. For most people, the right response is to check that you and your children are vaccinated. If health officials name a restaurant or event, people who were there in the past 2 weeks may be offered a vaccine to prevent illness.',
   watchNotes: [
     'As of late September 2026, CDC’s provisional weekly tables listed 4 Minnesota hepatitis A cases so far in 2026, the same as at this point in 2025.',
-    'Starting in 2016, large hepatitis A outbreaks in many U.S. states spread person to person, mainly among people who use drugs or are experiencing homelessness. Many of these outbreaks have since ended, but vaccination is still the best protection for people at risk.',
+    'Starting in 2016, large hepatitis A outbreaks in 37 U.S. states spread person to person, mainly among people who use drugs or are experiencing homelessness. By late 2022, CDC reported that most of these outbreaks had ended, but vaccination is still the best protection for people at risk.',
     'Some U.S. outbreaks in recent years have been linked to imported fresh or frozen berries. Watch for recall notices.',
-    'Federal vaccine guidance changed several times in 2025 and 2026. In March 2026, a federal court paused changes to CDC’s childhood immunization schedule while the case continues. As of October 2026, the CDC schedule in effect and the American Academy of Pediatrics both recommend hepatitis A vaccine for all children at 12 through 23 months. Catch-up doses are recommended through age 18. Talk with your child’s clinician if you have questions.',
+    'Federal vaccine guidance changed several times in 2025 and 2026. In March 2026, a federal court paused changes to CDC’s childhood immunization schedule while the case continues, and the federal government has appealed. As of October 2026, the CDC schedule in effect and the American Academy of Pediatrics both recommend hepatitis A vaccine for all children at 12 through 23 months. Catch-up doses are recommended through age 18. Talk with your child’s clinician if you have questions.',
   ],
   sources: [
     { label: 'CDC: About Hepatitis A', url: 'https://www.cdc.gov/hepatitis-a/about/index.html' },
@@ -200,6 +198,11 @@ const profile: PathogenProfile = {
       label: 'CDC MMWR: Prevention of Hepatitis A Virus Infection in the United States (ACIP, 2020)',
       url: 'https://www.cdc.gov/mmwr/volumes/69/rr/rr6905a1.htm',
     },
+    {
+      label: 'CDC MMWR: Widespread Hepatitis A Outbreaks Associated with Person-to-Person Transmission, 2016–2020',
+      url: 'https://www.cdc.gov/mmwr/volumes/71/wr/mm7139a1.htm',
+    },
+    { label: 'CDC: How CDC Investigates Hepatitis A Outbreaks', url: 'https://www.cdc.gov/hepatitis-a/outbreak-basics/index.html' },
     {
       label: 'CDC Pink Book: Hepatitis A',
       url: 'https://www.cdc.gov/pinkbook/hcp/table-of-contents/chapter-9-hepatitis-a.html',
@@ -213,16 +216,16 @@ const profile: PathogenProfile = {
       url: 'https://www.cdc.gov/vaccines/hcp/imz-schedules/child-adolescent-notes.html',
     },
     {
-      label: 'AAP: Recommended childhood and adolescent immunization schedule, 2026',
-      url: 'https://publications.aap.org/pediatrics/article/157/3/e2025075754/206175/Recommended-Childhood-and-Adolescent-Immunization',
+      label: 'HealthyChildren.org (AAP): Recommended childhood and adolescent immunization schedule for 2026',
+      url: 'https://healthychildren.org/English/news/Pages/AAPs-recommended-childhood-and-adolescent-immunization-schedule-for-2026.aspx',
     },
     {
       label: 'IDSA: Federal judge blocks immunization schedule changes, stays ACIP appointments (2026)',
       url: 'https://www.idsociety.org/news--publications-new/articles/2026/federal-judge-blocks-immunization-schedule-changes-stays-acip-member-appointments/',
     },
     {
-      label: 'Congressional Research Service: CDC’s updated childhood vaccine schedule litigation',
-      url: 'https://www.congress.gov/crs-product/LSB11427',
+      label: 'Congressional Research Service: CDC’s updated childhood vaccine schedule litigation (2026)',
+      url: 'https://www.everycrsreport.com/reports/LSB11427.html',
     },
     {
       label: 'CDC: NNDSS weekly notifiable disease data (provisional)',

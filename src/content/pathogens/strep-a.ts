@@ -1,12 +1,6 @@
-// Verified 2026-10-07 from search results: MDH invasive GAS counts (2022: 310 cases, 29 deaths; 2023: 625
-// cases, 55 deaths; 2024: 562 cases, more linked to long-term care facilities) and MN's ABCs participation.
-// MN Pulse has no strep A series (invasive GAS is not in NNDSS x9gk-5huc; STSS is deliberately unmapped).
-// TODO(verify): clinical details (treatment, 12-hour return rule, testing rules, 9-day rheumatic fever
-// window, impetigo exclusion, iGAS risk groups) follow long-standing CDC, IDSA 2012, AAP Red Book and AHA
-// guidance but were not re-checked live (WebSearch budget exhausted; cdc.gov blocked). Before publishing,
-// add URLs from search results for: CDC group A strep pages (strep throat, scarlet fever, impetigo, invasive
-// GAS, clinical guidance), CDC ABCs GAS reports, IDSA GAS pharyngitis guideline, AHA rheumatic fever
-// prevention statement, AAP Red Book GAS chapter.
+// Sources checked 2026-10-07: MDH invasive GAS counts (2022: 310 cases, 29 deaths; 2023: 625 cases, 55 deaths;
+// 2024: 562 cases, more linked to long-term care facilities), CDC group A strep clinical guidance and risk groups,
+// and the late-2022 pediatric rise in Colorado and Minnesota (MMWR). MN Pulse has no strep A series.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -202,14 +196,29 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'Strep A is harder to track than many respiratory germs. Strep throat is diagnosed with quick tests in clinics and is not reported to the state, so there is no direct count of how much is going around. Strep A is also not part of the standard multi-pathogen respiratory panel behind BioFire detection rates. At this time, MN Pulse has no weekly Minnesota number or trend line for strep A. Serious (invasive) group A strep is a reportable disease in Minnesota. The Minnesota Department of Health (MDH) tracks it with CDC’s Active Bacterial Core surveillance (ABCs) program and publishes yearly totals, often more than a year later. These counts are small, so look at changes from year to year, not week to week. A rise in invasive strep does not mean strep throat is more dangerous for a typical person. It is a reminder to treat strep throat fully, care for wounds, and get care fast for any emergency warning sign.',
   watchNotes: [
-    'Invasive group A strep infections rose across the U.S. starting in late 2022, first among children, and stayed higher than before the pandemic among adults. CDC lists higher risk for adults 65 and older, people with chronic conditions or wounds, people who inject drugs, people experiencing homelessness, residents of long-term care facilities, and American Indian and Alaska Native people.',
+    'Invasive group A strep infections rose across the U.S. starting in late 2022, first among children, including in Minnesota, and stayed higher than before the pandemic among adults. CDC lists higher risk for adults 65 and older; American Indian, Alaska Native, Native Hawaiian, and Pacific Islander people; people who inject drugs or are experiencing homelessness; and residents of long-term care facilities. Wounds, skin conditions, and some chronic health conditions also raise the risk.',
     'In Minnesota, serious (invasive) group A strep rose to 625 cases and 55 deaths in 2023, up from 310 cases and 29 deaths in 2022 (MDH). Nationally, CDC reported a 20-year high in 2023. Minnesota cases were lower in 2024, at 562, but more were linked to long-term care facilities. Most outbreaks in those facilities involved residents with wounds or getting wound care.',
     'Strep A is becoming more resistant to azithromycin and clindamycin, but penicillin and amoxicillin still work reliably.',
     'Several strep A vaccines are being studied, but none are approved.',
   ],
   sources: [
+    { label: 'CDC: About group A strep infection', url: 'https://www.cdc.gov/group-a-strep/about/index.html' },
+    { label: 'CDC: Clinical considerations for group A strep', url: 'https://www.cdc.gov/group-a-strep/hcp/clinical-guidance/index.html' },
+    {
+      label: 'CDC: Clinical guidance for group A streptococcal pharyngitis',
+      url: 'https://www.cdc.gov/group-a-strep/hcp/clinical-guidance/strep-throat.html',
+    },
+    { label: 'CDC: Clinical guidance for scarlet fever', url: 'https://www.cdc.gov/group-a-strep/hcp/clinical-guidance/scarlet-fever.html' },
+    {
+      label: 'CDC: Clinical guidance for streptococcal toxic shock syndrome',
+      url: 'https://www.cdc.gov/group-a-strep/hcp/clinical-guidance/streptococcal-toxic-shock-syndrome.html',
+    },
+    {
+      label: 'CDC MMWR: Increase in pediatric invasive group A strep infections, Colorado and Minnesota, October–December 2022',
+      url: 'https://www.cdc.gov/mmwr/volumes/72/wr/mm7210a4.htm',
+    },
     { label: 'MDH: Group A Streptococcus (GAS)', url: 'https://www.health.state.mn.us/diseases/strep/gas/index.html' },
-    { label: 'MDH: Invasive group A strep statistics', url: 'https://www.health.mn.gov/diseases/strep/gas/statistics.html' },
+    { label: 'MDH: Invasive group A strep statistics', url: 'https://www.health.state.mn.us/diseases/strep/gas/statistics.html' },
     {
       label: 'MDH: Invasive group A strep, annual summary of reportable diseases',
       url: 'https://www.health.state.mn.us/diseases/reportable/dcn/strepga.html',

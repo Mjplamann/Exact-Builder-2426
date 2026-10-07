@@ -113,7 +113,7 @@ const profile: PathogenProfile = {
       summary:
         'People 65 and older account for most flu hospital stays and deaths. The immune system responds less strongly with age, so CDC prefers stronger flu vaccines for this group.',
       actions: [
-        'Get a high-dose, adjuvanted (with an added immune booster), or recombinant (made without eggs or growing flu virus) flu vaccine each fall. If none is available, get any flu vaccine.',
+        'Get a flu vaccine made for older adults each fall, such as a high-dose, adjuvanted (with an added immune booster), or recombinant (made without eggs or growing flu virus) vaccine. If none is available, get any flu vaccine.',
         'Call your clinician as soon as flu symptoms start. Antivirals are recommended for everyone 65 and older with flu and work best within 2 days.',
         'If you live in a nursing home or assisted living, tell staff about symptoms right away. Antivirals may also be used to prevent flu during outbreaks.',
         'Ask about pneumococcal, RSV, and COVID-19 vaccines too.',
@@ -188,12 +188,12 @@ const profile: PathogenProfile = {
     vaccines: [
       {
         name: 'Yearly flu shot (inactivated or recombinant vaccine)',
-        who: 'Everyone 6 months and older without a medical reason to skip it. CDC, the American Academy of Pediatrics, and the Minnesota Department of Health all recommend it every year.',
+        who: 'Everyone 6 months and older without a medical reason to skip it. CDC, the American Academy of Pediatrics, the American Academy of Family Physicians, and the Minnesota Department of Health all recommend it every year.',
         notes:
-          'Best given in September or October, but still worth getting later while flu is spreading. Protection builds over about 2 weeks. Children 6 months to 8 years who have not had at least 2 flu vaccine doses before need 2 doses this season, at least 4 weeks apart. People with an egg allergy can get any flu vaccine that fits their age and health.',
+          'Best given in September or October, but still worth getting later while flu is spreading. Protection builds over about 2 weeks. All 2026–27 U.S. flu vaccines protect against three flu strains. Children 6 months to 8 years who have not had at least 2 flu vaccine doses before need 2 doses this season, at least 4 weeks apart. People with an egg allergy can get any flu vaccine that fits their age and health.',
       },
       {
-        name: 'High-dose, adjuvanted, or recombinant flu vaccine',
+        name: 'Flu vaccines made for older adults (such as high-dose, adjuvanted, or recombinant)',
         who: 'Preferred for adults 65 and older. If none of these is available, any age-appropriate flu vaccine should be given.',
         notes: 'These vaccines create a stronger immune response in older adults.',
       },
@@ -227,69 +227,57 @@ const profile: PathogenProfile = {
     'Flu test positivity is the share of lab flu tests that come back positive. Most tests are done on people sick enough to see a clinician or go to the hospital. So this number shows how much of that illness is flu, not how many people are infected. It is usually near zero in summer. In winter it climbs over several weeks, peaks, and then falls. The BioFire detection rate is the share of multi-virus respiratory panel tests at participating labs in the Midwest that find influenza A or B. These panels are run mostly in hospitals and emergency departments on sicker patients. Because they check for many germs at once, the rate shows how much flu adds to all the respiratory illness going around. The ED-visit percent is the share of all emergency department visits diagnosed as flu. It shows how much flu is sending people to the emergency department. In recent years in Minnesota, it has stayed well under 1% in summer and peaked at about 5% to 13% in winter. Weekly flu hospital admissions count people with lab-confirmed flu newly admitted to Minnesota hospitals, as reported to CDC. The rate per 100,000 residents makes it easier to compare with other places and past seasons. Admissions have ranged from a handful a week in summer to about 200 to more than 1,000 a week at recent winter peaks. A steady rise over 2 to 3 weeks means flu season is starting or speeding up. For most people, that means it is time to get vaccinated if you have not already, since protection takes about 2 weeks. Stay home when sick. If you are at higher risk, call your clinician at the first sign of flu. Numbers for the most recent week or two are often revised.',
   watchNotes: [
     'As of the week ending September 26, 2026, flu made up about 0.3% of emergency department visits in Minnesota. There were 21 new flu hospital admissions statewide that week. Activity was still low but had been rising slowly since late August, a little earlier than in recent years.',
-    'Minnesota’s 2025–26 flu season was driven mostly by H3N2. MDH counted 5,526 flu hospitalizations, including the largest single week of flu hospitalizations since it began tracking in 2008–09.',
-    'All three strains in 2026–27 flu vaccines were updated. This includes a new H3N2 strain aimed at the subclade K virus that spread widely in the 2025–26 season.',
-    'Federal vaccine guidance changed several times in 2025–2026. In March 2026, a federal court paused recent changes to the childhood vaccine schedule and votes of the reconstituted CDC vaccine advisory committee (ACIP). Under that order, CDC says the flu recommendations in its July 2025 immunization schedules remain in effect for 2026–27. They call for a yearly flu vaccine for everyone 6 months and older. A federal appeals court heard arguments on October 6, 2026, and had not yet ruled.',
-    'The American Academy of Pediatrics recommends a yearly flu vaccine for all children 6 months and older. The Minnesota Department of Health recommends one for everyone 6 months and older. MDH bases its vaccine guidance on recommendations from professional medical groups such as the American Academy of Pediatrics, ACOG, and IDSA.',
+    'The 2025–26 flu season was driven largely by subclade K, a changed H3N2 flu strain first seen in August 2025 that spread quickly around the world. Lab tests showed it was a poor match for the 2025–26 vaccines.',
+    'All three strains in 2026–27 flu vaccines were updated. This includes a new H3N2 strain chosen to match the subclade K virus.',
+    'Federal vaccine guidance changed several times in 2025–2026. In March 2026, a federal court paused changes made to CDC immunization schedules since mid-2025, including a revised childhood schedule issued in January 2026, and paused votes of the reconstituted CDC vaccine advisory committee (ACIP). CDC still recommends a yearly flu vaccine for everyone 6 months and older. The case is ongoing, so federal guidance could change.',
+    'The American Academy of Pediatrics recommends a yearly flu vaccine for all children 6 months and older and does not prefer one age-appropriate vaccine over another. The American Academy of Family Physicians recommends one for everyone 6 months and older. Since January 2026, the Minnesota Department of Health has based its vaccine guidance on recommendations from professional medical groups such as the American Academy of Pediatrics, the American Academy of Family Physicians, and ACOG.',
     'Bird flu (H5N1) and swine-origin “variant” flu viruses sometimes infect people who work with poultry, dairy cattle, or pigs, or who spend time around pigs at agricultural fairs. These are not seasonal flu and are tracked separately (see the H5N1 profile). Seasonal flu vaccine does not protect against H5N1.',
   ],
   sources: [
     {
-      label: 'CDC — Interim clinical considerations for seasonal influenza vaccines',
+      label: 'CDC — Interim clinical considerations for the use of seasonal influenza vaccines',
       url: 'https://www.cdc.gov/flu/hcp/vax-summary/seasonal-influenza-vaccines.html',
     },
     { label: 'CDC — 2026–2027 flu season', url: 'https://www.cdc.gov/flu/season/2026-2027.html' },
-    { label: 'CDC — ACIP flu recommendations summary', url: 'https://www.cdc.gov/flu/hcp/acip/index.html' },
-    { label: 'CDC — Treating flu (antiviral medicines)', url: 'https://www.cdc.gov/flu/treatment/index.html' },
-    { label: 'CDC — Flu signs and symptoms', url: 'https://www.cdc.gov/flu/signs-symptoms/index.html' },
+    { label: 'CDC — Seasonal flu vaccine basics', url: 'https://www.cdc.gov/flu/vaccines/index.html' },
+    { label: 'CDC — Treatment of flu', url: 'https://www.cdc.gov/flu/treatment/index.html' },
+    { label: 'CDC — Treating flu with antiviral drugs', url: 'https://www.cdc.gov/flu/treatment/antiviral-drugs.html' },
+    { label: 'CDC — Signs and symptoms of flu', url: 'https://www.cdc.gov/flu/signs-symptoms/index.html' },
     {
-      label: 'AAP policy statement — Recommendations for prevention and control of influenza in children, 2026–2027',
-      url: 'https://publications.aap.org/pediatrics/article/doi/10.1542/peds.2026-078778/208572/Recommendations-for-Prevention-and-Control-of',
+      label: 'WHO — Recommended influenza vaccine composition for the 2026–2027 northern hemisphere season',
+      url: 'https://www.who.int/news/item/27-02-2026-recommendations-for-influenza-vaccine-composition-for-the-2026-2027-northern-hemisphere-season',
+    },
+    {
+      label: 'American Academy of Pediatrics — Recommendations for influenza prevention and control, 2026–27 (news release)',
+      url: 'https://www.aap.org/en/news-room/news-releases/aap/2026/american-academy-of-pediatrics-issues-recommendations-for-influenza-prevention-and-control-for-2026-27/',
     },
     {
       label: 'HealthyChildren.org (AAP) — Flu prevention and treatment recommendations for 2026–27',
       url: 'https://www.healthychildren.org/English/news/Pages/aap-(influenza)-flu-prevention-recommendations-for-2026-27.aspx',
     },
     {
-      label: 'American Academy of Pediatrics — Preparing for the 2026–27 influenza season',
-      url: 'https://www.aap.org/en/patient-care/influenza/preparing-for-flu-season/',
+      label: 'American Academy of Family Physicians — 2026–2027 influenza, RSV, and COVID-19 vaccine guidance (PDF)',
+      url: 'https://www.aafp.org/assets/image/upload/v1788277985/pdf_2026_through_2027_influenza_rsv_sars_covid_2_guidance.pdf',
     },
     {
-      label: 'Immunize.org — Ask the Experts: influenza vaccine recommendations',
-      url: 'https://www.immunize.org/ask-experts/topic/influenza/vaccine-recommendations-influenza/',
+      label: 'Guideline Central — IDSA 2026 guideline on seasonal vaccines for immunocompromised patients (summary)',
+      url: 'https://www.guidelinecentral.com/insights/sep-2026-idsa-seasonalvaccinesimmunocompromisedpatients-guideline-spotlight/',
     },
     {
-      label: 'IDSA — 2026 guidelines on seasonal vaccines for immunocompromised patients',
-      url: 'https://www.idsociety.org/practice-guideline/Seasonal-RTI-Vaccinations-in-Immunocompromised-Patients/',
+      label: 'MDH health advisory (Jan. 2026) — MDH aligns with medical association immunization recommendations',
+      url: 'https://www2cdn.web.health.state.mn.us/communities/ep/han/2026/jan7imz.pdf',
     },
-    { label: 'MDH — Situation update for influenza', url: 'https://www.health.state.mn.us/diseases/flu/stats/index.html' },
-    { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
-    { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
-    { label: 'MDH — Respiratory virus vaccines', url: 'https://www.health.state.mn.us/diseases/respiratory/vaccine/index.html' },
+    { label: 'MDH — Influenza situation update', url: 'https://www.health.state.mn.us/diseases/flu/stats/index.html' },
+    { label: 'MDH — Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
+    { label: 'MDH — Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
     {
-      label: 'MPR News (Sept. 2026) — What to know about COVID-19 and flu vaccines in Minnesota this fall',
-      url: 'https://www.mprnews.org/story/2026/09/25/heres-what-you-need-to-know-about-covid19-and-flu-vaccines-in-minnesota-this-fall',
-    },
-    {
-      label: 'FOX 9 (May 2026) — Minnesota flu season saw largest single week of flu hospitalizations since 2008–09',
-      url: 'https://www.fox9.com/news/mn-flu-season-saw-single-largest-week-flu-hospitalizations-since-2008-2009-may-2026',
-    },
-    {
-      label: 'CDC: Emergency department visits for COVID-19, flu, and RSV',
-      url: 'https://www.cdc.gov/respiratory-viruses/data/emergency-department-visits.html',
+      label: 'CDC NSSP — Emergency department visit data by state and county',
+      url: 'https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56',
     },
     { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
     {
-      label: 'IDSA — Federal judge blocks immunization schedule changes, stays ACIP appointments (2026)',
-      url: 'https://www.idsociety.org/news--publications-new/articles/2026/federal-judge-blocks-immunization-schedule-changes-stays-acip-member-appointments/',
-    },
-    {
-      label: 'Congressional Research Service — Changes to CDC vaccine recommendations in 2025 and 2026',
-      url: 'https://www.congress.gov/crs-product/IN12684',
-    },
-    {
-      label: 'Congressional Research Service — CDC’s updated childhood vaccine schedule litigation',
-      url: 'https://www.congress.gov/crs-product/LSB11427',
+      label: 'American College of Physicians (March 2026) — Federal judge blocks immunization schedule changes, stays ACIP member appointments',
+      url: 'https://www.acponline.org/acp-newsroom/federal-judge-blocks-immunization-schedule-changes-stays-acip-member-appointments',
     },
   ],
   lastReviewed: '2026-10-07',

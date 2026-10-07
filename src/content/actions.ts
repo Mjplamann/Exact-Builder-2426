@@ -2,12 +2,15 @@
 // band × audience. Written for the general public (plain language, short imperative bullets).
 //
 // Basis (checked 2026-10-07; pending clinical review):
-//   * CDC Respiratory Virus Guidance (2024): core prevention (immunizations, hygiene, cleaner air,
+//   * CDC respiratory virus prevention guidance: core prevention (immunizations, hygiene, cleaner air,
 //     treatment) for everyone; when sick, stay home until 24 hours fever-free without fever-reducing
 //     medicine AND symptoms improving, then 5 days of added precautions (masks, distance, hygiene,
 //     cleaner air, testing).
-//   * MDH (January 2026) aligned its immunization recommendations with AAP, AAFP, ACOG and IDSA.
-//     Annual flu vaccine for everyone 6 months and older.
+//   * MDH (January 2026 health advisory) aligned its immunization recommendations with medical
+//     associations such as AAP, AAFP and ACOG. Annual flu vaccine for everyone 6 months and older
+//     (CDC, AAP, AAFP). 2026–27 COVID-19 vaccines are FDA-approved for everyone 65+ and for younger
+//     people with a higher-risk condition; AAFP recommends them for all adults, AAP for children
+//     6–23 months and higher-risk children, ACOG in pregnancy.
 //   * Flu antivirals work best started within 48 hours of symptoms; higher-risk people should seek
 //     care early (CDC recommends treatment for them even after 48 hours). COVID-19 antiviral pills
 //     must start within 5 days of symptoms for eligible people.
@@ -60,32 +63,41 @@ export const BAND_LABEL: Record<LevelBand, string> = {
 // ───────────────────────────── sources ─────────────────────────────
 
 const SRC = {
-  cdcGuidance: { label: 'CDC — Respiratory Virus Guidance', url: 'https://www.cdc.gov/respiratory-viruses/guidance/index.html' },
+  cdcGuidance: { label: 'CDC — Preventing respiratory illnesses', url: 'https://www.cdc.gov/respiratory-viruses/prevention/index.html' },
   cdcWhenSick: {
     label: 'CDC — Preventing spread of respiratory viruses when you’re sick',
     url: 'https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html',
   },
   cdcMasks: { label: 'CDC — Masks and respiratory virus prevention', url: 'https://www.cdc.gov/respiratory-viruses/prevention/masks.html' },
   cdcTesting: { label: 'CDC — Testing and respiratory viruses', url: 'https://www.cdc.gov/respiratory-viruses/prevention/testing.html' },
-  cdcFluVaccine: { label: 'CDC — Flu vaccines', url: 'https://www.cdc.gov/flu/vaccines/index.html' },
-  cdcFluTreatment: { label: 'CDC — Treating flu (antiviral medicines)', url: 'https://www.cdc.gov/flu/treatment/index.html' },
-  cdcCovidTreatment: { label: 'CDC — COVID-19 treatment options', url: 'https://www.cdc.gov/covid/treatment/index.html' },
-  cdcRsvInfants: { label: 'CDC — Protecting infants from RSV', url: 'https://www.cdc.gov/rsv/vaccines/protect-infants.html' },
-  cdcRsvOlder: { label: 'CDC — RSV vaccines for older adults', url: 'https://www.cdc.gov/rsv/vaccines/older-adults.html' },
-  cdcHands: { label: 'CDC — Clean hands', url: 'https://www.cdc.gov/clean-hands/index.html' },
-  mdhFlu: { label: 'MDH — Influenza (flu)', url: 'https://www.health.state.mn.us/diseases/flu/index.html' },
-  mdhRsv: { label: 'MDH — RSV', url: 'https://www.health.state.mn.us/diseases/rsv/index.html' },
-  mdhCovid: { label: 'MDH — COVID-19', url: 'https://www.health.state.mn.us/diseases/coronavirus/index.html' },
-  mdhImmunize: { label: 'MDH — Immunizations', url: 'https://www.health.state.mn.us/people/immunize/index.html' },
+  cdcFluVaccine: { label: 'CDC — Seasonal flu vaccine basics', url: 'https://www.cdc.gov/flu/vaccines/index.html' },
+  cdcFluTreatment: { label: 'CDC — Treatment of flu', url: 'https://www.cdc.gov/flu/treatment/index.html' },
+  cdcCovidTreatment: { label: 'CDC — Types of COVID-19 treatment', url: 'https://www.cdc.gov/covid/treatment/index.html' },
+  cdcRsvInfants: { label: 'CDC — RSV in infants and young children', url: 'https://www.cdc.gov/rsv/infants-young-children/index.html' },
+  cdcRsvOlder: { label: 'CDC — RSV vaccines for adults', url: 'https://www.cdc.gov/rsv/vaccines/adults.html' },
+  cdcHands: { label: 'CDC — About handwashing', url: 'https://www.cdc.gov/clean-hands/about/index.html' },
+  mdhFlu: { label: 'MDH — Influenza situation update', url: 'https://www.health.state.mn.us/diseases/flu/stats/index.html' },
+  mdhImmunize: {
+    label: 'MDH health advisory (Jan. 2026) — MDH aligns with medical association immunization recommendations',
+    url: 'https://www2cdn.web.health.state.mn.us/communities/ep/han/2026/jan7imz.pdf',
+  },
   mdhResp: { label: 'MDH — Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
-  mdhNoro: { label: 'MDH — Norovirus', url: 'https://www.health.state.mn.us/diseases/norovirus/index.html' },
   aapFlu: {
     label: 'HealthyChildren.org (AAP) — Flu prevention and treatment, 2026–27',
     url: 'https://www.healthychildren.org/English/news/Pages/aap-(influenza)-flu-prevention-recommendations-for-2026-27.aspx',
   },
+  aapRsv: { label: 'American Academy of Pediatrics — RSV resources', url: 'https://www.aap.org/rsv' },
+  aafpVaccines: {
+    label: 'AAFP — 2026–2027 influenza, RSV and COVID-19 vaccine guidance (PDF)',
+    url: 'https://www.aafp.org/assets/image/upload/v1788277985/pdf_2026_through_2027_influenza_rsv_sars_covid_2_guidance.pdf',
+  },
+  acogPregnancy: {
+    label: 'Contemporary OB/GYN (Sept. 2026) — ACOG 2026–27 respiratory virus immunization recommendations in pregnancy',
+    url: 'https://www.contemporaryobgyn.net/view/acog-2026-27-respiratory-virus-immunization-recommendations-pregnancy',
+  },
   idsaImmuno: {
-    label: 'IDSA — Seasonal vaccines for immunocompromised patients (2026)',
-    url: 'https://www.idsociety.org/practice-guideline/Seasonal-RTI-Vaccinations-in-Immunocompromised-Patients/',
+    label: 'Guideline Central — IDSA 2026 guideline on seasonal vaccines for immunocompromised patients (summary)',
+    url: 'https://www.guidelinecentral.com/insights/sep-2026-idsa-seasonalvaccinesimmunocompromisedpatients-guideline-spotlight/',
   },
 } satisfies Record<string, SourceLink>
 
@@ -160,7 +172,7 @@ const LOW: Record<AgeGroupId, Draft> = {
   all: {
     summary: 'Activity is low. This is the best time to get protected before respiratory viruses rise.',
     actions: [A.fluShot, A.covidAsk, A.hands, A.stayHome, A.coverAir],
-    sources: [SRC.cdcGuidance, SRC.cdcWhenSick, SRC.cdcFluVaccine, SRC.mdhImmunize, SRC.cdcHands, SRC.mdhNoro],
+    sources: [SRC.cdcGuidance, SRC.cdcWhenSick, SRC.cdcFluVaccine, SRC.mdhImmunize, SRC.cdcHands],
   },
   infants: {
     summary: 'Activity is low. Set up your baby’s protection now, before RSV and flu season.',
@@ -185,13 +197,13 @@ const LOW: Record<AgeGroupId, Draft> = {
         text: 'Call your clinician right away for a fever of 100.4°F (38°C) or higher in a baby under 3 months.',
       },
     ],
-    sources: [SRC.cdcRsvInfants, SRC.mdhRsv, SRC.cdcFluVaccine, SRC.aapFlu, SRC.mdhImmunize, SRC.cdcGuidance],
+    sources: [SRC.cdcRsvInfants, SRC.aapRsv, SRC.cdcFluVaccine, SRC.aapFlu, SRC.mdhImmunize, SRC.cdcGuidance],
   },
   children: {
     summary: 'Activity is low. Fall is the time to get kids vaccinated before school-season germs pick up.',
     actions: [
       {
-        text: 'Get your child a flu vaccine this fall. Children under 9 getting it for the first time need 2 doses, 4 weeks apart.',
+        text: 'Get your child a flu vaccine this fall. Children under 9 who have not had at least 2 flu vaccine doses before need 2 doses, 4 weeks apart.',
         pathogens: ['influenza'],
       },
       {
@@ -209,7 +221,7 @@ const LOW: Record<AgeGroupId, Draft> = {
   adults: {
     summary: 'Activity is low. A few minutes now — a flu shot and good habits — protect you and people around you.',
     actions: [A.fluShot, A.covidAsk, A.hands, A.stayHome, A.coverAir],
-    sources: [SRC.cdcGuidance, SRC.cdcWhenSick, SRC.cdcFluVaccine, SRC.mdhImmunize, SRC.cdcHands],
+    sources: [SRC.cdcGuidance, SRC.cdcWhenSick, SRC.cdcFluVaccine, SRC.aafpVaccines, SRC.mdhImmunize, SRC.cdcHands],
   },
   'older-adults': {
     summary: 'Activity is low. Good time to catch up on vaccines before winter.',
@@ -220,13 +232,13 @@ const LOW: Record<AgeGroupId, Draft> = {
       A.antiviralPlan,
       A.hands,
     ],
-    sources: [SRC.cdcFluVaccine, SRC.cdcRsvOlder, SRC.mdhImmunize, SRC.cdcFluTreatment, SRC.cdcCovidTreatment, SRC.cdcGuidance],
+    sources: [SRC.cdcFluVaccine, SRC.cdcRsvOlder, SRC.aafpVaccines, SRC.mdhImmunize, SRC.cdcFluTreatment, SRC.cdcCovidTreatment],
   },
   seniors: {
     summary: 'Activity is low. Get your fall vaccines now and have a plan for getting treatment fast if you get sick.',
     actions: [
       {
-        text: 'Get a flu vaccine made for older adults: high-dose, adjuvanted or recombinant. If none is available, any flu vaccine is better than none.',
+        text: 'Get a flu vaccine made for older adults, such as high-dose, adjuvanted or recombinant. If none is available, any flu vaccine is better than none.',
         pathogens: ['influenza'],
       },
       {
@@ -237,7 +249,7 @@ const LOW: Record<AgeGroupId, Draft> = {
       { ...A.antiviralPlan, text: 'Know how you’d reach a clinician quickly (including telehealth) if you get sick.' },
       A.hands,
     ],
-    sources: [SRC.cdcFluVaccine, SRC.cdcRsvOlder, SRC.mdhImmunize, SRC.cdcFluTreatment, SRC.cdcCovidTreatment, SRC.cdcGuidance],
+    sources: [SRC.cdcFluVaccine, SRC.cdcRsvOlder, SRC.aafpVaccines, SRC.mdhImmunize, SRC.cdcFluTreatment, SRC.cdcCovidTreatment],
   },
   pregnant: {
     summary: 'Activity is low. Vaccines during pregnancy protect you and pass protection to your baby.',
@@ -255,7 +267,7 @@ const LOW: Record<AgeGroupId, Draft> = {
       { text: 'Get a Tdap (whooping cough) shot at 27–36 weeks of every pregnancy.', pathogens: ['pertussis'] },
       A.hands,
     ],
-    sources: [SRC.cdcFluVaccine, SRC.cdcRsvInfants, SRC.mdhImmunize, SRC.mdhRsv, SRC.cdcGuidance],
+    sources: [SRC.cdcFluVaccine, SRC.cdcRsvInfants, SRC.acogPregnancy, SRC.mdhImmunize, SRC.cdcGuidance],
   },
   immunocompromised: {
     summary: 'Activity is low. Use this window to update vaccines and make a fast-treatment plan with your care team.',
@@ -304,7 +316,7 @@ const ELEVATED: Record<AgeGroupId, Draft> = {
       },
       { text: 'Call right away for a fever of 100.4°F (38°C) or higher in a baby under 3 months.' },
     ],
-    sources: [SRC.cdcRsvInfants, SRC.mdhRsv, SRC.aapFlu, SRC.cdcFluTreatment, SRC.cdcGuidance],
+    sources: [SRC.cdcRsvInfants, SRC.aapRsv, SRC.aapFlu, SRC.cdcFluTreatment, SRC.cdcGuidance],
   },
   children: {
     summary: 'Viruses are spreading at moderate levels in Minnesota. A few habits keep kids in school and out of the clinic.',
@@ -419,7 +431,7 @@ const HIGH: Record<AgeGroupId, Draft> = {
         pathogens: ['rsv'],
       },
     ],
-    sources: [SRC.cdcRsvInfants, SRC.mdhRsv, SRC.aapFlu, SRC.cdcFluTreatment, SRC.cdcGuidance],
+    sources: [SRC.cdcRsvInfants, SRC.aapRsv, SRC.aapFlu, SRC.cdcFluTreatment, SRC.cdcGuidance],
   },
   children: {
     summary: 'Viruses are spreading widely. Keep sick kids home and call early if your child is at higher risk.',

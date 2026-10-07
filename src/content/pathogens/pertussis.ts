@@ -1,11 +1,5 @@
-// Verified 2026-10-07 from search results: MDH case counts (2023: 61; 2024: more than 3,100, most since 2012;
-// 2025: 1,237 or 1,283 depending on the update, so "more than 1,200"; 2026: 186 as of 9/10/2026), and the
-// federal schedule litigation (March 16, 2026 stay; First Circuit argument October 6, 2026, no ruling yet).
-// TODO(verify): clinical details (treatment windows, PEP groups, TMP-SMX cautions, Tdap timing and
-// effectiveness) follow long-standing CDC/ACIP, AAP Red Book and ACOG guidance but were not re-checked live
-// (WebSearch budget exhausted; cdc.gov blocked). Before publishing, add URLs from search results for: CDC
-// pertussis clinical overview / treatment and postexposure prophylaxis, CDC Tdap-in-pregnancy page, ACOG
-// Tdap committee opinion, AAP Red Book pertussis chapter, MDH school immunization requirements.
+// Sources checked 2026-10-07: MDH 2023–2026 case counts, CDC clinical, treatment, PEP and Tdap-in-pregnancy
+// pages, ACOG, MDH school requirements, and the federal schedule litigation (no appeals ruling yet).
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -73,7 +67,7 @@ const profile: PathogenProfile = {
       summary:
         'Children who are not vaccinated or are behind on shots can get very sick. Vaccinated children can still catch whooping cough because protection fades over time, but their illness is usually milder and shorter.',
       actions: [
-        'Keep your child on schedule: 5 doses of DTaP by age 4 to 6 and a Tdap booster at age 11 or 12. Minnesota schools require DTaP for kindergarten and Tdap for 7th grade.',
+        'Keep your child on schedule: 5 doses of DTaP by age 4 to 6 and a Tdap booster at age 11 or 12. Minnesota schools require DTaP for kindergarten and Tdap for 7th grade, unless the family files a legal exemption.',
         'If your child has coughing fits, a whoop, or vomits after coughing, call your clinician and ask about testing.',
         'Keep a child with whooping cough home until they have taken the right antibiotic for 5 days.',
         'Keep a coughing child away from babies and pregnant family members.',
@@ -197,7 +191,7 @@ const profile: PathogenProfile = {
         name: 'Tdap during pregnancy',
         who: 'Every pregnancy, ideally early in the window from 27 through 36 weeks. Recommended by CDC and ACOG.',
         notes:
-          'The pregnant person makes antibodies that pass to the baby and protect the baby in the first months of life, before the baby can start DTaP. CDC reports that Tdap during pregnancy prevents most whooping cough cases and hospital stays in babies younger than 2 months. A person who has never had Tdap and did not get it during pregnancy should get it right after delivery, though this does not protect the newborn as well.',
+          'The pregnant person makes antibodies that pass to the baby and protect the baby in the first months of life, before the baby can start DTaP. CDC reports that Tdap during pregnancy prevents about 3 out of 4 whooping cough cases (78%) and about 9 out of 10 hospital stays (91%) in babies younger than 2 months. A person who has never had Tdap and did not get it during pregnancy should get it right after delivery, though this does not protect the newborn as well.',
       },
     ],
     everyday: [
@@ -225,9 +219,30 @@ const profile: PathogenProfile = {
     'Minnesota had a large whooping cough wave in 2024 and 2025. MDH counted more than 3,100 cases in 2024, the most since 2012, and more than 1,200 in 2025. That compares with 61 cases in 2023.',
     'As of September 10, 2026, MDH had counted 186 cases for 2026. That is much lower than in the past two years and in line with a national decline. These counts are preliminary. Whooping cough still circulates, so babies remain at risk.',
     'Federal vaccine guidance changed several times in 2025 and 2026. In March 2026, a federal court paused changes to CDC’s childhood immunization schedule. A federal appeals court heard arguments on October 6, 2026, and had not yet ruled, so federal guidance could change. As of October 2026, the CDC schedule in effect and the American Academy of Pediatrics both recommend DTaP for young children and Tdap at age 11 or 12. CDC and ACOG recommend Tdap during every pregnancy. Talk with your clinician if you have questions.',
-    'Minnesota schools require DTaP for kindergarten and Tdap for 7th grade.',
+    'In January 2026, MDH said it would base its immunization guidance on schedules from professional medical groups, such as the American Academy of Pediatrics, the American Academy of Family Physicians, ACOG, and the Infectious Diseases Society of America, rather than on CDC’s.',
+    'Minnesota schools require DTaP for kindergarten and a Tdap booster for 7th grade, unless the family files a legal exemption.',
   ],
   sources: [
+    { label: 'CDC: Clinical overview of pertussis', url: 'https://www.cdc.gov/pertussis/hcp/clinical-overview/index.html' },
+    { label: 'CDC: Treatment of pertussis', url: 'https://www.cdc.gov/pertussis/hcp/clinical-care/index.html' },
+    {
+      label: 'CDC: Postexposure antimicrobial prophylaxis for pertussis',
+      url: 'https://www.cdc.gov/pertussis/php/postexposure-prophylaxis/index.html',
+    },
+    { label: 'CDC: Pertussis vaccination recommendations', url: 'https://www.cdc.gov/pertussis/hcp/vaccine-recommendations/index.html' },
+    { label: 'CDC: Tdap vaccination during pregnancy', url: 'https://www.cdc.gov/pertussis/vaccines/tdap-vaccination-during-pregnancy.html' },
+    {
+      label: 'ACOG: Update on immunization and pregnancy: tetanus, diphtheria, and pertussis vaccination',
+      url: 'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/09/update-on-immunization-and-pregnancy-tetanus-diphtheria-and-pertussis-vaccination',
+    },
+    {
+      label: 'MDH: Immunization requirements for school',
+      url: 'https://www.health.state.mn.us/people/childrenyouth/schoolhealth/imm/immreq.html',
+    },
+    {
+      label: 'MDH: MDH aligns immunization recommendations with professional medical associations (January 2026)',
+      url: 'https://www.health.mn.gov/news/pressrel/2026/immuniz010826.html',
+    },
     {
       label: 'MDH: Pertussis disease statistics, 2026',
       url: 'https://www.health.state.mn.us/diseases/pertussis/stats/stats26.html',

@@ -21,7 +21,7 @@ const profile: PathogenProfile = {
     'Four coronaviruses, called 229E, NL63, OC43, and HKU1, cause many common colds. They are different from SARS-CoV-2, the virus that causes COVID-19. Most people catch one or more of them during their lives and can catch them again, because protection fades. Infections are usually mild, but they can cause bronchitis or pneumonia (a lung infection) in babies, older adults, and people with weakened immune systems or heart or lung disease.',
   seasonality: {
     summary:
-      'In Minnesota, seasonal coronaviruses spread mostly from late fall through early spring, usually peaking in mid-winter (often January or February), around the same time as flu and RSV. Few infections are found in summer. Which of the four types is most common changes from year to year.',
+      'In the U.S., including Minnesota, seasonal coronaviruses spread mostly from late fall through early spring, usually peaking in mid-winter (often January or February), around the same time as flu and RSV. Few infections are found in summer. Which of the four types is most common changes from year to year.',
     peakMonths: [1, 2],
   },
   transmission:
@@ -166,7 +166,7 @@ const profile: PathogenProfile = {
         name: 'Over-the-counter cough and cold medicines',
         type: 'other',
         detail:
-          'These may ease symptoms in adults and older children, but they do not make a cold go away faster. Do not give them to children under 4 unless a clinician tells you to. Read labels so you do not take two products with the same ingredient, such as acetaminophen.',
+          'These may ease symptoms in adults and older children, but they do not make a cold go away faster. Do not give them to children under 4, and ask a clinician before giving them to children 4 to 6. Read labels so you do not take two products with the same ingredient, such as acetaminophen.',
         who: 'Adults and older children who want symptom relief.',
       },
       {
@@ -213,6 +213,16 @@ const profile: PathogenProfile = {
     'There is no vaccine for these four coronaviruses. COVID-19 vaccines are made for SARS-CoV-2 and are not designed to prevent seasonal coronavirus colds.',
   ],
   sources: [
+    { label: 'CDC — Common human coronaviruses (fact sheet)', url: 'https://www.cdc.gov/coronavirus/downloads/Common-HCoV-fact-sheet-508.pdf' },
+    {
+      label: 'CDC Emerging Infectious Diseases — Seasonality of common human coronaviruses, United States, 2014–2021',
+      url: 'https://wwwnc.cdc.gov/eid/article/28/10/22-0396_article',
+    },
+    { label: 'CDC — Manage common cold', url: 'https://www.cdc.gov/common-cold/treatment/index.html' },
+    {
+      label: 'AAP HealthyChildren.org — Coughs and colds: medicines or home remedies?',
+      url: 'https://www.healthychildren.org/English/health-issues/conditions/chest-lungs/Pages/Coughs-and-Colds-Medicines-or-Home-Remedies.aspx',
+    },
     { label: 'CDC — NREVSS dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
     {
       label: 'CDC — Preventing spread of respiratory viruses when you’re sick',

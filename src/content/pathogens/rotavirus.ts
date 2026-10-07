@@ -1,9 +1,5 @@
 import type { PathogenProfile } from '../types'
 
-// TODO(verify): the vaccine-schedule status, dose ages and data-source notes are sourced below. The general
-// clinical facts (incubation, contraindications, intussusception risk, Minnesota peak months) follow
-// long-standing CDC/ACIP guidance but still need CDC rotavirus page URLs from a run with search budget.
-
 const profile: PathogenProfile = {
   id: 'rotavirus',
   name: 'Rotavirus',
@@ -149,13 +145,13 @@ const profile: PathogenProfile = {
     vaccines: [
       {
         name: 'RotaTeq (RV5)',
-        who: 'Recommended for all infants by CDC’s schedule now in effect and by the American Academy of Pediatrics. Given as drops by mouth in 3 doses, usually at 2, 4 and 6 months of age.',
+        who: 'Recommended for all infants by the American Academy of Pediatrics, by the Minnesota Department of Health and by the CDC schedule now in effect under a court order. Given as drops by mouth in 3 doses, usually at 2, 4 and 6 months of age.',
         notes:
           'The first dose can be given as early as 6 weeks of age and must be given by 14 weeks 6 days. All doses must be given by 8 months of age. Not for babies who had a severe allergic reaction to a previous dose or a vaccine ingredient, who have had intussusception, or who have SCID.',
       },
       {
         name: 'Rotarix (RV1)',
-        who: 'Recommended for all infants by CDC’s schedule now in effect and by the American Academy of Pediatrics. Given as drops by mouth in 2 doses, usually at 2 and 4 months of age.',
+        who: 'Recommended for all infants by the American Academy of Pediatrics, by the Minnesota Department of Health and by the CDC schedule now in effect under a court order. Given as drops by mouth in 2 doses, usually at 2 and 4 months of age.',
         notes:
           'Same age limits and reasons not to vaccinate as RotaTeq. Both vaccines carry a small risk of intussusception (a bowel blockage), mostly in the week after the first or second dose. CDC estimates this risk at about 1 in 20,000 to 1 in 100,000 vaccinated babies.',
       },
@@ -180,10 +176,20 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'MN Pulse shows rotavirus as a BioFire detection rate. This is the percent of BioFire GI (stomach and gut) panel tests at participating labs in the Midwest (not just Minnesota) that found rotavirus. These panels are run on people of all ages who are sick enough to see a clinician, including many young children. So the number shows trends, not how many people are sick. WastewaterSCAN also tests sewage from 4 Minnesota treatment plants (Rochester, Mankato, Red Wing and St. Cloud; none in the Twin Cities) for rotavirus. Wastewater gives a community-wide signal that includes people who were never tested, but only for the areas those plants serve. Because many children are vaccinated, rotavirus is usually low for much of the year and may rise in late winter and spring. Since vaccines, some years have bigger seasons than others. Babies who were recently vaccinated can pass vaccine virus in their stool, and some tests can pick it up. So small changes may not mean more illness; look for a rise that lasts several weeks. A clear, lasting rise means more rotavirus is spreading, mostly among young children. Check that your baby’s vaccines are up to date and step up handwashing.',
   watchNotes: [
-    'In January 2026, HHS changed CDC’s childhood immunization schedule. On March 16, 2026, a federal court paused those changes and the votes of the reconstituted CDC vaccine advisory committee. That restored the earlier schedule while the case continues. A federal appeals court heard arguments on October 6, 2026, and had not yet ruled.',
-    'Under the CDC schedule now in effect, rotavirus vaccine is recommended for all infants. The American Academy of Pediatrics also recommends it for all infants. The age limits are strict, so talk with your baby’s clinician at the 2-month visit.',
+    'In January 2026, HHS changed CDC’s childhood immunization schedule. Among other changes, rotavirus vaccine moved from a routine vaccine for all infants to “shared clinical decision-making” (a choice parents make with their clinician). On March 16, 2026, a federal judge paused those changes and the appointments of the new members of CDC’s vaccine advisory committee. That restored the earlier schedule while the case continues. A federal appeals court heard arguments on October 6, 2026, and had not ruled as of October 7, 2026.',
+    'On January 7, 2026, the Minnesota Department of Health (MDH) said it would follow immunization schedules from medical groups, including the American Academy of Pediatrics (AAP), instead of CDC’s changed schedule. AAP and MDH recommend rotavirus vaccine for all infants, as does the CDC schedule now in effect. The age limits are strict, so talk with your baby’s clinician at the 2-month visit.',
   ],
   sources: [
+    { label: 'CDC: Rotavirus Vaccine Safety (intussusception risk)', url: 'https://www.cdc.gov/vaccine-safety/vaccines/rotavirus.html' },
+    { label: 'CDC: Rotavirus Vaccine Information Statement (VIS)', url: 'https://www.cdc.gov/vaccines/hcp/current-vis/rotavirus.html' },
+    {
+      label: 'CDC Pink Book: Chapter 19, Rotavirus',
+      url: 'https://www.cdc.gov/pinkbook/hcp/table-of-contents/chapter-19-rotavirus.html',
+    },
+    {
+      label: 'Lee et al., BMC Infectious Diseases: Incubation periods of viral gastroenteritis, a systematic review',
+      url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3849296/',
+    },
     {
       label: 'CDC: Child and adolescent immunization schedule notes (rotavirus doses and age limits)',
       url: 'https://www.cdc.gov/vaccines/hcp/imz-schedules/child-adolescent-notes.html',
@@ -192,6 +198,10 @@ const profile: PathogenProfile = {
     {
       label: 'AAP: Recommended childhood and adolescent immunization schedule, 2026',
       url: 'https://publications.aap.org/pediatrics/article/157/3/e2025075754/206175/Recommended-Childhood-and-Adolescent-Immunization',
+    },
+    {
+      label: 'MDH Health Advisory: MDH Aligns with Medical Association Immunization Recommendations (January 7, 2026)',
+      url: 'https://www2cdn.web.health.state.mn.us/communities/ep/han/2026/jan7imz.pdf',
     },
     {
       label: 'IDSA: Federal judge blocks immunization schedule changes, stays ACIP appointments (2026)',

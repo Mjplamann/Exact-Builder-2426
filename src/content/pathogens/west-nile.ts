@@ -170,8 +170,8 @@ const profile: PathogenProfile = {
     'West Nile virus is not tracked with flu-style test positivity, respiratory or stomach virus panels, or emergency department visit percentages. Instead, health officials count reported human cases (confirmed and probable). Most infected people never feel sick, and many mild cases are never tested. So reported cases are mostly people with serious illness, and they are only a small part of all infections. Cases are counted by the county where the person lives, which may not be where they were bitten. There is also a delay of several weeks between a mosquito bite, illness, testing, and the case being reported. That means this week’s numbers reflect bites from earlier in the season. Health officials also track infected blood donors and test mosquitoes. In the Twin Cities area, mosquito testing by the Metropolitan Mosquito Control District can give an earlier warning. Numbers are small and change a lot from year to year, so a county with no reported cases is not a county with no risk. A rise in reported cases means infected mosquitoes were biting people in recent weeks and are likely still active. For an average person, that is a reminder to use repellent and cover up outdoors, especially in the evening, until the first hard frost.',
   watchNotes: [
     'As of early October 2026, West Nile risk in Minnesota is winding down for the year as nights get colder. Infected mosquitoes can still bite on warm evenings until a hard frost, so keep using repellent outdoors until then.',
-    '2025 was an unusually busy West Nile year in Minnesota, with more than 120 reported cases. Reported cases in 2026 have been much lower so far.',
-    'The Minnesota Department of Health posts this year’s case counts by county on its West Nile statistics page. It updates them every week or two during the season.',
+    '2025 was one of Minnesota’s busiest West Nile years on record, with more than 100 reported cases and at least 10 deaths, the most cases since 2003. Numbers change a lot from year to year, so check the MDH statistics page for 2026 counts.',
+    'The Minnesota Department of Health posts this year’s case counts by county on its West Nile statistics page and updates them during the season.',
   ],
   sources: [
     { label: 'CDC — West Nile virus', url: 'https://www.cdc.gov/west-nile-virus/index.html' },
@@ -182,8 +182,8 @@ const profile: PathogenProfile = {
       url: 'https://www.health.state.mn.us/diseases/westnile/statistics.html',
     },
     {
-      label: 'Minnesota Department of Health — West Nile virus cases by county (PDF)',
-      url: 'https://www.health.state.mn.us/diseases/westnile/casesbycounty.pdf',
+      label: 'Minnesota Department of Health — West Nile virus activity news release (August 2025)',
+      url: 'https://www.health.state.mn.us/news/pressrel/2025/westnile082525.html',
     },
     { label: 'U.S. EPA — Insect repellents', url: 'https://www.epa.gov/insect-repellents' },
   ],

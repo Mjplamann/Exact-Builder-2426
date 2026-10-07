@@ -28,7 +28,12 @@ const profile: PathogenProfile = {
       'Low fever',
       'Stomach pain or cramps',
     ],
-    lessCommon: ['Loss of appetite', 'Fussiness or tiredness', 'Diarrhea lasting 2 weeks or more'],
+    lessCommon: [
+      'Loss of appetite',
+      'Fussiness or tiredness',
+      'Diarrhea lasting 2 weeks or more',
+      'Rarely, liver inflammation (hepatitis), which can cause yellow skin or eyes',
+    ],
     emergencyWarningSigns: [
       'Signs of severe dehydration: no pee for many hours, a very dry mouth, crying with no tears, or sunken eyes',
       'In a baby: no wet diaper for many hours, or a sunken soft spot on the head',
@@ -194,11 +199,19 @@ const profile: PathogenProfile = {
   sources: [
     {
       label: 'CDC: About adenovirus',
-      url: 'https://www.cdc.gov/adenovirus/about/',
+      url: 'https://www.cdc.gov/adenovirus/about/index.html',
+    },
+    {
+      label: 'CDC: Clinical overview of adenovirus (types 40 and 41, gastroenteritis and hepatitis)',
+      url: 'https://www.cdc.gov/adenovirus/hcp/clinical-overview/index.html',
     },
     {
       label: 'CDC: Adenovirus guidelines for outbreaks (for health care providers)',
       url: 'https://www.cdc.gov/adenovirus/hcp/outbreaks/index.html',
+    },
+    {
+      label: 'CDC: Adenovirus vaccine information statement (military vaccine for types 4 and 7)',
+      url: 'https://www.cdc.gov/vaccines/hcp/current-vis/adenovirus.html',
     },
     {
       label: 'Public Health Agency of Canada: Pathogen safety data sheet, adenovirus serotypes 40 and 41',

@@ -1,9 +1,4 @@
-// TODO(verify): drafted from long-standing CDC, AAP (Red Book), IDSA/ATS and FDA label information WITHOUT
-// live web verification (the shared WebSearch budget was exhausted in drafting and in the fix pass; cdc.gov
-// was blocked). No search result yet supplies a clinical source URL for this germ, so the only source is the
-// BioFire data site. Before publishing, add URLs from search results for: CDC Chlamydia pneumoniae "About"
-// and clinical overview pages, AAP Red Book Chlamydia pneumoniae chapter, IDSA/ATS community-acquired
-// pneumonia guideline, FDA clarithromycin label (pregnancy warning).
+// Sources checked 2026-10-07: CDC C. pneumoniae clinical overview and clinical features pages.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -42,6 +37,7 @@ const profile: PathogenProfile = {
       'Wheezing or an asthma flare-up',
       'Pneumonia, which tends to be more serious in older adults',
       'Many people have very mild symptoms or none at all',
+      'Rarely, swelling of the brain (encephalitis) or of the heart muscle (myocarditis)',
     ],
     emergencyWarningSigns: [
       'Fast, hard, or labored breathing, or skin pulling in between the ribs with each breath',
@@ -193,7 +189,17 @@ const profile: PathogenProfile = {
   watchNotes: [
     'There is no vaccine for Chlamydia pneumoniae. It is different from the sexually transmitted chlamydia, and a positive result on a respiratory test says nothing about sexual health.',
   ],
-  sources: [{ label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' }],
+  sources: [
+    {
+      label: 'CDC: Clinical overview of Chlamydia pneumoniae infection',
+      url: 'https://www.cdc.gov/cpneumoniae/hcp/clinical-overview/index.html',
+    },
+    {
+      label: 'CDC: Clinical features of Chlamydia pneumoniae infection',
+      url: 'https://www.cdc.gov/cpneumoniae/hcp/clinical-signs/index.html',
+    },
+    { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
+  ],
   lastReviewed: '2026-10-07',
 }
 

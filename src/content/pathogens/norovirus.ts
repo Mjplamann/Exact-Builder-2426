@@ -168,8 +168,8 @@ const profile: PathogenProfile = {
     'MN Pulse shows norovirus mainly as a BioFire detection rate. This is the percent of BioFire GI (stomach and gut) panel tests at participating labs in the Midwest (not just Minnesota) that found norovirus. These panels are mostly ordered for people sick enough to see a clinician or go to a hospital. So the number shows trends, not how many people are sick. Most people with norovirus are never tested. A positive test means norovirus was found. But the virus can stay in stool for weeks, so it is not always the cause of the current illness. WastewaterSCAN also tests sewage from 4 Minnesota treatment plants (Rochester, Mankato, Red Wing and St. Cloud; none in the Twin Cities) for norovirus GII, the most common type. Wastewater gives a community-wide signal that includes people who were never tested, but only for the areas those plants serve. Norovirus levels are usually lowest in late summer and climb in late fall and winter. Because norovirus spreads so fast, they can rise sharply within a few weeks. A rise that lasts more than a week or two means more stomach bugs are going around. Wash hands with soap and water, stay home when sick, and keep an oral rehydration solution at home. A falling number means less spread, but norovirus never fully goes away. CDC’s NoroSTAT outbreak counts combine 14 states, including Minnesota, and are not broken out by state.',
   watchNotes: [
     'In the 2024–25 season, a newer strain called GII.17 caused about 3 in 4 U.S. norovirus outbreaks, overtaking the long-common GII.4 strain. That season started earlier than usual nationally and was unusually large in Minnesota, with more than 130 outbreaks and over 4,000 illnesses in January 2025 alone.',
-    'CDC’s NoroSTAT outbreak tracking network (14 states, including Minnesota) counted 1,392 outbreaks in the 2025–26 season (August 2025 to July 2026). That is within the typical range and far fewer than in the very large 2024–25 season.',
-    'Early 2026–27 reports were also typical. NoroSTAT states reported 27 outbreaks from August 1 to September 4, 2026, within the usual range for that time of year.',
+    'CDC’s NoroSTAT outbreak tracking network (14 states, including Minnesota) counted 1,392 outbreaks in the 2025–26 season (August 1, 2025, to July 31, 2026). That is within the typical range and about half the 2,650 outbreaks these states reported in the very large 2024–25 season.',
+    'As of October 2026, the 2026–27 norovirus season is just starting. In Minnesota it usually begins in October, and CDC updates NoroSTAT outbreak counts about once a month.',
     'There is no approved norovirus vaccine. Candidate vaccines are still being tested in clinical trials.',
   ],
   sources: [
@@ -177,7 +177,7 @@ const profile: PathogenProfile = {
     { label: 'CDC: How to Prevent Norovirus', url: 'https://www.cdc.gov/norovirus/prevention/index.html' },
     { label: 'CDC: Norovirus Outbreaks', url: 'https://www.cdc.gov/norovirus/outbreaks/index.html' },
     { label: 'CDC: NoroSTAT Data', url: 'https://www.cdc.gov/norovirus/php/reporting/norostat-data.html' },
-    { label: 'CDC: NoroSTAT Data Table', url: 'https://www.cdc.gov/norovirus/php/reporting/norostat-data-table.html' },
+    { label: 'CDC: NoroSTAT Data Table', url: 'https://www.cdc.gov/norovirus/reporting/norostat/data-table.html' },
     {
       label: 'CDC Yellow Book: Norovirus',
       url: 'https://www.cdc.gov/yellow-book/hcp/travel-associated-infections-diseases/norovirus.html',

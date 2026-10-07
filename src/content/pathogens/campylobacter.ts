@@ -157,7 +157,7 @@ const profile: PathogenProfile = {
       'Use separate cutting boards for raw meat and for produce, and wash hands, boards, and knives after touching raw poultry.',
       'Drink only pasteurized milk. Raw milk has caused Campylobacter outbreaks in Minnesota.',
       'Don’t drink untreated water from lakes, rivers, or streams; boil, filter, or treat it first.',
-      'Wash hands after touching animals, their food, or their poop, including puppies and kittens. Puppies, including ones sold in pet stores, have been linked to Campylobacter outbreaks, some with drug-resistant strains.',
+      'Wash hands after touching animals, their food, or their poop, including puppies and kittens.',
       'When traveling abroad, follow safe food and water practices.',
     ],
   },
@@ -174,12 +174,13 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'The BioFire detection rate is the share of GI panel stool tests at participating hospitals and clinics that find Campylobacter. Only people sick enough to see a clinician get tested, so most mild cases are never counted. In Minnesota, Campylobacter reliably rises each summer and falls in the colder months, so a summer climb is expected. A rise that is earlier, steeper, or later in the year than usual can point to an outbreak, which MDH investigates. For an average person, a rising number is not a reason to worry. It’s a reminder to cook poultry thoroughly, keep raw chicken away from other foods, and skip raw milk. MDH case counts have risen in recent years partly because more clinics use fast PCR stool tests. Emergency department data for stomach illness include many causes, not just Campylobacter.',
   watchNotes: [
-    'In 2023, MDH received 1,831 Campylobacter reports, the most of any year up to that time, with cases peaking in August. Part of that rise reflected wider use of fast PCR stool tests; about 63% of 2023 reports were confirmed by culture (growing the germ in a lab).',
+    'In 2024, MDH received 2,060 Campylobacter reports, up from 1,831 in 2023. About 6 in 10 of the 2024 reports (1,223) were confirmed by culture (growing the germ in a lab). The rest were found only by fast PCR stool tests, which is part of why reported numbers have climbed.',
     'Cases usually peak in late summer and decline through fall. Keep cooking poultry to 165°F at fall gatherings and tailgates.',
     'Minnesota health officials have linked Campylobacter illnesses to raw milk. Pasteurized milk is the safe choice, especially for children, pregnant people, and older adults.',
   ],
   sources: [
-    { label: 'CDC: Symptoms of Campylobacter Infection', url: 'https://www.cdc.gov/campylobacter/signs-symptoms/' },
+    { label: 'CDC: Symptoms of Campylobacter Infection', url: 'https://www.cdc.gov/campylobacter/signs-symptoms/index.html' },
+    { label: 'CDC: About Campylobacter Infection', url: 'https://www.cdc.gov/campylobacter/about/index.html' },
     { label: 'CDC: Clinical Overview of Campylobacter', url: 'https://www.cdc.gov/campylobacter/hcp/clinical-overview/index.html' },
     {
       label: 'CDC: Campylobacter and Guillain-Barré Syndrome',

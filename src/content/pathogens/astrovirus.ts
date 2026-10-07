@@ -195,12 +195,8 @@ const profile: PathogenProfile = {
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3849296/',
     },
     {
-      label: 'CDC Stacks: Persistent infections with diverse co-circulating astroviruses in pediatric oncology patients, Memphis, Tennessee',
-      url: 'https://stacks.cdc.gov/view/cdc/44391',
-    },
-    {
-      label: 'Beyond the gastrointestinal tract: the emerging and diverse tissue tropisms of astroviruses (review)',
-      url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8145421/',
+      label: 'CDC Emerging Infectious Diseases: Persistent infections with diverse co-circulating astroviruses in pediatric oncology patients, Memphis, Tennessee, USA',
+      url: 'https://wwwnc.cdc.gov/eid/article/23/2/16-1436',
     },
     {
       label: 'CDC: How to prevent norovirus (handwashing, cleaning, and disinfection steps for stomach viruses)',

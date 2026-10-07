@@ -183,10 +183,12 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'The BioFire detection rate is the share of GI panel stool tests at participating hospitals and clinics that find Salmonella. Only people sick enough to see a clinician get tested, often for fever, bloody diarrhea, or diarrhea lasting several days, so most mild cases are never counted. Salmonella detections usually rise in summer and early fall and are lower in winter. A rising number means more of the diarrhea being tested is caused by Salmonella, which can signal a normal seasonal increase or an outbreak. It does not mean your own risk is high. It’s a good reminder to cook food thoroughly, keep raw meat separate, refrigerate leftovers, and wash hands after touching animals. MDH case counts can rise partly because more clinics use fast PCR tests, not only because more people are sick. Emergency department data for stomach illness include many causes (mostly viruses like norovirus in winter), not just Salmonella.',
   watchNotes: [
-    'In summer 2026, a multistate Salmonella outbreak was linked to fresh jalapeño peppers grown in Sinaloa, Mexico. Minnesota was among the states affected. The peppers were recalled, and CDC declared the outbreak over on October 2, 2026.',
+    'In summer 2026, a multistate Salmonella outbreak was linked to fresh jalapeño peppers grown in Sinaloa, Mexico, and served at many Mexican-style restaurants. CDC counted 488 sick people in 34 states, 65 of them hospitalized and no deaths. Minnesota was among the hardest-hit states. The peppers were recalled, and CDC declared the outbreak over on October 2, 2026.',
     'Alfalfa sprouts from Minneapolis grower Everything Sprouts (Calco and Everything Sprouts brands) were linked in August 2026 to a multistate outbreak of both Salmonella and Shiga toxin–producing E. coli. Don’t eat recalled sprouts; throw them away.',
-    'CDC’s 2026 Salmonella outbreaks linked to backyard chicks and ducklings sickened more than 1,000 people nationwide, about 1 in 5 of them children younger than 5. Minnesota helped investigate. CDC declared the outbreaks over in September 2026, but backyard flocks can carry Salmonella at any time.',
-    'In 2026, MDH linked Minnesota Salmonella cases to powdered greens dietary supplements, including products made with moringa leaf powder. Small pet turtles have also caused Salmonella outbreaks again and again. CDC advises against pet turtles in homes with children under 5, adults 65 and older, or people with weakened immune systems.',
+    'CDC’s 2026 Salmonella outbreaks linked to backyard chicks and ducklings sickened more than 1,200 people in 46 states and Puerto Rico, and many of them were young children. Minnesota helped investigate. CDC declared the outbreaks over in September 2026, but backyard flocks can carry Salmonella at any time.',
+    'In 2026, MDH linked Minnesota Salmonella cases to powdered greens dietary supplements, including products made with moringa leaf powder. Don’t use recalled supplements.',
+    'Small pet turtles cause Salmonella outbreaks again and again. In a 2026 outbreak linked to pet turtles, all of the sick people were children. CDC advises against pet turtles in homes with children under 5, adults 65 and older, or people with weakened immune systems.',
+    'In 2024, MDH received 1,172 Salmonella reports, the most ever recorded in Minnesota. Of those, 986 were confirmed by culture (growing the germ in a lab), and 186 were found only by fast PCR stool tests.',
     'If MDH calls you after a positive test, please take the call. Interviews help MDH find outbreak sources quickly.',
   ],
   sources: [
@@ -215,6 +217,10 @@ const profile: PathogenProfile = {
       url: 'https://www.cdc.gov/mmwr/volumes/74/ss/ss7403a1.htm',
     },
     { label: 'MDH: Salmonellosis', url: 'https://www.health.state.mn.us/diseases/salmonellosis' },
+    {
+      label: 'MDH: Salmonellosis, Annual Summary of Reportable Diseases',
+      url: 'https://www.health.state.mn.us/diseases/reportable/dcn/salmonellosis.html',
+    },
     { label: 'MDH: Salmonellosis fact sheet (PDF)', url: 'https://www.health.mn.gov/diseases/salmonellosis/salmonella.pdf' },
     {
       label: 'MDH: Foodborne and Enteric Diseases, Annual Summary',

@@ -11,7 +11,7 @@ const profile: PathogenProfile = {
   oneLiner:
     'A very contagious cause of diarrhea that spreads easily in child care and households. Some strains resist many antibiotics.',
   overview:
-    'Shigella bacteria cause diarrhea (sometimes bloody), fever, and stomach pain, an illness called shigellosis. It takes only a few germs to make someone sick, so it spreads easily among young children, in child care, within households, and through sexual contact. Most people recover in 5 to 7 days without antibiotics. Drug-resistant strains, including extensively drug-resistant (XDR) Shigella, are a growing concern in the United States.',
+    'Shigella bacteria cause diarrhea (sometimes bloody), fever, and stomach pain, an illness called shigellosis. It takes only a few germs to make someone sick, so it spreads easily among young children, in child care, within households, and through sexual contact. Symptoms usually last about a week, and most people recover without antibiotics. Drug-resistant strains, including extensively drug-resistant (XDR) Shigella, are a growing concern in the United States.',
   seasonality: {
     summary:
       'In Minnesota, Shigella cases tend to follow outbreaks more than the calendar, so yearly counts can swing up and down. Nationally, cases tend to rise in late summer and early fall. But an outbreak in a child care center, school, or close-knit community can cause a spike in any month.',
@@ -71,7 +71,7 @@ const profile: PathogenProfile = {
     adults: {
       risk: 'lower',
       summary:
-        'Most healthy adults recover in 5 to 7 days. Adults often catch Shigella from sick children, travel, or sexual contact. Gay, bisexual, and other men who have sex with men are at higher risk, and drug-resistant strains have been more common in this group.',
+        'Most healthy adults recover in about a week. Adults often catch Shigella from sick children, travel, or sexual contact. Gay, bisexual, and other men who have sex with men are at higher risk, and drug-resistant strains have been more common in this group.',
       actions: [
         'Wash hands with soap and water after using the toilet or changing diapers, and before preparing food.',
         'Don’t prepare food for others while you have diarrhea.',
@@ -125,7 +125,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Most people recover in 5 to 7 days with fluids and rest. Antibiotics can shorten illness and help prevent spread. But resistance is common, so clinicians use them mainly for severe illness, for people with weakened immune systems, or to help control outbreaks. When possible, a lab test guides which drug to use. CDC has warned about rising extensively drug-resistant (XDR) Shigella, which commonly used antibiotics cannot treat.',
+      'Most people recover in about a week with fluids and rest. Antibiotics can shorten illness and help prevent spread. But resistance is common, so clinicians use them mainly for severe illness, for people with weakened immune systems, or to help control outbreaks. When possible, a lab test guides which drug to use. CDC has warned about rising extensively drug-resistant (XDR) Shigella, which commonly used antibiotics cannot treat.',
     options: [
       {
         name: 'Fluids and oral rehydration',
@@ -175,12 +175,26 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'The BioFire detection rate is the share of GI panel stool tests that are positive for “Shigella/EIEC” (Shigella or its close relative, enteroinvasive E. coli). Most people tested are sick enough to see a clinician, so mild cases are missed. Shigella spreads from person to person. So numbers can jump with an outbreak in a child care center or community instead of following a smooth seasonal curve. A rising number means more Shigella is showing up among people seeking care. For an average person, it’s a reminder to wash hands with soap and water and keep children with diarrhea home and out of pools. See a clinician for bloody diarrhea or high fever. A positive panel result is not the same as a culture-confirmed case (one where the lab grew Shigella to confirm it). Emergency department data for stomach illness include many causes, not just Shigella.',
   watchNotes: [
-    'In 2023, CDC issued a health advisory about a rise in extensively drug-resistant (XDR) Shigella in the United States. It was seen most often among gay, bisexual, and other men who have sex with men; people experiencing homelessness; international travelers; and people living with HIV. But XDR strains can spread to anyone, including children.',
+    'In 2023, CDC issued a health advisory about a rise in extensively drug-resistant (XDR) Shigella in the United States. About 5% of Shigella infections reported to CDC in 2022 were XDR, up from 0% in 2015. XDR Shigella was seen most often among gay, bisexual, and other men who have sex with men; people experiencing homelessness; international travelers; and people living with HIV. But XDR strains can spread to anyone, including children.',
     'If you are prescribed an antibiotic for Shigella and are not improving after a few days, contact your clinician; a culture can show whether the strain is resistant.',
     'In Minnesota, child care outbreaks of Shigella can last for weeks. MDH or your local health department may require negative stool tests before children or staff with Shigella return.',
   ],
   sources: [
+    { label: 'CDC: About Shigella Infection', url: 'https://www.cdc.gov/shigella/about/index.html' },
+    { label: 'CDC: Signs and Symptoms of Shigella Infection', url: 'https://www.cdc.gov/shigella/signs-symptoms/index.html' },
+    {
+      label: 'CDC: Preventing Shigella Infection Among Young Children',
+      url: 'https://www.cdc.gov/shigella/prevention/preventing-shigella-infection-among-young-children.html',
+    },
+    {
+      label: 'CDC Health Alert Network (HAN) 00486: Extensively Drug-Resistant (XDR) Shigella (2023)',
+      url: 'https://www.cdc.gov/han/2023/han00486.html',
+    },
     { label: 'CDC: Food Poisoning Symptoms', url: 'https://www.cdc.gov/food-safety/signs-symptoms/index.html' },
+    {
+      label: 'MDH: Childcare Provider Information on Shigellosis',
+      url: 'https://www.health.state.mn.us/diseases/shigellosis/childcare.html',
+    },
     {
       label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
       url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',

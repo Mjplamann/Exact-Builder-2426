@@ -1,11 +1,5 @@
-// Verified 2026-10-07 from search results: CDC surveillance (NSSP national ED data; 2024 wave peaked in
-// August 2024, largest rise in ages 2-4; decreasing since early 2025 but elevated in some regions into 2026).
-// Research notes: Mycoplasma is not reportable in Minnesota and is not in NNDSS.
-// TODO(verify): clinical details (incubation, macrolide/doxycycline/fluoroquinolone use, AAP doxycycline
-// note, FDA fluoroquinolone and clarithromycin-in-pregnancy warnings) follow long-standing CDC, AAP Red Book,
-// IDSA/ATS and FDA label information but were not re-checked live (WebSearch budget exhausted; cdc.gov
-// blocked). Before publishing, add URLs from search results for: CDC Mycoplasma "About" and clinical
-// overview pages, AAP Red Book Mycoplasma chapter, IDSA/ATS community-acquired pneumonia guideline.
+// Sources checked 2026-10-07: CDC Mycoplasma clinical overview, clinical care and surveillance pages (2024 wave
+// peaked in August 2024; decreasing since early 2025 but elevated in some regions into 2026).
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -150,7 +144,7 @@ const profile: PathogenProfile = {
         name: 'Doxycycline',
         type: 'antibiotic',
         detail:
-          'A tetracycline-family antibiotic that is an option for adults and children, especially when a macrolide is not working or resistance is suspected. The American Academy of Pediatrics says short courses (21 days or less) can be used in children of any age. It is usually avoided during pregnancy.',
+          'A tetracycline-family antibiotic that CDC lists as an option for adults and older children, and as an alternative when a macrolide is not working. The American Academy of Pediatrics says short courses (21 days or less) can be used in children of any age. It is usually avoided during pregnancy.',
         who: 'Adults, and children when their clinician decides it is the best choice',
       },
       {
@@ -208,6 +202,8 @@ const profile: PathogenProfile = {
     'There is no vaccine for Mycoplasma pneumoniae.',
   ],
   sources: [
+    { label: 'CDC: Clinical overview of Mycoplasma pneumoniae infection', url: 'https://www.cdc.gov/mycoplasma/hcp/clinical-overview/index.html' },
+    { label: 'CDC: Clinical care of Mycoplasma pneumoniae infection', url: 'https://www.cdc.gov/mycoplasma/hcp/clinical-care/index.html' },
     {
       label: 'CDC: Mycoplasma pneumoniae infection surveillance and trends',
       url: 'https://www.cdc.gov/mycoplasma/php/surveillance/index.html',

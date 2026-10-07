@@ -178,15 +178,30 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'On the BioFire GI Panel, STEC appears as “Shiga-like toxin-producing E. coli (STEC) stx1/stx2.” Stx1 and stx2 are the genes that make Shiga toxin (the poison). The panel also reports “E. coli O157,” the best-known type of STEC; other types are called non-O157. The detection rate is the share of GI panel stool tests that find Shiga toxin genes. People who get tested are mostly those sick enough to see a clinician, often with bloody diarrhea. So the numbers reflect more serious illness and miss mild cases. Detections are usually higher in summer and early fall. A rising number can mean a seasonal rise or an outbreak; MDH investigates clusters and announces outbreaks when a source is found. For an average person, a rise is a reminder to cook ground beef to 160°F, avoid raw milk and raw sprouts, and wash hands after animal contact. See a clinician promptly for bloody diarrhea, especially in children. A PCR panel detects the germ’s genetic material. Labs then grow the germ (culture) to confirm it, and MDH identifies its exact type.',
   watchNotes: [
-    'Summer–fall 2026: Alfalfa sprouts from Minneapolis grower Everything Sprouts were linked to a multistate outbreak of STEC and Salmonella. The sprouts were sold under the Calco and Everything Sprouts brands, and several non-O157 types of STEC were involved. As of October 1, 2026, CDC counted 76 sick people in 16 states, 6 hospitalized and no deaths. Don’t eat recalled sprouts; throw them away.',
+    'Summer–fall 2026: Alfalfa sprouts from Minneapolis grower Everything Sprouts were linked to a multistate outbreak of STEC and Salmonella. The sprouts were sold under the Calco and Everything Sprouts brands. As of October 1, 2026, CDC counted 76 sick people in 16 states, 6 hospitalized and no deaths. Don’t eat recalled sprouts; throw them away.',
     'In its August 2026 announcement, MDH reported 23 Minnesotans became ill between July 8 and August 8 in the sprout outbreak. Seed suppliers have recalled the alfalfa seed lot linked to the illnesses.',
     'Fall farm visits, apple orchards, pumpkin patches, and petting zoos continue into October. Wash hands with soap and water after touching animals, especially young children.',
-    'Fast PCR stool tests now find STEC types other than O157 more often than in the past. These non-O157 types can also cause serious illness and HUS.',
+    'Fast PCR stool tests now find STEC types other than O157 more often than in the past. In 2024, MDH reported 265 culture-confirmed non-O157 STEC cases, more than twice the 115 culture-confirmed O157 cases. Non-O157 types can also cause serious illness and HUS.',
   ],
   sources: [
+    { label: 'MDH: E. coli O157:H7 (E. coli O157)', url: 'https://www.health.state.mn.us/diseases/ecoli/basics.html' },
+    { label: 'MDH: Non-O157 Shiga toxin-producing E. coli (STEC)', url: 'https://www.health.state.mn.us/diseases/ecoli/basicsnon.html' },
+    { label: 'MDH: STEC and HUS Statistics', url: 'https://www.health.state.mn.us/diseases/ecoli/statistics.html' },
+    {
+      label: 'MDH: E. coli O157, Other STEC, and HUS, Annual Summary of Reportable Diseases',
+      url: 'https://www.health.state.mn.us/diseases/reportable/dcn/ecoli.html',
+    },
+    {
+      label: 'CDC MMWR: Recommendations for Diagnosis of STEC Infections by Clinical Laboratories (2009)',
+      url: 'https://www.cdc.gov/mmwr/preview/mmwrhtml/rr5812a1.htm',
+    },
     {
       label: 'CDC: E. coli and Salmonella Outbreak Linked to Alfalfa Sprouts (2026)',
       url: 'https://www.cdc.gov/ecoli/outbreaks/alfalfa-sprouts-08-26/index.html',
+    },
+    {
+      label: 'FDA: Outbreak Investigation of STEC and Salmonella, Sprouts (August 2026)',
+      url: 'https://www.fda.gov/food/outbreaks-foodborne-illness/outbreak-investigation-shiga-toxin-producing-e-coli-salmonella-sprouts-august-2026',
     },
     {
       label: 'MDH: STEC and Salmonella cases linked to alfalfa sprouts (2026)',

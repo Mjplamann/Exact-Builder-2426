@@ -1,10 +1,3 @@
-// TODO(verify): the data-source notes are sourced below. The clinical content (four types, croup as the
-// leading cause, type-specific seasons including the every-other-year type 1 fall pattern, 2–7 day
-// incubation, croup warning signs, single-dose steroid and nebulized epinephrine with observation, mist not
-// shown to help) follows long-standing CDC and AAP (Red Book / HealthyChildren.org) information WITHOUT live
-// web verification (the shared WebSearch budget was exhausted during review on 2026-10-07). Before
-// publishing, confirm and add CDC's HPIV pages (About; seasons; clinical overview) and an AAP croup page
-// using URLs that appear in search results.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -25,7 +18,7 @@ const profile: PathogenProfile = {
   },
   transmission:
     'Parainfluenza spreads through droplets when a sick person coughs or sneezes. It also spreads through close contact, like shaking hands, and by touching a surface with the virus on it and then touching your mouth, nose, or eyes.',
-  incubation: 'Symptoms usually start 2 to 7 days after a person is infected.',
+  incubation: 'Symptoms usually start 2 to 6 days after a person is infected.',
   contagiousPeriod:
     'People are most likely to spread parainfluenza while they have symptoms, and they may spread it shortly before symptoms start. Young children and people with weakened immune systems can spread the virus for longer, sometimes for weeks.',
   symptoms: {
@@ -193,9 +186,11 @@ const profile: PathogenProfile = {
     'There is no vaccine or approved antiviral medicine for parainfluenza.',
   ],
   sources: [
-    { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
-    { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
-    { label: 'CDC NREVSS: Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
+    { label: 'CDC — About human parainfluenza viruses', url: 'https://www.cdc.gov/parainfluenza/about/index.html' },
+    { label: 'CDC — Clinical overview of human parainfluenza viruses', url: 'https://www.cdc.gov/parainfluenza/hcp/clinical-overview/index.html' },
+    { label: 'MDH — Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
+    { label: 'MDH — Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
+    { label: 'CDC NREVSS — Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
     { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
   ],
   lastReviewed: '2026-10-07',

@@ -1,9 +1,7 @@
 import type { PathogenProfile } from '../types'
 
-// TODO(verify): revised without live web verification (the shared WebSearch budget was exhausted). Before
-// release, confirm by search: every source URL (especially the MDH mpox path, which may still be
-// /diseases/monkeypox/), JYNNEOS approval status for ages 12–17, and current CDC booster guidance.
-// Minnesota year-to-date counts come from CDC's NNDSS weekly table (data.cdc.gov x9gk-5huc), as of 2026-09-26.
+// Minnesota year-to-date counts in watchNotes come from CDC's provisional NNDSS weekly table
+// (data.cdc.gov x9gk-5huc), as of 2026-09-26.
 
 const profile: PathogenProfile = {
   id: 'mpox',
@@ -164,7 +162,7 @@ const profile: PathogenProfile = {
     vaccines: [
       {
         name: 'JYNNEOS vaccine',
-        who: 'Recommended for adults at higher risk. This includes gay, bisexual and other men who have sex with men, and transgender and nonbinary people, with certain risks in the past 6 months. These risks are a new sexually transmitted infection, more than one sex partner, or sex at a commercial sex venue or at a large public event where mpox is spreading. Sex partners of people at risk can also get it, as can people who expect to be in these situations. It is also recommended after an exposure. Teens and children may be able to get it in some situations, such as after an exposure; ask a clinician.',
+        who: 'Recommended for adults at higher risk. This includes gay, bisexual and other men who have sex with men, and transgender and nonbinary people, with certain risks in the past 6 months. These risks are a new sexually transmitted infection, more than one sex partner, or sex at a commercial sex venue or at a large public event where mpox is spreading. Sex partners of people at risk can also get it, as can people who expect to be in these situations. It is also recommended after an exposure. In 2025, CDC’s vaccine advisers recommended it for teens 12 to 17 who are at risk during an mpox outbreak. Younger children may be able to get it in some situations, such as after an exposure; ask a clinician.',
         notes:
           'Two shots, 4 weeks apart. Protection is strongest about 2 weeks after the second dose, so get both. After an exposure, get it within 4 days if possible; it may still lessen illness if given up to 14 days after. It is expected to protect against both clade I and clade II. The vaccine virus cannot grow in the body, so it is safe for people with weakened immune systems and can be given during pregnancy. Booster doses are not currently recommended for most people, and people who have already had mpox generally do not need the vaccine. It is sold commercially, so ask your clinic, a sexual health clinic or a pharmacy whether they offer it.',
       },
@@ -209,11 +207,16 @@ const profile: PathogenProfile = {
     { label: 'CDC: Mpox Situation Summary', url: 'https://www.cdc.gov/mpox/situation-summary/index.html' },
     { label: 'FDA: JYNNEOS', url: 'https://www.fda.gov/vaccines-blood-biologics/jynneos' },
     {
+      label: 'CDC ACIP: April 2025 meeting summary (mpox vaccine for teens 12 to 17)',
+      url: 'https://www.cdc.gov/acip/downloads/minutes/summary-2025-04-15-16-508.pdf',
+    },
+    {
       label: 'CDC: NNDSS weekly notifiable disease data (provisional)',
       url: 'https://data.cdc.gov/d/x9gk-5huc',
     },
     { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },
     { label: 'MDH: Mpox', url: 'https://www.health.state.mn.us/diseases/mpox/index.html' },
+    { label: 'MDH: Mpox statistics', url: 'https://www.health.state.mn.us/diseases/mpox/stats/index.html' },
     { label: 'WHO: Mpox fact sheet', url: 'https://www.who.int/news-room/fact-sheets/detail/mpox' },
   ],
   lastReviewed: '2026-10-07',

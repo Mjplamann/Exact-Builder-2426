@@ -1,9 +1,7 @@
 import type { PathogenProfile } from '../types'
 
-// TODO(verify): revised without live web verification (the shared WebSearch budget was exhausted). Before
-// release, confirm by search: every source URL, the final 2025 U.S. measles total, Minnesota's 2024 outbreak,
-// and whether the March 2026 court order affects the 2025 ACIP vote against MMRV under age 4. Minnesota
-// year-to-date counts come from CDC's NNDSS weekly table (data.cdc.gov x9gk-5huc), as of 2026-09-26.
+// Minnesota year-to-date counts in watchNotes come from CDC's provisional NNDSS weekly table
+// (data.cdc.gov x9gk-5huc), as of 2026-09-26.
 
 const profile: PathogenProfile = {
   id: 'measles',
@@ -177,7 +175,7 @@ const profile: PathogenProfile = {
         name: 'MMRV vaccine (ProQuad: measles, mumps, rubella and chickenpox)',
         who: 'Children 12 months through 12 years (the ages FDA approved it for). It is mostly used for the second dose at 4 to 6 years.',
         notes:
-          'For a child’s first dose at 12 to 47 months, separate MMR and chickenpox shots are recommended. The combined shot has a slightly higher chance of fever-related seizures at that age. In 2025, CDC’s vaccine advisers voted to recommend against MMRV for all children under 4. Ask your child’s clinician which option fits your child.',
+          'For a child’s first dose at 12 to 47 months, separate MMR and chickenpox shots are recommended. The combined shot has a slightly higher chance of fever-related seizures at that age. In 2025, CDC’s vaccine advisers voted to recommend against MMRV for all children under 4. In March 2026, a federal court paused that committee’s votes while a lawsuit continues. Either way, separate shots remain the usual choice for a first dose at this age. Ask your child’s clinician which option fits your child.',
       },
       {
         name: 'Immune globulin (IG) after exposure (not a vaccine)',
@@ -207,10 +205,11 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'Measles is not tracked like flu or COVID-19. It is not on the BioFire respiratory panel, and test positivity or emergency visit percentages are not useful for a disease this rare. Instead, public health counts confirmed cases. A confirmed case either has a positive lab test or is directly linked to someone who does. MN Pulse shows Minnesota counts from MDH and from CDC’s weekly notifiable disease tables. CDC’s weekly numbers are provisional, and Minnesota often adds cases to earlier weeks, so a blank week does not mean zero. The year-to-date total is the better guide. Minnesota has had measles cases in most recent years, with larger outbreaks among unvaccinated children in 2017 and 2024. People spread measles before the rash appears, so one case can expose many others. New cases tied to an exposure usually show up 1 to 3 weeks later, so counts often keep rising for a while after an outbreak is found. Even 1 new case is a public health event: MDH traces contacts and posts places where people may have been exposed. A rising count means an outbreak is growing, usually among people who are not vaccinated. If you and your family have 2 doses of MMR, your risk stays low. MN Pulse also shows measles results from wastewater testing at some Minnesota treatment plants, from CDC’s national program and from WastewaterSCAN (4 plants outside the Twin Cities). These tests look for wild measles virus, not the vaccine virus. One sick person or a traveler passing through can cause a detection. It is an early alert that health officials follow up on, not a case count, and a week with no detection does not rule out cases. The best response to any rise is to check your records, catch up on missed doses and watch MDH exposure notices.',
   watchNotes: [
-    'As of late September 2026, CDC’s provisional weekly tables listed 18 Minnesota measles cases so far in 2026, compared with 14 at the same point in 2025. For current Minnesota counts and public exposure locations, check the MDH measles page.',
-    'The U.S. had more than 2,000 confirmed measles cases in 2025, the most in more than 30 years, and 3 deaths. Most cases were in people who were not vaccinated or whose vaccination status was unknown.',
-    'Large outbreaks continued into 2026 in several states. Canada lost its measles elimination status in November 2025, and Mexico has also had large outbreaks, so make sure everyone is protected before any international travel.',
-    'CDC and the American Academy of Pediatrics both recommend 2 doses of MMR for all children. In March 2026, a federal court paused changes to CDC’s childhood immunization schedule and votes by the reconstituted CDC vaccine advisory committee while the case continues. Talk with your clinician if you have questions about your family’s schedule.',
+    'As of late September 2026, CDC’s provisional weekly tables listed 18 Minnesota measles cases so far in 2026, compared with 14 at the same point in 2025. For current Minnesota counts and public exposure locations, check the MDH measles pages.',
+    'The U.S. had nearly 2,300 confirmed measles cases in 2025, the most in more than 30 years, and 3 deaths. Most cases were in people who were not vaccinated or whose vaccination status was unknown.',
+    '2026 has been even worse. As of early August 2026, CDC had counted more than 2,400 confirmed U.S. cases this year, already more than in all of 2025 and the most since 1991. Most were linked to outbreaks.',
+    'Canada lost its measles elimination status in November 2025 after more than a year of spread. A review of whether the U.S. keeps its status, held since 2000, was postponed to November 2026. Mexico has also had large outbreaks, so make sure everyone is protected before any international travel.',
+    'CDC and the American Academy of Pediatrics both recommend 2 doses of MMR for all children. In March 2026, a federal court paused changes to CDC’s childhood immunization schedule and votes by the reconstituted CDC vaccine advisory committee while the case continues. The federal government has appealed. Talk with your clinician if you have questions about your family’s schedule.',
   ],
   sources: [
     { label: 'CDC: About Measles', url: 'https://www.cdc.gov/measles/about/index.html' },
@@ -240,6 +239,7 @@ const profile: PathogenProfile = {
     },
     { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },
     { label: 'MDH: Measles', url: 'https://www.health.state.mn.us/diseases/measles/index.html' },
+    { label: 'MDH: Measles statistics', url: 'https://www.health.state.mn.us/diseases/measles/stats.html' },
     { label: 'WHO: Measles fact sheet', url: 'https://www.who.int/news-room/fact-sheets/detail/measles' },
   ],
   lastReviewed: '2026-10-07',

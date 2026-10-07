@@ -213,6 +213,11 @@ const profile: PathogenProfile = {
   ],
   sources: [
     { label: 'CDC — About adenovirus', url: 'https://www.cdc.gov/adenovirus/about/' },
+    { label: 'CDC — Clinical overview of adenovirus', url: 'https://www.cdc.gov/adenovirus/hcp/clinical-overview/' },
+    {
+      label: 'FDA — Adenovirus Type 4 and Type 7 Vaccine, Live, Oral (prescribing information)',
+      url: 'https://www.fda.gov/media/80211/download',
+    },
     {
       label: 'CDC — Adenovirus guidelines for outbreaks (for health care providers)',
       url: 'https://www.cdc.gov/adenovirus/hcp/outbreaks/index.html',

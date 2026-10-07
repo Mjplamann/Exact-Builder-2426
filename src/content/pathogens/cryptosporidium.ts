@@ -14,12 +14,12 @@ const profile: PathogenProfile = {
     'Cryptosporidium, or “Crypto,” is a tiny parasite that causes watery diarrhea. It survives for days in properly chlorinated pools and is the leading cause of U.S. outbreaks linked to pools and water playgrounds. Young calves and other farm animals, such as at farms, fairs, and petting zoos, are another known source. Most healthy people get better on their own within about 2 weeks, but Crypto can be severe and long-lasting for people with weakened immune systems.',
   seasonality: {
     summary:
-      'Crypto is reported all year in Minnesota, but cases rise in summer and peak in late summer. That is when pools, splash pads, and lakes are busiest, and when fairs and farm visits bring more people into contact with animals. Infections from calves and other farm animals can happen in any season.',
+      'MDH says about 350 to 450 Crypto cases are diagnosed in Minnesota each year. Cases are reported all year, but they rise in summer and peak in late summer. That is when pools, splash pads, and lakes are busiest, and when fairs and farm visits bring more people into contact with animals. Infections from calves and other farm animals can happen in any season.',
     peakMonths: [7, 8, 9],
   },
   transmission:
     'Crypto spreads when people swallow something contaminated with stool (poop) from an infected person or animal. You can get it by swallowing water from pools, splash pads, lakes, or rivers, or by drinking untreated water. You can also get it by touching calves, goats, lambs, or their pens and then your mouth. Close contact with a sick person spreads it too, especially in child care or when changing diapers. Drinking unpasteurized (raw) milk or apple cider is another risk. One person with diarrhea can release huge numbers of parasites into a pool, and swallowing just a few can make someone sick.',
-  incubation: 'About 1 week on average. Symptoms usually start 2 to 10 days after swallowing the parasite.',
+  incubation: 'Usually about 1 week after swallowing the parasite, but symptoms can start anywhere from 2 days to 2 weeks after.',
   contagiousPeriod:
     'From the time symptoms start until weeks after diarrhea stops, because the parasite stays in stool. People with no symptoms can also spread it. Children should stay home from child care until diarrhea has stopped. CDC advises everyone to stay out of pools, splash pads, and other swimming water for 2 weeks after diarrhea has completely stopped.',
   symptoms: {
@@ -144,7 +144,7 @@ const profile: PathogenProfile = {
         name: 'Nitazoxanide (Alinia)',
         type: 'antiparasitic',
         detail:
-          'A 3-day course taken by mouth, as a liquid or tablet. It can shorten illness in people with healthy immune systems. It has not been shown to work well in people with weakened immune systems.',
+          'A 3-day course taken by mouth. The liquid is FDA-approved for people 1 year and older; the tablets are approved for ages 12 and up. It can shorten illness in people with healthy immune systems. It has not been shown to work for Crypto in people with HIV or other immune problems.',
         who: 'People 1 year and older whose clinician recommends treatment.',
       },
       {
@@ -188,6 +188,23 @@ const profile: PathogenProfile = {
   readingTheNumbers:
     'MN Pulse shows the BioFire detection rate: the percent of BioFire stool panel tests at participating Midwest labs (not just Minnesota) that found Crypto. These panels are mostly ordered for people with significant or lasting diarrhea, often at hospitals. So the number shows the share of tested people whose sample had Crypto. It does not count how many Minnesotans are infected, because most people with diarrhea are never tested. Crypto detections usually climb through summer and peak in late summer, then fall off in autumn. A sharp rise during swim season can mean outbreaks linked to pools, splash pads, or animal contact somewhere in the region. For you, a rising number is a reminder to stay out of the water when you have diarrhea, and for 2 weeks after. Avoid swallowing pool or lake water, and wash hands with soap and water after touching farm animals. Pool chlorine alone does not protect you from Crypto.',
   sources: [
+    { label: 'CDC: Treating Crypto', url: 'https://www.cdc.gov/cryptosporidium/treatment/index.html' },
+    { label: 'CDC: Clinical Care of Crypto', url: 'https://www.cdc.gov/cryptosporidium/hcp/clinical-care/index.html' },
+    { label: 'CDC: Preventing Swimming-related Illnesses', url: 'https://www.cdc.gov/healthy-swimming/prevention/' },
+    {
+      label: 'DailyMed (NIH): Alinia (nitazoxanide) prescribing information',
+      url: 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e90f98d9-3c9b-4e75-ba18-5517283eadf0',
+    },
+    { label: 'MDH: About Cryptosporidiosis', url: 'https://www.health.state.mn.us/diseases/cryptosporidiosis/basics.html' },
+    {
+      label: 'MDH: Health Care Provider Information on Cryptosporidiosis',
+      url: 'https://www.health.mn.gov/diseases/cryptosporidiosis/healthcare.html',
+    },
+    { label: 'MDH: Cryptosporidiosis Statistics', url: 'https://www.health.state.mn.us/diseases/cryptosporidiosis/statistics.html' },
+    {
+      label: 'MDH: Cryptosporidiosis, Annual Summary of Reportable Diseases',
+      url: 'https://www.health.state.mn.us/diseases/reportable/dcn/cryptosporidiosis.html',
+    },
     {
       label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
       url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',

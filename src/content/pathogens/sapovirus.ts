@@ -195,8 +195,8 @@ const profile: PathogenProfile = {
   ],
   sources: [
     {
-      label: 'CDC Emerging Infectious Diseases: Sapovirus outbreaks in long-term care facilities, Oregon and Minnesota, 2002–2009',
-      url: 'https://wwwnc.cdc.gov/eid/article/18/5/11-1843_article',
+      label: 'CDC Emerging Infectious Diseases: Sapovirus outbreaks in long-term care facilities, Oregon and Minnesota, 2002–2009 (PDF)',
+      url: 'https://wwwnc.cdc.gov/eid/article/18/5/pdfs/11-1843.pdf',
     },
     {
       label: 'CDC Emerging Infectious Diseases: Non-norovirus viral gastroenteritis outbreaks reported to NORS, USA, 2009–2018',
@@ -205,10 +205,6 @@ const profile: PathogenProfile = {
     {
       label: 'Lee et al., BMC Infectious Diseases: Incubation periods of viral gastroenteritis, a systematic review',
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3849296/',
-    },
-    {
-      label: 'Global distribution of sporadic sapovirus infections: systematic review and meta-analysis',
-      url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8376006/',
     },
     {
       label: 'CDC: How to prevent norovirus (handwashing, cleaning, and food safety steps that also apply to sapovirus)',

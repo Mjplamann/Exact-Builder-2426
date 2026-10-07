@@ -1,9 +1,3 @@
-// TODO(verify): the data-source notes are sourced below. The clinical content (identified in 2001, most
-// children infected by age 5, 3–6 day incubation, late-winter/spring season, spread, symptoms, risk groups,
-// no specific antiviral or vaccine) follows long-standing CDC and AAP (Red Book) information WITHOUT live web
-// verification (the shared WebSearch budget was exhausted during review on 2026-10-07). Before publishing,
-// confirm and add CDC's hMPV pages (About human metapneumovirus; HMPV clinical overview) using URLs that
-// appear in search results.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -184,12 +178,17 @@ const profile: PathogenProfile = {
     'In Minnesota, most hMPV activity for the 2026–27 season is expected in late winter and spring 2027, after the usual RSV peak.',
   ],
   sources: [
-    { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
-    { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
-    { label: 'CDC NREVSS: Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
+    { label: 'CDC — About human metapneumovirus', url: 'https://www.cdc.gov/human-metapneumovirus/about/index.html' },
+    {
+      label: 'CDC MMWR (2025) — Epidemiology of symptomatic human metapneumovirus infection',
+      url: 'https://www.cdc.gov/mmwr/volumes/74/wr/mm7411a2.htm',
+    },
+    { label: 'CDC — RSV vaccines for adults', url: 'https://www.cdc.gov/rsv/vaccines/adults.html' },
+    { label: 'MDH — Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
+    { label: 'MDH — Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
+    { label: 'CDC NREVSS — Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
     { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },
     { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
-    { label: 'CDC: RSV vaccines for older adults', url: 'https://www.cdc.gov/rsv/vaccines/older-adults.html' },
   ],
   lastReviewed: '2026-10-07',
 }

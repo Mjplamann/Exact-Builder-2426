@@ -28,7 +28,7 @@ const profile: PathogenProfile = {
   transmission:
     'These viruses spread through droplets and tiny particles when an infected person coughs, sneezes, or talks, and through close contact such as touching or shaking hands. You can also pick up the virus by touching a surface or a hand that has it on it, and then touching your eyes, nose, or mouth. The enteroviruses that cause hand, foot, and mouth disease also spread through fluid from blisters and through stool (poop), for example during diaper changes.',
   incubation:
-    'Cold symptoms from rhinovirus usually start about 2 days after exposure. Enterovirus illnesses, such as hand, foot, and mouth disease, usually start 3 to 6 days after exposure.',
+    'Cold symptoms from rhinovirus usually start about 2 days after exposure. Enterovirus illnesses, such as hand, foot, and mouth disease, usually start 3 to 5 days after exposure.',
   contagiousPeriod:
     'People with a cold spread the virus most in the first few days of symptoms, but they can spread it for a week or more. People with hand, foot, and mouth disease are usually most contagious during the first week of illness. Enteroviruses can stay in stool (poop) for weeks after symptoms go away, and some people spread these viruses without ever feeling sick.',
   symptoms: {
@@ -173,7 +173,7 @@ const profile: PathogenProfile = {
         name: 'Over-the-counter cough and cold medicines',
         type: 'other',
         detail:
-          'These may ease symptoms in adults and older children, but they do not make a cold go away faster. Do not give them to children under 4 unless a clinician tells you to. Read labels so you do not take two products with the same ingredient, such as acetaminophen.',
+          'These may ease symptoms in adults and older children, but they do not make a cold go away faster. Do not give them to children under 4, and ask a clinician before giving them to children 4 to 6. Read labels so you do not take two products with the same ingredient, such as acetaminophen.',
         who: 'Adults and older children who want symptom relief.',
       },
       {
@@ -224,6 +224,16 @@ const profile: PathogenProfile = {
     'There is no vaccine in the U.S. for rhinoviruses, EV-D68, or the enteroviruses that cause hand, foot, and mouth disease. Polio vaccine protects only against poliovirus.',
   ],
   sources: [
+    { label: 'CDC — About rhinoviruses', url: 'https://www.cdc.gov/rhinoviruses/about/index.html' },
+    { label: 'CDC — Manage common cold', url: 'https://www.cdc.gov/common-cold/treatment/index.html' },
+    { label: 'CDC — About enterovirus D68', url: 'https://www.cdc.gov/non-polio-enterovirus/about/about-enterovirus-d68.html' },
+    { label: 'CDC — Clinical overview of enterovirus D68', url: 'https://www.cdc.gov/non-polio-enterovirus/hcp/clinical-overview/' },
+    { label: 'CDC — About hand, foot, and mouth disease', url: 'https://www.cdc.gov/hand-foot-mouth/about/index.html' },
+    { label: 'CDC — Hand, foot, and mouth disease symptoms and complications', url: 'https://www.cdc.gov/hand-foot-mouth/signs-symptoms/index.html' },
+    {
+      label: 'AAP HealthyChildren.org — Coughs and colds: medicines or home remedies?',
+      url: 'https://www.healthychildren.org/English/health-issues/conditions/chest-lungs/Pages/Coughs-and-Colds-Medicines-or-Home-Remedies.aspx',
+    },
     {
       label: 'Meyers et al. — Automated real-time collection of pathogen-specific diagnostic data (BioFire Syndromic Trends), JMIR Public Health and Surveillance, 2018',
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6054708/',

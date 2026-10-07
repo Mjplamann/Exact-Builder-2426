@@ -1,10 +1,3 @@
-// TODO(verify): the vaccine, antibody, eligibility and data-source content is sourced below. The general
-// clinical facts (4–6 day incubation, 3–8 day contagious period with up to 4 weeks of shedding, survival on
-// hard surfaces, almost all children infected by age 2, leading cause of infant hospitalization) follow
-// long-standing CDC guidance, and the bronchiolitis treatment advice follows the AAP 2014 bronchiolitis
-// clinical practice guideline (Ralston et al., Pediatrics). Their URLs (CDC About RSV / How RSV spreads,
-// the AAP guideline) and an MDH RSV recommendations page still need confirming in a run with search budget
-// (the shared WebSearch budget was exhausted during review on 2026-10-07).
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -130,7 +123,7 @@ const profile: PathogenProfile = {
       summary:
         'People with weakened immune systems, such as transplant recipients or people getting cancer treatment, can get more severe RSV and may stay sick and contagious longer.',
       actions: [
-        'If you are 50 or older, ask about one dose of RSV vaccine. If you are younger than 50, ask your clinician whether a vaccine makes sense for you.',
+        'If you are 50 or older, ask about one dose of RSV vaccine. If you are younger than 50, ask your clinician whether a vaccine makes sense for you. IDSA’s 2026 guideline supports RSV vaccination for many people with weakened immune systems.',
         'Children 8 to 19 months old with a severely weakened immune system may qualify for an RSV antibody before their second season.',
         'Contact your care team early if you get cold symptoms with fever or trouble breathing.',
         'Ask household members to wash hands often and stay away when they are sick.',
@@ -184,7 +177,7 @@ const profile: PathogenProfile = {
         name: 'Clesrovimab (Enflonsia), an infant RSV antibody',
         who: 'Babies younger than 8 months in their first RSV season who are not protected by a maternal vaccine.',
         notes:
-          'FDA-approved in June 2025 for a baby’s first RSV season only. The American Academy of Pediatrics lists it as an equal choice to nirsevimab for the first season. CDC’s vaccine advisory committee voted to recommend it in June 2025. That committee’s actions are part of an ongoing federal court case (see the notes below), so ask your clinician about its current federal status, availability, and coverage.',
+          'FDA-approved in June 2025 for a baby’s first RSV season only. The American Academy of Pediatrics lists it as an equal choice to nirsevimab for the first season, and CDC’s infant RSV guidance lists it alongside nirsevimab. CDC’s vaccine advisory committee voted to recommend it in June 2025. That committee’s votes are part of an ongoing federal court case (see the notes below), so ask your clinician about availability and coverage.',
       },
       {
         name: 'Maternal RSV vaccine (Abrysvo)',
@@ -219,60 +212,56 @@ const profile: PathogenProfile = {
     'Urgent care can help with a worsening cough or ear pain when your regular clinic is closed. Go to the emergency department, not urgent care, for trouble breathing.',
   ],
   readingTheNumbers:
-    'MN Pulse shows several RSV signals. Test positivity is the share of RSV lab tests that come back positive among people who were tested. It comes from Minnesota labs that report to MDH and from CDC’s lab network for Minnesota and five nearby states (HHS Region 5). It is not the share of people infected. In recent winters, regional positivity peaked at about 10% to 25%, and it was under 1% in late summer 2026. BioFire detection rate is the share of multi-virus panel tests at participating labs in the Midwest (or nationwide, when regional data are not available) that find RSV. No Minnesota-only BioFire data are public. These lab tests are mostly done for babies, young children, and people sick enough to go to a hospital or emergency department. So they show how much serious breathing illness is due to RSV, not how many people are infected. ED-visit % is the share of all emergency department visits diagnosed as RSV. Most RSV emergency visits are for babies and young children, so the statewide share stays small even at the peak. It reached about 1% to 2.4% in each of the last four winters and is close to 0% in late summer. Watch the trend, not the size of the number. A small statewide rise can mean busy children’s emergency departments. Hospital numbers show weekly RSV hospital admissions in Minnesota and hospital rates per 100,000 people, and MDH also reports RSV hospital rates by county. Wastewater testing at Minnesota treatment plants measures RSV in sewage and can show a change early. RSV numbers often start rising in October or November. A steady rise for two or more weeks means RSV is spreading in your community. For most people, that means a higher chance a winter cold is RSV. It is also the time to make sure babies, pregnant people at 32 to 36 weeks, and older adults who qualify are protected. Keep sick people away from newborns. Numbers for the most recent week or two may be revised.',
+    'MN Pulse shows several RSV signals. Test positivity is the share of RSV lab tests that come back positive among people who were tested. It comes from Minnesota labs that report to MDH and from CDC’s lab network for Minnesota and five nearby states (HHS Region 5). It is not the share of people infected. In recent winters, regional positivity peaked at about 10% to 25%, and it was under 1% in late summer 2026. BioFire detection rate is the share of multi-virus panel tests at participating labs in the Midwest (or nationwide, when regional data are not available) that find RSV. No Minnesota-only BioFire data are public. These lab tests are mostly done for babies, young children, and people sick enough to go to a hospital or emergency department. So they show how much serious breathing illness is due to RSV, not how many people are infected. ED-visit % is the share of all emergency department visits diagnosed as RSV. Most RSV emergency visits are for babies and young children, so the statewide share stays small even at the peak. It peaked at about 0.9% to 2.4% in each of the last four winters and is close to 0% in late summer. Watch the trend, not the size of the number. A small statewide rise can mean busy children’s emergency departments. Hospital numbers show weekly RSV hospital admissions in Minnesota and hospital rates per 100,000 people, and MDH also reports RSV hospital rates by county. Wastewater testing at Minnesota treatment plants measures RSV in sewage and can show a change early. RSV numbers often start rising in October or November. A steady rise for two or more weeks means RSV is spreading in your community. For most people, that means a higher chance a winter cold is RSV. It is also the time to make sure babies, pregnant people at 32 to 36 weeks, and older adults who qualify are protected. Keep sick people away from newborns. Numbers for the most recent week or two may be revised.',
   watchNotes: [
     'In the week ending September 26, 2026, Minnesota had very few RSV emergency visits (about 0.01% of all visits) and RSV hospital admissions, which is typical before the season starts. The 2026–27 window for infant antibodies runs about October through March, and the maternal vaccine is given September through January.',
-    'In January 2026, the U.S. Department of Health and Human Services (HHS) narrowed several childhood immunization recommendations, including infant RSV antibodies. In March 2026, a federal court paused those changes and votes by CDC’s vaccine advisory committee, whose members were replaced in 2025. The case is still ongoing, so federal guidance could change. Ask your clinician what applies now.',
-    'The American Academy of Pediatrics continues to recommend an RSV antibody (nirsevimab or clesrovimab, with no preference) for all babies younger than 8 months entering their first RSV season. The exception is when the mother got the RSV vaccine at least 14 days before birth.',
-    'Adult RSV vaccine guidance has not changed for 2026–27: one dose for everyone 75 and older and for adults 50 to 74 at increased risk. Repeat doses are not recommended at this time.',
+    'In January 2026, the U.S. Department of Health and Human Services (HHS) issued a revised childhood immunization schedule that narrowed several recommendations. In March 2026, a federal court paused that schedule and the votes of CDC’s vaccine advisory committee, whose members were replaced in 2025. The case is still ongoing, so federal guidance could change. Ask your clinician what applies now.',
+    'In its 2026–27 guidance, the American Academy of Pediatrics continues to recommend an RSV antibody (nirsevimab or clesrovimab, with no preference) for all babies younger than 8 months entering their first RSV season. The exception is when the mother got the RSV vaccine at least 14 days before birth.',
+    'For 2026–27, CDC and the American Academy of Family Physicians recommend one dose of RSV vaccine for everyone 75 and older and for adults 50 to 74 at increased risk. Repeat doses are not recommended at this time.',
   ],
   sources: [
-    { label: 'CDC: Protecting infants from RSV', url: 'https://www.cdc.gov/rsv/vaccines/protect-infants.html' },
-    { label: 'CDC: RSV vaccines for older adults', url: 'https://www.cdc.gov/rsv/vaccines/older-adults.html' },
+    { label: 'CDC — RSV vaccines', url: 'https://www.cdc.gov/rsv/vaccines/index.html' },
+    { label: 'CDC — RSV in infants and young children', url: 'https://www.cdc.gov/rsv/infants-young-children/index.html' },
+    { label: 'CDC — RSV vaccines for adults', url: 'https://www.cdc.gov/rsv/vaccines/adults.html' },
+    { label: 'CDC — RSV vaccine guidance for adults (for clinicians)', url: 'https://www.cdc.gov/rsv/hcp/vaccine-clinical-guidance/adults.html' },
+    { label: 'CDC — RSV immunization: information for health care providers', url: 'https://www.cdc.gov/vaccines/hcp/by-disease/rsv.html' },
+    { label: 'CDC — Clinical overview of RSV', url: 'https://www.cdc.gov/rsv/hcp/clinical-overview/index.html' },
+    { label: 'CDC — How RSV spreads', url: 'https://www.cdc.gov/rsv/causes/index.html' },
+    { label: 'American Academy of Pediatrics — RSV resources', url: 'https://www.aap.org/rsv' },
     {
-      label: 'CDC MMWR (2023): Nirsevimab recommendations for infants',
-      url: 'https://www.cdc.gov/mmwr/volumes/72/wr/mm7234a4.htm',
+      label: 'Pharmacy Times (Sept. 2026) — AAP issues 2026–2027 guidance on RSV and COVID-19 immunization',
+      url: 'https://www.pharmacytimes.com/view/aap-issue-2026-2027-guidance-on-rsv-and-covid-19-immunization',
     },
     {
-      label: 'MMWR (2025) via PubMed Central: ACIP recommendations for clesrovimab',
-      url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12393692/',
-    },
-    { label: 'CDC: Adult immunization schedule addendum', url: 'https://www.cdc.gov/vaccines/hcp/imz-schedules/adult-addendum.html' },
-    {
-      label: 'CDC: Child and adolescent immunization schedule notes',
-      url: 'https://www.cdc.gov/vaccines/hcp/imz-schedules/child-adolescent-notes.html',
-    },
-    { label: 'CDC: ACIP vaccine recommendations', url: 'https://www.cdc.gov/acip/vaccine-recommendations/index.html' },
-    {
-      label: 'AAP policy statement: Prevention of RSV disease in infants and children (2025)',
-      url: 'https://publications.aap.org/pediatrics/article/156/5/e2025073923/203221/Recommendations-for-the-Prevention-of-RSV-Disease',
+      label: 'Contemporary OB/GYN (Sept. 2026) — ACOG 2026–27 respiratory virus immunization recommendations in pregnancy',
+      url: 'https://www.contemporaryobgyn.net/view/acog-2026-27-respiratory-virus-immunization-recommendations-pregnancy',
     },
     {
-      label: 'AAP: Recommended childhood and adolescent immunization schedule, 2026',
-      url: 'https://publications.aap.org/pediatrics/article/157/3/e2025075754/206175/Recommended-Childhood-and-Adolescent-Immunization',
+      label: 'American Academy of Family Physicians — 2026–2027 influenza, RSV, and COVID-19 vaccine guidance (PDF)',
+      url: 'https://www.aafp.org/assets/image/upload/v1788277985/pdf_2026_through_2027_influenza_rsv_sars_covid_2_guidance.pdf',
     },
     {
-      label: 'Congressional Research Service: Changes to CDC vaccine recommendations in 2025 and 2026',
-      url: 'https://www.congress.gov/crs-product/IN12684',
+      label: 'Guideline Central — IDSA 2026 guideline on seasonal vaccines for immunocompromised patients (summary)',
+      url: 'https://www.guidelinecentral.com/insights/sep-2026-idsa-seasonalvaccinesimmunocompromisedpatients-guideline-spotlight/',
     },
     {
-      label: 'Congressional Research Service: CDC’s updated childhood vaccine schedule litigation',
-      url: 'https://www.congress.gov/crs-product/LSB11427',
+      label: 'American College of Physicians (March 2026) — Federal judge blocks immunization schedule changes, stays ACIP member appointments',
+      url: 'https://www.acponline.org/acp-newsroom/federal-judge-blocks-immunization-schedule-changes-stays-acip-member-appointments',
     },
     {
-      label: 'IDSA: Federal judge blocks immunization schedule changes, stays ACIP appointments (2026)',
-      url: 'https://www.idsociety.org/news--publications-new/articles/2026/federal-judge-blocks-immunization-schedule-changes-stays-acip-member-appointments/',
+      label: 'MDH health advisory (Jan. 2026) — MDH aligns with medical association immunization recommendations',
+      url: 'https://www2cdn.web.health.state.mn.us/communities/ep/han/2026/jan7imz.pdf',
     },
-    { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
-    { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
+    { label: 'MDH — Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
+    { label: 'MDH — Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
     {
-      label: 'MDH: Respiratory hospitalizations (RESP-NET), including by county',
+      label: 'MDH — Respiratory hospitalizations (RESP-NET), including by county',
       url: 'https://www.health.state.mn.us/diseases/respiratory/stats/hosp.html',
     },
-    { label: 'CDC NREVSS: Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
-    { label: 'CDC RESP-NET: Respiratory virus hospitalization dashboard', url: 'https://www.cdc.gov/resp-net/dashboard/index.html' },
+    { label: 'CDC NREVSS — Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
+    { label: 'CDC RESP-NET — Respiratory virus hospitalization dashboard', url: 'https://www.cdc.gov/resp-net/dashboard/index.html' },
     {
-      label: 'CDC NSSP: Emergency department visit data by state and county',
+      label: 'CDC NSSP — Emergency department visit data by state and county',
       url: 'https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56',
     },
     { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },

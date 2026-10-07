@@ -11,7 +11,7 @@ const profile: PathogenProfile = {
   oneLiner:
     'A common parasite in untreated lake, stream, and well water that causes gassy, greasy diarrhea and spreads easily in child care.',
   overview:
-    'Giardia is a tiny parasite that lives in the gut and causes an illness called giardiasis. It is one of the most commonly reported intestinal parasites in Minnesota and a common cause of illness from water. People can catch it from untreated lake, river, or well water, from swallowing water while swimming, or from close contact, especially in child care. Some people never have symptoms but can still spread it, and prescription medicines treat it well.',
+    'Giardia is a tiny parasite that lives in the gut and causes an illness called giardiasis. Hundreds of cases are reported in Minnesota each year, and it is a common cause of illness from water. People can catch it from untreated lake, river, or well water, from swallowing water while swimming, or from close contact, especially in child care. Some people never have symptoms but can still spread it, and prescription medicines treat it well.',
   seasonality: {
     summary:
       'Giardia is reported all year in Minnesota. Cases tend to rise in summer and early fall, when more people swim, camp, and spend time on lakes and rivers. Cases linked to international travel, or found in people who recently moved to the U.S., can happen in any season.',
@@ -150,7 +150,7 @@ const profile: PathogenProfile = {
         name: 'Nitazoxanide (Alinia)',
         type: 'antiparasitic',
         detail:
-          'A 3-day course that comes as a liquid or tablet, which can make it easier for young children to take. FDA-approved for people 1 year and older.',
+          'A 3-day course. The liquid, which can be easier for young children to take, is FDA-approved for people 1 year and older; the tablets are approved for ages 12 and up.',
         who: 'Often used for children ages 1 to 3, and as an option for others.',
       },
       {
@@ -193,6 +193,10 @@ const profile: PathogenProfile = {
   ],
   readingTheNumbers:
     'MN Pulse shows the BioFire detection rate: the percent of BioFire stool panel tests at participating Midwest labs (not just Minnesota) that found Giardia. These panels are mostly ordered for people with significant or lasting diarrhea, often at hospitals. So the number shows the share of tested people whose sample had Giardia. It does not count how many Minnesotans are infected, because most people with diarrhea are never tested. Giardia can live in the gut without causing symptoms, so a positive result does not always mean it caused that person’s illness. Detections usually stay fairly steady through the year, with a modest rise in summer and early fall. A summer rise often reflects more swimming, camping, and travel. It does not by itself mean city tap water is unsafe. Public water systems are treated to remove parasites like Giardia. For you, a rising number is a reminder to boil or filter untreated water and avoid swallowing water when you swim. Wash hands with soap and water, too.',
+  watchNotes: [
+    'In 2024, MDH received 792 reports of Giardia infection in Minnesota residents, the most since 2010 and 46% above the typical yearly number from 2014 through 2023.',
+    'Swimming and camping season is winding down, but Giardia is reported all year. Keep boiling or filtering untreated water at cabins and campsites through the fall.',
+  ],
   sources: [
     { label: 'CDC: About Giardia Infection', url: 'https://www.cdc.gov/giardia/' },
     { label: 'CDC: Symptoms of Giardia Infection', url: 'https://www.cdc.gov/giardia/signs-symptoms/index.html' },
@@ -206,11 +210,19 @@ const profile: PathogenProfile = {
     },
     {
       label: 'Minnesota Department of Health: Giardiasis Information for Health Professionals',
-      url: 'https://www.health.state.mn.us/diseases/giardiasis/healthcare.html',
+      url: 'https://www.health.mn.gov/diseases/giardiasis/healthcare.html',
     },
     {
       label: 'Minnesota Department of Health: Giardiasis Statistics',
       url: 'https://www.health.state.mn.us/diseases/giardiasis/statistics.html',
+    },
+    {
+      label: 'Minnesota Department of Health: Giardiasis, Annual Summary of Reportable Diseases',
+      url: 'https://www.health.state.mn.us/diseases/reportable/dcn/giardiasis.html',
+    },
+    {
+      label: 'DailyMed (NIH): Alinia (nitazoxanide) prescribing information',
+      url: 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e90f98d9-3c9b-4e75-ba18-5517283eadf0',
     },
     {
       label: 'bioMérieux: BIOFIRE FILMARRAY Gastrointestinal Panel',

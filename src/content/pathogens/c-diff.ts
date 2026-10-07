@@ -1,10 +1,5 @@
 import type { PathogenProfile } from '../types'
 
-// TODO(verify): the BioFire panel and data-interpretation notes are sourced below. The treatment, testing,
-// recurrence and risk statements follow IDSA/SHEA 2017 and 2021 guidance, CDC patient pages and FDA labels,
-// but their source URLs (CDC, IDSA/SHEA, FDA) could not be confirmed in search results this session. Add
-// them from a run with search budget before publishing.
-
 const profile: PathogenProfile = {
   id: 'c-diff',
   name: 'Clostridioides difficile (C. diff)',
@@ -193,6 +188,22 @@ const profile: PathogenProfile = {
     'Two FDA-approved products made from healthy gut bacteria (Rebyota and Vowst) can help prevent repeat C. diff in adults. Ask your clinician whether one is right for you.',
   ],
   sources: [
+    { label: 'CDC: About C. diff', url: 'https://www.cdc.gov/c-diff/about/index.html' },
+    { label: 'CDC: After C. diff: Caring for Yourself and Others', url: 'https://www.cdc.gov/c-diff/after/index.html' },
+    { label: 'CDC: C. diff Facts for Clinicians', url: 'https://www.cdc.gov/c-diff/hcp/clinical-overview/index.html' },
+    {
+      label: 'IDSA/SHEA: 2021 Focused Update Guidelines on Management of Clostridioides difficile Infection in Adults',
+      url: 'https://www.idsociety.org/practice-guideline/clostridioides-difficile-2021-focused-update',
+    },
+    {
+      label: 'FDA: FDA Approves First Fecal Microbiota Product (Rebyota, 2022)',
+      url: 'https://www.fda.gov/news-events/press-announcements/fda-approves-first-fecal-microbiota-product',
+    },
+    {
+      label: 'FDA: FDA Approves First Orally Administered Fecal Microbiota Product (Vowst, 2023)',
+      url: 'https://www.fda.gov/news-events/press-announcements/fda-approves-first-orally-administered-fecal-microbiota-product-prevention-recurrence-clostridioides',
+    },
+    { label: 'FDA: VOWST product information', url: 'https://www.fda.gov/vaccines-blood-biologics/vowst' },
     {
       label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',
       url: 'https://www.biomerieux.com/corp/en/our-offer/clinical-products/biofire-filmarray-gastrointestinal-panel.html',
