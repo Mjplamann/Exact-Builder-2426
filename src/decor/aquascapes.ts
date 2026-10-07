@@ -136,6 +136,17 @@ class Scape {
     return this.flip ? Math.PI - a : a;
   }
 
+  /** Coral growth for this tank: a small tank starts with frags, not a mature show reef's colonies. */
+  get frag(): number {
+    return clamp(0.55 + 0.45 * this.k, 0.6, 1);
+  }
+
+  /** A species only if a grown specimen leaves room around it (a quarter of the width at most). */
+  roomFor(speciesId: string | null): string | null {
+    const sp = speciesId ? this.lib.get(speciesId) : undefined;
+    return sp && sp.spreadCm / 100 <= this.W / 4 ? speciesId : null;
+  }
+
   /** An element count that grows with the tank's width. */
   count(base: number, perWidth: number): number {
     return Math.max(0, Math.round(base + perWidth * this.wf));
@@ -458,8 +469,7 @@ class Scape {
     const spots = rocks.flatMap((r) => this.rockPoints(r, 8, 0.35).map((p) => ({ p, host: r, h: heightOf(p) })));
     spots.sort((a, b) => b.h - a.h);
     const taken: V3[] = [];
-    // A small tank starts with frags and small colonies, not the colonies of a mature show reef.
-    const frag = clamp(0.55 + 0.45 * this.k, 0.6, 1);
+    const frag = this.frag;
     for (const { ids, band, count, spacing } of plan) {
       const avail = ids.filter((id) => this.has(id));
       if (!avail.length) continue;
@@ -916,21 +926,24 @@ function reef(tank: TankState, lib: PlantIndex, seed: number) {
     { ids: ['sarcophyton-toadstool', 'capnella-imbricata', 'xenia-elongata', 'sinularia-flexibilis'], band: [0.35, 0.75], count: Math.round(3 * k + 1), spacing: 0.12 },
     { ids: ['zoanthus-sociatus', 'zoanthus-rasta', 'palythoa-grandis', 'discosoma-red', 'discosoma-blue', 'rhodactis-indosinensis', 'ricordea-florida', 'ricordea-yuma', 'briareum-violaceum'], band: [0.55, 1], count: Math.round(6 * k + 2), spacing: 0.07 },
   ]);
-  // The clownfish anemone: in a crevice on the second bommie, mid height.
-  const bta = s.pick('entacmaea-quadricolor', 'entacmaea-quadricolor-rose', 'heteractis-crispa');
+  // The clownfish anemone: in a crevice on the second bommie, mid height (a pico tank goes without:
+  // an anemone needs room to wander).
+  const f = s.frag;
+  const liters = (tank.size.widthCm * tank.size.heightCm * tank.size.depthCm) / 1000;
+  const bta = liters >= 40 ? s.pick('entacmaea-quadricolor', 'entacmaea-quadricolor-rose', 'heteractis-crispa') : null;
   const anemoneSpot = s.rockPoints(second[0], 4).sort((a, b) => a[1] - b[1])[1] ?? s.rockPoints(second[0], 1)[0];
-  if (anemoneSpot) s.addPlant(bta, anemoneSpot[0], anemoneSpot[2], { attachTo: second[0], growth: 0.9 });
+  if (anemoneSpot) s.addPlant(bta, anemoneSpot[0], anemoneSpot[2], { attachTo: second[0], growth: 0.9 * f });
   // Gorgonians at the back for height and movement.
-  s.addPlant(s.pick('gorgonia-ventalina', 'antillogorgia-bipinnata'), s.x(0.65), s.z(0.12), { growth: 0.85, rotY: 0 });
-  s.addPlant(s.pick('antillogorgia-bipinnata', 'eunicea-knobby'), s.x(0.3), s.z(0.1), { growth: 0.8 });
-  s.addPlant(s.pick('eunicea-knobby'), s.x(0.92), s.z(0.18), { growth: 0.75 });
-  // Sand dwellers in the open foreground.
-  s.addPlant(s.pick('trachyphyllia-geoffroyi'), s.x(0.45), s.z(0.75), { growth: 0.9 });
-  s.addPlant(s.pick('danafungia-scruposa'), s.x(0.68), s.z(0.8), { growth: 0.85 });
-  s.addPlant(s.pick('phymanthus-crucifer'), s.x(0.32), s.z(0.82), { growth: 0.8 });
+  s.addPlant(s.pick('gorgonia-ventalina', 'antillogorgia-bipinnata'), s.x(0.65), s.z(0.12), { growth: 0.85 * f, rotY: 0 });
+  s.addPlant(s.pick('antillogorgia-bipinnata', 'eunicea-knobby'), s.x(0.3), s.z(0.1), { growth: 0.8 * f });
+  s.addPlant(s.pick('eunicea-knobby'), s.x(0.92), s.z(0.18), { growth: 0.75 * f });
+  // Sand dwellers in the open foreground, where there is room for them.
+  s.addPlant(s.roomFor(s.pick('trachyphyllia-geoffroyi')), s.x(0.45), s.z(0.75), { growth: 0.9 * f });
+  s.addPlant(s.roomFor(s.pick('danafungia-scruposa')), s.x(0.68), s.z(0.8), { growth: 0.85 * f });
+  s.addPlant(s.pick('phymanthus-crucifer'), s.x(0.32), s.z(0.82), { growth: 0.8 * f });
   // Macroalgae tucked at the base of the rockwork.
-  s.addPlant(s.pick('halymenia-dilatata', 'gracilaria-parvispora'), s.x(0.06), s.z(0.2));
-  s.addPlant(s.pick('caulerpa-racemosa', 'caulerpa-prolifera'), s.x(0.94), s.z(0.65), { growth: 0.7 });
+  s.addPlant(s.pick('halymenia-dilatata', 'gracilaria-parvispora'), s.x(0.06), s.z(0.2), { growth: 0.8 * f });
+  s.addPlant(s.pick('caulerpa-racemosa', 'caulerpa-prolifera'), s.x(0.94), s.z(0.65), { growth: 0.7 * f });
   return s.result();
 }
 
@@ -960,10 +973,10 @@ function nanoReef(tank: TankState, lib: PlantIndex, seed: number) {
   const host = side[0] ?? island[0];
   if (liters >= 40 && host) {
     const spot = s.rockPoints(host, 4).sort((a, b) => a[1] - b[1])[1] ?? s.rockPoints(host, 1)[0];
-    if (spot) s.addPlant(s.pick('entacmaea-quadricolor', 'entacmaea-quadricolor-rose'), spot[0], spot[2], { attachTo: host, growth: 0.75 });
+    if (spot) s.addPlant(s.pick('entacmaea-quadricolor', 'entacmaea-quadricolor-rose'), spot[0], spot[2], { attachTo: host, growth: 0.75 * s.frag });
   }
-  s.addPlant(s.pick('phymanthus-crucifer'), s.x(0.36), s.z(0.82), { growth: 0.75 });
-  s.addPlant(s.pick('trachyphyllia-geoffroyi', 'danafungia-scruposa'), s.x(0.62), s.z(0.84), { growth: 0.8 });
+  s.addPlant(s.pick('phymanthus-crucifer'), s.x(0.36), s.z(0.82), { growth: 0.75 * s.frag });
+  s.addPlant(s.roomFor(s.pick('trachyphyllia-geoffroyi', 'danafungia-scruposa')), s.x(0.62), s.z(0.84), { growth: 0.8 * s.frag });
   return s.result();
 }
 
