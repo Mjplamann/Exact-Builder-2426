@@ -25,7 +25,7 @@ import { Ambience } from '../audio/Ambience';
 import type { AppApi, DeepPartial, PickResult, TankPresetInfo } from './AppApi';
 import { PRESETS, buildPresetTank, presetStock } from './presets';
 import type { CloudSave } from './cloudSave';
-import { TankLibrary } from './tankLibrary';
+import { TankLibrary, cleanTankName } from './tankLibrary';
 import { fetchTank } from './openLibrary';
 import { SHAPE_SIZES, aquascapesFor, tankFromSpec } from './biotopes';
 import { checkStock, suggestStock } from './stockAdvisor';
@@ -35,6 +35,10 @@ import type { AquascapeInfo, StockCheck, StockSuggestion, TankSpec, TankSummary 
 const AUTOSAVE_SECONDS = 15;
 /** Longest absence we fast-forward (sim time), to keep catch-up bounded. */
 const MAX_CATCHUP_SIM_SECONDS = 2 * 365 * 86400;
+/** A gap this long between two frames of a visible page means the computer slept: catch up. */
+const FRAME_GAP_CATCHUP_MS = 30_000;
+/** Remind the keeper at most this often that the browser refuses to store a tank. */
+const STORAGE_WARN_EVERY_MS = 30 * 60_000;
 
 function deepMerge<T>(target: T, patch: DeepPartial<T>): void {
   for (const [k, v] of Object.entries(patch as Record<string, unknown>)) {
@@ -67,6 +71,9 @@ export class App implements AppApi {
   private library: TankLibrary;
   private tour: Tour;
   private switching = false;
+  /** Wall-clock time of the last rendered frame (detects a computer that slept with the tank on screen). */
+  private lastFrameWall = 0;
+  private storageWarnedAt = -Infinity;
   /** What the camera follows: refreshed in place every frame from the followed animal. */
   private followSubject: FollowSubject = { pos: [0, 0, 0], lengthM: 0.05, forward: [1, 0, 0] };
 
@@ -131,8 +138,17 @@ export class App implements AppApi {
     window.addEventListener('resize', () => this.engine.resize());
     document.addEventListener('visibilitychange', () => this.onVisibility());
     window.addEventListener('pagehide', () => this.save(true));
+    // Tanks another device added, renamed or deleted since boot show up in the menu.
+    if (this.cloud)
+      this.cloud.onRemoteIndex = (index) => {
+        if (this.library.mergeSummaries(index.tanks, index.deleted)) this.world.events.emit('tanks-changed', {});
+      };
     // Make sure the open tank is in the collection (first run, or a fresh device).
     this.save();
+    if (!this.cloud && !this.library.persistent)
+      queueMicrotask(() =>
+        this.world.events.emit('notify', { message: 'This browser isn’t keeping site data (private browsing?), so your tanks will be gone when this page closes. Export a tank in Settings to keep it.', level: 'warning' }),
+      );
   }
 
   // ------------------------------------------------------------------------------------------
@@ -143,10 +159,16 @@ export class App implements AppApi {
     if (this.running) return;
     this.running = true;
     this.lastFrame = performance.now();
+    this.lastFrameWall = Date.now();
     const loop = (now: number) => {
       if (!this.running) return;
       const dt = Math.min(0.1, Math.max(0, (now - this.lastFrame) / 1000));
       this.lastFrame = now;
+      // A computer that slept with the tank on screen resumes without a visibility change: the
+      // tank lived through that time too.
+      const wall = Date.now();
+      if (this.hiddenAt === null && !document.hidden && wall - this.lastFrameWall > FRAME_GAP_CATCHUP_MS) this.catchUpSince(this.lastFrameWall);
+      this.lastFrameWall = wall;
       this.frame(dt);
       requestAnimationFrame(loop);
     };
@@ -227,10 +249,11 @@ export class App implements AppApi {
     if (document.hidden) {
       this.hiddenAt = Date.now();
       this.save(true);
-    } else if (this.hiddenAt) {
+    } else if (this.hiddenAt !== null) {
       this.catchUpSince(this.hiddenAt);
       this.hiddenAt = null;
       this.lastFrame = performance.now();
+      this.lastFrameWall = Date.now();
     }
   }
 
@@ -296,16 +319,25 @@ export class App implements AppApi {
     w.food.length = 0;
     w.selection = {};
     this.select({});
+    // Every tank opens on its whole-tank view: no tour, follow or close-up carried over.
+    const touring = this.tour.active;
+    if (touring) this.tour.stop();
     this.followAnimal(null);
     rebuildFishEntities(w);
     this.engine.rebuildTank(w);
+    if (this.engine.getZoom().zoom > 1.001) this.engine.resetView();
     this.rebuildEnvironment();
     for (const { speciesId, count } of stock) this.life.addFish(w, speciesId, count);
     for (const f of w.fish) if (!f.state.pos) this.behavior.placeNewFish(w, f);
     this.fishRenderer.sync(w);
     if (catchUpFrom !== undefined) this.catchUpSince(catchUpFrom);
+    // Opened while the page is hidden (a slow cloud fetch finishing in a background tab): this
+    // tank is now current up to this moment, not up to when the page was hidden.
+    if (this.hiddenAt !== null) this.hiddenAt = Date.now();
+    this.saveTimer = 0;
     w.events.emit('tank-reset', {});
     w.events.emit('time-scale-changed', { timeScale: w.clock.timeScale });
+    if (touring) w.events.emit('view-changed', { following: null, touring: false });
     this.save(true);
     w.events.emit('tanks-changed', {});
   }
@@ -319,10 +351,21 @@ export class App implements AppApi {
     }
     w.tank.simTime = w.clock.simTime;
     w.tank.timeScale = w.clock.timeScale;
-    w.tank.lastSavedReal = Date.now();
-    this.library.put(w.tank);
+    // While the page is hidden nothing is simulated: the tank is current only up to when it was
+    // hidden (a save on closing a long-hidden tab must not swallow those hours).
+    w.tank.lastSavedReal = this.hiddenAt ?? Date.now();
+    const stored = this.library.put(w.tank);
     this.cloud?.save(w.tank, force);
     this.cloud?.saveIndex(this.library.snapshot(), force);
+    if (!stored && this.library.storageFull && Date.now() - this.storageWarnedAt > STORAGE_WARN_EVERY_MS) {
+      this.storageWarnedAt = Date.now();
+      w.events.emit('notify', {
+        message: this.cloud
+          ? 'This browser’s storage is full, so this tank is being saved to your account only. Deleting tanks you no longer keep frees space here.'
+          : 'This browser’s storage is full — recent changes to this tank can’t be kept after the page closes. Delete a tank you no longer keep, or export this one in Settings.',
+        level: 'warning',
+      });
+    }
   }
 
   // ------------------------------------------------------------------------------------------
@@ -735,7 +778,10 @@ export class App implements AppApi {
   /** Import a saved tank as a new tank in the collection (never overwrites one), and switch to it. */
   importTank(json: string): void {
     const tank = importTank(json);
-    if (tank.id === this.world.tank.id || this.library.has(tank.id)) tank.id = newId('tank');
+    // Never reuse an id: not an open, stored or deleted tank's (a deleted id would be dropped again
+    // on the next boot when another device's deletion record arrives).
+    if (tank.id === this.world.tank.id || this.library.has(tank.id) || this.library.isDeleted(tank.id) || !/^[\w.:~@+-]{1,80}$/.test(tank.id)) tank.id = newId('tank');
+    tank.name = cleanTankName(tank.name) || (tank.water === 'marine' ? 'My Reef' : 'My Aquarium');
     this.save(true);
     this.openTank(tank);
   }
@@ -761,10 +807,13 @@ export class App implements AppApi {
     if (id === this.world.tank.id) return true;
     if (this.switching) return false;
     this.switching = true;
+    const from = this.world.tank.id;
     try {
       const tank = await fetchTank(this.library, this.cloud, id);
+      // Another tank change (the builder, a preset, an import) won the race while we waited.
+      if (this.world.tank.id !== from) return false;
       if (!tank) {
-        this.world.events.emit('notify', { message: 'That tank could not be loaded.', level: 'warning' });
+        this.world.events.emit('notify', { message: 'That tank could not be loaded right now.', level: 'warning' });
         return false;
       }
       if (!discardCurrent) this.save(true);
@@ -811,19 +860,27 @@ export class App implements AppApi {
   }
 
   async renameTank(id: string, name: string): Promise<void> {
-    const n = name.trim().slice(0, 80);
+    const n = cleanTankName(name);
     if (!n) return;
-    if (id === this.world.tank.id) {
+    const renameOpen = () => {
       this.world.tank.name = n;
       this.world.events.emit('tank-settings-changed', {});
       this.save(true);
-    } else {
+    };
+    if (id === this.world.tank.id) renameOpen();
+    else {
       const tank = await fetchTank(this.library, this.cloud, id);
-      if (tank) {
+      // It was opened while we fetched it: rename the live tank (its next save would undo ours).
+      if (id === this.world.tank.id) renameOpen();
+      else if (tank) {
         tank.name = n;
+        // A hair newer than the copies on other devices, so the new name reaches them too
+        // (newer copies win); one second less of unwatched life is invisible.
+        tank.lastSavedReal += 1001;
         this.library.put(tank);
         this.cloud?.save(tank, true);
-      } else this.library.rename(id, n);
+      } else if (this.library.has(id)) this.library.rename(id, n);
+      else return;
       this.cloud?.saveIndex(this.library.snapshot(), true);
     }
     this.world.events.emit('tanks-changed', {});
@@ -835,7 +892,7 @@ export class App implements AppApi {
     if (!src) return null;
     const copy = JSON.parse(JSON.stringify(src)) as TankState;
     copy.id = newId('tank');
-    copy.name = `${src.name} (copy)`.slice(0, 80);
+    copy.name = `${src.name.slice(0, 73).trim()} (copy)`;
     copy.createdAt = Date.now();
     // Same last-open time as the original, so both catch up on the same unwatched time.
     copy.journal.push({ at: copy.simTime, kind: 'info', text: `Copied from “${src.name}”` });
@@ -848,10 +905,19 @@ export class App implements AppApi {
 
   async deleteTank(id: string): Promise<boolean> {
     const others = this.listTanks().filter((t) => t.id !== id);
-    if (!others.length) return false;
+    if (!others.length || !this.library.has(id)) return false;
     if (id === this.world.tank.id) {
-      const next = others.sort((a, b) => b.lastSavedReal - a.lastSavedReal)[0];
-      if (!(await this.switchTo(next.id, true))) return false;
+      // The most recently watched other tank opens in its place (the next one if it can't be reached).
+      if (this.switching) return false;
+      let opened = false;
+      for (const next of others.sort((a, b) => b.lastSavedReal - a.lastSavedReal)) {
+        if (await this.switchTo(next.id, true)) {
+          opened = true;
+          break;
+        }
+        if (this.world.tank.id !== id) return false; // something else changed the tank meanwhile
+      }
+      if (!opened) return false;
     }
     this.library.remove(id);
     this.cloud?.deleteTank(id);

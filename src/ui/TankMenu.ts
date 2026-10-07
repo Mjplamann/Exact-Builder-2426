@@ -318,7 +318,11 @@ export class TankMenu {
       this.renaming = null;
       if (save && v && v !== t.name) {
         // The app emits 'tanks-changed'; render now too so the row never shows a stale form.
-        void this.host.app.renameTank(t.id, v).then(() => this.focusRow(t.id));
+        // (Only pull focus back if the keeper hasn't moved on while a cloud copy was fetched.)
+        void this.host.app.renameTank(t.id, v).then(() => {
+          const a = document.activeElement;
+          if (!a || a === document.body || a.closest(`.aqm-row[data-id="${CSS.escape(t.id)}"]`)) this.focusRow(t.id);
+        });
       }
       this.render();
       this.focusRow(t.id);
