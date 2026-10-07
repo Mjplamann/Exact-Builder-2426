@@ -37,6 +37,9 @@ export async function fetchTankEx(library: TankLibrary, cloud: CloudSave | null,
       }
     }
   }
+  // A copy is filed under its id: never let a damaged body open as some other tank.
+  if (local) local.id = id;
+  if (remote) remote.id = id;
   const tank = newerTank(local, remote);
   if (tank && tank === remote) library.put(tank);
   return { tank, missing: !tank && cloudKnows };

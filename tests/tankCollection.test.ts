@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { TankLibrary } from '../src/app/tankLibrary';
+import { TankLibrary, cleanTankName } from '../src/app/tankLibrary';
 import { fetchTank, openLibrary } from '../src/app/openLibrary';
-import { CloudSave } from '../src/app/cloudSave';
+import { CloudSave, mergeIndexes } from '../src/app/cloudSave';
 import { newTank } from '../src/sim/tankFactory';
 import type { TankState } from '../src/core/types';
 
@@ -289,5 +289,40 @@ describe('two devices, one cloud', () => {
     const r = await openLibrary(cloud);
     expect(r.tank!.id).toBe('a');
     expect(r.library.has('b')).toBe(false);
+  });
+});
+
+describe('names and merges', () => {
+  it('cleans tank names: trimmed, single-spaced, no control characters, at most 80 chars', () => {
+    expect(cleanTankName('  Shrimp \n\t cube  ')).toBe('Shrimp cube');
+    expect(cleanTankName('\u0000\u2028')).toBe('');
+    expect(cleanTankName('x'.repeat(200))).toHaveLength(80);
+    expect(cleanTankName(42)).toBe('');
+  });
+
+  it('mergeIndexes keeps the newer summary, both sides’ tanks and deletions, and this device’s open tank', () => {
+    const base = { name: 'n', water: 'freshwater' as const, size: { widthCm: 60, heightCm: 36, depthCm: 30 }, liters: 50, animals: 0, species: 0, createdAt: 1 };
+    const local = {
+      currentId: 'a',
+      tanks: [
+        { ...base, id: 'a', name: 'local a', lastSavedReal: 10 },
+        { ...base, id: 'b', name: 'local b', lastSavedReal: 5 },
+      ],
+      deleted: ['x'],
+    };
+    const remote = {
+      currentId: 'c',
+      tanks: [
+        { ...base, id: 'a', name: 'remote a', lastSavedReal: 9 },
+        { ...base, id: 'b', name: 'remote b', lastSavedReal: 7 },
+        { ...base, id: 'c', name: 'remote c', lastSavedReal: 7 },
+        { ...base, id: 'x', name: 'deleted here', lastSavedReal: 99 },
+      ],
+      deleted: ['y'],
+    };
+    const m = mergeIndexes(local, remote);
+    expect(m.currentId).toBe('a');
+    expect(Object.fromEntries(m.tanks.map((t) => [t.id, t.name]))).toEqual({ a: 'local a', b: 'remote b', c: 'remote c' });
+    expect(m.deleted!.sort()).toEqual(['x', 'y']);
   });
 });
