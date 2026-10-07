@@ -39,6 +39,9 @@ const MAX_SUGGESTIONS = 6;
 const SHOALS = new Set<RoleKey>(['shoal', 'tiny', 'top', 'bottom', 'bshoal', 'bigShoal', 'mshoal', 'mbuna', 'fancy', 'colony']);
 /** Largest group the advisor proposes of any one species. */
 const MAX_GROUP = 80;
+/** From this size (L) on, communities that would barely use the tank give way to fuller ones. */
+const BIG_TANK_LITERS = 500;
+const MIN_BIG_FILL = 0.12;
 
 /** Layouts with living plants that plant-eaters and diggers would wreck. */
 const PLANTED = new Set(['amazon', 'dutch', 'iwagumi', 'nature', 'nano-shrimp', 'blackwater']);
@@ -56,7 +59,15 @@ const STAPLES = new Set([
 /** Naturalistic styles, where wild forms look right and GloFish and albinos look out of place. */
 const NATURAL = new Set(['amazon', 'blackwater', 'iwagumi', 'nature', 'malawi', 'mangrove', 'brackish-rock', 'reef', 'nano-reef', 'fowlr']);
 /** Specialists that rarely thrive in a home tank (obligate cleaners, pod and coral-polyp feeders). */
-const DIFFICULT = new Set(['labroides-dimidiatus', 'synchiropus-splendidus', 'synchiropus-ocellatus', 'synchiropus-stellatus', 'chelmon-rostratus', 'zanclus-cornutus', 'oxymonacanthus-longirostris']);
+const DIFFICULT = new Set([
+  'labroides-dimidiatus', 'larabicus-quadrilineatus', 'synchiropus-splendidus', 'synchiropus-ocellatus', 'synchiropus-stellatus', 'chelmon-rostratus',
+  'zanclus-cornutus', 'oxymonacanthus-longirostris',
+  // Rainford's goby grazes a film few tanks grow and usually starves within months.
+  'koumansetta-rainfordi',
+]);
+/** Gobies that live only on a host coral: whip-coral gobies (no layout has whip corals), and Acropora clown gobies (reefs only). */
+const WHIP_GOBIES = /^Bryaninops$/;
+const CORAL_GOBIES = /^Gobiodon$/;
 /** Snail families that breed until they overrun a tank. */
 const PLAGUE_SNAILS = new Set(['Physidae', 'Planorbidae', 'Lymnaeidae', 'Thiaridae']);
 
@@ -95,6 +106,8 @@ interface Ctx {
   /** Temperature band the tank runs at (°C) and its pH band (CO₂ injection lowers the daytime pH). */
   temp: [number, number];
   ph: [number, number];
+  /** How far below the pH band a species' range may end before the sim would flag it. */
+  phLoTol: number;
   gh: number;
   liters: number;
   size: TankSize;
@@ -159,9 +172,14 @@ function context(spec: TankSpec, species: SpeciesIndex, plants: PlantIndex): Ctx
     style: spec.aquascape,
     // An unheated tank follows the room's daily swing; a heated one sits at its set-point.
     temp: eq.heater.on ? [T, T + 0.5] : [ROOM_TEMP_C - 1, ROOM_TEMP_C + 1.6],
-    // The life sim's water drifts: CO₂ injection takes about 1.3 off the pH by midday; without
-    // it the pH settles a little above the starting value as the water degasses.
-    ph: eq.co2 ? [wp.ph - 1.32, wp.ph + 0.1] : [wp.ph - 0.15, wp.ph + 0.3],
+    // The life sim's water drifts: CO₂ injection takes 1.22–1.28 off the pH by midday (measured
+    // across sizes and stockings, 1.3 allowed); without it the pH settles a little above the
+    // starting value as the water degasses.
+    ph: eq.co2 ? [wp.ph - 1.3, wp.ph + 0.1] : [wp.ph - 0.15, wp.ph + 0.3],
+    // The midday low of a CO₂ tank is a measured worst case, so it is held to the sim's own
+    // margin (it flags a species once the water is more than 0.2 outside its range) — which keeps
+    // Amano shrimp and otocinclus, the algae crew of every planted CO₂ tank, on the list.
+    phLoTol: eq.co2 ? 0.2 : 0.15,
     gh: wp.gh,
     liters: waterLiters(tank),
     size: tank.size,
@@ -189,7 +207,7 @@ function livesHere(sp: Species, c: Ctx): boolean {
   if (sp.water !== c.water) return false;
   const [tlo, thi] = sp.tempC;
   if (thi < 21 || tlo > c.temp[0] + 0.2 || thi < c.temp[1] - 0.2) return false;
-  if (sp.ph[0] > c.ph[0] + 0.15 || sp.ph[1] < c.ph[1] - 0.15) return false;
+  if (sp.ph[0] > c.ph[0] + c.phLoTol || sp.ph[1] < c.ph[1] - 0.15) return false;
   if (sp.dGH && c.water === 'freshwater' && (c.gh < sp.dGH[0] - 1 || c.gh > sp.dGH[1] + 2)) return false;
   if (sp.minTankLiters > c.liters) return false;
   if (c.corals) {
@@ -249,8 +267,8 @@ function presence(L: number, ideal: number): number {
 // ---------------------------------------------------------------------------------------------
 
 type RoleKey =
-  | 'shoal' | 'tiny' | 'top' | 'bottom' | 'grazer' | 'shrimp' | 'colony' | 'snail' | 'centre' | 'betta'
-  | 'mbuna' | 'rockCat' | 'fancy' | 'singleTail'
+  | 'shoal' | 'tiny' | 'top' | 'bottom' | 'grazer' | 'shrimp' | 'amano' | 'colony' | 'snail' | 'centre' | 'groupCentre' | 'betta'
+  | 'mbuna' | 'hap' | 'rockCat' | 'fancy' | 'singleTail'
   | 'bgoby' | 'bshoal' | 'puffer' | 'bigShoal' | 'archer'
   | 'clown' | 'mgoby' | 'mshoal' | 'mcentre' | 'cleaner' | 'mcrew';
 
@@ -278,12 +296,17 @@ const ROLES: Record<RoleKey, { test(sp: Species, c: Ctx, L: number): boolean; bo
     bonus: (sp) => (has(sp, 'sand-sifter') || has(sp, 'scavenger') ? 0.5 : 0),
   },
   grazer: {
-    test: (sp, c, L) => isFish(sp) && gentle(sp) && (has(sp, 'glass-grazer') || (has(sp, 'clings') && has(sp, 'algae-eater'))) && L <= 15 && !(c.planted && has(sp, 'plant-eater')),
+    // No wood-rasping plecos in a stone garden: there is no wood, and they plough the carpet.
+    test: (sp, c, L) =>
+      isFish(sp) && gentle(sp) && (has(sp, 'glass-grazer') || (has(sp, 'clings') && has(sp, 'algae-eater'))) && L <= Math.min(15, c.size.widthCm / 5) &&
+      !(c.planted && has(sp, 'plant-eater')) && !(c.style === 'iwagumi' && has(sp, 'wood-eater')),
   },
   shrimp: {
     test: (sp, _c, L) => sp.group === 'shrimp' && sp.temperament === 'peaceful' && L <= 5 && sp.diet !== 'filter-feeder' && !has(sp, 'invert-eater') && !has(sp, 'nocturnal-hider'),
     bonus: (sp) => (has(sp, 'algae-eater') ? 0.5 : 0),
   },
+  // Big shrimp only: a betta (or any fish that size) hunts cherry and tiger shrimp and their young.
+  amano: { test: (sp, c, L) => ROLES.shrimp.test(sp, c, L) && L >= 4 },
   snail: {
     // Never the snails that arrive uninvited and breed until they carpet the glass.
     test: (sp, c) =>
@@ -297,13 +320,27 @@ const ROLES: Record<RoleKey, { test(sp: Species, c: Ctx, L: number): boolean; bo
       (!isPredator(sp) || arch(sp, 'angelfish')) && (sp.zone !== 'bottom' || arch(sp, 'dwarf-cichlid', 'geophagus')) && !has(sp, 'clings'),
     bonus: (sp, c, L) => (has(sp, 'hoverer') ? 0.6 : 0) + presence(L, Math.min(18, Math.max(5, c.size.widthCm / 12))),
   },
+  // A big tank's centrepiece: a group of large, peaceful cichlids (eartheaters, discus) that a
+  // smaller tank couldn't hold.
+  groupCentre: {
+    test: (sp, c, L) =>
+      isFish(sp) && sp.family === 'Cichlidae' && shoaling(sp) && gentle(sp) && L >= 10 && L <= c.size.widthCm / 8 && !has(sp, 'nocturnal-hider') && !(c.planted && has(sp, 'digger')),
+    bonus: (sp, c, L) => (has(sp, 'hoverer') ? 0.4 : 0) + presence(L, Math.min(22, Math.max(10, c.size.widthCm / 12))),
+  },
   betta: { test: (sp) => isFish(sp) && isFighter(sp) },
+  // Rock-dwelling mbuna — never mixed with the sand-dwelling peacocks and haps below (mbuna bully
+  // them, and their high-protein food bloats the grazing mbuna).
   mbuna: {
-    test: (sp, c, L) => isFish(sp) && sp.family === 'Cichlidae' && /malawi/i.test(sp.region) && sp.social !== 'solitary' && !isPredator(sp) && L <= c.size.widthCm / 9,
+    test: (sp, c, L) => isFish(sp) && arch(sp, 'mbuna') && /malawi/i.test(sp.region) && sp.social !== 'solitary' && !isPredator(sp) && L <= c.size.widthCm / 9,
     // Milder mbuna keep a mixed rock community calm.
     bonus: (sp) => (sp.temperament === 'aggressive' ? -1 : 0.5),
   },
-  rockCat: { test: (sp, _c, L) => isFish(sp) && sp.zone === 'bottom' && arch(sp, 'synodontis', 'pleco', 'catfish') && L <= 15 && sp.temperament !== 'aggressive' && !isPredator(sp) },
+  hap: {
+    test: (sp, c, L) => isFish(sp) && sp.family === 'Cichlidae' && !arch(sp, 'mbuna') && /malawi/i.test(sp.region) && sp.social !== 'solitary' && !isPredator(sp) && L <= c.size.widthCm / 9,
+    bonus: (sp) => (sp.temperament === 'peaceful' ? 0.5 : 0),
+  },
+  // The Rift Lake catfish kept with Malawi cichlids: synodontis (the lake's own first).
+  rockCat: { test: (sp, _c, L) => isFish(sp) && arch(sp, 'synodontis') && L <= 15 && sp.temperament !== 'aggressive' && !isPredator(sp) },
   fancy: { test: (sp) => isFish(sp) && arch(sp, 'fancy-goldfish') },
   singleTail: { test: (sp) => isFish(sp) && arch(sp, 'goldfish') && conspecificKey(sp) === 'carassius-auratus' },
   bgoby: { test: (sp, _c, L) => isFish(sp) && arch(sp, 'goby', 'marine-goby') && L <= 9 && !has(sp, 'jumper') && !isPredator(sp) },
@@ -313,7 +350,9 @@ const ROLES: Record<RoleKey, { test(sp: Species, c: Ctx, L: number): boolean; bo
   archer: { test: (sp) => isFish(sp) && arch(sp, 'archerfish') },
   clown: { test: (sp) => isFish(sp) && arch(sp, 'clownfish') && sp.temperament !== 'aggressive' },
   mgoby: {
-    test: (sp, _c, L) => isFish(sp) && arch(sp, 'marine-goby', 'dartfish', 'blenny', 'jawfish') && L <= 10 && sp.temperament !== 'aggressive' && !isPredator(sp),
+    test: (sp, c, L) =>
+      isFish(sp) && arch(sp, 'marine-goby', 'dartfish', 'blenny', 'jawfish') && L <= 10 && sp.temperament !== 'aggressive' && !isPredator(sp) &&
+      !WHIP_GOBIES.test(genus(sp)) && (c.corals || !CORAL_GOBIES.test(genus(sp))),
     bonus: (sp) => (sp.temperament === 'peaceful' ? 0.5 : 0),
   },
   mshoal: { test: (sp) => isFish(sp) && arch(sp, 'chromis', 'anthias', 'cardinalfish', 'fairy-wrasse') && sp.temperament === 'peaceful' && groupLiving(sp) },
@@ -321,9 +360,11 @@ const ROLES: Record<RoleKey, { test(sp: Species, c: Ctx, L: number): boolean; bo
     test: (sp, c, L) =>
       isFish(sp) && arch(sp, 'tang', 'dwarf-angel', 'wrasse', 'basslet', 'dottyback', 'rabbitfish') && sp.temperament !== 'aggressive' && !isPredator(sp) && L <= c.size.widthCm / 6,
     // Fish-only tanks exist for the fish a reef can't keep: dwarf angels, tangs, bigger wrasses.
-    bonus: (sp, c) => (c.style === 'fowlr' && !has(sp, 'reef-safe') ? 2 : 0),
+    // A big tank's centrepiece is a big fish (a royal gramma is lost in three metres of reef).
+    bonus: (sp, c, L) => (c.style === 'fowlr' && !has(sp, 'reef-safe') ? 2 : 0) + presence(L, Math.min(20, Math.max(7, c.size.widthCm / 10))),
   },
-  cleaner: { test: (sp) => sp.group === 'shrimp' && (has(sp, 'cleaner') || has(sp, 'anemone-host')) && sp.temperament === 'peaceful' },
+  // Cleaner shrimp; anemone shrimp only where the layout has an anemone for them (the reefs).
+  cleaner: { test: (sp, c) => sp.group === 'shrimp' && (has(sp, 'cleaner') || (c.corals && has(sp, 'anemone-host'))) && (c.corals || !has(sp, 'anemone-host')) && sp.temperament === 'peaceful' },
   mcrew: {
     test: (sp) => (sp.group === 'snail' && (has(sp, 'algae-eater') || has(sp, 'sand-sifter'))) || (arch(sp, 'hermit-crab') && sp.temperament === 'peaceful'),
     bonus: (sp) => (sp.group === 'snail' ? 0.5 : 0),
@@ -362,6 +403,11 @@ const TEMPLATES: Template[] = [
     slots: [{ role: 'shoal', share: 0.42, max: 3 }, { role: 'bottom', share: 0.25, optional: true }, { role: 'grazer', share: 0.08, optional: true }, { role: 'shrimp', share: 0.04, optional: true }, { role: 'snail', share: 0.02, optional: true }],
   },
   {
+    id: 'grand', intro: 'A group of big, peaceful cichlids over a shoal',
+    when: (c) => tropicalFw(c) && c.style !== 'nano-shrimp' && c.style !== 'iwagumi' && c.liters >= 400,
+    slots: [{ role: 'groupCentre', share: 0.35, max: 1.6 }, { role: 'shoal', share: 0.3, max: 3 }, { role: 'bottom', share: 0.15, optional: true }, { role: 'grazer', share: 0.05, optional: true }],
+  },
+  {
     id: 'centrepiece', intro: 'A centrepiece with a supporting cast',
     when: (c) => tropicalFw(c) && c.style !== 'nano-shrimp' && c.style !== 'iwagumi' && c.liters >= 60,
     slots: [{ role: 'centre', share: 0.25, max: 1 }, { role: 'shoal', share: 0.35, max: 3 }, { role: 'bottom', share: 0.2, optional: true }, { role: 'grazer', share: 0.06, optional: true }, { role: 'snail', share: 0.02, optional: true }],
@@ -382,9 +428,10 @@ const TEMPLATES: Template[] = [
     slots: [{ role: 'colony', share: 0.4, max: 2.5 }, { role: 'snail', share: 0.05, optional: true }],
   },
   {
+    // Not in a shrimp nano: a betta hunts the colony the style is built for.
     id: 'betta', intro: 'A single betta',
-    when: (c) => tropicalFw(c) && c.liters < 120,
-    slots: [{ role: 'betta', share: 0.4 }, { role: 'snail', share: 0.04, optional: true }, { role: 'shrimp', share: 0.04, optional: true }],
+    when: (c) => tropicalFw(c) && c.liters < 120 && c.style !== 'nano-shrimp',
+    slots: [{ role: 'betta', share: 0.4 }, { role: 'snail', share: 0.04, optional: true }, { role: 'amano', share: 0.04, optional: true }],
   },
   {
     id: 'mbuna', intro: 'A Lake Malawi rock community',
@@ -392,9 +439,14 @@ const TEMPLATES: Template[] = [
     slots: [{ role: 'mbuna', share: 0.3, max: 1.6 }, { role: 'mbuna', share: 0.3, max: 1.6 }, { role: 'mbuna', share: 0.22, max: 1.6, optional: true }, { role: 'rockCat', share: 0.1, optional: true }],
   },
   {
-    id: 'mbuna-colony', intro: 'One Malawi species, kept as a colony',
+    id: 'mbuna-colony', intro: 'One mbuna species, kept as a colony',
     when: (c) => c.water === 'freshwater' && (c.style === 'malawi' || c.ph[0] >= 7.6),
     slots: [{ role: 'mbuna', share: 0.6, max: 2.5 }, { role: 'rockCat', share: 0.12, optional: true }],
+  },
+  {
+    id: 'peacocks', intro: 'Peacocks and haps over open sand',
+    when: (c) => c.water === 'freshwater' && (c.style === 'malawi' || c.ph[0] >= 7.6),
+    slots: [{ role: 'hap', share: 0.35, max: 1.6 }, { role: 'hap', share: 0.3, max: 1.6 }, { role: 'hap', share: 0.15, max: 1.6, optional: true }, { role: 'rockCat', share: 0.1, optional: true }],
   },
   {
     id: 'fancy-mix', intro: 'Fancy goldfish of different varieties',
@@ -437,6 +489,14 @@ const TEMPLATES: Template[] = [
     id: 'fish-only', intro: 'Fish a reef can’t keep, with live rock to graze',
     when: (c) => c.water === 'marine' && c.style === 'fowlr',
     slots: [{ role: 'mcentre', share: 0.35 }, { role: 'mcentre', share: 0.25, optional: true }, { role: 'mshoal', share: 0.2, optional: true }, { role: 'mcrew', share: 0.05, optional: true }],
+  },
+  {
+    id: 'grand-reef', intro: 'A big shoal over the rock, with a few showpieces',
+    when: (c) => c.water === 'marine' && c.liters >= 500,
+    slots: [
+      { role: 'mshoal', share: 0.3, max: 3 }, { role: 'mcentre', share: 0.25 }, { role: 'mcentre', share: 0.15, optional: true },
+      { role: 'clown', share: 0.08, optional: true }, { role: 'cleaner', share: 0.03, optional: true }, { role: 'mcrew', share: 0.04, optional: true },
+    ],
   },
   {
     id: 'clowns', intro: 'Clownfish with a clean-up crew',
@@ -513,6 +573,15 @@ function verdictWith(c: Ctx, sp: Species, among: Species[]): CompatibilityReport
   return r;
 }
 
+/** Most solitary clean-up animals (snails, crabs) of one species the advisor proposes. */
+const MAX_CREW = 30;
+
+/** Litres of tank per solitary clean-up animal: snails by shell size (reefs keep more), others sparsely. */
+function crewLiters(sp: Species, L: number, water: WaterType): number {
+  if (sp.group === 'snail') return water === 'marine' ? Math.max(8, 2 * L * L) : Math.max(30, 6 * L * L);
+  return Math.max(40, 8 * L * L);
+}
+
 /** How many of a species this slot takes within the remaining budget (0 = can't be afforded). */
 function countFor(cand: Cand, slot: Slot, c: Ctx, budget: number, sharedBy: number): number {
   const sp = cand.sp;
@@ -522,8 +591,9 @@ function countFor(cand: Cand, slot: Slot, c: Ctx, budget: number, sharedBy: numb
   if (isFighter(sp)) n = 1;
   else if (sp.social === 'pair') n = min = sp.groupSize >= 2 ? 2 : 1;
   else if (sp.social === 'solitary' || sp.groupSize <= 1) {
-    // A clean-up crew scales with the tank; a solitary fish is just one.
-    n = isInvertebrate(sp) ? Math.max(1, Math.min(sp.group === 'snail' ? 6 : 3, Math.round(c.liters / (sp.group === 'snail' ? 35 : 80)))) : 1;
+    // A clean-up crew scales with the tank and the size of the animal (a reef keeps a snail per
+    // few gallons, but one fighting conch per hundred litres); a solitary fish is just one.
+    n = isInvertebrate(sp) ? Math.max(1, Math.min(MAX_CREW, Math.round(c.liters / crewLiters(sp, cand.length, c.water)))) : 1;
   } else {
     // Group-living: never below the group size (varieties of one species share it). A big
     // tank takes bigger groups — thirty neons are lost in three metres of water.
@@ -646,7 +716,9 @@ function phrase(p: Pick, c: Ctx, again: boolean): string {
   const many = pluralOf(name);
   const n = p.count;
   const some = n === 1 ? withArticle(name) : `${n} ${many}`;
-  const pair = n === 2 && (p.sp.social === 'pair' || has(p.sp, 'pair-bonding')) ? `a pair of ${many}` : p.sp.social === 'harem' && n > 2 ? `a male ${name} with ${n - 1} females` : some;
+  // A harem is one male with his females; a big group holds several harems.
+  const harem = n <= 2 * p.sp.groupSize ? `a male ${name} with ${n - 1} females` : `${n} ${many}, a male to every ${Math.max(2, p.sp.groupSize - 1)} or so females`;
+  const pair = n === 2 && (p.sp.social === 'pair' || has(p.sp, 'pair-bonding')) ? `a pair of ${many}` : p.sp.social === 'harem' && n > 2 ? harem : some;
   switch (p.role) {
     case 'shoal':
     case 'tiny':
@@ -658,6 +730,7 @@ function phrase(p: Pick, c: Ctx, again: boolean): string {
     case 'grazer':
       return `${some} grazing algae from the glass and ${c.style === 'iwagumi' ? 'stones' : 'leaves'}`;
     case 'shrimp':
+    case 'amano':
     case 'colony':
       return `${n >= 8 ? `a colony of ${n} ${many}` : some} picking over the ${SURFACES[c.style] ?? 'plants and stones'}`;
     case 'snail':
@@ -666,6 +739,10 @@ function phrase(p: Pick, c: Ctx, again: boolean): string {
     case 'betta':
     case 'mcentre':
       return again ? pair : `${pair} as the centrepiece`;
+    case 'groupCentre':
+      return `${n} ${many}`;
+    case 'hap':
+      return `${some} hovering over the sand`;
     case 'rockCat':
       return `${some} slipping between the stones`;
     case 'bgoby':
@@ -757,7 +834,13 @@ export function suggestStock(spec: TankSpec, species: SpeciesIndex, plants: Plan
       });
     });
   }
-  c.suggestions = found.sort((a, b) => a.order - b.order).map((f) => f.s);
+  let list = found.sort((a, b) => a.order - b.order).map((f) => f.s);
+  // A show tank deserves a community that fills it a little: a pair of gobies is lost in 4,000 L.
+  if (c.liters >= BIG_TANK_LITERS) {
+    const full = list.filter((s) => s.stocking >= MIN_BIG_FILL);
+    if (full.length >= 3) list = full;
+  }
+  c.suggestions = list;
   return suggestStock(spec, species, plants);
 }
 

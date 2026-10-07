@@ -26,7 +26,7 @@ export function cycleStep(env: StepEnv): StepView {
         content: [
           h('span', { class: 'aqb-start-icon' }, icon('calendar', 22)),
           h('span', { class: 'aqb-card-title' }, 'Fishless cycle'),
-          h('span', { class: 'aqb-card-text' }, 'The realistic way: about 4–6 weeks of ammonia, then nitrite, while the bacteria grow. Add fish once both test at zero.'),
+          h('span', { class: 'aqb-card-text' }, 'The realistic way: a dose of ammonia feeds the new bacteria; over 4–6 weeks it falls, nitrite rises and falls. Add fish once both test at zero.'),
         ],
       },
     ],

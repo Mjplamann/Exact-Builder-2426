@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { WaterType } from '../src/core/types';
-import { ROOM_TEMP_C, SHAPE_SIZES, SIZE_LIMITS, aquascapesFor, heldTemperature, styleHasCorals, tankFromSpec } from '../src/app/biotopes';
+import { DEFAULT_SETTINGS, createWorld } from '../src/core/world';
+import { loadBundledSpecies } from '../src/data/speciesIndex';
+import { loadBundledPlants } from '../src/data/plantIndex';
+import { LifeSim } from '../src/sim/LifeSim';
+import { FISHLESS_AMMONIA_PPM, ROOM_TEMP_C, SHAPE_SIZES, SIZE_LIMITS, aquascapesFor, heldTemperature, styleHasCorals, tankFromSpec } from '../src/app/biotopes';
 import type { TankSpec } from '../src/app/tankTypes';
 import { AQUASCAPES } from '../src/decor/aquascapes';
+import { NANO_LIMITS, SIZE_LIMITS as BUILDER_LIMITS } from '../src/ui/builder/tankMath';
 
 const WATERS: WaterType[] = ['freshwater', 'brackish', 'marine'];
 
@@ -93,6 +98,19 @@ describe('aquascape styles per water type', () => {
   });
 });
 
+describe('style defaults agree with the builder’s own advice', () => {
+  it('lights every style for 6–10 hours (the equipment step calls longer days algae food)', () => {
+    for (const w of WATERS) {
+      for (const a of aquascapesFor(w, SHAPE_SIZES.standard.size)) {
+        const l = a.defaults!.equipment!.lights!;
+        const hours = (((l.offHour! - l.onHour!) % 24) + 24) % 24;
+        expect(hours, `${w} ${a.id}`).toBeGreaterThanOrEqual(6);
+        expect(hours, `${w} ${a.id}`).toBeLessThanOrEqual(10);
+      }
+    }
+  });
+});
+
 describe('tankFromSpec', () => {
   it('applies the style chemistry, substrate and equipment', () => {
     const t = tankFromSpec(specFor('freshwater', 'blackwater'), { now: 1.7e12, seed: 3 });
@@ -139,10 +157,54 @@ describe('tankFromSpec', () => {
     expect(goldfish.waterParams.temperatureC).toBe(ROOM_TEMP_C);
   });
 
-  it('starts a fishless cycle with an immature filter', () => {
+  it('starts a fishless cycle with an immature filter and the first dose of ammonia', () => {
     const t = tankFromSpec(specFor('freshwater', 'amazon', undefined, { cycled: false }));
     expect(t.waterParams.bacteria).toBeLessThan(0.1);
-    expect(tankFromSpec(specFor('freshwater', 'amazon')).waterParams.bacteria).toBeGreaterThanOrEqual(1);
+    expect(t.waterParams.ammonia).toBe(FISHLESS_AMMONIA_PPM);
+    const mature = tankFromSpec(specFor('freshwater', 'amazon'));
+    expect(mature.waterParams.bacteria).toBeGreaterThanOrEqual(1);
+    expect(mature.waterParams.ammonia).toBe(0);
+  });
+
+  it('cycles like a real fishless cycle: ammonia falls as nitrite peaks, then both read zero within six weeks', () => {
+    const species = loadBundledSpecies();
+    const plants = loadBundledPlants();
+    for (const [water, id, size] of [['freshwater', 'empty', SHAPE_SIZES.standard.size], ['marine', 'nano-reef', SHAPE_SIZES.cube.size], ['freshwater', 'amazon', { widthCm: 60, heightCm: 40, depthCm: 50 }]] as const) {
+      const tank = tankFromSpec(specFor(water, id, size, { cycled: false }), { now: Date.UTC(2026, 5, 1), seed: 5 });
+      const built = AQUASCAPES.find((a) => a.id === id)!.build(tank, plants, tank.seed);
+      tank.decor = built.decor;
+      tank.plants = built.plants;
+      const world = createWorld({ tank, species, plants, settings: { ...DEFAULT_SETTINGS } });
+      const life = new LifeSim(world);
+      const wp = tank.waterParams;
+      let peakNitrite = 0;
+      let ammoniaGoneDay = -1;
+      let doneDay = -1;
+      for (let day = 1; day <= 42 && doneDay < 0; day++) {
+        for (let s = 0; s < 96; s++) {
+          world.clock.simTime += 900_000;
+          life.update(world, 900);
+        }
+        peakNitrite = Math.max(peakNitrite, wp.nitrite);
+        if (ammoniaGoneDay < 0 && wp.ammonia < 0.05) ammoniaGoneDay = day;
+        if (wp.ammonia < 0.05 && wp.nitrite < 0.05 && day > 3) doneDay = day;
+      }
+      const where = `${water} ${id}`;
+      // The textbook curve: nitrite only builds as the ammonia is eaten, and lags behind it.
+      expect(ammoniaGoneDay, where).toBeGreaterThan(7);
+      expect(peakNitrite, where).toBeGreaterThan(0.25);
+      expect(doneDay, where).toBeGreaterThan(ammoniaGoneDay);
+      expect(doneDay, where).toBeLessThanOrEqual(42);
+      // And the filter is then ready for the planned animals.
+      expect(wp.bacteria, where).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('creates exactly the size the builder offers, down to its smallest nano', () => {
+    expect(SIZE_LIMITS.min).toEqual({ widthCm: NANO_LIMITS.width[0], heightCm: NANO_LIMITS.height[0], depthCm: NANO_LIMITS.depth[0] });
+    expect(SIZE_LIMITS.max).toEqual({ widthCm: BUILDER_LIMITS.width[1], heightCm: BUILDER_LIMITS.height[1], depthCm: BUILDER_LIMITS.depth[1] });
+    const pico = { widthCm: 20, heightCm: 15, depthCm: 15 };
+    expect(tankFromSpec(specFor('freshwater', 'nano-shrimp', pico)).size).toEqual(pico);
   });
 
   it('sanitizes sizes, depths and hand-edited equipment', () => {

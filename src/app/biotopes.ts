@@ -54,8 +54,12 @@ interface Biotope {
 
 const EMPTY_NAME = 'Empty tank — aquascape it yourself';
 
-/** Shared light schedules: low-tech tanks run a long, gentle day; CO₂ and reef tanks a shorter, brighter one. */
-const LONG_DAY = { onHour: 9, offHour: 21 };
+/**
+ * Shared light schedules, both ten hours (longer days only feed algae): low-tech tanks run a
+ * gentle day lit late into the evening, when the tank is watched most; CO₂ and reef tanks a
+ * brighter one centred on midday.
+ */
+const LONG_DAY = { onHour: 11, offHour: 21 };
 const SHORT_DAY = { onHour: 10, offHour: 20 };
 
 /*
@@ -301,11 +305,22 @@ export const SHAPE_SIZES: Record<Exclude<TankShape, 'custom'>, { label: string; 
   },
 };
 
-/** Dimensions the builder accepts for a custom tank (cm). */
+/**
+ * Dimensions the builder accepts (cm): from the smallest nano it offers (a 20 cm pico cube) to a
+ * 3 m show tank. Kept in step with the builder's own limits so a tank is created at exactly the
+ * size the keeper reviewed.
+ */
 export const SIZE_LIMITS: { min: TankSize; max: TankSize } = {
-  min: { widthCm: 30, heightCm: 20, depthCm: 20 },
+  min: { widthCm: 20, heightCm: 15, depthCm: 15 },
   max: { widthCm: 300, heightCm: 120, depthCm: 120 },
 };
+
+/**
+ * A fishless cycle is fed by the keeper: household ammonia dosed to about 2 ppm on day one. The
+ * new bacteria grow on it — ammonia falls over two or three weeks while nitrite climbs, then
+ * nitrite falls as nitrate builds — until both read zero, usually after four to five weeks.
+ */
+export const FISHLESS_AMMONIA_PPM = 2;
 
 // ---------------------------------------------------------------------------------------------
 // Spec → tank
@@ -370,7 +385,7 @@ function sanitizeSize(s: TankSize): TankSize {
  * communities against it.
  *
  * The starting temperature follows the heater (room temperature when unheated); a fishless-cycle
- * spec (`cycled: false`) starts with a brand-new filter.
+ * spec (`cycled: false`) starts with a brand-new filter and the keeper's first dose of ammonia.
  */
 export function tankFromSpec(spec: TankSpec, opts: { now?: number; seed?: number } = {}): TankState {
   const size = sanitizeSize(spec.size);
@@ -402,6 +417,8 @@ export function tankFromSpec(spec: TankSpec, opts: { now?: number; seed?: number
   wp.salinitySG = water === 'freshwater' ? 1.0 : clamp(finite(c.salinitySG) ? c.salinitySG : wp.salinitySG, sgLo, sgHi);
   // An unheated tank starts where the room keeps it (a keeper may know their room runs cool or warm).
   wp.temperatureC = tank.equipment.heater.on ? heldTemperature(tank.equipment) : finite(c.temperatureC) ? clamp(c.temperatureC, ROOM_TEMP_C - 2, ROOM_TEMP_C + 2) : ROOM_TEMP_C;
+  // Without something to feed on, the bacteria of a fishless cycle would never grow.
+  if (spec.cycled === false) wp.ammonia = FISHLESS_AMMONIA_PPM;
   if (spec.aquascape) tank.aquascape = spec.aquascape;
   return tank;
 }

@@ -309,3 +309,16 @@ describe('tank menu labels', () => {
     expect(deleteMessage({ ...tank, animals: 0, species: 0 })).toMatch(/^“Rio Negro” will be gone for good/);
   });
 });
+
+describe('scale preview', () => {
+  it('keeps the height label inside the drawing, from a pico tank to a 3 m show tank', async () => {
+    const { scalePreview } = await import('../src/ui/builder/art');
+    for (const size of [{ widthCm: 20, heightCm: 15, depthCm: 15 }, { widthCm: 60, heightCm: 40, depthCm: 50 }, { widthCm: 300, heightCm: 120, depthCm: 120 }, { widthCm: 300, heightCm: 20, depthCm: 20 }, { widthCm: 30, heightCm: 120, depthCm: 20 }]) {
+      const svg = scalePreview(size);
+      const vw = Number(/viewBox="0 0 (\d+)/.exec(svg)![1]);
+      const x = Number(/<text x="([\d.]+)" y="[\d.]+" data-l="h"/.exec(svg)![1]);
+      // "47.5 in" at 10.5 px is about 38 px wide.
+      expect(x + 38, `${size.widthCm}×${size.heightCm}`).toBeLessThanOrEqual(vw);
+    }
+  });
+});

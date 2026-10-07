@@ -18,6 +18,9 @@ const SIZES: Record<string, TankSize> = {
   long: { widthCm: 150, heightCm: 40, depthCm: 50 },
   tall: { widthCm: 90, heightCm: 75, depthCm: 50 },
   tiny: { widthCm: 30, heightCm: 20, depthCm: 20 },
+  // The smallest nano the builder offers (a 4.5 L pico cube) and a long, narrow custom tank.
+  pico: { widthCm: 20, heightCm: 15, depthCm: 15 },
+  narrow: { widthCm: 200, heightCm: 40, depthCm: 40 },
   huge: { widthCm: 300, heightCm: 120, depthCm: 120 },
 };
 

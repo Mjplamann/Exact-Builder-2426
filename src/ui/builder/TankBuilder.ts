@@ -296,7 +296,8 @@ export class TankBuilder {
   private async create(): Promise<void> {
     const spec = this.model.toSpec();
     await this.leaveInto(() => this.host.app.createTank(spec), () => {
-      this.host.toast(spec.cycled ? `Welcome to “${spec.name}”.` : `Welcome to “${spec.name}”. The filter is cycling — test the water in Care every few days.`, 'success');
+      // A fishless cycle's next steps come from the app's own notice (and the journal).
+      this.host.toast(`Welcome to “${spec.name}”.`, 'success');
     });
   }
 

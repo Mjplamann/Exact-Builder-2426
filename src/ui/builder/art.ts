@@ -185,8 +185,10 @@ export function scalePreview(size: TankSize, sandColor = '#b49c78'): string {
   const gap = 36;
   const totalW = personW + gap + Math.max(standW, w);
   const totalH = Math.max(172, standH + h) + 8;
-  const s = Math.min((VW - 52) / totalW, (ground - 10) / totalH);
-  const left = (VW - totalW * s) / 2 - 8;
+  // Room on the right for the height label ("120 cm", "47.5 in"), which sits beside the tank.
+  const avail = VW - 16 - 46;
+  const s = Math.min(avail / totalW, (ground - 10) / totalH);
+  const left = 8 + (avail - totalW * s) / 2;
   const px = left;
   const sx = left + (personW + gap) * s;
   const tx = sx + ((standW - w) / 2) * s;

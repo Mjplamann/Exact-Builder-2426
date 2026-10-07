@@ -857,10 +857,23 @@ export class App implements AppApi {
     const liters = Math.round((tank.size.widthCm * tank.size.heightCm * tank.size.depthCm) / 1000);
     this.journal('info', `Set up “${tank.name}”: ${tank.size.widthCm}×${tank.size.depthCm}×${tank.size.heightCm} cm, ${liters} L ${tank.water}${scape && scape.id !== 'empty' ? `, ${scape.name}` : ''}${spec.cycled ? '' : ' — fishless cycle started'}`);
     for (const q of stock) this.journal('added', `Added ${q.count} × ${this.world.species.get(q.speciesId)!.commonName}`);
-    if (!spec.cycled && planned.length) {
-      const list = planned.map((q) => `${q.count} × ${this.world.species.get(q.speciesId)!.commonName}`).join(', ');
-      this.journal('info', `Planned stock, to add once ammonia and nitrite read zero (usually 4–6 weeks): ${list}`);
-      this.world.events.emit('notify', { message: 'The filter is maturing. Your planned animals are noted in the journal — add them once ammonia and nitrite read zero.', level: 'info' });
+    if (!spec.cycled) {
+      // tankFromSpec doses the ammonia that feeds a fishless cycle; say what happens next.
+      const ppm = Math.round(tank.waterParams.ammonia * 10) / 10;
+      this.journal(
+        'care',
+        `Dosed ammonia to ${ppm} ppm to feed the new filter bacteria. Over the next weeks the ammonia falls as nitrite rises, then the nitrite falls as nitrate builds. When both read zero (usually 4–6 weeks), the tank is ready for fish.`,
+      );
+      if (planned.length) {
+        const list = planned.map((q) => `${q.count} × ${this.world.species.get(q.speciesId)!.commonName}`).join(', ');
+        this.journal('info', `Planned stock, to add once ammonia and nitrite read zero: ${list}`);
+      }
+      this.world.events.emit('notify', {
+        message: planned.length
+          ? 'The filter is maturing on a dose of ammonia. Your planned animals are noted in the journal — add them once ammonia and nitrite both read zero.'
+          : 'The filter is maturing on a dose of ammonia. Add fish once ammonia and nitrite both read zero, in about 4–6 weeks.',
+        level: 'info',
+      });
     }
     this.save(true);
     return tank.id;

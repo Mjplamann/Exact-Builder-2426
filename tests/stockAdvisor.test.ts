@@ -20,6 +20,7 @@ const SIZES: Record<string, TankSize> = {
   long: { widthCm: 150, heightCm: 40, depthCm: 50 },
   tall: { widthCm: 90, heightCm: 75, depthCm: 50 },
   tiny: { widthCm: 30, heightCm: 20, depthCm: 20 },
+  pico: { widthCm: 20, heightCm: 15, depthCm: 15 },
   huge: { widthCm: 300, heightCm: 120, depthCm: 120 },
 };
 const WATERS: WaterType[] = ['freshwater', 'brackish', 'marine'];
@@ -171,6 +172,92 @@ describe('stock suggestions', () => {
     a[0].stock[0].count = 999;
     a.length = 0;
     expect(suggestStock(spec, fresh, plants)[0].stock[0].count).not.toBe(999);
+  });
+});
+
+describe('what an experienced aquarist would suggest', () => {
+  const all = (water: WaterType, id: string, size: TankSize, patch: Partial<TankSpec> = {}) => suggestStock(specFor(water, id, size, patch), species, plants);
+  const sp = (q: { speciesId: string }) => species.get(q.speciesId)!;
+  const ids = (list: StockSuggestion[]) => list.flatMap((s) => s.stock.map((q) => q.speciesId));
+  const genusOf = (q: { speciesId: string }) => sp(q).scientificName.split(' ')[0];
+
+  it('gives CO₂ planted tanks their algae crew (Amano shrimp, otocinclus) and the Iwagumi its one big school', () => {
+    for (const [id, size] of [['iwagumi', SIZES.cube], ['dutch', SIZES.standard], ['nature', SIZES.tall]] as const) {
+      const list = all('freshwater', id, size);
+      expect(ids(list).some((x) => /caridina-multidentata|otocinclus/.test(x)), id).toBe(true);
+    }
+    const iwagumi = all('freshwater', 'iwagumi', SIZES.cube);
+    expect(iwagumi.some((s) => s.description.startsWith('A stone garden with one big school'))).toBe(true);
+    // No wood-rasping pleco in a stone garden.
+    for (const s of iwagumi) for (const q of s.stock) expect(sp(q).traits, q.speciesId).not.toContain('wood-eater');
+  });
+
+  it('keeps mbuna and peacocks/haps apart, with Rift Lake catfish only', () => {
+    for (const size of [SIZES.standard, SIZES.long, SIZES.huge]) {
+      for (const s of all('freshwater', 'malawi', size)) {
+        const cichlids = s.stock.filter((q) => sp(q).family === 'Cichlidae');
+        const mbuna = cichlids.filter((q) => sp(q).body.archetype === 'mbuna').length;
+        expect(mbuna === 0 || mbuna === cichlids.length, `${s.title}: mbuna mixed with haps`).toBe(true);
+        for (const q of s.stock) if (sp(q).family !== 'Cichlidae') expect(sp(q).body.archetype, `${s.title}: ${q.speciesId}`).toBe('synodontis');
+      }
+    }
+    expect(all('freshwater', 'malawi', SIZES.huge).some((s) => s.description.startsWith('Peacocks and haps'))).toBe(true);
+  });
+
+  it('never puts a betta with dwarf shrimp, nor in a shrimp nano', () => {
+    for (const [id, size] of [['empty', SIZES.nano], ['iwagumi', SIZES.nano], ['amazon', SIZES.nano], ['nano-shrimp', SIZES.nano], ['nano-shrimp', SIZES.tiny]] as const) {
+      for (const s of all('freshwater', id, size)) {
+        if (!s.stock.some((q) => isFighter(sp(q)))) continue;
+        expect(id, s.title).not.toBe('nano-shrimp');
+        for (const q of s.stock) if (sp(q).group === 'shrimp') expect(sp(q).adultLengthCm, `${s.title}: ${q.speciesId}`).toBeGreaterThanOrEqual(4);
+      }
+    }
+  });
+
+  it('only suggests gobies and shrimp whose host is in the tank, and no notoriously hard feeders', () => {
+    for (const [id, size] of [['reef', SIZES.standard], ['reef', SIZES.cube], ['nano-reef', SIZES.nano], ['fowlr', SIZES.standard], ['reef', SIZES.huge]] as const) {
+      for (const s of all('marine', id, size)) {
+        for (const q of s.stock) {
+          // There are no whip corals in any layout, and no corals or anemone at all in a fish-only tank.
+          expect(genusOf(q), `${id} ${s.title}`).not.toBe('Bryaninops');
+          if (id === 'fowlr') {
+            expect(genusOf(q), `${s.title}`).not.toBe('Gobiodon');
+            if (sp(q).group === 'shrimp') expect(sp(q).traits, `${s.title}: ${q.speciesId}`).not.toContain('anemone-host');
+          }
+          expect(['koumansetta-rainfordi', 'labroides-dimidiatus', 'synchiropus-splendidus']).not.toContain(q.speciesId);
+        }
+      }
+    }
+  });
+
+  it('sizes the clean-up crew by the animal and the tank', () => {
+    for (const [water, id, size] of [['marine', 'reef', SIZES.cube], ['marine', 'nano-reef', SIZES.nano], ['marine', 'reef', SIZES.huge], ['freshwater', 'amazon', SIZES.standard], ['freshwater', 'empty', SIZES.huge]] as const) {
+      const liters = (size.widthCm * size.heightCm * size.depthCm) / 1000;
+      for (const s of all(water, id, size)) {
+        for (const q of s.stock) {
+          const a = sp(q);
+          if (a.group !== 'snail' || a.social !== 'solitary') continue;
+          // A fighting conch wants ~100 L of sand to itself; small grazers a few litres each.
+          const perAnimal = liters / q.count;
+          expect(perAnimal, `${s.title}: ${q.count} × ${q.speciesId} in ${Math.round(liters)} L`).toBeGreaterThanOrEqual(water === 'marine' ? 1.5 * a.adultLengthCm ** 2 : 4 * a.adultLengthCm ** 2);
+          expect(q.count).toBeLessThanOrEqual(30);
+        }
+      }
+    }
+    // A big reef gets a real crew, not six snails.
+    const show = all('marine', 'reef', SIZES.huge);
+    expect(show.some((s) => s.stock.some((q) => sp(q).group === 'snail' && q.count >= 15))).toBe(true);
+  });
+
+  it('fills a show tank with a community worth its size', () => {
+    for (const [water, id] of [['marine', 'reef'], ['freshwater', 'amazon'], ['freshwater', 'malawi'], ['marine', 'fowlr']] as const) {
+      const list = all(water, id, SIZES.huge);
+      expect(list.length, id).toBeGreaterThanOrEqual(3);
+      for (const s of list) expect(s.stocking, `${id} “${s.title}”`).toBeGreaterThanOrEqual(0.12);
+    }
+    // Big peaceful cichlids lead one of the big Amazon communities; a big reef gets a big shoal and a tang-sized showpiece.
+    expect(all('freshwater', 'amazon', SIZES.huge).some((s) => s.stock.some((q) => sp(q).family === 'Cichlidae' && sp(q).adultLengthCm >= 15 && q.count >= 5))).toBe(true);
+    expect(all('marine', 'reef', SIZES.huge).some((s) => s.stock.some((q) => q.count >= 20 && sp(q).group === 'fish') && s.stock.some((q) => sp(q).adultLengthCm >= 15))).toBe(true);
   });
 });
 

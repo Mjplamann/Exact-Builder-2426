@@ -9,7 +9,7 @@ import type { Species } from '../../../core/types';
 import type { StockCheck, StockSuggestion } from '../../../app/tankTypes';
 import { stepper } from '../../controls';
 import { clear, debounce, h, setAttr, setClass, setText } from '../../dom';
-import { formatLength, localizeUnits, plural } from '../../format';
+import { formatLength, formatLiters, localizeUnits, plural } from '../../format';
 import { icon } from '../../icons';
 import { VirtualList } from '../../VirtualList';
 import type { StepEnv, StepView } from './types';
@@ -73,7 +73,7 @@ export function animalsStep(env: StepEnv): StepView {
         'div',
         { class: 'aqb-callout' },
         icon('calendar', 18),
-        h('p', null, 'Your filter will be cycling, so the tank starts without animals. When ammonia and nitrite both test at zero — in about 4–6 weeks — add them from the Fish panel. Anything you plan here waits in the journal until then.'),
+        h('p', null, 'Your filter will be cycling on a dose of ammonia, so the tank starts without animals. When ammonia and nitrite both test at zero — in about 4–6 weeks — add them from the Fish panel. Anything you plan here waits in the journal until then.'),
       );
 
   // --- The chosen animals & their check --------------------------------------------------------
@@ -168,7 +168,15 @@ export function animalsStep(env: StepEnv): StepView {
     clear(sugList);
     cards.length = 0;
     if (!list.length) {
-      sugList.append(h('p', { class: 'aqb-placeholder' }, 'No ready-made communities for this tank yet — pick animals yourself below.'));
+      // Say why, and offer the way out: usually a style whose animals need more water.
+      const style = m.style;
+      const small = !!style && (style.minLiters ?? 0) > m.liters;
+      const why = small
+        ? `The ${style!.name.toLowerCase()} style is designed for ${formatLiters(style!.minLiters!, units)} or more, and its animals need that room — this tank holds ${formatLiters(m.liters, units)}.`
+        : 'Nothing we would confidently suggest for this exact tank.';
+      const resize = h('button', { type: 'button', class: 'aq-link aqb-resize' }, 'Choose a bigger tank');
+      resize.addEventListener('click', () => env.goto('size'));
+      sugList.append(h('p', { class: 'aqb-placeholder' }, `${why} Pick animals yourself below — each choice is checked against the tank`, small ? ', or ' : '.', small ? resize : null, small ? '.' : null));
       openPicker();
       return;
     }
