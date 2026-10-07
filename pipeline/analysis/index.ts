@@ -42,9 +42,12 @@ const PRIMARY_PRIORITY: { metric: MetricKind; geo: string[] }[] = [
   { metric: 'hosp_admissions', geo: ['state'] },
   { metric: 'wastewater_level', geo: ['state'] },
   { metric: 'ili_pct', geo: ['state'] },
-  { metric: 'detection_rate', geo: ['census-region'] },
   { metric: 'test_positivity', geo: ['hhs-region'] },
+  { metric: 'detection_rate', geo: ['census-region'] },
+  { metric: 'wastewater_conc', geo: ['state'] },
+  { metric: 'ww_detections', geo: ['state'] },
   { metric: 'cases', geo: ['state'] },
+  { metric: 'cases_ytd', geo: ['state'] },
 ]
 
 /** Pathogens whose sub-type series roll up into a parent card. */
@@ -98,6 +101,8 @@ export function summarize(s: Series, now: string): SignalSummary | null {
   } else if (official) {
     level = official.level
     levelBasis = official.basis
+  } else if (s.metric === 'cases_ytd') {
+    levelBasis = 'Year-to-date count (no activity level)'
   } else if (s.metric === 'ww_detections') {
     // Any detection of a rare target is notable; none means not detected that week.
     const tested = s.attrs?.plantsTestedLatestWeek ?? s.attrs?.sitesTested
@@ -115,7 +120,7 @@ export function summarize(s: Series, now: string): SignalSummary | null {
   const hist = historicalValues(s.points, date)
   const typical = hist.length >= 26 ? median(hist) : NaN
   const vsTypical = typical > 0 ? Math.round((value / typical) * 10) / 10 : undefined
-  const trend = pub?.trend ?? computed.trend
+  const trend = s.metric === 'cases_ytd' ? 'unknown' : (pub?.trend ?? computed.trend)
   const change2w = computed.change2w
   const prev = valueAt(s, addDays(date, -7))
   const stale = date < addDays(now.slice(0, 10), -STALE_DAYS)
@@ -275,6 +280,7 @@ const METRIC_PHRASE: Record<MetricKind, string> = {
   wastewater_level: 'wastewater activity index',
   wastewater_conc: 'wastewater concentration',
   cases: 'reported cases',
+  cases_ytd: 'cases reported so far this year',
   outbreaks: 'reported outbreaks',
   deaths: 'reported deaths',
   ww_detections: 'wastewater detections',
@@ -294,6 +300,9 @@ function headlineFor(p: PathogenId, sig: SignalSummary | undefined, level: Activ
     const tr = trend === 'unknown' || level === 'unknown' ? '' : ` and ${TREND_LABEL[trend].toLowerCase()}`
     const scope = sig.attrs?.plants ? ` (${sig.attrs.plants} WastewaterSCAN plants)` : ''
     return `${what} levels in Minnesota wastewater are ${lvl}${tr}${scope}, week ending ${sig.latestDate}.`
+  }
+  if (sig.metric === 'cases_ytd') {
+    return `${nameOf(p)}: ${formatValue(sig)} case${sig.latestValue === 1 ? '' : 's'} reported in Minnesota so far in ${sig.latestDate.slice(0, 4)} (as of ${sig.latestDate}).`
   }
   if (level === 'unknown') {
     return `${nameOf(p)}: ${formatValue(sig)} ${METRIC_PHRASE[sig.metric]} in the week ending ${sig.latestDate} (not enough history to rate the level).`

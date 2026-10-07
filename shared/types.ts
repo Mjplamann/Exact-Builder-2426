@@ -72,7 +72,8 @@ export type MetricKind =
   | 'hosp_rate' // hospitalizations per 100,000 population per week
   | 'wastewater_level' // wastewater viral activity level (unitless index)
   | 'wastewater_conc' // normalized wastewater concentration (source-specific units)
-  | 'cases' // reported case count
+  | 'cases' // reported case count (per week)
+  | 'cases_ytd' // cumulative cases reported so far this calendar year (one point per report date)
   | 'outbreaks' // reported outbreak count
   | 'deaths' // reported deaths
   | 'ww_detections' // wastewater sites (or samples) with a detection that week (count)
@@ -90,6 +91,7 @@ export const METRIC_UNITS: Record<MetricKind, Unit> = {
   wastewater_level: 'index',
   wastewater_conc: 'ratio',
   cases: 'count',
+  cases_ytd: 'count',
   outbreaks: 'count',
   deaths: 'count',
   ww_detections: 'count',

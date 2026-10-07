@@ -100,6 +100,7 @@ export const METRIC_LABEL: Record<MetricKind, string> = {
   wastewater_level: 'Wastewater activity',
   wastewater_conc: 'Wastewater concentration',
   cases: 'Reported cases',
+  cases_ytd: 'Cases so far this year',
   outbreaks: 'Outbreaks',
   deaths: 'Deaths',
   ww_detections: 'Wastewater detections',
@@ -128,6 +129,8 @@ export function metricMeaning(metric: MetricKind, value: number | null | undefin
       return `normalized wastewater concentration ${v}`
     case 'cases':
       return `${v} reported cases`
+    case 'cases_ytd':
+      return `${v} cases reported so far this year`
     case 'outbreaks':
       return `${v} reported outbreaks`
     case 'deaths':

@@ -360,6 +360,7 @@ const DATASET_BY_METRIC: Record<MetricKind, string> = {
   ww_detections: 'mdh-wastewater',
   ed_visit_pct: 'mdh-syndromic',
   cases: 'mdh-other',
+  cases_ytd: 'mdh-other',
   rt: 'mdh-other',
 }
 
@@ -384,6 +385,7 @@ const METRIC_LABEL: Partial<Record<MetricKind, string>> = {
   wastewater_conc: 'wastewater concentration (PMMoV-normalized)',
   ed_visit_pct: '% of emergency department visits',
   cases: 'reported cases',
+  cases_ytd: 'cases reported so far this year',
 }
 
 function seriesLabel(spec: LinkSpec, n: NormalizedSeries): string {

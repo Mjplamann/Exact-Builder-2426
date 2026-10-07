@@ -86,6 +86,10 @@ export const MEASURE_INFO: Record<MetricKind, { what: string; why: string }> = {
     what: 'The share of outpatient clinic visits for fever with cough or sore throat (influenza-like illness).',
     why: 'A long-running, consistent measure of flu-like illness that lets this season be compared with many past seasons.',
   },
+  cases_ytd: {
+    what: 'The running total of cases reported to public health so far this calendar year.',
+    why: 'Shows how much disease has been reported this year. Because it only increases, use weekly measures to judge whether activity is rising or falling.',
+  },
   cases: {
     what: 'The number of confirmed or probable cases reported to public health that week.',
     why: 'Shows where and when infections are being diagnosed. Many mild cases are never tested, so the true number of infections is higher.',
@@ -532,6 +536,8 @@ function meaningOf(s: Series, value: number, who: string): string {
       return `${who} was detected at ${Math.round(value)} wastewater site${Math.round(value) === 1 ? '' : 's'} that week.`
     case 'cases':
       return `${Math.round(value).toLocaleString('en-US')} ${who} case${Math.round(value) === 1 ? ' was' : 's were'} reported in ${where} that week.`
+    case 'cases_ytd':
+      return `${Math.round(value).toLocaleString('en-US')} ${who} case${Math.round(value) === 1 ? ' has' : 's have'} been reported in ${where} so far this year.`
     case 'outbreaks':
       return `${Math.round(value)} ${who} outbreak${Math.round(value) === 1 ? ' was' : 's were'} reported in ${where} that week.`
     case 'deaths':

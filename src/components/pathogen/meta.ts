@@ -138,6 +138,8 @@ export const MEASURE_EXPLAINER: Record<MetricKind, string> = {
   wastewater_level:
     'How much of the virus is showing up in sewage compared with the usual level at those treatment plants. Wastewater captures infections whether or not people get tested, and often rises a week or so before clinic visits.',
   wastewater_conc: 'The amount of the virus in sewage, adjusted for how much human waste is in each sample.',
+  cases_ytd:
+    'The total number of cases reported to public health so far this year. It only goes up during the year, so it shows how much has happened, not whether things are getting better or worse right now.',
   cases:
     'Cases reported to public health. Many mild cases are never tested or reported, so the true number is higher. Changes over time are more meaningful than the exact count.',
   outbreaks: 'Clusters of illness reported to public health (for example in a school, care facility or restaurant).',
@@ -157,6 +159,7 @@ export const MEASURE_AXIS: Record<MetricKind, string> = {
   wastewater_level: 'Wastewater activity level',
   wastewater_conc: 'Normalized wastewater concentration',
   cases: 'Reported cases each week',
+  cases_ytd: 'Cases reported so far this year',
   outbreaks: 'Reported outbreaks each week',
   deaths: 'Reported deaths each week',
   ww_detections: 'Wastewater detections each week',
