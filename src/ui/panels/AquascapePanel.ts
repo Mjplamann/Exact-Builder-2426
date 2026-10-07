@@ -283,7 +283,8 @@ export class AquascapePanel implements Panel {
     for (const p of app.presets()) {
       const load = button('Add as a new tank', () => {
         this.host.openPanel(null);
-        void fadeTankChange(() => app.loadPreset(p.id)).then(() => this.host.toast(`Welcome to “${p.name}” — your other tanks keep living in the tank menu.`, 'success'));
+        // Resolves undefined when another tank change is still fading (nothing was added).
+        void fadeTankChange(() => (app.loadPreset(p.id), true)).then((ok) => ok && this.host.toast(`Welcome to “${p.name}” — your other tanks keep living in the tank menu.`, 'success'));
       }, { variant: 'ghost', cls: 'aq-btn-small' });
       presets.append(
         h('div', { class: 'aq-preset' },

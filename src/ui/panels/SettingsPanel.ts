@@ -6,6 +6,7 @@ import type { Quality, Settings } from '../../core/types';
 import type { Panel, UIHost } from '../context';
 import { button, section, segmented, slider, toggle } from '../controls';
 import { fadeTankChange, openTankBuilder } from '../builder';
+import { fading } from '../builder/fade';
 import { importTank as parseTank } from '../../sim/persistence';
 import { h, throttle } from '../dom';
 import { formatCount } from '../format';
@@ -82,6 +83,7 @@ export class SettingsPanel implements Panel {
         return;
       }
       // An import joins the collection as a new tank (nothing is replaced).
+      if (fading()) return;
       host.openPanel(null);
       const ok = await fadeTankChange(() => {
         app.importTank(text);

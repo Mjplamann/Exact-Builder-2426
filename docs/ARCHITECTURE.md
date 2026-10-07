@@ -72,6 +72,15 @@ minute per document unless forced). At boot `openLibrary` merges the cloud index
 wins; deletions are tombstoned so a stale device can't resurrect a tank) and opens the current tank,
 taking whichever copy is newer.
 
+Every cloud index write first reads the cloud index and merges it (`mergeIndexes`: union of tanks,
+newer summary wins, tombstones from both sides); the write is skipped if the index can't be read,
+and what was read is fed back to the open app (`CloudSave.onRemoteIndex` →
+`TankLibrary.mergeSummaries`), so tanks added or deleted on another device appear without a
+reload. Cloud reads time out after 6 s and then fail fast for 30 s; writes time out after 30 s. A
+tank is dropped at boot only when neither this browser nor the cloud has it. A save while the page
+is hidden stamps the time it was hidden (`lastSavedReal = hiddenAt`), and the render loop catches
+up when a visible page resumes after a frame gap of more than 30 s (a sleeping computer).
+
 Only the open tank is simulated. Every tank stores `lastSavedReal`; opening one (boot, switching,
 returning to the page) runs `LifeSim.catchUp` over the real time it spent unwatched (capped at two
 years), so every tank keeps living. Presets, imports and the guided builder (`App.createTank(spec)`,
@@ -83,6 +92,12 @@ eye), so close-ups behave like a telephoto lens. The App passes one `FollowSubje
 refreshes in place each frame; `Engine.follow/zoomBy/panBy/resetView` drive the rig, PostFX adds
 depth of field while following or zoomed, and `Tour` (`src/app/tour.ts`) picks subjects for the
 documentary mode. The UI talks only to the AppApi view methods.
+
+Close-ups: `FishRenderer` shows a depth-only twin of every fin mesh (fins, legs, antennae) while
+following or zoomed past 1.3×, so depth of field keeps them sharp with their body. Close-up-only
+surface detail (leaf venation, scale shimmer, sand grain) is gated by `closeUpAmount(zoom,
+following)` via `DECOR_UNIFORMS.uCloseUp` / `FISH_CLOSEUP`, so the whole-tank view is identical on
+any display.
 
 ### Events (`src/core/events.ts`)
 `fish-added | fish-removed | fish-died | fish-born` → App calls `FishRenderer.sync`.
