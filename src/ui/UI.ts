@@ -514,10 +514,7 @@ export class UI implements UIHost {
       case 'journal':
         return new JournalPanel(this);
       case 'settings':
-        return new SettingsPanel(this, () => {
-          this.openPanel('scape');
-          (this.panels.get('scape') as AquascapePanel | undefined)?.showNewTank();
-        });
+        return new SettingsPanel(this);
     }
   }
 

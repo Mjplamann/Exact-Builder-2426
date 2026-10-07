@@ -138,8 +138,6 @@ body.aq-idle #tank { cursor: none; }
   font-size: 15px; font-weight: 600; letter-spacing: 0.01em; color: var(--text); text-align: left;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .aq-tankname:hover { background: rgba(255, 255, 255, 0.06); }
-.aq-tankname-input { font-size: 15px; font-weight: 600; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--hair-strong);
-  border-radius: 8px; padding: 2px 6px; margin-left: -6px; width: 260px; }
 .aq-clockline { display: flex; align-items: center; gap: 7px; margin-top: 3px; color: var(--text-2); font-size: 12.5px; white-space: nowrap; }
 .aq-glyph { display: inline-flex; color: var(--text-2); opacity: 0.9; }
 .aq-speed { border: 1px solid var(--hair); background: rgba(255, 255, 255, 0.06); color: var(--text-2); border-radius: 999px;
@@ -813,7 +811,7 @@ body.aq-idle #tank { cursor: none; }
   .aq-seg { padding: 2px; }
   .aq-tabs { gap: 8px; }
   .aq-tab { padding: 13px 6px 14px; min-width: 44px; }
-  .aq-search-input, .aq-tankname-input, .aq-card-name-input { height: 44px; font-size: 16px; }
+  .aq-search-input, .aq-card-name-input { height: 44px; font-size: 16px; }
   .aq-switch { width: 51px; height: 31px; }
   .aq-switch-knob { width: 25px; height: 25px; }
   .aq-switch[aria-checked="true"] .aq-switch-knob { transform: translateX(20px); }

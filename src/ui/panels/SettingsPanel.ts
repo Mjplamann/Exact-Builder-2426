@@ -17,10 +17,8 @@ export class SettingsPanel implements Panel {
   readonly el: HTMLElement;
   private syncers: (() => void)[] = [];
 
-  /** @param _onNewTank kept for the UI shell's call site: "New tank…" now opens the guided builder itself. */
   constructor(
     private host: UIHost,
-    _onNewTank?: () => void,
   ) {
     const app = host.app;
     const s = () => app.world.settings;

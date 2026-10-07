@@ -7,7 +7,7 @@ import type { PlantSpecies, WaterType } from '../../core/types';
 import { DECOR_CATALOG, type DecorVariant } from '../../decor/catalog';
 import type { Panel, UIHost } from '../context';
 import { button, section, slider, tabs } from '../controls';
-import { clear, debounce, h, prefersReducedMotion, setClass, throttle } from '../dom';
+import { clear, debounce, h, setClass, throttle } from '../dom';
 import { formatLength } from '../format';
 import { icon } from '../icons';
 import { BACKGROUNDS, SUBSTRATES, decorColor, decorGlyph, plantGlyph } from '../scapeArt';
@@ -301,15 +301,6 @@ export class AquascapePanel implements Panel {
       section('New tank', h('p', { class: 'aq-hint' }, 'Design another tank step by step: water, size and shape, style, equipment and its first inhabitants. This one keeps living while you are away from it.'), build),
       section('Ready-made tanks', h('p', { class: 'aq-hint' }, 'Complete aquascapes with their inhabitants, each added as a new tank.'), presets),
     );
-  }
-
-  /** Jump straight to the "new tank" section (from Settings). */
-  showNewTank(): void {
-    this.setTab('tank');
-    requestAnimationFrame(() => {
-      const secs = this.views.tank.querySelectorAll('.aq-sec');
-      (secs[secs.length - 2] as HTMLElement | undefined)?.scrollIntoView({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-    });
   }
 
   onSettingsChanged(): void {
