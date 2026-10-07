@@ -398,7 +398,10 @@
   .aqb-review-row .aqb-edit { grid-area: edit; }
   .aqb-picker-list { height: min(52vh, 420px); height: min(52dvh, 420px); }
   .aqb-members { grid-template-columns: minmax(0, 1fr); }
-  .aqb-ncycle-chain { gap: 8px 22px; }
+  /* A narrow screen reads the cycle top to bottom, no arrow left dangling at a line end. */
+  .aqb-ncycle-chain { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .aqb-ncycle-step { flex-direction: row; align-items: baseline; gap: 8px; padding: 7px 12px; }
+  .aqb-ncycle-step:not(:last-child)::after { content: "↓"; right: auto; left: 18px; top: auto; bottom: -17px; transform: none; font-size: 12px; line-height: 1; }
 }
 
 /* Short screens (phones in landscape): full screen, progress and chips share one line. */

@@ -81,6 +81,7 @@ export function equipmentStep(env: StepEnv): StepView {
     format: (v) => formatTemp(v, units),
     onInput: (v) => {
       m.setHeater({ targetC: v });
+      paintHeat();
       env.changed();
     },
   });
@@ -93,9 +94,12 @@ export function equipmentStep(env: StepEnv): StepView {
   target.el.hidden = !eq.heater.on;
   const tropical = formatTempRange([24, 27], units);
   const paintHeat = () => {
+    const h = m.equipment.heater;
     setText(
       heatHint,
-      m.equipment.heater.on
+      h.on && h.targetC < ROOM_TEMP_C
+        ? `Heaters only heat: set below the room (about ${formatTemp(ROOM_TEMP_C, units, 0)}), the water simply stays at room temperature.`
+        : h.on
         ? water === 'marine'
           ? `Reefs live at ${tropical}, and steadiness matters more than the exact number.`
           : `Tropical fish want ${tropical}; a few degrees cooler suits hillstream and subtropical species.`

@@ -17,7 +17,7 @@ import { animalsLabel, waterLabel } from './labels';
 import { BuilderModel, STEPS, STEP_NAMES, stepIssue, type StepId } from './model';
 import { formatDims } from './tankMath';
 import { frameBatch } from './widgets';
-import { animalsStep } from './steps/animals';
+import { animalsStep, prefetchSuggestions } from './steps/animals';
 import { cycleStep } from './steps/cycle';
 import { equipmentStep } from './steps/equipment';
 import { lookStep } from './steps/look';
@@ -81,6 +81,8 @@ export class TankBuilder {
   /** Furthest step reached (chips offer the ones before it). */
   private reached = 0;
   private view: StepView | null = null;
+  /** Cancels the idle-time advisor run started on the step before the animals. */
+  private cancelPrefetch: (() => void) | null = null;
   private stylesCache = new Map<WaterType, AquascapeInfo[]>();
   private confirmEl: HTMLElement | null = null;
   private closed = false;
@@ -162,6 +164,8 @@ export class TankBuilder {
 
   private show(step: StepId, dir: number): void {
     this.view?.dispose?.();
+    this.cancelPrefetch?.();
+    this.cancelPrefetch = null;
     this.step = step;
     this.reached = Math.max(this.reached, STEPS.indexOf(step));
     const view = MAKERS[step](this.env);
@@ -188,6 +192,9 @@ export class TankBuilder {
     requestAnimationFrame(() => {
       if (this.view === view && !this.closed) view.onShown?.();
     });
+    // The water, size, style and equipment are settled by the filter step: get the suggested
+    // communities ready while the keeper reads about the nitrogen cycle.
+    if (step === 'cycle') this.cancelPrefetch = prefetchSuggestions(this.env);
   }
 
   private goto(step: StepId): void {
@@ -378,6 +385,8 @@ export class TankBuilder {
     window.removeEventListener('keydown', this.keyCapture, true);
     this.view?.dispose?.();
     this.view = null;
+    this.cancelPrefetch?.();
+    this.cancelPrefetch = null;
     const el = this.el;
     const hadFocus = el.contains(document.activeElement);
     if (animate && !prefersReducedMotion()) {

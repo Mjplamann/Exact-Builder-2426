@@ -19,10 +19,35 @@ const TAG = 'builder';
 const LEVEL_WORDS: Record<StockCheck['level'], string> = { good: 'Good match', caution: 'Needs care', bad: 'Not advised' };
 const CHECK_WORDS: Record<StockCheck['level'], string> = { good: 'They should get along here', caution: 'Workable, with care', bad: 'Not a good idea in this tank' };
 
-/** What the advisor's answer depends on (not the animals already chosen). */
+/** What the advisor's answer depends on (not the animals already chosen, nor the cycle choice). */
 function suggestKey(env: StepEnv): string {
   const s = env.model.spec;
-  return JSON.stringify([s.water, s.size, s.aquascape, s.substrate, s.waterParams, s.equipment, s.cycled]);
+  return JSON.stringify([s.water, s.size, s.aquascape, s.substrate, s.substrateDepthFrontCm, s.substrateDepthBackCm, s.waterParams, s.equipment]);
+}
+
+/**
+ * Work out the suggested communities in idle time while the keeper is still on an earlier step,
+ * so the animals step opens with them ready (the advisor takes tens of milliseconds on a phone).
+ * Returns a cancel function.
+ */
+export function prefetchSuggestions(env: StepEnv): () => void {
+  if (env.cache.suggestions.has(suggestKey(env))) return () => {};
+  const run = () => {
+    const key = suggestKey(env);
+    if (env.cache.suggestions.has(key)) return;
+    try {
+      env.cache.suggestions.set(key, env.host.app.suggestStock(env.model.toSpec()));
+    } catch (err) {
+      console.warn('[builder] suggestStock failed', err);
+    }
+  };
+  const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
+  if (w.requestIdleCallback && w.cancelIdleCallback) {
+    const id = w.requestIdleCallback(run, { timeout: 1500 });
+    return () => w.cancelIdleCallback!(id);
+  }
+  const t = setTimeout(run, 400);
+  return () => clearTimeout(t);
 }
 
 /**
@@ -174,7 +199,7 @@ export function animalsStep(env: StepEnv): StepView {
       const why = small
         ? `The ${style!.name.toLowerCase()} style is designed for ${formatLiters(style!.minLiters!, units)} or more, and its animals need that room — this tank holds ${formatLiters(m.liters, units)}.`
         : 'Nothing we would confidently suggest for this exact tank.';
-      const resize = h('button', { type: 'button', class: 'aq-link aqb-resize' }, 'Choose a bigger tank');
+      const resize = h('button', { type: 'button', class: 'aq-link aqb-resize' }, 'choose a bigger tank');
       resize.addEventListener('click', () => env.goto('size'));
       sugList.append(h('p', { class: 'aqb-placeholder' }, `${why} Pick animals yourself below — each choice is checked against the tank`, small ? ', or ' : '.', small ? resize : null, small ? '.' : null));
       openPicker();
