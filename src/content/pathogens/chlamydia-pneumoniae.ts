@@ -16,7 +16,7 @@ const profile: PathogenProfile = {
   biofireTargets: ['Chlamydia pneumoniae'],
   oneLiner: 'A common bacterium that causes sore throat, hoarseness, and lingering coughs. It is not the sexually transmitted chlamydia.',
   overview:
-    'Chlamydia pneumoniae is a type of bacteria that infects the nose, throat, and lungs. It usually causes mild illness, such as a sore throat, a hoarse voice, or bronchitis (a chest cold). It can also cause pneumonia (a lung infection), often a mild “walking pneumonia.” Most people are infected at some point in their lives, and people can get it more than once. It is a different germ from Chlamydia trachomatis, which causes the sexually transmitted infection, and it does not spread through sex.',
+    'Chlamydia pneumoniae is a type of bacteria that infects the nose, throat, and lungs. It usually causes mild illness, such as a sore throat, a hoarse voice, or bronchitis (a chest cold), and sometimes a mild pneumonia (a lung infection). Most people are infected at some point in their lives, and people can get it more than once. It is a different germ from Chlamydia trachomatis, which causes the sexually transmitted infection, and it does not spread through sex.',
   seasonality: {
     summary:
       'Chlamydia pneumoniae spreads year-round and does not follow a strong seasonal pattern in Minnesota or elsewhere in the U.S. Outbreaks can happen at any time in places where people are close together, such as schools, college dorms, military barracks, and nursing homes.',
