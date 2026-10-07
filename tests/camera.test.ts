@@ -363,3 +363,54 @@ describe('camera follow', () => {
     expect(rig.dofAmount).toBeLessThan(0.01);
   });
 });
+
+describe('camera resize & panning', () => {
+  it('stays on the whole tank through a phone rotation, with the new home framing', () => {
+    const rig = makeRig(0.58); // portrait
+    rig.frame(tank, 2.15); // → landscape
+    rig.update(DT);
+    const ref = makeRig(2.15);
+    expect(rig.camera.position.x).toBeCloseTo(ref.camera.position.x, 6);
+    expect(rig.camera.position.y).toBeCloseTo(ref.camera.position.y, 6);
+    expect(rig.camera.position.z).toBeCloseTo(ref.camera.position.z, 6);
+    expectFrameOnGlass(rig);
+    // A zoomed-in view keeps its spot (clamped to the glass), recomposed at once.
+    rig.setZoom(4);
+    rig.panBy(1, 0);
+    run(rig, 1.5);
+    rig.frame(tank, 0.58);
+    rig.update(DT);
+    expect(rig.zoom).toBeCloseTo(4, 3);
+    expectFrameOnGlass(rig);
+  });
+
+  it('keeps a followed animal framed through a rotation, without a slow re-zoom', () => {
+    const rig = makeRig(0.58);
+    const s: FollowSubject = { pos: [0.05, 0.16, 0.02], lengthM: 0.04, forward: [0, 0, 1] };
+    rig.follow(s, { fill: 0.25 });
+    run(rig, 10);
+    rig.frame(tank, 2.15);
+    run(rig, 0.1);
+    const a = ndc(rig, new Vector3(s.pos[0] - 0.02, s.pos[1], s.pos[2]));
+    const c = ndc(rig, new Vector3(s.pos[0] + 0.02, s.pos[1], s.pos[2]));
+    expect((c.x - a.x) / 2).toBeCloseTo(0.25, 2);
+    expect(Math.abs((a.x + c.x) / 2)).toBeLessThan(0.05);
+    expectFrameOnGlass(rig);
+  });
+
+  it('pans what is in focus exactly with the finger (parallax for the rest)', () => {
+    const rig = makeRig(0.58);
+    rig.setZoom(4);
+    run(rig, 1.5);
+    for (const z of [0.1, -0.1]) {
+      rig.focusAt(z);
+      const p = new Vector3(rig.camera.position.x, 0.15, z);
+      const before = ndc(rig, p);
+      rig.panBy(-0.2, 0.1); // a drag right and down by 10 % / 5 % of the screen
+      run(rig, 1.5);
+      const after = ndc(rig, p);
+      expect(after.x - before.x).toBeCloseTo(0.2, 2);
+      expect(after.y - before.y).toBeCloseTo(-0.1, 2);
+    }
+  });
+});

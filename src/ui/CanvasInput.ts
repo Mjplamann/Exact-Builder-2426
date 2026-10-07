@@ -45,6 +45,15 @@ const TWO_FINGER_TAP_MS = 280;
 /** …and their centre and spread together drift less than this (px). */
 const TWO_FINGER_TAP_SLOP = 20;
 
+/**
+ * When an input event happened (ms, performance.now() time base). Taps are timed by their events,
+ * not by when a busy main thread got round to them.
+ */
+function at(e: Event): number {
+  const t = e.timeStamp;
+  return Number.isFinite(t) && t > 0 ? t : performance.now();
+}
+
 /** A Safari trackpad pinch (WebKit GestureEvent). */
 interface GestureLike extends UIEvent {
   scale: number;
@@ -98,7 +107,7 @@ export class CanvasInput {
     c.addEventListener('gestureend', () => (this.gesture = null));
     c.addEventListener('dblclick', (e) => {
       // Touch double-taps are handled in onUp; ignore the browser's duplicate.
-      if (performance.now() - this.lastTouchUp < 700) return;
+      if (at(e) - this.lastTouchUp < 700) return;
       this.onDouble(e.clientX, e.clientY);
     });
     c.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -122,18 +131,18 @@ export class CanvasInput {
 
   private onDown(e: PointerEvent): void {
     this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: e.pointerType });
-    if (e.pointerType !== 'mouse') this.lastTouchAt = performance.now();
+    if (e.pointerType !== 'mouse') this.lastTouchAt = at(e);
     this.glide.vx = this.glide.vy = 0;
     if (this.pointers.size === 2) {
       // Second finger: switch to pinch/pan; cancel any pending tap, swipe or item drag.
       if (this.down?.scapeDrag) this.scape.cancelDrag();
       this.down = null;
       this.panning = null;
-      this.startPinch();
+      this.startPinch(at(e));
       return;
     }
     if (e.button === 1 || e.button === 2) {
-      this.startPan(e.pointerId, e.clientX, e.clientY, false);
+      this.startPan(e.pointerId, e.clientX, e.clientY, false, at(e));
       return;
     }
     if (e.button !== 0) return;
@@ -149,7 +158,7 @@ export class CanvasInput {
         this.setCursor('grabbing');
       }
     }
-    this.down = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), button: e.button, scapeDrag };
+    this.down = { id: e.pointerId, x: e.clientX, y: e.clientY, t: at(e), button: e.button, scapeDrag };
   }
 
   private onMove(e: PointerEvent): void {
@@ -157,14 +166,14 @@ export class CanvasInput {
     if (p) {
       p.x = e.clientX;
       p.y = e.clientY;
-      if (e.pointerType !== 'mouse') this.lastTouchAt = performance.now();
+      if (e.pointerType !== 'mouse') this.lastTouchAt = at(e);
     }
     if (this.pinch && this.pointers.size >= 2) return this.movePinch();
     const pn = this.panning;
     if (pn && e.pointerId === pn.id) {
       const dx = e.clientX - pn.x;
       const dy = e.clientY - pn.y;
-      const now = performance.now();
+      const now = at(e);
       const dt = Math.max(1, now - pn.t) / 1000;
       // Smoothed release velocity (px/s) for the glide.
       const k = Math.min(1, dt / 0.06);
@@ -205,11 +214,11 @@ export class CanvasInput {
       if (e.pointerId !== pc.a && e.pointerId !== pc.b) return;
       if (this.pointers.size >= 2) {
         // A third finger was down: carry on with the remaining pair.
-        this.startPinch();
+        this.startPinch(at(e));
         return;
       }
       this.pinch = null;
-      if (performance.now() - pc.t0 < TWO_FINGER_TAP_MS && pc.travel < TWO_FINGER_TAP_SLOP) {
+      if (at(e) - pc.t0 < TWO_FINGER_TAP_MS && pc.travel < TWO_FINGER_TAP_SLOP) {
         // A quick two-finger tap: back to the whole tank.
         if (this.view.isClose()) this.view.reset();
         return;
@@ -217,7 +226,7 @@ export class CanvasInput {
       // One finger stays down: it keeps looking around (unless an animal is being followed — a
       // pinch only reframed it, and the lagging finger must not let go of it).
       const rest = this.pointers.entries().next().value;
-      if (rest && !this.host.app.world.follow) this.startPan(rest[0], rest[1].x, rest[1].y, true);
+      if (rest && !this.host.app.world.follow) this.startPan(rest[0], rest[1].x, rest[1].y, true, at(e));
       return;
     }
     const pn = this.panning;
@@ -225,7 +234,7 @@ export class CanvasInput {
       this.panning = null;
       this.setCursor('default');
       // Let a swipe coast to a stop — unless the finger rested before lifting.
-      if (pn.glide && performance.now() - pn.t < 90) {
+      if (pn.glide && at(e) - pn.t < 90) {
         const v = Math.hypot(pn.vx, pn.vy);
         const k = v > GLIDE_MAX_PX_S ? GLIDE_MAX_PX_S / v : 1;
         this.glide.vx = pn.vx * k;
@@ -243,11 +252,12 @@ export class CanvasInput {
       return;
     }
     const moved = Math.hypot(e.clientX - d.x, e.clientY - d.y);
-    if (moved > CLICK_SLOP || performance.now() - d.t > CLICK_MS) return;
+    if (moved > CLICK_SLOP || at(e) - d.t > CLICK_MS) return;
     this.click(e.clientX, e.clientY);
     if (e.pointerType !== 'mouse') {
-      // Manual double-tap (dblclick is unreliable on touch).
-      const now = performance.now();
+      // Manual double-tap (dblclick is unreliable on touch). Timed by the events themselves: the
+      // first tap opens the animal's card, and that work must not eat into the double-tap window.
+      const now = at(e);
       this.lastTouchUp = now;
       if (now - this.lastTap.t < DOUBLE_TAP_MS && Math.hypot(e.clientX - this.lastTap.x, e.clientY - this.lastTap.y) < 30) {
         this.onDouble(e.clientX, e.clientY);
@@ -379,7 +389,7 @@ export class CanvasInput {
   private onGesture(e: GestureLike, start: boolean): void {
     e.preventDefault();
     // On touch screens WebKit fires these alongside the pointers the pinch code already follows.
-    if (this.pointers.size || performance.now() - this.lastTouchAt < 600) return;
+    if (this.pointers.size || at(e) - this.lastTouchAt < 600) return;
     const s = e.scale > 0 ? e.scale : 1;
     if (start || this.gesture === null) {
       this.gesture = s;
@@ -395,12 +405,12 @@ export class CanvasInput {
     this.view.pan(dxPx, dyPx);
   }
 
-  private startPinch(): void {
+  private startPinch(now: number): void {
     const it = this.pointers.entries();
     const [a, pa] = it.next().value as [number, Pt];
     const [b, pb] = it.next().value as [number, Pt];
     // A pair that changes mid-gesture (a third finger) is no longer a tap.
-    const t0 = this.pinch ? -Infinity : performance.now();
+    const t0 = this.pinch ? -Infinity : now;
     this.pinch = { a, b, prev: { ax: pa.x, ay: pa.y, bx: pb.x, by: pb.y }, t0, travel: 0 };
   }
 
@@ -420,8 +430,12 @@ export class CanvasInput {
     cur.by = b.y;
     const m = pinchMove(p.prev, cur, this.pinchOut);
     p.travel += Math.abs(m.dx) + Math.abs(m.dy) + Math.abs(m.ds);
+    // Zoom about where the fingers' centre WAS, then carry that spot along with them: the first
+    // step anchors what was under the fingers when they landed, and every later step keeps that
+    // same spot under them (the camera moves the anchor with each pan) — browsers report each
+    // finger's move separately, so the centre jitters by half a step between events.
+    if (Math.abs(m.steps) > 1e-3) this.view.zoom(Math.max(-3, Math.min(3, m.steps)), m.cx - m.dx, m.cy - m.dy);
     if ((m.dx || m.dy) && !this.host.app.world.follow) this.pan(m.dx, m.dy);
-    if (Math.abs(m.steps) > 1e-3) this.view.zoom(Math.max(-3, Math.min(3, m.steps)), m.cx, m.cy);
     p.prev.ax = cur.ax;
     p.prev.ay = cur.ay;
     p.prev.bx = cur.bx;

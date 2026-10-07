@@ -372,6 +372,10 @@ export class CameraRig {
   /** (Re)compute the home framing for a tank and the current aspect. */
   frame(tank: TankState, aspect: number): void {
     const b = tankBounds(tank);
+    // A view resting on the whole tank stays on it through a resize or a phone's rotation (the
+    // new home framing may crop differently); a closer view keeps its spot, clamped to the glass.
+    const atHome = this.initialized && Math.abs(this.free.x) < 1e-6 && Math.abs(this.free.y - this.homeY) < 1e-6 && this.free.z < 1e-6;
+    const prevAspect = this.aspect;
     this.camera.aspect = aspect;
     this.camera.updateProjectionMatrix();
     this.aspect = aspect;
@@ -415,9 +419,29 @@ export class CameraRig {
       this.clampView(this.free);
       this.snap();
     } else {
+      if (atHome) this.free.set(0, cy, 0);
       this.clampView(this.free);
+      if (Math.abs(aspect / prevAspect - 1) > 0.02) this.reframeAfterResize();
     }
     this.applyProjection();
+  }
+
+  /**
+   * The screen changed shape (a phone turned, a window resized): the picture is recomposed at
+   * once — like a cut — rather than drifting there over seconds. A followed animal keeps its
+   * framing (fill of the new width); a free view lands on its (clamped) target. A framing
+   * transition already under way carries on by itself.
+   */
+  private reframeAfterResize(): void {
+    if (this.transDur > 0 && this.transT < this.transDur) return;
+    if (this.subject) {
+      this.followTargetFor(this.followTarget);
+      this.view.pos.copy(this.followTarget);
+    } else {
+      this.view.pos.copy(this.free);
+    }
+    this.view.vel.set(0, 0, 0);
+    this.aim.snap(this.aimTarget.set(0, 0, 0));
   }
 
   // ------------------------------------------------------------------------------------------
@@ -506,14 +530,16 @@ export class CameraRig {
   }
 
   /**
-   * Pan by (dx, dy) fractions of the visible half-width/height (positive = view moves right/up).
-   * Clamped so the view never leaves the front glass. Ignored while following (the App releases
-   * the animal first).
+   * Pan by (dx, dy) fractions of the visible half-width/height (positive = view moves right/up),
+   * measured at the depth the lens is focused on: what is in focus moves exactly with the finger
+   * (nearer things a little faster, the back of the tank slower — parallax). Clamped so the view
+   * never leaves the front glass. Ignored while following (the App releases the animal first).
    */
   panBy(dx: number, dy: number): void {
     if (this.subject || !(Number.isFinite(dx) && Number.isFinite(dy))) return;
     const z = Math.exp(this.free.z);
-    const visH = this.homeH / z;
+    const dS = Math.max(0, this.frontZ - this.freeFocusZ) / this.n;
+    const visH = (this.homeH / z) * (1 + dS / this.distAt(z));
     this.free.x += MathUtils.clamp(dx, -1, 1) * visH * this.aspect * 0.5;
     this.free.y += MathUtils.clamp(dy, -1, 1) * visH * 0.5;
     this.clampView(this.free);

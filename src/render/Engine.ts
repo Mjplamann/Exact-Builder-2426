@@ -65,6 +65,9 @@ export const QUALITY_PRESETS: Record<Quality, QualityPreset> = {
   ultra: { maxPixels: 6e6, dpr: 3, shadows: true, shadowMap: 4096, post: true, msaa: 4, bloom: true, caustics: 1024, motes: 600, rays: 32, reflection: 0.75, substrateTexture: 512, frontReflections: true, shadowTaps: [12, 16], dofTaps: 28 },
 };
 
+/** A zoom gesture keeps its anchor while input keeps coming within this long (ms). */
+const ANCHOR_HOLD_MS = 400;
+
 /** Moonlight LEDs (linear), for the veil color. */
 const MOON = new Color(0.1, 0.24, 1.0);
 
@@ -122,7 +125,7 @@ export class Engine {
   private shadowScanTimer = 0;
   /** The post chain has captured at least one frame (back-glass reflection source). */
   private ghostReady = false;
-  private builtFor: { size: TankSize; substrate: SubstrateKind; background: BackgroundKind; depthF: number; depthB: number; seed: number } | null = null;
+  private builtFor: { id: string; size: TankSize; substrate: SubstrateKind; background: BackgroundKind; depthF: number; depthB: number; seed: number } | null = null;
   private size = new Vector2();
   private tmpColor = new Color();
   private tmpV = new Vector3();
@@ -191,10 +194,17 @@ export class Engine {
     this.lighting.fit(t);
     this.bubbles.clear();
     this.ghostReady = false; // the last frame showed another tank
-    this.builtFor = { size: { ...t.size }, substrate: t.substrate, background: t.background, depthF: t.substrateDepthFrontCm, depthB: t.substrateDepthBackCm, seed: t.seed };
-    if (sizeChanged) this.rig.resetView();
+    this.builtFor = { id: t.id, size: { ...t.size }, substrate: t.substrate, background: t.background, depthF: t.substrateDepthFrontCm, depthB: t.substrateDepthBackCm, seed: t.seed };
+    // Another tank (or a resized one) opens on its whole-tank view: a cut, like walking up to it,
+    // never a glide from wherever the last tank's close-up was.
+    const otherTank = sizeChanged || prev?.id !== t.id;
+    if (otherTank) {
+      this.rig.resetView();
+      this.anchor.valid = false;
+      this.refocusT = -1;
+    }
     this.frameCamera();
-    if (sizeChanged) this.rig.snap();
+    if (otherTank) this.rig.snap();
   }
 
   private buildSubstrate(): void {
@@ -472,15 +482,18 @@ export class Engine {
     // One pick per gesture: while the pointer stays put, the anchored point stays under it.
     const a = this.anchor;
     const now = performance.now();
-    if (!a.valid || now - a.time > 400 || Math.hypot(anchorClientX - a.x, anchorClientY - a.y) > 8) {
+    if (!a.valid || now - a.time > ANCHOR_HOLD_MS || Math.hypot(anchorClientX - a.x, anchorClientY - a.y) > 8) {
       const picked = pickAnchor?.(anchorClientX, anchorClientY) ?? null;
       a.valid = picked ? !!a.point.copy(picked) : this.anchorInTank(this.rayFromScreen(anchorClientX, anchorClientY), a.point);
       a.x = anchorClientX;
       a.y = anchorClientY;
     }
     a.time = now;
-    if (a.valid) this.rig.zoomBy(steps, nx, ny, a.point);
-    else {
+    if (a.valid) {
+      // The lens focuses on the anchor (CameraRig.zoomBy); no centre autofocus over it.
+      this.rig.zoomBy(steps, nx, ny, a.point);
+      this.refocusT = -1;
+    } else {
       this.rig.zoomBy(steps);
       this.refocusSoon();
     }
@@ -556,7 +569,20 @@ export class Engine {
 
   /** Pan by fractions of the visible half-width/height (positive = view moves right/up). Ignored while following. */
   panBy(dx: number, dy: number): void {
+    if (this.rig.isFollowing || !(Number.isFinite(dx) && Number.isFinite(dy))) return;
     this.rig.panBy(dx, dy);
+    const a = this.anchor;
+    if (a.valid && performance.now() - a.time < ANCHOR_HOLD_MS) {
+      // Part of a pinch (or a drag right after a zoom): the anchored point travels with the
+      // fingers, so the next zoom step keeps it under them instead of picking something new, and
+      // the lens stays on it.
+      const rect = this.canvas.getBoundingClientRect();
+      a.x -= MathUtils.clamp(dx, -1, 1) * rect.width * 0.5;
+      a.y += MathUtils.clamp(dy, -1, 1) * rect.height * 0.5;
+      a.time = performance.now();
+      this.refocusT = -1;
+      return;
+    }
     this.refocusSoon();
   }
 
