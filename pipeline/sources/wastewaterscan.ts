@@ -408,9 +408,9 @@ export function describeAssays(assays: Record<string, AssayRange>, current: stri
 
 // ───────────────────────── Geography ─────────────────────────
 
-type CountyFeatures = Map<string, Feature>
+export type CountyFeatures = Map<string, Feature>
 
-async function loadCountyFeatures(rootDir: string): Promise<CountyFeatures> {
+export async function loadCountyFeatures(rootDir: string): Promise<CountyFeatures> {
   const file = path.join(rootDir, 'public', 'geo', 'mn-counties.geojson')
   const fc = JSON.parse(await readFile(file, 'utf8')) as FeatureCollection
   const m: CountyFeatures = new Map()
@@ -541,7 +541,14 @@ export function buildPlantSeries(
     if (NWSS_IDS[uid]) attrs.nwssId = NWSS_IDS[uid]
     // Publisher's classification of the latest sample.
     const asOf = toWeekEnding(d.latest.date) ?? undefined
-    const cat = mapActivityCategory(d.latest.category)
+    let cat = mapActivityCategory(d.latest.category)
+    let by = 'WastewaterSCAN'
+    if (!cat && spec.rare && asOf && d.detectWeeks.get(asOf) === false) {
+      // WastewaterSCAN left the category "not calculated" (new assay or short history), but no
+      // sample that week had any gene copies. That is a plain non-detection, not a threshold.
+      cat = { level: 'minimal', label: 'Not detected this week' }
+      by = 'WastewaterSCAN sample results'
+    }
     const verdict = trendFromCategory(categories?.[d.latest.assay])
     const verdictCurrent = verdict && (!verdict.lastSampleDate || toWeekEnding(verdict.lastSampleDate) === asOf)
     if (verdict && verdictCurrent) attrs.wwscanTrend = verdict.text
@@ -552,7 +559,7 @@ export function buildPlantSeries(
         ...(trend ? { trend } : {}),
         label: [cat?.label, trend ? verdict!.text : undefined].filter(Boolean).join('; '),
         asOf,
-        by: 'WastewaterSCAN',
+        by,
       }
     }
     s.attrs = attrs
@@ -627,7 +634,7 @@ export function buildDetectionSeries(acc: DetectionAccumulator, plantCount: numb
       points,
       provisionalFrom: provisionalFor(lastWeek, opts.now),
       note:
-        `Number of Minnesota WastewaterSCAN plants where at least one sample that week had any ${name} genetic material (gene copies > 0). ` +
+        `Number of Minnesota WastewaterSCAN plants where at least one sample that week detected this target (gene copies > 0; assays: ${[...(acc.assays.get(pathogen) ?? [])].sort().join(', ')}). ` +
         `Weeks are included only when at least one plant was tested. The plants are Rochester, Mankato, Red Wing and St. Cloud, and none are in the Twin Cities. ` +
         `This is not a case count: one infected person or a visitor can cause a detection.` +
         (pathogen === 'h5n1' ? ` ${H5_NOTE}` : ''),

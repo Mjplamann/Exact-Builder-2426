@@ -494,12 +494,13 @@ export const cdcNndss: SourceModule = {
     description:
       "Provisional weekly counts of nationally notifiable diseases that the Minnesota Department of Health reports to CDC, from CDC's weekly NNDSS tables: whooping cough, measles, mpox, hepatitis A, West Nile virus and other reportable infections, with year-to-date totals compared with the same week last year. Counts are by the week CDC published them, not when people got sick, and they are revised later. Minnesota's current-week cells are often blank because cases are credited to earlier weeks, and some diseases (such as Salmonella, Campylobacter and E. coli STEC) are blank all year and only appear after year-end. A blank is not zero. These are reported cases only, so they undercount infections, and they say nothing about counties.",
     geography: 'Minnesota statewide',
-    cadence: 'Weekly (CDC tables published Wednesday–Thursday for the prior MMWR week)',
+    cadence: 'Weekly (CDC posts each table midweek for the MMWR week ending the previous Saturday)',
     attribution: "CDC National Notifiable Diseases Surveillance System (NNDSS) weekly tables via data.cdc.gov (dataset x9gk-5huc); mirror: PopHIVE/Ingest (Yale School of Public Health)",
   },
   timeoutMs: 6 * 60_000,
   async run(ctx): Promise<SourceResult> {
     const errors: string[] = []
+    const info: string[] = []
     const diagnostics: Record<string, unknown> = { datasetId: DATASET_ID }
     let series: Series[] = []
     try {
@@ -550,6 +551,8 @@ export const cdcNndss: SourceModule = {
         skipped: built.skipped,
         unmappedWatch,
       })
+      info.push(`Latest CDC table: ${latest.year} week ${latest.week} (week ending ${latest.weekEnding}).`)
+      if (loaded.via === 'pophive-mirror') info.push('Served from the PopHIVE GitHub mirror because data.cdc.gov was unavailable.')
       ctx.log.info(
         `${loaded.via}: ${loaded.rows.length} MN rows, ${allLabels.size} labels, latest table ${latest.year} week ${latest.week} (${latest.weekEnding}); ${series.length} series`,
       )
@@ -560,7 +563,10 @@ export const cdcNndss: SourceModule = {
     }
     return {
       datasets: [{ source: SOURCE, dataset: DATASET, series }],
-      message: errors.length ? `${series.length ? 'Partial refresh' : 'Refresh failed'}: ${errors.join('; ')}` : undefined,
+      message:
+        [errors.length ? `${series.length ? 'Partial refresh' : 'Refresh failed'}: ${errors.join('; ')}.` : '', ...info]
+          .filter(Boolean)
+          .join(' ') || undefined,
       diagnostics,
     }
   },

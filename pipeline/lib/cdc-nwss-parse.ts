@@ -176,6 +176,48 @@ export function countyCentroids(geojson: CountyFeatureCollection): CentroidMap {
 
 const round4 = (v: number) => Math.round(v * 1e4) / 1e4
 
+export type AdjacencyMap = Map<string, Set<string>>
+
+/** County adjacency from shared boundary vertices in the county GeoJSON. */
+export function countyAdjacency(geojson: CountyFeatureCollection): AdjacencyMap {
+  const byVertex = new Map<string, Set<string>>()
+  const rings = (g: { type?: string; coordinates?: unknown }): number[][][] =>
+    g?.type === 'Polygon' ? (g.coordinates as number[][][]) : g?.type === 'MultiPolygon' ? (g.coordinates as number[][][][]).flat() : []
+  for (const f of geojson.features ?? []) {
+    const fips = String(f.properties?.fips ?? f.properties?.GEOID ?? '')
+    for (const ring of rings(f.geometry as { type?: string; coordinates?: unknown })) {
+      for (const [x, y] of ring) {
+        const k = `${x.toFixed(3)},${y.toFixed(3)}`
+        const set = byVertex.get(k) ?? new Set<string>()
+        set.add(fips)
+        byVertex.set(k, set)
+      }
+    }
+  }
+  const adj: AdjacencyMap = new Map()
+  for (const set of byVertex.values()) {
+    if (set.size < 2) continue
+    for (const a of set) for (const b of set) if (a !== b) (adj.get(a) ?? adj.set(a, new Set()).get(a)!).add(b)
+  }
+  return adj
+}
+
+/** True when the counties form one contiguous block. */
+function contiguous(fips: string[], adj: AdjacencyMap): boolean {
+  if (fips.length < 2) return true
+  const seen = new Set([fips[0]])
+  const queue = [fips[0]]
+  while (queue.length) {
+    const cur = queue.pop()!
+    for (const n of adj.get(cur) ?? []) {
+      if (!fips.includes(n) || seen.has(n)) continue
+      seen.add(n)
+      queue.push(n)
+    }
+  }
+  return seen.size === fips.length
+}
+
 /** Approximate great-circle distance in km. */
 function distanceKm(a: [number, number], b: [number, number]): number {
   const rad = Math.PI / 180
@@ -185,13 +227,15 @@ function distanceKm(a: [number, number], b: [number, number]): number {
 }
 
 /**
- * Population-weighted centroid of the served counties' centroids. When the listed counties are far
- * apart (e.g. non-adjacent pairs, which suggests a data-entry issue), use the most populous county's
- * centroid instead of a meaningless midpoint. Returns undefined when no county is known.
+ * Population-weighted centroid of the served counties' centroids. When the listed counties are not
+ * contiguous (e.g. 'Dodge, Douglas', which suggests a data-entry issue) — or, without adjacency data,
+ * far apart — use the most populous county's centroid instead of a meaningless midpoint.
+ * Returns undefined when no county is known.
  */
 export function servedCentroid(
   fips: string[],
   centroids: CentroidMap,
+  adjacency?: AdjacencyMap,
 ): { coord: [number, number]; method: 'weighted' | 'largest-county' } | undefined {
   const pts = fips
     .map((f) => ({ c: centroids.get(f), w: MN_COUNTY_BY_FIPS[f]?.pop.total ?? 1 }))
@@ -202,8 +246,10 @@ export function servedCentroid(
     round4(pts.reduce((s, p) => s + p.c[0] * p.w, 0) / W),
     round4(pts.reduce((s, p) => s + p.c[1] * p.w, 0) / W),
   ]
-  const spread = Math.max(...pts.map((p) => distanceKm(p.c, coord)))
-  if (pts.length > 1 && spread > 100) {
+  const scattered = adjacency?.size
+    ? !contiguous(fips.filter((f) => centroids.has(f)), adjacency)
+    : Math.max(...pts.map((p) => distanceKm(p.c, coord))) > 100
+  if (pts.length > 1 && scattered) {
     const largest = pts.reduce((a, b) => (b.w > a.w ? b : a))
     return { coord: largest.c, method: 'largest-county' }
   }
@@ -295,6 +341,7 @@ export interface SiteLocation {
 export interface WvalBuildOptions {
   historyStart: string
   centroids: CentroidMap
+  adjacency?: AdjacencyMap
   /** Optional per-site coordinates (e.g. CDC's jittered site map), keyed 'ID:nnnn'. */
   siteCoords?: Map<string, SiteLocation>
   /** Pathogens whose cut-points passed checkCutpoints (others get no thresholds). */
@@ -334,7 +381,7 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
     if (m.population != null && m.population > 0) geo.population = Math.round(m.population)
     const known = KNOWN_SITES[site]?.coord
     const fromMap = opts.siteCoords?.get(site)
-    const centroid = servedCentroid(fips, opts.centroids)
+    const centroid = servedCentroid(fips, opts.centroids, opts.adjacency)
     if (known) {
       geo.coord = known
       locationBasis[site] = 'plant location (WastewaterSCAN)'
@@ -416,6 +463,8 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
     if (!points.length) continue
     const latest = points[points.length - 1][0]
     const n = byWeek.get(latest)!.length
+    const first = points[0][0]
+    const nFirst = byWeek.get(first)!.length
     const s = makeSeries({
       source: SOURCE_ID,
       dataset: 'nwss-wval',
@@ -426,7 +475,7 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
       points,
       note:
         `Derived by MN Pulse from CDC NWSS site data: each week's median Wastewater Viral Activity Level across the Minnesota sites reporting ${PATHOGEN_NAME[pathogen]} that week ` +
-        `(CDC also uses the median of site levels for state levels, but CDC's own state value may differ slightly). Weeks with fewer than ${MIN_STATE_SITES} reporting sites are omitted.` +
+        `(CDC also uses the median of site levels for state levels, but CDC's own state value may differ slightly). Weeks with fewer than ${MIN_STATE_SITES} reporting sites are omitted; ${nFirst} sites reported in the first week shown (${first}) and ${n} in the latest, so the mix of sites behind the median changes over time.` +
         (pathogen === 'covid'
           ? ''
           : ' Many MDH-tested sites report exactly 1 for influenza A and RSV for long stretches, which can hold the median near 1 outside peaks.'),
@@ -488,6 +537,34 @@ export function parseStateMap(text: string, state = 'Minnesota'): OfficialStateW
     })
   }
   return out
+}
+
+/**
+ * Attach CDC's official Minnesota category to the derived statewide series when it refers to the
+ * same week as the series' latest point. Returns warnings for categories that could not be attached.
+ */
+export function attachOfficialState(state: Series[], official: OfficialStateWval[]): string[] {
+  const warnings: string[] = []
+  for (const o of official) {
+    const s = state.find((x) => x.pathogen === o.pathogen)
+    if (!s || !o.week) continue
+    const last = s.points[s.points.length - 1]?.[0]
+    if (!o.level) {
+      warnings.push(`CDC state WVAL category for ${o.pathogen} not recognized: "${o.category}"`)
+      continue
+    }
+    if (o.week !== last) {
+      warnings.push(`CDC state WVAL for ${o.pathogen} is for week ${o.week}, derived series ends ${last}; official level not attached`)
+      continue
+    }
+    s.official = { level: o.level, label: o.category, asOf: o.week, by: 'CDC NWSS WVAL (official Minnesota level)' }
+    s.attrs = {
+      ...s.attrs,
+      ...(o.value != null ? { cdcStateWval: String(o.value) } : {}),
+      ...(o.sites != null ? { cdcSites: String(o.sites) } : {}),
+    }
+  }
+  return warnings
 }
 
 /** Parse NWSSWVALSiteMap.json into jittered site coordinates for Minnesota sites. */
@@ -560,7 +637,7 @@ export function buildDetectionSeries(raw: Record<string, string>[], spec: Detect
   let skippedTarget = 0
   let maxSample = ''
   let lastDetection = ''
-  let lastDetectionSite = ''
+  const lastDetectionSites = new Set<string>()
   let firstSample = ''
   for (const r of raw) {
     const target = (r.pcr_target ?? '').trim().toLowerCase()
@@ -585,8 +662,9 @@ export function buildDetectionSeries(raw: Record<string, string>[], spec: Detect
     if (date > maxSample) maxSample = date
     if (!firstSample || date < firstSample) firstSample = date
     if (detect === 'yes' && date >= lastDetection) {
+      if (date > lastDetection) lastDetectionSites.clear()
       lastDetection = date
-      lastDetectionSite = site
+      lastDetectionSites.add(site)
     }
     if (week < historyStart) continue
     const w = weeks.get(week) ?? { tested: new Set(), detected: new Set() }
@@ -621,13 +699,14 @@ export function buildDetectionSeries(raw: Record<string, string>[], spec: Detect
     provisionalFrom: latest > maxSample ? latest : undefined,
     note: spec.note,
   })
+  const label = (id: string) => (siteCounties.get(id) ? `${siteCounties.get(id)} (${id})` : id)
   const attrs: Record<string, string> = {
     sitesTested: String(lw.tested.size),
     lastDetection: lastDetection
-      ? `${lastDetection} (${lastDetectionSite}${siteCounties.get(lastDetectionSite) ? `, ${siteCounties.get(lastDetectionSite)}` : ''})`
+      ? `${lastDetection} — ${[...lastDetectionSites].sort().map(label).join('; ')}`
       : `none since testing began ${firstSample}`,
   }
-  if (lw.detected.size) attrs.detectedAt = [...lw.detected].map((id) => siteCounties.get(id) || id).join('; ')
+  if (lw.detected.size) attrs.detectedAt = [...lw.detected].sort().map(label).join('; ')
   s.attrs = attrs
   return { series: s, diag }
 }

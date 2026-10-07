@@ -1,5 +1,5 @@
 // Thin React wrapper around Apache ECharts (modular build) with theme-token awareness.
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import * as echarts from 'echarts/core'
 import { BarChart, LineChart, ScatterChart, HeatmapChart } from 'echarts/charts'
 import {
@@ -14,10 +14,8 @@ echarts.use([
   MarkLineComponent, MarkAreaComponent, VisualMapComponent, AriaComponent, SVGRenderer,
 ])
 
-/** Read a CSS custom property (theme token) from :root. */
-export function cssVar(name: string): string {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-}
+export { cssVar } from './chartTheme'
+export type EChartsInstance = echarts.ECharts
 
 export function EChart({
   option,
@@ -25,12 +23,25 @@ export function EChart({
   className = '',
   ariaLabel,
   onEvents,
+  onKeyDown,
+  onFocus,
+  onBlur,
+  focusable = false,
+  title,
 }: {
   option: EChartsCoreOption
   height?: number
   className?: string
   ariaLabel: string
   onEvents?: Record<string, (params: unknown) => void>
+  /** Keyboard handler with access to the chart instance (e.g. arrow keys move the tooltip). */
+  onKeyDown?: (e: ReactKeyboardEvent<HTMLDivElement>, chart: echarts.ECharts) => void
+  onFocus?: (chart: echarts.ECharts) => void
+  onBlur?: (chart: echarts.ECharts) => void
+  /** Put the chart in the tab order (pair with onKeyDown). */
+  focusable?: boolean
+  /** Native tooltip hint, e.g. keyboard instructions. */
+  title?: string
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const chart = useRef<echarts.ECharts | null>(null)
@@ -60,5 +71,18 @@ export function EChart({
     }
   }, [onEvents])
 
-  return <div ref={ref} role="img" aria-label={ariaLabel} className={className} style={{ height, width: '100%' }} />
+  return (
+    <div
+      ref={ref}
+      role="img"
+      aria-label={ariaLabel}
+      title={title}
+      tabIndex={focusable ? 0 : undefined}
+      onKeyDown={onKeyDown ? (e) => chart.current && onKeyDown(e, chart.current) : undefined}
+      onFocus={onFocus ? () => chart.current && onFocus(chart.current) : undefined}
+      onBlur={onBlur ? () => chart.current && onBlur(chart.current) : undefined}
+      className={`rounded-md ${className}`}
+      style={{ height, width: '100%' }}
+    />
+  )
 }

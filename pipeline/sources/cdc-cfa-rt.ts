@@ -15,10 +15,12 @@
 //     county rows can be identified unambiguously.
 //
 // Weekly series construction (both datasets): for every estimate date keep the value from the
-// NEWEST model run that covered it (the same newest-vintage rule cdc-hubs uses for target data), then
+// NEWEST model run that estimated it (the newest-vintage rule cdc-hubs uses for target data; a later
+// run that is 'Not Estimated' across the board does not erase an earlier published estimate), then
 // take, for each MMWR week, the estimate for the last estimated day of that week — the Saturday for
 // complete weeks, the model-run date for the current partial week. Every point is a single value as
-// published by CDC; nothing is averaged or interpolated. 'Not Estimated' days become null points.
+// published by CDC; nothing is averaged or interpolated. Days no run estimated become null points.
+// `official` = the epidemic-trend category of the run behind the newest non-null point.
 import type { GeoRef, PathogenId, Point, Series, TrendDirection } from '../../shared/types.ts'
 import { addDays, weekEndingSaturday } from '../../shared/mmwr.ts'
 import { MN_COUNTY_BY_FIPS, countyByName } from '../../shared/geo/mnCounties.ts'
@@ -167,7 +169,21 @@ export function parseStateRows(rows: Record<string, string>[]): { estimates: RtE
 /** For two rows from the same run and date, prefer the 95% interval when several are published. */
 const preferInterval = (a: RtEstimate, b: RtEstimate) => a.intervalWidth === 0.95 && b.intervalWidth !== 0.95
 
-/** Keep, for every (location, pathogen, date), the estimate from the newest model run. Sorted by date. */
+/** Does `a` beat `b` for the same date: an actual estimate first, then the newer run, then the 95% interval. */
+function better(a: RtEstimate, b: RtEstimate): boolean {
+  const av = a.median != null
+  const bv = b.median != null
+  if (av !== bv) return av
+  if (a.asOf !== b.asOf) return a.asOf > b.asOf
+  return preferInterval(a, b)
+}
+
+/**
+ * Keep, for every (location, pathogen, date), the estimate from the newest model run that produced
+ * one. Some weekly runs are 'Not Estimated' across the board (e.g. MN runs of 2026-05-26 and
+ * 2026-09-22, which blanked COVID-19 between two estimated runs); such blanks do not erase the
+ * previous run's published estimate. A date only becomes null when no run estimated it. Sorted by date.
+ */
 export function newestPerDate(estimates: RtEstimate[]): Map<string, RtEstimate[]> {
   const best = new Map<string, Map<string, RtEstimate>>()
   for (const e of estimates) {
@@ -175,20 +191,36 @@ export function newestPerDate(estimates: RtEstimate[]): Map<string, RtEstimate[]
     let m = best.get(key)
     if (!m) best.set(key, (m = new Map()))
     const prev = m.get(e.date)
-    if (!prev || e.asOf > prev.asOf || (e.asOf === prev.asOf && preferInterval(e, prev))) m.set(e.date, e)
+    if (!prev || better(e, prev)) m.set(e.date, e)
   }
   const out = new Map<string, RtEstimate[]>()
   for (const [key, m] of best) out.set(key, [...m.values()].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)))
   return out
 }
 
-/** For each MMWR week (keyed by its Saturday), the estimate for the last estimated day of that week. */
+/** The newest model run per (location, pathogen) and its category — reported when it published no estimate. */
+export function newestRuns(estimates: RtEstimate[]): Map<string, { asOf: string; category: string }> {
+  const out = new Map<string, { asOf: string; category: string }>()
+  for (const e of estimates) {
+    const key = `${e.loc}|${e.pathogen}`
+    const prev = out.get(key)
+    if (!prev || e.asOf > prev.asOf) out.set(key, { asOf: e.asOf, category: e.category })
+  }
+  return out
+}
+
+/**
+ * For each MMWR week (keyed by its Saturday), the estimate for the last day of that week that has
+ * one; the week is null only when no day in it was estimated.
+ */
 export function weeklyLast(daily: RtEstimate[]): { week: string; e: RtEstimate }[] {
   const byWeek = new Map<string, RtEstimate>()
   for (const e of daily) {
     const wk = weekEndingSaturday(e.date)
     const prev = byWeek.get(wk)
-    if (!prev || e.date > prev.date) byWeek.set(wk, e)
+    const ev = e.median != null
+    const pv = prev?.median != null
+    if (!prev || (ev && !pv) || (ev === pv && e.date > prev.date)) byWeek.set(wk, e)
   }
   return [...byWeek.entries()].sort(([a], [b]) => (a < b ? -1 : 1)).map(([week, e]) => ({ week, e }))
 }
@@ -202,19 +234,24 @@ export interface BuildOptions {
   note: string
   /** Prefix for the provenance attribute, e.g. "data.cdc.gov 5dqz-y4ea". */
   provenance: string
+  /** Newest model run for this location/pathogen (from `newestRuns`), to flag a newer blank run. */
+  newestRun?: { asOf: string; category: string }
 }
 
 /**
- * Build one weekly Rt series from newest-per-date daily estimates (sorted ascending), with CDC's
- * latest epidemic-trend category as `official`.
+ * Build one weekly Rt series from newest-per-date daily estimates (sorted ascending). `official`
+ * is CDC's epidemic-trend category from the model run behind the latest estimated day, so the
+ * label always describes the newest value shown.
  */
 export function buildRtSeries(daily: RtEstimate[], opts: BuildOptions): Series | null {
   const kept = daily.filter((e) => weekEndingSaturday(e.date) >= opts.historyStart)
   if (!kept.length) return null
   const weeks = weeklyLast(kept)
   const points: Point[] = weeks.map(({ week, e }) => [week, e.median == null ? null : roundValue(e.median, 'rt')])
-  const last = kept[kept.length - 1]
+  const valued = kept.filter((e) => e.median != null)
+  const last = valued.length ? valued[valued.length - 1] : kept[kept.length - 1]
   const lastWeek = weekEndingSaturday(last.date)
+  const finalWeek = points[points.length - 1][0]
   // Each weekly run re-estimates its whole window except the first week of the previous window.
   const runStart = kept.filter((e) => e.asOf === last.asOf).reduce((m, e) => (e.date < m ? e.date : m), last.date)
   const nextRevised = weekEndingSaturday(addDays(runStart, 7))
@@ -227,7 +264,7 @@ export function buildRtSeries(daily: RtEstimate[], opts: BuildOptions): Series |
     geo: opts.geo,
     label: `${NAME_OF[pathogen] ?? pathogen} — estimated Rt (CDC CFA)`,
     points,
-    provisionalFrom: nextRevised <= lastWeek ? nextRevised : lastWeek,
+    provisionalFrom: nextRevised <= finalWeek ? nextRevised : finalWeek,
     note: opts.note,
   })
   if (last.category) {
@@ -235,6 +272,10 @@ export function buildRtSeries(daily: RtEstimate[], opts: BuildOptions): Series |
     s.official = { ...(trend ? { trend } : {}), label: officialLabel(last.category, last.pGrowing), asOf: lastWeek, by: BY }
   }
   const attrs: Record<string, string> = { modelRun: last.asOf, estimateDate: last.date, data: opts.provenance }
+  if (opts.newestRun && opts.newestRun.asOf > last.asOf) {
+    attrs.newestRun = opts.newestRun.asOf
+    attrs.newestRunCategory = opts.newestRun.category || '(blank)'
+  }
   if (last.category) attrs.category = last.category
   if (last.pGrowing != null) attrs.pGrowing = r3(last.pGrowing)
   if (last.lower != null) attrs.lower = r3(last.lower)
@@ -488,9 +529,9 @@ export function parseAhfsRows(rows: Record<string, unknown>[], s: AhfsSchema): {
 const STATE_NOTE =
   "CDC's estimate of the effective reproduction number (Rt) from daily emergency department visits (NSSP). " +
   'Rt above 1 means infections are likely growing; below 1, likely declining. It shows the direction of spread, not how much illness there is. ' +
-  'Each week shows the estimate for its last day (the newest point is the latest model-run date), taken from the newest weekly model run covering that day; ' +
+  'Each week shows the estimate for its last day (the newest point is the latest model-run date), from the newest weekly model run that estimated that day; ' +
   'recent weeks are nowcast-adjusted and revised weekly. CDC changed methods on 2026-06-01 (EpiNow2 → spatially pooled HGAM). ' +
-  'Blank weeks: CDC did not estimate Rt (too few visits).'
+  'Blank weeks: no CDC run estimated Rt (e.g. too few visits off-season).'
 
 const COUNTY_NOTE =
   'CDC estimates Rt for health service areas (HSAs, groups of neighboring counties); every county in an HSA shows the same value. ' +
@@ -517,6 +558,7 @@ async function loadState(historyStart: string, now: string, log: Logger): Promis
   const latestRun = runs[runs.length - 1]
   const series: Series[] = []
   const perDisease: Record<string, unknown> = {}
+  const newest = newestRuns(estimates)
   for (const [key, daily] of newestPerDate(estimates)) {
     const s = buildRtSeries(daily, {
       dataset: STATE_DATASET,
@@ -524,6 +566,7 @@ async function loadState(historyStart: string, now: string, log: Logger): Promis
       historyStart,
       note: STATE_NOTE,
       provenance: `data.cdc.gov ${STATE_ID}${res.via === 'pophive-mirror' ? ' (PopHIVE mirror)' : ''}`,
+      newestRun: newest.get(key),
     })
     if (!s) continue
     const cat = s.attrs?.category ?? ''
@@ -534,6 +577,7 @@ async function loadState(historyStart: string, now: string, log: Logger): Promis
       latestRun: s.attrs?.modelRun,
       lastEstimateDate: s.attrs?.estimateDate,
       category: cat,
+      newestRunCategory: s.attrs?.newestRunCategory,
       pGrowing: s.attrs?.pGrowing,
       weeks: s.points.length,
       nullWeeks: s.points.filter((p) => p[1] == null).length,
@@ -612,7 +656,8 @@ async function loadLocal(historyStart: string, log: Logger): Promise<LocalLoad> 
     return { series: [], skipped, diagnostics: { ...diagnostics, status: 'skipped', reason: skipped } }
   }
   const series: Series[] = []
-  for (const daily of newestPerDate(estimates).values()) {
+  const newest = newestRuns(estimates)
+  for (const [key, daily] of newestPerDate(estimates)) {
     const fips = daily[0].loc
     const county = MN_COUNTY_BY_FIPS[fips]
     const built = buildRtSeries(daily, {
@@ -621,6 +666,7 @@ async function loadLocal(historyStart: string, log: Logger): Promise<LocalLoad> 
       historyStart,
       note: COUNTY_NOTE,
       provenance: `data.cdc.gov ${LOCAL_ID}`,
+      newestRun: newest.get(key),
     })
     if (built) series.push(built)
   }

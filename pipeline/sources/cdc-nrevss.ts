@@ -179,7 +179,9 @@ function buildSeries(
       : `NREVSS laboratories in ${WHERE[geo]}`
   const method = movingAverage
     ? 'Values are CDC’s centered 3-week moving average (the latest week averages only the current and previous week).'
-    : 'Weekly percent of NAAT (PCR) tests positive.'
+    : from === 'seuz-s2cv'
+      ? 'Weekly percent of tests positive.'
+      : 'Weekly percent of NAAT (PCR) tests positive.'
   const extra =
     pathogen === 'influenza'
       ? ' CDC publishes influenza positivity on data.cdc.gov for the U.S. only (no HHS-region or state series).'
@@ -201,7 +203,12 @@ function buildSeries(
   const attrs: Record<string, string> = { dataset: from, method: movingAverage ? 'centered 3-week moving average' : 'weekly % positive' }
   if (latest?.posted) attrs.posted = latest.posted.slice(0, 10)
   if (geo === 'MN' && latest) attrs.field = latest.field
-  if (latest?.tests != null) attrs.tests = `${Math.round(latest.tests).toLocaleString('en-US')} tests in week ending ${latest.week}`
+  if (latest?.tests != null) {
+    const n = Math.round(latest.tests).toLocaleString('en-US')
+    attrs.tests = movingAverage
+      ? `~${n} tests/week (3-week average) around ${latest.week}`
+      : `${n} tests in week ending ${latest.week}`
+  }
   attrs.link = DATASET_LINK[from] ?? ''
   series.attrs = attrs
   return { series, latest }

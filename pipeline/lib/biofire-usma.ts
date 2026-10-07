@@ -116,6 +116,9 @@ export function reportNumber(name: string): number | undefined {
 
 // ── PDF text ──
 
+/** Row separator between pages (table context never carries across pages). */
+export const PAGE_BREAK = '\f'
+
 export interface PdfText {
   pages: number
   /** Reading-order text (pdf.js content order), one string per page. */
@@ -166,7 +169,7 @@ export async function pdfToText(buf: Uint8Array): Promise<PdfText> {
   const rows: string[] = []
   for (const page of items) {
     text.push(page.map((i) => i.str + (i.hasEOL ? '\n' : '')).join('').replace(/[^\S\n]+/g, ' '))
-    rows.push(...itemsToRows(page))
+    rows.push(...itemsToRows(page), PAGE_BREAK)
   }
   return { pages: totalPages, text, rows }
 }
@@ -196,6 +199,8 @@ const REGION_RE = /\b(Northeast(?:ern)?|North|Midwest(?:ern)?|South(?:ern)?|West
 const AVG_RE = /\b(?:12|twelve)[\s-]*(?:wk|week)s?\s*(?:rolling\s+)?(?:average|avg\.?|mean)\b/gi
 const TWO_WEEK_RE = /\b(?:past|last|previous|prior|recent|most recent)\s+(?:two|2)\s+weeks\b|(?<![0-9])(?:two|2)[\s-]*(?:wk|week)s?\b(?!\s*(?:rolling\s+)?(?:average|avg|mean))/i
 const PCT_RE = /(?<![0-9.])(\d{1,3}(?:\.\d+)?)\s*%/g
+/** Mentions of non-Census-region geographies that make a sentence's numbers ambiguous. */
+const OTHER_GEO_RE = /(?<![A-Za-z])U\.\s?S\.|\b(?:[Nn]ational(?:ly)?|[Nn]ationwide|US|USA|United States|[Cc]ountry|HHS|[Rr]egion\s*\d+)\b/
 
 function regionsIn(s: string): Set<string> {
   const out = new Set<string>()
@@ -254,6 +259,7 @@ export function parseSentence(sentence: string): UsmaFinding | { reason: string 
   const regions = regionsIn(s)
   if (!regions.has('Midwest')) return null
   if (regions.size > 1) return { reason: 'several regions in one sentence' }
+  if (OTHER_GEO_RE.test(s)) return { reason: 'also mentions national or other geographies' }
   const { tracked } = trackedOrganisms(s)
   if (tracked.size !== 1) return { reason: tracked.size ? 'several organisms in one sentence' : 'no recognized organism' }
   const pcts = percentsIn(s)
@@ -282,11 +288,23 @@ export function parseMidwestTables(rows: string[]): { accepted: UsmaFinding[]; r
   let region: string | null = null
   let header: { order: ('rate' | 'avg')[]; at: number } | null = null
   rows.forEach((row, i) => {
+    if (row === PAGE_BREAK) {
+      region = null
+      header = null
+      return
+    }
     const plain = row.replace(/\s*\|\s*/g, ' ').trim()
     const regions = regionsIn(plain)
     // A heading row: just a region name (optionally "Region"/"Census Region").
     if (regions.size === 1 && /^(?:the\s+)?(?:northeast(?:ern)?|north|midwest(?:ern)?|south(?:ern)?|west(?:ern)?)(?:\s+(?:census\s+)?region)?:?$/i.test(plain)) {
       region = [...regions][0]
+      header = null
+      return
+    }
+    // Any other line naming a different region (or several, or the nation) ends the Midwest context.
+    const hasOrganism = findOrganismsInText(plain).length > 0
+    if (!hasOrganism && (regions.size > 1 || (regions.size === 1 && !regions.has('Midwest')) || OTHER_GEO_RE.test(plain))) {
+      region = null
       header = null
       return
     }
@@ -299,7 +317,7 @@ export function parseMidwestTables(rows: string[]): { accepted: UsmaFinding[]; r
     if (region !== 'Midwest' || !header || i - header.at > 40) return
     const { hits, tracked } = trackedOrganisms(plain)
     if (!hits.length) return
-    if (regions.size) return void rejected.push({ reason: 'table row names a region', text: row })
+    if (regions.size || OTHER_GEO_RE.test(plain)) return void rejected.push({ reason: 'table row names a region', text: row })
     if (tracked.size !== 1 || hits.length !== 1) return void rejected.push({ reason: 'table row: not exactly one organism', text: row })
     // Count numbers outside the organism name (names contain digits: PIV 3, 229E, H1-2009, F40/41).
     const h = hits[0]

@@ -263,7 +263,9 @@ export function parseLongCsv(fileName: string, text: string, fallbackVintage: st
     const key = `${def.code}|${geo}|${week}|${smoothing}`
     if (seen.has(key)) bump(rep.notes, 'duplicate-key-last-wins')
     seen.add(key)
-    const retrieved = (get(r, 'retrieved_at') ?? '').trim()
+    const rawRetrieved = (get(r, 'retrieved_at') ?? '').trim()
+    // Vintages compare as ISO strings; normalize other date spellings (e.g. 10/05/2026).
+    const retrieved = /^\d{4}-\d{2}-\d{2}/.test(rawRetrieved) ? rawRetrieved : rawRetrieved ? (toIsoDate(rawRetrieved) ?? '') : ''
     const o: BiofireObs = {
       def, geo, week, value: rate == null ? null : rate * 100, smoothing, vintage: retrieved || fallbackVintage,
       provisional: truthy(get(r, 'provisional')), file: fileName,

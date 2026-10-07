@@ -15,8 +15,8 @@ import { loadCdcRows, type CdcRowsResult } from '../lib/cdcData.ts'
 import { fetchText } from '../lib/http.ts'
 import { latestDate } from '../lib/series.ts'
 import {
-  DETECTION_SPECS, PATHOGEN_NAME, SOURCE_ID, buildDetectionSeries, buildWvalSeries, checkCutpoints, countyCentroids,
-  parseSiteMap, parseStateMap, parseWvalRows, type CentroidMap, type SiteLocation, type WvalPathogen,
+  DETECTION_SPECS, PATHOGEN_NAME, SOURCE_ID, attachOfficialState, buildDetectionSeries, buildWvalSeries, checkCutpoints, countyAdjacency, countyCentroids,
+  parseSiteMap, parseStateMap, parseWvalRows, type AdjacencyMap, type CentroidMap, type SiteLocation, type WvalPathogen,
 } from '../lib/cdc-nwss-parse.ts'
 import type { SourceContext, SourceModule, SourceResult } from '../types.ts'
 
@@ -46,13 +46,13 @@ function checkSchema(label: string, cols: string[], required: string[], expected
   return missing
 }
 
-function loadCentroids(ctx: SourceContext): CentroidMap {
+function loadCountyGeo(ctx: SourceContext): { centroids: CentroidMap; adjacency?: AdjacencyMap } {
   try {
     const gj = JSON.parse(readFileSync(join(ctx.rootDir, 'public/geo/mn-counties.geojson'), 'utf8'))
-    return countyCentroids(gj)
+    return { centroids: countyCentroids(gj), adjacency: countyAdjacency(gj) }
   } catch (e) {
     ctx.log.warn(`county centroids unavailable (${errMsg(e)}); sites will have no coordinates`)
-    return new Map()
+    return { centroids: new Map() }
   }
 }
 
@@ -75,8 +75,12 @@ async function runWval(ctx: SourceContext, errors: string[], diagnostics: Record
   const thresholdsFor = new Set<WvalPathogen>()
   for (const p of Object.keys(PATHOGEN_NAME) as WvalPathogen[]) {
     const c = check[p]
-    if (c && c.checked > 0 && c.mismatches / c.checked <= 0.01) thresholdsFor.add(p)
-    else if (c && c.checked > 0) {
+    if (!c || c.checked === 0) {
+      // No CDC categories to check against (e.g. the column disappeared): keep the documented values.
+      thresholdsFor.add(p)
+      if (parsed.rows.some((r) => r.pathogen === p)) log.warn(`no site_wval_category values for ${p}; WVAL cut-points applied unverified`)
+    } else if (c.mismatches / c.checked <= 0.01) thresholdsFor.add(p)
+    else {
       log.warn(`WVAL cut-points for ${p} disagree with CDC categories in ${c.mismatches}/${c.checked} rows (e.g. ${c.examples.join('; ')}); thresholds omitted — CDC may have revised them`)
     }
   }
@@ -92,24 +96,14 @@ async function runWval(ctx: SourceContext, errors: string[], diagnostics: Record
     log.info(`CDC site map unavailable (${errMsg(e).slice(0, 120)}); using county centroids`)
   }
 
-  const built = buildWvalSeries(parsed.rows, { historyStart: ctx.historyStart, centroids: loadCentroids(ctx), siteCoords, thresholdsFor })
+  const built = buildWvalSeries(parsed.rows, { historyStart: ctx.historyStart, ...loadCountyGeo(ctx), siteCoords, thresholdsFor })
   if (built.unmatchedCounties.length) log.warn(`county name(s) not matched to MN FIPS: ${built.unmatchedCounties.join(', ')}`)
 
   const stateDiag: Record<string, unknown> = { ...built.stateDiag }
   try {
     const official = parseStateMap(await fetchCdcJson('NWSSWVALStateMap.json'))
     stateDiag.cdcStateMap = official
-    for (const o of official) {
-      const s = built.state.find((x) => x.pathogen === o.pathogen)
-      const last = s?.points[s.points.length - 1]?.[0]
-      if (!s || !o.level || !o.week) continue
-      if (o.week !== last) {
-        log.warn(`CDC state WVAL for ${o.pathogen} is for week ${o.week}, derived series ends ${last}; official level not attached`)
-        continue
-      }
-      s.official = { level: o.level, label: o.category, asOf: o.week, by: 'CDC NWSS WVAL (official Minnesota level)' }
-      s.attrs = { ...s.attrs, ...(o.value != null ? { cdcStateWval: String(o.value) } : {}), ...(o.sites != null ? { cdcSites: String(o.sites) } : {}) }
-    }
+    for (const w of attachOfficialState(built.state, official)) log.warn(w)
   } catch (e) {
     stateDiag.cdcStateMapError = errMsg(e)
     log.info(`CDC official state WVAL unavailable (${errMsg(e).slice(0, 120)}); derived median is classified with CDC cut-points`)
@@ -145,7 +139,8 @@ async function runWval(ctx: SourceContext, errors: string[], diagnostics: Record
     sites: new Set(parsed.rows.map((r) => r.site)).size,
     perPathogen,
     unmatchedCounties: built.unmatchedCounties,
-    siteLocations: built.locationBasis,
+    siteLocations: countBy(Object.values(built.locationBasis)),
+    sitesPlacedAtLargestCounty: Object.entries(built.locationBasis).filter(([, b]) => b.includes('largest')).map(([id]) => id),
     siteMap: siteMapDiag,
     state: stateDiag,
   }
@@ -157,33 +152,43 @@ async function runWval(ctx: SourceContext, errors: string[], diagnostics: Record
 }
 
 async function runDetections(ctx: SourceContext, errors: string[], diagnostics: Record<string, unknown>): Promise<Series[]> {
-  const out: Series[] = []
   const diag: Record<string, unknown> = {}
-  for (const spec of DETECTION_SPECS) {
-    const log = ctx.log.child(spec.key)
-    try {
-      const loaded = await loadCdcRows(spec.datasetId, { where: MN_WHERE }, isMn, log)
-      const cols = columnsOf(loaded.rows)
-      const missing = checkSchema(spec.datasetId, cols, SAMPLE_REQUIRED, SAMPLE_EXPECTED, ctx)
-      const { series, diag: d } = buildDetectionSeries(loaded.rows, spec, ctx.historyStart)
-      diag[spec.key] = { dataset: spec.datasetId, via: loaded.via, datasetUpdatedAt: loaded.updatedAt, rowsRead: loaded.rows.length, columns: cols, missingColumns: missing, ...d }
-      if (series) {
-        out.push(series)
+  const results = await Promise.all(
+    DETECTION_SPECS.map(async (spec): Promise<Series | undefined> => {
+      const log = ctx.log.child(spec.key)
+      try {
+        const loaded = await loadCdcRows(spec.datasetId, { where: MN_WHERE }, isMn, log)
+        const cols = columnsOf(loaded.rows)
+        const missing = checkSchema(spec.datasetId, cols, SAMPLE_REQUIRED, SAMPLE_EXPECTED, ctx)
+        const { series, diag: d } = buildDetectionSeries(loaded.rows, spec, ctx.historyStart)
+        diag[spec.key] = { dataset: spec.datasetId, via: loaded.via, datasetUpdatedAt: loaded.updatedAt, rowsRead: loaded.rows.length, columns: cols, missingColumns: missing, ...d }
+        if (loaded.via === 'pophive-mirror') errors.push(`${spec.name} detections served from the PopHIVE mirror of ${spec.datasetId}`)
+        if (!series) {
+          log.warn(`${spec.datasetId}: no usable Minnesota samples`)
+          return undefined
+        }
         log.info(`${spec.datasetId} via ${loaded.via}: ${loaded.rows.length} MN rows, ${series.points.length} weeks, latest ${series.points[series.points.length - 1][0]}`)
-      } else {
-        log.warn(`${spec.datasetId}: no usable Minnesota samples`)
+        return series
+      } catch (e) {
+        // loadCdcRows treats an empty result as a failure; for these datasets that can simply mean no
+        // Minnesota site tests for the pathogen.
+        const msg = /no rows returned/.test(errMsg(e)) ? `no Minnesota samples returned by data.cdc.gov ${spec.datasetId}` : errMsg(e)
+        // Keep the last published series for this pathogen (unchanged) so one failed dataset does not
+        // drop it from the shared detections file; the analysis flags it stale as it ages.
+        const kept = previousSeries(ctx, 'nwss-detections').find((s) => s.pathogen === spec.pathogen)
+        diag[spec.key] = { dataset: spec.datasetId, error: msg, keptPrevious: kept ? latestDate([kept]) : null }
+        errors.push(`${spec.name} detections (${spec.datasetId}): ${msg}${kept ? ` — kept previous data through ${latestDate([kept])}` : ''}`)
+        return kept
       }
-      if (loaded.via === 'pophive-mirror') errors.push(`${spec.name} detections served from the PopHIVE mirror of ${spec.datasetId}`)
-    } catch (e) {
-      // Keep the last published series for this pathogen (unchanged) so one failed dataset does not
-      // drop it from the shared detections file; the analysis flags it stale if it ages.
-      const kept = previousSeries(ctx, 'nwss-detections').find((s) => s.pathogen === spec.pathogen)
-      if (kept) out.push(kept)
-      diag[spec.key] = { dataset: spec.datasetId, error: errMsg(e), keptPrevious: kept ? latestDate([kept]) : null }
-      errors.push(`${spec.name} detections (${spec.datasetId}): ${errMsg(e)}${kept ? ` — kept previous data through ${latestDate([kept])}` : ''}`)
-    }
-  }
+    }),
+  )
   diagnostics.detections = diag
+  return results.filter((s): s is Series => !!s)
+}
+
+function countBy(values: string[]): Record<string, number> {
+  const out: Record<string, number> = {}
+  for (const v of values) out[v] = (out[v] ?? 0) + 1
   return out
 }
 
@@ -213,23 +218,22 @@ export const cdcNwss: SourceModule = {
     attribution:
       'CDC National Wastewater Surveillance System (data.cdc.gov datasets atcp-73re, akvg-8vrb, mtpu-urpp, xpxn-rzgz); samples collected by MDH and WastewaterSCAN',
   },
-  timeoutMs: 8 * 60_000,
+  timeoutMs: 10 * 60_000,
   async run(ctx): Promise<SourceResult> {
     const errors: string[] = []
     const diagnostics: Record<string, unknown> = {}
-    let wval: Series[] = []
-    let detections: Series[] = []
-    try {
-      wval = await runWval(ctx, errors, diagnostics)
-    } catch (e) {
-      errors.push(`WVAL (atcp-73re): ${errMsg(e)}`)
-      diagnostics.wval = { error: errMsg(e) }
-    }
-    try {
-      detections = await runDetections(ctx, errors, diagnostics)
-    } catch (e) {
-      errors.push(`detections: ${errMsg(e)}`)
-    }
+    // The WVAL table and the three sample-level datasets are independent; fetch them concurrently.
+    const [wval, detections] = await Promise.all([
+      runWval(ctx, errors, diagnostics).catch((e): Series[] => {
+        errors.push(`WVAL (atcp-73re): ${errMsg(e)}`)
+        diagnostics.wval = { error: errMsg(e) }
+        return []
+      }),
+      runDetections(ctx, errors, diagnostics).catch((e): Series[] => {
+        errors.push(`detections: ${errMsg(e)}`)
+        return []
+      }),
+    ])
     diagnostics.latestData = { wval: latestDate(wval), detections: latestDate(detections) }
     for (const err of errors) ctx.log.warn(err)
     if (!wval.length && !detections.length) throw new Error(`No CDC NWSS data: ${errors.join('; ')}`)
