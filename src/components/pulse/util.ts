@@ -71,9 +71,14 @@ export function meaningAfterValue(metric: MetricKind, value: number | null | und
 /** Year-to-date case count for a case-count signal: its own value, a sibling cases_ytd signal, or attrs.ytd. */
 function yearToDate(s: SignalSummary, p?: PathogenPulse): { value: number; prev?: number; year: string } | undefined {
   const year = (s.attrs?.year ?? s.latestDate.slice(0, 4)) as string
-  if (s.metric === 'cases_ytd') return { value: s.latestValue, year }
+  // Same-week count last year, when the source gives one (CDC NNDSS tables do).
+  const prevOf = (x: SignalSummary) => {
+    const v = Number(x.attrs?.ytdPrevYear)
+    return x.attrs?.ytdPrevYear != null && Number.isFinite(v) ? v : undefined
+  }
+  if (s.metric === 'cases_ytd') return { value: s.latestValue, prev: prevOf(s), year }
   const sibling = p?.signals.find((x) => x.metric === 'cases_ytd' && x.geo.type === s.geo.type && x.geo.code === s.geo.code)
-  if (sibling) return { value: sibling.latestValue, year: (sibling.attrs?.year ?? sibling.latestDate.slice(0, 4)) as string }
+  if (sibling) return { value: sibling.latestValue, prev: prevOf(sibling), year: (sibling.attrs?.year ?? sibling.latestDate.slice(0, 4)) as string }
   const ytd = Number(s.attrs?.ytd)
   if (s.attrs?.ytd != null && Number.isFinite(ytd)) {
     const prev = Number(s.attrs?.ytdPrevYear)
@@ -90,17 +95,25 @@ export const isCaseCount = (s: SignalSummary | undefined): boolean => !!s && (s.
  * so wastewater measures are shown relative to their own usual level; detection counts as "N of M";
  * case counts as the year-to-date total; regional lab data says plainly that it covers several states.
  */
-export function cardFigure(s: SignalSummary, name: string, p?: PathogenPulse): { figure: string; caption: string } {
+export function cardFigure(
+  s: SignalSummary,
+  name: string,
+  p?: PathogenPulse,
+  now = new Date(),
+): { figure: string; caption: string; cumulative?: boolean } {
   const what = s.label.split(' — ')[0]
   if (isCaseCount(s)) {
     const ytd = yearToDate(s, p)
     if (ytd) {
       const where = s.geo.type === 'state' ? 'in Minnesota ' : ''
+      const when = ytd.year === String(now.getFullYear()) ? 'so far this year' : `in ${ytd.year}`
+      // A running total: callers show it without a trend arrow, sparkline or activity level.
       return {
         figure: formatValue(ytd.value, 'count'),
-        caption: `case${plural(ytd.value)} reported ${where}so far in ${ytd.year}${
+        caption: `case${plural(ytd.value)} reported ${where}${when}${
           ytd.prev != null ? ` (${formatValue(ytd.prev, 'count')} by this time last year)` : ''
         }`,
+        cumulative: true,
       }
     }
   }

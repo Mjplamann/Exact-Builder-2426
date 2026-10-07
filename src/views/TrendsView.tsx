@@ -6,7 +6,7 @@ import { addDays } from '../../shared/mmwr'
 import { getProfile, pathogenName } from '../content'
 import { useDashboard } from '../lib/dashboard'
 import type { DashboardData } from '../lib/data'
-import { formatDate } from '../lib/format'
+import { formatDate, isCumulative } from '../lib/format'
 import { forecastsFor, preferredForecast } from '../lib/series'
 import { RANGE_WEEKS, useAppState, type TimeRange } from '../lib/state'
 import { FilterBar } from '../components/layout/FilterBar'
@@ -268,7 +268,7 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
                 {title}
               </h2>
               <p className="mt-0.5 text-sm text-ink-2">
-                {tab.unitText} · {primary ? lineName(primary) : requestedPlace} · weekly
+                {tab.unitText} · {primary ? lineName(primary) : requestedPlace} · {isCumulative(metric) ? 'running total' : 'weekly'}
               </p>
             </div>
             {sel && sel.alternatives.length > 1 && primary && (

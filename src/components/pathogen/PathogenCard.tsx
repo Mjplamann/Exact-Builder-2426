@@ -4,7 +4,7 @@ import type { PathogenPulse } from '../../../shared/types'
 import type { PathogenProfile } from '../../content/types'
 import { formatDate, formatValue, plural } from '../../lib/format'
 import { LevelBadge, TrendPill } from '../ui'
-import { CATEGORY_LABEL, isCaseMetric, KIND_LABEL, regionTitle, yearToDateOf } from './meta'
+import { CATEGORY_LABEL, isCaseMetric, KIND_LABEL, regionTitle, yearToDateOf, ytdPhrase } from './meta'
 import { MonthStrip, peakPhrase } from './MonthStrip'
 
 export function LiveDot({ label = 'Live data' }: { label?: string }) {
@@ -91,27 +91,32 @@ export function PathogenCard({
   )
 }
 
-/** Level, trend and date for a card; case-count illnesses show their year-to-date count instead of a level. */
+/**
+ * Level, trend and date for a card. Case-count illnesses show their count for the year so far instead: a running
+ * total, so no level and no trend arrow next to it.
+ */
 function PulseLine({ pulse }: { pulse: PathogenPulse }) {
   const p = pulse.primary
   const caseCount = isCaseMetric(p?.metric) && pulse.level === 'unknown'
   const ytd = caseCount ? yearToDateOf(p, undefined) : undefined
   const region = regionTitle(p?.geo)
-  const date = p?.latestDate ?? pulse.asOf
+  const date = ytd?.asOf ?? p?.latestDate ?? pulse.asOf
+  // A weekly case count may carry a trend; a running total never does.
+  const showTrend = caseCount ? pulse.trend !== 'unknown' && !ytd && p?.metric !== 'cases_ytd' : true
   return (
     <div className="space-y-1">
       <div className="flex flex-wrap items-center gap-1.5">
         {caseCount ? (
           <span className="inline-flex items-center rounded-full border border-line-strong px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-ink-1">
-            {ytd ? `${formatValue(ytd.value, 'count')} MN case${plural(ytd.value)} in ${ytd.year}` : 'Case counts'}
+            {ytd ? `${formatValue(ytd.value, 'count')} MN case${plural(ytd.value)} ${ytdPhrase(ytd)}` : 'Case counts'}
           </span>
         ) : (
           <LevelBadge level={pulse.level} size="sm" />
         )}
-        {!(caseCount && pulse.trend === 'unknown') && <TrendPill trend={pulse.trend} compact />}
+        {showTrend && <TrendPill trend={pulse.trend} compact />}
         {date && !region && (
           <span className="text-xs text-ink-3">
-            {caseCount && p?.metric === 'cases_ytd' ? 'as of' : 'week ending'} {formatDate(date)}
+            {caseCount && (ytd || p?.metric === 'cases_ytd') ? 'as of' : 'week ending'} {formatDate(date)}
           </span>
         )}
       </div>

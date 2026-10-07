@@ -4,14 +4,26 @@
 //   states (reporting area; 'MINNESOTA' in 2022–2024, 'Minnesota' from 2025), year (TEXT), week,
 //   label (disease; wording changes over time), m1 = current-week count, m2 = previous 52-week max,
 //   m3 = cumulative YTD current MMWR year, m4 = cumulative YTD previous MMWR year, each with an
-//   m*_flag ('-' no reported cases / blank, 'U' unavailable, 'N'/'NN'/'NP'/'NC' not notifiable,
-//   not published, not calculated).
+//   m*_flag. CDC's flag legend: '-' = no reported cases (the jurisdiction submitted none), 'N' = not
+//   reportable, 'NN' = not nationally notifiable, 'U' = unavailable, 'NP' = not published,
+//   'NC' = not calculated. In 2022–2024 rows '-' also sits beside numbers; only an empty cell flagged
+//   '-' means "no reported cases". An empty cell with no flag at all never occurs (2022–2026) and is
+//   treated as unknown.
+//
+// What we publish per disease:
+//   * 'cases' — NEW REPORTS PER WEEK: the increase in m3 (year-to-date) since the previous week's
+//     table of the same MMWR year (week 1 → its m3). m1 (current week) is NOT used for the series:
+//     MN assigns cases to earlier MMWR weeks, so m1 is '-' in most weeks even while m3 rises. m1 is
+//     kept in diagnostics only.
+//   * 'cases_ytd' — m3 per weekly table date for the current MMWR year.
 //
 // Minnesota caveats (checked against the full PopHIVE copy, rows updated 2026-09-30):
-//   * MN assigns cases to earlier MMWR weeks, so m1 is blank ('-') in most weeks even while m3 rises.
-//     A blank is NOT zero: we keep it as null.
-//   * Enteric diseases (Campylobacter, Salmonella, STEC, Shigella, Crypto, Cyclospora, Giardia) are
-//     blank all current year for MN; the prior year's totals appear the next year in m4.
+//   * Enteric diseases (Campylobacter, Salmonella, STEC, Shigella, Crypto, Cyclospora, Giardia) and,
+//     earlier, anaplasmosis and babesiosis are '-' in every table of every year while the next year's
+//     tables show the previous year's totals in m4: MN reports them after year-end, so their '-' cells
+//     are NOT zero and stay null (see lateReportedYears).
+//   * m3 occasionally goes down from one week to the next (cases reclassified, e.g. mpox 2024 W07);
+//     that week's new-report value is null.
 //   * m2 is the 52-week maximum, not a year-to-date count.
 //   * The CSV export (mirror) formats numbers with thousands separators ('1,125').
 //
@@ -141,6 +153,9 @@ export const RULES: PathogenRule[] = [
   },
 ]
 
+/** CDC's flag for an empty cell meaning "no reported cases" (a zero, not a missing value). */
+export const NO_CASES_FLAG = '-'
+
 /** CDC cell flags other than '-' (no reported cases): the cell is not a count at all. */
 export const FLAG_WORDS: Record<string, string> = {
   U: 'unavailable',
@@ -238,12 +253,18 @@ export interface PathogenWeek {
   week: number
   weekEnding: string
   labels: string[]
+  /** Combined cells: CDC's '-' (no reported cases) counts as 0; null when unknown (see combineMeasure). */
   m1: number | null
   m3: number | null
   m4: number | null
-  /** CDC flag explaining a null m3/m4 when it is not a plain blank ('U', 'NP', ...). */
+  /** CDC flag explaining a null m1/m3/m4 ('U', 'NP', ...). */
+  m1Flag?: string
   m3Flag?: string
   m4Flag?: string
+  /** Every component cell was '-' (no reported cases): the 0 comes from flags only, no number was published. */
+  m1Dash?: true
+  m3Dash?: true
+  m4Dash?: true
   /** 52-week max per component (not additive across components). */
   m2: { label: string; value: number | null }[]
   /** Labels that matched but were not used because a ', Total' row for the same component exists. */
@@ -263,12 +284,17 @@ export function sumReported(values: (number | null)[]): number | null {
 
 /**
  * Combine one measure across components. A component flagged unavailable / not published ('U', 'NP',
- * ...) makes the total unknown (null, flag kept); otherwise blanks ('-') add nothing.
+ * ...) makes the total unknown (null, flag kept). An empty cell flagged '-' is CDC's "no reported cases"
+ * and adds 0; when every component is '-' the total is 0 with `dash` set, so callers can still tell a
+ * published zero from a flag-only one (Minnesota's after-year-end diseases). An empty cell with no flag
+ * at all is undefined by CDC and makes the total unknown.
  */
-export function combineMeasure(cells: { value: number | null; flag: string }[]): { value: number | null; flag?: string } {
+export function combineMeasure(cells: { value: number | null; flag: string }[]): { value: number | null; flag?: string; dash?: true } {
   const unknown = cells.find((c) => c.value == null && isUnavailable(c.flag))
   if (unknown) return { value: null, flag: unknown.flag }
-  return { value: sumReported(cells.map((c) => c.value)) }
+  if (cells.some((c) => c.value == null && c.flag !== NO_CASES_FLAG)) return { value: null }
+  const reported = sumReported(cells.map((c) => c.value))
+  return reported == null ? { value: 0, dash: true } : { value: reported }
 }
 
 const TOTAL_SUFFIX = /, total$/
@@ -334,8 +360,12 @@ export function groupByPathogen(rows: NndssRow[]): Map<PathogenId, PathogenWeek[
         m4: m4.value,
         m2: chosen.map((c) => ({ label: c.label, value: c.m2 })),
       }
+      if (m1.flag) pw.m1Flag = m1.flag
       if (m3.flag) pw.m3Flag = m3.flag
       if (m4.flag) pw.m4Flag = m4.flag
+      if (m1.dash) pw.m1Dash = true
+      if (m3.dash) pw.m3Dash = true
+      if (m4.dash) pw.m4Dash = true
       if (dropped.length) pw.dropped = dropped
       list.push(pw)
     }
@@ -347,6 +377,7 @@ export function groupByPathogen(rows: NndssRow[]): Map<PathogenId, PathogenWeek[
 const fmt = (n: number) => n.toLocaleString('en-US')
 const cases = (n: number) => `${fmt(n)} case${n === 1 ? '' : 's'}`
 const cellWord = (flag?: string) => (flag && FLAG_WORDS[flag] ? `marked ${FLAG_WORDS[flag]}` : 'blank')
+const plural = (n: number, one: string, many: string) => (n === 1 ? one : many)
 
 /** Plain-language year-to-date comparison for the latest table week. */
 export function ytdSummary(year: number, m3: number | null, m4: number | null, m3Flag?: string, m4Flag?: string): string {
@@ -358,15 +389,117 @@ export function ytdSummary(year: number, m3: number | null, m4: number | null, m
   return `${year} and ${prev} year-to-date counts are blank in CDC's weekly table`
 }
 
-export const BASE_NOTE =
-  "Provisional counts from CDC's weekly NNDSS tables for Minnesota. Each point is the table's 'current week' cell as CDC first published it: " +
-  'the cases Minnesota had assigned to that MMWR week when the table came out. It is not a count by illness onset and it is never revised. ' +
-  'Cases reported later are credited to earlier weeks and are never added back to these points, so the weekly points undercount; ' +
-  'the year-to-date total is the better guide. Blank cells are shown as missing, not zero.'
+/**
+ * MMWR years Minnesota reported to CDC only after year-end. A year counts when its year-to-date cell is
+ * '-' in every weekly table (no number ever published) AND either the next year's tables show cases for
+ * it (m4 > 0, which contradicts the '-') or the year before followed the same pattern, so a year still in
+ * progress (or one whose total has not been back-filled yet, as in January) inherits it. Requiring that
+ * evidence keeps out diseases that simply have no cases yet (measles in January, West Nile in June) or had
+ * none all year (measles 2023, when the 2024 tables' m4 stayed '-'): their '-' is a real zero.
+ */
+export function lateReportedYears(weeks: PathogenWeek[]): Set<number> {
+  const byYear = new Map<number, PathogenWeek[]>()
+  for (const w of weeks) {
+    const list = byYear.get(w.year) ?? []
+    list.push(w)
+    byYear.set(w.year, list)
+  }
+  const late = new Set<number>()
+  for (const year of [...byYear.keys()].sort((a, b) => a - b)) {
+    const flagOnly = byYear.get(year)!.every((w) => w.m3Dash)
+    const shownLater = (byYear.get(year + 1) ?? []).some((w) => (w.m4 ?? 0) > 0)
+    if (flagOnly && (shownLater || late.has(year - 1))) late.add(year)
+  }
+  return late
+}
 
-/** Weeks kept for a series whose current-week cells are blank across the whole history window. */
+/** Year-to-date count (m3) from one table: '-' is 0 except in years reported after year-end (null). */
+export function ytdValue(w: PathogenWeek, late: Set<number>): number | null {
+  return w.ambiguous || (w.m3Dash && late.has(w.year)) ? null : w.m3
+}
+
+/** Previous year's year-to-date count (m4) from one table, on the same rule for that year. */
+export function prevYtdValue(w: PathogenWeek, late: Set<number>): number | null {
+  return w.ambiguous || (w.m4Dash && late.has(w.year - 1)) ? null : w.m4
+}
+
+export interface NewReports {
+  points: Point[]
+  /** Weeks whose year-to-date count fell below the previous week's (cases reclassified): value null. */
+  decreases: { date: string; from: number; to: number }[]
+  /** Weeks with no table for the previous MMWR week to compare with: value null. */
+  noPrevious: string[]
+}
+
+/**
+ * New cases reported to CDC per week: how much the year-to-date count rose since the previous week's
+ * table of the same MMWR year; week 1's table contributes its whole year-to-date count. Null when this
+ * week's or the previous week's count is unknown, when the previous week's table has no row, or when the
+ * count went down (reclassification).
+ */
+export function newReports(weeks: PathogenWeek[], ytd: (number | null)[]): NewReports {
+  const points: Point[] = []
+  const decreases: NewReports['decreases'] = []
+  const noPrevious: string[] = []
+  weeks.forEach((w, i) => {
+    const now = ytd[i]
+    let value: number | null = null
+    if (now != null && w.week === 1) value = now
+    else if (now != null) {
+      const prev = weeks[i - 1]
+      const before = i > 0 ? ytd[i - 1] : null
+      if (!prev || prev.year !== w.year || addDays(prev.weekEnding, 7) !== w.weekEnding) noPrevious.push(w.weekEnding)
+      else if (before != null && now >= before) value = now - before
+      else if (before != null) decreases.push({ date: w.weekEnding, from: before, to: now })
+    }
+    points.push([w.weekEnding, value])
+  })
+  return { points, decreases, noPrevious }
+}
+
+export const WEEKLY_NOTE =
+  "Provisional counts from CDC's weekly NNDSS tables for Minnesota. Each weekly point is the number of new cases Minnesota reported to CDC that week: " +
+  "how much the table's year-to-date count rose since the previous week's table (the first table of a year counts its whole year-to-date total). " +
+  'It dates cases by when they reached CDC, not by when people got sick. ' +
+  "The tables' own 'current week' column is not used: Minnesota credits most cases to earlier weeks, so that column badly undercounts. " +
+  "CDC's '-' (no reported cases) counts as zero; cells CDC marks unavailable or not published are shown as missing."
+
+export const ytdNote = (year: number) =>
+  `Provisional year-to-date count from CDC's weekly NNDSS tables for Minnesota: the cases credited to ${year} in each week's table, as CDC published it. ` +
+  "It is a running total; it falls only when cases are reclassified. CDC's '-' (no reported cases) counts as zero; cells CDC marks unavailable or not published are shown as missing."
+
+/** "2022–2025" for consecutive years, else "2022, 2024". */
+const yearList = (years: number[]) =>
+  years.length > 1 && years[years.length - 1] - years[0] === years.length - 1 ? `${years[0]}–${years[years.length - 1]}` : years.join(', ')
+
+/** Notes for years Minnesota reported after year-end (their '-' cells are shown as missing, not zero). */
+function lateNotes(late: Set<number>, latest: PathogenWeek, latestPrev: number | null, yearsShown: Set<number>): string[] {
+  const notes: string[] = []
+  const year = latest.year
+  if (late.has(year)) {
+    notes.push(
+      latestPrev != null && latestPrev > 0
+        ? `Minnesota's ${year} year-to-date count has been blank all year in these tables while ${year - 1} shows ${fmt(latestPrev)} by the same week, so Minnesota appears to report this disease to CDC after year-end; blanks do not mean zero cases and are shown as missing.`
+        : `Minnesota's ${year} year-to-date count has been blank all year in these tables, as in earlier years whose cases appeared only in later tables, so Minnesota appears to report this disease to CDC after year-end; blanks do not mean zero cases and are shown as missing.`,
+    )
+  }
+  const earlier = [...late].filter((y) => y !== year && yearsShown.has(y)).sort((a, b) => a - b)
+  if (earlier.length) {
+    notes.push(
+      `${yearList(earlier)} ${plural(earlier.length, 'was', 'were')} blank in every weekly table although later tables showed cases for ${plural(earlier.length, 'that year', 'those years')} (reported after year-end), so ${plural(earlier.length, 'its', 'their')} weeks are shown as missing, not zero.`,
+    )
+  }
+  return notes
+}
+
+/** Weeks kept for a series whose values are blank across the whole history window. */
 export const BLANK_SERIES_WEEKS = 13
 
+/** Compactness: an all-blank series lists only its latest weeks (dropping blanks loses nothing). */
+function compact(points: Point[]): { points: Point[]; trimmedFrom?: string } {
+  if (points.length <= BLANK_SERIES_WEEKS || points.some((p) => p[1] != null)) return { points }
+  return { points: points.slice(-BLANK_SERIES_WEEKS), trimmedFrom: points[0][0] }
+}
 
 export interface BuildResult {
   series: Series[]
@@ -374,6 +507,8 @@ export interface BuildResult {
   skipped: Record<string, string>
   /** Schema-drift / label problems worth surfacing in result.message. */
   warnings: string[]
+  /** Newest week whose 'current week' cell (m1) held a published number, across diseases (diagnostics). */
+  newestCurrentWeekCell?: string
 }
 
 export function buildSeries(byPathogen: Map<PathogenId, PathogenWeek[]>, historyStart: string, latestTableWeek: string): BuildResult {
@@ -381,18 +516,18 @@ export function buildSeries(byPathogen: Map<PathogenId, PathogenWeek[]>, history
   const perPathogen: Record<string, unknown> = {}
   const skipped: Record<string, string> = {}
   const warnings: string[] = []
+  let newestCurrentWeekCell: string | undefined
   const recentCutoff = addDays(latestTableWeek, -56)
   const driftCutoff = addDays(latestTableWeek, -364)
+  const inWindow = (d: string) => d >= historyStart
   for (const rule of RULES) {
     const weeks = byPathogen.get(rule.pathogen)
     if (!weeks?.length) {
       skipped[rule.pathogen] = 'no matching label in Minnesota rows'
       continue
     }
-    const kept = weeks.filter((w) => w.weekEnding >= historyStart)
-    let points: Point[] = kept.map((w) => [w.weekEnding, w.m1])
     const latest = weeks[weeks.length - 1]
-    const nonNull = points.filter((p) => p[1] != null)
+    const kept = weeks.filter((w) => inWindow(w.weekEnding))
     const labelsUsed = [...new Set(weeks.flatMap((w) => w.labels))]
     // A label seen in the past year but missing from the newest table: CDC probably renamed or split it.
     if (latest.weekEnding < latestTableWeek && latest.weekEnding >= driftCutoff) {
@@ -407,33 +542,45 @@ export function buildSeries(byPathogen: Map<PathogenId, PathogenWeek[]>, history
         `${rule.name}: ${ambiguousWeeks.length} week(s) list overlapping labels (${[...new Set(last.ambiguous)].join('; ')}), so their counts were left blank rather than added together`,
       )
     }
-    if (!points.length || (latest.weekEnding < recentCutoff && !nonNull.length)) {
-      skipped[rule.pathogen] = `label no longer in the weekly tables (last seen ${latest.year} week ${latest.week}) and no current-week counts`
+
+    // Year-to-date per table ('-' = 0 except after-year-end years), then new reports per week. Both are
+    // computed over the full history so the first week in the window still has its previous table.
+    const late = lateReportedYears(weeks)
+    const ytd = weeks.map((w) => ytdValue(w, late))
+    const weekly = newReports(weeks, ytd)
+    const weeklyKept = weekly.points.filter(([d]) => inWindow(d))
+    const ytdKept: Point[] = weeks.map((w, i): Point => [w.weekEnding, ytd[i]]).filter(([d]) => inWindow(d))
+    const anyCount = [...weeklyKept, ...ytdKept].some(([, v]) => v != null && v > 0)
+    if (!weeklyKept.length || (latest.weekEnding < recentCutoff && !anyCount)) {
+      skipped[rule.pathogen] = `label no longer in the weekly tables (last seen ${latest.year} week ${latest.week}) and no reported cases in the window`
       perPathogen[rule.pathogen] = { labels: labelsUsed, lastSeen: latest.weekEnding }
       continue
     }
-    // Diseases Minnesota sends to CDC only after year-end: YTD blank ('-', not 'U'/'NP') in every table of
-    // this year AND of last year, while last year's YTD (m4, backfilled) is non-zero. Requiring two blank
-    // years avoids flagging diseases that simply have no cases yet this year (measles in January, West
-    // Nile in June).
-    const plainBlank = (w: PathogenWeek) => w.m3 == null && !w.m3Flag && !w.ambiguous
-    const thisYear = weeks.filter((w) => w.year === latest.year)
-    const lastYear = weeks.filter((w) => w.year === latest.year - 1)
-    const blankAllYear = lastYear.length > 0 && thisYear.every(plainBlank) && lastYear.every(plainBlank) && (latest.m4 ?? 0) > 0
-    const notes = [BASE_NOTE]
+    const blankAllYear = late.has(latest.year)
+    const latestYtd = ytdValue(latest, late)
+    const latestPrev = prevYtdValue(latest, late)
+    const yearsShown = new Set(kept.map((w) => w.year))
+    const decreases = weekly.decreases.filter((d) => inWindow(d.date))
+    const noPrevious = weekly.noPrevious.filter(inWindow)
+
+    // ── 'cases': new reports per week ──
+    const weeklyCompact = compact(weeklyKept)
+    const weeklyNonNull = weeklyCompact.points.filter((p) => p[1] != null)
+    const notes = [WEEKLY_NOTE]
     if (rule.note) notes.push(rule.note)
-    if (blankAllYear) {
+    notes.push(...lateNotes(late, latest, latestPrev, yearsShown))
+    if (decreases.length) {
       notes.push(
-        `Minnesota's ${latest.year} year-to-date count has been blank all year in these tables while ${latest.year - 1} shows ${fmt(latest.m4!)} by the same week, so Minnesota appears to report this disease to CDC after year-end; blanks do not mean zero cases.`,
+        `In ${decreases.length} ${plural(decreases.length, 'week', 'weeks')} (latest ${decreases[decreases.length - 1].date}) the year-to-date count fell below the previous week's (cases reclassified or removed), so no new-case count is shown for ${plural(decreases.length, 'that week', 'those weeks')}.`,
       )
     }
-    // Compactness: when every current-week cell in the window is blank, only the latest weeks are listed
-    // (dropping blanks loses nothing).
-    let trimmedFrom: string | undefined
-    if (!nonNull.length && points.length > BLANK_SERIES_WEEKS) {
-      trimmedFrom = points[0][0]
-      points = points.slice(-BLANK_SERIES_WEEKS)
-      notes.push(`Only the latest ${BLANK_SERIES_WEEKS} weeks are listed because every current-week cell since ${trimmedFrom} is blank.`)
+    if (noPrevious.length) {
+      notes.push(
+        `${noPrevious.length} ${plural(noPrevious.length, 'week has', 'weeks have')} no new-case count because CDC's table for the week before has no row for this disease to compare with.`,
+      )
+    }
+    if (weeklyCompact.trimmedFrom) {
+      notes.push(`Only the latest ${BLANK_SERIES_WEEKS} weeks are listed because every week since ${weeklyCompact.trimmedFrom} is blank.`)
     }
     const s = makeSeries({
       source: SOURCE,
@@ -441,47 +588,93 @@ export function buildSeries(byPathogen: Map<PathogenId, PathogenWeek[]>, history
       pathogen: rule.pathogen,
       metric: 'cases',
       geo: STATE_GEO,
-      label: `${rule.name} — current-week cases in CDC's weekly table (NNDSS)`,
-      points,
+      label: `${rule.name} — new cases reported to CDC this week (NNDSS)`,
+      points: weeklyCompact.points,
       note: notes.join(' '),
     })
-    const attrs: Record<string, string> = {
+    const common: Record<string, string> = {
       nndssLabel: [...new Set(latest.labels)].join(' + '),
       mmwrWeek: `${latest.year}-W${String(latest.week).padStart(2, '0')}`,
     }
-    if (latest.m3 != null) attrs.ytd = String(latest.m3)
-    if (latest.m4 != null) attrs.ytdPrevYear = String(latest.m4)
-    if (latest.m3Flag) attrs.ytdFlag = `${latest.m3Flag} (${FLAG_WORDS[latest.m3Flag]})`
-    if (latest.m4Flag) attrs.ytdPrevYearFlag = `${latest.m4Flag} (${FLAG_WORDS[latest.m4Flag]})`
+    const ytdAttrs: Record<string, string> = {}
+    if (latestPrev != null) ytdAttrs.ytdPrevYear = String(latestPrev)
+    if (latest.m3Flag) ytdAttrs.ytdFlag = `${latest.m3Flag} (${FLAG_WORDS[latest.m3Flag]})`
+    if (latest.m4Flag) ytdAttrs.ytdPrevYearFlag = `${latest.m4Flag} (${FLAG_WORDS[latest.m4Flag]})`
+    if (blankAllYear) ytdAttrs.currentYear = 'blank all year (reported after year-end)'
+    if (latest.ambiguous) common.overlappingLabels = [...new Set(latest.ambiguous)].join(' | ')
+    // attrs.ytd stays on the weekly series for readers that look for it there (pulse/pathogen views, analysis).
+    const attrs: Record<string, string> = { ...common, ...(latestYtd != null ? { ytd: String(latestYtd) } : {}), ...ytdAttrs }
     if (latest.m2.length === 1) {
       if (latest.m2[0].value != null) attrs.max52 = String(latest.m2[0].value)
     } else {
       for (const c of latest.m2) if (c.value != null) attrs[`max52 (${c.label})`] = String(c.value)
     }
-    if (blankAllYear) attrs.currentYear = 'blank all year (reported after year-end)'
-    if (latest.ambiguous) attrs.overlappingLabels = [...new Set(latest.ambiguous)].join(' | ')
     s.attrs = attrs
-    // NNDSS publishes no level, trend or wording of its own. The year-to-date comparison is MN Pulse's
-    // sentence about CDC's counts, so it goes in `summary` (never `official`, which is the publisher's voice).
-    if (!latest.ambiguous) s.summary = ytdSummary(latest.year, latest.m3, latest.m4, latest.m3Flag, latest.m4Flag)
+    // NNDSS publishes no level, trend or wording of its own: these sentences are MN Pulse's, so they go
+    // in `summary` (never `official`, which is the publisher's voice).
+    const lastWeekly = weeklyCompact.points[weeklyCompact.points.length - 1]
+    const lastDecrease = decreases[decreases.length - 1]
+    if (!latest.ambiguous && lastWeekly[0] === latest.weekEnding) {
+      if (lastWeekly[1] != null) {
+        s.summary = `${fmt(lastWeekly[1])} new ${plural(lastWeekly[1], 'case', 'cases')} reported to CDC in the week ending ${latest.weekEnding}`
+      } else if (lastDecrease?.date === latest.weekEnding) {
+        s.summary = `The year-to-date count fell from ${fmt(lastDecrease.from)} to ${fmt(lastDecrease.to)} in the week ending ${latest.weekEnding} (cases reclassified), so no new-case count is shown`
+      }
+    }
     series.push(s)
-    const lastNonNull = nonNull[nonNull.length - 1]
+
+    // ── 'cases_ytd': the year-to-date count per table, current MMWR year ──
+    const ytdCompact = compact(ytdKept.filter((_, i) => kept[i].year === latest.year))
+    const ytdNotes = [ytdNote(latest.year)]
+    if (rule.note) ytdNotes.push(rule.note)
+    ytdNotes.push(...lateNotes(late, latest, latestPrev, new Set([latest.year])))
+    if (ytdCompact.trimmedFrom) {
+      ytdNotes.push(`Only the latest ${BLANK_SERIES_WEEKS} weeks are listed because every year-to-date cell since ${ytdCompact.trimmedFrom} is blank.`)
+    }
+    const y = makeSeries({
+      source: SOURCE,
+      dataset: DATASET,
+      pathogen: rule.pathogen,
+      metric: 'cases_ytd',
+      geo: STATE_GEO,
+      label: `${rule.name} — cases reported so far in ${latest.year} (NNDSS)`,
+      points: ytdCompact.points,
+      note: ytdNotes.join(' '),
+    })
+    y.attrs = { ...common, year: String(latest.year), ...ytdAttrs }
+    if (!latest.ambiguous) y.summary = ytdSummary(latest.year, latestYtd, latestPrev, latest.m3Flag, latest.m4Flag)
+    series.push(y)
+
+    // ── diagnostics (m1, the 'current week' column, lives only here) ──
+    const lastNewReport = weeklyNonNull[weeklyNonNull.length - 1]
+    const m1Published = kept.filter((w) => w.m1 != null && !w.m1Dash)
+    const lastM1 = m1Published[m1Published.length - 1]
+    if (lastM1 && (!newestCurrentWeekCell || lastM1.weekEnding > newestCurrentWeekCell)) newestCurrentWeekCell = lastM1.weekEnding
     const dropped = [...new Set(kept.flatMap((w) => w.dropped ?? []))]
     perPathogen[rule.pathogen] = {
       labels: labelsUsed,
-      points: points.length,
-      nonNullPoints: nonNull.length,
-      ...(trimmedFrom ? { blankSince: trimmedFrom } : {}),
+      points: weeklyCompact.points.length,
+      nonNullPoints: weeklyNonNull.length,
+      ...(weeklyCompact.trimmedFrom ? { blankSince: weeklyCompact.trimmedFrom } : {}),
       latestTableWeek: latest.weekEnding,
-      latestNonNull: lastNonNull ? { date: lastNonNull[0], value: lastNonNull[1] } : null,
-      ytd: latest.m3,
-      ytdPrevYear: latest.m4,
+      latestNewReports: lastNewReport ? { date: lastNewReport[0], value: lastNewReport[1] } : null,
+      ytd: latestYtd,
+      ytdPrevYear: latestPrev,
+      ytdPoints: ytdCompact.points.length,
       blankAllYear,
+      ...(late.size ? { lateReportedYears: [...late].sort((a, b) => a - b) } : {}),
+      currentWeekColumn: {
+        latest: latest.m1Dash ? NO_CASES_FLAG : (latest.m1 ?? latest.m1Flag ?? null),
+        latestPublished: lastM1 ? { date: lastM1.weekEnding, value: lastM1.m1 } : null,
+        sumThisYear: weeks.filter((w) => w.year === latest.year).reduce((a, w) => a + (w.m1 ?? 0), 0),
+      },
+      ...(decreases.length ? { reclassifiedWeeks: decreases } : {}),
+      ...(noPrevious.length ? { weeksWithoutPreviousTable: noPrevious.length } : {}),
       ...(dropped.length ? { droppedInFavorOfTotal: dropped } : {}),
       ...(ambiguousWeeks.length ? { ambiguousWeeks: ambiguousWeeks.length } : {}),
     }
   }
-  return { series, perPathogen, skipped, warnings }
+  return { series, perPathogen, skipped, warnings, newestCurrentWeekCell }
 }
 
 // ───────────────────────── loading (live API, mirror fallback) ─────────────────────────
@@ -683,8 +876,8 @@ export const cdcNndss: SourceModule = {
     url: 'https://data.cdc.gov/NNDSS/NNDSS-Weekly-Data/x9gk-5huc',
     description:
       "Provisional weekly counts of nationally notifiable diseases that the Minnesota Department of Health reports to CDC, from CDC's weekly NNDSS tables: whooping cough, measles, mpox, hepatitis A, West Nile virus and other reportable infections, with year-to-date totals compared with the same week last year. " +
-      "Each weekly point is the table's 'current week' cell as CDC first published it: the cases Minnesota had assigned to that week at the time. It is not a count by when people got sick, and it is never revised. Cases reported later are credited to earlier weeks and show up only in the year-to-date totals, so the weekly points undercount. " +
-      "Minnesota's current-week cells are often blank, and some diseases (such as Salmonella, Campylobacter and E. coli STEC) are blank all year and only appear after year-end. A blank is not zero. These are reported cases only, so they undercount infections, and they say nothing about counties.",
+      "Each weekly point is the number of new cases Minnesota reported to CDC that week: how much the table's year-to-date count rose since the previous week's table. It dates cases by when they reached CDC, not by when people got sick. The tables' 'current week' column is not used because Minnesota credits most cases to earlier weeks, so it badly undercounts. " +
+      "CDC's '-' means no reported cases and counts as zero. Some diseases (such as Salmonella, Campylobacter and E. coli STEC) are blank all year and only appear after year-end; for those a blank is not zero and is shown as missing. These are reported cases only, so they undercount infections, and they say nothing about counties.",
     geography: 'Minnesota statewide',
     cadence: 'Weekly (CDC posts each table midweek for the MMWR week ending the previous Saturday)',
     attribution: "CDC National Notifiable Diseases Surveillance System (NNDSS) weekly tables via data.cdc.gov (dataset x9gk-5huc); mirror: PopHIVE/Ingest (Yale School of Public Health)",
@@ -743,7 +936,9 @@ export const cdcNndss: SourceModule = {
         parse: stats,
         columnsSeen: schema.seen,
         latestTableWeek: { year: latest.year, week: latest.week, weekEnding: latest.weekEnding },
-        newestNonBlankCurrentWeek: newestCount ?? null,
+        newestValue: newestCount ?? null,
+        // m1 ('current week' column) is diagnostics only: the newest week where any disease's cell held a number.
+        newestNonBlankCurrentWeek: built.newestCurrentWeekCell ?? null,
         rowsByYear: yearsSeen,
         labelsInMinnesotaRows: allLabels.size,
         pathogens: built.perPathogen,
@@ -752,11 +947,9 @@ export const cdcNndss: SourceModule = {
         unmappedWatch,
       })
       info.push(`Latest CDC table: ${latest.year} week ${latest.week} (week ending ${latest.weekEnding}).`)
-      // run.ts dates the source by its newest non-null point; explain why that can lag the table.
+      // run.ts dates the source by its newest non-null point; explain when that lags the table.
       if (!newestCount || newestCount < latest.weekEnding) {
-        info.push(
-          `Minnesota leaves most current-week cells blank, so the newest weekly count (${newestCount ?? 'none'}) can lag the table; year-to-date totals are current through ${latest.weekEnding}.`,
-        )
+        info.push(`No disease has a count for the latest table week, so the newest value (${newestCount ?? 'none'}) lags the table.`)
       }
       if (loaded.via === 'pophive-mirror') {
         if (loaded.liveRejected) {

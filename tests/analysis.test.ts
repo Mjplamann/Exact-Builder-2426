@@ -308,6 +308,35 @@ describe('rare targets', () => {
     expect(p.primary?.metric).toBe('cases_ytd')
     expect(p.headline).toBe('Whooping cough: 186 Minnesota cases so far in 2026 (as of 2026-09-10).')
   })
+  it('never rate batch-reported NNDSS weekly counts (a 0 → 30 jump is a batch, not a surge)', () => {
+    const vals: number[] = [...Array.from({ length: 150 }, (_, i) => (i % 7 === 0 ? 4 : 0)), 0, 0, 0, 0, 0, 30]
+    const s = mk({ id: 'cdc-nndss:nndss-mn:pertussis:cases:state:27', pathogen: 'pertussis', metric: 'cases', points: weeklyTo(LAST, vals) })
+    const sig = summarize(s, NOW)!
+    expect(sig.latestValue).toBe(30)
+    expect(sig.level).toBe('unknown')
+    expect(sig.trend).toBe('unknown')
+    expect(sig.percentile).toBeUndefined()
+    expect(sig.levelBasis).toMatch(/batches/)
+    // The same shape from another source is still rated against its history.
+    const other = summarize({ ...s, id: 'mdh:mdh-other:pertussis:cases:state:27', source: 'mdh', dataset: 'mdh-other' }, NOW)!
+    expect(other.level).toBe('very-high')
+  })
+  it("lead with MDH's year-to-date total over a fresher NNDSS one from the same year, unless MDH's is stale", () => {
+    const mdh = (date: string) =>
+      mk({ id: 'mdh:mdh-other:pertussis:cases_ytd:state:27', pathogen: 'pertussis', metric: 'cases_ytd', points: [[date, 186]], attrs: { year: '2026' } })
+    const nndss = mk({
+      id: 'cdc-nndss:nndss-mn:pertussis:cases_ytd:state:27',
+      pathogen: 'pertussis',
+      metric: 'cases_ytd',
+      points: weeklyTo('2026-09-26', [89, 89, 119]),
+      attrs: { year: '2026', ytdPrevYear: '1125' },
+    })
+    const lead = (m: Series) => runAnalysis([file([m]), file([nndss])], [], { now: NOW, log: quiet }).pulse.pathogens[0]
+    const fresh = lead(mdh('2026-09-10'))
+    expect(fresh.primary?.source).toBe('mdh')
+    expect(fresh.headline).toBe('Whooping cough: 186 Minnesota cases so far in 2026 (as of 2026-09-10).')
+    expect(lead(mdh('2026-08-01')).primary?.source).toBe('cdc-nndss')
+  })
   it('keep single detections off the watch list', () => {
     const det = mk({
       id: 'wastewaterscan:wwscan-detections:h5n1:ww_detections:state:27',
@@ -348,5 +377,43 @@ describe('one scale per measure', () => {
     expect(c.level).toBe(r.level)
     const ramsey = pulse.counties.find((x) => x.fips === '27123')!.metrics['ed:influenza']
     expect(ramsey.level).toBe('low')
+  })
+})
+
+describe('MDH panel-only percentages', () => {
+  it('rank behind regional full-panel positivity for the headline (their denominator tracks the assay mix)', () => {
+    const season = (lo: number, hi: number) => Array.from({ length: 160 }, (_, i) => lo + (hi - lo) * (0.5 + 0.5 * Math.sin((i / 52) * 2 * Math.PI)))
+    const mdh = mk({
+      id: 'mdh:mdh-lab:rhino-entero:test_positivity:state:27',
+      pathogen: 'rhino-entero',
+      metric: 'test_positivity',
+      points: weeklyTo(LAST, [...season(0.8, 1.6).slice(0, 159), 1.2]),
+      attrs: { mlsAssays: 'multiplex panels' },
+    })
+    const region = mk({
+      id: 'cdc-nrevss:nrevss-region5:rhino-entero:test_positivity:hhs-region:HHS5',
+      pathogen: 'rhino-entero',
+      metric: 'test_positivity',
+      geo: { type: 'hhs-region', code: 'HHS5', name: 'HHS Region 5' },
+      points: weeklyTo(LAST, [...season(8, 28).slice(0, 159), 33]),
+    })
+    const { pulse } = runAnalysis([file([mdh]), file([region])], [], { now: NOW, log: quiet })
+    const r = pulse.pathogens.find((p) => p.pathogen === 'rhino-entero')!
+    expect(r.primary?.geo.code).toBe('HHS5')
+    expect(r.level).toBe('very-high')
+    // The Minnesota panel percent is still published alongside it.
+    expect(r.signals.some((s) => s.source === 'mdh')).toBe(true)
+  })
+
+  it('still head the card when no regional positivity exists', () => {
+    const mdh = mk({
+      id: 'mdh:mdh-lab:hmpv:test_positivity:state:27',
+      pathogen: 'hmpv',
+      metric: 'test_positivity',
+      points: weeklyTo(LAST, Array.from({ length: 120 }, (_, i) => 0.5 + (i % 10) / 10)),
+      attrs: { mlsAssays: 'multiplex panels' },
+    })
+    const { pulse } = runAnalysis([file([mdh])], [], { now: NOW, log: quiet })
+    expect(pulse.pathogens.find((p) => p.pathogen === 'hmpv')!.primary?.source).toBe('mdh')
   })
 })

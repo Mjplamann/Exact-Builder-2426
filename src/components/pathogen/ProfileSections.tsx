@@ -196,13 +196,13 @@ export function Symptoms({ profile }: { profile: PathogenProfile }) {
         )}
       </div>
       {emergencyWarningSigns.length > 0 && (
-        <Callout tone="critical" title="Emergency warning signs: call 911 or go to the ER">
-          <p className="mb-2 text-sm text-ink-1">Get emergency care right away for anyone with:</p>
+        <Callout tone="critical" title="Emergency warning signs">
+          <p className="mb-2 text-base font-semibold text-ink-1">Call 911 or go to the emergency department right away for anyone with:</p>
           <div className={groups.length > 2 ? 'grid gap-4 md:grid-cols-2 xl:grid-cols-3' : groups.length > 1 ? 'grid gap-4 md:grid-cols-2' : ''}>
             {groups.map((g) => (
               <div key={g.label ?? 'all'}>
                 {g.label && <p className="mb-1 text-sm font-semibold text-ink-1">{g.label}</p>}
-                <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-ink-1 marker:text-ink-1">
+                <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-ink-1 marker:text-[var(--status-critical)]">
                   {g.items.map((t) => (
                     <li key={t}>
                       {t}

@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import type { ActivityLevel, CountyMetric, Manifest, MapLayer, PulseFile, Series } from '../../../shared/types'
 import { LEVELS } from '../../../shared/risk'
 import { MN_COUNTIES } from '../../../shared/geo/mnCounties'
-import { formatDate, LEVEL_INK_VAR, LEVEL_LABEL, LEVEL_VAR, metricMeaning, UNIT_SUFFIX } from '../../lib/format'
+import { formatDate, isCumulative, LEVEL_INK_VAR, LEVEL_LABEL, LEVEL_VAR, metricMeaning, UNIT_SUFFIX } from '../../lib/format'
 import { pathogenName } from '../../content'
 import { LevelScale } from '../charts/LevelScale'
 import { LevelBadge, SourceTag, TrendPill } from '../ui'
@@ -81,14 +81,17 @@ export function StatewideSignals({ pulse, manifest, limit = 5, title = 'Statewid
             <li key={p.pathogen} className="flex flex-col gap-1 px-3 py-2">
               <span className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-medium text-ink-1">{pathogenName(p.pathogen)}</span>
-                <span className="flex items-center gap-1.5">
-                  <LevelBadge level={p.level} size="sm" />
-                  <TrendPill trend={p.trend} compact />
-                </span>
+                {/* A running total for the year never gets a level or a trend arrow. */}
+                {!isCumulative(s.metric) && (
+                  <span className="flex items-center gap-1.5">
+                    <LevelBadge level={p.level} size="sm" />
+                    <TrendPill trend={p.trend} compact />
+                  </span>
+                )}
               </span>
               <span className="text-xs text-ink-2">{capitalize(metricMeaning(s.metric, s.latestValue, s.unit).replace(/\bit\b/, pathogenName(p.pathogen)))}</span>
               <span className="text-xs text-ink-3">
-                Minnesota, week ending {formatDate(s.latestDate, true)} · {sourceName(manifest, s.source)}
+                Minnesota, {isCumulative(s.metric) ? 'as of' : 'week ending'} {formatDate(s.latestDate, true)} · {sourceName(manifest, s.source)}
               </span>
             </li>
           )

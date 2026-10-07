@@ -5,10 +5,11 @@ import type { PathogenProfile } from '../content/types'
 import { getProfile } from '../content'
 import { useDashboard } from '../lib/dashboard'
 import { useAppState } from '../lib/state'
-import { formatDate, formatValue } from '../lib/format'
+import { formatDate, formatValue, isCumulative } from '../lib/format'
 import { Card, EmptyState, LevelBadge, SectionTitle, TrendPill } from '../components/ui'
 import {
-  basisSentence, CATEGORY_LABEL, inlineName, isCaseMetric, KIND_LABEL, pulseFor, regionTitle, sourceShort, summaryOf, yearToDateOf, ytdHeadline,
+  basisSentence, CATEGORY_LABEL, inlineName, isCaseMetric, KIND_LABEL, pulseFor, regionTitle, sourceShort, summaryOf, weeklyCasesSentence,
+  yearToDateOf, ytdHeadline,
 } from '../components/pathogen/meta'
 import { buildSignals } from '../components/pathogen/signals'
 import { hasLiveSignals, SignalSection } from '../components/pathogen/SignalSection'
@@ -34,7 +35,7 @@ const isoToText = (s: string) => s.replace(/\b(\d{4}-\d{2}-\d{2})\b/g, (d) => fo
  * ("Measles: 21 Minnesota cases so far in 2026 (as of …); not detected at …"); keep only what follows.
  */
 function afterCaseClause(headline: string): string | undefined {
-  const m = /^[^:]+: [\d,]+ Minnesota cases? so far in \d{4}(?: \([^)]*\))?(?:;\s*|\.\s*|$)/.exec(headline)
+  const m = /^[^:]+: [\d,]+ (?:Minnesota )?cases?(?: reported)?(?: in Minnesota)? so far (?:in \d{4}|this year)(?: \([^)]*\))?(?:;\s*|\.\s*|$)/.exec(headline)
   if (!m) return headline
   const rest = headline.slice(m[0].length).trim()
   return rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : undefined
@@ -47,22 +48,32 @@ function StatusBox({ pulse, profile, series }: { pulse: PathogenPulse; profile: 
   const ytd = caseCount ? yearToDateOf(p, series) : undefined
   const region = regionTitle(p?.geo)
   const date = p?.latestDate ?? pulse.asOf
-  // MN Pulse's own year-to-date sentence from another source (e.g. CDC NNDSS next to MDH's count).
-  const otherSummary = caseCount
-    ? series?.find((s) => s.pathogen === pulse.pathogen && s.geo.type === 'state' && s.id !== p?.seriesId && !s.age && summaryOf(s))
-    : undefined
+  // MN Pulse's own year-to-date sentence from another source (e.g. CDC NNDSS next to MDH's count): another source's
+  // running total first, else any other source's sentence; never the lead source's own weekly series.
+  const others = caseCount
+    ? (series ?? []).filter((s) => s.pathogen === pulse.pathogen && s.geo.type === 'state' && s.id !== p?.seriesId && !s.age && summaryOf(s))
+    : []
+  const otherSummary =
+    others.find((s) => s.source !== p?.source && isCumulative(s.metric)) ?? others.find((s) => s.source !== p?.source)
   const everyday =
     p && !caseCount && p.unit === '%'
       ? translateValue({ key: p.seriesId, metric: p.metric, value: p.latestValue, date: p.latestDate, geo: p.geo, pathogen: pulse.pathogen }, profile)
       : null
   const headline = caseCount ? afterCaseClause(pulse.headline) : pulse.headline
   const basis = caseCount || p?.metric === 'rt' ? undefined : basisSentence(p?.levelBasis)
+  // Case-count illnesses lead with a running total for the year, which never gets a trend arrow or a level.
   const label = caseCount ? 'Reported cases in Minnesota' : region ? `This week · ${region}` : 'This week in Minnesota'
+  // A running total from a source that also publishes weekly counts (CDC NNDSS) is followed by that week's new reports.
+  const weeklySibling =
+    p?.metric === 'cases_ytd'
+      ? pulse.signals.find((s) => s.metric === 'cases' && s.source === p.source && s.geo.type === 'state' && !s.stale)
+      : p
+  const weekly = caseCount ? weeklyCasesSentence(weeklySibling) : undefined
   return (
     <div className="mt-4 rounded-xl border border-line bg-surface-2 p-4">
       <p className="mb-2 text-xs font-semibold tracking-wide text-ink-3 uppercase">
         {label}
-        {date ? ` · ${caseCount && p?.metric === 'cases_ytd' ? 'as of' : 'week ending'} ${formatDate(ytd?.asOf ?? date, true)}` : ''}
+        {date ? ` · ${caseCount && (ytd || p?.metric === 'cases_ytd') ? 'as of' : 'week ending'} ${formatDate(ytd?.asOf ?? date, true)}` : ''}
       </p>
       {caseCount ? (
         <>
@@ -70,27 +81,28 @@ function StatusBox({ pulse, profile, series }: { pulse: PathogenPulse; profile: 
             <p className="text-2xl leading-tight font-semibold text-ink-1">
               {ytdHeadline(ytd)}
               {ytd.prev != null && (
-                <span className="text-lg font-normal text-ink-2"> · {formatValue(ytd.prev, 'count')} at this point last year</span>
+                <span className="text-lg font-normal text-ink-2"> · {formatValue(ytd.prev, 'count')} by this point last year</span>
               )}
             </p>
           )}
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center rounded-full border border-line-strong px-2.5 py-1 text-sm font-medium text-ink-2">
-              Case counts — no activity level
+              {ytd ? 'Running total · no trend or level' : 'Case counts — no activity level'}
             </span>
-            {pulse.trend !== 'unknown' && <TrendPill trend={pulse.trend} />}
+            {!ytd && p?.metric === 'cases' && pulse.trend !== 'unknown' && <TrendPill trend={pulse.trend} />}
           </div>
           {ytd && (
             <p className="mt-2 text-sm text-ink-2">
               {ytd.source === 'cdc-nndss' ? 'Counted in CDC’s weekly NNDSS table for Minnesota' : `Reported to ${sourceShort(ytd.source)}`}. A
-              year-to-date count only goes up, so it shows how much has happened this year, not whether spread is rising right now.
+              count for the year so far only goes up, so it shows how much has happened this year, not whether spread is rising right now.
             </p>
           )}
+          {weekly && ytd && <p className="mt-1 text-sm text-ink-2">{weekly}.</p>}
           {otherSummary && (
             <p className="mt-1 text-sm text-ink-2">
               <span className="font-medium text-ink-1">From {sourceShort(otherSummary.source)} data: </span>
               {summaryOf(otherSummary)}.{' '}
-              {ytd && /\d/.test(summaryOf(otherSummary) ?? '') && (
+              {ytd && isCumulative(otherSummary.metric) && /\d/.test(summaryOf(otherSummary) ?? '') && (
                 <span className="text-ink-3">Sources count at different times and may use different case definitions, so totals can differ.</span>
               )}
             </p>
@@ -100,8 +112,8 @@ function StatusBox({ pulse, profile, series }: { pulse: PathogenPulse; profile: 
       ) : (
         <>
           <div className="flex flex-wrap items-center gap-2">
-            {p?.metric !== 'rt' && <LevelBadge level={pulse.level} size="lg" />}
-            <TrendPill trend={pulse.trend} />
+            {p?.metric !== 'rt' && !isCumulative(p?.metric) && <LevelBadge level={pulse.level} size="lg" />}
+            {!isCumulative(p?.metric) && <TrendPill trend={pulse.trend} />}
           </div>
           <p className="mt-2 text-sm text-ink-1">{isoToText(pulse.headline)}</p>
           {everyday && (

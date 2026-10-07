@@ -44,7 +44,7 @@ export const LEARN_INTRO = {
   keyIdeas: [
     {
       title: 'Most numbers describe people who got tested',
-      text: 'Positivity, BioFire rates and ED shares count tests and visits, not everyone in Minnesota.',
+      text: 'Lab positivity and emergency department shares count tests and visits, not everyone in Minnesota.',
     },
     {
       title: 'Direction matters more than size',
@@ -92,7 +92,7 @@ export const LEARN_SECTIONS: LearnSection[] = [
     title: 'Percent positive is not the share of people infected',
     short: 'Percent positive',
     summary:
-      'Test positivity and BioFire detection rates tell you what share of tests found a germ, among people sick enough to get tested. They do not tell you what share of Minnesotans are infected.',
+      'Test positivity (and BioFire detection rates, when available) tells you what share of tests found a germ, among people sick enough to get tested. It does not tell you what share of Minnesotans are infected.',
     body: [
       'When a lab reports that 12% of flu tests were positive, it means 12% of tests, not 12% of people. Tests are mostly done on people with symptoms who saw a clinician, went to urgent care or an emergency department, or were admitted to a hospital. Healthy people, and most people with a mild cold who stay home, are never tested.',
       'So positivity answers one question: “Of the sick people who got tested, how many had this germ?” That makes it a good guide to what is causing illness right now, and its direction over several weeks is a dependable sign of spread. The share of everyone who is infected is usually much lower, and positivity cannot tell you exactly how much lower.',
@@ -111,8 +111,9 @@ export const LEARN_SECTIONS: LearnSection[] = [
         means: 'The share of positive tests doubled. That is a strong sign the germ is spreading, even though both numbers sound small.',
       },
       {
-        see: 'Rhinovirus is found in a large share of BioFire panels in September.',
-        means: 'That is normal for early fall. Rhinovirus (a common cold virus) is found all year and peaks when school starts.',
+        see: 'About 3 in 10 regional lab tests are positive for rhinovirus/enterovirus in September.',
+        means:
+          'That is normal for early fall. Rhinovirus (a common cold virus) is found all year and peaks after school starts. In HHS Region 5, positivity has peaked at about 27% to 32% each September since 2021.',
       },
       {
         see: 'Positivity falls while emergency visits rise.',
@@ -345,8 +346,9 @@ export const LEARN_SECTIONS: LearnSection[] = [
       {
         title: 'Which level wins for an illness',
         items: [
-          'An illness can have several signals, each with its own level and date. The headline uses the best up-to-date signal in this order: Minnesota ED visit percentage, Minnesota lab positivity, Minnesota hospital rate or admissions, Minnesota wastewater, flu-like illness visits, then regional BioFire and lab data, then reported cases.',
-          'Signals whose newest data are out of date are skipped for the headline but still listed.',
+          'An illness can have several signals, each with its own level and date. The headline uses the best up-to-date signal in this order: Minnesota ED visit percentage; Minnesota lab positivity; Minnesota hospital rate, then hospital admissions; CDC’s wastewater activity level for Minnesota; flu-like illness visits; HHS Region 5 lab positivity; Midwest BioFire detection rate (when available); Minnesota wastewater concentrations; wastewater detections; then reported cases.',
+          'For rare diseases (measles, mpox, hepatitis A, H5 bird flu, West Nile virus and whooping cough), reported cases come first, then wastewater detections and concentrations, then the order above.',
+          'Signals whose newest data are out of date are skipped for the headline but still listed. Minnesota and regional numbers are preferred over U.S.-wide ones, and CDC’s Rt estimates are used only when nothing else is available.',
         ],
       },
     ],
@@ -361,7 +363,7 @@ export const LEARN_SECTIONS: LearnSection[] = [
     body: [
       '**CDC ensemble forecasts.** Each week, research teams submit forecasts to CDC’s FluSight, COVID-19 and RSV Forecast Hubs. CDC combines them into an ensemble, which is usually more reliable than any single model, for hospital admissions and ED visit percentages up to 3 weeks ahead. When a CDC ensemble exists for a measure, MN Pulse shows it first.',
       '**MN Pulse projection.** For each weekly series, MN Pulse also runs its own “analog–trend ensemble” of three simple methods: persistence (the next weeks look like this week), a damped trend (the last 4 weeks’ growth, fading over time), and a seasonal analog (how the same weeks moved in earlier seasons, skipping 2019–20 to 2021–22). Each method is weighted by how accurate it has been for that series.',
-      '**Ranges come from real past errors.** MN Pulse re-ran the method at every week of the past ~2 years (“backtesting”) and uses how far off it was to set the ranges. The darker 50% range should contain the actual value about half the time; the lighter 95% range about 19 times out of 20.',
+      '**Ranges come from real past errors.** MN Pulse checks the method with walk-forward backtests over about the past 3 years: at each past week it makes a projection using only the data available at that time, then scores it against what actually happened (“out of sample”). The ranges come from how far off those past projections were in similar situations, with a similar level, recent trend and time of year. The darker 50% range should contain the actual value about half the time; the lighter 95% range about 19 times out of 20.',
     ],
     forYou:
       'Use projections to plan, not to predict a date. If even the low end of the range is rising, it is a good time to prepare. Ranges get wider further ahead because the future is less certain.',
@@ -372,7 +374,7 @@ export const LEARN_SECTIONS: LearnSection[] = [
           'They are extrapolations from past data. They cannot anticipate a new variant, a change in testing or reporting, holidays, or school breaks.',
           'They tend to miss turning points: a peak usually shows up in the data before any projection predicts it.',
           'The newest data are often revised, and projections start from those preliminary numbers.',
-          'Skill numbers describe the past ~2 years. A very unusual season can be harder to project.',
+          'Skill numbers describe about the past 3 years. A very unusual season can be harder to project.',
         ],
       },
     ],
@@ -405,7 +407,7 @@ export const LEARN_SECTIONS: LearnSection[] = [
         title: 'Small counties and regional data',
         items: [
           'In small counties a handful of people can swing a rate. County ED values are health-service-area estimates shared by neighboring counties.',
-          'BioFire (Midwest) and NREVSS (HHS Region 5) data are regional and are not Minnesota-specific.',
+          'NREVSS lab data (HHS Region 5), and BioFire data (Midwest) when available, are regional and are not Minnesota-specific.',
           'Wastewater covers only people served by participating plants; homes on septic systems are not included.',
         ],
       },
@@ -507,7 +509,7 @@ export const BIOFIRE_GUIDE = {
   why: [
     'BioFire Syndromic Trends publishes only U.S. and Census-region (four regions) figures. Minnesota is part of the 12-state Midwest region, so no Minnesota-only BioFire numbers are public.',
     'bioMérieux does not offer a public data feed and its terms restrict automated collection from syndromictrends.com, so MN Pulse does not scrape the website.',
-    'Instead, MN Pulse loads BioFire Trend CSV exports added to the repository by bioMérieux or a partner lab, and reads bioMérieux’s published “TRENDS Insights” reports for Midwest rates.',
+    'Instead, MN Pulse can load BioFire Trend CSV exports added to the repository by bioMérieux or a partner lab, and can read Midwest rates from bioMérieux’s published “TRENDS Insights” reports. Until one of these provides data, no BioFire numbers appear on MN Pulse.',
   ],
   steps: [
     'Export the detection-rate CSV from BioFire Trend (or prepare the long format below). Share aggregate rates only, never patient-level data.',

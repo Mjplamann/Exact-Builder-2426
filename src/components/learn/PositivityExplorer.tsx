@@ -17,18 +17,20 @@ export interface PositivityPreset {
 
 const fmtPct = (v: number) => `${v > 0 && v < 1 ? v.toFixed(2) : v < 10 && v % 1 !== 0 ? v.toFixed(1) : Math.round(v)}%`
 
-/** "About 15 in 100 tests found it (roughly 1 in 7)." */
+/**
+ * "About 15 in 100 tests found it (roughly 1 in 7)." The "1 in" part, and the whole phrase below 1%, use the one
+ * shared rounding rule (lib/format aboutOneIn), so 7.5% is "1 in 13" and 0.26% "1 in 400" on every page.
+ */
 export function naturalFrequency(pct: number): string {
-  if (pct <= 0) return 'None of the tests found it.'
+  if (!Number.isFinite(pct) || pct <= 0) return 'None of the tests found it.'
   if (pct >= 100) return 'Every test found it.'
-  if (pct < 1) {
-    const per1000 = Math.round(pct * 10)
-    return per1000 < 1 ? 'Fewer than 1 in 1,000 tests found it.' : `About ${per1000} in 1,000 tests found it.`
-  }
+  const shared = aboutOneIn(pct)
+  if (pct < 1) return shared ? `${shared.charAt(0).toUpperCase()}${shared.slice(1)} tests found it.` : 'Almost none of the tests found it.'
   const n = Math.round(pct)
-  // Same rounding as everywhere else on MN Pulse (lib/format aboutOneIn), so 7.5% is "1 in 13" on every page.
-  const oneIn = pct >= 2.5 && pct < 45 ? aboutOneIn(pct)?.replace(/^about /, 'roughly ') : undefined
-  return `About ${n} in 100 tests found it${oneIn && !/ 1 in 1$/.test(oneIn) ? ` (${oneIn})` : ''}.`
+  // Skip the parenthesis when it says the same thing ("20 in 100" is exactly "1 in 5").
+  const m = shared ? /(\d+) in ([\d,]+)$/.exec(shared) : null
+  const same = m ? Number(m[1]) / Number(m[2].replace(/,/g, '')) === n / 100 : true
+  return `About ${n} in 100 tests found it${shared && !same ? ` (${shared.replace(/^about /, 'roughly ')})` : ''}.`
 }
 
 export function IconArray({ pct, maxWidth = 220 }: { pct: number; maxWidth?: number }) {

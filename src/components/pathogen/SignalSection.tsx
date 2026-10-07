@@ -6,10 +6,11 @@ import type { Forecast, Manifest, PathogenId, Point, SignalSummary, Unit } from 
 import type { PathogenProfile } from '../../content/types'
 import { pathogenName } from '../../content'
 import { useAppState } from '../../lib/state'
-import { formatDate, formatValue, METRIC_LABEL, metricMeaning } from '../../lib/format'
+import { formatDate, formatValue, isCumulative, METRIC_LABEL, metricMeaning } from '../../lib/format'
 import { FilterBar, AUDIENCES } from '../layout/FilterBar'
 import { TrendChart } from '../charts/TrendChart'
 import { Sparkline } from '../charts/Sparkline'
+import { LineKey } from '../charts/ForecastLegend'
 import { Callout, LevelBadge, SourceTag, TrendPill } from '../ui'
 import {
   ageDisplay, basisSentence, inlineName, isCaseMetric, MEASURE_AXIS, MEASURE_EXPLAINER, regionTitle, seriesNoun, sourceName,
@@ -48,8 +49,12 @@ function NeutralChip({ children }: { children: ReactNode }) {
   )
 }
 
-/** Level + trend chips for one latest value. Rt never gets a level; case counts get a neutral chip. */
+/**
+ * Level + trend chips for one latest value. Rt never gets a level; weekly case counts get a neutral chip; a running
+ * total for the year (cases so far this year) only goes up, so it gets neither a level nor a trend arrow.
+ */
 function Chips({ metric, l }: { metric: SignalGroup['metric']; l: Latest }) {
+  if (isCumulative(metric)) return <NeutralChip>Running total · no trend or level</NeutralChip>
   const showLevel = metric !== 'rt' && !!l.level && l.level !== 'unknown'
   return (
     <>
@@ -185,7 +190,7 @@ function Tile({ label, sub, metric, unit, latest: l, spark, source, dataset, not
         </p>
       )}
       <p className="mt-auto text-xs text-ink-3">
-        Week ending {formatDate(l.date, true)} · {sourceShort(source, dataset)}
+        {isCumulative(metric) ? 'As of' : 'Week ending'} {formatDate(l.date, true)} · {sourceShort(source, dataset)}
       </p>
       {note && <p className="text-xs text-ink-3">{note}</p>}
       {action}
@@ -309,7 +314,7 @@ function GroupCard({
       {l && (
         <p className="mt-2 text-sm text-ink-1">
           <span className="text-ink-2">
-            {lead.name}, {group.metric === 'cases_ytd' ? 'as of' : 'week ending'} {formatDate(l.date, true)}:{' '}
+            {lead.name}, {isCumulative(group.metric) ? 'as of' : 'week ending'} {formatDate(l.date, true)}:{' '}
           </span>
           <strong className="font-semibold">{meaningFor(lead, profile, l.value)}</strong>
           {countLatest && countLatest.date === l.date && group.metric === 'hosp_rate' && (
@@ -399,11 +404,7 @@ function AgeCard({ chart, profile, manifest, multiple }: { chart: AgeGroupChart;
               e.highlight ? 'border-accent bg-accent-soft' : 'border-line bg-surface-1'
             }`}
           >
-            <span
-              aria-hidden="true"
-              className="inline-block h-0.5 w-3.5 rounded-full"
-              style={{ background: e.muted ? 'var(--series-muted)' : e.color }}
-            />
+            <LineKey color={e.color ?? 'var(--series-muted)'} width={16} />
             <span className={e.highlight ? 'font-semibold text-ink-1' : 'text-ink-2'}>{ageDisplay(e.series.age ?? e.name)}</span>
             <span className="tabular font-semibold text-ink-1">{l ? formatValue(l.value, chart.unit) : '—'}</span>
             {e.highlight && <span className="text-xs font-medium text-ink-1">Your group</span>}
@@ -412,10 +413,12 @@ function AgeCard({ chart, profile, manifest, multiple }: { chart: AgeGroupChart;
       </ul>
       <p className="mt-2 text-xs text-ink-2">
         {chart.emphasis
-          ? `${audienceLabel ?? 'Your group'} is highlighted; other ages are shown in gray for comparison.`
-          : state.audience === 'pregnant' || state.audience === 'immunocompromised'
-            ? 'Age data can’t show risk during pregnancy or with a weakened immune system. See “Who is most at risk” above.'
-            : 'Pick your group under “Who is most at risk” to highlight it here.'}{' '}
+          ? `${audienceLabel ?? 'Your group'} is highlighted; other ages are shown in fainter blue for comparison.`
+          : `Lines step from the faintest blue (youngest) to the strongest blue (oldest). ${
+              state.audience === 'pregnant' || state.audience === 'immunocompromised'
+                ? 'Age data can’t show risk during pregnancy or with a weakened immune system. See “Who is most at risk” above.'
+                : 'Pick your group under “Who is most at risk” to highlight it here.'
+            }`}{' '}
         Rates for a single age group rest on few patients and can jump from week to week.
       </p>
       <div className="mt-2">

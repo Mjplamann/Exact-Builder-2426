@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import type { Manifest, PathogenPulse, PulseFile } from '../../../shared/types'
 import { pathogenName } from '../../content'
-import { formatDate } from '../../lib/format'
+import { formatDate, isCumulative } from '../../lib/format'
 import { useAppState } from '../../lib/state'
 import { Sparkline } from '../charts/Sparkline'
 import { EmptyState, LevelBadge, SourceTag, TrendPill } from '../ui'
@@ -65,8 +65,10 @@ function WatchCard({ p, manifest }: { p: PathogenPulse; manifest: Manifest }) {
   const fig = s ? cardFigure(s, name, p) : undefined
   const region = s && isWiderThanState(s.geo) ? regionLabel(s.geo) : undefined
   const sparkPoints = s ? s.spark.filter((pt) => pt[1] != null).length : 0
-  // A year-to-date total or a near-empty series has no shape worth drawing.
-  const showSpark = !!s && sparkPoints >= 3 && s.metric !== 'cases_ytd'
+  // A running total for the year (cases so far this year) only goes up: no trend arrow, sparkline or level beside it.
+  const cumulative = !!fig?.cumulative || isCumulative(s?.metric)
+  // A near-empty series has no shape worth drawing.
+  const showSpark = !!s && sparkPoints >= 3 && !cumulative
   const titleId = `watch-${p.pathogen}`
 
   return (
@@ -93,8 +95,8 @@ function WatchCard({ p, manifest }: { p: PathogenPulse; manifest: Manifest }) {
         </span>
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
-        {!(isCaseCount(s) && p.level === 'unknown') && <LevelBadge level={p.level} size="sm" />}
-        {p.trend !== 'unknown' && <TrendPill trend={p.trend} />}
+        {!(isCaseCount(s) && p.level === 'unknown') && !cumulative && <LevelBadge level={p.level} size="sm" />}
+        {p.trend !== 'unknown' && !cumulative && <TrendPill trend={p.trend} />}
         {region && (
           <span className="inline-flex items-center rounded-full border border-dashed border-line-strong px-2 py-0.5 text-xs font-medium text-ink-2">
             {region.chip}
@@ -133,7 +135,7 @@ function WatchCard({ p, manifest }: { p: PathogenPulse; manifest: Manifest }) {
         {s && <SourceTag>{s.sourceName ?? manifest.sources.find((m) => m.id === s.source)?.name ?? s.source}</SourceTag>}
         {(p.asOf ?? s?.latestDate) && (
           <span>
-            {isCaseCount(s) && s?.metric === 'cases_ytd' ? 'As of' : 'Week ending'} {formatDate(p.asOf ?? s?.latestDate, true)}
+            {cumulative ? 'As of' : 'Week ending'} {formatDate(cumulative ? (s?.latestDate ?? p.asOf) : (p.asOf ?? s?.latestDate), true)}
           </span>
         )}
       </div>

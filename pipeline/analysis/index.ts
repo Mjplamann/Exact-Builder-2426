@@ -101,6 +101,12 @@ function normalize(s: Series): Series {
   return s.metric !== 'cases_ytd' && isCumulative(s) ? { ...s, metric: 'cases_ytd', unit: 'count' } : s
 }
 
+/**
+ * Weekly counts of new reports to CDC's NNDSS tables (the rise in year-to-date since last week's table). Minnesota
+ * sends these in batches, so a week can jump from 0 to dozens with no real change in spread: no level, no trend.
+ */
+export const isBatchReported = (s: Pick<Series, 'source' | 'metric'>): boolean => s.source === 'cdc-nndss' && s.metric === 'cases'
+
 /** A single observation (e.g. a year-to-date table read once): never described as "the week ending". */
 const isSnapshot = (s: Series | undefined) => !!s && s.points.filter((p) => p[1] != null).length <= 1
 
@@ -172,6 +178,8 @@ export function summarize(s: Series, now: string, opts: SummarizeOptions = {}): 
     levelBasis = `Rated by the same admissions per 100,000 residents (${formatNumber(sib.latestValue, sib.unit)}): ${sib.levelBasis}`
   } else if (s.metric === 'cases_ytd') {
     levelBasis = 'Year-to-date count (no activity level)'
+  } else if (isBatchReported(s)) {
+    levelBasis = 'New reports to CDC this week (no activity level: Minnesota sends reports in batches, so single weeks jump)'
   } else if (s.metric === 'cases' && !rank) {
     levelBasis = 'Weekly reported cases (too few weeks with counts to rate a level)'
   } else if (s.metric === 'ww_detections') {
@@ -199,7 +207,7 @@ export function summarize(s: Series, now: string, opts: SummarizeOptions = {}): 
   const typical = hist.length >= 26 ? median(hist) : NaN
   const vsTypical = !isRt && typical > 0 ? Math.round((value / typical) * 10) / 10 : undefined
   const trend: TrendDirection =
-    s.metric === 'cases_ytd' ? 'unknown' : isRt ? (pub?.trend ?? 'unknown') : (pub?.trend ?? computed.trend)
+    s.metric === 'cases_ytd' || isBatchReported(s) ? 'unknown' : isRt ? (pub?.trend ?? 'unknown') : (pub?.trend ?? computed.trend)
   const prev = valueAt(s, addDays(date, -7))
   const stale = date < addDays(now.slice(0, 10), -STALE_DAYS)
   return {
@@ -214,7 +222,7 @@ export function summarize(s: Series, now: string, opts: SummarizeOptions = {}): 
     latestValue: value,
     previousValue: prev,
     change2w: s.metric === 'cases_ytd' ? undefined : computed.change2w,
-    percentile: rank && !isRt && s.metric !== 'cases_ytd' ? Math.round(rank.percentile) : undefined,
+    percentile: rank && !isRt && s.metric !== 'cases_ytd' && !isBatchReported(s) ? Math.round(rank.percentile) : undefined,
     vsTypical,
     level,
     trend,
@@ -236,7 +244,19 @@ function ordinal(n: number): string {
 const forecastKey = (f: Forecast) =>
   seriesKey({ ...f, dataset: f.metric === 'ed_visit_pct' ? 'nssp' : f.metric.startsWith('hosp') ? 'nhsn' : '' })
 
+/**
+ * MDH's panel-only percentages (rhino/entero, hMPV, adenovirus, parainfluenza, seasonal coronaviruses) divide by a
+ * test total that also counts flu/COVID-19/RSV-only assays, so their level tracks the assay mix as much as the virus.
+ * They still show on every page, but regional lab positivity from full panels heads the card ahead of them.
+ */
+export const isPanelMixPercent = (sig: Pick<SignalSummary, 'source' | 'metric' | 'attrs'>): boolean =>
+  sig.source === 'mdh' && sig.metric === 'test_positivity' && sig.attrs?.mlsAssays === 'multiplex panels'
+
 function priorityOf(sig: SignalSummary, list: Priority): number {
+  if (isPanelMixPercent(sig)) {
+    const region = list.findIndex((p) => p.metric === 'test_positivity' && p.geo.includes('hhs-region'))
+    if (region !== -1) return region + 0.5
+  }
   const i = list.findIndex((p) => p.metric === sig.metric && p.geo.includes(sig.geo.type))
   return i === -1 ? list.length : i
 }
@@ -329,7 +349,8 @@ export function outlookFrom(
   if ((direction === 'rising' || direction === 'rising-fast') && levelOfValue(series, target.date, target.median) === 'minimal') {
     return {
       direction: 'rising',
-      text: `${subject} may rise but stay very low, about ${formatNumber(target.median, series.unit)}, ${span} (${who}).`,
+      // A wastewater concentration has no everyday scale (the card shows it relative to usual): no raw number.
+      text: `${subject} may rise but stay very low${series.metric === 'wastewater_conc' ? '' : `, about ${formatNumber(target.median, series.unit)},`} ${span} (${who}).`,
       forecastId: forecast.id,
     }
   }
@@ -563,7 +584,7 @@ export function rollupSites(all: Series[]): Series[] {
       geo: { type: 'state', code: '27', name: 'Minnesota' },
       label: `${first.label.split(' — ')[0]} — wastewater, median of ${codes.size} Minnesota ${sourceNameOf(first)} plants`,
       points,
-      note: `Weekly median across ${codes.size} wastewater plants (${sites.map((x) => x.geo.name.replace(/ \(.*\)$/, '')).join(', ')}${metro.length === 0 ? '; none in the Twin Cities metro' : ''}). Covers only the communities these plants serve. ${first.note ?? ''}`.trim(),
+      note: `Weekly median across ${codes.size} wastewater plants (${sites.map((x) => x.geo.name.replace(/ \(.*\)$/, '')).join(', ')}${metro.length === 0 ? '; none in the Twin Cities metro' : ''}). Covers only the communities these plants serve. ${(first.note ?? '').replace(/\s*Official level:[^.]*\.\)?\.?/, '')} Level: this median ranked against its own Minnesota history (WastewaterSCAN's per-plant categories compare with national levels).`.trim(),
       attrs: {
         derived: `median of ${reporting.length} reporting plants`,
         plants: String(codes.size),
@@ -742,6 +763,12 @@ export function runAnalysis(files: SeriesFile[], sourceForecasts: Forecast[], ct
       const sa = byId.get(a.seriesId)!.pathogen === pathogen ? 0 : 1
       const sb = byId.get(b.seriesId)!.pathogen === pathogen ? 0 : 1
       if (sa !== sb) return sa - sb
+      // Same-year totals: MDH's own count over what has reached CDC's NNDSS tables, which Minnesota sends in batches.
+      if (a.metric === 'cases_ytd' && b.metric === 'cases_ytd' && a.latestDate.slice(0, 4) === b.latestDate.slice(0, 4)) {
+        const ma = a.source === 'mdh' ? 0 : 1
+        const mb = b.source === 'mdh' ? 0 : 1
+        if (ma !== mb) return ma - mb
+      }
       if (a.latestDate !== b.latestDate) return a.latestDate > b.latestDate ? -1 : 1
       // Detection counts: the system testing more plants speaks for more of Minnesota.
       return testedOf(b) - testedOf(a) || (a.source === 'wastewaterscan' ? -1 : b.source === 'wastewaterscan' ? 1 : 0)

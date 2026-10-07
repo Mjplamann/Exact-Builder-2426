@@ -9,7 +9,7 @@ import type {
 import { addDays, daysBetween } from '../../../shared/mmwr'
 import { computeTrend, levelFromCuts, levelFromPercentile, rankAgainstHistory } from '../../../shared/risk'
 import { getProfile, pathogenName } from '../../content'
-import { aboutOneIn, formatChange, formatValue, METRIC_LABEL, TREND_LABEL } from '../../lib/format'
+import { aboutOneIn, formatChange, formatValue, isCumulative, METRIC_LABEL, TREND_LABEL } from '../../lib/format'
 import type { GeoSelection } from '../../lib/state'
 import { CONTEXT_PLACE_COLOR, SELECTED_PLACE_COLOR } from '../charts/chartTheme'
 import { forecastSourceName, geoLabel } from './labels'
@@ -39,7 +39,7 @@ export const METRIC_TABS: MetricTab[] = [
   { metric: 'wastewater_conc', label: 'Wastewater concentration', title: 'wastewater concentration', unitText: 'normalized concentration in sewage' },
   { metric: 'ww_detections', label: 'Wastewater detections', title: 'wastewater detections', unitText: 'wastewater sites with a detection' },
   { metric: 'ili_pct', label: 'Flu-like illness visits', title: 'flu-like illness visits', unitText: '% of clinic visits for flu-like illness' },
-  { metric: 'cases', label: 'Cases', title: 'reported cases', unitText: 'reported cases per week' },
+  { metric: 'cases', label: 'Weekly cases', title: 'new cases reported each week', unitText: 'new cases reported per week' },
   { metric: 'cases_ytd', label: 'Cases this year', title: 'cases so far this year', unitText: 'cases reported so far this calendar year' },
   { metric: 'outbreaks', label: 'Outbreaks', title: 'reported outbreaks', unitText: 'reported outbreaks per week' },
   { metric: 'deaths', label: 'Deaths', title: 'reported deaths', unitText: 'reported deaths per week' },
@@ -96,7 +96,7 @@ export const MEASURE_INFO: Record<MetricKind, { what: string; why: string }> = {
     why: 'Shows how much disease has been reported this year. Because it only increases, use weekly measures to judge whether activity is rising or falling.',
   },
   cases: {
-    what: 'The number of confirmed or probable cases reported to public health that week.',
+    what: 'The number of new confirmed or probable cases reported to public health that week. In CDC’s weekly NNDSS tables, it is the number Minnesota reported to CDC that week, which can include people who got sick earlier.',
     why: 'Shows where and when infections are being diagnosed. Many mild cases are never tested, so the true number of infections is higher.',
   },
   outbreaks: {
@@ -391,16 +391,18 @@ export function summarizeSeries(s: Series, pulse: PulseFile | undefined, manifes
   const means = s.metric === 'cases_ytd' ? undefined : trailingMeans(s.points)
   const change2wAbs = means ? Math.round((means.now - means.before) * 1e6) / 1e6 : undefined
   const sig = pulse?.pathogens.flatMap((p) => p.signals).find((x) => x.seriesId === s.id)
+  // A running total for the year only goes up: never a trend, a 2-week change or a level.
+  const cumulative = isCumulative(s.metric)
   if (sig) {
     const pubT = publisherTrend(s, sig.latestDate)
     return {
       ...base,
       latestDate: sig.latestDate,
       latestValue: sig.latestValue,
-      change2w: sig.change2w,
-      change2wAbs: sig.change2w == null ? undefined : change2wAbs,
-      level: s.metric === 'rt' ? 'unknown' : sig.level,
-      trend: sig.trend,
+      change2w: cumulative ? undefined : sig.change2w,
+      change2wAbs: cumulative || sig.change2w == null ? undefined : change2wAbs,
+      level: s.metric === 'rt' || cumulative ? 'unknown' : sig.level,
+      trend: cumulative ? 'unknown' : sig.trend,
       trendBy: pubT && pubT.trend === sig.trend ? pubT.by : undefined,
       trendLabel: pubT && pubT.trend === sig.trend ? pubT.label : undefined,
       levelBasis: sig.levelBasis,
@@ -461,7 +463,8 @@ export function changeDisplay(r: Pick<SignalRow, 'change2w' | 'change2wAbs' | 'l
   kind: 'pct' | 'abs' | 'none'
 } {
   // Rt is itself a rate of spread; a percentage change of it reads as a contradiction next to "Growing".
-  if (r.series.metric === 'rt') return { text: '—', kind: 'none' }
+  // A running total only goes up, so its change says nothing about whether spread is rising.
+  if (r.series.metric === 'rt' || isCumulative(r.series.metric)) return { text: '—', kind: 'none' }
   if (r.change2w == null || !Number.isFinite(r.change2w)) return { text: '—', kind: 'none' }
   const pctContradicts = r.latestValue === 0 || (r.trend === 'steady' && Math.abs(Math.round(r.change2w * 100)) >= 10)
   if (!pctContradicts) return { text: formatChange(r.change2w), kind: 'pct' }
@@ -655,7 +658,7 @@ function meaningOf(s: Series, value: number, who: string): string {
     case 'ww_detections':
       return `${who} was detected at ${Math.round(value)} wastewater site${Math.round(value) === 1 ? '' : 's'} that week.`
     case 'cases':
-      return `${Math.round(value).toLocaleString('en-US')} ${who} case${Math.round(value) === 1 ? ' was' : 's were'} reported in ${where} that week.`
+      return `${Math.round(value).toLocaleString('en-US')} new ${who} case${Math.round(value) === 1 ? ' was' : 's were'} reported in ${where} that week.`
     case 'cases_ytd':
       return `${Math.round(value).toLocaleString('en-US')} ${who} case${Math.round(value) === 1 ? ' has' : 's have'} been reported in ${where} so far this year.`
     case 'outbreaks':

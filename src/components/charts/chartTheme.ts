@@ -15,12 +15,113 @@ export function cssVar(name: string): string {
 }
 
 const VAR_RE = /^var\(\s*(--[\w-]+)\s*(?:,\s*(.+))?\)$/
+const MIX_RE = /^color-mix\(\s*in\s+oklab\s*,(.+)\)$/i
 
-/** Resolve "var(--token)" (or "var(--token, fallback)") to a concrete color; other strings pass through. */
+/**
+ * Resolve "var(--token)" (or "var(--token, fallback)") to a concrete color; other strings pass through.
+ * "color-mix(in oklab, <color> P%, <color>)" (the form ordinalColor() writes, tokens allowed inside) is mixed
+ * here too, so one CSS string colors both HTML swatches (natively) and canvas charts.
+ */
 export function resolveColor(color: string): string {
-  const m = VAR_RE.exec(color.trim())
+  const c = color.trim()
+  const mix = MIX_RE.exec(c)
+  if (mix) return resolveMix(mix[1]) ?? 'gray'
+  const m = VAR_RE.exec(c)
   if (!m) return color
   return cssVar(m[1]) || (m[2] ? resolveColor(m[2]) : 'gray')
+}
+
+/** Split "a, b(c, d), e" at top-level commas. */
+function splitTop(s: string): string[] {
+  const out: string[] = []
+  let depth = 0
+  let start = 0
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i]
+    if (ch === '(') depth++
+    else if (ch === ')') depth--
+    else if (ch === ',' && depth === 0) {
+      out.push(s.slice(start, i).trim())
+      start = i + 1
+    }
+  }
+  out.push(s.slice(start).trim())
+  return out
+}
+
+function resolveMix(args: string): string | undefined {
+  const parts = splitTop(args)
+  if (parts.length !== 2) return undefined
+  const stops = parts.map((p) => {
+    const m = /^(.*?)\s+([\d.]+)%$/.exec(p)
+    return m ? { color: m[1], pct: Number(m[2]) } : { color: p, pct: undefined as number | undefined }
+  })
+  let [p1, p2] = [stops[0].pct, stops[1].pct]
+  if (p1 == null && p2 == null) p1 = p2 = 50
+  else if (p1 == null) p1 = 100 - p2!
+  else if (p2 == null) p2 = 100 - p1
+  const sum = p1 + p2!
+  if (!(sum > 0)) return undefined
+  const a = rgbOf(resolveColor(stops[0].color))
+  const b = rgbOf(resolveColor(stops[1].color))
+  if (!a || !b) return undefined
+  const t = p2! / sum
+  const la = oklabFromRgb(a)
+  const lb = oklabFromRgb(b)
+  return hexFromOklab([0, 1, 2].map((k) => la[k] + (lb[k] - la[k]) * t) as [number, number, number])
+}
+
+function rgbOf(color: string): [number, number, number] | undefined {
+  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(color.trim())
+  if (hex) {
+    const h = hex[1].length === 3 ? hex[1].replace(/./g, (x) => x + x) : hex[1]
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
+  }
+  const rgb = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(color)
+  return rgb ? [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])] : undefined
+}
+
+const toLinear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
+const toGamma = (c: number) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055)
+
+function oklabFromRgb([R, G, B]: [number, number, number]): [number, number, number] {
+  const [r, g, b] = [R, G, B].map((v) => toLinear(v / 255))
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b)
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b)
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b)
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  ]
+}
+
+function hexFromOklab([L, a, b]: [number, number, number]): string {
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3
+  const rgb = [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ]
+  return `#${rgb.map((c) => Math.round(Math.min(1, Math.max(0, toGamma(c))) * 255).toString(16).padStart(2, '0')).join('')}`
+}
+
+/**
+ * The i-th of n steps (0-based) of a one-hue ordinal ramp for ordered categories such as age bands, as a CSS
+ * color: an OKLab mix between two --seq-* tokens, so the steps have even lightness gaps in both themes.
+ * The default range (--seq-300 → --seq-700) passes the dataviz ordinal checks for up to 6 steps in light and
+ * dark (monotone lightness, adjacent ΔL ≥ 0.06, light end ≥ 2:1 on the surface, single hue). In light mode
+ * step 0 is the lightest; the dark theme's --seq-* tokens run the other way, so step 0 is always the
+ * lowest-contrast end. Never orange or amber, so ordered groups never read as activity levels.
+ */
+export function ordinalColor(i: number, n: number, from = 300, to = 700): string {
+  const t = n <= 1 ? 1 : Math.min(1, Math.max(0, i / (n - 1)))
+  const pct = Math.round(t * 100)
+  if (pct <= 0) return `var(--seq-${from})`
+  if (pct >= 100) return `var(--seq-${to})`
+  return `color-mix(in oklab, var(--seq-${from}) ${100 - pct}%, var(--seq-${to}))`
 }
 
 /** Apply an alpha to a hex / rgb() color. Unknown formats are returned unchanged. */
@@ -189,7 +290,7 @@ export function axisTitle(metric: MetricKind, unit: Unit): string {
     case 'hosp_rate':
       return 'Hospitalizations per 100,000 people, weekly'
     case 'cases':
-      return 'Reported cases per week'
+      return 'New cases reported per week'
     case 'cases_ytd':
       return 'Cases reported so far this year'
     case 'outbreaks':

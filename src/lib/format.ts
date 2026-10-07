@@ -147,13 +147,19 @@ export const METRIC_LABEL: Record<MetricKind, string> = {
   hosp_rate: 'Hospitalization rate',
   wastewater_level: 'Wastewater activity',
   wastewater_conc: 'Wastewater concentration',
-  cases: 'Reported cases',
+  cases: 'Weekly new cases',
   cases_ytd: 'Cases so far this year',
   outbreaks: 'Outbreaks',
   deaths: 'Deaths',
   ww_detections: 'Wastewater detections',
   rt: 'Reproduction number (Rt)',
 }
+
+/**
+ * Running totals (cases reported so far this year) only ever go up, so they never get a trend arrow, a 2-week
+ * change or an activity level; they are read as "so far this year", as of a date.
+ */
+export const isCumulative = (metric: MetricKind | undefined): boolean => metric === 'cases_ytd'
 
 /** "s" unless the value is exactly one. */
 export const plural = (n: number | null | undefined): string => (n === 1 ? '' : 's')
@@ -179,7 +185,7 @@ export function metricMeaning(metric: MetricKind, value: number | null | undefin
     case 'wastewater_conc':
       return `normalized wastewater concentration ${v}`
     case 'cases':
-      return `${v} reported case${plural(value)}`
+      return `${v} new case${plural(value)} reported`
     case 'cases_ytd':
       return `${v} case${plural(value)} reported so far this year`
     case 'outbreaks':

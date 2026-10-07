@@ -9,15 +9,21 @@
 // Everything is fitted and scored out of sample, walking forward through the last ~3 years:
 //   * Component weights (per horizon, inverse squared error) at each past origin use only errors
 //     whose outcome was already known at that origin; the live forecast uses all of them.
-//   * Prediction intervals are empirical quantiles of the ensemble's own past errors, taken from the
-//     past situations most like the current one (level, recent slope and week of the season), so a
-//     low summer baseline is not given mid-surge uncertainty and vice versa.
-//   * The upper end is capped at the larger of the highest value this series reached in the same
-//     weeks of earlier seasons and SEASONAL_CAP_MULTIPLE × the median (and 1.5× its all-time record),
-//     so a 4-week band cannot run far beyond anything plausible for the time of year.
-//   * Reported skill (MAE vs. a "no change" forecast, 95% coverage) replays exactly this procedure at
-//     each past origin with only the information available then — coverage is never computed from the
-//     same errors the interval was built from.
+//   * The projection is the conditional median outcome: the ensemble point forecast plus the median of
+//     the ensemble's own past errors in the past situations most like the current one (level, recent
+//     slope and week of the season). Prediction intervals are the other empirical quantiles of that
+//     same error set, so the median always sits inside its own band and a low summer baseline is not
+//     given mid-surge uncertainty (and vice versa). A tiny normal-shaped term (TIE_BREAK × spread)
+//     breaks ties between error quantiles so lo95 < lo80 < lo50 < median < hi50 < hi80 < hi95.
+//   * The upper end is softly capped near the larger of the highest value this series reached in the
+//     same weeks of earlier seasons and SEASONAL_CAP_MULTIPLE × the median (and 1.5× its all-time
+//     record): above that cap values are log-compressed (softCap) rather than clamped, so a 4-week band
+//     cannot run far beyond anything plausible for the time of year but its quantiles stay distinct.
+//     A physical maximum (100 for percentages) is approached smoothly for the same reason, as is zero
+//     for every quantile but lo95, which may be exactly 0 so that zero outcomes count as covered.
+//   * Reported skill (MAE vs. a "no change" forecast, 95% coverage) replays exactly this procedure —
+//     centering, quantiles, soft cap — at each past origin with only the information available then:
+//     coverage is never computed from the same errors the interval was built from.
 // Sparse series (mostly zeros, zero in recent weeks, or a projected median of zero) are not projected:
 // their log-scale errors are dominated by the zero offset and the bands are meaningless.
 //
@@ -43,6 +49,12 @@ export interface ProjectionOptions {
   origin?: string
   /** Trend damping factor φ (default 0.6, chosen by backtest on MN flu and COVID admissions). */
   damping?: number
+  /**
+   * Center the projection on the conditional median outcome (default true). false keeps the raw
+   * ensemble point forecast as the median — only for backtest comparisons, as its band can then be
+   * one-sided around it.
+   */
+  center?: boolean
 }
 
 export interface ProjectionSkill {
@@ -62,8 +74,10 @@ export interface ProjectionResult {
   points: QuantileForecastPoint[]
   skill: ProjectionSkill[]
   weights: Record<ComponentName, number>[]
-  /** Upper cap applied to each horizon's quantiles (same order as `points`). */
+  /** Soft upper cap applied to each horizon's quantiles (same order as `points`); see softCap. */
   caps: number[]
+  /** Log-scale shift from the ensemble point forecast to the median, per horizon (median of similar past errors). */
+  centering: number[]
   method: string
 }
 
@@ -80,10 +94,67 @@ export const MIN_INTERVAL_ERRORS = 20
 const MIN_SKILL_ORIGINS = 10
 /** Weeks of season either side of the target used for the seasonal cap. */
 const CAP_WINDOW_WEEKS = 1
-/** Upper quantiles never exceed this multiple of the median unless the same weeks of past seasons did. */
+/** Upper quantiles are compressed above this multiple of the median unless the same weeks of past seasons went higher. */
 export const SEASONAL_CAP_MULTIPLE = 3
 /** Phase distance (weeks of season) that counts as much as one standard deviation of level. */
 const PHASE_SCALE_WEEKS = 8
+/** Scale of the log-compression above the seasonal cap, as a fraction of the cap (see softCap). */
+export const CAP_SOFTNESS = 0.1
+/** Quantiles (except lo95) below this fraction of the log offset c are compressed smoothly towards, never onto, zero. */
+const FLOOR_SOFTNESS = 0.1
+/** Width of the smooth approach to a physical maximum, as a fraction of it (95–100 for percentages). */
+const MAX_SOFT_BAND = 0.05
+/** Weight of the normal-shaped term that keeps tied empirical error quantiles strictly ordered. */
+const TIE_BREAK = 0.002
+/** Quantile levels of a forecast point, lowest first; index 3 is the median. */
+const LEVELS = [0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975] as const
+const NORMAL_Z: Record<number, number> = { 0.025: -1.96, 0.1: -1.2816, 0.25: -0.6745, 0.5: 0, 0.75: 0.6745, 0.9: 1.2816, 0.975: 1.96 }
+
+/**
+ * Soft upper cap: the identity up to `cap`, then a log-compression with slope 1 at the cap,
+ *   softCap(v) = cap + s·ln(1 + (v − cap)/s),  s = k·cap,
+ * so values above the cap keep their order (strictly increasing) but grow only logarithmically:
+ * 2× the cap maps to ≈ 1.24× it, 100× the cap to ≈ 1.69× it (k = 0.1).
+ */
+export function softCap(v: number, cap: number, k = CAP_SOFTNESS): number {
+  if (!(cap > 0) || !Number.isFinite(cap) || v <= cap) return v
+  const s = k * cap
+  return cap + s * Math.log1p((v - cap) / s)
+}
+
+/** Smooth approach to a physical maximum: the identity below max·(1 − MAX_SOFT_BAND), strictly increasing and < max above. */
+export function softMax(v: number, max: number | undefined): number {
+  if (max == null || !Number.isFinite(max)) return v
+  const w = MAX_SOFT_BAND * max
+  const t = max - w
+  return v <= t ? v : max - w * Math.exp(-(v - t) / w)
+}
+
+/** Smooth floor at zero: the identity above `a`, and a·e^(x/a − 1) (> 0, slope 1 at a) below it. */
+function softFloor(x: number, a: number): number {
+  return x >= a ? x : a * Math.exp(x / a - 1)
+}
+
+/** Round to at least 3 decimals and `sig` significant digits. */
+function roundSig(v: number, sig: number): number {
+  if (v === 0 || !Number.isFinite(v)) return v
+  const d = Math.max(3, sig - 1 - Math.floor(Math.log10(Math.abs(v))))
+  return Number(v.toFixed(Math.min(d, 100)))
+}
+
+/**
+ * Round an ascending set of quantiles for publication (≥ 3 decimals, ≥ 4 significant digits), adding
+ * digits when needed so values that were strictly increasing stay strictly increasing.
+ */
+export function roundOrdered(xs: number[]): number[] {
+  const strict = (a: number[]) => a.every((v, i) => i === 0 || v > a[i - 1])
+  const wanted = strict(xs)
+  for (let sig = 4; sig <= 17; sig++) {
+    const r = xs.map((v) => roundSig(v, sig))
+    if (!wanted || strict(r)) return r
+  }
+  return xs
+}
 
 interface Prepared {
   dates: string[]
@@ -96,11 +167,12 @@ interface Prepared {
   c: number
 }
 
-function prepare(points: Point[]): Prepared | null {
+function prepare(points: Point[], upTo?: string): Prepared | null {
   const clean = points.filter((p): p is [string, number] => p[1] != null && Number.isFinite(p[1]) && p[1] >= 0)
   if (clean.length < MIN_POINTS) return null
-  const positives = clean.map((p) => p[1]).filter((v) => v > 0)
-  // Offset keeps log() finite at zero while staying small relative to the series' scale.
+  const positives = clean.filter((p) => !upTo || p[0] <= upTo).map((p) => p[1]).filter((v) => v > 0)
+  // Offset keeps log() finite at zero while staying small relative to the series' scale; computed from
+  // data up to the forecast origin only, so a forecast from an earlier origin ignores later weeks.
   const c = Math.max(1e-3, 0.1 * (positives.length ? median(positives) : 1))
   const dates = clean.map((p) => p[0])
   const values = clean.map((p) => p[1])
@@ -225,7 +297,8 @@ export function project(points: Point[], opts: ProjectionOptions = {}): Projecti
   const H = opts.horizon ?? 4
   const exclude = new Set(opts.excludeSeasons ?? PANDEMIC_SEASONS)
   const damping = opts.damping ?? DEFAULT_DAMPING
-  const p = prepare(points)
+  const centered = opts.center ?? true
+  const p = prepare(points, opts.origin)
   if (!p) return null
   let T = p.dates.length - 1
   if (opts.origin) {
@@ -361,18 +434,29 @@ export function project(points: Point[], opts: ProjectionOptions = {}): Projecti
       .map((r) => r.e)
   }
 
-  const NORMAL_Z: Record<number, number> = { 0.025: -1.96, 0.1: -1.2816, 0.25: -0.6745, 0.5: 0, 0.75: 0.6745, 0.9: 1.2816, 0.975: 1.96 }
-  /** Interval offsets in z space from errors; normal approximation widening with √h when too few. */
-  const offsets = (errs: number[], h: number, tau: number) => {
+  /**
+   * Error quantiles in z space as a function of the level, from similar past errors: the empirical
+   * quantile plus a tiny normal-shaped tie-break (strictly increasing whenever the errors' 95% spread
+   * is non-zero). With too few errors, or none spread at all, a normal approximation widening with √h
+   * around their median (0 with no errors).
+   */
+  const errorQuantiles = (errs: number[], h: number, tau: number): ((level: number) => number) => {
+    let mid = 0
     if (errs.length >= MIN_INTERVAL_ERRORS) {
-      return (q: number) => quantile(errs, q)
+      const qe = (l: number) => quantile(errs, l)
+      const spread = qe(0.975) - qe(0.025)
+      if (spread > 0) return (l) => qe(l) + TIE_BREAK * NORMAL_Z[l] * spread
+      mid = qe(0.5)
     }
     const diffs = p.z.slice(1, tau + 1).map((v, i) => v - p.z[i])
-    const s1 = Number.isFinite(stdev(diffs)) ? stdev(diffs) : 0.25
-    return (q: number) => (NORMAL_Z[q] ?? 0) * s1 * Math.sqrt(h)
+    const sd = stdev(diffs)
+    const s1 = Number.isFinite(sd) ? sd : 0.25
+    return (l) => mid + NORMAL_Z[l] * s1 * Math.sqrt(h)
   }
 
-  const valueOf = (zv: number) => Math.max(0, Math.exp(zv) - p.c)
+  /** Original scale from z, with a smooth floor so values stay positive and strictly increasing. */
+  const floorAt = FLOOR_SOFTNESS * p.c
+  const valueOf = (zv: number) => softFloor(Math.exp(zv) - p.c, floorAt)
 
   /** Upper cap for a forecast made at tau for targetDate with the given median (original scale). */
   const capAt = (tau: number, targetDate: string, med: number): number => {
@@ -390,6 +474,38 @@ export function project(points: Point[], opts: ProjectionOptions = {}): Projecti
     return Math.min(opts.max ?? Infinity, Math.max(med, Math.min(global, seasonal)))
   }
 
+  interface Band {
+    /** Quantiles at LEVELS on the original scale (unrounded); values[3] is the median. */
+    values: number[]
+    cap: number
+    /** z-scale shift from the ensemble point forecast to the median. */
+    shift: number
+    /** Median before the smooth floor (≤ 0 means the series is projected to be off). */
+    rawMedian: number
+  }
+  /**
+   * The forecast procedure for one origin and horizon, shared by the live forecast and the backtest:
+   * centre the ensemble forecast zh on the median of similar past errors, take the other quantiles
+   * from the same errors, and softly cap the upper end.
+   */
+  const bandOf = (tau: number, h: number, zh: number, errs: number[], targetDate: string): Band => {
+    const q = errorQuantiles(errs, h, tau)
+    const zs = LEVELS.map((l) => zh + q(l))
+    // Uncentred (comparison only): the raw ensemble forecast is the median, whatever its band says.
+    if (!centered) zs[3] = zh
+    const med = valueOf(zs[3])
+    const cap = capAt(tau, targetDate, med)
+    const values = zs.map((z) => softMax(softCap(valueOf(z), cap), opts.max))
+    // The lowest bound may reach the physical minimum itself, so outcomes of exactly zero can fall inside
+    // the 95% interval; it stays below lo80 because softFloor(x) > max(0, x) for x < floorAt.
+    values[0] = softMax(softCap(Math.max(0, Math.exp(zs[0]) - p.c), cap), opts.max)
+    if (!centered) {
+      for (let i = 0; i < 3; i++) values[i] = Math.min(values[i], values[3])
+      for (let i = 4; i < 7; i++) values[i] = Math.max(values[i], values[3])
+    }
+    return { values, cap, shift: zs[3] - zh, rawMedian: Math.exp(zs[3]) - p.c }
+  }
+
   // 3) Skill: replay the live procedure at every past origin with only what was known then.
   const skill: ProjectionSkill[] = []
   for (let h = 1; h <= H; h++) {
@@ -401,15 +517,11 @@ export function project(points: Point[], opts: ProjectionOptions = {}): Projecti
       if (r.h !== h) continue
       const errs = similarErrors(h, r.t, situation(r.t))
       if (errs.length < MIN_INTERVAL_ERRORS) continue
-      const off = offsets(errs, h, r.t)
-      const med = valueOf(r.zh)
-      const cap = capAt(r.t, p.dates[r.target], med)
-      const lo = Math.min(cap, valueOf(r.zh + off(0.025)))
-      const hi = Math.min(cap, valueOf(r.zh + off(0.975)))
+      const { values } = bandOf(r.t, h, r.zh, errs, p.dates[r.target])
       const actual = p.values[r.target]
       n++
-      if (actual >= lo - 1e-9 && actual <= hi + 1e-9) inside++
-      absErr += Math.abs(Math.min(cap, med) - actual)
+      if (actual >= values[0] - 1e-9 && actual <= values[6] + 1e-9) inside++
+      absErr += Math.abs(values[3] - actual)
       absNaive += Math.abs(p.values[r.t] - actual)
     }
     if (n < MIN_SKILL_ORIGINS) continue
@@ -428,47 +540,31 @@ export function project(points: Point[], opts: ProjectionOptions = {}): Projecti
   const sitT = situation(T)
   const out: QuantileForecastPoint[] = []
   const caps: number[] = []
+  const centering: number[] = []
   for (let h = 1; h <= H; h++) {
     const zh = combine(fT, weights[h - 1], h)
-    const off = offsets(similarErrors(h, T, sitT), h, T)
     const date = addDays(p.dates[T], 7 * h)
-    const med = valueOf(zh)
-    const cap = capAt(T, date, med)
-    const at = (q: number) => round(Math.min(cap, valueOf(zh + off(q))))
-    const pt: QuantileForecastPoint = {
-      date,
-      horizon: h,
-      median: round(Math.min(cap, med)),
-      lo50: at(0.25),
-      hi50: at(0.75),
-      lo80: at(0.1),
-      hi80: at(0.9),
-      lo95: at(0.025),
-      hi95: at(0.975),
-    }
-    // Keep quantiles ordered after rounding and capping.
-    pt.lo50 = Math.min(pt.lo50, pt.median)
-    pt.hi50 = Math.max(pt.hi50, pt.median)
-    pt.lo80 = Math.min(pt.lo80!, pt.lo50)
-    pt.hi80 = Math.max(pt.hi80!, pt.hi50)
-    pt.lo95 = Math.min(pt.lo95, pt.lo80)
-    pt.hi95 = Math.max(pt.hi95, pt.hi80)
-    out.push(pt)
-    caps.push(round(cap))
+    const band = bandOf(T, h, zh, similarErrors(h, T, sitT), date)
+    // A projected median of zero means the series is effectively off: its band would be all offset noise.
+    if (band.rawMedian <= 0) return null
+    const [lo95, lo80, lo50, med, hi50, hi80, hi95] = roundOrdered(band.values)
+    out.push({ date, horizon: h, median: med, lo50, hi50, lo80, hi80, lo95, hi95 })
+    caps.push(round(band.cap))
+    centering.push(round(band.shift))
   }
-  // A projected median of zero means the series is effectively off: its band would be all offset noise.
-  if (out.some((pt) => pt.median <= 0)) return null
   return {
     origin: p.dates[T],
     points: out,
     skill,
     weights,
     caps,
+    centering,
     method:
       'Analog–trend ensemble on log scale: persistence, damped 4-week trend, and same-weeks-of-prior-seasons analogs, ' +
-      'weighted by past error using only outcomes known at each point in time. Intervals come from past errors in similar ' +
-      'situations (level, recent trend, week of season), capped at the highest value seen in the same weeks of past seasons ' +
-      `or ${SEASONAL_CAP_MULTIPLE}× the median. Skill and coverage are scored out of sample.`,
+      'weighted by past error using only outcomes known at each point in time. The projection is centred on the median ' +
+      'outcome in similar past situations (level, recent trend, week of season), and its intervals come from the same ' +
+      'past errors; values above the highest seen in the same weeks of past seasons ' +
+      `(or ${SEASONAL_CAP_MULTIPLE}× the median) are compressed. Skill and coverage are scored out of sample.`,
   }
 }
 

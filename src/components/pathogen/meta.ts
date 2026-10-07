@@ -229,7 +229,7 @@ export const TILE_CAPTION: Record<MetricKind, string> = {
   hosp_rate: 'admissions per 100,000',
   wastewater_level: 'activity level',
   wastewater_conc: 'normalized concentration',
-  cases: 'cases in the week',
+  cases: 'new cases reported that week',
   cases_ytd: 'cases so far this year',
   outbreaks: 'outbreaks in the week',
   deaths: 'deaths in the week',
@@ -259,9 +259,11 @@ export function yearToDateOf(sig: SignalSummary | undefined, series: Series[] | 
   if (!sig || !isCaseMetric(sig.metric)) return undefined
   const s = series?.find((x) => x.id === sig.seriesId)
   if (sig.metric === 'cases_ytd') {
+    const prev = Number(sig.attrs?.ytdPrevYear)
     return {
       value: sig.latestValue,
       year: String(sig.attrs?.year ?? sig.latestDate.slice(0, 4)),
+      prev: sig.attrs?.ytdPrevYear != null && Number.isFinite(prev) ? prev : undefined,
       asOf: sig.latestDate,
       source: sig.source,
       seriesId: sig.seriesId,
@@ -282,9 +284,33 @@ export function yearToDateOf(sig: SignalSummary | undefined, series: Series[] | 
   }
 }
 
-/** "18 Minnesota cases in 2026" (the hero headline for case-count illnesses). */
-export function ytdHeadline(y: YearToDate): string {
-  return `${formatValue(y.value, 'count')} Minnesota case${plural(y.value)} in ${y.year}`
+/** "so far this year" for the current calendar year, otherwise "in 2025" (a finished year's total). */
+export function ytdPhrase(y: Pick<YearToDate, 'year'>, now = new Date()): string {
+  return y.year === String(now.getFullYear()) ? 'so far this year' : `in ${y.year}`
+}
+
+/**
+ * "18 Minnesota cases so far this year" (the hero headline for case-count illnesses). A running total, so it
+ * never sits next to a trend arrow or an activity level.
+ */
+export function ytdHeadline(y: YearToDate, now = new Date()): string {
+  return `${formatValue(y.value, 'count')} Minnesota case${plural(y.value)} ${ytdPhrase(y, now)}`
+}
+
+/** Who a weekly case count is reported to, for sentences ("reported to CDC"). */
+function reportedTo(source: string): string {
+  if (source === 'cdc-nndss' || source.startsWith('cdc')) return 'CDC'
+  return sourceShort(source)
+}
+
+/**
+ * The weekly count behind a case-count illness, as a sentence: "3 new cases reported to CDC in the week ending
+ * Sep 26, 2026". Undefined for anything but a weekly 'cases' signal.
+ */
+export function weeklyCasesSentence(sig: Pick<SignalSummary, 'metric' | 'latestValue' | 'latestDate' | 'source'> | undefined): string | undefined {
+  if (!sig || sig.metric !== 'cases' || sig.latestValue == null || !Number.isFinite(sig.latestValue)) return undefined
+  const n = sig.latestValue
+  return `${formatValue(n, 'count')} new case${plural(n)} reported to ${reportedTo(sig.source)} in the week ending ${formatDate(sig.latestDate, true)}`
 }
 
 /** Human source name from the manifest, plus the dataset abbreviation in the series label ("NSSP"). */
@@ -313,7 +339,7 @@ export const MEASURE_EXPLAINER: Record<MetricKind, string> = {
   cases_ytd:
     'The total number of cases reported to public health so far this year. It only goes up during the year, so it shows how much has happened, not whether things are getting better or worse right now.',
   cases:
-    'Cases reported to public health. Many mild cases are never tested or reported, so the true number is higher. Changes over time are more meaningful than the exact count.',
+    'New cases reported to public health each week. In CDC’s weekly NNDSS tables this is the number of cases Minnesota reported to CDC that week, which can include people who got sick earlier. Many mild cases are never tested or reported, so the true number is higher. With only a few cases a week, a change of one or two means little.',
   outbreaks: 'Clusters of illness reported to public health (for example in a school, care facility or restaurant).',
   deaths: 'Deaths reported with this illness.',
   ww_detections: 'The number of wastewater samples or treatment plants where the germ was found that week.',
@@ -330,8 +356,8 @@ export const MEASURE_AXIS: Record<MetricKind, string> = {
   hosp_rate: 'Hospital admissions per 100,000 residents each week',
   wastewater_level: 'Wastewater activity level',
   wastewater_conc: 'Normalized wastewater concentration',
-  cases: 'Reported cases each week',
-  cases_ytd: 'Cases reported so far this year',
+  cases: 'New cases reported each week',
+  cases_ytd: 'Cases reported so far this year (a running total)',
   outbreaks: 'Reported outbreaks each week',
   deaths: 'Reported deaths each week',
   ww_detections: 'Wastewater detections each week',

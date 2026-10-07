@@ -17,6 +17,11 @@
 //   * RSV infant protection: maternal RSV vaccine (32–36 weeks, September–January) OR an infant RSV
 //     antibody (nirsevimab / clesrovimab); RSV vaccine for adults 75+ and 50–74 at increased risk.
 //   * Masks in crowded indoor spaces for higher-risk people (and those around them) when activity is up.
+//   * Children with asthma: daily controller medicine and an asthma action plan (CDC EV-D68 guidance); the
+//     yearly fall rhinovirus/enterovirus rise after school starts is a common asthma trigger.
+// Band summaries stay generic ("respiratory viruses are spreading…"): the band follows the statewide level,
+// and the panel links the currently notable illnesses separately, so no step names which virus is driving
+// activity (that would go stale between data updates).
 // Everything here is educational, not medical advice.
 import type { ActivityLevel, AgeGroupId, PathogenId } from '../../shared/types'
 import type { SourceLink } from './types'
@@ -76,6 +81,7 @@ const SRC = {
   cdcRsvInfants: { label: 'CDC — RSV in infants and young children', url: 'https://www.cdc.gov/rsv/infants-young-children/index.html' },
   cdcRsvOlder: { label: 'CDC — RSV vaccines for adults', url: 'https://www.cdc.gov/rsv/vaccines/adults.html' },
   cdcHands: { label: 'CDC — About handwashing', url: 'https://www.cdc.gov/clean-hands/about/index.html' },
+  cdcEvd68: { label: 'CDC — About enterovirus D68 (asthma and fall respiratory illness)', url: 'https://www.cdc.gov/non-polio-enterovirus/about/about-enterovirus-d68.html' },
   mdhFlu: { label: 'MDH — Influenza situation update', url: 'https://www.health.state.mn.us/diseases/flu/stats/index.html' },
   mdhImmunize: {
     label: 'MDH health advisory (Jan. 2026) — MDH aligns with medical association immunization recommendations',
@@ -210,13 +216,18 @@ const LOW: Record<AgeGroupId, Draft> = {
         text: 'Ask your child’s clinician about the COVID-19 vaccine, especially for kids under 2 or with health conditions.',
         pathogens: ['covid'],
       },
+      {
+        text: 'If your child has asthma, keep giving their daily controller medicine and keep an up-to-date asthma action plan at home and at school.',
+        why: 'Colds spread quickly after school starts each fall and are a common trigger of asthma attacks.',
+        pathogens: ['rhino-entero'],
+      },
       { ...A.hands, text: 'Teach hand-washing with soap and water for 20 seconds, especially before eating and after the bathroom.' },
       {
         text: 'Keep sick kids home from school or child care until they’ve had no fever for 24 hours without fever medicine and feel better.',
         pathogens: RESP,
       },
     ],
-    sources: [SRC.aapFlu, SRC.cdcFluVaccine, SRC.mdhImmunize, SRC.cdcWhenSick, SRC.cdcHands],
+    sources: [SRC.aapFlu, SRC.cdcFluVaccine, SRC.mdhImmunize, SRC.cdcWhenSick, SRC.cdcHands, SRC.cdcEvd68],
   },
   adults: {
     summary: 'Activity is low. A few minutes now — a flu shot and good habits — protect you and people around you.',

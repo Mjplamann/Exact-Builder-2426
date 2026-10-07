@@ -5,7 +5,7 @@ import type { ActivityLevel, CountyMetric, MapLayer, MetricKind, PulseFile, Seri
 import { LEVELS, maxLevel } from '../../../shared/risk'
 import { MN_COUNTY_BY_FIPS } from '../../../shared/geo/mnCounties'
 import { pathogenName } from '../../content'
-import { formatDate, formatValue, LEVEL_LABEL, METRIC_LABEL } from '../../lib/format'
+import { formatDate, formatValue, isCumulative, LEVEL_LABEL, METRIC_LABEL } from '../../lib/format'
 import { LevelBadge, TrendPill } from '../ui'
 import { naturalFrequency } from './util'
 
@@ -169,7 +169,7 @@ export function CountySummary({ pulse, fips, series = [] }: { pulse: PulseFile; 
                         </div>
                         <div className="flex shrink-0 flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-1.5">
                           {showLevel && r.metric.level && <LevelBadge level={r.metric.level} size="sm" />}
-                          {r.metric.trend && <TrendPill trend={r.metric.trend} compact />}
+                          {r.metric.trend && !isCumulative(r.layer?.metric) && <TrendPill trend={r.metric.trend} compact />}
                         </div>
                       </li>
                     )

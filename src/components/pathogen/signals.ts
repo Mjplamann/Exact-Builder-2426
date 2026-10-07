@@ -13,7 +13,7 @@ import { METRIC_LABEL } from '../../lib/format'
 import { lastPoint, preferredForecast } from '../../lib/series'
 import type { GeoSelection } from '../../lib/state'
 import { MN_COUNTY_BY_FIPS } from '../../../shared/geo/mnCounties'
-import { seriesVar } from '../charts/chartTheme'
+import { ordinalColor, seriesVar } from '../charts/chartTheme'
 import { ageGroupOf, METRIC_ORDER, pickAgeBands, publisherLabel, relatedIds, pulseFor, summaryOf } from './meta'
 
 /** Measures with no new value for this long are collapsed into a one-line note instead of a chart. */
@@ -341,6 +341,13 @@ export function buildSignals(
     if (bands.length < 2) continue
     const groupsOf = bands.map((s) => ageGroupOf(s))
     const emphasis = groupsOf.includes(audience)
+    // Age bands are ordered (youngest → oldest), so they wear one blue ramp, never the categorical palette
+    // (whose orange and amber read as activity levels). With a matching "Guidance for" group, that band is the
+    // accent line and the others step along a lighter, muted stretch of the same ramp.
+    const nHigh = emphasis ? groupsOf.filter((g) => g === audience).length : 0
+    const nLow = bands.length - nHigh
+    let hi = 0
+    let lo = 0
     ages.push({
       key,
       pathogen: bands[0].pathogen,
@@ -350,12 +357,18 @@ export function buildSignals(
       entries: bands.map((s, i) => {
         const g = groupsOf[i]
         const highlight = emphasis && g === audience
+        const color = !emphasis
+          ? ordinalColor(i, bands.length)
+          : highlight
+            ? nHigh === 1
+              ? 'var(--accent)'
+              : ordinalColor(hi++, nHigh, 500, 700)
+            : ordinalColor(lo++, nLow, 200, 300)
         return {
           series: s,
           signal: signalById.get(s.id),
           name: s.age ?? s.label,
-          // Emphasis: the selected band keeps its fixed slot color; the rest go gray (TrendChart's muted color).
-          color: emphasis && !highlight ? undefined : `var(--series-${i + 1})`,
+          color,
           muted: emphasis && !highlight,
           group: g,
           highlight,
