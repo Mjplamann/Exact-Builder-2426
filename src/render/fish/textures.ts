@@ -682,7 +682,9 @@ function paintFin(b: Bufs, ctx: BodyCtx, look: Appearance, name: FinName, def: F
       }
       const rw = 0.1 * (1 - 0.5 * x) + 0.018;
       const ray = 1 - smooth(rw * 0.55, rw * 1.5, d);
-      const seg = (x * (12 + 4 * x)) % 1;
+      // Each ray is segmented on its own: joints are staggered from ray to ray (aligned joints
+      // read as a woven mesh once a fin is in sharp focus at close range).
+      const seg = (x * (12 + 4 * x) + 0.43 * hash2(ri, 3, ctx.seed)) % 1;
       const joint = ray * Math.exp(-((seg - 0.5) ** 2) / 0.003);
       // Membrane incisions between spines / reduced webbing.
       const between = Math.abs(rp - ri); // 0 on a ray, 0.5 midway
