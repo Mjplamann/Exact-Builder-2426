@@ -10,17 +10,17 @@ const profile: PathogenProfile = {
   biofireTargets: ['Adenovirus F40/41'],
   oneLiner: 'Adenovirus types 40 and 41 infect the gut and cause watery diarrhea in babies and toddlers that can last a week or more.',
   overview:
-    'Adenoviruses are a large family of viruses. Most cause colds, sore throats, or pink eye, but types 40 and 41 (species F, also called enteric adenoviruses) mainly infect the intestines. They are a leading cause of diarrhea in children under 2, and the diarrhea often lasts longer than with other stomach viruses. Older children and adults rarely get sick from these types. This page covers the stomach types only; respiratory adenovirus is tracked separately on MN Pulse.',
+    'Adenoviruses are a large family of viruses. Most cause colds, sore throats, or pink eye, but types 40 and 41 (also called enteric, or gut, adenoviruses) mainly infect the intestines. They are a leading cause of diarrhea in children under 2, and the diarrhea often lasts longer than with other stomach viruses. Older children and adults rarely get sick from these types, which MN Pulse tracks separately from respiratory adenovirus.',
   seasonality: {
     summary:
-      'Unlike many stomach viruses, enteric adenovirus does not follow a clear season. Studies have not found a consistent seasonal pattern, so it can show up in Minnesota any time of year, often as clusters in child care settings.',
+      'Unlike many stomach viruses, enteric adenovirus does not follow a clear season. Studies have not found a consistent seasonal pattern. It can show up in Minnesota any time of year.',
     peakMonths: [],
   },
   transmission:
-    'Enteric adenovirus spreads by the fecal-oral route: tiny amounts of stool (poop) from an infected child get into someone else’s mouth. Common ways include diaper changing, shared toys and surfaces, and hands that were not washed well. Water, such as a poorly chlorinated pool, can spread adenoviruses, but this is less common. Adenoviruses can survive a long time on surfaces and resist some common disinfectants. Outbreaks can happen in child care centers and hospital children’s wards.',
+    'Enteric adenovirus spreads when tiny amounts of stool (poop) from an infected child get into someone else’s mouth. Common ways include diaper changing, shared toys and surfaces, and hands that were not washed well. Swallowing water contaminated with sewage can also spread these viruses, but this is less common. Adenoviruses can survive a long time on surfaces and resist some common disinfectants. Outbreaks can happen in child care centers and hospital children’s wards.',
   incubation: 'Symptoms usually start 3 to 10 days after exposure.',
   contagiousPeriod:
-    'Children shed the virus in their stool while they have diarrhea. Adenoviruses can keep being shed after a person recovers, sometimes for a long time, especially in people with weakened immune systems. Shedding often happens without symptoms, so keep up handwashing and careful diaper changing after your child feels better.',
+    'Children shed (pass) the virus in their stool while they have diarrhea. Adenoviruses can keep being shed after a person recovers, sometimes for a long time, especially in people with weakened immune systems. Shedding often happens without symptoms, so keep up handwashing and careful diaper changing after your child feels better.',
   symptoms: {
     common: [
       'Watery diarrhea, often lasting a week or longer',
@@ -30,13 +30,13 @@ const profile: PathogenProfile = {
     ],
     lessCommon: ['Loss of appetite', 'Fussiness or tiredness', 'Diarrhea lasting 2 weeks or more'],
     emergencyWarningSigns: [
-      'Signs of serious dehydration: peeing very little or not at all, a very dry mouth, no tears when crying, or feeling dizzy or faint when standing up',
-      'In a baby or young child: very few wet diapers, a sunken soft spot on the head, sunken eyes, or being unusually sleepy, limp, or fussy',
-      'Confusion, extreme sleepiness, or being hard to wake up',
+      'Signs of severe dehydration: no pee for many hours, a very dry mouth, crying with no tears, or sunken eyes',
+      'In a baby: no wet diaper for many hours, or a sunken soft spot on the head',
+      'Fainting, confusion, or being very sleepy, limp, or hard to wake',
+      'Cannot keep any fluids down and is getting weaker',
       'Green or bloody vomit, or vomit that looks like coffee grounds',
-      'Bloody or black, tar-like stool',
-      'Yellow skin or yellow whites of the eyes (jaundice)',
-      'Severe stomach pain that does not go away',
+      'Black, tar-like stool, or a lot of blood in the stool',
+      'Severe belly pain that does not go away, or a swollen, hard belly',
     ],
   },
   ageGroups: {
@@ -45,7 +45,7 @@ const profile: PathogenProfile = {
       summary:
         'Babies and toddlers under 2 are the group most often sick from enteric adenovirus. Because the diarrhea can last a week or more, dehydration is the main concern.',
       actions: [
-        'Keep breastfeeding or formula feeding, and offer smaller, more frequent feeds.',
+        'Keep breastfeeding or giving full-strength formula, and offer smaller, more frequent feeds. Do not give plain water to a baby under 6 months.',
         'Ask your clinician about using an oral rehydration solution (ORS) if your baby has a lot of diarrhea or is vomiting.',
         'Count wet diapers. Fewer wet diapers is an early sign of dehydration.',
         'Call a clinician right away if your baby is younger than 3 months and has a fever of 100.4°F (38°C) or higher.',
@@ -57,11 +57,11 @@ const profile: PathogenProfile = {
       summary:
         'Most illness is in toddlers, especially those in child care. Older children and teens rarely get sick from these types. The diarrhea can last longer than parents expect, often a week or more.',
       actions: [
-        'Offer small sips of an oral rehydration solution often, especially after each bout of diarrhea or vomiting.',
-        'Let your child go back to regular foods as soon as they are hungry.',
-        'Keep your child home from child care until at least 24 hours after diarrhea and vomiting stop.',
-        'Call your clinician if diarrhea is not getting better after a week, or sooner if your child seems dehydrated.',
+        'Offer small sips of an oral rehydration solution often, and let your child go back to regular foods as soon as they are hungry.',
+        'Keep your child home from child care while they have diarrhea or vomiting, and follow the program’s return rules.',
+        'Call your clinician if diarrhea is not getting better after 3 days or lasts more than a week, or sooner if your child seems dehydrated.',
         'Do not give anti-diarrhea medicine to a child unless a clinician tells you to.',
+        'Do not give Pepto-Bismol (bismuth subsalicylate) to children or teens. It is related to aspirin and is linked to Reye’s syndrome, a rare but serious illness.',
       ],
     },
     adults: {
@@ -71,7 +71,9 @@ const profile: PathogenProfile = {
       actions: [
         'Wash your hands with soap and water after changing diapers or helping a child in the bathroom.',
         'Disinfect changing tables, potty chairs, and toys with a product that lists adenovirus on its label, or a bleach solution.',
-        'If you get diarrhea, drink plenty of fluids and stay home from work until you are well.',
+        'If you get diarrhea, drink plenty of fluids and stay home from work while sick.',
+        'Do not prepare food for others while sick and for at least 3 days after symptoms stop, as MDH advises for norovirus, which spreads the same way.',
+        'If you work in food service, health care, or child care, follow your workplace’s return-to-work rules.',
       ],
     },
     'older-adults': {
@@ -85,9 +87,9 @@ const profile: PathogenProfile = {
       ],
     },
     seniors: {
-      risk: 'moderate',
+      risk: 'lower',
       summary:
-        'Illness from these types is uncommon at this age, but older adults can become dehydrated more quickly from any vomiting or diarrhea.',
+        'Illness from these types is uncommon at this age. If you do get sick, older adults can become dehydrated more quickly from any vomiting or diarrhea.',
       actions: [
         'Drink fluids often if you are sick, even if you do not feel thirsty.',
         'Call your clinician early if you cannot keep fluids down, feel dizzy, or seem confused.',
@@ -102,13 +104,13 @@ const profile: PathogenProfile = {
         'Wash your hands well after diaper changes and before eating.',
         'Sip fluids often if you get diarrhea or vomiting.',
         'Call your prenatal care provider if you cannot keep fluids down, have a fever, or feel dizzy.',
-        'Ask your provider or pharmacist before taking any anti-diarrhea or anti-nausea medicine.',
+        'Ask your provider or pharmacist before taking any anti-diarrhea or anti-nausea medicine, including Pepto-Bismol.',
       ],
     },
     immunocompromised: {
       risk: 'higher',
       summary:
-        'People with weakened immune systems, including children who have had a stem cell or organ transplant, are at higher risk of severe adenovirus illness. They can have longer-lasting diarrhea and may shed the virus for a long time.',
+        'People with weakened immune systems, including children who have had a stem cell or organ transplant, are at higher risk of severe adenovirus illness. They can have longer-lasting diarrhea and may shed (pass) the virus for a long time.',
       actions: [
         'Call your care team early if you or your child has diarrhea, especially if it lasts more than a day or two.',
         'Ask whether stool testing is needed, since long-lasting diarrhea has many possible causes.',
@@ -132,7 +134,7 @@ const profile: PathogenProfile = {
         name: 'Other fluids and regular food',
         type: 'supportive',
         detail:
-          'Keep breastfeeding or formula feeding babies. Return to normal foods as soon as your child is hungry. Eating helps the gut recover.',
+          'Keep breastfeeding or giving full-strength formula to babies. Do not give plain water to babies under 6 months, and do not water down formula. Return to normal foods as soon as your child is hungry. Eating helps the gut recover.',
         who: 'Anyone with mild illness.',
       },
       {
@@ -164,27 +166,29 @@ const profile: PathogenProfile = {
     everyday: [
       'Wash your hands with soap and water for at least 20 seconds after diaper changes and using the toilet, and before eating or preparing food.',
       'Change diapers on a surface you can clean, and disinfect it after each use.',
-      'Clean toys and high-touch surfaces with a bleach solution or an EPA-registered disinfectant that lists adenovirus on its label. Adenoviruses can resist some common cleaners.',
-      'Keep sick children home from child care until at least 24 hours after diarrhea and vomiting stop.',
+      'Clean toys and high-touch surfaces with a bleach solution or a disinfectant registered by the EPA (US Environmental Protection Agency) that lists adenovirus on its label. Adenoviruses can resist some common cleaners. Never mix bleach with ammonia or other cleaners.',
+      'Keep sick children home from child care while they have diarrhea or vomiting, and follow the program’s return rules.',
+      'Do not prepare food for others while sick and for at least 3 days after symptoms stop.',
       'Keep children with diarrhea out of swimming pools, splash pads, and lakes.',
       'Do not share cups, utensils, or towels with someone who is sick.',
     ],
   },
   testing:
-    'Most children with diarrhea do not need testing. If a clinician orders a stool test, for example for a child who is very sick, has diarrhea lasting more than a week, or has a weakened immune system, labs may use a multiplex PCR panel (one test that checks for many germs at once), such as the BioFire GI Panel, which reports “Adenovirus F40/41.” A positive result shows the virus is present but does not always prove it caused the illness, because adenovirus can be shed after recovery or found alongside other germs. Respiratory adenovirus tests from a nose swab are different and do not tell you about types 40 and 41. There are no home tests.',
+    'Most children with diarrhea do not need testing. Sometimes a clinician orders a stool test. This is more likely for a child who is very sick, has diarrhea lasting more than a week, or has a weakened immune system. Labs may use a multiplex PCR panel. PCR is a lab test that finds a germ’s genetic material, and a multiplex panel checks for many germs at once. The BioFire GI (gastrointestinal) Panel is one example; it reports “Adenovirus F40/41.” A positive result shows the virus is present. It does not always prove the virus caused the illness, because adenovirus can be shed after recovery or found alongside other germs. Respiratory adenovirus tests from a nose swab are different and do not tell you about types 40 and 41. There are no home tests.',
   whenToSeekCare: [
     'Call a clinician or your clinic’s nurse line if vomiting is so frequent that liquids will not stay down.',
-    'Call if diarrhea is not getting better after several days, or lasts more than a week, even if your child seems OK otherwise.',
-    'Call if there is a fever over 102°F (38.9°C) or any blood in the stool.',
+    'Call the same day for early signs of dehydration: fewer wet diapers, peeing less than usual, a dry mouth, or crying with few tears.',
+    'Call if diarrhea is not getting better after 3 days or lasts more than a week, even if your child seems OK otherwise.',
+    'Call the same day if there is a fever over 102°F (38.9°C) or a small amount of blood in the stool.',
     'Call early for babies and for anyone with a weakened immune system who has diarrhea.',
-    'Go to urgent care the same day if there are signs of dehydration, such as fewer wet diapers, a dry mouth, or crying without tears, and your child cannot drink enough to catch up.',
-    'Call 911 or go to an emergency department for any emergency warning sign.',
+    'Call a clinician the same day if a child develops yellow skin or yellow whites of the eyes (jaundice). Go to an emergency department if jaundice comes with confusion, extreme sleepiness, or unusual bleeding or bruising.',
+    'Go to urgent care the same day if there are signs of dehydration and your child cannot drink enough to catch up.',
+    'Go to an emergency department for any emergency warning sign. Call 911 for fainting, confusion, or trouble staying awake.',
   ],
   readingTheNumbers:
-    'MN Pulse shows enteric adenovirus as a BioFire detection rate: the percent of BioFire GI panel tests at participating labs in the region (not just Minnesota) that found adenovirus F40/41. Because young children are the main group affected, the number mostly reflects babies and toddlers whose clinicians ordered a stool panel, usually children sick enough to need a clinic visit or hospital care. It shows trends, not how many people are sick. This virus does not usually follow a strong season, so look for a rise that lasts several weeks rather than expecting a winter peak. When a detection rate is small, a few extra positive tests can make the line jump. A sustained rise means more young children are getting sick from it. For families, that is a reminder to focus on handwashing, diaper hygiene, and watching for dehydration. This number is separate from the respiratory adenovirus data on MN Pulse. Emergency department (ED) and wastewater data generally do not track enteric adenovirus separately, and MDH does not count individual cases.',
+    'MN Pulse shows enteric adenovirus as a BioFire detection rate. This is the percent of BioFire GI (stomach and gut) panel tests at participating labs in the Midwest (not just Minnesota) that found adenovirus F40/41. Most positive tests come from babies and toddlers sick enough to need a clinic visit or hospital care. But panels are run on people of all ages, so the percentage can also shift when the mix of people being tested changes. For example, if many more adults are tested during a norovirus surge, this number can dip. Some detections are also in children with mild or no symptoms. The number shows trends, not how many people are sick. This virus does not usually follow a strong season, so look for a rise that lasts several weeks rather than expecting a winter peak. When a detection rate is small, a few extra positive tests can make the line jump. A sustained rise usually means more of this virus is circulating among young children. For families, that is a reminder to focus on handwashing, diaper hygiene, and watching for dehydration. This number is separate from the respiratory adenovirus data on MN Pulse. Public emergency department (ED) data do not track enteric adenovirus separately, and MDH does not count individual cases. Wastewater testing at some Minnesota treatment plants, through the WastewaterSCAN program, looks for these stomach types of adenovirus and can give a community-wide signal that includes people who were never tested.',
   watchNotes: [
-    'The adenovirus vaccine used by the US military protects only against types 4 and 7, which cause respiratory illness. It does not protect against types 40 and 41 and is not available to the general public.',
-    'In 2022, health officials investigated rare cases of severe hepatitis (liver inflammation) of unknown cause in young children. Adenovirus type 41 was found in many of them, but it has not been shown to be the cause, and such cases remain very rare. Call a clinician right away if your child has yellow skin or eyes.',
+    'As of October 2026, there is no adenovirus vaccine for the general public. The vaccine used by the US military protects only against types 4 and 7, which cause respiratory illness, not types 40 and 41.',
     'MDH asks child care providers to report when more than 10% of children and staff are sick with diarrhea or vomiting.',
   ],
   sources: [
@@ -209,12 +213,24 @@ const profile: PathogenProfile = {
       url: 'https://wwwnc.cdc.gov/eid/article/27/2/20-3943_article',
     },
     {
+      label: 'CDC: About norovirus (symptoms and signs of dehydration)',
+      url: 'https://www.cdc.gov/norovirus/about/index.html',
+    },
+    {
+      label: 'MDH: Norovirus infection (including advice on preparing food after illness)',
+      url: 'https://www.health.state.mn.us/diseases/norovirus/index.html',
+    },
+    {
       label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
       url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',
     },
     {
       label: 'MDH: Child care provider information on diarrheal illness',
       url: 'https://www.health.state.mn.us/diseases/foodborne/daycare.html',
+    },
+    {
+      label: 'WastewaterSCAN data dashboard',
+      url: 'https://data.wastewaterscan.org/',
     },
     {
       label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',

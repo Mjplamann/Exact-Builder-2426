@@ -179,7 +179,7 @@ const profile: PathogenProfile = {
   testing:
     'Crypto is diagnosed with a stool (poop) test. Many labs do not check for Crypto unless a health care provider asks for it, so mention swimming, untreated water, or animal contact. More than one stool sample, collected on different days, may be needed. Stool panels that check for many germs at once (such as BioFire) include Crypto. There is no home test. Crypto is a reportable disease in Minnesota, so MDH may contact you to learn where you might have been exposed.',
   whenToSeekCare: [
-    'Call your clinician if watery diarrhea lasts more than a few days, especially after swimming, drinking untreated water, or contact with calves or other farm animals.',
+    'Call your clinician if watery diarrhea lasts more than a few days. This matters most after swimming, drinking untreated water, or contact with calves or other farm animals.',
     'Call early if you are pregnant, are 65 or older, or are caring for a baby with diarrhea.',
     'If you have a weakened immune system, contact your care team as soon as watery diarrhea starts.',
     'Go to urgent care or an emergency department for signs of dehydration or if you can’t keep liquids down. Also go right away for bloody stools or severe belly pain.',

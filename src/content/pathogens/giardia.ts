@@ -130,7 +130,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Several prescription medicines treat giardiasis well, including tinidazole, metronidazole, and nitazoxanide. Tinidazole and metronidazole are antibiotics that also work against some parasites, including Giardia. Nitazoxanide is an antiparasitic medicine. Common antibiotics such as amoxicillin do not work against Giardia. Your clinician will choose based on age, pregnancy, and other health factors. People who carry Giardia but have no symptoms usually do not need treatment, unless their clinician recommends it, such as to protect a pregnant family member. Drinking plenty of fluids is important. Some people have trouble digesting milk for weeks after treatment, and this usually improves with time.',
+      'Several prescription medicines treat giardiasis well, including tinidazole, metronidazole, and nitazoxanide. Tinidazole and metronidazole are antibiotics that also work against some parasites, including Giardia. Nitazoxanide is an antiparasitic medicine. Common antibiotics such as amoxicillin do not work against Giardia. Your clinician will choose based on age, pregnancy, and other health factors. People who carry Giardia but have no symptoms usually do not need treatment. Their clinician may still recommend it, such as to protect a pregnant family member. Drinking plenty of fluids is important. Some people have trouble digesting milk for weeks after treatment, and this usually improves with time.',
     options: [
       {
         name: 'Tinidazole',

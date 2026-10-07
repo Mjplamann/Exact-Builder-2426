@@ -31,12 +31,13 @@ const profile: PathogenProfile = {
     ],
     lessCommon: ['Low fever or chills', 'Headache', 'Muscle aches', 'Tiredness', 'Loss of appetite'],
     emergencyWarningSigns: [
-      'Signs of serious dehydration: peeing very little or not at all, a very dry mouth, no tears when crying, or feeling dizzy or faint when standing up',
-      'In a baby or young child: very few wet diapers, a sunken soft spot on the head, sunken eyes, or being unusually sleepy, limp, or fussy',
-      'Confusion, extreme sleepiness, or being hard to wake up',
+      'Signs of severe dehydration: no pee for many hours, a very dry mouth, crying with no tears, or sunken eyes',
+      'In a baby: no wet diaper for many hours, or a sunken soft spot on the head',
+      'Fainting, confusion, or being very sleepy, limp, or hard to wake',
+      'Cannot keep any fluids down and is getting weaker',
       'Green or bloody vomit, or vomit that looks like coffee grounds',
-      'Bloody or black, tar-like stool',
-      'Severe stomach pain that does not go away',
+      'Black, tar-like stool, or a lot of blood in the stool',
+      'Severe belly pain that does not go away, or a swollen, hard belly',
     ],
   },
   ageGroups: {
@@ -45,7 +46,7 @@ const profile: PathogenProfile = {
       summary:
         'Babies can lose fluid quickly from vomiting and diarrhea, so dehydration is the main concern. Most babies recover in a few days with extra fluids.',
       actions: [
-        'Keep breastfeeding or formula feeding, and offer smaller, more frequent feeds.',
+        'Keep breastfeeding or giving full-strength formula, and offer smaller, more frequent feeds. Do not give plain water to a baby under 6 months.',
         'Ask your clinician about using an oral rehydration solution (ORS) if your baby is vomiting or has a lot of diarrhea.',
         'Count wet diapers. Fewer wet diapers is an early sign of dehydration.',
         'Call a clinician right away if your baby is younger than 3 months and has a fever of 100.4°F (38°C) or higher.',
@@ -55,13 +56,13 @@ const profile: PathogenProfile = {
     children: {
       risk: 'moderate',
       summary:
-        'Sapovirus is most common in children under 5. Most children feel better in a few days, but young children can become dehydrated.',
+        'Sapovirus is most common in children under 5. Most children feel better in a few days, but young children can become dehydrated. As rotavirus vaccines have cut rotavirus illness, viruses like sapovirus and norovirus now cause a larger share of stomach illness in young children.',
       actions: [
-        'Offer small sips of an oral rehydration solution often, especially after each bout of vomiting or diarrhea.',
-        'Let your child go back to regular foods as soon as they are hungry.',
-        'Keep your child home from child care or school until at least 24 hours after diarrhea and vomiting stop.',
+        'Offer small sips of an oral rehydration solution often, and let your child go back to regular foods as soon as they are hungry.',
+        'Keep your child home from child care or school while they have diarrhea or vomiting, and follow the program’s return rules.',
         'Teach handwashing with soap and water after using the toilet and before eating.',
         'Do not give anti-diarrhea medicine to a child unless a clinician tells you to.',
+        'Do not give Pepto-Bismol (bismuth subsalicylate) to children or teens. It is related to aspirin and is linked to Reye’s syndrome, a rare but serious illness.',
       ],
     },
     adults: {
@@ -70,7 +71,8 @@ const profile: PathogenProfile = {
         'Healthy adults usually have a mild illness that passes in a few days. Many adults catch it while caring for a sick child or family member.',
       actions: [
         'Drink plenty of fluids. Water, broth, or sports drinks help with mild illness; an oral rehydration solution is best if you are losing a lot of fluid.',
-        'Stay home from work while sick, and do not prepare food for others until at least 2 days after symptoms stop.',
+        'Stay home from work while sick. Do not prepare food for others until at least 3 days after symptoms stop, as MDH advises for norovirus, a close cousin.',
+        'If you work in food service, health care, or child care, follow your workplace’s return-to-work rules.',
         'Wash your hands with soap and water, especially after using the bathroom or caring for someone who is sick.',
         'Clean up vomit or diarrhea right away with a bleach solution or a disinfectant labeled for norovirus.',
       ],
@@ -104,14 +106,14 @@ const profile: PathogenProfile = {
       actions: [
         'Sip fluids often. An oral rehydration solution can help if you are losing a lot of fluid.',
         'Call your prenatal care provider if you cannot keep fluids down, have a fever, or feel dizzy.',
-        'Ask your provider or pharmacist before taking any anti-diarrhea or anti-nausea medicine.',
+        'Ask your provider or pharmacist before taking any anti-diarrhea or anti-nausea medicine, including Pepto-Bismol.',
         'Later in pregnancy, call right away if you notice your baby is moving less than usual.',
       ],
     },
     immunocompromised: {
       risk: 'higher',
       summary:
-        'People with weakened immune systems, such as transplant recipients or people getting chemotherapy, can sometimes have diarrhea that lasts much longer and may shed the virus for a long time.',
+        'People with weakened immune systems, such as transplant recipients or people getting chemotherapy, can have diarrhea that lasts much longer. They may also shed (pass) the virus in their stool for a long time.',
       actions: [
         'Call your care team early if you have vomiting or diarrhea, especially if it lasts more than a day or two.',
         'Ask whether stool testing is needed, since long-lasting diarrhea has many possible causes.',
@@ -135,8 +137,8 @@ const profile: PathogenProfile = {
         name: 'Other fluids and regular food',
         type: 'supportive',
         detail:
-          'For mild illness, water, broth, or sports drinks can help. Keep breastfeeding or formula feeding babies. Return to normal foods as soon as the person feels hungry.',
-        who: 'Anyone with mild illness.',
+          'For older children and adults with mild illness, water, broth, or sports drinks can help, but they do not replace salts as well as an oral rehydration solution. Babies and young children should keep breastfeeding or getting full-strength formula, plus an oral rehydration solution if needed. Do not give plain water to babies under 6 months, and do not water down formula. Return to normal foods as soon as the person is hungry.',
+        who: 'Older children and adults with mild illness. Babies and young children need breast milk or formula, plus ORS if needed.',
       },
       {
         name: 'Anti-nausea medicine (such as ondansetron)',
@@ -149,7 +151,7 @@ const profile: PathogenProfile = {
         name: 'Anti-diarrhea medicine (loperamide, such as Imodium)',
         type: 'other',
         detail:
-          'This over-the-counter medicine may ease watery diarrhea in adults. Do not use it if you have a high fever or blood in your stool. Check with a pharmacist or clinician first if you are pregnant or have other health conditions.',
+          'This over-the-counter medicine may ease watery diarrhea in adults. Do not use it if you have a high fever or blood in your stool. Never take more than the label says; high doses can cause serious heart problems. Check with a pharmacist or clinician first if you are pregnant, have a weakened immune system, or have other health conditions.',
         who: 'Adults only. It is not recommended for children unless a clinician advises it.',
       },
       {
@@ -166,34 +168,35 @@ const profile: PathogenProfile = {
     vaccines: [],
     everyday: [
       'Wash your hands with soap and water for at least 20 seconds, especially after using the toilet or changing diapers and before eating or preparing food. Hand sanitizer does not work as well against stomach viruses like this one, so use it only in addition to handwashing.',
-      'Stay home from work, school, or child care while sick and until at least 24 hours after vomiting and diarrhea stop.',
-      'Do not cook or prepare food for others while sick and for at least 2 days after symptoms stop.',
-      'Clean up vomit or diarrhea right away while wearing gloves. Use a bleach solution (5 to 25 tablespoons of household bleach per gallon of water) or a disinfectant registered by the EPA (US Environmental Protection Agency) for norovirus.',
+      'Stay home from work, school, or child care while sick, and follow your workplace’s or program’s return rules.',
+      'Do not cook or prepare food for others while sick and for at least 3 days after symptoms stop. MDH advises this for norovirus, a close cousin of sapovirus.',
+      'Clean up vomit or diarrhea right away while wearing gloves. Use a bleach solution (5 to 25 tablespoons of household bleach per gallon of water) or a disinfectant registered by the EPA (US Environmental Protection Agency) for norovirus. Never mix bleach with ammonia or other cleaners, and open a window while you clean.',
       'Wash soiled clothes and bedding in hot water with detergent, and dry them on high heat.',
       'Rinse fruits and vegetables, and cook oysters and other shellfish thoroughly.',
+      'There is no vaccine for sapovirus, and rotavirus vaccine does not protect against it. These everyday steps are the best protection.',
     ],
   },
   testing:
-    'Most people with a short stomach illness do not need testing. When a clinician orders a stool test, for example for a hospitalized patient, a person with a weakened immune system, or diarrhea that will not go away, labs often use a multiplex PCR panel (one test that checks for many germs at once). The BioFire GI Panel is one example; it detects sapovirus genogroups (strain groups) I, II, IV, and V. A positive result means the virus’s genetic material was found. It does not always prove sapovirus caused the symptoms, because the virus can linger after an illness or show up alongside other germs. Public health labs, including MDH’s, have tested stool from outbreaks for sapovirus when norovirus tests were negative. There are no home tests.',
+    'Most people with a short stomach illness do not need testing. Sometimes a clinician orders a stool test. This is more likely for a person in the hospital, someone with a weakened immune system, or diarrhea that will not go away. Labs often use a multiplex PCR panel. PCR is a lab test that finds a germ’s genetic material, and a multiplex panel checks for many germs at once. The BioFire GI (gastrointestinal) Panel is one example. It detects sapovirus genogroups (strain groups) I, II, IV, and V. A positive result does not always prove sapovirus caused the symptoms. The virus can linger after an illness or show up alongside other germs. Public health labs, including MDH’s, have tested stool from outbreaks for sapovirus when norovirus tests were negative. There are no home tests.',
   whenToSeekCare: [
     'Call a clinician or your clinic’s nurse line if vomiting is so frequent that liquids will not stay down.',
+    'Call the same day for early signs of dehydration: peeing less than usual, fewer wet diapers, a dry mouth, crying with few tears, or feeling dizzy when standing.',
     'Call if diarrhea lasts more than 3 days without getting better.',
-    'Call if there is a fever over 102°F (38.9°C) or any blood in the stool.',
+    'Call the same day if there is a fever over 102°F (38.9°C) or a small amount of blood in the stool.',
     'Call early for babies, adults 65 and older, pregnant people, and anyone with a weakened immune system who has vomiting or diarrhea.',
-    'Go to urgent care the same day if there are signs of dehydration, such as peeing much less than usual, a dry mouth, or dizziness, and the person cannot drink enough to catch up.',
-    'Call 911 or go to an emergency department for any emergency warning sign.',
+    'Go to urgent care the same day if there are signs of dehydration and the person cannot drink enough to catch up.',
+    'Go to an emergency department for any emergency warning sign. Call 911 for fainting, confusion, or trouble staying awake.',
   ],
   readingTheNumbers:
-    'MN Pulse shows sapovirus as a BioFire detection rate: the percent of BioFire GI panel tests at participating labs in the region (not just Minnesota) that found sapovirus. These panels are mostly ordered for people sick enough to see a clinician or go to the hospital, often young children, older adults, and people with weakened immune systems. So the number shows trends, not how many people are sick. Based on outbreak patterns, expect higher levels in winter and spring. A rising number means sapovirus is spreading more in the community. For most people, that is a reminder to wash hands with soap and water, stay home when sick, and watch young children and older relatives for dehydration. Look at the trend over several weeks rather than one week’s value. Emergency department (ED) and wastewater data generally do not track sapovirus separately, and MDH does not count individual sapovirus cases.',
+    'MN Pulse shows sapovirus as a BioFire detection rate. This is the percent of BioFire GI (stomach and gut) panel tests at participating labs in the Midwest (not just Minnesota) that found sapovirus. These panels are mostly ordered for people sick enough to see a clinician or go to the hospital. Many are young children, older adults, or people with weakened immune systems. So the number shows trends, not how many people are sick. Based on outbreak patterns, expect higher levels in the colder months. The percentage can also shift when the mix of people being tested changes. Because the rate is small, a few extra positive tests can make the line jump, so look at the trend over several weeks rather than one week’s value. A rise that lasts several weeks usually means more sapovirus is going around. For most people, that is a reminder to wash hands with soap and water, stay home when sick, and watch young children and older relatives for dehydration. Emergency department (ED) and wastewater data generally do not track sapovirus separately, and MDH does not count individual sapovirus cases.',
   watchNotes: [
-    'As rotavirus vaccines have cut rotavirus illness, other viruses such as norovirus and sapovirus now cause a larger share of stomach illness in young children.',
     'MDH asks child care providers to report when more than 10% of children and staff are sick with diarrhea or vomiting. MDH also investigates outbreaks in places like long-term care facilities.',
     'If you think you got sick from food at a restaurant or event, call MDH’s Foodborne Illness Hotline at 1-877-366-3455.',
   ],
   sources: [
     {
       label: 'CDC Emerging Infectious Diseases: Sapovirus outbreaks in long-term care facilities, Oregon and Minnesota, 2002–2009',
-      url: 'https://wwwnc.cdc.gov/eid/article/18/5/11-1843',
+      url: 'https://wwwnc.cdc.gov/eid/article/18/5/11-1843_article',
     },
     {
       label: 'CDC Emerging Infectious Diseases: Non-norovirus viral gastroenteritis outbreaks reported to NORS, USA, 2009–2018',
@@ -210,6 +213,14 @@ const profile: PathogenProfile = {
     {
       label: 'CDC: How to prevent norovirus (handwashing, cleaning, and food safety steps that also apply to sapovirus)',
       url: 'https://www.cdc.gov/norovirus/prevention/index.html',
+    },
+    {
+      label: 'CDC: About norovirus (symptoms and signs of dehydration)',
+      url: 'https://www.cdc.gov/norovirus/about/index.html',
+    },
+    {
+      label: 'MDH: Norovirus infection (including advice on preparing food after illness)',
+      url: 'https://www.health.state.mn.us/diseases/norovirus/index.html',
     },
     {
       label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
