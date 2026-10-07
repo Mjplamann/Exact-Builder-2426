@@ -324,6 +324,8 @@
 .aqb-use[aria-pressed="true"] { background: rgba(143, 216, 198, 0.18); border-color: rgba(143, 216, 198, 0.45); }
 .aqb-use[aria-pressed="true"] .aq-icon { display: block; }
 .aqb-placeholder { margin: 0; padding: 18px 2px; font-size: 12.5px; color: var(--text-3); }
+.aqb-communities > .aqb-placeholder { grid-column: 1 / -1; max-width: 68ch; }
+.aqb-resize { grid-column: 1 / -1; justify-self: start; margin-top: -6px; }
 .aqb-communities[aria-busy="true"] .aqb-placeholder { animation: aq-breathe 2.6s ease-in-out infinite; }
 .aqb-picker { margin-top: 18px; }
 .aqb-picker-body { margin-top: 12px; }

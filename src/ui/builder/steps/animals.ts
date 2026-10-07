@@ -199,9 +199,12 @@ export function animalsStep(env: StepEnv): StepView {
       const why = small
         ? `The ${style!.name.toLowerCase()} style is designed for ${formatLiters(style!.minLiters!, units)} or more, and its animals need that room — this tank holds ${formatLiters(m.liters, units)}.`
         : 'Nothing we would confidently suggest for this exact tank.';
-      const resize = h('button', { type: 'button', class: 'aq-link aqb-resize' }, 'choose a bigger tank');
-      resize.addEventListener('click', () => env.goto('size'));
-      sugList.append(h('p', { class: 'aqb-placeholder' }, `${why} Pick animals yourself below — each choice is checked against the tank`, small ? ', or ' : '.', small ? resize : null, small ? '.' : null));
+      sugList.append(h('p', { class: 'aqb-placeholder' }, `${why} Pick animals yourself below — each choice is checked against the tank.`));
+      if (small) {
+        const resize = h('button', { type: 'button', class: 'aq-btn aq-btn-ghost aqb-resize' }, 'Choose a bigger tank');
+        resize.addEventListener('click', () => env.goto('size'));
+        sugList.append(resize);
+      }
       openPicker();
       return;
     }
