@@ -189,6 +189,8 @@ export class CameraRig {
    * animal's card or a panel covers the middle (see setSafeArea).
    */
   private safe = { x0: -1, x1: 1, y0: -1, y1: 1 };
+  /** 0..1 of the rule-of-thirds lead there is room for (a big animal that fills the frame is centred). */
+  private leadRoom = 1;
 
   // Framing transition (start/switch/end of a follow): elapsed, length, kind, where it started.
   private transT = 0;
@@ -693,6 +695,9 @@ export class CameraRig {
     b.z = MathUtils.clamp(b.z, this.backTrue, this.frontZ);
     const dS = (this.frontZ - b.z) / this.n;
     let lz = this.solveZoom(Math.max(1e-3, s.lengthM) / this.framingFill, dS);
+    // An animal too big for the lead (a 40 cm fish seen through a phone held upright) is centred.
+    const halfNdc = Math.max(1e-3, s.lengthM) / this.widthAt(lz, dS);
+    this.leadRoom = MathUtils.clamp((0.9 - halfNdc) / LEAD, 0, 1);
     // Gliding to a far-off animal: pull back first so both are in view, then push in.
     if (this.transSwitch && this.transT < this.transDur) {
       const zT = Math.exp(lz);
@@ -754,7 +759,8 @@ export class CameraRig {
     const s = this.safe;
     const hx = (s.x1 - s.x0) / 2;
     const hy = (s.y1 - s.y0) / 2;
-    out.set(s.x0 + hx - LEAD * hx * MathUtils.clamp(f.x / len, -1, 1), s.y0 + hy - 0.3 * LEAD * hy * MathUtils.clamp(f.y / len, -1, 1), 0);
+    const lead = LEAD * this.leadRoom;
+    out.set(s.x0 + hx - lead * hx * MathUtils.clamp(f.x / len, -1, 1), s.y0 + hy - 0.3 * lead * hy * MathUtils.clamp(f.y / len, -1, 1), 0);
     return out;
   }
 

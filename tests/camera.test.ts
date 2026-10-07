@@ -443,3 +443,15 @@ describe('camera safe area', () => {
     expect(Math.abs(q.y)).toBeLessThan(0.05);
   });
 });
+
+describe('camera big animals', () => {
+  it('centres an animal too big for the rule-of-thirds lead (a phone held upright)', () => {
+    const rig = makeRig(0.46);
+    const s: FollowSubject = { pos: [0, 0.18, 0], lengthM: 0.3, forward: [1, 0, 0] };
+    rig.follow(s);
+    run(rig, 10);
+    const c = ndc(rig, new Vector3(...s.pos));
+    expect(Math.abs(c.x)).toBeLessThan(0.03);
+    expect(rig.zoom).toBeCloseTo(1, 2);
+  });
+});
