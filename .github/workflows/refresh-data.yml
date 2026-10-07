@@ -50,8 +50,11 @@ jobs:
           git config user.name "mn-pulse-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/data
-          if git diff --cached --quiet; then
-            echo "No data changes."
+          # Commit only when observations changed (pulse/manifest timestamps alone are not worth a commit;
+          # the deployed site is still rebuilt from this run's files).
+          if git diff --cached --quiet -- public/data/series; then
+            echo "No new observations."
+            git reset -q
           else
             git commit -m "Data refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
             for i in 1 2 3; do

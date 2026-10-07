@@ -98,8 +98,12 @@ async function runSource(
     const nonEmpty = result.datasets.filter((d) => d.series.some((s) => s.points.length > 0))
     if (nonEmpty.length === 0) throw new Error(result.message ?? 'Source returned no data')
     for (const ds of nonEmpty) {
+      const target = path.join(SERIES_DIR, seriesFileName(ds.source, ds.dataset))
+      // Leave the file untouched when the data did not change, so refreshes only commit real updates.
+      const prevFile = await readJson<SeriesFile>(target)
+      if (prevFile && JSON.stringify(prevFile.series) === JSON.stringify(ds.series)) continue
       const file: SeriesFile = { ...ds, generatedAt: now }
-      await writeJson(path.join(SERIES_DIR, seriesFileName(ds.source, ds.dataset)), file)
+      await writeJson(target, file)
     }
     if (result.diagnostics) await writeJson(path.join(DIAG_DIR, `${mod.meta.id}.json`), result.diagnostics)
     const all = nonEmpty.flatMap((d) => d.series)
