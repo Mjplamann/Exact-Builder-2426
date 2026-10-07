@@ -62,6 +62,12 @@ const LN_STEP = Math.log(ZOOM_STEP);
 const LN_MAX = Math.log(MAX_ZOOM);
 /** Share of the zoom done by walking up to the glass (distance ∝ zoom^−DOLLY); the lens does the rest. */
 const DOLLY = 0.35;
+/**
+ * Most of a tank's height the whole-tank view may crop when the screen is wider than the tank
+ * (cubes and tall tanks on a landscape screen). Beyond it the tank is shown narrower than the
+ * screen, framed by the dark room, so a tall tank never loses its surface and its substrate.
+ */
+const MAX_HEIGHT_CROP = 0.22;
 /** Closest the camera may come to the front glass (m). */
 const MIN_GLASS_GAP = 0.12;
 /** How much of the screen width a followed animal may be asked to span. */
@@ -392,12 +398,13 @@ export class CameraRig {
       visH = rectH * inset - 2 * DRIFT_AMP.y;
       cy = (this.yMin + this.yMax) / 2;
     } else {
-      // Viewport wider than the tank: fit the width, crop vertically — favour keeping the
-      // waterline (crop 35% from the top, 65% from the bottom).
+      // Viewport wider than the tank: fit the width and crop vertically — but never more than
+      // MAX_HEIGHT_CROP of the height; past that the dark room frames the sides. Favour the
+      // waterline (crop 20% from the top, 80% from the bottom).
       const visW = rectW * inset - 2 * DRIFT_AMP.x;
-      visH = visW / aspect;
-      const crop = rectH - visH;
-      cy = this.yMax - crop * 0.35 - visH / 2;
+      visH = Math.min(rectH * inset - 2 * DRIFT_AMP.y, Math.max(visW / aspect, rectH * (1 - MAX_HEIGHT_CROP)));
+      const crop = Math.max(0, rectH - visH);
+      cy = this.yMax - crop * 0.2 - visH / 2;
     }
     this.homeH = visH;
     this.homeDist = visH / 2 / tanHalf;
