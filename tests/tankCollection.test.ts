@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TankLibrary, cleanTankName } from '../src/app/tankLibrary';
 import { fetchTank, openLibrary } from '../src/app/openLibrary';
 import { CloudSave, mergeIndexes } from '../src/app/cloudSave';
@@ -324,5 +324,46 @@ describe('names and merges', () => {
     expect(m.currentId).toBe('a');
     expect(Object.fromEntries(m.tanks.map((t) => [t.id, t.name]))).toEqual({ a: 'local a', b: 'remote b', c: 'remote c' });
     expect(m.deleted!.sort()).toEqual(['x', 'y']);
+  });
+});
+
+describe('a cloud write that never answers', () => {
+  it('does not block later saves of the same document', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    try {
+      const docs = new Map<string, Doc>();
+      let hangNext = true;
+      const claude = fakeClaude(docs);
+      const db = (await claude.use('db')) as { doc(p: string): { set(d: Doc): Promise<void> } };
+      const realDoc = db.doc.bind(db);
+      db.doc = (p: string) => {
+        const d = realDoc(p);
+        return {
+          ...d,
+          set: (data: Doc) => {
+            if (hangNext && p.includes('tank-')) {
+              hangNext = false;
+              return new Promise<void>(() => {});
+            }
+            return d.set(data);
+          },
+        };
+      };
+      g.claude = { use: async (n: string) => (n === 'db' ? db : claude.use(n)) };
+      const pending = CloudSave.connect(500);
+      await vi.advanceTimersByTimeAsync(10);
+      const cloud = (await pending)!;
+      const t = tank('w', 10, { name: 'first' });
+      cloud.save(t, true);
+      await vi.advanceTimersByTimeAsync(100);
+      cloud.save({ ...t, name: 'second' }, true);
+      await vi.advanceTimersByTimeAsync(31_000);
+      vi.useRealTimers();
+      await cloud.flushed();
+      const body = await cloud.loadTank('w');
+      expect(JSON.parse(body!).name).toBe('second');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

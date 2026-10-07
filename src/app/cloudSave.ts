@@ -33,12 +33,14 @@ const MIN_INTERVAL_MS = 60_000;
 const MAX_TOMBSTONES = 100;
 /** After a read times out, further reads fail fast for this long (the app stays responsive offline). */
 const OFFLINE_BACKOFF_MS = 30_000;
+/** Longest wait for one queued write (index read + compress + store) before the queue moves on. */
+const WRITE_TIMEOUT_MS = 30_000;
 
 class Timeout extends Error {}
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return new Promise<T>((resolve, reject) => {
-    const t = setTimeout(() => reject(new Timeout('cloud read timed out')), ms);
+    const t = setTimeout(() => reject(new Timeout('cloud request timed out')), ms);
     p.then(
       (v) => {
         clearTimeout(t);
@@ -120,7 +122,8 @@ class DocWriter {
       const job = this.pending;
       this.pending = null;
       try {
-        await job();
+        // A write that never answers must not block every later save of this document.
+        await withTimeout(job(), WRITE_TIMEOUT_MS);
       } catch {
         // Quota / transient errors: the local copy remains; the next save retries.
       }
