@@ -1,7 +1,7 @@
 // Interactive natural-frequency explainer: a 100-dot icon array driven by a slider, plus optional
 // one-click presets from live positivity / detection-rate data (never invented values).
 import { useId, useState } from 'react'
-import { formatDate } from '../../lib/format'
+import { aboutOneIn, formatDate } from '../../lib/format'
 import { Pill } from '../ui'
 
 export interface PositivityPreset {
@@ -26,8 +26,9 @@ export function naturalFrequency(pct: number): string {
     return per1000 < 1 ? 'Fewer than 1 in 1,000 tests found it.' : `About ${per1000} in 1,000 tests found it.`
   }
   const n = Math.round(pct)
-  const oneIn = pct <= 50 && n < 100 ? Math.round(100 / pct) : null
-  return `About ${n} in 100 tests found it${oneIn && oneIn > 1 ? ` (roughly 1 in ${oneIn})` : ''}.`
+  // Same rounding as everywhere else on MN Pulse (lib/format aboutOneIn), so 7.5% is "1 in 13" on every page.
+  const oneIn = pct >= 2.5 && pct < 45 ? aboutOneIn(pct)?.replace(/^about /, 'roughly ') : undefined
+  return `About ${n} in 100 tests found it${oneIn && !/ 1 in 1$/.test(oneIn) ? ` (${oneIn})` : ''}.`
 }
 
 export function IconArray({ pct, maxWidth = 220 }: { pct: number; maxWidth?: number }) {

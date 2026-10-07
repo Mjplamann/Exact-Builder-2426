@@ -2,9 +2,9 @@
 import type { MouseEvent } from 'react'
 import type { PathogenPulse } from '../../../shared/types'
 import type { PathogenProfile } from '../../content/types'
-import { formatDate } from '../../lib/format'
+import { formatDate, formatValue, plural } from '../../lib/format'
 import { LevelBadge, TrendPill } from '../ui'
-import { CATEGORY_LABEL, KIND_LABEL } from './meta'
+import { CATEGORY_LABEL, isCaseMetric, KIND_LABEL, regionTitle, yearToDateOf } from './meta'
 import { MonthStrip, peakPhrase } from './MonthStrip'
 
 export function LiveDot({ label = 'Live data' }: { label?: string }) {
@@ -79,13 +79,7 @@ export function PathogenCard({
       )}
 
       <div className="mt-auto flex flex-col gap-3 pt-1">
-        {pulse ? (
-          <div className="flex flex-wrap items-center gap-1.5">
-            <LevelBadge level={pulse.level} size="sm" />
-            <TrendPill trend={pulse.trend} compact />
-            {pulse.asOf && <span className="text-xs text-ink-3">week ending {formatDate(pulse.asOf)}</span>}
-          </div>
-        ) : null}
+        {pulse ? <PulseLine pulse={pulse} /> : null}
         <div>
           <p className="mb-1 text-xs text-ink-3">
             Usually peaks: <span className="text-ink-2">{peakPhrase(profile.seasonality.peakMonths)}</span>
@@ -94,5 +88,39 @@ export function PathogenCard({
         </div>
       </div>
     </article>
+  )
+}
+
+/** Level, trend and date for a card; case-count illnesses show their year-to-date count instead of a level. */
+function PulseLine({ pulse }: { pulse: PathogenPulse }) {
+  const p = pulse.primary
+  const caseCount = isCaseMetric(p?.metric) && pulse.level === 'unknown'
+  const ytd = caseCount ? yearToDateOf(p, undefined) : undefined
+  const region = regionTitle(p?.geo)
+  const date = p?.latestDate ?? pulse.asOf
+  return (
+    <div className="space-y-1">
+      <div className="flex flex-wrap items-center gap-1.5">
+        {caseCount ? (
+          <span className="inline-flex items-center rounded-full border border-line-strong px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-ink-1">
+            {ytd ? `${formatValue(ytd.value, 'count')} MN case${plural(ytd.value)} in ${ytd.year}` : 'Case counts'}
+          </span>
+        ) : (
+          <LevelBadge level={pulse.level} size="sm" />
+        )}
+        {!(caseCount && pulse.trend === 'unknown') && <TrendPill trend={pulse.trend} compact />}
+        {date && !region && (
+          <span className="text-xs text-ink-3">
+            {caseCount && p?.metric === 'cases_ytd' ? 'as of' : 'week ending'} {formatDate(date)}
+          </span>
+        )}
+      </div>
+      {region && (
+        <p className="text-xs text-ink-3">
+          {region}
+          {date ? ` · week ending ${formatDate(date)}` : ''}
+        </p>
+      )}
+    </div>
   )
 }

@@ -1,20 +1,17 @@
 // Thin React wrapper around Apache ECharts (modular build) with theme-token awareness.
+//
+// Only what the app draws is registered (line series, grid, tooltip/axis pointer, mark lines and mark
+// areas, SVG renderer). TrendChart loads this module lazily, so ECharts stays out of every chunk that
+// only needs chart helpers (sparklines, maps, level legends).
 import { useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import * as echarts from 'echarts/core'
-import { BarChart, LineChart, ScatterChart, HeatmapChart } from 'echarts/charts'
-import {
-  DataZoomComponent, GridComponent, LegendComponent, MarkAreaComponent, MarkLineComponent, TooltipComponent,
-  VisualMapComponent, AriaComponent,
-} from 'echarts/components'
+import { LineChart } from 'echarts/charts'
+import { GridComponent, MarkAreaComponent, MarkLineComponent, TooltipComponent } from 'echarts/components'
 import { SVGRenderer } from 'echarts/renderers'
 import type { EChartsCoreOption } from 'echarts/core'
 
-echarts.use([
-  LineChart, BarChart, ScatterChart, HeatmapChart, GridComponent, TooltipComponent, LegendComponent, DataZoomComponent,
-  MarkLineComponent, MarkAreaComponent, VisualMapComponent, AriaComponent, SVGRenderer,
-])
+echarts.use([LineChart, GridComponent, TooltipComponent, MarkLineComponent, MarkAreaComponent, SVGRenderer])
 
-export { cssVar } from './chartTheme'
 export type EChartsInstance = echarts.ECharts
 
 export function EChart({
@@ -39,7 +36,10 @@ export function EChart({
   onKeyDown?: (e: ReactKeyboardEvent<HTMLDivElement>, chart: echarts.ECharts) => void
   onFocus?: (chart: echarts.ECharts) => void
   onBlur?: (chart: echarts.ECharts) => void
-  /** Put the chart in the tab order (pair with onKeyDown). */
+  /**
+   * Put the chart in the tab order (pair with onKeyDown). A focusable chart is exposed as an
+   * "interactive chart" application so screen readers pass the arrow keys through to it.
+   */
   focusable?: boolean
   /** Native tooltip hint. Prefer ariaDescribedBy for instructions (a native tooltip competes with the chart's). */
   title?: string
@@ -77,7 +77,8 @@ export function EChart({
   return (
     <div
       ref={ref}
-      role="img"
+      role={focusable ? 'application' : 'img'}
+      aria-roledescription={focusable ? 'interactive chart' : undefined}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
       title={title}

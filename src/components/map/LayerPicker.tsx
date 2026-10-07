@@ -1,11 +1,12 @@
 // Map controls: which layer to draw (grouped by measure), how to color it, and the plant overlay.
-import type { MapLayer } from '../../../shared/types'
-import { pathogenName } from '../../content'
-import { groupLayers, type MapMode } from './mapData'
+import { useId } from 'react'
+import type { PulseFile } from '../../../shared/types'
+import { groupLayers, layerOptionLabel, type MapMode } from './mapData'
 
 const selectCls = 'min-w-0 max-w-full rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-sm text-ink-1'
 
-export function LayerPicker({ layers, value, onChange }: { layers: MapLayer[]; value?: string; onChange: (id: string) => void }) {
+export function LayerPicker({ pulse, value, onChange }: { pulse: PulseFile; value?: string; onChange: (id: string) => void }) {
+  const layers = pulse.mapLayers
   const groups = groupLayers(layers)
   return (
     <label className="flex min-w-0 flex-col gap-1 text-xs font-medium text-ink-2">
@@ -20,8 +21,10 @@ export function LayerPicker({ layers, value, onChange }: { layers: MapLayer[]; v
         {groups.map((g) => (
           <optgroup key={g.title} label={g.title}>
             {g.layers.map((l) => (
+              // Measure + program (+ plant count) so look-alike layers read differently, e.g. CDC NWSS levels vs
+              // MDH/WastewaterSCAN concentrations for the same virus.
               <option key={l.id} value={l.id}>
-                {pathogenName(l.pathogen)} — {g.title.replace(/ \(.*\)$/, '').toLowerCase()}
+                {layerOptionLabel(pulse, l)}
               </option>
             ))}
           </optgroup>
@@ -31,32 +34,49 @@ export function LayerPicker({ layers, value, onChange }: { layers: MapLayer[]; v
   )
 }
 
+const MODES: { id: MapMode; label: string }[] = [
+  { id: 'level', label: 'Activity level' },
+  { id: 'value', label: 'Value' },
+]
+
+/**
+ * Native radios: one tab stop, arrow keys move and select, and the focus ring is drawn inside each segment
+ * (no overflow clipping), matching the time-range control in the filter bar.
+ */
 export function ModeToggle({ value, onChange, disabled }: { value: MapMode; onChange: (m: MapMode) => void; disabled?: boolean }) {
-  const opts: { id: MapMode; label: string }[] = [
-    { id: 'level', label: 'Activity level' },
-    { id: 'value', label: 'Value' },
-  ]
+  const name = useId()
   return (
-    <div className="flex flex-col gap-1 text-xs font-medium text-ink-2">
-      <span id="map-mode-label">Color by</span>
-      <div className="flex overflow-hidden rounded-lg border border-line" role="radiogroup" aria-labelledby="map-mode-label">
-        {opts.map((o) => (
-          <button
-            key={o.id}
-            type="button"
-            role="radio"
-            aria-checked={value === o.id}
-            disabled={disabled}
-            onClick={() => onChange(o.id)}
-            className={`px-2.5 py-1.5 text-sm whitespace-nowrap disabled:opacity-50 ${
-              value === o.id ? 'bg-accent text-accent-ink' : 'bg-surface-1 text-ink-2 hover:bg-surface-2'
-            }`}
-          >
-            {o.label}
-          </button>
-        ))}
+    <fieldset className="flex min-w-0 flex-col gap-1 border-0 p-0 text-xs font-medium text-ink-2" disabled={disabled}>
+      <legend className="mb-1 p-0">Color by</legend>
+      <div className="flex rounded-lg border border-line">
+        {MODES.map((o, i) => {
+          const checked = value === o.id
+          return (
+            <label key={o.id} className={`relative flex ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+              <input
+                type="radio"
+                name={name}
+                value={o.id}
+                checked={checked}
+                onChange={() => onChange(o.id)}
+                className="peer sr-only"
+              />
+              <span
+                className={`px-2.5 py-1.5 text-sm whitespace-nowrap peer-focus-visible:z-10 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[-4px] ${
+                  i === 0 ? 'rounded-l-[7px]' : 'border-l border-line'
+                } ${i === MODES.length - 1 ? 'rounded-r-[7px]' : ''} ${
+                  checked
+                    ? 'bg-accent font-semibold text-accent-ink peer-focus-visible:outline-[var(--accent-ink)]'
+                    : 'bg-surface-1 text-ink-2 peer-focus-visible:outline-[var(--focus)] hover:bg-surface-2'
+                }`}
+              >
+                {o.label}
+              </span>
+            </label>
+          )
+        })}
       </div>
-    </div>
+    </fieldset>
   )
 }
 

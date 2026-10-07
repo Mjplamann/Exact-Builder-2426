@@ -80,10 +80,102 @@ export function sitesFor(pulse: PulseFile, siteLayerId: string | undefined): Sit
   return pulse.sites.filter((s) => s.metrics[siteLayerId])
 }
 
-/** NSSP county ED values are reported for the health service area the county belongs to. */
-export function isHsaEstimate(layer: MapLayer | undefined): boolean {
+/**
+ * County values reported for the health service area (HSA, a group of neighboring counties) rather than the
+ * county alone: CDC NSSP ER visits, CDC CFA Rt, and any layer whose series carry an HSA attribute.
+ * Pass a sample series of the layer (or the county's own series) to check its attributes.
+ */
+export function isHsaEstimate(layer: MapLayer | undefined, sample?: Series): boolean {
   if (!layer || layer.kind !== 'county') return false
-  return /nssp/i.test(layer.source) || layer.metric === 'ed_visit_pct'
+  if (/nssp|cfa-rt/i.test(layer.source) || layer.metric === 'ed_visit_pct' || layer.metric === 'rt') return true
+  return !!(sample?.attrs && (sample.attrs.hsa || sample.attrs.hsaName))
+}
+
+/** The HSA's name for a tooltip: attrs.hsaName first, else attrs.hsa when it is a name (CFA's hsa is an id like "941"). */
+export function hsaLabel(series: Series | undefined): string | undefined {
+  const a = series?.attrs
+  if (!a) return undefined
+  if (a.hsaName?.trim()) return a.hsaName.trim()
+  if (a.hsa?.trim() && !/^\d+$/.test(a.hsa.trim())) return a.hsa.trim()
+  return undefined
+}
+
+/** Rt is the direction of spread, not an amount: it has no activity level. */
+export function isLevelless(layer: Pick<MapLayer, 'metric'> | undefined): boolean {
+  return layer?.metric === 'rt'
+}
+
+/** Value text for a layer: Rt keeps two decimals (1.05 vs 0.97 matters); everything else uses formatValue. */
+export function formatLayerValue(v: number | null | undefined, layer: Pick<MapLayer, 'metric' | 'unit'>, opts?: { compact?: boolean }): string {
+  if (layer.metric === 'rt' && v != null && Number.isFinite(v)) return v.toFixed(2)
+  return formatValue(v, layer.unit, opts)
+}
+
+/** Short program name for the system a series comes from (for the layer picker and source notes). */
+const PROGRAMS: [RegExp, string][] = [
+  [/^nwss/, 'CDC NWSS'],
+  [/^wwscan/, 'WastewaterSCAN'],
+  [/^mdh-wastewater/, 'MDH'],
+  [/^mdh-respnet/, 'MDH RESP-NET'],
+  [/^nssp/, 'CDC NSSP'],
+  [/^cfa/, 'CDC CFA'],
+  [/^nhsn/, 'CDC NHSN'],
+  [/^mdh/, 'MDH'],
+]
+
+export function programName(s: Pick<Series, 'dataset' | 'source'>): string {
+  for (const [re, name] of PROGRAMS) if (re.test(s.dataset)) return name
+  return s.source
+}
+
+/** Series ids look like "source:dataset:pathogen:metric:geoType:code". */
+function idParts(seriesId: string): { source: string; dataset: string; pathogen: string } {
+  const [source = '', dataset = '', pathogen = ''] = seriesId.split(':')
+  return { source, dataset, pathogen }
+}
+
+/** Source id of the series behind one county/plant metric (a layer can mix sources, e.g. MDH + WastewaterSCAN plants). */
+export function metricSource(m: CountyMetric | undefined, fallback?: string): string | undefined {
+  return (m && idParts(m.seriesId).source) || fallback
+}
+
+/** Every metric drawn for a layer (county or plant). */
+export function layerMetrics(pulse: PulseFile, layer: MapLayer): CountyMetric[] {
+  const out: CountyMetric[] = []
+  const rows = layer.kind === 'site' ? pulse.sites : pulse.counties
+  for (const r of rows) {
+    const m = r.metrics[layer.id]
+    if (m) out.push(m)
+  }
+  return out
+}
+
+/** Programs behind a layer, most places first ("MDH + WastewaterSCAN"), and how many places report. */
+export function layerPrograms(pulse: PulseFile, layer: MapLayer): { names: string[]; places: number } {
+  const counts = new Map<string, number>()
+  const ms = layerMetrics(pulse, layer)
+  for (const m of ms) {
+    const name = programName(idParts(m.seriesId))
+    counts.set(name, (counts.get(name) ?? 0) + 1)
+  }
+  const names = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([n]) => n)
+  return { names, places: ms.length }
+}
+
+const MEASURE_SHORT: Record<string, string> = { 'wastewater activity level': 'wastewater level' }
+
+/**
+ * Picker text that tells look-alike layers apart by measure and program:
+ * "COVID-19 — wastewater level (CDC NWSS, 27 plants)" vs "COVID-19 — wastewater concentration (MDH + WastewaterSCAN, 33 plants)".
+ */
+export function layerOptionLabel(pulse: PulseFile, layer: MapLayer): string {
+  const raw = layer.label.includes(' — ') ? layer.label.split(' — ').slice(1).join(' — ') : layerShortLabel(layer).split(' · ')[1]
+  const measure = MEASURE_SHORT[raw] ?? raw
+  const { names, places } = layerPrograms(pulse, layer)
+  const prog = names.length ? names.join(' + ') : ''
+  const where = layer.kind === 'site' && places ? `${places} plant${places === 1 ? '' : 's'}` : ''
+  const extra = [prog, where].filter(Boolean).join(', ')
+  return `${pathogenName(layer.pathogen)} — ${measure}${extra ? ` (${extra})` : ''}`
 }
 
 export const HSA_NOTE = 'County values are estimates for the health service area'
@@ -104,9 +196,10 @@ const GROUP_TITLE: Partial<Record<MetricKind, string>> = {
   wastewater_level: 'Wastewater',
   wastewater_conc: 'Wastewater',
   ww_detections: 'Wastewater',
+  rt: 'Spread (Rt)',
 }
 
-const GROUP_ORDER = ['Emergency department visits', 'Hospitalizations', 'Lab test positivity', 'Reported cases', 'Wastewater']
+const GROUP_ORDER = ['Emergency department visits', 'Hospitalizations', 'Lab test positivity', 'Reported cases', 'Spread (Rt)', 'Wastewater']
 
 export interface LayerGroup {
   title: string
@@ -145,6 +238,7 @@ export function layerShortLabel(layer: MapLayer): string {
     wastewater_level: 'wastewater',
     wastewater_conc: 'wastewater',
     ww_detections: 'wastewater detections',
+    rt: 'Rt',
   }
   return `${pathogenName(layer.pathogen)} · ${metric[layer.metric] ?? METRIC_LABEL[layer.metric].toLowerCase()}`
 }
@@ -223,11 +317,11 @@ export function binIndex(bins: ValueBin[], v: number | null | undefined): number
   return bins.length - 1
 }
 
-export function binLabel(bin: ValueBin, unit: Unit): string {
-  if (bin.lo === bin.hi) return formatValue(bin.lo, unit)
-  // Decimals follow the bin width so labels read evenly (0.5–1.0%, not 0.50–1.0%).
+export function binLabel(bin: ValueBin, unit: Unit, metric?: MetricKind): string {
+  if (bin.lo === bin.hi) return metric === 'rt' ? bin.lo.toFixed(2) : formatValue(bin.lo, unit)
+  // Decimals follow the bin width so labels read evenly (0.5–1.0%, not 0.50–1.0%); Rt always uses two.
   const step = Math.abs(bin.hi - bin.lo)
-  const dec = unit === 'count' ? 0 : step >= 5 ? 0 : step >= 0.5 ? 1 : step >= 0.05 ? 2 : 3
+  const dec = metric === 'rt' ? 2 : unit === 'count' ? 0 : step >= 5 ? 0 : step >= 0.5 ? 1 : step >= 0.05 ? 2 : 3
   const f = (v: number) => (unit === 'count' ? Math.round(v).toLocaleString('en-US') : v.toFixed(dec))
   return `${f(bin.lo)}–${f(bin.hi)}${unit === '%' ? '%' : ''}`
 }
@@ -255,6 +349,7 @@ export function layerPhrase(layer: MapLayer): string {
     wastewater_level: 'wastewater levels',
     wastewater_conc: 'wastewater levels',
     ww_detections: 'wastewater detections',
+    rt: 'Rt estimates',
   }
   return `${name} ${m[layer.metric] ?? METRIC_LABEL[layer.metric].toLowerCase()}`
 }
@@ -273,10 +368,103 @@ export function countyNames(fips: string[] | undefined, max = 4): string {
 
 // ───────────────────────── Statewide comparison ─────────────────────────
 
-/** Minnesota-wide signal for the same pathogen + metric, if the pulse has one. */
-export function stateSignal(pulse: PulseFile, layer: MapLayer): SignalSummary | undefined {
-  const p = pulse.pathogens.find((x) => x.pathogen === layer.pathogen)
-  return p?.signals.find((s) => s.metric === layer.metric && s.geo.type === 'state')
+/** Measures that belong together when looking for a statewide twin. */
+const MEASURE_FAMILY: Partial<Record<MetricKind, string>> = {
+  hosp_rate: 'hosp',
+  hosp_admissions: 'hosp',
+  wastewater_level: 'ww',
+  wastewater_conc: 'ww',
+  ww_detections: 'ww',
+  cases: 'cases',
+  cases_ytd: 'cases',
+}
+const measureFamily = (m: MetricKind) => MEASURE_FAMILY[m] ?? m
+
+/**
+ * Minnesota-wide signal that goes with a layer: same pathogen and measure family, preferring the same
+ * source (MDH county hospitalizations → MDH's statewide RESP-NET rate, not CDC NHSN), then the same metric,
+ * then the same unit.
+ */
+export function stateSignal(pulse: PulseFile, layer: MapLayer, seriesById?: Map<string, Series>): SignalSummary | undefined {
+  const fam = family(layer.pathogen)
+  // A layer can mix sources (29 MDH plants + 4 WastewaterSCAN plants): the one behind most places leads.
+  const counts = new Map<string, number>()
+  for (const m of layerMetrics(pulse, layer)) {
+    const src = idParts(m.seriesId).source
+    counts.set(src, (counts.get(src) ?? 0) + 1)
+  }
+  const main = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? layer.source
+  const sourceScore = (src: string) => (src === main ? 4 : counts.has(src) || src === layer.source ? 3 : 0)
+  let best: { s: SignalSummary; score: number } | undefined
+  for (const p of pulse.pathogens) {
+    if (p.pathogen !== layer.pathogen && p.pathogen !== fam) continue
+    for (const s of p.signals) {
+      if (s.geo.type !== 'state' || measureFamily(s.metric) !== measureFamily(layer.metric)) continue
+      const sp = seriesById?.get(s.seriesId)?.pathogen ?? idParts(s.seriesId).pathogen
+      if (sp !== layer.pathogen) continue
+      const score = sourceScore(s.source) + (s.metric === layer.metric ? 2 : 0) + (s.unit === layer.unit ? 1 : 0)
+      if (!best || score > best.score) best = { s, score }
+    }
+  }
+  return best?.s
+}
+
+// ───────────────────────── Level scales ─────────────────────────
+
+/** Publishers whose category scale has three steps (Low / Moderate / High), so "Low" is its floor (mirrors the pipeline). */
+const THREE_STEP_SCALES = [/^pub:MDH RESP-NET/]
+
+/**
+ * Which scale a series' level is on: a publisher's own categories ("pub:MDH RESP-NET"), published cut-points
+ * ("cuts:…"), or its own history ("history"); null when the measure has no level (Rt). Mirrors how the
+ * pipeline rates levels, so a county and the state can be compared only when they share a scale.
+ * County ER visits are rated with Minnesota's cut-points for the same pathogen (pass `stateEd`).
+ */
+export function levelScaleOf(s: Series | undefined, latestDate?: string, stateEd?: Series): string | null {
+  if (!s || s.metric === 'rt') return null
+  const off = s.official
+  if (off?.level && off.level !== 'unknown' && (!off.asOf || !latestDate || off.asOf === latestDate)) return `pub:${off.by ?? s.source}`
+  if (s.thresholds) return `cuts:${s.metric}:${s.thresholds.by}`
+  if (s.geo.type === 'county' && s.metric === 'ed_visit_pct' && stateEd?.thresholds) return `cuts:${s.metric}:${stateEd.thresholds.by}`
+  return 'history'
+}
+
+/** Statewide all-ages ER-visit series for a pathogen that carries CDC cut-points (used to rate county ER visits). */
+export function stateEdSeries(series: Series[], pathogen: PathogenId): Series | undefined {
+  return series.find((s) => s.geo.type === 'state' && s.metric === 'ed_visit_pct' && s.pathogen === pathogen && !s.age && s.thresholds)
+}
+
+/** True for a three-step publisher scale, where "Low" is the bottom step. */
+export function isThreeStepScale(scale: string | null): boolean {
+  return !!scale && THREE_STEP_SCALES.some((re) => re.test(scale))
+}
+
+/**
+ * Position of a level within its own scale, 0 (bottom step) to 1 (top step); null when there is no level.
+ * Lets measures on different scales be ranked fairly: MDH's "Low" is its floor (0), CDC's "Low" is step 2 of 5.
+ */
+export function scalePosition(level: ActivityLevel, scale: string | null): number | null {
+  if (scale == null || level === 'unknown') return null
+  const i = LEVELS.indexOf(level)
+  if (i < 0) return null
+  if (isThreeStepScale(scale)) return Math.min(1, Math.max(0, i - 1) / 2)
+  return i / (LEVELS.length - 1)
+}
+
+/** Percentile (0–100) of a value among the series' weekly values from the ~3 years before `date` (needs 26+ weeks). */
+export function historyPercentile(s: Series | undefined, date: string, value: number | null | undefined): number | undefined {
+  if (!s || value == null) return undefined
+  const from = `${Number(date.slice(0, 4)) - 3}${date.slice(4)}`
+  const hist: number[] = []
+  for (const [d, v] of s.points) if (v != null && d < date && d >= from) hist.push(v)
+  if (hist.length < 26) return undefined
+  let below = 0
+  let equal = 0
+  for (const v of hist) {
+    if (v < value) below++
+    else if (v === value) equal++
+  }
+  return ((below + equal / 2) / hist.length) * 100
 }
 
 /** Statewide series with the same pathogen, metric and unit (prefer the same source, then the freshest). */

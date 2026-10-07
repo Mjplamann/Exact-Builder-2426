@@ -33,10 +33,8 @@ export function MonthStrip({ months, now = new Date(), size = 'sm' }: { months: 
   const peaks = new Set(months)
   const h = size === 'md' ? 'h-7 text-xs' : 'h-5 text-[10px]'
   return (
+    // Decorative: every use sits next to a visible "Usually peaks: …" line, so screen readers hear it once.
     <div>
-      <p className="sr-only">
-        Usually peaks: {peakPhrase(months)}. It is now {MONTH_LONG[current - 1]}.
-      </p>
       <ol className="flex gap-0.5" aria-hidden="true">
         {MONTH_SHORT.map((m, i) => {
           const month = i + 1

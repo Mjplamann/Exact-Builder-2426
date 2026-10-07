@@ -1,19 +1,26 @@
 // SVG choropleth of Minnesota's 87 counties with optional wastewater-plant markers.
 // Projection: Lambert conformal conic tuned for Minnesota, fitted to the container width.
 // Colors: activity levels (always with a text label in tooltip/legend), or a quantized sequential ramp.
-import { useId, useMemo, useState, type KeyboardEvent, type PointerEvent } from 'react'
+//
+// Keyboard (full map): the counties are one tab stop (roving tabindex on the selected, last-visited or first
+// county). Arrow keys move to the nearest county in that direction, Home/End jump to the first/last county
+// alphabetically, Enter/Space select, Escape hides the details popup. Plant marks are a second roving group.
+// The compact overview map is a single image with a text summary: selection there happens through the
+// "Where" menu and the "Highest this week" list, so it costs no tab stops.
+import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { geoConicConformal, geoPath, type GeoProjection } from 'd3-geo'
 import { scaleSqrt } from 'd3-scale'
-import type { CountyMetric, MapLayer, PulseFile, Series, SitePulse } from '../../../shared/types'
+import type { ActivityLevel, CountyMetric, MapLayer, PulseFile, Series, SitePulse } from '../../../shared/types'
+import { LEVELS } from '../../../shared/risk'
 import { pathogenName } from '../../content'
 import { useDashboard } from '../../lib/dashboard'
-import { formatDate, formatValue, LEVEL_LABEL, LEVEL_VAR, METRIC_LABEL, metricMeaning, UNIT_SUFFIX } from '../../lib/format'
+import { formatDate, formatValue, LEVEL_LABEL, LEVEL_VAR, METRIC_LABEL, metricMeaning, TREND_LABEL, UNIT_SUFFIX } from '../../lib/format'
 import { EmptyState, LevelBadge, TrendPill } from '../ui'
 import {
-  binIndex, countyMetricsFor, countyNames, HSA_NOTE, isHsaEstimate, layerById, makeBins, metricLevel, siteLayerFor, sitesFor,
-  sourceName, type ValueBin,
+  binIndex, binLabel, countyMetricsFor, countyNames, formatLayerValue, HSA_NOTE, hsaLabel, isHsaEstimate, isLevelless, layerById,
+  layerPhrase, makeBins, metricLevel, metricSource, siteLayerFor, sitesFor, sourceName, type ValueBin,
 } from './mapData'
-import { LevelLegend, SiteLegend, ValueLegend } from './MapLegend'
+import { LevelLegend, PlantMark, SiteLegend, ValueLegend, type PlantMarkStyle } from './MapLegend'
 import { MapTooltip } from './MapTooltip'
 import { useCountiesGeo, useElementWidth } from './useCountiesGeo'
 
@@ -24,7 +31,7 @@ export interface CountyMapProps {
   /** Selected county FIPS. */
   selected?: string | null
   onSelect?: (fips: string | null) => void
-  /** Color counties by activity level (default) or by raw value. */
+  /** Color counties by activity level (default) or by raw value. Measures without a level (Rt) always use value. */
   mode?: 'level' | 'value'
   /** Overlay wastewater sites from pulse.sites. */
   showSites?: boolean
@@ -33,7 +40,7 @@ export interface CountyMapProps {
    * width, capped at this value (the map is then centered).
    */
   height?: number
-  /** Compact = no legend/controls (used for the mini map on the overview). */
+  /** Compact = no legend/controls, not focusable (used for the mini map on the overview). */
   compact?: boolean
 }
 
@@ -55,19 +62,56 @@ interface SiteDot {
 }
 
 const PAD = 4
+const RT_NOTE = 'Rt shows direction of spread, not amount'
 
-/** "…were for it" → "…were for Flu". */
+/** "…were for it" → "…were for Flu". Rt reads as spread, with two decimals. */
 export function meaningFor(layer: MapLayer, value: number | null | undefined): string {
+  if (layer.metric === 'rt' && value != null) {
+    return `each infection is passed on to about ${value.toFixed(2)} others on average (Rt ${value > 1 ? 'above' : value < 1 ? 'below' : 'at'} 1)`
+  }
   const s = metricMeaning(layer.metric, value, layer.unit)
   return s.replace(/\bit\b/, pathogenName(layer.pathogen))
 }
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-function hsaName(series: Series | undefined): string | undefined {
-  if (!series?.attrs) return undefined
-  const key = Object.keys(series.attrs).find((k) => /hsa|service.?area/i.test(k))
-  return key ? series.attrs[key] : undefined
+const DIRS: Record<string, [number, number]> = {
+  ArrowRight: [1, 0],
+  ArrowLeft: [-1, 0],
+  ArrowUp: [0, -1],
+  ArrowDown: [0, 1],
+}
+
+/** Nearest item whose position lies in the arrow's direction (within a ~63° cone), favoring straight lines. */
+function nearestInDirection<T>(items: T[], self: T, pos: (t: T) => [number, number], dir: [number, number]): T | undefined {
+  const [x0, y0] = pos(self)
+  let best: T | undefined
+  let bestCost = Number.POSITIVE_INFINITY
+  for (const it of items) {
+    if (it === self) continue
+    const [x, y] = pos(it)
+    const dx = x - x0
+    const dy = y - y0
+    const along = dx * dir[0] + dy * dir[1]
+    if (along <= 0.5) continue
+    const across = Math.abs(dx * dir[1] - dy * dir[0])
+    if (across > along * 2) continue
+    const cost = along + across * 2
+    if (cost < bestCost) {
+      bestCost = cost
+      best = it
+    }
+  }
+  return best
+}
+
+/** "70 very low, 5 low, 11 no data" */
+function countsPhrase(counts: Partial<Record<ActivityLevel, number>>, noData: number): string {
+  const parts = [...LEVELS, 'unknown' as const]
+    .filter((l) => (counts[l] ?? 0) > 0)
+    .map((l) => `${counts[l]} ${LEVEL_LABEL[l].toLowerCase()}`)
+  if (noData > 0) parts.push(`${noData} no data`)
+  return parts.join(', ')
 }
 
 export function CountyMap({
@@ -75,7 +119,7 @@ export function CountyMap({
   layerId,
   selected,
   onSelect,
-  mode = 'level',
+  mode: modeProp = 'level',
   showSites = false,
   height,
   compact = false,
@@ -88,10 +132,16 @@ export function CountyMap({
 
   const [hover, setHover] = useState<Hover>(null)
   const [focusId, setFocusId] = useState<string | null>(null)
+  // Roving tab stops: the county (and plant) that Tab lands on.
+  const [roveCounty, setRoveCounty] = useState<string | null>(null)
+  const [roveSite, setRoveSite] = useState<string | null>(null)
+  const pathRefs = useRef(new Map<string, SVGPathElement>())
+  const dotRefs = useRef(new Map<string, SVGGElement>())
 
   const layer = layerById(pulse, layerId)
   const countyLayer = layer?.kind === 'county' ? layer : undefined
   const siteLayer = layer?.kind === 'site' || showSites ? siteLayerFor(pulse, layer) : undefined
+  const mode = isLevelless(countyLayer) ? 'value' : modeProp
 
   const metrics = useMemo(
     () => (countyLayer ? countyMetricsFor(pulse, countyLayer.id) : new Map<string, CountyMetric>()),
@@ -110,6 +160,12 @@ export function CountyMap({
     for (const s of data?.series ?? []) if (ids.has(s.id)) out.set(s.id, s)
     return out
   }, [data, metrics])
+  const sampleSeries = useMemo(() => seriesById.values().next().value as Series | undefined, [seriesById])
+
+  // Follow the selection with the keyboard tab stop.
+  useEffect(() => {
+    if (selected) setRoveCounty(selected)
+  }, [selected])
 
   // ── Geometry ──
   const geom = useMemo(() => {
@@ -134,7 +190,8 @@ export function CountyMap({
       d: path(f) ?? '',
       c: path.centroid(f) as [number, number],
     }))
-    return { projection, h, counties }
+    const alpha = [...counties].sort((a, b) => a.name.localeCompare(b.name))
+    return { projection, h, counties, alpha }
   }, [geo, width, height, compact])
 
   const siteList = useMemo(() => sitesFor(pulse, siteLayer?.id), [pulse, siteLayer])
@@ -160,6 +217,7 @@ export function CountyMap({
     // Big dots first so small ones stay on top.
     return out.sort((a, b) => b.r - a.r)
   }, [geom, siteLayer, siteList, compact, width])
+  const dotsAlpha = useMemo(() => [...dots].sort((a, b) => a.site.name.localeCompare(b.site.name)), [dots])
 
   // ── Fill + labels ──
   function fillFor(fips: string): string {
@@ -178,7 +236,10 @@ export function CountyMap({
     if (!countyLayer) return `${base}. Select to see county details.`
     const m = metrics.get(c.fips)
     if (!m || m.value == null) return `${base}: no data for ${countyLayer.label}.`
-    const v = `${formatValue(m.value, countyLayer.unit)}${UNIT_SUFFIX[countyLayer.unit]}`
+    const v = `${formatLayerValue(m.value, countyLayer)}${UNIT_SUFFIX[countyLayer.unit]}`
+    if (isLevelless(countyLayer)) {
+      return `${base}: Rt ${v}${m.trend && m.trend !== 'unknown' ? `, ${TREND_LABEL[m.trend].toLowerCase()}` : ''}, week ending ${formatDate(m.date, true)}.`
+    }
     return `${base}: ${LEVEL_LABEL[metricLevel(m)]} activity, ${v}, week ending ${formatDate(m.date, true)}.`
   }
 
@@ -192,8 +253,19 @@ export function CountyMap({
     const [x, y] = localPoint(e)
     setHover({ kind, id, x, y })
   }
-  const onPointerLeave = (id: string) => () => setHover((h) => (h?.id === id ? null : h))
+  // Touch fires pointerleave right after every tap; only a real pointer leaving should close the popup.
+  const onPointerLeave = (id: string) => (e: PointerEvent<SVGElement>) => {
+    if (e.pointerType === 'touch') return
+    setHover((h) => (h?.id === id ? null : h))
+  }
+  // Touch has no hover: a tap on a plant toggles its details popup (a tap on a county closes it).
+  const onSiteTap = (d: SiteDot) => (e: PointerEvent<SVGElement>) => {
+    if (e.pointerType !== 'touch') return
+    setHover((h) => (h?.id === d.site.id ? null : { kind: 'site', id: d.site.id, x: d.x, y: d.y }))
+  }
   const onFocus = (kind: 'county' | 'site', id: string, x: number, y: number) => (e: React.FocusEvent<SVGElement>) => {
+    if (kind === 'county') setRoveCounty(id)
+    else setRoveSite(id)
     let visible = true
     try {
       visible = e.currentTarget.matches(':focus-visible')
@@ -208,13 +280,49 @@ export function CountyMap({
     setFocusId((f) => (f === id ? null : f))
     setHover((h) => (h?.id === id ? null : h))
   }
-  const onCountyKey = (fips: string) => (e: KeyboardEvent<SVGElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+  const focusCounty = (fips: string | undefined) => {
+    if (!fips) return
+    setRoveCounty(fips)
+    pathRefs.current.get(fips)?.focus()
+  }
+  const focusSite = (id: string | undefined) => {
+    if (!id) return
+    setRoveSite(id)
+    dotRefs.current.get(id)?.focus()
+  }
+  const onCountyKey = (c: CountyShape) => (e: KeyboardEvent<SVGElement>) => {
+    if (!geom) return
+    const dir = DIRS[e.key]
+    if (dir) {
       e.preventDefault()
-      onSelect?.(fips)
+      focusCounty(nearestInDirection(geom.counties, c, (x) => x.c, dir)?.fips)
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      focusCounty(geom.alpha[0]?.fips)
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      focusCounty(geom.alpha[geom.alpha.length - 1]?.fips)
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onSelect?.(c.fips)
+    } else if (e.key === 'Escape') {
+      // Escape only dismisses the popup; it never clears the selection.
+      setHover(null)
+    }
+  }
+  const onSiteKey = (d: SiteDot) => (e: KeyboardEvent<SVGElement>) => {
+    const dir = DIRS[e.key]
+    if (dir) {
+      e.preventDefault()
+      focusSite(nearestInDirection(dots, d, (x) => [x.x, x.y], dir)?.site.id)
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      focusSite(dotsAlpha[0]?.site.id)
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      focusSite(dotsAlpha[dotsAlpha.length - 1]?.site.id)
     } else if (e.key === 'Escape') {
       setHover(null)
-      onSelect?.(null)
     }
   }
 
@@ -244,7 +352,7 @@ export function CountyMap({
   const focusDot = focusId ? dots.find((d) => d.site.id === focusId) : undefined
 
   // Legend counts.
-  const levelCounts: Partial<Record<string, number>> = {}
+  const levelCounts: Partial<Record<ActivityLevel, number>> = {}
   let unknownCount = 0
   for (const m of reporting) {
     const l = metricLevel(m)
@@ -254,19 +362,37 @@ export function CountyMap({
   const countyTotal = geom?.counties.length ?? 87
   const noDataCount = countyLayer ? countyTotal - reporting.length : 0
   const binCounts = bins.map((_, i) => reporting.filter((m) => binIndex(bins, m.value) === i).length)
-  const siteLevelCounts: Partial<Record<string, number>> = {}
-  let siteUnknown = 0
-  for (const site of siteList) {
-    const l = metricLevel(siteLayer ? site.metrics[siteLayer.id] : undefined)
+  const siteLevelCounts: Partial<Record<ActivityLevel, number>> = {}
+  for (const d of dots) {
+    const l = metricLevel(d.metric)
     siteLevelCounts[l] = (siteLevelCounts[l] ?? 0) + 1
-    if (l === 'unknown') siteUnknown++
   }
 
+  // Plants sit on counties filled with the same level colors → ring marks; otherwise level-filled dots.
+  const markStyle: PlantMarkStyle = countyLayer && layerHasData && mode === 'level' ? 'ring' : 'fill'
+
+  // Tab stops (full map only).
+  const tabCounty =
+    roveCounty && geom?.counties.some((c) => c.fips === roveCounty) ? roveCounty : (selected ?? geom?.alpha[0]?.fips ?? null)
+  const tabSite = roveSite && dots.some((d) => d.site.id === roveSite) ? roveSite : (dotsAlpha[0]?.site.id ?? null)
+
+  // Text summary of what the map shows (the compact map's whole accessible name).
+  let summary = ''
+  if (countyLayer && layerHasData) {
+    summary =
+      mode === 'value'
+        ? bins.map((b, i) => `${binCounts[i]} at ${binLabel(b, countyLayer.unit, countyLayer.metric)}`).join(', ') + (noDataCount ? `, ${noDataCount} no data` : '')
+        : countsPhrase(levelCounts, noDataCount)
+  } else if (siteLayer && siteHasData) {
+    summary = `plants: ${countsPhrase(siteLevelCounts, 0)}`
+  }
   const ariaMap = countyLayer
-    ? `Map of Minnesota counties colored by ${mode === 'value' ? 'value' : 'activity level'} for ${countyLayer.label}.`
+    ? `Map of ${layerPhrase(countyLayer)} by county${mode === 'value' ? ', shaded by value' : ', by activity level'}${summary ? `: ${summary}.` : '.'}`
     : layer?.kind === 'site'
-      ? `Map of Minnesota wastewater treatment plants colored by ${layer.label} level.`
+      ? `Map of Minnesota wastewater treatment plants colored by ${layer.label} level${summary ? `; ${summary}.` : '.'}`
       : 'Map of Minnesota counties.'
+
+  const selectable = !!onSelect && !compact
 
   return (
     <div className="min-w-0">
@@ -276,15 +402,26 @@ export function CountyMap({
         </p>
       )}
       {!compact && (
-        <button
-          type="button"
-          onClick={skipMap}
-          className="sr-only rounded-md bg-surface-1 px-2 py-1 text-sm text-accent focus:not-sr-only focus:mb-2 focus:inline-block"
-        >
-          Skip past the county map
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={skipMap}
+            className="sr-only rounded-md bg-surface-1 px-2 py-1 text-sm text-accent focus:not-sr-only focus:mb-2 focus:inline-block"
+          >
+            Skip past the county map
+          </button>
+          <p id={`${uid}-help`} className="sr-only">
+            Counties are one stop in the tab order: use the arrow keys to move to a neighboring county, Home and End for the first and last
+            county, Enter to select it, and Escape to hide the details popup.
+            {dots.length > 0 ? ' Wastewater plants are the next tab stop and move the same way.' : ''}
+          </p>
+        </>
       )}
-      <div ref={wrapRef} className="relative w-full" onPointerLeave={() => setHover((h) => (h && h.id !== focusId ? null : h))}>
+      <div
+        ref={wrapRef}
+        className="relative w-full"
+        onPointerLeave={(e) => e.pointerType !== 'touch' && setHover((h) => (h && h.id !== focusId ? null : h))}
+      >
         {!geom ? (
           <div
             className="flex items-center justify-center rounded-lg bg-surface-2 text-sm text-ink-3"
@@ -297,8 +434,9 @@ export function CountyMap({
             width={width}
             height={geom.h}
             viewBox={`0 0 ${width} ${geom.h}`}
-            role="group"
+            role={compact ? 'img' : 'group'}
             aria-label={ariaMap}
+            aria-describedby={compact ? undefined : `${uid}-help`}
             className="block select-none"
             style={{ touchAction: 'manipulation' }}
           >
@@ -313,19 +451,27 @@ export function CountyMap({
               {geom.counties.map((c) => (
                 <path
                   key={c.fips}
+                  ref={(el) => {
+                    if (el) pathRefs.current.set(c.fips, el)
+                    else pathRefs.current.delete(c.fips)
+                  }}
                   d={c.d}
-                  tabIndex={0}
-                  role="button"
-                  aria-pressed={selected === c.fips}
-                  aria-label={countyAria(c)}
+                  data-fips={c.fips}
+                  tabIndex={compact ? undefined : c.fips === tabCounty ? 0 : -1}
+                  role={compact ? undefined : 'button'}
+                  aria-pressed={compact ? undefined : selected === c.fips}
+                  aria-label={compact ? undefined : countyAria(c)}
                   style={{ fill: fillFor(c.fips), stroke: 'var(--surface-1)', strokeWidth: 1, outline: 'none', cursor: onSelect ? 'pointer' : 'default' }}
                   strokeLinejoin="round"
                   onPointerMove={onPointerMove('county', c.fips)}
                   onPointerLeave={onPointerLeave(c.fips)}
-                  onClick={() => onSelect?.(c.fips)}
-                  onKeyDown={onCountyKey(c.fips)}
-                  onFocus={onFocus('county', c.fips, c.c[0], c.c[1])}
-                  onBlur={onBlur(c.fips)}
+                  onClick={() => {
+                    setHover((h) => (h?.kind === 'site' ? null : h))
+                    onSelect?.(c.fips)
+                  }}
+                  onKeyDown={compact ? undefined : onCountyKey(c)}
+                  onFocus={compact ? undefined : onFocus('county', c.fips, c.c[0], c.c[1])}
+                  onBlur={compact ? undefined : onBlur(c.fips)}
                 />
               ))}
             </g>
@@ -354,31 +500,37 @@ export function CountyMap({
             )}
 
             {dots.length > 0 && (
-              <g aria-label="Wastewater treatment plants" role="group">
+              <g aria-label={compact ? undefined : 'Wastewater treatment plants'} role={compact ? undefined : 'group'}>
                 {dots.map((d) => {
                   const level = metricLevel(d.metric)
                   const served = countyNames(d.site.counties, 3)
                   return (
                     <g
                       key={d.site.id}
-                      tabIndex={0}
-                      role="img"
-                      aria-label={`${d.site.name}${served ? `, serving ${served}` : ''}: ${LEVEL_LABEL[level]} wastewater level, week ending ${formatDate(d.metric.date, true)}.`}
+                      ref={(el) => {
+                        if (el) dotRefs.current.set(d.site.id, el)
+                        else dotRefs.current.delete(d.site.id)
+                      }}
+                      tabIndex={compact ? undefined : d.site.id === tabSite ? 0 : -1}
+                      role={compact ? undefined : 'img'}
+                      aria-label={
+                        compact
+                          ? undefined
+                          : `${d.site.name}${served ? `, serving ${served}` : ''}: ${LEVEL_LABEL[level]} wastewater level, week ending ${formatDate(d.metric.date, true)}.`
+                      }
                       style={{ outline: 'none' }}
                       onPointerMove={onPointerMove('site', d.site.id)}
                       onPointerLeave={onPointerLeave(d.site.id)}
-                      onFocus={onFocus('site', d.site.id, d.x, d.y)}
-                      onBlur={onBlur(d.site.id)}
+                      onPointerUp={onSiteTap(d)}
+                      onKeyDown={compact ? undefined : onSiteKey(d)}
+                      onFocus={compact ? undefined : onFocus('site', d.site.id, d.x, d.y)}
+                      onBlur={compact ? undefined : onBlur(d.site.id)}
                     >
-                      <circle cx={d.x} cy={d.y} r={Math.max(d.r + 4, 10)} style={{ fill: 'transparent' }} />
-                      <circle
-                        cx={d.x}
-                        cy={d.y}
-                        r={d.r}
-                        style={{ fill: LEVEL_VAR[level], stroke: 'var(--surface-1)', strokeWidth: 2 }}
-                      />
+                      {/* Hit area of at least 24px, larger than the painted mark. */}
+                      <circle cx={d.x} cy={d.y} r={Math.max(d.r + 4, 12)} style={{ fill: 'transparent' }} />
+                      <PlantMark cx={d.x} cy={d.y} r={d.r} level={level} markStyle={markStyle} />
                       {hover?.id === d.site.id && (
-                        <circle cx={d.x} cy={d.y} r={d.r + 1.5} style={{ fill: 'none', stroke: 'var(--ink-1)', strokeWidth: 1.5 }} />
+                        <circle cx={d.x} cy={d.y} r={d.r + 3} style={{ fill: 'none', stroke: 'var(--ink-1)', strokeWidth: 1.5 }} />
                       )}
                     </g>
                   )
@@ -389,7 +541,7 @@ export function CountyMap({
               <circle
                 cx={focusDot.x}
                 cy={focusDot.y}
-                r={focusDot.r + 4}
+                r={focusDot.r + 5}
                 pointerEvents="none"
                 aria-hidden="true"
                 style={{ fill: 'none', stroke: 'var(--ink-1)', strokeWidth: 2 }}
@@ -405,17 +557,20 @@ export function CountyMap({
                 name={geom.counties.find((c) => c.fips === hover.id)?.name ?? hover.id}
                 layer={countyLayer}
                 metric={metrics.get(hover.id)}
-                source={sourceName(data?.manifest, countyLayer?.source)}
-                hsa={hsaName(seriesById.get(metrics.get(hover.id)?.seriesId ?? ''))}
+                source={sourceName(data?.manifest, metricSource(metrics.get(hover.id), countyLayer?.source))}
+                series={seriesById.get(metrics.get(hover.id)?.seriesId ?? '')}
                 compact={compact}
-                selectable={!!onSelect}
+                selectable={selectable}
               />
             ) : (
               siteLayer && (
                 <SiteTip
                   site={dots.find((d) => d.site.id === hover.id)?.site}
                   layer={siteLayer}
-                  source={sourceName(data?.manifest, siteLayer.source)}
+                  source={sourceName(
+                    data?.manifest,
+                    metricSource(dots.find((d) => d.site.id === hover.id)?.metric, siteLayer.source),
+                  )}
                   compact={compact}
                 />
               )
@@ -427,26 +582,37 @@ export function CountyMap({
       {!compact && (
         <div className="mt-3 flex flex-col gap-3" id={`${uid}-after`} tabIndex={-1} style={{ outline: 'none' }}>
           {countyLayer && layerHasData && mode === 'level' && (
-            <LevelLegend counts={levelCounts} noData={noDataCount} showUnknown={unknownCount > 0} title="Activity level (number of counties)" />
+            <LevelLegend counts={levelCounts} noData={noDataCount} showUnknown={unknownCount > 0} title="Activity level" />
           )}
           {countyLayer && layerHasData && mode === 'value' && bins.length > 0 && (
             <ValueLegend
               bins={bins}
               unit={countyLayer.unit}
+              metric={countyLayer.metric}
               counts={binCounts}
               noData={noDataCount}
-              title={`${METRIC_LABEL[countyLayer.metric]}${countyLayer.unit === '%' ? ' (% of visits)' : UNIT_SUFFIX[countyLayer.unit] ? ` (${UNIT_SUFFIX[countyLayer.unit].trim()})` : ''}`}
+              title={
+                isLevelless(countyLayer)
+                  ? 'Estimated Rt (above 1 = likely growing)'
+                  : `${METRIC_LABEL[countyLayer.metric]}${countyLayer.unit === '%' ? ' (% of visits)' : UNIT_SUFFIX[countyLayer.unit] ? ` (${UNIT_SUFFIX[countyLayer.unit].trim()})` : ''}`
+              }
             />
           )}
           {siteLayer && siteHasData && (
             <>
-              {!(countyLayer && layerHasData && mode === 'level') && (
-                <LevelLegend counts={siteLevelCounts} showUnknown={siteUnknown > 0} title="Wastewater level (number of plants)" />
+              {markStyle === 'fill' && layer?.kind === 'site' && (
+                <LevelLegend showUnknown={(siteLevelCounts.unknown ?? 0) > 0} title="Wastewater level" />
               )}
-              <SiteLegend layer={siteLayer} located={dots.length} unlocated={siteList.length - dots.length} />
+              <SiteLegend
+                layer={siteLayer}
+                located={dots.length}
+                unlocated={siteList.length - dots.length}
+                counts={siteLevelCounts}
+                markStyle={markStyle}
+              />
             </>
           )}
-          {countyLayer && isHsaEstimate(countyLayer) && layerHasData && (
+          {countyLayer && isHsaEstimate(countyLayer, sampleSeries) && layerHasData && (
             <p className="text-xs text-ink-3">{HSA_NOTE}: neighboring counties in the same area can show the same value.</p>
           )}
         </div>
@@ -460,7 +626,7 @@ function CountyTip({
   layer,
   metric,
   source,
-  hsa,
+  series,
   compact,
   selectable,
 }: {
@@ -468,33 +634,36 @@ function CountyTip({
   layer?: MapLayer
   metric?: CountyMetric
   source: string
-  hsa?: string
+  series?: Series
   compact: boolean
   selectable: boolean
 }) {
   const level = metricLevel(metric)
+  const rt = isLevelless(layer)
+  const hsa = hsaLabel(series)
   return (
     <div className="flex flex-col gap-1.5">
       <p className="text-sm font-semibold text-ink-1">{name} County</p>
       {layer && metric && metric.value != null ? (
         <>
           <div className="flex flex-wrap items-center gap-1.5">
-            <LevelBadge level={level} size="sm" />
+            {!rt && <LevelBadge level={level} size="sm" />}
             {metric.trend && <TrendPill trend={metric.trend} compact />}
           </div>
           {compact ? (
             <p className="font-semibold text-ink-1">
-              {formatValue(metric.value, layer.unit)}
+              {formatLayerValue(metric.value, layer)}
               <span className="font-normal text-ink-2">{UNIT_SUFFIX[layer.unit]}</span>
             </p>
           ) : (
             <p className="text-ink-1">{capitalize(meaningFor(layer, metric.value))}</p>
           )}
+          {rt && <p className="text-ink-2">{RT_NOTE}.</p>}
           <p className="text-ink-3">
             Week ending {formatDate(metric.date, true)}
             {source && !compact ? ` · ${source}` : ''}
           </p>
-          {!compact && isHsaEstimate(layer) && (
+          {!compact && isHsaEstimate(layer, series) && (
             <p className="text-ink-3">
               {HSA_NOTE}
               {hsa ? ` (${hsa})` : ''}.
@@ -504,7 +673,7 @@ function CountyTip({
       ) : layer ? (
         <p className="text-ink-2">No data reported for {layer.label}.</p>
       ) : null}
-      {selectable && !compact && <p className="text-ink-3">Select for county details</p>}
+      {selectable && <p className="text-ink-3">Select for county details</p>}
     </div>
   )
 }

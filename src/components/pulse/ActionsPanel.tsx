@@ -4,8 +4,49 @@ import { BAND_LABEL, EMERGENCY_SIGNS, getActions, sectionPathogens } from '../..
 import { getProfile, pathogenName } from '../../content'
 import { formatDate, LEVEL_LABEL } from '../../lib/format'
 import { useAppState } from '../../lib/state'
-import { AUDIENCES } from '../layout/FilterBar'
+import { AUDIENCES } from '../../lib/audiences'
+import { ExternalLink } from '../learn/ExternalLink'
+import { StatusIcon } from '../ui'
 import { hrefFor } from './util'
+
+/**
+ * Split the emergency-signs sentence into a lead-in and a bulleted list so the signs can be scanned:
+ * "Call 911 or go to an emergency department for A, B, or C. In babies, …" → lead "Call 911 or go to an emergency
+ * department for:", signs [A, B, C], extra "In babies, …". The text itself stays in content/actions; when it no
+ * longer matches this shape it is shown unchanged.
+ */
+function splitSigns(text: string): { lead: string; signs: string[]; extra?: string } | undefined {
+  const m = /^(.*?\b(?:for|if you have))\s+([^.]+)\.\s*(.*)$/.exec(text.trim())
+  if (!m) return undefined
+  const signs = m[2].split(/,\s*(?:or\s+)?/).map((x) => x.trim()).filter(Boolean)
+  if (signs.length < 3) return undefined
+  return { lead: `${m[1]}:`, signs, extra: m[3] || undefined }
+}
+
+function EmergencySigns() {
+  const parts = splitSigns(EMERGENCY_SIGNS.text)
+  return (
+    <div className="rounded-xl border border-line border-l-4 border-l-[var(--status-critical)] bg-surface-2 p-4" role="note" aria-labelledby="help-now-title">
+      <h3 id="help-now-title" className="flex items-center gap-2 text-sm font-semibold text-ink-1">
+        <StatusIcon tone="critical" size={18} />
+        When to get help now
+      </h3>
+      {parts ? (
+        <div className="mt-2 text-sm leading-snug text-ink-1">
+          <p className="font-medium">{parts.lead}</p>
+          <ul className="mt-1.5 list-disc space-y-1 pl-5 marker:text-[var(--status-critical)]">
+            {parts.signs.map((sign) => (
+              <li key={sign}>{sign.charAt(0).toUpperCase() + sign.slice(1)}</li>
+            ))}
+          </ul>
+          {parts.extra && <p className="mt-2">{parts.extra}</p>}
+        </div>
+      ) : (
+        <p className="mt-2 text-sm leading-snug text-ink-1">{EMERGENCY_SIGNS.text}</p>
+      )}
+    </div>
+  )
+}
 
 export function ActionsPanel({ level, levelNote, extraPathogens = [] }: { level: ActivityLevel; levelNote?: string; extraPathogens?: PathogenId[] }) {
   const { state, go } = useAppState()
@@ -44,7 +85,9 @@ export function ActionsPanel({ level, levelNote, extraPathogens = [] }: { level:
                   {a.text}
                   {a.why && (
                     <details className="mt-0.5">
-                      <summary className="cursor-pointer text-xs text-ink-3 hover:text-ink-2">Why?</summary>
+                      <summary className="cursor-pointer text-xs text-ink-3 hover:text-ink-2">
+                        Why?<span className="sr-only"> (step {i + 1})</span>
+                      </summary>
                       <p className="mt-1 text-xs text-ink-2">{a.why}</p>
                     </details>
                   )}
@@ -55,10 +98,7 @@ export function ActionsPanel({ level, levelNote, extraPathogens = [] }: { level:
         </div>
 
         <aside className="flex min-w-0 flex-col gap-4 lg:border-l lg:border-line lg:pl-8" aria-label="Warning signs and related pages">
-          <div className="rounded-xl bg-surface-2 p-4 text-xs leading-relaxed text-ink-2">
-            <p className="mb-1 text-sm font-semibold text-ink-1">When to get help now</p>
-            {EMERGENCY_SIGNS.text}
-          </div>
+          <EmergencySigns />
 
           {links.length > 0 && (
             <div>
@@ -88,12 +128,12 @@ export function ActionsPanel({ level, levelNote, extraPathogens = [] }: { level:
 
           <details className="text-xs text-ink-3 lg:mt-auto">
             <summary className="cursor-pointer hover:text-ink-2">Sources · reviewed {formatDate(section.lastReviewed, true)}</summary>
-            <ul className="mt-2 space-y-1">
+            <ul className="mt-1">
               {[...section.sources, EMERGENCY_SIGNS.source].map((src) => (
                 <li key={src.url}>
-                  <a href={src.url} target="_blank" rel="noreferrer" className="text-accent underline-offset-2 hover:underline">
+                  <ExternalLink href={src.url} className="inline-block py-1">
                     {src.label}
-                  </a>
+                  </ExternalLink>
                 </li>
               ))}
             </ul>

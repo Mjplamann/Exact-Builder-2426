@@ -21,23 +21,31 @@ export function LevelScale({ active, variant = 'bar', title, showUnknown = false
   const label = title ?? 'Activity level scale'
 
   if (variant === 'chips') {
+    // Every chip keeps its full color (a faded chip would fail contrast and read as "disabled"); the level
+    // that applies gets an outline ring and bolder text instead.
     return (
       <div className={className}>
         {title && <p className="mb-1 text-xs font-medium text-ink-2">{title}</p>}
-        <ul className="flex flex-wrap gap-1.5" aria-label={label}>
-          {levels.map((l) => (
-            <li
-              key={l}
-              className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap ${
-                active && active !== l ? 'opacity-45' : ''
-              }`}
-              style={{ background: LEVEL_VAR[l], color: LEVEL_INK_VAR[l] }}
-              aria-current={active === l ? 'true' : undefined}
-            >
-              <LevelGlyph level={l} />
-              {LEVEL_LABEL[l]}
-            </li>
-          ))}
+        <ul className={`flex flex-wrap gap-1.5 ${active ? 'p-1' : ''}`} aria-label={label}>
+          {levels.map((l) => {
+            const on = active === l
+            return (
+              <li
+                key={l}
+                className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs whitespace-nowrap ${on ? 'font-bold' : 'font-medium'}`}
+                style={{
+                  background: LEVEL_VAR[l],
+                  color: LEVEL_INK_VAR[l],
+                  boxShadow: on ? '0 0 0 2px var(--surface-1), 0 0 0 3.5px var(--ink-1)' : undefined,
+                }}
+                aria-current={on ? 'true' : undefined}
+              >
+                <LevelGlyph level={l} />
+                {LEVEL_LABEL[l]}
+                {on && <span className="sr-only"> (current)</span>}
+              </li>
+            )
+          })}
         </ul>
       </div>
     )
@@ -62,7 +70,7 @@ export function LevelScale({ active, variant = 'bar', title, showUnknown = false
                 aria-hidden="true"
               />
               <span
-                className={`mt-1 block truncate text-center text-[11px] leading-tight ${on ? 'font-semibold text-ink-1' : 'text-ink-2'}`}
+                className={`mt-1 block text-center text-[10px] leading-tight min-[400px]:text-[11px] ${on ? 'font-semibold text-ink-1' : 'text-ink-2'}`}
               >
                 {LEVEL_LABEL[l]}
               </span>

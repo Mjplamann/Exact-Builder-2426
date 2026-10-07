@@ -4,20 +4,68 @@ import { LEVEL_LABEL, TREND_LABEL } from '../../shared/risk'
 
 export { LEVEL_LABEL, TREND_LABEL }
 
+/**
+ * Small non-zero values keep two significant figures instead of rounding to "0" / "0.0", which reads as
+ * "nothing" next to a Rising trend: 0.043 → "0.043", 0.4 → "0.4", 0.004 → "<0.01".
+ */
+function small(v: number): string | undefined {
+  const a = Math.abs(v)
+  if (a === 0 || a >= 1) return undefined
+  if (a < 0.01) return v < 0 ? '>−0.01' : '<0.01'
+  return String(Number(v.toPrecision(2)))
+}
+
 export function formatValue(v: number | null | undefined, unit: Unit, opts: { compact?: boolean } = {}): string {
   if (v == null || !Number.isFinite(v)) return '—'
-  if (unit === '%') return `${v < 1 && v > 0 ? v.toFixed(2) : v < 10 ? v.toFixed(1) : v.toFixed(0)}%`
-  if (unit === 'per100k') return `${v < 10 ? v.toFixed(1) : v.toFixed(0)}`
-  if (unit === 'index') return v.toFixed(1)
+  if (unit === '%') {
+    if (v > 0 && v < 0.01) return '<0.01%'
+    return `${v < 1 && v > 0 ? v.toFixed(2) : v < 10 ? v.toFixed(1) : v.toFixed(0)}%`
+  }
+  if (unit === 'per100k') return small(v) ?? `${v < 10 ? v.toFixed(1) : v.toFixed(0)}`
+  if (unit === 'index') return small(v) ?? v.toFixed(1)
   if (unit === 'ratio') {
     if (v === 0) return '0'
     if (Math.abs(v) >= 100) return Math.round(v).toLocaleString('en-US')
     return Number(v.toPrecision(3)).toLocaleString('en-US', { maximumSignificantDigits: 3 })
   }
+  // Counts are whole numbers; a fractional count (e.g. an average) below 1 keeps two significant figures.
+  const sm = small(v)
+  if (sm) return sm
   if (opts.compact && Math.abs(v) >= 1000) {
     return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(v)
   }
   return Math.round(v).toLocaleString('en-US')
+}
+
+const NICE = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10]
+
+/** Round a denominator to a friendly number: 385 → 400, 128 → 120, 12.5 → 13, 10,000 → 10,000. */
+export function friendlyRound(n: number): number {
+  if (!Number.isFinite(n) || n <= 0) return n
+  if (n < 20) return Math.max(1, Math.round(n))
+  const mag = 10 ** Math.floor(Math.log10(n))
+  let best = mag
+  let bestDist = Infinity
+  for (const k of NICE) {
+    const v = k * mag
+    const d = Math.abs(Math.log(n / v))
+    if (d < bestDist) {
+      bestDist = d
+      best = v
+    }
+  }
+  return Math.round(best)
+}
+
+/**
+ * The one "natural frequency" phrasing used everywhere for a percentage: 0.26 → "about 1 in 400",
+ * 32 → "about 1 in 3", 62 → "about 6 in 10". Returns undefined for zero, negative or missing values.
+ * Lower-case "about" so it can sit mid-sentence; callers append the noun ("ER visits", "lab tests").
+ */
+export function aboutOneIn(pct: number): string | undefined {
+  if (!Number.isFinite(pct) || pct <= 0) return undefined
+  if (pct >= 45) return `about ${Math.min(10, Math.round(pct / 10))} in 10`
+  return `about 1 in ${friendlyRound(100 / pct).toLocaleString('en-US')}`
 }
 
 export const UNIT_SUFFIX: Record<Unit, string> = {
@@ -107,6 +155,9 @@ export const METRIC_LABEL: Record<MetricKind, string> = {
   rt: 'Reproduction number (Rt)',
 }
 
+/** "s" unless the value is exactly one. */
+export const plural = (n: number | null | undefined): string => (n === 1 ? '' : 's')
+
 /** One-line plain-language meaning of a metric value, e.g. for tooltips and cards. */
 export function metricMeaning(metric: MetricKind, value: number | null | undefined, unit: Unit): string {
   const v = formatValue(value, unit)
@@ -120,7 +171,7 @@ export function metricMeaning(metric: MetricKind, value: number | null | undefin
     case 'ili_pct':
       return `${v} of clinic visits were for flu-like illness`
     case 'hosp_admissions':
-      return `${v} people admitted to the hospital in a week`
+      return `${v} ${value === 1 ? 'person' : 'people'} admitted to the hospital in a week`
     case 'hosp_rate':
       return `${v} hospitalizations per 100,000 residents in a week`
     case 'wastewater_level':
@@ -128,15 +179,15 @@ export function metricMeaning(metric: MetricKind, value: number | null | undefin
     case 'wastewater_conc':
       return `normalized wastewater concentration ${v}`
     case 'cases':
-      return `${v} reported cases`
+      return `${v} reported case${plural(value)}`
     case 'cases_ytd':
-      return `${v} cases reported so far this year`
+      return `${v} case${plural(value)} reported so far this year`
     case 'outbreaks':
-      return `${v} reported outbreaks`
+      return `${v} reported outbreak${plural(value)}`
     case 'deaths':
-      return `${v} reported deaths`
+      return `${v} reported death${plural(value)}`
     case 'ww_detections':
-      return `${v} wastewater site${value === 1 ? '' : 's'} with a detection`
+      return `${v} wastewater site${plural(value)} with a detection`
     case 'rt':
       return `each infection leads to about ${v} more (Rt)`
   }

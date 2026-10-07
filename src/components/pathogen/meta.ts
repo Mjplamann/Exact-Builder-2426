@@ -1,7 +1,10 @@
 // Display vocabulary and data-matching helpers for the illness library and illness detail pages.
-import type { AgeGroupId, Manifest, MetricKind, PathogenCategory, PathogenId, PathogenPulse, PulseFile, Series } from '../../../shared/types'
+import type {
+  AgeGroupId, GeoRef, Manifest, MetricKind, PathogenCategory, PathogenId, PathogenPulse, PulseFile, Series, SignalSummary,
+} from '../../../shared/types'
 import type { GuidanceGroup, PathogenProfile, RiskTier, TreatmentOption } from '../../content/types'
 import { pathogenName } from '../../content'
+import { aboutOneIn, formatDate, formatValue, plural } from '../../lib/format'
 
 export const CATEGORY_LABEL: Record<PathogenCategory, string> = {
   'respiratory-viral': 'Respiratory virus',
@@ -115,6 +118,175 @@ export function wherePhrase(geo: Series['geo'], short = false): string {
   return `in ${geo.name || geo.code}`
 }
 
+/** Geographies larger than Minnesota, whose numbers must never be labelled as Minnesota's own. */
+export function isWiderThanState(geo: Pick<GeoRef, 'type'> | undefined): boolean {
+  return !!geo && (geo.type === 'hhs-region' || geo.type === 'census-region' || geo.type === 'national')
+}
+
+const HHS_STATES: Record<string, number> = { HHS1: 6, HHS2: 4, HHS3: 6, HHS4: 8, HHS5: 6, HHS6: 5, HHS7: 4, HHS8: 6, HHS9: 8, HHS10: 4 }
+
+/**
+ * Short title for a multi-state area, in the same vocabulary as wherePhrase():
+ * HHS5 → "HHS Region 5 (MN + 5 nearby states)", Midwest → "Midwest (MN + 11 other states)", US → "United States".
+ * Undefined for Minnesota and places inside it.
+ */
+export function regionTitle(geo: GeoRef | undefined): string | undefined {
+  if (!geo || !isWiderThanState(geo)) return undefined
+  if (geo.type === 'hhs-region') {
+    const num = geo.code.replace(/^HHS/i, '')
+    const n = HHS_STATES[geo.code.toUpperCase()]
+    return n ? `HHS Region ${num} (MN + ${n - 1} nearby states)` : `HHS Region ${num}`
+  }
+  if (geo.type === 'census-region') {
+    return /midwest/i.test(geo.code + geo.name) ? 'Midwest (MN + 11 other states)' : geo.name || geo.code
+  }
+  return 'United States'
+}
+
+/** Short publisher names for sentences ("From CDC NNDSS data: …"). */
+const SOURCE_SHORT: Record<string, string> = {
+  'cdc-nndss': 'CDC NNDSS',
+  'cdc-nssp': 'CDC NSSP',
+  'cdc-hubs': 'CDC',
+  'cdc-nwss': 'CDC NWSS',
+  'cdc-respnet': 'CDC RESP-NET',
+  'cdc-fluview': 'CDC FluView',
+  'cdc-nrevss': 'CDC NREVSS',
+  'cdc-cfa-rt': 'CDC',
+  mdh: 'MDH',
+  wastewaterscan: 'WastewaterSCAN',
+  biofire: 'BioFire',
+}
+
+/** Short publisher name; the CDC forecast hubs republish NSSP and NHSN, so those copies are named for the system. */
+export function sourceShort(source: string, dataset?: string): string {
+  if (source === 'cdc-hubs' && dataset) {
+    if (/^nhsn/.test(dataset)) return 'CDC NHSN'
+    if (/^nssp/.test(dataset)) return 'CDC NSSP'
+  }
+  return SOURCE_SHORT[source] ?? source
+}
+
+/**
+ * MN Pulse's own plain-language fact about a series (Series.summary). Older data files carried this sentence
+ * in `official` with an "MN Pulse …" author; it is read from there too so it is never shown as the publisher's words.
+ */
+export function summaryOf(s: Pick<Series, 'summary' | 'official'>): string | undefined {
+  if (s.summary) return s.summary
+  const off = s.official
+  return off?.label && /^MN Pulse\b/.test(off.by ?? '') ? off.label : undefined
+}
+
+/** The publisher's own wording for the latest week, when it is really theirs (not an MN Pulse summary). */
+export function publisherLabel(s: Pick<Series, 'official'>): string | undefined {
+  const off = s.official
+  if (!off?.label || /^MN Pulse\b/.test(off.by ?? '')) return undefined
+  return off.label
+}
+
+const isoToText = (t: string) => t.replace(/\b(\d{4}-\d{2}-\d{2})\b/g, (d) => formatDate(d, true))
+const lowerFirst = (t: string) => (/^[A-Z][a-z]/.test(t) ? t.charAt(0).toLowerCase() + t.slice(1) : t)
+
+/**
+ * The pipeline's level basis ("Compared with the past 3 years of this measure (54th percentile)") as a full
+ * sentence for "How the level is set: …". Unknown wording falls back to "Set from …".
+ */
+export function basisSentence(basis: string | undefined): string | undefined {
+  if (!basis) return undefined
+  const b = isoToText(basis.trim().replace(/\.$/, ''))
+  let m = /^Compared with the past (.+?) of this measure \((\d+)(?:st|nd|rd|th) percentile\)$/i.exec(b)
+  if (m) {
+    const p = Number(m[2])
+    if (p >= 100) return `This week is the highest in the past ${m[1]} of this measure.`
+    if (p <= 0) return `This week is as low as any week in the past ${m[1]} of this measure.`
+    return `This week is higher than ${p}% of weeks in the past ${m[1]} of this measure.`
+  }
+  if (/^Not enough history/i.test(b)) return 'There isn’t enough history yet to compare this week with past years, so no level is set.'
+  if (/^Year-to-date count/i.test(b)) return 'A running total for the year only goes up, so it doesn’t get an activity level.'
+  if (/^Weekly reported cases/i.test(b)) return 'Too few weeks have reported cases to rate a level.'
+  if (/^Rt shows/i.test(b)) return 'Rt shows the direction of spread, not the amount, so it has no activity level.'
+  m = /^Not detected in the latest week(?: \((\d+) sites tested\))?$/i.exec(b)
+  if (m) return m[1] ? `Not detected at any of the ${m[1]} sites tested in the latest week.` : 'Not detected in the latest week.'
+  m = /^Detected in (\d+) of the last 3 weeks \((.+) this week\)$/i.exec(b)
+  if (m) return `Detected in ${m[1]} of the last 3 weeks (${m[2]} this week); repeated detections raise the level.`
+  m = /^Detected at (.+) this week$/i.exec(b)
+  if (m) return `Detected at ${m[1]} this week.`
+  m = /^Rated by the same admissions per 100,000 residents \((.+?)\): (.+)$/i.exec(b)
+  if (m) return `Rated from the matching rate of ${m[1]} admissions per 100,000 residents, using ${lowerFirst(m[2])}.`
+  m = /^(.+) category “(.+)”( \(none reported this week\))?$/.exec(b)
+  if (m) return `${m[1]} rates this week “${m[2]}”${m[3] ? '; with none reported, it sits at the bottom of the scale' : ''}.`
+  if (/^CDC .*(levels|cut-points)/i.test(b)) return `Uses ${b}.`
+  return `Set from ${lowerFirst(b)}.`
+}
+
+/** Unit caption under a compact tile's figure. */
+export const TILE_CAPTION: Record<MetricKind, string> = {
+  detection_rate: 'of panel tests detected it',
+  test_positivity: 'of lab tests positive',
+  ed_visit_pct: 'of ER visits',
+  ili_pct: 'of clinic visits',
+  hosp_admissions: 'admitted in the week',
+  hosp_rate: 'admissions per 100,000',
+  wastewater_level: 'activity level',
+  wastewater_conc: 'normalized concentration',
+  cases: 'cases in the week',
+  cases_ytd: 'cases so far this year',
+  outbreaks: 'outbreaks in the week',
+  deaths: 'deaths in the week',
+  ww_detections: 'sites with a detection',
+  rt: 'new infections per infection',
+}
+
+/** Case counts (weekly or year-to-date) get no activity level: they are read as a running total. */
+export const isCaseMetric = (m: MetricKind | undefined): boolean => m === 'cases' || m === 'cases_ytd'
+
+export interface YearToDate {
+  value: number
+  year: string
+  /** Count by the same point last year, when the source gives one. */
+  prev?: number
+  /** Date the count applies to. */
+  asOf: string
+  source: string
+  seriesId: string
+}
+
+/** Last date in a series, counting blank weeks (a table published with an empty cell is still published). */
+const lastListed = (s: Series) => s.points[s.points.length - 1]?.[0]
+
+/** Year-to-date count from a pulse signal: its own value (cases_ytd) or the series' attrs.ytd (NNDSS tables). */
+export function yearToDateOf(sig: SignalSummary | undefined, series: Series[] | undefined): YearToDate | undefined {
+  if (!sig || !isCaseMetric(sig.metric)) return undefined
+  const s = series?.find((x) => x.id === sig.seriesId)
+  if (sig.metric === 'cases_ytd') {
+    return {
+      value: sig.latestValue,
+      year: String(sig.attrs?.year ?? sig.latestDate.slice(0, 4)),
+      asOf: sig.latestDate,
+      source: sig.source,
+      seriesId: sig.seriesId,
+    }
+  }
+  const attrs = s?.attrs ?? sig.attrs
+  const ytd = Number(attrs?.ytd)
+  if (attrs?.ytd == null || !Number.isFinite(ytd)) return undefined
+  const prev = Number(attrs?.ytdPrevYear)
+  const asOf = s?.official?.asOf ?? (s ? lastListed(s) : undefined) ?? sig.latestDate
+  return {
+    value: ytd,
+    year: asOf.slice(0, 4),
+    prev: attrs?.ytdPrevYear != null && Number.isFinite(prev) ? prev : undefined,
+    asOf,
+    source: sig.source,
+    seriesId: sig.seriesId,
+  }
+}
+
+/** "18 Minnesota cases in 2026" (the hero headline for case-count illnesses). */
+export function ytdHeadline(y: YearToDate): string {
+  return `${formatValue(y.value, 'count')} Minnesota case${plural(y.value)} in ${y.year}`
+}
+
 /** Human source name from the manifest, plus the dataset abbreviation in the series label ("NSSP"). */
 export function sourceName(manifest: Manifest | undefined, s: { source: string; label?: string }): string {
   const src = manifest?.sources.find((x) => x.id === s.source)
@@ -184,16 +356,13 @@ export const METRIC_ORDER: MetricKind[] = [
 ]
 
 /**
- * "about 1 in 390" style natural frequency for a percentage. Rounded to friendly numbers because the
- * underlying measure is itself an estimate. Returns null for missing values.
+ * Natural frequency for a percentage, using the one rounding rule shared across MN Pulse (lib/format aboutOneIn),
+ * so 0.26% reads "about 1 in 400" here and on the Pulse page. "none" for zero; null for missing values.
  */
 export function naturalFrequency(pct: number | null | undefined): string | null {
   if (pct == null || !Number.isFinite(pct) || pct < 0) return null
   if (pct === 0) return 'none'
-  if (pct >= 50) return `about ${Math.min(10, Math.round(pct / 10))} in 10`
-  const n = 100 / pct
-  const nice = n < 20 ? Math.round(n) : n < 100 ? Math.round(n / 5) * 5 : n < 1000 ? Math.round(n / 10) * 10 : Math.round(n / 100) * 100
-  return `about 1 in ${nice.toLocaleString('en-US')}`
+  return aboutOneIn(pct) ?? null
 }
 
 // ── Age bands (age-specific series) ────────────────────────────────────────────

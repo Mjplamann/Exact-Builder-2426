@@ -1,6 +1,7 @@
-// Data freshness strip: one chip per source from the manifest (state + dates), linking to Sources.
+// Data freshness: one line when everything is current; chips only for sources that are delayed or failing.
+// Sources not yet live ('pending') or paused ('disabled') are left out here (the Sources page lists them).
 import type { Manifest, SourceState } from '../../../shared/types'
-import { formatDate, formatDateTime } from '../../lib/format'
+import { formatDate } from '../../lib/format'
 import { useAppState } from '../../lib/state'
 import { hrefFor } from './util'
 
@@ -50,54 +51,54 @@ function StatusGlyph({ state }: { state: SourceState }) {
 
 export function DataFreshness({ manifest }: { manifest: Manifest }) {
   const { state, go } = useAppState()
-  const sources = [...manifest.sources].sort((a, b) => order(a.state) - order(b.state) || a.name.localeCompare(b.name))
-  const counts = sources.reduce<Partial<Record<SourceState, number>>>((m, s) => ({ ...m, [s.state]: (m[s.state] ?? 0) + 1 }), {})
+  // Sources not live yet ('pending') or switched off on purpose ('disabled') are not counted here.
+  const live = manifest.sources.filter((s) => s.state !== 'pending' && s.state !== 'disabled')
+  const problems = live
+    .filter((s) => s.state === 'stale' || s.state === 'error')
+    .sort((a, b) => order(a.state) - order(b.state) || a.name.localeCompare(b.name))
+  const ok = live.filter((s) => s.state === 'ok').length
   const sourcesHref = hrefFor(state, 'sources')
   const toSources = (e: React.MouseEvent) => {
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
     e.preventDefault()
     go('sources')
   }
 
   return (
-    <section className="card p-5 sm:p-6" aria-labelledby="fresh-title">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <h2 id="fresh-title" className="text-lg font-semibold tracking-tight text-ink-1">
-            Data freshness
-          </h2>
-          <p className="mt-0.5 text-sm text-ink-2">
-            {sources.length
-              ? `${counts.ok ?? 0} of ${sources.length} source${sources.length === 1 ? '' : 's'} up to date · checked ${formatDateTime(manifest.generatedAt)}`
-              : 'No sources have reported yet.'}
-          </p>
-        </div>
-        <a href={sourcesHref} onClick={toSources} className="text-sm font-medium text-accent underline-offset-2 hover:underline">
+    <section className="card px-5 py-4 sm:px-6" aria-labelledby="fresh-title">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <p className="text-sm text-ink-2">
+          <span id="fresh-title" className="font-semibold text-ink-1">
+            Data freshness:
+          </span>{' '}
+          {live.length
+            ? `${ok} of ${live.length} source${live.length === 1 ? '' : 's'} up to date · checked ${centralDate(manifest.generatedAt)}`
+            : 'No sources have reported yet.'}
+        </p>
+        <a href={sourcesHref} onClick={toSources} className="inline-block py-1 text-sm font-medium text-accent underline-offset-2 hover:underline">
           About the sources →
         </a>
       </div>
-      {sources.length > 0 && (
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {sources.map((s) => (
+      {problems.length > 0 && (
+        <ul className="mt-3 flex flex-wrap gap-2" aria-label="Sources that are delayed or not updating">
+          {problems.map((s) => (
             <li key={s.id} className="max-w-full">
               <a
                 href={sourcesHref}
                 onClick={toSources}
-                title={s.message ?? s.description}
                 className="flex max-w-full items-start gap-2 rounded-xl border border-line bg-surface-1 px-3 py-2 hover:bg-surface-2"
               >
                 <span className="mt-0.5">
                   <StatusGlyph state={s.state} />
                 </span>
                 <span className="min-w-0">
-                  <span className="block truncate text-sm font-medium text-ink-1">{s.name}</span>
+                  <span className="block text-sm font-medium break-words text-ink-1">{s.name}</span>
                   <span className="block text-xs text-ink-3">
                     <span className="font-medium text-ink-2">{STATE_TEXT[s.state]}</span>
                     {s.latestData && <> · data through {formatDate(s.latestData, true)}</>}
-                    {!s.latestData && s.lastSuccess && (s.state === 'ok' || s.state === 'stale' || s.state === 'error') && (
-                      <> · last fetched {centralDate(s.lastSuccess)}</>
-                    )}
+                    {!s.latestData && s.lastSuccess && <> · last fetched {centralDate(s.lastSuccess)}</>}
                   </span>
+                  {s.message && <span className="mt-0.5 block text-xs break-words text-ink-3">{s.message}</span>}
                 </span>
               </a>
             </li>

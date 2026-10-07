@@ -47,9 +47,12 @@ jobs:
           SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
           DELPHI_API_KEY: ${{ secrets.DELPHI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Passed through the environment (never interpolated into the script) and validated.
+          ONLY: ${{ github.event.inputs.only }}
         run: |
-          if [ -n "${{ github.event.inputs.only }}" ]; then
-            npx tsx pipeline/run.ts --only=${{ github.event.inputs.only }}
+          [[ "$ONLY" =~ ^[a-z0-9,-]*$ ]] || { echo "::error::'only' must be comma-separated source ids (a-z, 0-9, '-')"; exit 1; }
+          if [ -n "$ONLY" ]; then
+            npx tsx pipeline/run.ts --only="$ONLY"
           else
             npx tsx pipeline/run.ts
           fi
@@ -58,17 +61,38 @@ jobs:
           git config user.name "mn-pulse-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/data
-          # Commit only when observations changed (pulse/manifest timestamps alone are not worth a commit;
-          # the deployed site is still rebuilt from this run's files).
-          if git diff --cached --quiet -- public/data/series; then
-            echo "No new observations."
+          # Commit when observations changed, or when the analysis output (pulse, forecasts, manifest)
+          # changed beyond its run timestamps. Timestamp-only changes are not worth a commit; the deployed
+          # site is still rebuilt from this run's files.
+          changed=false
+          git diff --cached --quiet -- public/data/series || changed=true
+          norm='walk(if type == "object" then del(.generatedAt, .issuedAt, .lastAttempt, .lastSuccess) else . end)'
+          for f in pulse.json forecasts.json manifest.json; do
+            p="public/data/$f"
+            [ -f "$p" ] || continue
+            if ! git cat-file -e "HEAD:$p" 2>/dev/null; then changed=true; continue; fi
+            if ! cmp -s <(git show "HEAD:$p" | jq -S "$norm") <(jq -S "$norm" "$p"); then
+              echo "$f changed beyond timestamps."
+              changed=true
+            fi
+          done
+          if [ "$changed" != true ]; then
+            echo "No new observations or analysis changes."
             git reset -q
-          else
-            git commit -m "Data refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
-            for i in 1 2 3; do
-              git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
-              sleep $((i * 5))
-            done
+            exit 0
+          fi
+          git commit -m "Data refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
+          pushed=false
+          for i in 1 2 3; do
+            if git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              pushed=true
+              break
+            fi
+            sleep $((i * 5))
+          done
+          if [ "$pushed" != true ]; then
+            echo "::error::Could not push the data refresh after 3 attempts."
+            exit 1
           fi
       - name: Build site
         if: github.ref_name == github.event.repository.default_branch
@@ -85,10 +109,22 @@ jobs:
     needs: refresh
     if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
+    # Same group as deploy.yml so two Pages deployments never race; a running deployment is not cancelled.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-        continue-on-error: true
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.deployment.outcome }}" = "success" ]; then
+            echo "Deployed refreshed data to ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::error::GitHub Pages deployment failed (${{ steps.deployment.outcome }}); the site still shows the previous data." 
+            echo "GitHub Pages deployment **failed**; the site still shows the previous data." >> "$GITHUB_STEP_SUMMARY"
+          fi

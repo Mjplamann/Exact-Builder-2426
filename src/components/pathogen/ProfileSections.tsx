@@ -1,6 +1,6 @@
 // Content sections of an illness page, rendered from its PathogenProfile.
 import type { ReactNode } from 'react'
-import type { AgeGroupId } from '../../../shared/types'
+import type { AgeGroupId, GeoRef, MetricKind, PathogenId } from '../../../shared/types'
 import type { GuidanceGroup, PathogenProfile } from '../../content/types'
 import { formatDate, formatValue } from '../../lib/format'
 import { AUDIENCES, FilterBar } from '../layout/FilterBar'
@@ -41,7 +41,7 @@ function SubHeading({ children }: { children: ReactNode }) {
 
 interface Translation {
   key: string
-  /** Bold lead: "About 1 in 380" or "None"/"No". */
+  /** Bold lead: "About 1 in 400" or "None"/"No". */
   strong: string
   /** Sentence body without the date, e.g. " emergency department visits in Minnesota were for flu". */
   body: string
@@ -50,16 +50,18 @@ interface Translation {
   raw?: string
 }
 
-function translate(e: Entry, profile: PathogenProfile): Translation | null {
-  const l = latestOf(e)
-  if (!l) return null
-  const freq = naturalFrequency(l.value)
+/** A test-positivity, panel detection or ER-visit percentage in everyday terms ("About 1 in 400 ER visits …"). */
+export function translateValue(
+  v: { key: string; metric: MetricKind; value: number; date: string; geo: GeoRef; pathogen: PathogenId },
+  profile: PathogenProfile,
+): Translation | null {
+  const freq = naturalFrequency(v.value)
   if (!freq) return null
-  const name = seriesNoun(profile, e.series.pathogen)
-  const where = wherePhrase(e.series.geo, true)
+  const name = seriesNoun(profile, v.pathogen)
+  const where = wherePhrase(v.geo, true)
   const none = freq === 'none'
-  const base = { key: e.series.id, date: l.date, raw: none ? undefined : formatValue(l.value, '%') }
-  switch (e.series.metric) {
+  const base = { key: v.key, date: v.date, raw: none ? undefined : formatValue(v.value, '%') }
+  switch (v.metric) {
     case 'test_positivity':
       return none
         ? { ...base, strong: 'None', body: ` of lab tests for ${name} ${where} came back positive` }
@@ -77,6 +79,13 @@ function translate(e: Entry, profile: PathogenProfile): Translation | null {
   }
 }
 
+function translate(e: Entry, profile: PathogenProfile): Translation | null {
+  const l = latestOf(e)
+  if (!l) return null
+  const s = e.series
+  return translateValue({ key: s.id, metric: s.metric, value: l.value, date: l.date, geo: s.geo, pathogen: s.pathogen }, profile)
+}
+
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 /** Split long guidance into a short lead (first two sentences) and the rest. */
@@ -86,15 +95,36 @@ function splitLead(text: string, n = 2): [string, string] {
   return [parts.slice(0, n).join(' '), parts.slice(n).join(' ')]
 }
 
+/** How to read this illness's numbers (the profile's guide text), with the long part folded away. */
+export function ReadingGuide({ profile }: { profile: PathogenProfile }) {
+  const [lead, rest] = splitLead(profile.readingTheNumbers)
+  return (
+    <div className="max-w-prose text-sm leading-relaxed text-ink-2">
+      <p>{lead}</p>
+      {rest && (
+        <details className="mt-2">
+          <summary className="cursor-pointer text-sm font-medium text-accent select-none hover:underline">
+            More on reading {inlineName(profile)} numbers
+          </summary>
+          <p className="mt-2 border-l-2 border-line pl-3">{rest}</p>
+        </details>
+      )}
+    </div>
+  )
+}
+
+const TRANSLATABLE = ['test_positivity', 'detection_rate', 'ed_visit_pct'] as const
+
+/** Whether "What the numbers mean for you" has a current percentage to put in everyday terms. */
+export const hasEverydayNumbers = (result: BuildResult) => result.groups.some((g) => (TRANSLATABLE as readonly string[]).includes(g.metric))
+
 export function NumbersForYou({ profile, result }: { profile: PathogenProfile; result: BuildResult }) {
-  const order = ['test_positivity', 'detection_rate', 'ed_visit_pct'] as const
+  const order = TRANSLATABLE
   const translations = order
     .map((m) => result.groups.find((g) => g.metric === m))
-    .map((g) => (g ? (g.entries.find((e) => !e.muted) ?? null) : null))
-    .map((e) => (e ? translate(e, profile) : null))
+    .map((g) => (g ? translate(g.lead, profile) : null))
     .filter((t): t is Translation => !!t)
   const sameDate = translations.every((t) => t.date === translations[0]?.date)
-  const [lead, rest] = splitLead(profile.readingTheNumbers)
   return (
     <div className="space-y-4">
       {translations.length > 0 ? (
@@ -119,22 +149,12 @@ export function NumbersForYou({ profile, result }: { profile: PathogenProfile; r
           </p>
         </div>
       ) : (
-        <p className="rounded-xl border border-dashed border-line-strong p-3 text-sm text-ink-2">
-          There is no weekly test-positivity or emergency-visit figure for {inlineName(profile)} in the data right now, so there is no
-          current number to translate. The guide below explains how to read reports when you see them.
+        <p className="max-w-prose text-sm text-ink-2">
+          MN Pulse has no weekly test-positivity or emergency-visit percentage for {inlineName(profile)} to put in everyday terms. Here is
+          how to read the numbers you may see in reports:
         </p>
       )}
-      <div className="max-w-prose text-sm leading-relaxed text-ink-2">
-        <p>{lead}</p>
-        {rest && (
-          <details className="mt-2">
-            <summary className="cursor-pointer text-sm font-medium text-accent select-none hover:underline">
-              More on reading {inlineName(profile)} numbers
-            </summary>
-            <p className="mt-2 border-l-2 border-line pl-3">{rest}</p>
-          </details>
-        )}
-      </div>
+      <ReadingGuide profile={profile} />
     </div>
   )
 }
@@ -176,15 +196,15 @@ export function Symptoms({ profile }: { profile: PathogenProfile }) {
         )}
       </div>
       {emergencyWarningSigns.length > 0 && (
-        <Callout tone="warn" title="Emergency warning signs: call 911 or go to the ER">
-          <p className="mb-2 text-ink-1">Get emergency care right away for anyone with:</p>
-          <div className={groups.length > 1 ? 'grid gap-4 md:grid-cols-2' : ''}>
+        <Callout tone="critical" title="Emergency warning signs: call 911 or go to the ER">
+          <p className="mb-2 text-sm text-ink-1">Get emergency care right away for anyone with:</p>
+          <div className={groups.length > 2 ? 'grid gap-4 md:grid-cols-2 xl:grid-cols-3' : groups.length > 1 ? 'grid gap-4 md:grid-cols-2' : ''}>
             {groups.map((g) => (
               <div key={g.label ?? 'all'}>
-                {g.label && <p className="mb-1 font-semibold text-ink-1">{g.label}</p>}
-                <ul className="list-disc space-y-1 pl-5 marker:text-[var(--status-critical)]">
+                {g.label && <p className="mb-1 text-sm font-semibold text-ink-1">{g.label}</p>}
+                <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-ink-1 marker:text-ink-1">
                   {g.items.map((t) => (
-                    <li key={t} className="text-ink-1">
+                    <li key={t}>
                       {t}
                     </li>
                   ))}

@@ -3,11 +3,23 @@
 import type { MapLayer, PathogenId, PulseFile } from '../../../shared/types'
 import { LEVELS } from '../../../shared/risk'
 import { MN_COUNTY_BY_FIPS } from '../../../shared/geo/mnCounties'
-import { formatDate, formatValue, LEVEL_LABEL, LEVEL_VAR } from '../../lib/format'
+import { formatDate, formatValue } from '../../lib/format'
 import { useAppState } from '../../lib/state'
 import { CountyMap } from '../map/CountyMap'
+import { LevelLegend } from '../map/MapLegend'
+import { countyMetricsFor, isLevelless, metricLevel } from '../map/mapData'
 import { LevelBadge } from '../ui'
+import { COUNTY_SUMMARY_HEADING_ID } from './CountySummary'
 import { hrefFor } from './util'
+
+/** Scroll the county summary (in the hero, far above the map) into view and move focus to its heading. */
+function focusCountySummary() {
+  const el = document.getElementById(COUNTY_SUMMARY_HEADING_ID)
+  if (!el) return
+  const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+  el.focus({ preventScroll: true })
+}
 
 /** Counties with the highest level (then value) on a layer. HSA estimates can tie across neighbors. */
 function topCounties(pulse: PulseFile, layerId: string, n = 5) {
@@ -38,6 +50,10 @@ export function MiniMap({ pulse, top }: { pulse: PulseFile; top?: PathogenId }) 
   const selected = state.geo.type === 'county' ? state.geo.code : null
   const selectedName = selected ? MN_COUNTY_BY_FIPS[selected]?.name : undefined
   const hottest = layer ? topCounties(pulse, layer.id) : []
+  // Key entries match what the map draws: hatched counties ("No data") and grey ones ("Not enough data").
+  const reporting = layer?.kind === 'county' ? [...countyMetricsFor(pulse, layer.id).values()].filter((m) => m.value != null) : []
+  const noDataCount = layer?.kind === 'county' ? Object.keys(MN_COUNTY_BY_FIPS).length - reporting.length : 0
+  const hasUnknown = reporting.some((m) => metricLevel(m) === 'unknown')
 
   const openMap = (e: React.MouseEvent) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
@@ -101,23 +117,36 @@ export function MiniMap({ pulse, top }: { pulse: PulseFile; top?: PathogenId }) 
           height={300}
         />
       </div>
-      {layer.kind === 'county' && (
-        <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1" aria-label="Map key: activity level colors">
-          {LEVELS.map((l) => (
-            <li key={l} className="flex items-center gap-1 text-[11px] text-ink-2">
-              <span aria-hidden="true" className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: LEVEL_VAR[l] }} />
-              {LEVEL_LABEL[l]}
-            </li>
-          ))}
-        </ul>
+      {layer.kind === 'county' && !isLevelless(layer) && (
+        <div className="mt-3">
+          <LevelLegend noData={noDataCount} showUnknown={hasUnknown} title="Map key: activity level" />
+        </div>
       )}
-      <p className="mt-2 text-xs text-ink-3">
-        {selectedName ? `${selectedName} County selected. ` : 'Select a county to see its local numbers above. '}
-        Open the full map for other illnesses and wastewater sites.
-      </p>
+      {selectedName ? (
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <button
+            type="button"
+            onClick={focusCountySummary}
+            className="rounded-lg border border-line bg-surface-2 px-3 py-1.5 text-left text-sm font-medium text-ink-1 hover:bg-surface-3"
+          >
+            {selectedName} County selected — see its numbers <span aria-hidden="true">↑</span>
+          </button>
+          <span className="text-xs text-ink-3">Open the full map for other illnesses and wastewater sites.</span>
+        </div>
+      ) : (
+        <p className="mt-2 text-xs text-ink-3">
+          Select a county to see its local numbers at the top of the page. Open the full map for other illnesses and
+          wastewater sites.
+        </p>
+      )}
       {layer.kind === 'county' && hottest.length > 0 && (
         <div className="mt-4 border-t border-line pt-3">
           <h3 className="text-sm font-medium text-ink-1">Highest this week</h3>
+          {layer.metric === 'ed_visit_pct' && (
+            <p className="mt-0.5 text-xs text-ink-3">
+              Values are estimated for health service areas (groups of counties), so neighboring counties can share a value.
+            </p>
+          )}
           <ul className="mt-1.5 divide-y divide-line">
             {hottest.map(({ fips, m }) => (
               <li key={fips}>

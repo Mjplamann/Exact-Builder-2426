@@ -1,10 +1,16 @@
 // Client-side CSV export of the charted series (RFC 4180 quoting + spreadsheet-formula guard).
+// Pure functions only (no DOM, no React) so they can be unit-tested; the browser download lives in
+// ./download.ts.
 import type { Forecast, Series } from '../../../shared/types'
-import { forecastSourceName, geoLabel } from './model'
+import { forecastSourceName, geoLabel } from './labels'
 
 type Cell = string | number | null | undefined
 
-/** Quote a cell when needed; neutralize text that a spreadsheet would run as a formula. */
+/**
+ * Quote a cell when needed; neutralize text that a spreadsheet would run as a formula (CSV/formula
+ * injection): a text cell starting with = + - @, a tab or a carriage return gets a leading apostrophe.
+ * Numbers are written as numbers (a negative number is data, not a formula).
+ */
 export function csvCell(v: Cell): string {
   if (v == null) return ''
   if (typeof v === 'number') return Number.isFinite(v) ? String(v) : ''
@@ -52,22 +58,4 @@ export function chartedCsv(
     }
   }
   return toCsv(rows)
-}
-
-export function downloadText(filename: string, text: string, type = 'text/csv;charset=utf-8') {
-  // BOM so Excel opens UTF-8 (em dashes, accents) correctly.
-  const blob = new Blob(['﻿', text], { type })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.rel = 'noopener'
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
-
-export function safeFilePart(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }

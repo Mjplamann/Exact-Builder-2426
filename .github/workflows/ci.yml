@@ -22,3 +22,18 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+
+  a11y:
+    # Builds the site and scans every route in light and dark mode with axe-core; fails on serious or
+    # critical WCAG violations, a skip link that changes the hash route, or duplicate page titles.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx vite build
+      - run: node tests/a11y/axe-scan.mjs

@@ -54,7 +54,6 @@ export function LatestTable({
   caption,
   emptyTitle,
   emptyText,
-  sourceIds = [],
   limit = 6,
   sort = 'value',
 }: {
@@ -63,23 +62,16 @@ export function LatestTable({
   caption: string
   emptyTitle: string
   emptyText: string
-  /** Sources that would supply these rows; their status message is shown when nothing is loaded. */
-  sourceIds?: string[]
   limit?: number
   sort?: 'value' | 'none'
 }) {
   const [showAll, setShowAll] = useState(false)
+  // Source status messages are pipeline diagnostics: they belong on the Sources page, never in a public empty state.
   if (!rows.length) {
-    const statuses = manifest.sources.filter((s) => sourceIds.includes(s.id) && s.message)
     return (
       <div className="mt-5">
         <EmptyState title={emptyTitle}>
           <p>{emptyText}</p>
-          {statuses.map((s) => (
-            <p key={s.id} className="mt-1 text-xs text-ink-3">
-              {s.name}: {s.message}
-            </p>
-          ))}
         </EmptyState>
       </div>
     )

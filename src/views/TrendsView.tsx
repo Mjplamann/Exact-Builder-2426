@@ -17,7 +17,9 @@ import { AboutMeasure } from '../components/trends/AboutMeasure'
 import { ProjectionDetails } from '../components/trends/ProjectionDetails'
 import { SignalsTable } from '../components/trends/SignalsTable'
 import { LatestSummary } from '../components/trends/LatestSummary'
-import { chartedCsv, downloadText, safeFilePart } from '../components/trends/csv'
+import { chartedCsv } from '../components/trends/csv'
+import { downloadText, safeFilePart } from '../components/trends/download'
+import { prefersReducedMotion } from '../components/charts/chartTheme'
 import {
   DEFAULT_PATHOGEN, METRIC_TAB, agesFor, forecastSourceName, geoColor, geoLabel, lastObs, metricsFor, pathogenGroups, resolveSelection,
   sentenceName, signalRows, sourceInfo, summarizeSeries,
@@ -42,7 +44,9 @@ export default function TrendsView() {
 function TrendsExplorer({ data }: { data: DashboardData }) {
   const { state, update } = useAppState()
   const all = data.series
-  const now = data.manifest.generatedAt
+  // "Not updated recently" is judged against today, not against when the data files were generated
+  // (a stalled pipeline must not make old data look fresh).
+  const now = useMemo(() => new Date().toISOString(), [])
   const chartRef = useRef<HTMLHeadingElement>(null)
 
   // ── Illness ──
@@ -105,7 +109,8 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
   const lineName = (s: Series) => `${geoLabel(s.geo)}${s.age ? ` (ages ${s.age})` : ''}`
   const chartInputs: TrendSeriesInput[] = useMemo(() => {
     if (!primary || !sel) return []
-    const out: TrendSeriesInput[] = [{ series: primary, name: lineName(primary), color: geoColor(primary.geo) }]
+    // The selected place is the accent-blue line; Minnesota (when a county is selected) is the gray context line.
+    const out: TrendSeriesInput[] = [{ series: primary, name: lineName(primary), color: geoColor(primary.geo, true) }]
     if (!compareSeasons) {
       if (sel.state) out.push({ series: sel.state, name: lineName(sel.state), color: geoColor(sel.state.geo), muted: true })
       if (showCompare) for (const r of sel.regional) out.push({ series: r, name: lineName(r), color: geoColor(r.geo), muted: true })
@@ -159,7 +164,7 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
       setSourcePref(s.id)
     }
     requestAnimationFrame(() => {
-      chartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      chartRef.current?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' })
       chartRef.current?.focus({ preventScroll: true })
     })
   }
@@ -340,9 +345,6 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
                 seasons” to see {seasonHidden.length > 1 ? 'them' : 'it'}.
               </p>
             )}
-            {showProjections && !forecast && primary && !compareSeasons && (
-              <p className="text-xs text-ink-3">No projection is available for this measure.</p>
-            )}
           </div>
           {primary && showProjections && !compareSeasons && primaryForecasts.length > 1 && forecast && (
             <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-ink-2">
@@ -377,11 +379,16 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
               Try another measure{age ? ' or age group' : ''}, or choose “All of Minnesota”.
             </EmptyState>
           )}
-
+          {primary && !forecast && !compareSeasons && (
+            <p className="mt-2 text-xs text-ink-2">
+              No projection is available for this measure in {geoLabel(primary.geo)}. MN Pulse projects statewide and regional
+              measures with enough history; CDC forecasts cover flu, COVID-19 and RSV hospital admissions and ER visits.
+            </p>
+          )}
         </div>
       </Card>
 
-      <div className="mb-4 grid gap-4 lg:grid-cols-2">
+      <div className={`mb-4 grid gap-4 ${primary && forecast ? 'lg:grid-cols-2' : ''}`}>
         {primary ? (
           <AboutMeasure
             series={primary}
@@ -398,17 +405,27 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
             <p className="text-sm text-ink-2">Choose a measure with data to see what it means and where it comes from.</p>
           </Card>
         )}
-        <ProjectionDetails
-          series={primary}
-          forecasts={primaryForecasts}
-          selected={forecast}
-          onSelect={setModelPref}
-          who={whoText}
-          shownOnChart={showProjections}
-        />
+        {primary && forecast && (
+          <ProjectionDetails
+            series={primary}
+            forecasts={primaryForecasts}
+            selected={forecast}
+            onSelect={setModelPref}
+            who={whoText}
+            shownOnChart={showProjections}
+          />
+        )}
       </div>
 
-      <SignalsTable rows={rows} charted={charted} who={who} onPick={pickSeries} onDownload={download} canDownload={!!primary} />
+      <SignalsTable
+        rows={rows}
+        charted={charted}
+        who={who}
+        pathogen={pathogen}
+        onPick={pickSeries}
+        onDownload={download}
+        canDownload={!!primary}
+      />
     </div>
   )
 }

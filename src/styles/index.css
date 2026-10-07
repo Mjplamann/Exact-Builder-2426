@@ -14,7 +14,7 @@
   --surface-3: #e7e6e0;
   --ink-1: #0b0b0b;
   --ink-2: #52514e;
-  --ink-3: #6f6d68;
+  --ink-3: #696762; /* >= 4.5:1 on every light surface incl. --accent-soft and --surface-3 */
   --muted: #898781;
   --grid: #e1e0d9;
   --axis: #c3c2b7;
@@ -45,16 +45,22 @@
   --seq-600: #184f95;
   --seq-700: #0d366b;
 
-  /* activity levels (ordinal heat ramp) */
-  --level-minimal: #e0952c;
-  --level-low: #dc7431;
-  --level-moderate: #c95228;
-  --level-high: #a3351e;
-  --level-very-high: #742013;
-  --level-unknown: #c3c2b7;
+  /*
+   * Activity levels: one warm ordinal ramp, sand -> light amber -> orange -> red-orange -> deep red
+   * (OKLCH L 0.77 / 0.70 / 0.62 / 0.52 / 0.41; validated with the dataviz ordinal checks: monotone L,
+   * adjacent dL >= 0.06, light end >= 2:1 on --surface-1, hue spread 39deg). A calm week reads sand, not amber.
+   * --level-ink-* is the badge text on each step (all >= 4.5:1): dark on the three light steps, white on the
+   * two dark ones. "Not enough data" is a neutral grey kept clearly apart from the sand step (dE 11).
+   */
+  --level-minimal: #d3ae80;
+  --level-low: #d28b40;
+  --level-moderate: #d06212;
+  --level-high: #b33b03;
+  --level-very-high: #84230d;
+  --level-unknown: #d4d3cc;
   --level-ink-minimal: #0b0b0b;
   --level-ink-low: #0b0b0b;
-  --level-ink-moderate: #ffffff;
+  --level-ink-moderate: #0b0b0b;
   --level-ink-high: #ffffff;
   --level-ink-very-high: #ffffff;
 
@@ -101,15 +107,16 @@
     --seq-500: #5598e7;
     --seq-600: #86b6ef;
     --seq-700: #b7d3f6;
-    --level-minimal: #6e4c12;
-    --level-low: #985019;
-    --level-moderate: #c25724;
-    --level-high: #e66a3c;
-    --level-very-high: #f7a07f;
+    /* dark ramp runs the other way (higher = brighter on the dark surface); Very low stays visible at L 0.51 */
+    --level-minimal: #815e38;
+    --level-low: #b26e27;
+    --level-moderate: #dc7b40;
+    --level-high: #f29676;
+    --level-very-high: #fab8aa;
     --level-unknown: #383835;
     --level-ink-minimal: #ffffff;
-    --level-ink-low: #ffffff;
-    --level-ink-moderate: #ffffff;
+    --level-ink-low: #0b0b0b;
+    --level-ink-moderate: #0b0b0b;
     --level-ink-high: #0b0b0b;
     --level-ink-very-high: #0b0b0b;
     --good-ink: #0ca30c;
@@ -150,15 +157,16 @@
   --seq-500: #5598e7;
   --seq-600: #86b6ef;
   --seq-700: #b7d3f6;
-  --level-minimal: #6e4c12;
-  --level-low: #985019;
-  --level-moderate: #c25724;
-  --level-high: #e66a3c;
-  --level-very-high: #f7a07f;
+  /* dark ramp runs the other way (higher = brighter on the dark surface); Very low stays visible at L 0.51 */
+  --level-minimal: #815e38;
+  --level-low: #b26e27;
+  --level-moderate: #dc7b40;
+  --level-high: #f29676;
+  --level-very-high: #fab8aa;
   --level-unknown: #383835;
   --level-ink-minimal: #ffffff;
-  --level-ink-low: #ffffff;
-  --level-ink-moderate: #ffffff;
+  --level-ink-low: #0b0b0b;
+  --level-ink-moderate: #0b0b0b;
   --level-ink-high: #0b0b0b;
   --level-ink-very-high: #0b0b0b;
   --good-ink: #0ca30c;
@@ -183,6 +191,12 @@
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* Keep in-page targets and keyboard focus clear of the sticky header (WCAG 2.4.11). --header-h is set from
+   a ResizeObserver on the header; it is 0 when the header is not sticky (short viewports). */
+html {
+  scroll-padding-top: calc(var(--header-h, 64px) + 8px);
+}
+
 html,
 body {
   background: var(--page);
@@ -201,6 +215,12 @@ body {
   outline-offset: 2px;
 }
 
+/* <main> takes focus programmatically after a route change (tabindex=-1, not a control): no ring around the
+   whole page. This unlayered rule is needed because the unlayered :focus-visible above beats `outline-none`. */
+#main[tabindex='-1']:focus-visible {
+  outline: none;
+}
+
 .tabular {
   font-variant-numeric: tabular-nums;
 }
@@ -210,6 +230,39 @@ body {
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: 14px;
+}
+
+/* Windows High Contrast / forced colors: selected states otherwise vanish because backgrounds are dropped.
+   Every selected control gets a system Highlight outline (plus the bold weight it already carries). */
+@media (forced-colors: active) {
+  [role='radio'][aria-checked='true'],
+  [role='tab'][aria-selected='true'],
+  [aria-pressed='true'],
+  [aria-current='page'],
+  input[type='radio']:checked + span {
+    outline: 2px solid Highlight;
+    outline-offset: -3px;
+    font-weight: 600;
+  }
+  /* Switch = button[role=switch] > span (track) > span (thumb). */
+  [role='switch'] > span[aria-hidden='true'] {
+    border: 1px solid ButtonText;
+  }
+  [role='switch'] > span[aria-hidden='true'] > span {
+    forced-color-adjust: none;
+    background: ButtonText;
+  }
+  [role='switch'][aria-checked='true'] > span[aria-hidden='true'] {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+  }
+  [role='switch'][aria-checked='true'] {
+    font-weight: 600;
+  }
+  .card {
+    border-color: CanvasText;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

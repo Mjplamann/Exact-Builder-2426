@@ -1,6 +1,7 @@
 // Controls for the Trends explorer: illness picker, metric tabs, option switches, small selects.
 import { useRef, type KeyboardEvent, type ReactNode } from 'react'
 import type { MetricKind, PathogenId } from '../../../shared/types'
+import { SegmentedRadio } from '../charts/SegmentedRadio'
 import { METRIC_TAB, type PathogenGroup } from './model'
 
 const SELECT = 'max-w-full rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-sm text-ink-1 hover:border-line-strong'
@@ -151,7 +152,10 @@ export function Toggle({
   )
 }
 
-/** Small segmented control (radio group) used for choosing a projection model. */
+/**
+ * Small segmented control (radio group) used for choosing a projection model: one tab stop, arrow keys /
+ * Home / End move and select, inset focus ring (see SegmentedRadio).
+ */
 export function Segmented<T extends string>({
   label,
   options,
@@ -163,22 +167,5 @@ export function Segmented<T extends string>({
   value: T
   onChange: (v: T) => void
 }) {
-  return (
-    <div role="radiogroup" aria-label={label} className="inline-flex flex-wrap gap-1 rounded-lg border border-line p-0.5">
-      {options.map((o) => (
-        <button
-          key={o.id}
-          type="button"
-          role="radio"
-          aria-checked={o.id === value}
-          onClick={() => onChange(o.id)}
-          className={`rounded-md px-2.5 py-1 text-xs ${
-            o.id === value ? 'bg-accent font-semibold text-accent-ink' : 'text-ink-2 hover:bg-surface-2'
-          }`}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
-  )
+  return <SegmentedRadio label={label} options={options} value={value} onChange={onChange} />
 }

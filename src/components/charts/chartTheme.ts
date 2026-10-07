@@ -4,6 +4,9 @@
 // render time and re-render when the theme changes (data-theme on <html> or the OS preference).
 import { useEffect, useState } from 'react'
 import type { ActivityLevel, MetricKind, Unit } from '../../../shared/types'
+import { isoFromMs, msFromIso } from './time'
+
+export { isoFromMs, msFromIso }
 
 /** Read a CSS custom property (theme token) from :root. */
 export function cssVar(name: string): string {
@@ -38,10 +41,42 @@ export function withAlpha(color: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
-/** Categorical slot color (1-based, fixed order, never cycled past 8). */
-export function seriesVar(slot: number): string {
-  return slot >= 1 && slot <= 8 ? `var(--series-${slot})` : 'var(--series-muted)'
+/** True for a dark color (relative luminance below 0.2), e.g. the dark-theme chart surface. */
+export function isDarkColor(color: string): boolean {
+  const m = /rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(withAlpha(color, 1))
+  if (!m) return false
+  const lin = (v: number) => {
+    const c = v / 255
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+  }
+  return 0.2126 * lin(Number(m[1])) + 0.7152 * lin(Number(m[2])) + 0.0722 * lin(Number(m[3])) < 0.2
 }
+
+/**
+ * Level-safe categorical order (token slot numbers): blue, aqua, violet, magenta, green.
+ *
+ * The full categorical palette's orange (slot 2), amber (4) and red (8) sit almost on top of the
+ * activity-level colors (--level-*), and every chart here is drawn next to level badges or threshold
+ * lines, so those three slots are never used for lines. This order passes the dataviz palette
+ * validator on adjacent pairs in both themes (light: worst CVD ΔE 17.6, normal 24.0; dark: CVD 13.0,
+ * normal 19.7). Past five lines, series fold to gray.
+ */
+export const LEVEL_SAFE_SLOTS = [1, 3, 7, 5, 6] as const
+
+/**
+ * Line color for the n-th series (1-based) in the level-safe order, never cycled: past the fifth,
+ * `var(--series-muted)`. Callers that pick colors for a chart should use this instead of a literal
+ * `var(--series-N)` so lines never wear an activity-level color.
+ */
+export function seriesVar(slot: number): string {
+  const n = LEVEL_SAFE_SLOTS[slot - 1]
+  return n ? `var(--series-${n})` : 'var(--series-muted)'
+}
+
+/** The selected place in a place comparison (accent-blue line). */
+export const SELECTED_PLACE_COLOR = 'var(--series-1)'
+/** Minnesota (or any context line) when another place is selected. */
+export const CONTEXT_PLACE_COLOR = 'var(--series-muted)'
 
 export const LEVEL_TOKEN: Record<ActivityLevel, string> = {
   minimal: '--level-minimal',
@@ -106,20 +141,7 @@ export function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 }
 
-// ───────────────────────── number + date helpers ─────────────────────────
-
-const DAY_MS = 86_400_000
-
-/** "2026-09-26" → UTC midnight milliseconds. */
-export function msFromIso(iso: string): number {
-  const [y, m, d] = iso.slice(0, 10).split('-').map(Number)
-  return Date.UTC(y, m - 1, d)
-}
-
-/** UTC milliseconds → "2026-09-26" (rounded to the nearest day). */
-export function isoFromMs(ms: number): string {
-  return new Date(Math.round(ms / DAY_MS) * DAY_MS).toISOString().slice(0, 10)
-}
+// ───────────────────────── number helpers ─────────────────────────
 
 /** A clean tick step (1, 2, 2.5, 5 × 10^n) near `raw`. */
 export function niceStep(raw: number): number {
@@ -168,6 +190,8 @@ export function axisTitle(metric: MetricKind, unit: Unit): string {
       return 'Hospitalizations per 100,000 people, weekly'
     case 'cases':
       return 'Reported cases per week'
+    case 'cases_ytd':
+      return 'Cases reported so far this year'
     case 'outbreaks':
       return 'Reported outbreaks'
     case 'deaths':
@@ -179,7 +203,7 @@ export function axisTitle(metric: MetricKind, unit: Unit): string {
     case 'wastewater_level':
       return 'Wastewater activity level'
     case 'wastewater_conc':
-      return 'Relative wastewater level'
+      return 'Wastewater concentration (normalized)'
   }
   return unit === '%' ? 'Percent' : unit === 'per100k' ? 'Per 100,000 people' : 'Value'
 }

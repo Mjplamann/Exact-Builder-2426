@@ -152,12 +152,9 @@ describe('cdc-nndss series', () => {
       ['2026-09-26', null],
     ])
     expect(pert.attrs).toMatchObject({ ytd: '119', ytdPrevYear: '1125', max52: '18', mmwrWeek: '2026-W38' })
-    expect(pert.official).toEqual({
-      label: '119 cases so far in 2026 vs 1,125 by this week in 2025',
-      asOf: '2026-09-26',
-      by: 'MN Pulse summary of CDC NNDSS year-to-date counts',
-    })
-    expect(pert.official?.level).toBeUndefined()
+    // MN Pulse's own sentence, not the publisher's assessment.
+    expect(pert.summary).toBe('119 cases so far in 2026 vs 1,125 by this week in 2025')
+    expect(pert.official).toBeUndefined()
   })
   it('reports current-week counts when published', () => {
     const mpox = build().series.find((s) => s.pathogen === 'mpox')!
@@ -165,7 +162,7 @@ describe('cdc-nndss series', () => {
       ['2026-09-19', null],
       ['2026-09-26', 3],
     ])
-    expect(mpox.official?.label).toBe('25 cases so far in 2026 vs 17 by this week in 2025')
+    expect(mpox.summary).toBe('25 cases so far in 2026 vs 17 by this week in 2025')
   })
   it('combines indigenous and imported measles without summing 52-week maxima', () => {
     const measles = build().series.find((s) => s.pathogen === 'measles')!
@@ -186,12 +183,12 @@ describe('cdc-nndss series', () => {
     expect(campy.points.every(([, v]) => v === null)).toBe(true)
     expect(campy.attrs?.ytd).toBeUndefined()
     expect(campy.attrs?.currentYear).toMatch(/blank all year/)
-    expect(campy.official?.label).toBe("2026 count is blank in CDC's weekly table; 1,461 by this week in 2025")
+    expect(campy.summary).toBe("2026 count is blank in CDC's weekly table; 1,461 by this week in 2025")
     expect(campy.note).toMatch(/blanks do not mean zero/)
     // West Nile has 2026 YTD values, so it is not flagged.
     const wnv = build().series.find((s) => s.pathogen === 'west-nile')!
     expect(wnv.attrs?.currentYear).toBeUndefined()
-    expect(wnv.official?.label).toBe('10 cases so far in 2026 vs 158 by this week in 2025')
+    expect(wnv.summary).toBe('10 cases so far in 2026 vs 158 by this week in 2025')
   })
   it('does not double count renamed labels in the same week', () => {
     const hepA = build().series.find((s) => s.pathogen === 'hepatitis-a')
@@ -253,6 +250,7 @@ describe('cdc-nndss label changes', () => {
     const s = built.series.find((x) => x.pathogen === 'salmonella')!
     expect(s.points).toEqual([['2026-09-26', null]])
     expect(s.official).toBeUndefined()
+    expect(s.summary).toBeUndefined()
     expect(s.attrs?.overlappingLabels).toMatch(/Salmonellosis \| Salmonellosis \(excluding/)
     expect(built.warnings.join(' ')).toMatch(/Salmonellosis: 1 week\(s\) list overlapping labels/)
   })
@@ -277,13 +275,13 @@ describe('cdc-nndss flags', () => {
     ])
     const built = buildSeries(groupByPathogen(rows), '2021-07-01', '2026-09-26')
     const pert = built.series.find((s) => s.pathogen === 'pertussis')!
-    expect(pert.official?.label).toBe("2026 count is marked unavailable in CDC's weekly table; 1,125 by this week in 2025")
+    expect(pert.summary).toBe("2026 count is marked unavailable in CDC's weekly table; 1,125 by this week in 2025")
     expect(pert.attrs).toMatchObject({ ytdFlag: 'U (unavailable)', ytdPrevYear: '1125' })
     expect(pert.attrs?.currentYear).toBeUndefined() // 'U' is not the after-year-end blank pattern
     const measles = built.series.find((s) => s.pathogen === 'measles')!
     expect(measles.points).toEqual([['2026-09-26', 3]])
     expect(measles.attrs?.ytd).toBeUndefined()
-    expect(measles.official?.label).toBe("2026 count is marked not published in CDC's weekly table; 14 by this week in 2025")
+    expect(measles.summary).toBe("2026 count is marked not published in CDC's weekly table; 14 by this week in 2025")
   })
 })
 

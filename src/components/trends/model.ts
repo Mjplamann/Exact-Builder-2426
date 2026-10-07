@@ -3,14 +3,18 @@
 // Nothing in this file invents numbers: every value shown comes from a published series or forecast,
 // and the only derived figures (2-week change, level) use the same shared functions the pipeline uses.
 import type {
-  ActivityLevel, Forecast, GeoRef, GeoType, Manifest, MetricKind, PathogenCategory, PathogenId, PulseFile, Series,
+  ActivityLevel, GeoRef, GeoType, Manifest, MetricKind, PathogenCategory, PathogenId, PulseFile, Series,
   SourceStatus, TrendDirection, Unit,
 } from '../../../shared/types'
 import { addDays, daysBetween } from '../../../shared/mmwr'
 import { computeTrend, levelFromCuts, levelFromPercentile, rankAgainstHistory } from '../../../shared/risk'
-import { MN_COUNTY_BY_FIPS } from '../../../shared/geo/mnCounties'
 import { getProfile, pathogenName } from '../../content'
+import { aboutOneIn, formatChange, formatValue, METRIC_LABEL, TREND_LABEL } from '../../lib/format'
 import type { GeoSelection } from '../../lib/state'
+import { CONTEXT_PLACE_COLOR, SELECTED_PLACE_COLOR } from '../charts/chartTheme'
+import { forecastSourceName, geoLabel } from './labels'
+
+export { forecastSourceName, geoLabel }
 
 // ───────────────────────── Metrics ─────────────────────────
 
@@ -36,6 +40,7 @@ export const METRIC_TABS: MetricTab[] = [
   { metric: 'ww_detections', label: 'Wastewater detections', title: 'wastewater detections', unitText: 'wastewater sites with a detection' },
   { metric: 'ili_pct', label: 'Flu-like illness visits', title: 'flu-like illness visits', unitText: '% of clinic visits for flu-like illness' },
   { metric: 'cases', label: 'Cases', title: 'reported cases', unitText: 'reported cases per week' },
+  { metric: 'cases_ytd', label: 'Cases this year', title: 'cases so far this year', unitText: 'cases reported so far this calendar year' },
   { metric: 'outbreaks', label: 'Outbreaks', title: 'reported outbreaks', unitText: 'reported outbreaks per week' },
   { metric: 'deaths', label: 'Deaths', title: 'reported deaths', unitText: 'reported deaths per week' },
   { metric: 'rt', label: 'Rt', title: 'reproduction number (Rt)', unitText: 'new infections caused by each infection' },
@@ -170,14 +175,6 @@ function compareAgeLabels(a: string, b: string): number {
 
 export const GEO_ORDER: GeoType[] = ['county', 'sewershed', 'mdh-district', 'mdh-region', 'state', 'hhs-region', 'census-region', 'national']
 
-export function geoLabel(g: GeoRef): string {
-  if (g.type === 'county') {
-    const c = MN_COUNTY_BY_FIPS[g.code]
-    if (c) return `${c.name} County`
-  }
-  return g.name
-}
-
 /** One-line explanation for regional geographies that include Minnesota. */
 export function geoExplainer(g: GeoRef): string | undefined {
   if (g.type === 'hhs-region') return `${g.name} is the federal health region that includes Minnesota, Wisconsin, Michigan, Illinois, Indiana and Ohio.`
@@ -186,22 +183,24 @@ export function geoExplainer(g: GeoRef): string | undefined {
   return undefined
 }
 
-/** Fixed color per place so a place keeps its color when lines are added or removed. */
-export function geoColor(g: GeoRef): string {
+/**
+ * Line color for a place in a place comparison. The selected place is always the accent-blue line;
+ * Minnesota, when another place is selected, is the gray context line; U.S. and regional comparisons
+ * keep fixed level-safe slots (aqua, violet, magenta) so they never look like an activity level.
+ */
+export function geoColor(g: GeoRef, selected = false): string {
+  if (selected) return SELECTED_PLACE_COLOR
   switch (g.type) {
     case 'state':
-      return 'var(--series-1)'
-    case 'county':
-    case 'mdh-region':
-    case 'mdh-district':
-    case 'sewershed':
-      return 'var(--series-2)'
+      return CONTEXT_PLACE_COLOR
     case 'national':
       return 'var(--series-3)'
     case 'hhs-region':
-      return 'var(--series-4)'
+      return 'var(--series-7)'
     case 'census-region':
       return 'var(--series-5)'
+    default:
+      return CONTEXT_PLACE_COLOR
   }
 }
 
@@ -333,9 +332,16 @@ export interface SignalRow {
   geo: string
   latestDate?: string
   latestValue?: number
+  /** Relative change of the 3-week average vs. the 3-week average two weeks earlier (0.25 = +25%). */
   change2w?: number
+  /** The same comparison as an absolute difference on the series' own scale. */
+  change2wAbs?: number
   level: ActivityLevel
   trend: TrendDirection
+  /** Publisher whose own trend call is shown (e.g. "CDC NSSP"), when the trend is theirs. */
+  trendBy?: string
+  /** The publisher's trend wording, verbatim (e.g. "No change", "Increasing"). */
+  trendLabel?: string
   levelBasis: string
   stale: boolean
 }
@@ -348,6 +354,33 @@ export function sourceInfo(manifest: Manifest | undefined, id: string): SourceSt
 }
 
 /**
+ * The two 3-week trailing means that `computeTrend` (shared/risk) compares: the latest three weeks and
+ * the three weeks ending two weeks earlier. Mirrors its rules exactly so the absolute change shown
+ * matches the percentage and the trend.
+ */
+export function trailingMeans(points: Series['points']): { now: number; before: number } | undefined {
+  const vals = new Map<string, number>()
+  for (const [d, v] of points) if (v != null && Number.isFinite(v)) vals.set(d, v)
+  const dates = [...vals.keys()].sort()
+  if (dates.length < 3) return undefined
+  const last = dates[dates.length - 1]
+  const smooth = (end: string) => {
+    const xs = [0, 1, 2].map((k) => vals.get(addDays(end, -7 * k))).filter((x): x is number => x != null)
+    return xs.length >= 2 ? xs.reduce((a, b) => a + b, 0) / xs.length : undefined
+  }
+  const now = smooth(last)
+  const before = smooth(addDays(last, -14))
+  return now == null || before == null ? undefined : { now, before }
+}
+
+/** The publisher's own trend call for the latest week, when the series carries one. */
+function publisherTrend(s: Series, latestDate: string | undefined): { trend: TrendDirection; by: string; label: string } | undefined {
+  const o = s.official
+  if (!o?.trend || (o.asOf && latestDate && o.asOf !== latestDate)) return undefined
+  return { trend: o.trend, by: o.by ?? 'Publisher', label: o.label ?? TREND_LABEL[o.trend] }
+}
+
+/**
  * Latest value, 2-week change and level for one series. Uses the pipeline's own summary from
  * pulse.json when present; otherwise applies the same shared rules (official thresholds, then
  * the series' own history) in the browser.
@@ -355,15 +388,21 @@ export function sourceInfo(manifest: Manifest | undefined, id: string): SourceSt
 export function summarizeSeries(s: Series, pulse: PulseFile | undefined, manifest: Manifest | undefined, now: string): SignalRow {
   const sourceName = sourceInfo(manifest, s.source)?.name ?? s.source
   const base = { series: s, label: s.label, sourceName, geo: geoLabel(s.geo) }
+  const means = s.metric === 'cases_ytd' ? undefined : trailingMeans(s.points)
+  const change2wAbs = means ? Math.round((means.now - means.before) * 1e6) / 1e6 : undefined
   const sig = pulse?.pathogens.flatMap((p) => p.signals).find((x) => x.seriesId === s.id)
   if (sig) {
+    const pubT = publisherTrend(s, sig.latestDate)
     return {
       ...base,
       latestDate: sig.latestDate,
       latestValue: sig.latestValue,
       change2w: sig.change2w,
-      level: sig.level,
+      change2wAbs: sig.change2w == null ? undefined : change2wAbs,
+      level: s.metric === 'rt' ? 'unknown' : sig.level,
       trend: sig.trend,
+      trendBy: pubT && pubT.trend === sig.trend ? pubT.by : undefined,
+      trendLabel: pubT && pubT.trend === sig.trend ? pubT.label : undefined,
       levelBasis: sig.levelBasis,
       stale: sig.stale,
     }
@@ -374,7 +413,13 @@ export function summarizeSeries(s: Series, pulse: PulseFile | undefined, manifes
   let level: ActivityLevel = 'unknown'
   let levelBasis = 'Not enough history to compare'
   const pub = s.official && (!s.official.asOf || s.official.asOf === date) ? s.official : undefined
-  if (pub?.level) {
+  const pubT = publisherTrend(s, date)
+  if (s.metric === 'rt') {
+    // Rt is the direction of spread, not the amount of illness: a trend, never an activity level.
+    levelBasis = 'Rt shows direction of spread, not amount'
+  } else if (s.metric === 'cases_ytd') {
+    levelBasis = 'Year-to-date count (no activity level)'
+  } else if (pub?.level && pub.level !== 'unknown') {
     level = pub.level
     levelBasis = `${pub.by ?? 'Publisher'} category${pub.label ? ` “${pub.label}”` : ''}`
   } else if (s.thresholds) {
@@ -389,16 +434,55 @@ export function summarizeSeries(s: Series, pulse: PulseFile | undefined, manifes
     }
   }
   const computed = computeTrend(s.points, { minFloor: s.unit === 'count' ? 5 : 0 })
+  const ytd = s.metric === 'cases_ytd'
   return {
     ...base,
     latestDate: date,
     latestValue: value,
-    change2w: computed.change2w,
+    change2w: ytd ? undefined : computed.change2w,
+    change2wAbs: ytd || computed.change2w == null ? undefined : change2wAbs,
     level,
-    trend: pub?.trend ?? computed.trend,
+    trend: ytd ? 'unknown' : (pubT?.trend ?? (s.metric === 'rt' ? 'unknown' : computed.trend)),
+    trendBy: pubT?.by,
+    trendLabel: pubT?.label,
     levelBasis,
     stale: date < addDays(now.slice(0, 10), -STALE_DAYS),
   }
+}
+
+/**
+ * How to show the 2-week change next to a trend. The percentage compares 3-week averages, so it is
+ * hidden where it would contradict what the reader sees: when the latest week is 0, or when the trend is
+ * Steady although the percentage is large (a tiny base, below the small-change floor). The absolute
+ * change of the same averages is shown instead.
+ */
+export function changeDisplay(r: Pick<SignalRow, 'change2w' | 'change2wAbs' | 'latestValue' | 'trend' | 'series'>): {
+  text: string
+  kind: 'pct' | 'abs' | 'none'
+} {
+  // Rt is itself a rate of spread; a percentage change of it reads as a contradiction next to "Growing".
+  if (r.series.metric === 'rt') return { text: '—', kind: 'none' }
+  if (r.change2w == null || !Number.isFinite(r.change2w)) return { text: '—', kind: 'none' }
+  const pctContradicts = r.latestValue === 0 || (r.trend === 'steady' && Math.abs(Math.round(r.change2w * 100)) >= 10)
+  if (!pctContradicts) return { text: formatChange(r.change2w), kind: 'pct' }
+  if (r.change2wAbs == null || !Number.isFinite(r.change2wAbs)) return { text: '—', kind: 'none' }
+  return { text: formatAbsChange(r.change2wAbs, r.series.unit), kind: 'abs' }
+}
+
+/** Signed absolute change on a series' scale: "+0.05 pts", "−1.2 per 100k", "+3". */
+export function formatAbsChange(d: number, unit: Unit): string {
+  if (!Number.isFinite(d)) return '—'
+  if (d === 0) return 'no change'
+  const sign = d > 0 ? '+' : '−'
+  const v = formatValue(Math.abs(d), unit)
+  if (unit === '%') return `${sign}${v.replace('%', '')} pts`
+  return `${sign}${v}${unit === 'per100k' ? ' per 100k' : ''}`
+}
+
+/** "CDC NSSP trend: No change" — the publisher's own trend call, verbatim. */
+export function publisherTrendText(r: Pick<SignalRow, 'trendBy' | 'trendLabel'>): string | undefined {
+  if (!r.trendBy || !r.trendLabel) return undefined
+  return `${r.trendBy} trend: ${r.trendLabel}`
 }
 
 /** Every all-ages series for the pathogen (and its sub-types) outside county/sewershed level, plus the selected county. */
@@ -427,22 +511,65 @@ export function signalRows(
   )
 }
 
-// ───────────────────────── Forecasts ─────────────────────────
+/** Geographies listed behind a disclosure in the signals table (finer than the selected place). */
+const SUB_STATE: GeoType[] = ['mdh-district', 'sewershed']
 
-export function forecastSourceName(f: Forecast): string {
-  switch (f.source) {
-    case 'mn-pulse':
-      return 'MN Pulse projection'
-    case 'cdc-flusight':
-      return 'CDC FluSight ensemble'
-    case 'cdc-covidhub':
-      return 'CDC COVID-19 Forecast Hub ensemble'
-    case 'cdc-rsvhub':
-      return 'CDC RSV Forecast Hub ensemble'
-    default:
-      return f.model
-  }
+const SUB_GEO_NAME: Partial<Record<GeoType, string>> = { 'mdh-district': 'MDH district', sewershed: 'treatment plant' }
+
+/**
+ * A series label without its leading illness name, e.g. "Flu — % of ED visits (NSSP)" → "% of ED visits
+ * (NSSP)", "Influenza A — wastewater…" → "Wastewater…". The table groups rows by measure and tags sub-types,
+ * so the prefix only adds noise (and its spelling varies by source).
+ */
+export function measureLabel(label: string): string {
+  const m = /^([^—:%]{2,32}?)\s*(?:—|:|–)\s+(.+)$/.exec(label)
+  const rest = m ? m[2] : label
+  return rest.charAt(0).toUpperCase() + rest.slice(1)
 }
+
+export interface SignalSubGroup {
+  key: string
+  /** e.g. "Flu A wastewater by MDH district". */
+  label: string
+  rows: SignalRow[]
+}
+
+export interface SignalGroup {
+  metric: MetricKind
+  /** Measure heading, e.g. "Emergency department visits". */
+  title: string
+  rows: SignalRow[]
+  /** Sub-state geographies, collapsed by default. */
+  subgroups: SignalSubGroup[]
+}
+
+/** Group signal rows by measure (tab order); sub-state rows go into collapsed sub-groups per sub-type. */
+export function groupSignalRows(rows: SignalRow[], pathogen: PathogenId): SignalGroup[] {
+  const groups = new Map<MetricKind, SignalGroup>()
+  for (const r of rows) {
+    const m = r.series.metric
+    if (!groups.has(m)) groups.set(m, { metric: m, title: METRIC_LABEL[m] ?? METRIC_TAB[m]?.label ?? m, rows: [], subgroups: [] })
+    const g = groups.get(m)!
+    if (!SUB_STATE.includes(r.series.geo.type)) {
+      g.rows.push(r)
+      continue
+    }
+    const sub = r.series.pathogen !== pathogen ? `${pathogenName(r.series.pathogen)} ` : ''
+    const key = `${m}|${r.series.geo.type}|${r.series.pathogen}|${r.series.source}`
+    let sg = g.subgroups.find((x) => x.key === key)
+    if (!sg) {
+      sg = { key, label: `${sub}${METRIC_LABEL[m]?.toLowerCase() ?? m} by ${SUB_GEO_NAME[r.series.geo.type] ?? r.series.geo.type}`, rows: [] }
+      g.subgroups.push(sg)
+    }
+    sg.rows.push(r)
+  }
+  for (const g of groups.values()) {
+    for (const sg of g.subgroups) sg.label = `${sg.label.charAt(0).toUpperCase()}${sg.label.slice(1)}`
+  }
+  return [...groups.values()].sort((a, b) => metricRank(a.metric) - metricRank(b.metric))
+}
+
+// ───────────────────────── Forecasts ─────────────────────────
 
 /** Whole weeks between the last observed week and a forecast target week. */
 export function weeksAhead(lastDate: string | undefined, target: string): number | undefined {
@@ -451,14 +578,6 @@ export function weeksAhead(lastDate: string | undefined, target: string): number
 }
 
 // ───────────────────────── Plain-language numbers ─────────────────────────
-
-/** "1 in 380" style phrasing for a percentage (2 significant figures for big denominators). */
-export function oneIn(pct: number): string | undefined {
-  if (!(pct > 0) || pct > 50) return undefined
-  const n = 100 / pct
-  const rounded = n >= 100 ? Number(n.toPrecision(2)) : Math.round(n)
-  return `1 in ${rounded.toLocaleString('en-US')}`
-}
 
 /** An absolute amount on a series' scale, e.g. "0.37 percentage points" or "40 admissions". */
 export function formatAmount(v: number, unit: Unit, metric: MetricKind): string {
@@ -500,23 +619,24 @@ export function plainMeaning(s: Series, value: number, who: string): string {
 
 function meaningOf(s: Series, value: number, who: string): string {
   const where = geoLabel(s.geo)
-  const ratio = oneIn(value)
+  // The one natural-frequency phrasing used across the app ("about 1 in 400", "about 6 in 10").
+  const ratio = aboutOneIn(value)
   switch (s.metric) {
     case 'ed_visit_pct':
       if (value <= 0) return `Almost no emergency department visits in ${where} were for ${who} that week.`
       return ratio
-        ? `About ${ratio} emergency department visits in ${where} were for ${who} that week.`
+        ? `${ratio} emergency department visits in ${where} were for ${who} that week.`
         : `${value.toFixed(0)}% of emergency department visits in ${where} were for ${who} that week.`
     case 'test_positivity':
       if (value <= 0) return `Almost no lab tests for ${who} came back positive that week.`
-      return ratio ? `About ${ratio} lab tests for ${who} came back positive that week.` : `${value.toFixed(0)}% of lab tests for ${who} came back positive that week.`
+      return ratio ? `${ratio} lab tests for ${who} came back positive that week.` : `${value.toFixed(0)}% of lab tests for ${who} came back positive that week.`
     case 'detection_rate':
       if (value <= 0) return `${who} was almost never found in multi-germ panel tests that week.`
       return ratio
-        ? `${who} was found in about ${ratio} multi-germ panel tests on sick patients that week.`
+        ? `${who} was found in ${ratio} multi-germ panel tests on sick patients that week.`
         : `${who} was found in ${value.toFixed(0)}% of multi-germ panel tests on sick patients that week.`
     case 'ili_pct':
-      return ratio ? `About ${ratio} clinic visits in ${where} were for flu-like illness that week.` : `${value.toFixed(1)}% of clinic visits were for flu-like illness that week.`
+      return ratio ? `${ratio} clinic visits in ${where} were for flu-like illness that week.` : `${value.toFixed(1)}% of clinic visits were for flu-like illness that week.`
     case 'hosp_admissions': {
       const n = Math.round(value)
       return `${n.toLocaleString('en-US')} ${n === 1 ? 'person was' : 'people were'} newly admitted to the hospital with ${who} in ${where} that week.`

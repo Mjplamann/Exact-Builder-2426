@@ -367,7 +367,6 @@ export const BASE_NOTE =
 /** Weeks kept for a series whose current-week cells are blank across the whole history window. */
 export const BLANK_SERIES_WEEKS = 13
 
-const BY = 'MN Pulse summary of CDC NNDSS year-to-date counts'
 
 export interface BuildResult {
   series: Series[]
@@ -462,10 +461,9 @@ export function buildSeries(byPathogen: Map<PathogenId, PathogenWeek[]>, history
     if (blankAllYear) attrs.currentYear = 'blank all year (reported after year-end)'
     if (latest.ambiguous) attrs.overlappingLabels = [...new Set(latest.ambiguous)].join(' | ')
     s.attrs = attrs
-    // NNDSS publishes no level or trend; the year-to-date comparison is MN Pulse's wording of CDC's counts.
-    if (!latest.ambiguous) {
-      s.official = { label: ytdSummary(latest.year, latest.m3, latest.m4, latest.m3Flag, latest.m4Flag), asOf: latest.weekEnding, by: BY }
-    }
+    // NNDSS publishes no level, trend or wording of its own. The year-to-date comparison is MN Pulse's
+    // sentence about CDC's counts, so it goes in `summary` (never `official`, which is the publisher's voice).
+    if (!latest.ambiguous) s.summary = ytdSummary(latest.year, latest.m3, latest.m4, latest.m3Flag, latest.m4Flag)
     series.push(s)
     const lastNonNull = nonNull[nonNull.length - 1]
     const dropped = [...new Set(kept.flatMap((w) => w.dropped ?? []))]

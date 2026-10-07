@@ -7,6 +7,7 @@ import { addDays } from '../../shared/mmwr'
 import { GLOSSARY, LEARN_INTRO, LEARN_SECTIONS } from '../content/learn'
 import { pathogenName } from '../content'
 import { useDashboard } from '../lib/dashboard'
+import { useAppState } from '../lib/state'
 import { lastPoint } from '../lib/series'
 import { TrendChart } from '../components/charts/TrendChart'
 import { EmptyState } from '../components/ui'
@@ -93,7 +94,6 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
           caption="BioFire detection rates in MN Pulse now · Midwest region"
           emptyTitle="No BioFire data loaded right now"
           emptyText="Midwest detection rates appear here when bioMérieux reports or partner-lab exports are available."
-          sourceIds={['biofire']}
         />
       )
 
@@ -110,7 +110,6 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
             caption="Minnesota ED visit percentages in MN Pulse now"
             emptyTitle="No emergency department data loaded right now"
             emptyText="Statewide NSSP values appear here when CDC's data are available."
-            sourceIds={['cdc-hubs', 'cdc-nssp']}
             sort="none"
           />
           <Facts>
@@ -134,7 +133,6 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
             caption="Minnesota hospital measures in MN Pulse now"
             emptyTitle="No hospital data loaded right now"
             emptyText="NHSN admissions and RESP-NET rates appear here when CDC's data are available."
-            sourceIds={['cdc-hubs', 'cdc-respnet']}
             sort="none"
             limit={8}
           />
@@ -160,7 +158,6 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
             caption="Minnesota wastewater measures in MN Pulse now"
             emptyTitle="No statewide wastewater data loaded right now"
             emptyText="CDC wastewater levels and detection counts appear here when the data are available."
-            sourceIds={['cdc-nwss', 'wastewaterscan']}
             sort="none"
           />
           <Facts>
@@ -188,7 +185,6 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
           caption="HHS Region 5 lab positivity in MN Pulse now"
           emptyTitle="No regional lab positivity loaded right now"
           emptyText="NREVSS percent positive for Region 5 appears here when CDC's data are available."
-          sourceIds={['cdc-nrevss']}
         />
       )
 
@@ -200,7 +196,6 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
           caption="Minnesota Rt estimates in MN Pulse now"
           emptyTitle="No Rt estimates loaded right now"
           emptyText="CDC's Minnesota Rt estimates and epidemic-trend calls appear here when available."
-          sourceIds={['cdc-cfa-rt']}
           sort="none"
         />
       )
@@ -286,11 +281,52 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
   }
 }
 
+const BIOFIRE = 'biofire'
+
+/** Short placeholder for the BioFire explainer while MN Pulse has no BioFire series (kept last, not second). */
+function BiofireComingSoon({ index }: { index: number }) {
+  const { go } = useAppState()
+  return (
+    <SectionShell id={BIOFIRE} index={index} title="BioFire detection rates: coming soon">
+      <p className="leading-relaxed text-ink-2">
+        BioFire panels test one sample for many germs at once; a “detection rate” is the share of panels that found a given germ. Public
+        figures cover only the Midwest region and the U.S., not Minnesota by itself.
+      </p>
+      <p className="mt-2 leading-relaxed text-ink-2">
+        MN Pulse doesn’t have BioFire data yet. When bioMérieux or a partner lab shares exports, Midwest detection rates will appear here
+        and on the illness pages.
+      </p>
+      <p className="mt-3">
+        <button
+          type="button"
+          onClick={() => {
+            go('sources')
+            requestAnimationFrame(() => requestAnimationFrame(() => jumpToSection('biofire-data')))
+          }}
+          className="text-sm font-medium text-accent hover:underline"
+        >
+          How a lab can contribute BioFire data <span aria-hidden="true">→</span>
+        </button>
+      </p>
+    </SectionShell>
+  )
+}
+
 export default function LearnView() {
   const { data } = useDashboard()
+  // The BioFire explainer moves to the end as a short note until BioFire series exist.
+  const hasBiofire = !!data?.series.some((s) => s.metric === 'detection_rate')
+  const sections = useMemo(
+    () => (hasBiofire ? LEARN_SECTIONS : LEARN_SECTIONS.filter((s) => s.id !== BIOFIRE)),
+    [hasBiofire],
+  )
   const toc: TocItem[] = useMemo(
-    () => [...LEARN_SECTIONS.map((s) => ({ id: s.id, label: s.short })), { id: 'glossary', label: 'Glossary' }],
-    [],
+    () => [
+      ...sections.map((s) => ({ id: s.id, label: s.short })),
+      ...(hasBiofire ? [] : [{ id: BIOFIRE, label: 'BioFire (coming soon)' }]),
+      { id: 'glossary', label: 'Glossary' },
+    ],
+    [sections, hasBiofire],
   )
   const ids = useMemo(() => toc.map((t) => t.id), [toc])
   const active = useActiveSection(ids)
@@ -309,23 +345,26 @@ export default function LearnView() {
 
   return (
     <div className="lg:grid lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-10">
-      <aside className="min-w-0">
-        <div className="lg:hidden">
-          <Intro />
-        </div>
+      {/* Phones: the page title comes first, outside any landmark; desktop shows it in the article. */}
+      <div className="lg:hidden">
+        <Intro />
+      </div>
+      {/* Not an <aside>: the nav inside is already labelled "On this page". */}
+      <div className="min-w-0">
         <LearnToc items={toc} active={active} />
-      </aside>
+      </div>
       <article className="min-w-0 max-w-3xl">
         <div className="hidden lg:block">
           <Intro />
         </div>
         <div className="space-y-8">
-          {LEARN_SECTIONS.map((s, i) => (
+          {sections.map((s, i) => (
             <LearnSectionBlock key={s.id} section={s} index={i + 1}>
               {data && <LiveData id={s.id} data={data} />}
             </LearnSectionBlock>
           ))}
-          <SectionShell id="glossary" index={LEARN_SECTIONS.length + 1} title="Glossary">
+          {!hasBiofire && <BiofireComingSoon index={sections.length + 1} />}
+          <SectionShell id="glossary" index={toc.length} title="Glossary">
             <p className="mb-4 leading-relaxed text-ink-2">Short definitions of terms used across MN Pulse.</p>
             <Glossary entries={GLOSSARY} />
           </SectionShell>

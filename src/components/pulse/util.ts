@@ -1,6 +1,7 @@
 // Small helpers shared by the overview (pulse) components.
-import type { SignalSummary, ActivityLevel, Manifest, MetricKind, PathogenId, PathogenPulse, PulseFile, Unit } from '../../../shared/types'
-import { formatValue, metricMeaning } from '../../lib/format'
+import type { SignalSummary, ActivityLevel, GeoRef, Manifest, MetricKind, PathogenId, PathogenPulse, PulseFile, Unit } from '../../../shared/types'
+import { aboutOneIn, formatValue, metricMeaning, plural } from '../../lib/format'
+import { HEADLINE_PATHOGENS } from '../../lib/freshness'
 import { toHash, type AppState, type View } from '../../lib/state'
 import { pathogenName } from '../../content'
 
@@ -12,36 +13,46 @@ const DENOMINATOR: Partial<Record<MetricKind, string>> = {
   ili_pct: 'clinic visits',
 }
 
-const NICE = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10]
-
-/** Round a denominator to a friendly number: 385 → 400, 128 → 120, 12.5 → 13, 10,000 → 10,000. */
-export function friendlyRound(n: number): number {
-  if (!Number.isFinite(n) || n <= 0) return n
-  if (n < 20) return Math.max(1, Math.round(n))
-  const mag = 10 ** Math.floor(Math.log10(n))
-  let best = mag
-  let bestDist = Infinity
-  for (const k of NICE) {
-    const v = k * mag
-    const d = Math.abs(Math.log(n / v))
-    if (d < bestDist) {
-      bestDist = d
-      best = v
-    }
-  }
-  return Math.round(best)
-}
+/** Moved to lib/format (shared by every view); re-exported for existing imports. */
+export { friendlyRound } from '../../lib/format'
 
 /**
  * Natural-frequency phrase for a percentage: 0.26% of ER visits → "about 1 in 400 ER visits".
  * Returns undefined for non-percent metrics, zero, or missing values.
  */
 export function naturalFrequency(value: number | null | undefined, metric: MetricKind, unit: Unit): string | undefined {
-  if (unit !== '%' || value == null || !Number.isFinite(value) || value <= 0) return undefined
-  const what = DENOMINATOR[metric] ?? 'of those counted'
-  if (value >= 45) return `about ${Math.round(value / 10)} in 10 ${what}`
-  const n = friendlyRound(100 / value)
-  return `about 1 in ${n.toLocaleString('en-US')} ${what}`
+  if (unit !== '%' || value == null) return undefined
+  const phrase = aboutOneIn(value)
+  if (!phrase) return undefined
+  return `${phrase} ${DENOMINATOR[metric] ?? 'of those counted'}`
+}
+
+/** Geographies larger than Minnesota whose numbers must not be presented as Minnesota's own. */
+export function isWiderThanState(geo: GeoRef | undefined): boolean {
+  return !!geo && (geo.type === 'hhs-region' || geo.type === 'census-region' || geo.type === 'national')
+}
+
+const HHS_STATES: Record<string, number> = { HHS1: 6, HHS2: 4, HHS3: 6, HHS4: 8, HHS5: 6, HHS6: 5, HHS7: 4, HHS8: 6, HHS9: 8, HHS10: 4 }
+
+/**
+ * Short chip text and an in-sentence phrase for a multi-state geography:
+ *   HHS5 → { chip: "HHS Region 5 · 6 states", where: "MN and 5 nearby states" }.
+ */
+export function regionLabel(geo: GeoRef): { chip: string; where: string } | undefined {
+  if (geo.type === 'hhs-region') {
+    const n = HHS_STATES[geo.code]
+    const num = geo.code.replace(/^HHS/i, '')
+    return {
+      chip: `HHS Region ${num}${n ? ` · ${n} states` : ''}`,
+      where: n ? `MN and ${n - 1} nearby states` : `HHS Region ${num}`,
+    }
+  }
+  if (geo.type === 'census-region') {
+    const midwest = /midwest/i.test(geo.code) || /midwest/i.test(geo.name)
+    return midwest ? { chip: 'Midwest · 12 states', where: 'MN and 11 other Midwest states' } : { chip: geo.name, where: geo.name }
+  }
+  if (geo.type === 'national') return { chip: 'United States', where: 'the US' }
+  return undefined
 }
 
 /**
@@ -57,12 +68,42 @@ export function meaningAfterValue(metric: MetricKind, value: number | null | und
   return rest
 }
 
+/** Year-to-date case count for a case-count signal: its own value, a sibling cases_ytd signal, or attrs.ytd. */
+function yearToDate(s: SignalSummary, p?: PathogenPulse): { value: number; prev?: number; year: string } | undefined {
+  const year = (s.attrs?.year ?? s.latestDate.slice(0, 4)) as string
+  if (s.metric === 'cases_ytd') return { value: s.latestValue, year }
+  const sibling = p?.signals.find((x) => x.metric === 'cases_ytd' && x.geo.type === s.geo.type && x.geo.code === s.geo.code)
+  if (sibling) return { value: sibling.latestValue, year: (sibling.attrs?.year ?? sibling.latestDate.slice(0, 4)) as string }
+  const ytd = Number(s.attrs?.ytd)
+  if (s.attrs?.ytd != null && Number.isFinite(ytd)) {
+    const prev = Number(s.attrs?.ytdPrevYear)
+    return { value: ytd, prev: s.attrs?.ytdPrevYear != null && Number.isFinite(prev) ? prev : undefined, year: s.latestDate.slice(0, 4) }
+  }
+  return undefined
+}
+
+/** Case counts (weekly or year-to-date) are better read as a running total than as a weekly blip. */
+export const isCaseCount = (s: SignalSummary | undefined): boolean => !!s && (s.metric === 'cases' || s.metric === 'cases_ytd')
+
 /**
  * The headline figure for a watch card. Raw wastewater concentrations mean little to most readers,
- * so wastewater measures are shown relative to their own usual level; detection counts as "N of M".
+ * so wastewater measures are shown relative to their own usual level; detection counts as "N of M";
+ * case counts as the year-to-date total; regional lab data says plainly that it covers several states.
  */
-export function cardFigure(s: SignalSummary, name: string): { figure: string; caption: string } {
+export function cardFigure(s: SignalSummary, name: string, p?: PathogenPulse): { figure: string; caption: string } {
   const what = s.label.split(' — ')[0]
+  if (isCaseCount(s)) {
+    const ytd = yearToDate(s, p)
+    if (ytd) {
+      const where = s.geo.type === 'state' ? 'in Minnesota ' : ''
+      return {
+        figure: formatValue(ytd.value, 'count'),
+        caption: `case${plural(ytd.value)} reported ${where}so far in ${ytd.year}${
+          ytd.prev != null ? ` (${formatValue(ytd.prev, 'count')} by this time last year)` : ''
+        }`,
+      }
+    }
+  }
   if (s.metric === 'ww_detections') {
     const tested = s.attrs?.plantsTestedLatestWeek ?? s.attrs?.sitesTested
     return {
@@ -81,7 +122,13 @@ export function cardFigure(s: SignalSummary, name: string): { figure: string; ca
     }
     return { figure: 'Below usual', caption: `${what} in wastewater (${scope})` }
   }
-  return { figure: formatValue(s.latestValue, s.unit), caption: meaningAfterValue(s.metric, s.latestValue, s.unit, name) }
+  const region = isWiderThanState(s.geo) ? regionLabel(s.geo) : undefined
+  if (region && (s.metric === 'test_positivity' || s.metric === 'detection_rate')) {
+    const tests = s.metric === 'test_positivity' ? 'lab tests' : 'multi-germ panel tests'
+    return { figure: formatValue(s.latestValue, s.unit), caption: `of ${tests} in ${region.where} came back positive` }
+  }
+  const rest = meaningAfterValue(s.metric, s.latestValue, s.unit, name)
+  return { figure: formatValue(s.latestValue, s.unit), caption: region ? `${rest} (${region.where})` : rest }
 }
 
 /** Outlook text from the pipeline is a full sentence. */
@@ -106,7 +153,19 @@ export function rankPathogens(pulse: PulseFile): PathogenPulse[] {
   return [...pulse.pathogens].sort((a, b) => b.score - a.score || pathogenName(a.pathogen).localeCompare(pathogenName(b.pathogen)))
 }
 
-/** Latest "as of" week across the pathogen summaries. */
+export { HEADLINE_PATHOGENS, headlineDates } from '../../lib/freshness'
+
+/**
+ * The flu, COVID-19 or RSV summary that sets the statewide level (its level equals the statewide level; the
+ * highest score wins ties), so "How is this level set?" quotes the basis that actually produced it.
+ */
+export function statewideDriver(pulse: PulseFile): PathogenPulse | undefined {
+  return pulse.pathogens
+    .filter((p) => HEADLINE_PATHOGENS.includes(p.pathogen) && p.level === pulse.statewide.level && p.primary)
+    .sort((a, b) => b.score - a.score)[0]
+}
+
+/** Latest "as of" week across all pathogen summaries (any source, including wastewater and snapshots). */
 export function latestWeek(pulse: PulseFile): string | undefined {
   let best: string | undefined
   for (const p of pulse.pathogens) {

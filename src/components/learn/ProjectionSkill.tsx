@@ -89,7 +89,8 @@ export function ProjectionSkill({ forecasts, series }: { forecasts: Forecast[]; 
       <div className="border-b border-line bg-surface-2 px-3 py-2">
         <h3 className="text-sm font-semibold text-ink-1">How accurate has the MN Pulse projection been?</h3>
         <p className="text-xs text-ink-2">
-          From backtests over the past ~2 years, updated with every data refresh.
+          From walk-forward backtests (each past projection used only data available at the time), updated with every
+          data refresh.
           {h1.length > 0 && (
             <>
               {' '}

@@ -199,6 +199,12 @@ export interface SeriesFile {
   source: string
   dataset: string
   generatedAt: string
+  /**
+   * True for files MN Pulse derives from other series (e.g. statewide medians of WastewaterSCAN plants,
+   * public/data/series/wastewaterscan__wwscan-mn.json). They are published for the app but never fed back
+   * into the analysis as inputs.
+   */
+  derived?: boolean
   series: Series[]
 }
 

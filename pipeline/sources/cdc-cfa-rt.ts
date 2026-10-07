@@ -458,6 +458,20 @@ export function ahfsMnWhere(s: AhfsSchema): string {
   return `${s.state} in ('Minnesota', 'MN')`
 }
 
+/** Latest model-run / origin date accepted as real: the day after the pipeline run. */
+export function latestPlausibleRun(now: string): string {
+  return addDays(now.slice(0, 10), 1)
+}
+
+/**
+ * Filter for the newest-release lookup: Minnesota rows with an origin date no later than tomorrow.
+ * CDC data has carried typo releases (origin_date '2029-09-29'); without the bound such a release would
+ * sort first forever and hide every real one.
+ */
+export function ahfsHeadWhere(s: AhfsSchema, now: string): string {
+  return `${ahfsMnWhere(s)} AND ${s.origin} IS NOT NULL AND ${s.origin} <= ${soqlString(latestPlausibleRun(now))}`
+}
+
 /** Filter for one release's rows: Minnesota, that origin date, and (when typed numeric) no forward horizons. */
 export function ahfsReleaseWhere(s: AhfsSchema, origin: string): string {
   const parts = [ahfsMnWhere(s), `${s.origin} = ${soqlString(origin)}`]
@@ -477,6 +491,8 @@ export interface AhfsStats {
   badDate: number
   unknownDisease: Record<string, number>
   conflicts: number
+  /** Rows whose origin date is after `maxOrigin` (typo releases), skipped. */
+  futureOrigin: number
   geoLevels?: string[]
 }
 
@@ -499,8 +515,12 @@ function resolveFips(r: Record<string, unknown>, s: AhfsSchema): string | null {
 }
 
 /** Normalize ahfs-x44r rows (one release) to county estimates; ambiguous data is counted in `conflicts`. */
-export function parseAhfsRows(rows: Record<string, unknown>[], s: AhfsSchema): { estimates: RtEstimate[]; stats: AhfsStats } {
-  const stats: AhfsStats = { rows: rows.length, kept: 0, notMnCounty: 0, notCountyLevel: 0, projected: 0, badDate: 0, unknownDisease: {}, conflicts: 0 }
+export function parseAhfsRows(
+  rows: Record<string, unknown>[],
+  s: AhfsSchema,
+  opts: { maxOrigin?: string } = {},
+): { estimates: RtEstimate[]; stats: AhfsStats } {
+  const stats: AhfsStats = { rows: rows.length, kept: 0, notMnCounty: 0, notCountyLevel: 0, projected: 0, badDate: 0, unknownDisease: {}, conflicts: 0, futureOrigin: 0 }
   // If a geography-level column exists and some rows say "county", keep only those.
   let levelOk: (r: Record<string, unknown>) => boolean = () => true
   if (s.geoLevel) {
@@ -529,6 +549,10 @@ export function parseAhfsRows(rows: Record<string, unknown>[], s: AhfsSchema): {
     const date = parseCfaDate(cell(r, s.target))
     if (!asOf || !date) {
       stats.badDate++
+      continue
+    }
+    if (opts.maxOrigin && asOf > opts.maxOrigin) {
+      stats.futureOrigin++
       continue
     }
     const horizon = s.horizon ? num(cell(r, s.horizon)) : null
@@ -634,7 +658,13 @@ async function loadState(historyStart: string, now: string, log: Logger): Promis
     log.warn(`${STATE_ID} schema drift: missing column(s) ${schema.missing.join(', ')} (saw ${schema.seen.join(', ')}${declared ? `; declared ${declared.join(', ')}` : ''})`)
   }
   if (res.rows.length && schema.missingRequired.length) throw new Error(`${STATE_ID} schema drift: required column(s) ${schema.missingRequired.join(', ')} missing`)
-  const { estimates, stats } = parseStateRows(res.rows)
+  const parsed = parseStateRows(res.rows)
+  const stats = parsed.stats
+  // A model run dated after tomorrow is a typo in the release date, never a real run.
+  const maxRun = latestPlausibleRun(now)
+  const futureRuns = [...new Set(parsed.estimates.filter((e) => e.asOf > maxRun).map((e) => e.asOf))].sort()
+  const estimates = parsed.estimates.filter((e) => e.asOf <= maxRun)
+  if (futureRuns.length) log.warn(`${STATE_ID}: ignoring future model run date(s) ${futureRuns.join(', ')} (after ${maxRun})`)
   if (Object.keys(stats.unknownDisease).length) log.warn(`${STATE_ID}: ignoring unknown disease value(s) ${JSON.stringify(stats.unknownDisease)}`)
   if (stats.badDate) log.warn(`${STATE_ID}: ${stats.badDate} row(s) with unparseable dates`)
   // A trend category with a blank median is a publisher quirk (one real 2024-12-17 flu row); only
@@ -690,6 +720,7 @@ async function loadState(historyStart: string, now: string, log: Logger): Promis
       ...(schema.noValues.length ? { columnsWithoutValues: schema.noValues } : {}),
       ...stats,
       modelRuns: runs.length,
+      ...(futureRuns.length ? { anomalies: [`future as_of date(s) ignored: ${futureRuns.join(', ')}`] } : {}),
       ...(categoryWithoutValue ? { categoryWithoutValue } : {}),
       firstRun: runs[0],
       latestRun,
@@ -706,7 +737,7 @@ interface LocalLoad {
   diagnostics: Record<string, unknown>
 }
 
-async function loadLocal(historyStart: string, log: Logger): Promise<LocalLoad> {
+async function loadLocal(historyStart: string, now: string, log: Logger): Promise<LocalLoad> {
   const diagnostics: Record<string, unknown> = {}
   const meta = await fetchJson<{ columns?: SocrataColumn[]; rowsUpdatedAt?: number }>(
     `https://data.cdc.gov/api/views/${LOCAL_ID}.json`,
@@ -724,9 +755,30 @@ async function loadLocal(historyStart: string, log: Logger): Promise<LocalLoad> 
   const s = det.schema
   diagnostics.schema = s
   const where = ahfsMnWhere(s)
+  const maxOrigin = latestPlausibleRun(now)
+  // Releases dated in the future are typos: report them, never pick them.
+  try {
+    const future = await socrataQuery<Record<string, unknown>>(LOCAL_ID, {
+      select: s.origin,
+      where: `${where} AND ${s.origin} > ${soqlString(maxOrigin)}`,
+      group: s.origin,
+      order: `${s.origin} DESC`,
+      pageSize: 10,
+      maxRows: 10,
+    })
+    const dates = future.map((r) => String(r[s.origin] ?? '')).filter(Boolean)
+    if (dates.length) {
+      const msg = `origin date(s) after ${maxOrigin} ignored (likely typos in the release date): ${dates.join(', ')}`
+      log.warn(`${LOCAL_ID}: ${msg}`)
+      diagnostics.anomalies = [msg]
+      diagnostics.futureOrigins = dates
+    }
+  } catch (e) {
+    diagnostics.futureOriginCheck = `failed: ${errText(e).slice(0, 160)}`
+  }
   const head = await socrataQuery<Record<string, unknown>>(LOCAL_ID, {
     select: s.origin,
-    where: `${where} AND ${s.origin} IS NOT NULL`,
+    where: ahfsHeadWhere(s, now),
     order: `${s.origin} DESC`,
     pageSize: 1,
     maxRows: 1,
@@ -745,7 +797,7 @@ async function loadLocal(historyStart: string, log: Logger): Promise<LocalLoad> 
     log.warn(`${LOCAL_ID} skipped: ${skipped}`)
     return { series: [], skipped, diagnostics: { ...diagnostics, rows: rows.length, status: 'skipped', reason: skipped } }
   }
-  const { estimates, stats } = parseAhfsRows(rows, s)
+  const { estimates, stats } = parseAhfsRows(rows, s, { maxOrigin })
   Object.assign(diagnostics, stats)
   if (Object.keys(stats.unknownDisease).length) log.warn(`${LOCAL_ID}: ignoring unknown disease value(s) ${JSON.stringify(stats.unknownDisease)}`)
   if (stats.conflicts > 0) {
@@ -838,7 +890,7 @@ export const cdcCfaRt: SourceModule = {
     }
 
     try {
-      const lc = await loadLocal(ctx.historyStart, ctx.log)
+      const lc = await loadLocal(ctx.historyStart, ctx.now, ctx.log)
       countySeries = lc.series
       localLatest = lc.latestOrigin
       diagnostics[LOCAL_ID] = lc.diagnostics
@@ -849,6 +901,10 @@ export const cdcCfaRt: SourceModule = {
       diagnostics[LOCAL_ID] = { status: 'error', error: errText(e) }
     }
 
+    // Both dates are already bounded by latestPlausibleRun(); re-check so a typo can never reach users.
+    const plausible = (d: string | undefined) => (d && d <= latestPlausibleRun(ctx.now) ? d : undefined)
+    stateLatest = plausible(stateLatest)
+    localLatest = plausible(localLatest)
     diagnostics.freshness = { stateLatestRun: stateLatest, countyLatestRelease: localLatest }
     if (stateLatest && localLatest && localLatest > addDays(stateLatest, 7)) {
       const msg = `${LOCAL_ID} (release ${localLatest}) is newer than ${STATE_ID} (run ${stateLatest}); ${STATE_ID} may have been retired`

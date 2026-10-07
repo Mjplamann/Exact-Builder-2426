@@ -5,8 +5,9 @@ import { forecastSourceLabel } from './chartTheme'
 export function ForecastKey({ color = 'var(--series-1)', width = 22 }: { color?: string; width?: number }) {
   return (
     <svg width={width} height="12" viewBox={`0 0 ${width} 12`} aria-hidden="true" className="shrink-0">
-      <rect x="0" y="0" width={width} height="12" rx="2" style={{ fill: color }} fillOpacity={0.12} />
-      <rect x="0" y="3" width={width} height="6" style={{ fill: color }} fillOpacity={0.22} />
+      {/* Same weights as the chart: faint 95% band, clearly darker 50% band stacked on it. */}
+      <rect x="0" y="0" width={width} height="12" rx="2" style={{ fill: color }} fillOpacity={0.1} />
+      <rect x="0" y="3" width={width} height="6" style={{ fill: color }} fillOpacity={0.24} />
       <line x1="1" x2={width - 1} y1="6" y2="6" style={{ stroke: color }} strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" />
     </svg>
   )

@@ -1,6 +1,7 @@
 // Helpers for building normalized Series objects.
 import { METRIC_UNITS, type GeoRef, type MetricKind, type PathogenId, type Point, type Series } from '../../shared/types.ts'
-import { parseISODate, toISODate, weekEndingSaturday } from '../../shared/mmwr.ts'
+import { addDays, parseISODate, toISODate, weekEndingSaturday } from '../../shared/mmwr.ts'
+import type { Logger } from './log.ts'
 
 /** Normalize assorted date strings (ISO, ISO datetime, M/D/YYYY) to ISO YYYY-MM-DD. */
 export function toIsoDate(raw: string): string | null {
@@ -126,3 +127,25 @@ export function latestDate(series: Series[]): string | undefined {
 }
 
 export const STATE_GEO: GeoRef = { type: 'state', code: '27', name: 'Minnesota' }
+
+/** Observations dated more than this many days after the run are typos or projections, never data. */
+export const MAX_FUTURE_DAYS = 7
+
+/**
+ * Global guard applied before any series is written or analysed: drops points dated after
+ * now + MAX_FUTURE_DAYS (e.g. a release stamped 2029 instead of 2026) and logs each series affected.
+ * Mutates the series in place; returns the number of points dropped.
+ */
+export function dropFuturePoints(series: Series[], now: string, scope: string, log?: Logger): number {
+  const limit = addDays(now.slice(0, 10), MAX_FUTURE_DAYS)
+  let dropped = 0
+  for (const s of series) {
+    const before = s.points.length
+    s.points = s.points.filter(([d]) => d <= limit)
+    if (s.points.length !== before) {
+      dropped += before - s.points.length
+      log?.warn(`${scope}: dropped ${before - s.points.length} point(s) dated after ${limit} from ${s.id}`)
+    }
+  }
+  return dropped
+}

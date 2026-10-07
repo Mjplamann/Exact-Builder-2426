@@ -9,14 +9,15 @@ import { findSeries, lastPoint, preferredForecast } from '../../lib/series'
 import { useAppState, type TimeRange } from '../../lib/state'
 import { pathogenName } from '../../content'
 import { TrendChart } from '../charts/TrendChart'
+import { seriesVar } from '../charts/chartTheme'
 import { EmptyState } from '../ui'
 import { hrefFor, naturalFrequency, sourceName } from './util'
 
-/** Fixed entity → color slot (color follows the illness, never its row number). */
+/** Fixed entity → level-safe color slot (color follows the illness, never its row number). */
 const BIG_THREE: { id: PathogenId; color: string }[] = [
-  { id: 'influenza', color: 'var(--series-1)' },
-  { id: 'covid', color: 'var(--series-2)' },
-  { id: 'rsv', color: 'var(--series-3)' },
+  { id: 'influenza', color: seriesVar(1) },
+  { id: 'covid', color: seriesVar(2) },
+  { id: 'rsv', color: seriesVar(3) },
 ]
 
 const RANGE_TEXT: Record<TimeRange, string> = {
@@ -65,7 +66,7 @@ export function KeyTrends({ data }: { data: DashboardData }) {
   )
 
   const latestDates = [...new Set(picked.map((p) => lastPoint(p.series.points)?.[0]).filter((d): d is string => !!d))]
-  const where = isCounty ? `${countyName} County (hospital service area)` : 'Minnesota'
+  const where = isCounty ? `${countyName} County (health service area)` : 'Minnesota'
   const names = picked.map((p) => pathogenName(p.id))
   const sources = [...new Set(picked.map((p) => sourceName(data.manifest, p.series.source)))]
   const forecastModels = [...new Set(forecasts.map((f) => (f.source === 'mn-pulse' ? 'MN Pulse projection' : f.model)))]

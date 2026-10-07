@@ -1,18 +1,23 @@
 // Side panel when no county is selected: how the current layer looks across Minnesota.
-import type { ActivityLevel, CountyMetric, Manifest, MapLayer, PulseFile } from '../../../shared/types'
+import { useMemo } from 'react'
+import type { ActivityLevel, CountyMetric, Manifest, MapLayer, PulseFile, Series } from '../../../shared/types'
 import { LEVELS } from '../../../shared/risk'
 import { MN_COUNTIES } from '../../../shared/geo/mnCounties'
-import { formatDate, formatValue, LEVEL_LABEL, LEVEL_VAR, metricMeaning, UNIT_SUFFIX } from '../../lib/format'
+import { formatDate, LEVEL_INK_VAR, LEVEL_LABEL, LEVEL_VAR, metricMeaning, UNIT_SUFFIX } from '../../lib/format'
 import { pathogenName } from '../../content'
+import { LevelScale } from '../charts/LevelScale'
 import { LevelBadge, SourceTag, TrendPill } from '../ui'
-import { HatchSwatch } from './MapLegend'
+import { NoDataChip } from './MapLegend'
 import {
-  countyMetricsFor, countyName, countyNames, layerPhrase, levelRank, metricLevel, sitesFor, sourceName, stateSignal, TREND_PHRASE,
+  countyMetricsFor, countyName, countyNames, formatLayerValue, isLevelless, layerPhrase, layerPrograms, levelRank, metricLevel, sitesFor,
+  sourceName, stateSignal, TREND_PHRASE,
 } from './mapData'
 
 interface Props {
   pulse: PulseFile
   manifest?: Manifest
+  /** All loaded series (used to match the statewide twin of a layer by source). */
+  series?: Series[]
   layer?: MapLayer
   onSelectCounty: (fips: string) => void
 }
@@ -27,34 +32,35 @@ function sortByLevelThenValue<T extends { metric: CountyMetric }>(a: T, b: T) {
   return levelRank(metricLevel(b.metric)) - levelRank(metricLevel(a.metric)) || (b.metric.value ?? -Infinity) - (a.metric.value ?? -Infinity)
 }
 
-/** One horizontal part-to-whole bar: places by level, 2px surface gaps between segments. */
+/**
+ * One horizontal part-to-whole bar: places by level, 2px surface gaps between segments, counts inside the
+ * segments wide enough to hold them (all counts are also in the accessible name and the map legend). The
+ * shared LevelScale chips below it are the color key.
+ */
 function LevelBar({ counts, noData, total, noun }: { counts: Record<ActivityLevel, number>; noData: number; total: number; noun: string }) {
   const segs = [
-    ...[...LEVELS, 'unknown' as const].map((l) => ({ key: l, n: counts[l], fill: LEVEL_VAR[l], label: LEVEL_LABEL[l] })),
-    { key: 'none', n: noData, fill: HATCH_BG, label: 'No data' },
+    ...[...LEVELS, 'unknown' as const].map((l) => ({ key: l, n: counts[l], fill: LEVEL_VAR[l], ink: LEVEL_INK_VAR[l], label: LEVEL_LABEL[l] })),
+    { key: 'none', n: noData, fill: HATCH_BG, ink: 'var(--ink-1)', label: 'No data' },
   ].filter((s) => s.n > 0)
   const aria = segs.map((s) => `${s.label}: ${s.n}`).join(', ')
   return (
     <div>
-      <div className="flex h-4 w-full gap-[2px] overflow-hidden rounded-[4px]" role="img" aria-label={`${noun} by level — ${aria}`}>
+      <div className="flex h-5 w-full gap-[2px] overflow-hidden rounded-[4px]" role="img" aria-label={`${noun} by level — ${aria}. Total ${total}.`}>
         {segs.map((s) => (
-          <span key={s.key} className="h-full min-w-[3px]" style={{ flex: `${s.n} 0 0`, background: s.fill }} title={`${s.label}: ${s.n}`} />
+          <span
+            key={s.key}
+            className="tabular flex h-full min-w-[3px] items-center justify-center text-[11px] leading-none font-semibold"
+            style={{ flex: `${s.n} 0 0`, background: s.fill, color: s.ink }}
+            title={`${s.label}: ${s.n}`}
+          >
+            {s.n / total >= 0.07 ? s.n : ''}
+          </span>
         ))}
       </div>
-      <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs sm:grid-cols-3">
-        {segs.map((s) => (
-          <li key={s.key} className="flex items-center gap-1.5">
-            {s.key === 'none' ? (
-              <HatchSwatch size={12} />
-            ) : (
-              <span aria-hidden="true" className="inline-block h-3 w-3 rounded-[3px]" style={{ background: s.fill }} />
-            )}
-            <span className="text-ink-1">{s.label}</span>
-            <span className="tabular text-ink-3">{s.n}</span>
-          </li>
-        ))}
-      </ul>
-      <p className="sr-only">Total {total}</p>
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        <LevelScale variant="chips" showUnknown={counts.unknown > 0} className="contents" />
+        {noData > 0 && <NoDataChip />}
+      </div>
     </div>
   )
 }
@@ -94,7 +100,8 @@ export function StatewideSignals({ pulse, manifest, limit = 5, title = 'Statewid
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props) {
+export function StatewidePanel({ pulse, manifest, series, layer, onSelectCounty }: Props) {
+  const seriesById = useMemo(() => new Map((series ?? []).map((s) => [s.id, s] as const)), [series])
   if (!layer) {
     return (
       <div className="flex flex-col gap-4">
@@ -112,8 +119,10 @@ export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props
     )
   }
 
-  const source = sourceName(manifest, layer.source)
-  const st = stateSignal(pulse, layer)
+  const programs = layerPrograms(pulse, layer).names
+  const source = programs.length > 1 ? programs.join(' + ') : sourceName(manifest, layer.source)
+  const st = stateSignal(pulse, layer, seriesById)
+  const rt = isLevelless(layer)
 
   const header = (
     <div>
@@ -131,12 +140,13 @@ export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props
       <p className="text-xs font-medium text-ink-3">Minnesota overall</p>
       <div className="mt-1 flex flex-wrap items-center gap-2">
         <span className="font-semibold text-ink-1">
-          {formatValue(st.latestValue, st.unit)}
+          {formatLayerValue(st.latestValue, st)}
           <span className="font-normal text-ink-2">{UNIT_SUFFIX[st.unit]}</span>
         </span>
-        <LevelBadge level={st.level} size="sm" />
+        {!isLevelless(st) && <LevelBadge level={st.level} size="sm" />}
         <TrendPill trend={st.trend} compact />
       </div>
+      {isLevelless(st) && <p className="mt-1 text-xs text-ink-2">Rt shows direction of spread, not amount.</p>}
       <p className="mt-1 text-xs text-ink-3">
         Week ending {formatDate(st.latestDate, true)} · {sourceName(manifest, st.source)}
       </p>
@@ -199,6 +209,7 @@ export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props
   const rising = reporting.filter((r) => r.metric.trend === 'rising' || r.metric.trend === 'rising-fast').length
   const latest = reporting.map((r) => r.metric.date).sort().pop()
   const topLevel = ORDER.find((l) => counts[l] > 0)
+  const growing = reporting.filter((r) => (r.metric.value ?? 0) > 1 && r.metric.trend !== 'falling' && r.metric.trend !== 'falling-fast').length
 
   return (
     <div className="flex flex-col gap-4">
@@ -206,7 +217,12 @@ export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props
       {reporting.length ? (
         <>
           <p className="text-sm text-ink-1">
-            {elevated > 0 ? (
+            {rt ? (
+              <>
+                <span className="font-semibold">{growing}</span> of {reporting.length} counties with an estimate are likely growing (Rt above
+                1). Rt shows the direction of spread, not how much illness there is.
+              </>
+            ) : elevated > 0 ? (
               <>
                 <span className="font-semibold">{elevated}</span> of {total} counties are at high or very high activity for {layerPhrase(layer)}.
               </>
@@ -218,17 +234,17 @@ export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props
             ) : (
               <>Counties report {layerPhrase(layer)}, but there is not enough history to rate levels yet.</>
             )}{' '}
-            {rising > 0 && (
+            {rising > 0 && !rt && (
               <>
                 {rising} {rising === 1 ? 'county is' : 'counties are'} rising.
               </>
             )}
           </p>
-          <LevelBar counts={counts} noData={noData} total={total} noun="Counties" />
+          {!rt && <LevelBar counts={counts} noData={noData} total={total} noun="Counties" />}
           {statewideLine}
           <section aria-labelledby="sw-top">
             <h3 id="sw-top" className="mb-1.5 text-sm font-semibold text-ink-1">
-              Highest counties{latest ? ` · week ending ${formatDate(latest)}` : ''}
+              {rt ? 'Highest Rt estimates' : 'Highest counties'}{latest ? ` · week ending ${formatDate(latest)}` : ''}
             </h3>
             <ol className="flex flex-col divide-y divide-[var(--border)] overflow-hidden rounded-xl border border-line">
               {top.map(({ fips, metric }, i) => (
@@ -237,15 +253,15 @@ export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props
                     type="button"
                     onClick={() => onSelectCounty(fips)}
                     className="flex w-full items-center gap-2 px-3 py-2 text-left hover:bg-surface-2"
-                    aria-label={`${countyName(fips)} County: ${LEVEL_LABEL[metricLevel(metric)]}, ${formatValue(metric.value, layer.unit)}. Show details.`}
+                    aria-label={`${countyName(fips)} County: ${rt ? 'Rt' : LEVEL_LABEL[metricLevel(metric)]}, ${formatLayerValue(metric.value, layer)}. Show details.`}
                   >
                     <span className="tabular w-4 text-xs text-ink-3">{i + 1}</span>
                     <span className="min-w-0 flex-1 text-sm font-medium text-ink-1">{countyName(fips)}</span>
                     <span className="tabular text-sm text-ink-1">
-                      {formatValue(metric.value, layer.unit)}
+                      {formatLayerValue(metric.value, layer)}
                       <span className="text-ink-2">{UNIT_SUFFIX[layer.unit]}</span>
                     </span>
-                    <LevelBadge level={metricLevel(metric)} size="sm" />
+                    {rt ? metric.trend && <TrendPill trend={metric.trend} compact /> : <LevelBadge level={metricLevel(metric)} size="sm" />}
                   </button>
                 </li>
               ))}

@@ -70,10 +70,17 @@ export function historicalValues(points: Point[], before: string, opts: HistoryO
   return out
 }
 
+/**
+ * Percentile of `value` among this series' trailing weekly values (null with too little history).
+ * A value at or below every past week ranks 0, so a zero against a mostly-zero (or all-zero) history
+ * reads as "very low" rather than the mid-rank of its ties (which would be ~50, i.e. "low").
+ */
 export function rankAgainstHistory(points: Point[], date: string, value: number, opts: HistoryOptions = {}) {
   const hist = historicalValues(points, date, opts)
   if (hist.length < (opts.minWeeks ?? 52)) return null
-  return { percentile: percentileRank(hist, value), p90: quantile(hist, 0.9), n: hist.length }
+  const min = Math.min(...hist)
+  const percentile = value <= min ? 0 : percentileRank(hist, value)
+  return { percentile, p90: quantile(hist, 0.9), n: hist.length }
 }
 
 export interface TrendResult {
@@ -104,6 +111,8 @@ export function computeTrend(
   const now = smooth(last)
   const before = smooth(addDays(last, -14))
   if (now == null || before == null) return { trend: 'unknown' }
+  // Nothing reported in the latest week: never call that growth (earlier weeks can still lift the mean).
+  const latestZero = vals.get(last) === 0
   const all = [...vals.values()]
   const floor = opts.floor ?? Math.max(opts.minFloor ?? 1e-9, 0.015 * quantile(all, 0.9))
   const diff = now - before
@@ -112,8 +121,7 @@ export function computeTrend(
   // Symmetric log-ratio thresholds: ±10% → rising/falling, ×1.4 or ÷1.4 → fast.
   const lr = Math.log((now + floor) / (before + floor))
   let trend: TrendDirection = 'steady'
-  if (lr >= Math.log(1.4)) trend = 'rising-fast'
-  else if (lr >= Math.log(1.1)) trend = 'rising'
+  if (lr >= Math.log(1.1)) trend = latestZero ? 'steady' : lr >= Math.log(1.4) ? 'rising-fast' : 'rising'
   else if (lr <= -Math.log(1.4)) trend = 'falling-fast'
   else if (lr <= -Math.log(1.1)) trend = 'falling'
   return { trend, change2w: finite(change2w) }
@@ -121,8 +129,9 @@ export function computeTrend(
 
 const finite = (x: number) => (Number.isFinite(x) ? Math.round(x * 1000) / 1000 : undefined)
 
+// Unknown scores 0 so stale or unrated pathogens rank below current "very low" ones.
 const LEVEL_SCORE: Record<ActivityLevel, number> = {
-  unknown: 10,
+  unknown: 0,
   minimal: 5,
   low: 22,
   moderate: 45,

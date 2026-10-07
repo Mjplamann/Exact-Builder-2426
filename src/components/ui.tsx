@@ -104,7 +104,7 @@ export function Pill({ active, children, onClick, title }: { active?: boolean; c
       onClick={onClick}
       aria-pressed={active}
       className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-        active ? 'border-transparent bg-accent text-accent-ink' : 'border-line bg-surface-1 text-ink-2 hover:bg-surface-2'
+        active ? 'border-transparent bg-accent font-semibold text-accent-ink' : 'border-line bg-surface-1 text-ink-2 hover:bg-surface-2'
       }`}
     >
       {children}
@@ -121,15 +121,62 @@ export function EmptyState({ title, children }: { title: string; children?: Reac
   )
 }
 
-export function Callout({ tone = 'info', title, children }: { tone?: 'info' | 'warn'; title?: string; children: ReactNode }) {
+export type CalloutTone = 'info' | 'warn' | 'critical'
+
+const CALLOUT_CLASS: Record<CalloutTone, string> = {
+  info: 'border-line bg-accent-soft',
+  warn: 'border-[var(--status-warning)] bg-surface-2',
+  // Critical (e.g. emergency warning signs): a heavy status-coloured left rule plus an icon, never colour alone.
+  critical: 'border-line border-l-4 border-l-[var(--status-critical)] bg-surface-2',
+}
+
+export function Callout({
+  tone = 'info',
+  title,
+  children,
+  className = '',
+}: {
+  tone?: CalloutTone
+  title?: string
+  children: ReactNode
+  className?: string
+}) {
   return (
-    <div
-      className={`rounded-xl border p-3 text-sm ${tone === 'warn' ? 'border-[var(--status-warning)] bg-surface-2' : 'border-line bg-accent-soft'}`}
-      role={tone === 'warn' ? 'note' : undefined}
-    >
-      {title && <p className="mb-0.5 font-semibold text-ink-1">{title}</p>}
-      <div className="text-ink-2">{children}</div>
+    <div className={`rounded-xl border p-3 text-sm ${CALLOUT_CLASS[tone]} ${className}`} role={tone === 'info' ? undefined : 'note'}>
+      {title && (
+        <p className="mb-0.5 flex items-center gap-1.5 font-semibold text-ink-1">
+          {tone !== 'info' && <StatusIcon tone={tone} />}
+          {title}
+        </p>
+      )}
+      <div className={tone === 'critical' ? 'text-ink-1' : 'text-ink-2'}>
+        {!title && tone !== 'info' && (
+          <span className="mr-1.5 inline-block align-[-3px]">
+            <StatusIcon tone={tone} />
+          </span>
+        )}
+        {children}
+      </div>
     </div>
+  )
+}
+
+/** Warning triangle (warn) or alert triangle with a solid fill (critical); decorative, paired with text. */
+export function StatusIcon({ tone, size = 16 }: { tone: 'warn' | 'critical'; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true" className="shrink-0">
+      {tone === 'critical' ? (
+        <>
+          <path d="M10 2.2 18.4 17H1.6Z" fill="var(--status-critical)" />
+          <path d="M10 7.4v4.4M10 14.2v.1" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" />
+        </>
+      ) : (
+        <>
+          <path d="M10 2.6 18 16.6H2Z" fill="none" stroke="var(--status-warning)" strokeWidth="1.8" strokeLinejoin="round" />
+          <path d="M10 7.6v4M10 14v.1" stroke="var(--ink-1)" strokeWidth="1.8" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
   )
 }
 

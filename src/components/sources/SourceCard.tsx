@@ -52,7 +52,8 @@ export function SourceCard({ source: s, files }: { source: SourceStatus; files: 
   const age = daysAgo(s.latestData)
   const problem = s.state === 'error' || s.state === 'stale'
   const myFiles = files.filter((f) => f.source === s.id)
-  const headingId = `src-${s.id}`
+  // The wrapper in SourcesView owns `src-${id}` (the jump target); the heading gets its own id for the label.
+  const headingId = `src-${s.id}-h`
   return (
     <article className="card p-4 sm:p-5" aria-labelledby={headingId}>
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
@@ -86,7 +87,9 @@ export function SourceCard({ source: s, files }: { source: SourceStatus; files: 
             </p>
           )}
           <p className="mt-2 text-sm">
-            <ExternalLink href={s.url}>Go to the source</ExternalLink>
+            <ExternalLink href={s.url}>
+              Go to the source<span className="sr-only">: {s.name}</span>
+            </ExternalLink>
           </p>
         </div>
         <dl className="min-w-0 divide-y divide-line self-start rounded-lg border border-line px-3">

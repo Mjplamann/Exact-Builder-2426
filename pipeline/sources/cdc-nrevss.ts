@@ -218,12 +218,14 @@ function summarizeDiag(d: ParseDiag) {
 export const cdcNrevss: SourceModule = {
   meta: {
     id: SOURCE,
-    name: 'CDC NREVSS lab test positivity (HHS Region 5)',
+    name: 'CDC NREVSS lab test positivity',
     publisher: 'CDC — National Respiratory and Enteric Virus Surveillance System (NREVSS)',
     url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html',
     description:
-      'Each week, about 450 hospital, commercial and public-health laboratories report how many PCR (NAAT) tests they ran for respiratory viruses and how many were positive. This shows the percent positive for RSV, COVID-19, human metapneumovirus (hMPV), adenovirus, parainfluenza, rhinovirus/enterovirus and seasonal coronaviruses in HHS Region 5 (Minnesota, Wisconsin, Illinois, Indiana, Michigan and Ohio) and nationally, plus national flu positivity — the closest public counterpart to a multi-virus respiratory panel. It shows which viruses are circulating and whether they are rising or falling. It does NOT measure how many people are infected: it counts tests (not patients) among people who were tested, depends on who gets tested, pools six states rather than Minnesota alone, and has no regional flu data.',
-    geography: 'HHS Region 5 (MN, WI, IL, IN, MI, OH); United States',
+      'Each week, about 450 hospital, commercial and public-health laboratories report how many PCR (NAAT) tests they ran for respiratory viruses and how many were positive. ' +
+      'This shows the percent positive for COVID-19 and RSV in Minnesota alone (CDC’s centered 3-week average), and for RSV, COVID-19, human metapneumovirus (hMPV), adenovirus, parainfluenza, rhinovirus/enterovirus and seasonal coronaviruses in HHS Region 5 (Minnesota, Wisconsin, Illinois, Indiana, Michigan and Ohio) and nationally, plus national flu positivity — the closest public counterpart to a multi-virus respiratory panel. ' +
+      'It shows which viruses are circulating and whether they are rising or falling. It does NOT measure how many people are infected: it counts tests (not patients) among people who were tested and depends on who gets tested. The regional values pool six states rather than Minnesota alone, and there is no regional flu series.',
+    geography: 'Minnesota (COVID-19, RSV; 3-week average); HHS Region 5; United States',
     cadence: 'Weekly (week ending Saturday; CDC posts updates on Wednesday evenings)',
     attribution: 'CDC National Respiratory and Enteric Virus Surveillance System (NREVSS), data.cdc.gov',
   },

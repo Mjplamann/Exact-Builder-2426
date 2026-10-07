@@ -1,5 +1,5 @@
 // "Illnesses to know about": searchable, filterable library of every pathogen profile.
-import { useDeferredValue, useId, useMemo, useState } from 'react'
+import { useDeferredValue, useId, useMemo, useRef, useState } from 'react'
 import type { PathogenCategory } from '../../shared/types'
 import { PROFILES } from '../content'
 import type { PathogenProfile } from '../content/types'
@@ -39,6 +39,9 @@ export default function PathogensView() {
   const [query, setQuery] = useState('')
   const deferred = useDeferredValue(query.trim())
   const searchId = useId()
+  const searchRef = useRef<HTMLInputElement>(null)
+  /** The empty-state buttons unmount once they work, so keep keyboard focus in the search box. */
+  const refocus = () => requestAnimationFrame(() => searchRef.current?.focus())
 
   const items = useMemo(() => {
     return PROFILES.map((profile) => {
@@ -107,6 +110,7 @@ export default function PathogensView() {
               <path d="m13 13 4 4" strokeLinecap="round" />
             </svg>
             <input
+              ref={searchRef}
               id={searchId}
               type="search"
               value={query}
@@ -118,16 +122,16 @@ export default function PathogensView() {
           </div>
         </div>
         <div
-          className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>button]:shrink-0 [&>button]:whitespace-nowrap"
+          className="-mx-3 flex gap-2 overflow-x-auto px-3 py-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:py-0 [&>button]:shrink-0 [&>button]:whitespace-nowrap"
           role="group"
           aria-label="Filter by type of illness"
         >
           <Pill active={state.category === 'all'} onClick={() => update({ category: 'all' })}>
-            All <span className="tabular opacity-75">{items.length}</span>
+            All <span className={`tabular ${state.category === 'all' ? '' : 'text-ink-3'}`}>{items.length}</span>
           </Pill>
           {CATEGORY_FILTERS.filter((c) => counts[c]).map((c) => (
             <Pill key={c} active={state.category === c} onClick={() => update({ category: c })}>
-              {CATEGORY_LABEL[c]} <span className="tabular opacity-75">{counts[c]}</span>
+              {CATEGORY_LABEL[c]} <span className={`tabular ${state.category === c ? '' : 'text-ink-3'}`}>{counts[c]}</span>
             </Pill>
           ))}
         </div>
@@ -152,7 +156,7 @@ export default function PathogensView() {
       {visible.length ? (
         <div className="space-y-8">
           {[
-            { key: 'live', title: 'Tracked this week', note: 'Weekly Minnesota data, highest activity first.', list: visible.filter((v) => v.live) },
+            { key: 'live', title: 'Tracked this week', note: 'Minnesota or regional data, highest activity first.', list: visible.filter((v) => v.live) },
             {
               key: 'guide',
               title: liveVisible ? 'More illnesses, A to Z' : 'Illnesses, A to Z',
@@ -191,14 +195,24 @@ export default function PathogensView() {
           <p>Try a different word, such as a symptom (“cough”, “rash”) or another name for the illness.</p>
           <div className="mt-3 flex flex-wrap justify-center gap-2">
             {deferred && (
-              <button type="button" onClick={() => setQuery('')} className="rounded-lg border border-line px-3 py-1.5 text-sm text-ink-1 hover:bg-surface-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery('')
+                  refocus()
+                }}
+                className="rounded-lg border border-line px-3 py-1.5 text-sm text-ink-1 hover:bg-surface-2"
+              >
                 Clear search
               </button>
             )}
             {state.category !== 'all' && (
               <button
                 type="button"
-                onClick={() => update({ category: 'all' })}
+                onClick={() => {
+                  update({ category: 'all' })
+                  refocus()
+                }}
                 className="rounded-lg border border-line px-3 py-1.5 text-sm text-ink-1 hover:bg-surface-2"
               >
                 Show all types

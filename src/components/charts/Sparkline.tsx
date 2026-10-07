@@ -2,7 +2,7 @@
 // surface ring, optional faint area wash. Color defaults to currentColor so it inherits text color.
 import { useId } from 'react'
 import type { Point } from '../../../shared/types'
-import { msFromIso } from './chartTheme'
+import { msFromIso } from './time'
 
 export interface SparklineProps {
   points: Point[]

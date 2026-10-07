@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
   AHFS_MAX_ROWS,
+  ahfsHeadWhere,
   ahfsMnWhere,
   ahfsReleaseWhere,
   buildRtSeries,
   checkStateSchema,
+  latestPlausibleRun,
   detectAhfsSchema,
   newestPerDate,
   newestRuns,
@@ -276,6 +278,16 @@ describe('parseAhfsRows', () => {
     expect(ahfsReleaseWhere(schema, '2026-09-29T00:00:00.000')).toBe("county_fips like '27%' AND origin_date = '2026-09-29T00:00:00.000'")
     expect(ahfsReleaseWhere({ ...schema, horizonNumeric: true }, '2026-09-29')).toBe("county_fips like '27%' AND origin_date = '2026-09-29' AND horizon <= 0")
     expect(AHFS_MAX_ROWS).toBeGreaterThan(87 * 3 * 60)
+  })
+
+  it('never picks a release dated in the future (CDC typo origin 2029-09-29)', () => {
+    const now = '2026-10-07T02:07:00.000Z'
+    expect(latestPlausibleRun(now)).toBe('2026-10-08')
+    expect(ahfsHeadWhere(schema, now)).toBe("county_fips like '27%' AND origin_date IS NOT NULL AND origin_date <= '2026-10-08'")
+    const typo = r('27053', '2026-09-29', '0', '1.3406', { origin_date: '2029-09-29' })
+    const { estimates, stats } = parseAhfsRows([typo, r('27053', '2026-09-28', '-1', '1.3488')], schema, { maxOrigin: latestPlausibleRun(now) })
+    expect(stats.futureOrigin).toBe(1)
+    expect(estimates.map((e) => e.asOf)).toEqual(['2026-09-29'])
   })
 
   it('counts conflicting values for one county/date as ambiguous', () => {
