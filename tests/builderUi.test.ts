@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SHAPE_SIZES } from '../src/app/biotopes';
+import { SHAPE_SIZES, aquascapesFor } from '../src/app/biotopes';
 import type { AquascapeInfo } from '../src/app/tankTypes';
 import {
   BuilderModel,
@@ -227,6 +227,22 @@ describe('tank builder model', () => {
     expect(m.spec.substrateDepthFrontCm).toBeLessThanOrEqual(lim.front);
     expect(m.spec.substrateDepthBackCm).toBe(lim.back);
     expect(defaultSlope(50)).toEqual({ front: 3, back: 8 });
+  });
+
+  it('style suggestions follow the tank as it is resized', () => {
+    const fresh = aquascapesFor('freshwater');
+    const m = new BuilderModel(SHAPE_SIZES, fresh, [], (w, size) => aquascapesFor(w, size));
+    m.applyStyle(fresh.find((s) => s.id === 'iwagumi')!);
+    const tall = m.spec.substrateDepthBackCm!;
+    const flowStd = m.equipment.filter.flowLph;
+    m.setShape('nano');
+    // Depths are scaled for the 30 cm nano rather than clamped from a 50 cm tank's.
+    expect(m.spec.substrateDepthBackCm!).toBeLessThan(tall);
+    expect(m.spec.substrateDepthBackCm!).toBeLessThan(slopeLimits(30).back);
+    expect(m.equipment.filter.flowLph).toBeLessThan(flowStd);
+    m.setShape('standard');
+    expect(m.spec.substrateDepthBackCm).toBe(tall);
+    expect(m.style?.id).toBe('iwagumi');
   });
 
   it('stock lists merge, clamp and drop empty entries', () => {

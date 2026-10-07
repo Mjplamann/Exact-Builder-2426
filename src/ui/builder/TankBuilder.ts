@@ -96,7 +96,7 @@ export class TankBuilder {
     const app = host.app;
     this.returnFocus = opts.returnFocus ?? null;
     this.stylesCache.set('freshwater', app.aquascapes('freshwater'));
-    this.model = new BuilderModel(app.shapeSizes(), this.stylesCache.get('freshwater')!, app.listTanks().map((t) => t.name));
+    this.model = new BuilderModel(app.shapeSizes(), this.stylesCache.get('freshwater')!, app.listTanks().map((t) => t.name), (w, size) => app.aquascapes(w, size));
     this.env = {
       host,
       model: this.model,

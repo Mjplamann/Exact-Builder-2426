@@ -7,6 +7,7 @@ import type {
   PlantInstance,
   Settings,
   TankState,
+  TankSize,
   WaterType,
 } from '../core/types';
 import type { World } from '../core/world';
@@ -131,7 +132,7 @@ export interface AppApi {
 
   // Guided tank builder
   /** Aquascape styles for a water type (with suggested substrate/background/chemistry/equipment). */
-  aquascapes(water: WaterType): AquascapeInfo[];
+  aquascapes(water: WaterType, size?: TankSize): AquascapeInfo[];
   /** Starting dimensions per tank shape. */
   shapeSizes(): typeof SHAPE_SIZES;
   /** Communities that genuinely suit the planned tank, best first. */

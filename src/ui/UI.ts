@@ -47,6 +47,8 @@ const IDLE_SECONDS = 3.5;
 const IDLE_SECONDS_TOUCH = 5;
 /** While an animal's card is open the keeper is probably reading it. */
 const IDLE_SECONDS_CARD = 12;
+/** A documentary tour is for watching: the controls step aside sooner. */
+const IDLE_SECONDS_TOUR = 2;
 /** Extra seconds before the controls fade for the very first time (see the first-run hint). */
 const FIRST_IDLE_EXTRA = 3;
 /** How long the one-time first-run hint stays (ms). */
@@ -65,7 +67,7 @@ const DOCK: { id: PanelId; label: string; icon: IconName; key: string }[] = [
 
 const SHORTCUTS: [string, string][] = [
   ['C', 'Fish catalog'],
-  ['F', 'Feed (last food, anywhere)'],
+  ['F', 'Follow the selected animal · otherwise feed'],
   ['A', 'Aquascape'],
   ['J', 'Journal'],
   ['Space', 'Pause / resume time'],
@@ -75,7 +77,6 @@ const SHORTCUTS: [string, string][] = [
   ['+  −', 'Look closer / wider'],
   ['0', 'Back to the whole tank'],
   ['T', 'Tour: the camera drifts between animals'],
-  ['F', 'Follow the selected animal (otherwise feed)'],
   ['Scroll', 'Zoom (rotate in Aquascape)'],
   ['Drag  ←  →', 'Look around once zoomed in'],
   ['Double-click', 'Tap on the glass · on an animal: follow it'],
@@ -671,6 +672,7 @@ export class UI implements UIHost {
 
   private idleSeconds(): number {
     if (this.card.visible) return IDLE_SECONDS_CARD;
+    if (this.app.isTouring()) return IDLE_SECONDS_TOUR;
     const base = this.isTouch ? IDLE_SECONDS_TOUCH : IDLE_SECONDS;
     // A newcomer gets a moment longer to take in the controls before they first fade.
     return this.firstHint === 'pending' ? base + FIRST_IDLE_EXTRA : base;
@@ -690,9 +692,9 @@ export class UI implements UIHost {
     const portrait = window.innerHeight > window.innerWidth;
     const tips = touch
       ? portrait
-        ? 'Swipe to look along the tank · pinch to look closer · double-tap the glass to knock'
-        : 'Swipe to look around · pinch to look closer · double-tap the glass to knock'
-      : 'Double-click the glass to tap it · scroll to look closer · press ? for shortcuts';
+        ? 'Swipe to look along the tank · pinch to look closer · double-tap a fish to follow it'
+        : 'Pinch to look closer · double-tap a fish to follow it, or the water to knock on the glass'
+      : 'Scroll to look closer · double-click a fish to follow it, or the water to tap the glass · ? for shortcuts';
     const el = h('div', { class: 'aq-firsthint aq-glass', role: 'status' }, h('p', { class: 'aq-firsthint-lead' }, lead), h('p', { class: 'aq-firsthint-tips' }, tips));
     const close = () => {
       if (!el.isConnected || el.classList.contains('is-out')) return;

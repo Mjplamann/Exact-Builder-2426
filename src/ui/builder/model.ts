@@ -5,7 +5,7 @@
  * changing the water type starts those choices afresh (a reef substrate makes no sense in a
  * river). Sizes are whole centimeters, clamped to sane limits.
  */
-import type { BackgroundKind, Equipment, SubstrateKind, WaterType } from '../../core/types';
+import type { BackgroundKind, Equipment, SubstrateKind, TankSize, WaterType } from '../../core/types';
 import type { SHAPE_SIZES } from '../../app/biotopes';
 import type { AquascapeInfo, TankShape, TankSpec } from '../../app/tankTypes';
 import { defaultEquipment } from '../../sim/tankFactory';
@@ -128,11 +128,14 @@ export class BuilderModel {
    * @param shapes        starting dimensions per shape (`app.shapeSizes()`)
    * @param styles        the styles for freshwater, the starting water (`app.aquascapes('freshwater')`)
    * @param existingNames names already in the collection (a new tank gets a distinct one)
+   * @param sizedStyles   the styles with defaults scaled to a planned size (`app.aquascapes(water, size)`):
+   *                      slopes and filter flow then follow the tank as it is resized
    */
   constructor(
     private shapes: ShapeSizes,
     styles: readonly AquascapeInfo[],
     private existingNames: readonly string[] = [],
+    private sizedStyles?: (water: WaterType, size: TankSize) => readonly AquascapeInfo[],
   ) {
     const size = { ...shapes.standard.size };
     const slope = defaultSlope(size.heightCm);
@@ -217,6 +220,7 @@ export class BuilderModel {
   private sizeChanged(): void {
     const s = this.spec;
     s.size = clampSize(s.size, s.shape);
+    this.style = this.sized(this.style);
     this.fitSlope();
     // Untouched filters are re-sized for the new volume.
     if (!this.touched.has('filter')) this.equipment.filter = this.baseEquipment().filter;
@@ -225,6 +229,7 @@ export class BuilderModel {
   /** Apply a style and its suggestions (to everything the keeper has not chosen by hand). */
   applyStyle(style: AquascapeInfo | null): void {
     const s = this.spec;
+    style = this.sized(style);
     this.style = style;
     s.aquascape = style?.id ?? 'empty';
     const d = style?.defaults ?? {};
@@ -243,6 +248,12 @@ export class BuilderModel {
     }
     this.syncTemperature();
     if (!this.touched.has('name')) s.name = uniqueName(defaultTankName(style, s.water), this.existingNames);
+  }
+
+  /** The style's defaults for the planned size (depths for its height, a filter for its volume). */
+  private sized(style: AquascapeInfo | null): AquascapeInfo | null {
+    if (!style || !this.sizedStyles) return style;
+    return this.sizedStyles(this.spec.water, this.spec.size).find((q) => q.id === style.id) ?? style;
   }
 
   /** Equipment for this water and volume, with the style's suggestions on top. */

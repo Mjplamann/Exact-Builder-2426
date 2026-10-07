@@ -1,5 +1,5 @@
 import { Plane, Vector3 } from 'three';
-import type { DecorItem, DecorKind, Equipment, FishEntity, FoodKind, PlantInstance, Settings, TankState, WaterParams, WaterType } from '../core/types';
+import type { DecorItem, DecorKind, Equipment, FishEntity, FoodKind, PlantInstance, Settings, TankSize, TankState, WaterType } from '../core/types';
 import { createWorld, rebuildFishEntities, type World } from '../core/world';
 import { substrateHeight, tankBounds } from '../core/tankGeometry';
 import { newId } from '../core/rng';
@@ -35,16 +35,6 @@ import type { AquascapeInfo, StockCheck, StockSuggestion, TankSpec, TankSummary 
 const AUTOSAVE_SECONDS = 15;
 /** Longest absence we fast-forward (sim time), to keep catch-up bounded. */
 const MAX_CATCHUP_SIM_SECONDS = 2 * 365 * 86400;
-
-/** Biotope chemistry for a new tank (the nitrogen cycle and algae stay as the factory set them). */
-function applyChemistry(wp: WaterParams, patch?: Partial<WaterParams>): void {
-  if (!patch) return;
-  const keys = ['temperatureC', 'ph', 'gh', 'kh', 'salinitySG', 'tannins'] as const;
-  for (const k of keys) {
-    const v = patch[k];
-    if (typeof v === 'number' && Number.isFinite(v)) wp[k] = v;
-  }
-}
 
 function deepMerge<T>(target: T, patch: DeepPartial<T>): void {
   for (const [k, v] of Object.entries(patch as Record<string, unknown>)) {
@@ -874,8 +864,8 @@ export class App implements AppApi {
   // Tank builder helpers
   // ------------------------------------------------------------------------------------------
 
-  aquascapes(water: WaterType): AquascapeInfo[] {
-    return aquascapesFor(water);
+  aquascapes(water: WaterType, size?: TankSize): AquascapeInfo[] {
+    return aquascapesFor(water, size);
   }
 
   shapeSizes(): typeof SHAPE_SIZES {
