@@ -414,3 +414,32 @@ describe('camera resize & panning', () => {
     }
   });
 });
+
+describe('camera safe area', () => {
+  it('frames a followed animal in the uncovered part of the screen, and back when it clears', () => {
+    const rig = makeRig(0.58);
+    const s: FollowSubject = { pos: [0.02, 0.17, 0.02], lengthM: 0.05, forward: [0, 0, 1] };
+    rig.follow(s, { fill: 0.25 });
+    run(rig, 8);
+    // A card covers the lower half: the animal goes to the middle of the upper part.
+    rig.setSafeArea(-1, 1, 0.1, 0.7);
+    run(rig, 8);
+    const p = ndc(rig, new Vector3(...s.pos));
+    expect(p.y).toBeGreaterThan(0.2);
+    expect(p.y).toBeLessThan(0.6);
+    expect(Math.abs(p.x)).toBeLessThan(0.05);
+    expectFrameOnGlass(rig);
+    // A narrow strip beside a landscape card: the animal fits in it.
+    rig.setSafeArea(0.4, 1, -1, 0.6);
+    run(rig, 8);
+    const a = ndc(rig, new Vector3(s.pos[0] - 0.025, s.pos[1], s.pos[2]));
+    const c = ndc(rig, new Vector3(s.pos[0] + 0.025, s.pos[1], s.pos[2]));
+    expect(a.x).toBeGreaterThan(0.4);
+    expect(c.x).toBeLessThan(1);
+    rig.setSafeArea(-1, 1, -1, 1);
+    run(rig, 8);
+    const q = ndc(rig, new Vector3(...s.pos));
+    expect(Math.abs(q.x)).toBeLessThan(0.05);
+    expect(Math.abs(q.y)).toBeLessThan(0.05);
+  });
+});

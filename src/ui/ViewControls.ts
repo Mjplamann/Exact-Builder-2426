@@ -110,6 +110,66 @@ export function zoomLabel(zoom: number): string {
   return zoom < 9.95 ? `${zoom.toFixed(1)}×` : `${Math.round(zoom)}×`;
 }
 
+/** A screen rectangle (client px). */
+export interface RectLike {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+/**
+ * Where a followed animal should be framed (client px) so the animal's card or an open panel never
+ * hides it: the largest uncovered part of the screen below `top` (the chip), above `edges.bottom`
+ * (the dock) and left of `edges.right` (the zoom buttons), when something covers the middle of the
+ * screen where the camera would otherwise put it; null = the whole screen. Small covers off to the
+ * side (the card in a desktop corner) leave the framing alone.
+ */
+export function followSafeArea(vw: number, vh: number, covers: readonly RectLike[], top = 0, edges: { bottom?: number; right?: number } = {}): RectLike | null {
+  if (!(vw > 0 && vh > 0)) return null;
+  // Where the camera puts an animal by default: around the middle of the frame (rule of thirds
+  // either way). Only a cover reaching into it moves the framing.
+  const zoneOf = (r: RectLike): RectLike => {
+    const w = r.right - r.left;
+    const h = r.bottom - r.top;
+    return { left: r.left + w * 0.22, right: r.right - w * 0.22, top: r.top + h * 0.3, bottom: r.bottom - h * 0.3 };
+  };
+  const hits = (a: RectLike, b: RectLike) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1;
+  const valid = covers.filter((c) => c.right > c.left && c.bottom > c.top);
+  const screen: RectLike = { left: 0, top: 0, right: vw, bottom: vh };
+  if (!valid.some((c) => hits(c, zoneOf(screen)))) return null;
+  const minSide = 0.18 * Math.min(vw, vh);
+  let r: RectLike = {
+    left: 0,
+    top: Math.max(0, Math.min(top, vh * 0.4)),
+    right: Math.max(vw * 0.6, Math.min(vw, edges.right ?? vw)),
+    bottom: Math.max(vh * 0.6, Math.min(vh, edges.bottom ?? vh)),
+  };
+  for (let pass = 0; pass < 3; pass++) {
+    const c = valid.find((q) => hits(q, zoneOf(r)));
+    if (!c) break;
+    // The largest strip of the free area beside, above or below the cover.
+    const strips: RectLike[] = [
+      { left: r.left, top: r.top, right: Math.min(r.right, c.left), bottom: r.bottom },
+      { left: Math.max(r.left, c.right), top: r.top, right: r.right, bottom: r.bottom },
+      { left: r.left, top: r.top, right: r.right, bottom: Math.min(r.bottom, c.top) },
+      { left: r.left, top: Math.max(r.top, c.bottom), right: r.right, bottom: r.bottom },
+    ];
+    let best: RectLike | null = null;
+    let bestArea = 0;
+    for (const q of strips) {
+      const w = q.right - q.left;
+      const h = q.bottom - q.top;
+      if (w < minSide || h < minSide || w * h <= bestArea) continue;
+      bestArea = w * h;
+      best = q;
+    }
+    if (!best) break;
+    r = best;
+  }
+  return r;
+}
+
 export type ViewKeyAction = 'zoom-in' | 'zoom-out' | 'reset' | 'tour' | 'follow' | 'pan-left' | 'pan-right' | 'pan-up' | 'pan-down';
 
 /**
@@ -336,6 +396,9 @@ export class ViewControls {
 
   private t = 0;
   private lastPanel: PanelId | null = null;
+  /** The safe framing area last given to the camera (key of rounded px; '' = whole screen). */
+  private safeKey = '';
+  private layer: HTMLElement;
   private chipSpecies = '';
   /** Zoom readout cache (tenths), so the DOM is only touched when the shown value changes. */
   private shownZoom = -1;
@@ -345,6 +408,7 @@ export class ViewControls {
     layer: HTMLElement,
   ) {
     const app = host.app;
+    this.layer = layer;
     this.router = new ViewRouter(app, window);
     this.router.onTourStart = () => {
       host.openPanel(null);
@@ -432,6 +496,47 @@ export class ViewControls {
       if (panel && this.host.app.isTouring()) this.host.app.setTour(false);
     }
     this.sync();
+    this.syncSafeArea();
+  }
+
+  /**
+   * Keep a followed animal clear of its card and of an open panel: tell the camera which part of
+   * the screen is free (it glides the framing there, and back when they close).
+   */
+  private syncSafeArea(): void {
+    const app = this.host.app;
+    if (!app.world.follow) {
+      if (this.safeKey) {
+        this.safeKey = '';
+        app.engine.setFollowSafeArea(null);
+      }
+      return;
+    }
+    const covers: RectLike[] = [];
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const card = this.layer.querySelector<HTMLElement>('.aq-fishcard');
+    const root = this.layer.closest('.aq-root') ?? document.querySelector('.aq-root');
+    // (On a phone the card steps aside for an open sheet; the sheet itself covers then.)
+    if (card && !card.hidden && !(this.host.isMobile && root?.classList.contains('has-panel'))) covers.push(card.getBoundingClientRect());
+    const inset = this.host.coveredInsets?.();
+    if (inset?.right) covers.push({ left: vw - inset.right, top: 0, right: vw, bottom: vh });
+    if (inset?.bottom) covers.push({ left: 0, top: vh - inset.bottom, right: vw, bottom: vh });
+    const top = this.chip.hidden ? 0 : this.chip.getBoundingClientRect().bottom + 6;
+    let area: RectLike | null = null;
+    if (covers.length) {
+      // Keep clear of the dock and of this cluster too (they stay put when the chrome rests).
+      const dock = root?.querySelector<HTMLElement>('.aq-dock');
+      const dr = dock?.getBoundingClientRect();
+      const dockTop = dr && dr.height > 0 && getComputedStyle(dock!).display !== 'none' ? dr.top - 6 : vh;
+      const clusterShown = getComputedStyle(this.el).visibility !== 'hidden';
+      const clusterLeft = clusterShown ? this.el.getBoundingClientRect().left - 6 : vw;
+      area = followSafeArea(vw, vh, covers, top, { bottom: dockTop, right: clusterLeft });
+    }
+    const key = area ? `${Math.round(area.left)},${Math.round(area.top)},${Math.round(area.right)},${Math.round(area.bottom)}` : '';
+    if (key === this.safeKey) return;
+    this.safeKey = key;
+    app.engine.setFollowSafeArea(area);
   }
 
   private sync(): void {

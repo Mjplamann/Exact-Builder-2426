@@ -4,6 +4,7 @@ import {
   ViewRouter,
   ZOOM_STEP_RATIO,
   dragToPan,
+  followSafeArea,
   pinchMove,
   viewKeyAction,
   wheelSteps,
@@ -281,5 +282,39 @@ describe('ViewRouter', () => {
     f.world.follow = null;
     f.state.touring = true;
     expect(f.router.isClose()).toBe(true);
+  });
+});
+
+describe('followSafeArea', () => {
+  it('frames a followed animal above the phone card, below the chip', () => {
+    // iPhone portrait: the card covers the lower half of the screen above the dock.
+    const a = followSafeArea(440, 763, [{ left: 8, top: 365, right: 432, bottom: 685 }], 122)!;
+    expect(a).toEqual({ left: 0, top: 122, right: 440, bottom: 365 });
+  });
+
+  it('frames it beside the card in landscape', () => {
+    const a = followSafeArea(838, 390, [{ left: 22, top: 89, right: 582, bottom: 288 }], 122, { bottom: 298 })!;
+    expect(a.left).toBe(582);
+    expect(a.right).toBe(838);
+  });
+
+  it('leaves the framing alone when nothing covers the middle', () => {
+    // Desktop: the card sits in the bottom-left corner.
+    expect(followSafeArea(1600, 900, [{ left: 22, top: 560, right: 318, bottom: 882 }], 60)).toBeNull();
+    expect(followSafeArea(1600, 900, [], 60)).toBeNull();
+  });
+
+  it('uses the space beside a side panel', () => {
+    expect(followSafeArea(1600, 900, [{ left: 1186, top: 0, right: 1600, bottom: 900 }], 60)).toEqual({ left: 0, top: 60, right: 1186, bottom: 900 });
+    // …and between the panel and the card when both are open.
+    const a = followSafeArea(1600, 900, [{ left: 1186, top: 0, right: 1600, bottom: 900 }, { left: 22, top: 560, right: 318, bottom: 882 }], 60)!;
+    expect(a.left).toBe(318);
+    expect(a.right).toBe(1186);
+  });
+
+  it('keeps clear of the dock and the zoom buttons', () => {
+    // iPhone landscape: below the card is only the dock; beside it, the strip up to the buttons.
+    const a = followSafeArea(838, 390, [{ left: 22, top: 89, right: 582, bottom: 288 }], 122, { bottom: 298, right: 758 })!;
+    expect(a).toEqual({ left: 582, top: 122, right: 758, bottom: 298 });
   });
 });

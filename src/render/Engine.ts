@@ -466,6 +466,21 @@ export class Engine {
   }
 
   /**
+   * The part of the screen (client px) a followed animal should be framed in — beside its card or
+   * above a sheet, so it is never hidden behind them. null = the whole screen.
+   */
+  setFollowSafeArea(area: { left: number; top: number; right: number; bottom: number } | null): void {
+    if (!area) {
+      this.rig.setSafeArea(-1, 1, -1, 1);
+      return;
+    }
+    const r = this.canvas.getBoundingClientRect();
+    const w = Math.max(1, r.width);
+    const h = Math.max(1, r.height);
+    this.rig.setSafeArea(((area.left - r.left) / w) * 2 - 1, ((area.right - r.left) / w) * 2 - 1, 1 - ((area.bottom - r.top) / h) * 2, 1 - ((area.top - r.top) / h) * 2);
+  }
+
+  /**
    * Zoom by wheel-notch steps (+ closer, ×1.12 each; fractional for trackpads and pinch),
    * optionally toward a screen point: the thing under it stays under it. `pickAnchor` may return
    * the true-space point under a client position (fish, plant, decor); otherwise the tank's

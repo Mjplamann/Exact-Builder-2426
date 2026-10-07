@@ -184,6 +184,11 @@ export class CameraRig {
   private followW = 0;
   /** Framing spring rate for the current subject (eased with how fast it crosses the frame). */
   private followOmega = OMEGA_FOLLOW;
+  /**
+   * The uncovered part of the screen (NDC) a followed animal is framed in — all of it, unless the
+   * animal's card or a panel covers the middle (see setSafeArea).
+   */
+  private safe = { x0: -1, x1: 1, y0: -1, y1: 1 };
 
   // Framing transition (start/switch/end of a follow): elapsed, length, kind, where it started.
   private transT = 0;
@@ -610,6 +615,32 @@ export class CameraRig {
   }
 
   /**
+   * Frame a followed animal inside this part of the screen (NDC, x0 < x1, y0 < y1), e.g. beside its
+   * card or above a sheet, so it is never hidden behind them; the framing glides there like any
+   * other reframing. Full screen = (−1, 1, −1, 1).
+   */
+  setSafeArea(x0: number, x1: number, y0: number, y1: number): void {
+    if (![x0, x1, y0, y1].every(Number.isFinite)) return;
+    const s = this.safe;
+    s.x0 = MathUtils.clamp(Math.min(x0, x1), -1, 1);
+    s.x1 = MathUtils.clamp(Math.max(x0, x1), -1, 1);
+    s.y0 = MathUtils.clamp(Math.min(y0, y1), -1, 1);
+    s.y1 = MathUtils.clamp(Math.max(y0, y1), -1, 1);
+    // Never a sliver: at least a fifth of the screen each way, around its centre.
+    for (const [a, b] of [['x0', 'x1'], ['y0', 'y1']] as const) {
+      const c = (s[a] + s[b]) / 2;
+      const half = Math.max(0.2, (s[b] - s[a]) / 2);
+      s[a] = Math.max(-1, Math.min(c, 1 - half) - half);
+      s[b] = s[a] + 2 * half;
+    }
+  }
+
+  /** The fill actually used: as requested, but never wider than ~80 % of the uncovered width. */
+  private get framingFill(): number {
+    return Math.min(this.followFill, 0.8 * ((this.safe.x1 - this.safe.x0) / 2));
+  }
+
+  /**
    * Scale the followed animal's framing, within what the lens can reach at its depth (so a pinch
    * past the end of the range never leaves a dead zone to pinch back through).
    */
@@ -618,8 +649,8 @@ export class CameraRig {
     const dS = Math.max(0, this.frontZ - this.sp.z) / this.n;
     const len = Math.max(1e-3, s.lengthM);
     const lo = Math.max(FILL_MIN, len / this.widthAt(0, dS));
-    const hi = Math.min(FILL_MAX, len / this.widthAt(LN_MAX, dS));
-    const cur = MathUtils.clamp(this.followFill, Math.min(lo, hi), Math.max(lo, hi));
+    const hi = Math.min(FILL_MAX, len / this.widthAt(LN_MAX, dS), 0.8 * ((this.safe.x1 - this.safe.x0) / 2));
+    const cur = MathUtils.clamp(this.framingFill, Math.min(lo, hi), Math.max(lo, hi));
     this.setFollowFill(MathUtils.clamp(cur * factor, Math.min(lo, hi), Math.max(lo, hi)));
   }
 
@@ -661,7 +692,7 @@ export class CameraRig {
     b.x = MathUtils.clamp(b.x, -this.halfW, this.halfW);
     b.z = MathUtils.clamp(b.z, this.backTrue, this.frontZ);
     const dS = (this.frontZ - b.z) / this.n;
-    let lz = this.solveZoom(Math.max(1e-3, s.lengthM) / this.followFill, dS);
+    let lz = this.solveZoom(Math.max(1e-3, s.lengthM) / this.framingFill, dS);
     // Gliding to a far-off animal: pull back first so both are in view, then push in.
     if (this.transSwitch && this.transT < this.transDur) {
       const zT = Math.exp(lz);
@@ -671,17 +702,59 @@ export class CameraRig {
       if (span < lz) lz = MathUtils.lerp(span, lz, smooth01((this.transT / this.transDur - 0.35) / 0.5));
     }
     this.leadNdc(this.tmp);
-    this.centreFor(b, this.tmp.x, this.tmp.y, lz, out);
-    out.z = lz;
-    this.clampView(out);
+    const sx = this.tmp.x;
+    const sy = this.tmp.y;
+    this.placeAt(b, sx, sy, lz, out);
+    // Part of the screen is covered (the animal's card, a sheet) and the glass stops the frame
+    // from putting the animal in the free part at this zoom: come closer until it fits there.
+    const sa = this.safe;
+    if ((sa.x0 > -1 || sa.x1 < 1 || sa.y0 > -1 || sa.y1 < 1) && !(this.transSwitch && this.transT < this.transDur) && !this.inSafe(b, out)) {
+      let lo = lz;
+      let hi = LN_MAX;
+      this.placeAt(b, sx, sy, hi, out);
+      if (this.inSafe(b, out)) {
+        for (let i = 0; i < 14; i++) {
+          const m = (lo + hi) / 2;
+          this.placeAt(b, sx, sy, m, out);
+          if (this.inSafe(b, out)) hi = m;
+          else lo = m;
+        }
+        this.placeAt(b, sx, sy, hi, out);
+      } else this.placeAt(b, sx, sy, lz, out);
+    }
     return out;
   }
 
-  /** Where on screen (NDC) the subject should sit: away from its heading (rule of thirds). */
+  /** Framing (x, y, ln zoom) that puts `p` at screen NDC (sx, sy), kept on the glass. */
+  private placeAt(p: Vector3, sx: number, sy: number, lz: number, out: Vector3): void {
+    this.centreFor(p, sx, sy, lz, out);
+    out.z = lz;
+    this.clampView(out);
+  }
+
+  /** Does the framing `v` show the true-space point `p` well inside the uncovered area? */
+  private inSafe(p: Vector3, v: Vector3): boolean {
+    const z = Math.exp(v.z);
+    const dist = this.distAt(z);
+    const tan = this.tanAt(z);
+    const lift = EYE_LIFT * 2 * dist * tan;
+    const reach = dist + Math.max(0, this.frontZ - p.z) / this.n;
+    const nx = (p.x - v.x) / (reach * tan * this.aspect);
+    const ny = ((p.y - v.y - lift) / reach + lift / dist) / tan;
+    const s = this.safe;
+    const mx = 0.4 * ((s.x1 - s.x0) / 2);
+    const my = 0.4 * ((s.y1 - s.y0) / 2);
+    return nx >= s.x0 + mx && nx <= s.x1 - mx && ny >= s.y0 + my && ny <= s.y1 - my;
+  }
+
+  /** Where on screen (NDC) the subject should sit: away from its heading (rule of thirds), in the uncovered area. */
   private leadNdc(out: Vector3): Vector3 {
     const f = this.sf;
     const len = Math.max(0.35, f.length());
-    out.set(-LEAD * MathUtils.clamp(f.x / len, -1, 1), -0.3 * LEAD * MathUtils.clamp(f.y / len, -1, 1), 0);
+    const s = this.safe;
+    const hx = (s.x1 - s.x0) / 2;
+    const hy = (s.y1 - s.y0) / 2;
+    out.set(s.x0 + hx - LEAD * hx * MathUtils.clamp(f.x / len, -1, 1), s.y0 + hy - 0.3 * LEAD * hy * MathUtils.clamp(f.y / len, -1, 1), 0);
     return out;
   }
 
