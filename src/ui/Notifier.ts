@@ -111,9 +111,12 @@ export class Notifier {
     const w = this.world;
     if (w.settings.careMode === 'zen') return;
     const wp = w.tank.waterParams;
-    if (wp.ammonia > 0.25) this.warn('ammonia', `Ammonia has risen to ${wp.ammonia.toFixed(2)} mg/L. A partial water change will help.`, 'warning');
+    // Ammonia and nitrite only harm animals: in an empty tank they are a fishless cycle feeding its
+    // new bacteria (the ammonia is dosed on purpose), and changing water would only slow it down.
+    const animals = needs.animals > 0;
+    if (animals && wp.ammonia > 0.25) this.warn('ammonia', `Ammonia has risen to ${wp.ammonia.toFixed(2)} mg/L. A partial water change will help.`, 'warning');
     else this.settle('ammonia');
-    if (wp.nitrite > 0.25) this.warn('nitrite', `Nitrite is ${wp.nitrite.toFixed(2)} mg/L — the filter bacteria are struggling. Feed lightly and change some water.`, 'warning');
+    if (animals && wp.nitrite > 0.25) this.warn('nitrite', `Nitrite is ${wp.nitrite.toFixed(2)} mg/L — the filter bacteria are struggling. Feed lightly and change some water.`, 'warning');
     else this.settle('nitrite');
     if (wp.nitrate > 40) this.warn('nitrate', `Nitrate has built up to ${Math.round(wp.nitrate)} mg/L. It may be time for a water change.`, 'warning');
     else this.settle('nitrate');

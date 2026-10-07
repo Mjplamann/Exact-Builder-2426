@@ -909,6 +909,30 @@ body.aq-idle #tank { cursor: none; }
   .aq-viewctl { right: max(8px, var(--safe-r)); bottom: calc(max(8px, var(--safe-b)) + var(--dock-space) + 10px); gap: 8px; }
   .aq-root.is-mobile .aq-viewctl.has-card { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 300ms ease, visibility 0s linear 300ms; }
   .aq-viewchip { max-width: calc(100vw - 16px - var(--safe-l) - var(--safe-r)); }
+  /* Toasts rest at the cluster's height: they take the width beside it, never over − or +. */
+  .aq-root:not(.has-panel) .aq-toasts { left: max(8px, var(--safe-l)); right: calc(max(8px, var(--safe-r)) + 58px); width: auto; transform: none; }
+  /* An animal's card holds that place (and hides the cluster): toasts drop in from the top instead,
+     below the name and the follow chip, so they never sit on the card's buttons. */
+  .aq-root:not(.has-panel):has(.aq-fishcard:not([hidden])) .aq-toasts { top: calc(max(12px, var(--safe-t)) + 112px); bottom: auto;
+    right: max(8px, var(--safe-r)); flex-direction: column; }
+}
+/* Phones in landscape: the two-column animal card reaches up to the chip's place below the tank
+   name, so while it is open the chip moves up into the top row, beside the water-health dot. The
+   row is shared: the dot keeps to its dot (its colour still tells; the word returns with the card
+   closed) and the tank name and the chip each keep to their side. */
+@media (max-height: 520px) and (min-width: 641px) {
+  .aq-root:not(.has-panel):has(.aq-fishcard:not([hidden])) .aq-viewchip { top: max(14px, var(--safe-t)); left: auto;
+    right: calc(max(var(--gutter), var(--safe-r)) + 52px); transform: none;
+    max-width: calc(100vw - max(var(--gutter), var(--safe-l)) - max(var(--gutter), var(--safe-r)) - 52px - 268px); }
+  .aq-root:not(.has-panel):has(.aq-fishcard:not([hidden])) .aq-health-text { max-width: 0; opacity: 0; margin-left: 0; }
+  .aq-root:not(.has-panel):has(.aq-fishcard:not([hidden])) .aq-topleft { max-width: 260px; }
+  /* The card also covers the toasts' place above the dock: they drop in below the top row. */
+  .aq-root:not(.has-panel):has(.aq-fishcard:not([hidden])) .aq-toasts { top: calc(max(14px, var(--safe-t)) + 56px); bottom: auto; flex-direction: column; }
+}
+/* Toasts that drop in from the top slide down into place. */
+@media (max-width: 640px), (max-height: 520px) and (min-width: 641px) {
+  .aq-root:not(.has-panel):has(.aq-fishcard:not([hidden])) .aq-toast { transform: translateY(-6px); }
+  .aq-root:not(.has-panel):has(.aq-fishcard:not([hidden])) .aq-toast.is-in { transform: none; }
 }
 @media (max-width: 640px), (max-height: 520px) {
   /* The feeding hint already sits below the name: go below it. */

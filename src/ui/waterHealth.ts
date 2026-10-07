@@ -198,11 +198,20 @@ export function assessWater(wp: WaterParams, water: WaterType, needs: TankNeeds,
 
   // Ammonia: worst of total-ammonia test-kit bands and the free-NH₃ toxicity.
   const nh3 = freeAmmonia(wp.ammonia, wp.ph, wp.temperatureC);
-  const ammonia = worst(upper(wp.ammonia, 0.25, 1), upper(nh3, 0.005, 0.02));
-  push('ammonia', ammonia, `Ammonia ${wp.ammonia.toFixed(2)} mg/L — a partial water change will help`);
-
-  const nitrite = salty ? upper(wp.nitrite, 0.5, 2) : upper(wp.nitrite, 0.1, 0.5);
-  push('nitrite', nitrite, `Nitrite ${wp.nitrite.toFixed(2)} mg/L — the filter bacteria are struggling`);
+  let ammonia = worst(upper(wp.ammonia, 0.25, 1), upper(nh3, 0.005, 0.02));
+  let nitrite = salty ? upper(wp.nitrite, 0.5, 2) : upper(wp.nitrite, 0.1, 0.5);
+  if (needs.animals > 0) {
+    push('ammonia', ammonia, `Ammonia ${wp.ammonia.toFixed(2)} mg/L — a partial water change will help`);
+    push('nitrite', nitrite, `Nitrite ${wp.nitrite.toFixed(2)} mg/L — the filter bacteria are struggling`);
+  } else {
+    // Nobody to harm: in an empty tank ammonia and nitrite are a fishless cycle at work (its
+    // ammonia is dosed on purpose to grow the bacteria) — something to watch, not to change away.
+    if (ammonia !== 'good') ammonia = 'caution';
+    if (nitrite !== 'good') nitrite = 'caution';
+    // One note for both readings.
+    if (ammonia !== 'good' || nitrite !== 'good')
+      push(ammonia !== 'good' ? 'ammonia' : 'nitrite', 'caution', 'Fishless cycle — feeding the new bacteria; add fish once ammonia and nitrite read zero');
+  }
 
   const nitrate = needs.reef ? upper(wp.nitrate, 10, 25) : upper(wp.nitrate, 25, 50);
   push('nitrate', nitrate, `Nitrate has built up to ${Math.round(wp.nitrate)} mg/L — time for a water change`);

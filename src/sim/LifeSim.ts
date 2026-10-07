@@ -112,6 +112,11 @@ const MICRO_FEEDER_CM = 1.5;
 /** Fish emit 'fish-grew' every time they've grown this fraction since the last event (live). */
 const GREW_EVENT_FRACTION = 0.02;
 const JOURNAL_MAX = 500;
+/**
+ * Told once, when an empty tank that held ammonia (a fishless cycle's dose, see
+ * `src/app/biotopes.ts`) has grown the bacteria to clear it: journal, toast or welcome-back card.
+ */
+export const FISHLESS_CYCLE_DONE = 'The fishless cycle is complete: ammonia and nitrite both read zero — the filter is ready for fish.';
 
 type WarnKind = 'ammonia' | 'nitrite' | 'nitrate' | 'oxygen' | 'kh' | 'temperature' | 'hunger' | 'algae' | 'plants';
 
@@ -176,6 +181,8 @@ export class LifeSim implements BreedHost {
   private tankRef: TankState | null = null;
   private pending = 0;
   private floraPending = 0;
+  /** Step the plants on the next step regardless of `floraPending` (a tank was just attached). */
+  private floraDue = true;
   private catchingUp = false;
 
   // Per-step accumulators.
@@ -202,6 +209,12 @@ export class LifeSim implements BreedHost {
   private bigWaterChangeAt = -Infinity;
   /** Until this sim time the seeded filter grows to match the first stock (see `ensure`). */
   private seedUntil = -Infinity;
+  /** A fishless cycle is under way: watched until ammonia and nitrite read zero (`checkFishlessCycle`). */
+  private cycleWatch = false;
+  /** Its end has been told (this tank's journal says so): never twice. */
+  private cycleTold = false;
+  /** It ended during the current catch-up: the welcome-back card says so. */
+  private cycleDoneAway = false;
   /** Catch-up tallies. */
   private tallyBorn = new Map<string, number>();
   private tallyDied: { name: string; cause: string }[] = [];
@@ -301,6 +314,10 @@ export class LifeSim implements BreedHost {
     this.flora.reset();
     this.chem.attach(world.tank, this.expectedLoadN(world));
     this.pending = 0;
+    // The plants' rates are this tank's from the first step (the chemistry settles its daily CO₂
+    // cycle on them, see `Chemistry.attach`).
+    this.floraPending = 0;
+    this.floraDue = true;
     this.births.length = 0;
     this.clutches.length = 0;
     this.grewAt.clear();
@@ -310,6 +327,12 @@ export class LifeSim implements BreedHost {
     // A cycled tank that is still empty has a seeded filter waiting for its first stock: for the
     // next sim day the colony is sized to whatever the keeper puts in (presets, a new tank).
     this.seedUntil = world.fish.length === 0 && world.tank.waterParams.bacteria >= 0.9 ? world.clock.simTime + MS_PER_DAY : -Infinity;
+    // A fishless cycle carries on across reloads and tank switches: an empty tank still holding
+    // detectable ammonia or nitrite, whose journal doesn't yet tell of the cycle's end.
+    const wp = world.tank.waterParams;
+    this.cycleTold = world.tank.journal.some((e) => e.text.startsWith('The fishless cycle is complete'));
+    this.cycleWatch = !this.cycleTold && world.fish.length === 0 && (wp.ammonia >= 0.05 || wp.nitrite >= 0.05);
+    this.cycleDoneAway = false;
   }
 
   /**
@@ -375,6 +398,7 @@ export class LifeSim implements BreedHost {
     };
     this.tallyBorn.clear();
     this.tallyDied = [];
+    this.cycleDoneAway = false;
     this.pending = 0;
 
     const maxStep = simSeconds > CATCHUP_LONG_S ? CATCHUP_LONG_STEP_S : CATCHUP_MAX_STEP_S;
@@ -424,7 +448,8 @@ export class LifeSim implements BreedHost {
     this.census.build(world, now, this.chem.co2, zen);
     this.capacityRatio = this.census.ratio;
     this.floraPending += dt;
-    if (this.floraPending >= FLORA_STEP_S || !live) {
+    if (this.floraPending >= FLORA_STEP_S || !live || this.floraDue) {
+      this.floraDue = false;
       const fi = this.floraIn;
       fi.dose = dailyLightDose(lights);
       fi.co2 = this.chem.co2;
@@ -889,10 +914,14 @@ export class LifeSim implements BreedHost {
     const wp = world.tank.waterParams;
     const marine = world.tank.water === 'marine';
     if (this.careModeNow !== 'zen') {
-      if (this.armed('ammonia', wp.ammonia >= 0.25, wp.ammonia < 0.1, world, live))
+      // Ammonia and nitrite only matter to animals: an empty tank's are a fishless cycle feeding
+      // its new bacteria (the keeper dosed that ammonia on purpose; see `checkFishlessCycle`).
+      const animals = world.fish.length > 0;
+      if (this.armed('ammonia', animals && wp.ammonia >= 0.25, wp.ammonia < 0.1, world, live))
         this.fire(world, now, live, 'warning', `Ammonia has appeared (${wp.ammonia.toFixed(2)} ppm). Feed lightly and change some water.`);
-      if (this.armed('nitrite', wp.nitrite >= 0.25, wp.nitrite < 0.1, world, live))
+      if (this.armed('nitrite', animals && wp.nitrite >= 0.25, wp.nitrite < 0.1, world, live))
         this.fire(world, now, live, 'warning', `Nitrite is rising (${wp.nitrite.toFixed(2)} ppm) while the filter bacteria catch up. A water change will help.`);
+      this.checkFishlessCycle(world, now, live);
       const no3Limit = marine ? 25 : 50;
       if (this.armed('nitrate', wp.nitrate >= no3Limit, wp.nitrate < no3Limit * 0.6, world, live))
         this.fire(world, now, live, 'warning', `Nitrate has built up to ${Math.round(wp.nitrate)} ppm — time for a water change.`);
@@ -936,6 +965,29 @@ export class LifeSim implements BreedHost {
     if (live && world.clock.realSeconds - this.lastWarnReal < 20) return false;
     this.warnArmed[kind] = false;
     return true;
+  }
+
+  /**
+   * A fishless cycle: an empty tank holding ammonia (the keeper's dose) grows its bacteria on it —
+   * the ammonia falls as nitrite rises, then the nitrite falls. Once both read zero with the
+   * filter established, say so once (a toast live, the welcome-back card after an absence). If
+   * animals moved in before then, the cycle simply ends unannounced.
+   */
+  private checkFishlessCycle(world: World, now: number, live: boolean): void {
+    if (this.cycleTold) return;
+    const wp = world.tank.waterParams;
+    const empty = world.fish.length === 0;
+    if (!this.cycleWatch) {
+      this.cycleWatch = empty && wp.ammonia >= 0.25;
+      return;
+    }
+    if (wp.ammonia >= 0.05 || wp.nitrite >= 0.05 || wp.bacteria < 0.95) return;
+    this.cycleWatch = false;
+    if (!empty) return;
+    this.cycleTold = true;
+    this.journal(world, 'milestone', FISHLESS_CYCLE_DONE, now);
+    if (live) world.events.emit('notify', { message: FISHLESS_CYCLE_DONE, level: 'success' });
+    else if (this.catchingUp) this.cycleDoneAway = true;
   }
 
   /**
@@ -983,7 +1035,8 @@ export class LifeSim implements BreedHost {
     if (this.flora.overgrown > before.overgrown && this.flora.overgrown >= 2) parts.push('the plants have grown tall and could use a trim');
     else if (plantGrowth > before.plantGrowth + 0.05 * Math.max(1, world.tank.plants.length)) parts.push('the plants have filled out');
     if (wp.nitrate >= (world.tank.water === 'marine' ? 25 : 40) && wp.nitrate > before.nitrate + 5) parts.push('the water could use a change');
-    else if (wp.ammonia >= 0.25 || wp.nitrite >= 0.25) parts.push('the water quality has slipped');
+    // (In an empty tank ammonia and nitrite are a fishless cycle at work, not a slip.)
+    else if (world.fish.length > 0 && (wp.ammonia >= 0.25 || wp.nitrite >= 0.25)) parts.push('the water quality has slipped');
     else if (wp.kh < (world.tank.water === 'marine' ? 5.5 : 1) && wp.ph < before.ph - 0.3) parts.push('the pH has drifted down and the water could use a change');
     let hunger = 0;
     for (const f of world.fish) hunger += f.state.hunger;
@@ -1001,7 +1054,8 @@ export class LifeSim implements BreedHost {
         ? ` ${capitalize(countOf(died.length, 'animal'))} passed away peacefully of old age.`
         : ` Sadly, ${died.length} animals passed away${old ? `, ${old} of them of old age` : ''}.`;
     }
-    if (!parts.length && !died.length) text += ' All is calm in the tank.';
+    if (this.cycleDoneAway) text += ` ${FISHLESS_CYCLE_DONE}`;
+    else if (!parts.length && !died.length) text += ' All is calm in the tank.';
     return text;
   }
 

@@ -178,9 +178,10 @@ function context(spec: TankSpec, species: SpeciesIndex, plants: PlantIndex): Ctx
     style: spec.aquascape,
     // An unheated tank follows the room's daily swing; a heated one sits at its set-point.
     temp: eq.heater.on ? [T, T + 0.5] : [ROOM_TEMP_C - 1, ROOM_TEMP_C + 1.6],
-    // The life sim's water drifts: CO₂ injection takes 1.22–1.28 off the pH by midday (measured
-    // across sizes and stockings, 1.3 allowed); without it the pH settles a little above the
-    // starting value as the water degasses.
+    // The life sim's water drifts: CO₂ injection takes 1.23–1.29 off the pH by midday, every day
+    // from the first (measured across the CO₂ styles, sizes, stockings and set-up hours; 1.3
+    // allowed), and the nightly high stays below, or at most ≈0.1 above, the starting value;
+    // without it the pH settles a little above the starting value as the water degasses.
     ph: eq.co2 ? [wp.ph - 1.3, wp.ph + 0.1] : [wp.ph - 0.15, wp.ph + 0.3],
     // The midday low of a CO₂ tank is a measured worst case, so it is held to the sim's own
     // margin (it flags a species once the water is more than 0.2 outside its range) — which keeps

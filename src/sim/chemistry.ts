@@ -2,7 +2,7 @@ import type { DecorItem, TankState, WaterParams, WaterType } from '../core/types
 import { waterLiters } from '../core/tankGeometry';
 import { DECOR_CATALOG } from '../decor/catalog';
 import { clamp, clamp01, relax, smoothstep } from './simMath';
-import { filterTurnover } from './environment';
+import { filterTurnover, lightScheduleLevel } from './environment';
 
 /**
  * Water chemistry on the sim clock.
@@ -195,6 +195,10 @@ export class Chemistry {
   plantTanN = 0;
   private decor: DecorChem = { tanninRate: 0, bufferRate: 0, airstones: 0, area: 0, caves: 0 };
   private decorSig = -1;
+  /** Move the CO₂ onto the tank's daily cycle at the next step (`settleOnCycle`). */
+  private settleDue = false;
+  /** …then re-pin the pH offset so the model reads this saved pH there (null: keep the offset). */
+  private settlePh: number | null = null;
 
   /** Rebuild hidden state from the persisted water parameters. `expectedLoadN` mg N/day. */
   attach(tank: TankState, expectedLoadN: number): void {
@@ -219,8 +223,51 @@ export class Chemistry {
     const k = this.reaeration(tank) * 0.85;
     const respCO2 = expectedLoadN * 60; // ≈ 60 mg CO₂ respired per mg N excreted (RQ 0.8, O:N ≈ 20)
     this.co2 = clamp(0.6 + respCO2 / Math.max(1, k * v), 0.5, 40);
+    this.pinPh(wp, wp.ph);
+    // That is only a first guess: the CO₂ follows a daily cycle (injection by day, degassing by
+    // night, photosynthesis) and the first step, which knows the real respiration and plants,
+    // settles onto it (`settleOnCycle`). A tank that has lived before carries on exactly where it
+    // was: its saved pH was read at this hour of that cycle, so the offset is re-pinned there (a
+    // guess would shift the pH at every reload or tank switch). A brand-new tank keeps the offset
+    // pinned above, so its given pH reads as it always has; an injected one also starts on its
+    // cycle, so its first night is like every later one (not spent degassing far below them).
+    const fresh = !(tank.simTime > tank.createdAt);
+    this.settleDue = !fresh || tank.equipment.co2;
+    this.settlePh = fresh ? null : wp.ph;
+  }
+
+  /** Pin the tank's pH offset so the model reads `ph` at the current CO₂. */
+  private pinPh(wp: WaterParams, ph: number): void {
     this.phOffset = 0;
-    this.phOffset = clamp(wp.ph - this.modelPh(wp), -2.5, 2.5);
+    this.phOffset = clamp(ph - this.modelPh(wp), -2.5, 2.5);
+  }
+
+  /**
+   * Put the dissolved CO₂ where this tank's steady daily cycle has it at the start of this step:
+   * the step's own CO₂ balance integrated over three days of the light and injection schedule,
+   * with this step's respiration and plants (`inp`) held steady.
+   */
+  private settleOnCycle(tank: TankState, dt: number, inp: ChemInputs): void {
+    const v = waterLiters(tank);
+    const kCO2 = this.reaeration(tank) * 0.85;
+    const lights = tank.equipment.lights;
+    const inject = tank.equipment.co2;
+    const days = dt / 86400;
+    // mg CO₂/day around the clock: animals, decay (organic matter mineralizes over ≈0.7 d), plants.
+    const resp = (inp.animalO2 * 1.1) / Math.max(days, 1e-6) + (this.pendingN / 0.7) * 20 + inp.photoCO2 * 0.15;
+    const sd = 1 / 96; // 15-minute steps, as live
+    const start = inp.hour - dt / 7200; // `inp.hour` is the middle of this step
+    let co2 = this.co2;
+    for (let i = 0; i < 3 * 96; i++) {
+      const h = (((start - 72 + (i + 0.5) * 24 * sd) % 24) + 24) % 24;
+      const light = lightScheduleLevel(lights, h) * clamp01(lights.intensity);
+      const window = light > 0 || lightScheduleLevel(lights, (h + 1) % 24) > 0;
+      const photo = Math.min(inp.photoCO2 * light * (co2 / (co2 + 2.5)) * sd, co2 * v * 0.8 + resp * sd);
+      const kInj = inject && window ? 22 : 0;
+      co2 = clamp((co2 + (resp * sd - photo) / v + (kCO2 * 0.6 + kInj * 30) * sd) / (1 + (kCO2 + kInj) * sd), 0.3, 60);
+    }
+    this.co2 = co2;
+    if (this.settlePh !== null) this.pinPh(tank.waterParams, this.settlePh);
   }
 
   /** Decor-derived rates; cheap signature check so it only rebuilds on change. */
@@ -312,6 +359,10 @@ export class Chemistry {
     const T = wp.temperatureC;
     const marine = tank.water === 'marine';
     const decor = this.refreshDecor(tank);
+    if (this.settleDue) {
+      this.settleDue = false;
+      this.settleOnCycle(tank, dt, inp);
+    }
 
     // --- organic matter → ammonia -------------------------------------------------------------
     const mineralized = this.pendingN * relax(days, 0.7);
