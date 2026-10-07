@@ -14,7 +14,7 @@
 import Papa from 'papaparse'
 import type { ActivityLevel, GeoRef, MetricKind, PathogenId, Point, Series, TrendDirection } from '../../shared/types.ts'
 import { METRIC_UNITS } from '../../shared/types.ts'
-import { mmwrWeekEnding, weekEndingSaturday, weeksInMmwrYear } from '../../shared/mmwr.ts'
+import { addDays, mmwrWeekEnding, weekEndingSaturday, weeksInMmwrYear } from '../../shared/mmwr.ts'
 import { num } from './csv.ts'
 import { roundValue as roundFixed, STATE_GEO } from './series.ts'
 import {
@@ -42,8 +42,12 @@ export function normHeader(h: string): string {
     .trim()
 }
 
-/** Pseudo-pathogen for a bare "coronavirus" label, resolved per file (seasonal CoV when SARS-CoV-2 is separate). */
-type PathogenHit = PathogenId | 'cov?'
+/**
+ * Pseudo-pathogens: 'cov?' is a bare "coronavirus" label, resolved per file (seasonal CoV when SARS-CoV-2
+ * is separate); 'untracked' is a named organism MN Pulse has no id for (e.g. B. parapertussis), so the
+ * column is never given a file's default pathogen.
+ */
+type PathogenHit = PathogenId | 'cov?' | 'untracked'
 
 const PATHOGEN_RULES: [RegExp, PathogenHit][] = [
   [/influenza ?like( illness)?|\bili\b/g, 'ili'],
@@ -58,7 +62,9 @@ const PATHOGEN_RULES: [RegExp, PathogenHit][] = [
   [/influenza a\b|\bflu ?a\b|\binf ?a\b|\bh1n1( ?pdm ?(09)?)?\b|\bh3n2\b/g, 'influenza-a'],
   [/influenza b\b|\bflu ?b\b|\binf ?b\b|\bvictoria\b|\byamagata\b/g, 'influenza-b'],
   [/influenza|\bflu\b/g, 'influenza'],
-  [/pertussis|whooping cough/g, 'pertussis'],
+  [/\bpara ?pertussis\b|\bholmesii\b/g, 'untracked'],
+  [/\bpertussis\b|whooping cough/g, 'pertussis'],
+  [/chlamyd(ia|ophila) pneumoniae|\bc pneumoniae\b/g, 'chlamydia-pneumoniae'],
   [/measles|rubeola/g, 'measles'],
   [/mycoplasma/g, 'mycoplasma'],
   [/acute respiratory illness(es)?|\bari\b|all respiratory viruses|respiratory viruses combined|combined respiratory|any respiratory virus/g, 'respiratory-combined'],
@@ -242,6 +248,8 @@ export interface NormalizeSpec {
   minDate?: string
   /** Treat site/plant/facility columns as wastewater sewersheds (wastewater site files only). */
   allowSites?: boolean
+  /** Wastewater file: regions are plant regions (no county population attached; fallback scheme allowed). */
+  wastewater?: boolean
 }
 
 export interface NormalizeOptions {
@@ -289,6 +297,8 @@ export interface NormalizeDiag {
   rowsUsed: number
   skipped: Record<string, number>
   unparsed: string[]
+  /** Schema drift that was handled (e.g. non-Saturday week-ending dates moved to the nearest Saturday). */
+  warnings?: string[]
   series: number
   latest?: string
 }
@@ -322,9 +332,14 @@ export function trendFromLabel(raw: string): TrendDirection | undefined {
 
 // ───────────────────────── CSV → grid ─────────────────────────
 
-/** Decode bytes as UTF-8, falling back to Windows-1252 (common for exported spreadsheets). */
+/**
+ * Decode bytes: UTF-16 when a byte-order mark says so (MDH's syndromic CSVs are UTF-16LE Tableau
+ * exports), else UTF-8, falling back to Windows-1252 (common for exported spreadsheets).
+ */
 export function decodeText(buf: ArrayBuffer): string {
   const bytes = new Uint8Array(buf)
+  if (bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0xfe) return new TextDecoder('utf-16le').decode(bytes.subarray(2))
+  if (bytes.length >= 2 && bytes[0] === 0xfe && bytes[1] === 0xff) return new TextDecoder('utf-16be').decode(bytes.subarray(2))
   try {
     return new TextDecoder('utf-8', { fatal: true }).decode(bytes).replace(/^﻿/, '')
   } catch {
@@ -414,10 +429,12 @@ function detectDates(cols: Col[], rows: string[][]): { strategy: DateStrategy | 
   for (const c of ywCols) used.add(c.idx)
   const seasonCols = cols.filter((c) => /\bseason\b/.test(c.h) && share(c, rows, parseSeason) >= 0.8)
   for (const c of seasonCols) used.add(c.idx)
+  // A week-of-season column (week 1 = MMWR week 40) is not an MMWR week; it is never used for dates.
   const weekCols = cols.filter(
     (c) =>
       /\b(week|wk)\b/.test(c.h) &&
       !/\b(start|end|ending|date)\b/.test(c.h) &&
+      !(/\bseason\b/.test(c.h) && !/\b(mmwr|epi)\b/.test(c.h)) &&
       share(c, rows, weekNumber) >= 0.9 &&
       (/\b(mmwr|epi)\b/.test(c.h) || rows.some((r) => (weekNumber(r[c.idx] ?? '') ?? 0) >= 40)),
   )
@@ -489,7 +506,10 @@ function resolvePathogen(
   fileHasCovid: boolean,
   header?: string,
 ): PathogenResolution {
-  let list = hits.map((p) => (p === 'cov?' ? (fileHasCovid ? 'seasonal-cov' : null) : p)).filter((p): p is PathogenId => !!p)
+  if (hits.includes('untracked')) return { reason: 'names an organism MN Pulse does not track' }
+  let list = hits
+    .map((p) => (p === 'cov?' ? (fileHasCovid ? 'seasonal-cov' : null) : p))
+    .filter((p): p is PathogenId => !!p && p !== 'untracked')
   if (hits.includes('cov?') && !fileHasCovid) return { reason: 'bare "coronavirus" label (cannot tell seasonal CoV from SARS-CoV-2)' }
   const allowCombined = !spec.pathogens || spec.pathogens.includes('respiratory-combined')
   if (list.length > 1) {
@@ -541,6 +561,14 @@ function roleMetric(role: Role, spec: NormalizeSpec): MetricKind | null {
     default:
       return null
   }
+}
+
+/** A "site" label that is really a region or statewide aggregate ("Northeast", "Statewide Weighted"). */
+export function isAggregateSite(name: string): boolean {
+  const n = normHeader(name)
+  if (!n) return false
+  if (regionToken(name)) return true
+  return /\b(statewide|state wide|weighted|all sites|all plants|average of|total)\b/.test(n) && !/\b(wwtp|wwtf|plant|facility)\b/.test(n)
 }
 
 const slug = (s: string) =>
@@ -635,11 +663,12 @@ function normalizeInner(
         (!isNumericCol(c) || /\b(fips|geoid|code)\b/.test(c.h)) &&
         share(c, rows, (s) => countyGeo(s)) >= 0.6,
     ) ?? textCols.find((c) => c.distinct.length >= 5 && share(c, rows, (s) => countyGeo(s) && countyGeo(s) !== STATE_GEO) >= 0.8)
-  const regionCol = textCols.find(
-    (c) =>
-      (/\b(region|regions|district|area|zone|geography|geographic|location|hcc|coalition)\b/.test(c.h) || share(c, rows, regionToken) >= 0.8) &&
-      share(c, rows, regionToken) >= 0.6,
-  )
+  // A column named like a place wins over one that merely contains place-like words (a pathogen
+  // column holding only "Total" would otherwise look like a statewide region column).
+  const regionNamed = (c: Col) => /\b(region|regions|district|area|zone|geography|geographic|location|hcc|coalition)\b/.test(c.h)
+  const regionCol =
+    textCols.find((c) => regionNamed(c) && share(c, rows, regionToken) >= 0.6) ??
+    textCols.find((c) => !/\b(pathogen|virus|viruses|disease|organism|target)\b/.test(c.h) && share(c, rows, regionToken) >= 0.8)
   const latCol = cols.find((c) => /^(lat|latitude|y)$/.test(c.h) && isNumericCol(c))
   const lonCol = cols.find((c) => /^(lon|long|longitude|lng|x)$/.test(c.h) && isNumericCol(c))
   const popCol = cols.find((c) => isNumericCol(c) && headerRole(c.raw) === 'population')
@@ -666,7 +695,7 @@ function normalizeInner(
     if (regionCol) geo.attrCols.add(regionCol.idx)
   } else if (regionCol) {
     const labels = regionCol.distinct
-    const scheme = detectRegionScheme(labels)
+    const scheme = detectRegionScheme(labels, { wastewater: spec.wastewater })
     if (!scheme) {
       if (labels.every((l) => regionToken(l) === 'State')) {
         geo.attrCols.add(regionCol.idx)
@@ -693,7 +722,7 @@ function normalizeInner(
       return t && t !== 'State'
     })
     if (regionHeaders.length >= 3) {
-      headerScheme = detectRegionScheme(regionHeaders.map((c) => c.raw))
+      headerScheme = detectRegionScheme(regionHeaders.map((c) => c.raw), { wastewater: spec.wastewater })
       if (headerScheme) {
         geo.level = 'region'
         geo.scheme = headerScheme
@@ -708,6 +737,13 @@ function normalizeInner(
       geo.level = 'county'
       geo.fromHeaders = true
     }
+  }
+  // A wastewater region's value is a sewershed-population-weighted average of its plants, so the
+  // region's total county population would be misleading; counties are kept to show the area.
+  function placeGeo(g: GeoRef | null): GeoRef | null {
+    if (!g || !spec.wastewater || g.type === 'state' || g.population == null) return g
+    const { population: _drop, ...rest } = g
+    return rest
   }
   diag.geo = {
     level: geo.level,
@@ -739,7 +775,8 @@ function normalizeInner(
       continue
     }
     const pathogenShare = vals.length ? vals.filter((v) => OVERALL.test(normHeader(v)) || detectPathogens(v).length === 1).length / vals.length : 0
-    if (!pathogenCol && pathogenShare >= 0.6 && vals.some((v) => detectPathogens(v).length === 1)) {
+    const pathogenNamed = /\b(pathogen|virus|viruses|disease|organism|target)\b/.test(c.h)
+    if (!pathogenCol && pathogenShare >= 0.6 && (vals.some((v) => detectPathogens(v).length === 1) || pathogenNamed)) {
       pathogenCol = c
       continue
     }
@@ -770,12 +807,20 @@ function normalizeInner(
     usable = keep
   }
 
-  // 4) Dates per row.
+  // 4) Dates per row. A date column is mapped to the MMWR week containing the date (week-start and
+  // sample dates), except that a "week ending" column whose dates are not Saturdays is moved to the
+  // nearest Saturday (Sun–Tue back, Thu–Fri forward), which is the MMWR week sharing most of its days.
+  let endShift: 'none' | 'prev' | 'next' = 'none'
   const rowDate = (r: string[]): string | null => {
     switch (strategy.kind) {
       case 'date': {
         const iso = parseDateCell(r[strategy.col] ?? '')
-        return iso ? weekEndingSaturday(iso) : null
+        if (!iso) return null
+        if (endShift === 'prev') {
+          const dow = new Date(`${iso}T00:00:00Z`).getUTCDay()
+          return dow === 6 ? iso : addDays(iso, -(dow + 1))
+        }
+        return weekEndingSaturday(iso)
       }
       case 'yyyyww': {
         const yw = parseYearWeek(r[strategy.col] ?? '')
@@ -808,6 +853,26 @@ function normalizeInner(
       }
     }
     diag.weekdays = wd
+    const total = Object.values(wd).reduce((a, b) => a + b, 0)
+    const [topDay, topN] = Object.entries(wd).sort((a, b) => b[1] - a[1])[0] ?? ['', 0]
+    const h = cols[strategy.col].h
+    const endLabelled = /\bend(s|ing|ed|date)?\b/.test(h) && !/\b(start|starting|begin|beginning)\b/.test(h)
+    const startLabelled = /\b(start|starting|begin|beginning|of)\b/.test(h)
+    if (total && topDay !== 'Sat' && topN / total >= 0.8) {
+      const label = cols[strategy.col].raw
+      if (endLabelled) {
+        if (topDay === 'Wed') {
+          diag.unparsed.push(`"${label}" says week ending but the dates are Wednesdays; cannot tell which MMWR week they belong to`)
+          return { series: [], diag }
+        }
+        endShift = ['Sun', 'Mon', 'Tue'].includes(topDay) ? 'prev' : 'next'
+        ;(diag.warnings ??= []).push(
+          `"${label}" says week ending but most dates are ${topDay}days; moved to the ${endShift === 'prev' ? 'previous' : 'next'} Saturday (schema drift?)`,
+        )
+      } else if (!startLabelled && topDay !== 'Sun' && spec.combine !== 'mean') {
+        ;(diag.warnings ??= []).push(`"${label}" dates are mostly ${topDay}days (not a week start or end); used the MMWR week containing each date`)
+      }
+    }
   }
 
   // Functional-dependency check: an unrecognized text column is harmless only if it never splits a
@@ -865,7 +930,7 @@ function normalizeInner(
     const label = season != null ? c.raw.replace(/(20\d\d)\s*[-–—/]\s*(\d{2}|20\d\d)/, ' ') : c.raw
     let headerGeo: GeoRef | null | undefined
     if (geo.fromHeaders) {
-      headerGeo = geo.level === 'region' && geo.scheme ? regionGeo(c.raw, geo.scheme) : countyGeo(c.raw)
+      headerGeo = geo.level === 'region' && geo.scheme ? placeGeo(regionGeo(c.raw, geo.scheme)) : countyGeo(c.raw)
       if (!headerGeo) {
         diag.valueColumns.push({ column: c.raw, role: headerRole(c.raw), status: 'header is not a place in a wide-by-place table' })
         continue
@@ -876,9 +941,20 @@ function normalizeInner(
     const proportion = /\b(proportion|prop|fraction)\b/.test(normHeader(label)) && !/%|percent|pct/.test(normHeader(label))
     vcols.push({ col: c, proportion, role: seasonOnly || (season != null && isBare(label)) ? 'bare' : headerRole(label), hits: detectPathogens(label), variant: variantOf(label), headerGeo, season })
   }
+  // "Influenza A & B" next to separate "Influenza A" and "Influenza B" columns is most likely a
+  // co-infection count, not the total, so it is never mapped to combined influenza.
+  const AB = /\b(influenza|flu|inf) a (and |or |\+ )?b\b/
+  if (vcols.some((v) => v.hits.includes('influenza-a')) && vcols.some((v) => v.hits.includes('influenza-b'))) {
+    for (let i = vcols.length - 1; i >= 0; i--) {
+      if (AB.test(normHeader(vcols[i].col.raw))) {
+        diag.valueColumns.push({ column: vcols[i].col.raw, role: vcols[i].role, status: 'ambiguous "A and B" column next to separate A and B columns (co-infection?); not mapped' })
+        vcols.splice(i, 1)
+      }
+    }
+  }
 
   // 6) Rows → raw observations.
-  type Obs = { date: string; value: number; col: number }
+  type Obs = { date: string; value: number | null; col: number }
   const groups = new Map<string, { pathogen: PathogenId; metric: MetricKind; geo: GeoRef; variant?: string; obs: Obs[]; levels: Map<string, string[]> }>()
   const positives = new Map<string, { geo: GeoRef; obs: Obs[] }>()
   const tests = new Map<string, { geo: GeoRef; obs: Obs[] }>()
@@ -890,7 +966,10 @@ function normalizeInner(
     if (prev && prev.status === 'mapped') return
     colStatus.set(v.col.idx, { column: v.col.raw, role: v.role, pathogen, metric, status })
   }
-  const lowerBound = [opts.historyStart, spec.minDate ?? ''].sort().pop()!
+  // minDate guards files with no geography column (implicitly statewide); a file that labels each row's
+  // place (e.g. RESP-NET "7-co"/"statewide") is trusted as labelled.
+  const implicitState = geo.level === 'state' && geo.col == null
+  const lowerBound = [opts.historyStart, implicitState ? (spec.minDate ?? '') : ''].sort().pop()!
 
   for (const r of usable) {
     const d0 = rowDate(r)
@@ -904,6 +983,12 @@ function normalizeInner(
       const id = (r[geo.siteId] ?? '').trim()
       if (!id || OVERALL.test(normHeader(id))) {
         skip('site total/blank row')
+        continue
+      }
+      // MDH's site file also carries region and statewide aggregates ("Northeast", "Statewide Weighted").
+      const nm = (r[geo.siteName ?? geo.siteId] ?? id).trim()
+      if (isAggregateSite(id) || isAggregateSite(nm)) {
+        skip('region/statewide aggregate row in site file')
         continue
       }
       const name = (r[geo.siteName ?? geo.siteId] ?? id).trim() || id
@@ -924,7 +1009,7 @@ function normalizeInner(
     } else if (geo.col != null) {
       const raw = (r[geo.col] ?? '').trim()
       const key = `${geo.level}|${raw}`
-      if (!geoCache.has(key)) geoCache.set(key, geo.level === 'county' ? countyGeo(raw) : regionGeo(raw, geo.scheme!))
+      if (!geoCache.has(key)) geoCache.set(key, geo.level === 'county' ? countyGeo(raw) : placeGeo(regionGeo(raw, geo.scheme!)))
       rowGeo = geoCache.get(key) ?? null
       if (!rowGeo) {
         skip(`unmatched ${geo.level} "${raw.slice(0, 30)}"`)
@@ -953,10 +1038,13 @@ function normalizeInner(
     const rowRole: Role | null = metricCol ? headerRole(r[metricCol.idx] ?? '') : null
     let used = false
     for (const v of vcols) {
-      const cell = r[v.col.idx] ?? ''
-      const raw = num(cell)
-      if (raw == null) continue
-      let value = raw
+      const cell = (r[v.col.idx] ?? '').trim()
+      const parsed = num(cell)
+      // A suppression/pending marker ("<5", "*", "NA") is a reported-but-withheld value: kept as null.
+      // A blank cell is simply not reported and gets no point.
+      if (parsed == null && !(cell !== '' && SUPPRESSED.test(cell))) continue
+      const raw = parsed
+      let value: number | null = raw
       let date = d0
       if (strategy.kind === 'seasonMatrix') {
         const w = weekNumber(r[strategy.weekCol] ?? '')!
@@ -973,6 +1061,7 @@ function normalizeInner(
       let pathogen = res.pathogen ?? (!hits.length && !res.reason ? spec.defaultPathogen : undefined)
       if (role === 'ili') pathogen = 'ili'
       if (role === 'positives' || role === 'tests') {
+        if (value == null) continue
         if (!spec.metrics.includes('test_positivity')) {
           setStatus(v, `${role} count (no positivity expected in this file)`)
           continue
@@ -980,7 +1069,7 @@ function normalizeInner(
         const pk = `${role === 'tests' && !v.hits.length && !rowPathogen.length ? '*' : pathogen ?? '?'}|${g.type}|${g.code}|${v.variant ?? ''}`
         const bucket = role === 'positives' ? positives : tests
         if (!bucket.has(pk)) bucket.set(pk, { geo: g, obs: [] })
-        bucket.get(pk)!.obs.push({ date, value, col: v.col.idx })
+        bucket.get(pk)!.obs.push({ date, value: value as number, col: v.col.idx })
         setStatus(v, `used as ${role} for computing positivity`, pathogen)
         used = true
         continue
@@ -995,7 +1084,7 @@ function normalizeInner(
         continue
       }
       // Only an explicit "proportion"/"fraction" header for a percentage measure is rescaled to percent.
-      if (v.proportion && METRIC_UNITS[metric] === '%') value = raw * 100
+      if (raw != null && v.proportion && METRIC_UNITS[metric] === '%') value = raw * 100
       if (metric === 'ili_pct' && pathogen !== 'ili') {
         setStatus(v, 'ILI percentage with a pathogen-specific label', pathogen, metric)
         continue
@@ -1012,7 +1101,7 @@ function normalizeInner(
       for (const lc of [...levelCols, ...trendCols]) {
         const lab = (r[lc.idx] ?? '').trim()
         if (!lab) continue
-        const lcp = lc.pathogens.filter((p): p is PathogenId => p !== 'cov?')
+        const lcp = lc.pathogens.filter((p): p is PathogenId => p !== 'cov?' && p !== 'untracked')
         const applies = lcp.length ? lcp.includes(pathogen) : vcols.length === 1 || !!pathogenCol
         if (applies) labels.push(lab)
       }
@@ -1034,7 +1123,12 @@ function normalizeInner(
       byDate.get(o.date)!.push(o)
     }
     const pts: Point[] = []
-    for (const [date, os] of [...byDate].sort(([a], [b]) => (a < b ? -1 : 1))) {
+    for (const [date, all] of [...byDate].sort(([a], [b]) => (a < b ? -1 : 1))) {
+      const os = all.filter((o): o is Obs & { value: number } => o.value != null)
+      if (!os.length) {
+        pts.push([date, null]) // reported but suppressed
+        continue
+      }
       const colsInWeek = new Set(os.map((o) => o.col))
       if (colsInWeek.size > 1 && new Set(os.map((o) => o.value)).size > 1) return `${label}: several columns give different values for the same week`
       let v: number
@@ -1048,6 +1142,17 @@ function normalizeInner(
     return pts
   }
 
+  // Percent measures stored as proportions (0.011 for 1.1%) would be 100x too small. Statewide flu, RSV
+  // and COVID positivity and ILI always rise well above 1% in winter, so a series spanning a winter that
+  // never exceeds 1 is refused rather than silently rescaled.
+  const suspectedProportion = (pathogen: PathogenId, metric: MetricKind, g: GeoRef, pts: Point[]): boolean => {
+    if (g.type !== 'state') return false
+    if (!(metric === 'ili_pct' || (metric === 'test_positivity' && ['influenza', 'rsv', 'covid', 'respiratory-combined'].includes(pathogen)))) return false
+    const vals = pts.filter((p): p is [string, number] => p[1] != null)
+    const winter = vals.some(([d]) => ['12', '01', '02'].includes(d.slice(5, 7)))
+    return winter && vals.length >= 8 && vals.every(([, v]) => v <= 1)
+  }
+
   const out: NormalizedSeries[] = []
   for (const g of groups.values()) {
     const label = `${g.pathogen}/${g.metric}/${g.geo.code}${g.variant ? `/${g.variant}` : ''}`
@@ -1056,7 +1161,11 @@ function normalizeInner(
       diag.unparsed.push(pts)
       continue
     }
-    if (!pts.length) continue
+    if (!pts.some((p) => p[1] != null)) continue
+    if (suspectedProportion(g.pathogen, g.metric, g.geo, pts)) {
+      diag.unparsed.push(`${label}: suspected proportion (every value <= 1 across a winter; expected percent); not published`)
+      continue
+    }
     const s: NormalizedSeries = {
       pathogen: g.pathogen,
       metric: g.metric,
@@ -1093,7 +1202,7 @@ function normalizeInner(
     const tMap = new Map(testPts)
     const pts: Point[] = []
     for (const [d, pv] of posPts) {
-      const tv = tMap.get(d)
+      const tv = tMap.get(d) ?? null
       if (pv == null || tv == null || tv <= 0 || pv > tv) continue
       pts.push([d, roundValue((pv / tv) * 100, 'test_positivity')])
     }
@@ -1116,21 +1225,21 @@ function normalizeInner(
       const id = [...sites.keys()].find((k) => `mdh-${slug(k)}` === s.geo.code)
       const site = id != null ? sites.get(id) : undefined
       if (!site) continue
-      let counties = [...site.counties]
+      // geo.counties only from a county column in the MDH file. When there is none, the plant's host
+      // city (exact name match) only places the point on the map; it is not written as counties served.
+      const counties = [...site.counties]
       let coordBasis: string | undefined
-      if (!counties.length) {
-        const f = plantCounty(site.name)
-        if (f) counties = [f]
-        if (f) coordBasis = 'county centroid (plant city)'
-      }
       let coord: [number, number] | undefined
       if (site.lat != null && site.lon != null) {
         coord = [Math.round(site.lon * 1e4) / 1e4, Math.round(site.lat * 1e4) / 1e4]
         coordBasis = 'site coordinates (MDH)'
       } else if (counties.length) {
         coord = countiesCentroid(counties, opts.rootDir)
-        coordBasis ??= 'population-weighted centroid of counties served'
-        if (!coord) coordBasis = undefined
+        coordBasis = coord ? 'population-weighted centroid of the counties MDH lists' : undefined
+      } else {
+        const f = plantCounty(site.name)
+        coord = f ? countiesCentroid([f], opts.rootDir) : undefined
+        if (coord) coordBasis = 'approximate: centroid of the host city county'
       }
       s.geo = {
         ...s.geo,

@@ -28,8 +28,10 @@ export interface PageInfo {
   /** ISO date parsed from "Updated M/D/YYYY" (or "Last updated ..."). */
   updated?: string
   updatedText?: string
-  /** ISO date from an "as of M/D/YYYY" phrase (e.g. pertussis year-to-date counts). */
+  /** ISO date from the first "as of M/D/YYYY" phrase on the page. */
   asOf?: string
+  /** Every "as of <date>" phrase with the text just before it, so callers can pick the relevant one. */
+  asOfPhrases: { date: string; context: string }[]
   links: PageLink[]
   tables: PageTable[]
   /** Short text snippets that look like key statistics (numbers next to surveillance keywords). */
@@ -88,8 +90,12 @@ export function parsePage(html: string, pageUrl: string): PageInfo {
     updated = parseLooseDate(um[1])
   }
 
-  const am = /\bas of:?\s*((?:\d{1,2}\/\d{1,2}\/\d{2,4})|(?:[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}))/i.exec(text)
-  const asOf = am ? parseLooseDate(am[1]) : undefined
+  const asOfPhrases: { date: string; context: string }[] = []
+  for (const m of text.matchAll(/\bas of:?\s*((?:\d{1,2}\/\d{1,2}\/\d{2,4})|(?:[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}))/gi)) {
+    const date = parseLooseDate(m[1])
+    if (date && asOfPhrases.length < 20) asOfPhrases.push({ date, context: text.slice(Math.max(0, (m.index ?? 0) - 60), m.index).trim() })
+  }
+  const asOf = asOfPhrases[0]?.date
 
   const links: PageLink[] = []
   const tables: PageTable[] = []
@@ -184,6 +190,7 @@ export function parsePage(html: string, pageUrl: string): PageInfo {
     updated,
     updatedText,
     asOf,
+    asOfPhrases,
     links,
     tables,
     keyStats,

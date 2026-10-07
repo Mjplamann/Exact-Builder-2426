@@ -7,9 +7,10 @@
 //     Southeast, Southwest, West Central): geo type 'mdh-region'.
 //   * 7 Field Services epidemiology districts (South Central and Southwest merged into one "South"
 //     district, and several counties shifted): geo type 'mdh-district'.
-//   * The wastewater program's plant-based regions. They have no West Central region, and their county
-//     membership is not published, so no counties are attached.
-//   * Twin Cities metro (7 counties) vs Greater Minnesota.
+//   * Twin Cities metro (7 counties) vs Greater Minnesota. RESP-NET labels these "7-co" and "80-co".
+//   * A fallback 'wastewater' scheme (South Central present, no West Central) with no counties attached.
+//     The real MDH wastewater files (CI run 2026-10-07) use the Field Services districts, with the
+//     combined South district labelled "Southwest": every plant's region matched its county's district.
 // The scheme is detected from the set of region labels in each file and never assumed.
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
@@ -50,6 +51,9 @@ export function regionToken(raw: string): RegionToken | null {
     return 'State'
   if (/^(greater (mn|minnesota)|non ?metro|outstate( mn| minnesota)?|outside (the )?metro)( region| area)?$/.test(s))
     return 'Greater Minnesota'
+  // RESP-NET geography labels: "7-co" (7-county Twin Cities metro) and "80-co" (the other 80 counties).
+  if (/^(7|seven) ?co(unty|unties)?( metro| area)?$/.test(s)) return 'Metro'
+  if (/^(80|eighty) ?co(unty|unties)?( area)?$/.test(s)) return 'Greater Minnesota'
   if (/^(the )?(twin cities )?((7|seven) county )?metro(politan)?( area| region| district| twin cities)?$/.test(s)) return 'Metro'
   if (/^twin cities( metro| area)?$/.test(s)) return 'Metro'
   if (/^(twin cities )?metro(politan)? (7|seven) county( area| region| metro)?$/.test(s)) return 'Metro'
@@ -75,14 +79,20 @@ export function regionToken(raw: string): RegionToken | null {
   return table[s] ?? null
 }
 
-/** Detect which regional scheme a set of region labels belongs to (null when unclear). */
-export function detectRegionScheme(labels: Iterable<string>): RegionScheme | null {
+/**
+ * Detect which regional scheme a set of region labels belongs to (null when unclear).
+ * `wastewater`: the file is a wastewater file, so a South-Central-without-West-Central label set is the
+ * plant-based fallback scheme; any other file with a subset of the 8 SCHSAC labels is SCHSAC.
+ */
+export function detectRegionScheme(labels: Iterable<string>, opts: { wastewater?: boolean } = {}): RegionScheme | null {
   const t = new Set<RegionToken>()
   for (const l of labels) {
     const tok = regionToken(l)
     if (tok && tok !== 'State') t.add(tok)
   }
   if (t.size === 0) return null
+  // The 7-county metro is the same in every scheme, so "Metro" (+ statewide) alone is unambiguous.
+  if (t.size === 1 && t.has('Metro')) return 'metro-greater'
   if (t.has('Greater Minnesota')) return [...t].every((x) => x === 'Metro' || x === 'Greater Minnesota') ? 'metro-greater' : null
   const wc = t.has('West Central')
   const sc = t.has('South Central')
@@ -90,7 +100,7 @@ export function detectRegionScheme(labels: Iterable<string>): RegionScheme | nul
   if (t.has('South') && !sc && !sw) return t.size >= 3 ? 'district' : null
   if (wc && sc && sw) return 'schsac'
   if (wc && sw && !sc) return t.size >= 4 ? 'district' : null
-  if (!wc && sc) return t.size >= 3 ? 'wastewater' : null
+  if (!wc && sc) return t.size >= 3 ? (opts.wastewater ? 'wastewater' : 'schsac') : null
   return null
 }
 
@@ -162,8 +172,10 @@ export function countyList(raw: string): string[] {
 
 /**
  * Host cities of Minnesota wastewater treatment plants and the county each lies in (public
- * geography, not surveillance data). Used only when a site file gives neither counties nor
- * coordinates; the resulting point is the county centroid, flagged with attrs.coordBasis.
+ * geography, not surveillance data). Used only to place a plant on the map when no MDH file gives its
+ * county or coordinates: the point is that county's centroid, flagged with attrs.coordBasis, and the
+ * county is NOT written to geo.counties (it is where the plant is, not the area it serves).
+ * Metropolitan Council plants serve many counties, so they are deliberately absent.
  */
 const PLANT_CITY_COUNTY: Record<string, string> = {
   'albert lea': 'Freeborn',
@@ -176,7 +188,6 @@ const PLANT_CITY_COUNTY: Record<string, string> = {
   cloquet: 'Carlton',
   'detroit lakes': 'Becker',
   duluth: 'St. Louis',
-  wlssd: 'St. Louis',
   'elk river': 'Sherburne',
   faribault: 'Rice',
   'fergus falls': 'Otter Tail',
@@ -199,37 +210,30 @@ const PLANT_CITY_COUNTY: Record<string, string> = {
   'red wing': 'Goodhue',
   rochester: 'Olmsted',
   'st cloud': 'Stearns',
-  'saint cloud': 'Stearns',
   spicer: 'Kandiyohi',
   'thief river falls': 'Pennington',
   willmar: 'Kandiyohi',
   winona: 'Winona',
   worthington: 'Nobles',
-  // Metropolitan Council plants
-  'metro plant': 'Ramsey',
-  'metropolitan plant': 'Ramsey',
-  'blue lake': 'Scott',
-  empire: 'Dakota',
-  seneca: 'Dakota',
-  hastings: 'Dakota',
-  'eagles point': 'Washington',
-  'st croix valley': 'Washington',
-  rogers: 'Hennepin',
 }
 
-/** County FIPS for a plant/site name via its host city, when recognizable. */
+/** Plant-name words that are not part of the host city ("Mankato WWTP", "Duluth (WLSSD) WWTP*"). */
+const PLANT_WORDS =
+  /\b(wwtp|wwtf|wrf|wrrf|wpcp|wpcf|wastewater|waste water|treatment|plant|facility|water|reclamation|resource|recovery|pollution|control|sewage|sanitary|district|city|of|public|utilities|commission|mn|minnesota|wlssd|cirssd)\b/g
+
+/** Normalized host-city key of a plant name, or '' when nothing is left. */
+export function plantCityKey(siteName: string): string {
+  return squash(siteName.replace(/\([^)]*\)/g, ' ').replace(/\*/g, ' '))
+    .replace(/\bsaint\b/g, 'st')
+    .replace(PLANT_WORDS, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/** County FIPS of a plant's host city, only when the plant name is exactly that city (plus plant words). */
 export function plantCounty(siteName: string): string | undefined {
-  const s = ` ${squash(siteName).replace(/\bst\b/g, 'st').replace(/\bsaint\b/g, 'st')} `
-  let best: string | undefined
-  let bestLen = 0
-  for (const [city, county] of Object.entries(PLANT_CITY_COUNTY)) {
-    const key = city.replace(/\bsaint\b/g, 'st')
-    if (s.includes(` ${key} `) && key.length > bestLen) {
-      best = county
-      bestLen = key.length
-    }
-  }
-  return best ? countyByName(best)?.fips : undefined
+  const county = PLANT_CITY_COUNTY[plantCityKey(siteName)]
+  return county ? countyByName(county)?.fips : undefined
 }
 
 /** Exposed for tests: every plant city must resolve to a real county. */

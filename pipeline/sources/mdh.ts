@@ -1,32 +1,40 @@
 // Minnesota Department of Health (MDH) — weekly respiratory surveillance pages and watch-list pages.
 //
 // MDH publishes its weekly flu / viral respiratory / wastewater statistics as HTML pages with
-// "Downloadable data (CSV)" links. The CSV file names and columns are not documented anywhere we could
-// read, so this module:
-//   1. crawls the statistics pages (www.health.state.mn.us, falling back to www.health.mn.gov),
+// "Downloadable data (CSV)" links. The CSV layouts are not documented, so this module:
+//   1. crawls the statistics pages (www.health.state.mn.us, falling back to MDH's other host names),
 //      extracting every .csv/.xlsx/.pdf link with its link text and nearest heading, the page's
 //      "Updated M/D/YYYY" date, data tables and key-statistic text;
 //   2. maps each CSV to a dataset by its link text (LINK_SPECS, from MDH's published link titles),
 //      falling back to a page-level generic spec;
 //   3. parses each file with a defensive normalizer (pipeline/lib/mdh-normalize.ts) that emits a series
 //      only when the pathogen, measure, week and place are unambiguous;
-//   4. reads pertussis and measles year-to-date counts from their HTML tables;
+//   4. reads pertussis year-to-date counts (statewide and by county) and measles year-to-date counts
+//      from their HTML tables;
 //   5. returns full diagnostics (header, first rows, row counts, why a column was or was not mapped)
 //      so parsing can be refined after each CI run.
-// Nothing is synthesized: blank/suppressed cells are omitted and every value comes from an MDH file.
-import { mkdir, writeFile } from 'node:fs/promises'
+// The specs below were checked against the real file layouts seen in the first CI run (2026-10-07,
+// public/data/diagnostics/mdh.json). Nothing is synthesized: blank cells are omitted, suppressed cells
+// ("<5", "*") are kept as null, and every value comes from an MDH file.
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import type { MetricKind, PathogenId, Point, Series } from '../../shared/types.ts'
-import { weekEndingSaturday } from '../../shared/mmwr.ts'
+import type { MetricKind, PathogenId, Point, Series, SeriesFile } from '../../shared/types.ts'
+import { addDays, weekEndingSaturday } from '../../shared/mmwr.ts'
 import { HttpError, fetchBuffer } from '../lib/http.ts'
 import { latestDate, makeSeries, STATE_GEO } from '../lib/series.ts'
 import type { SourceContext, SourceModule, SourceResult } from '../types.ts'
 import { compactTable, parsePage, type PageInfo, type PageLink } from '../lib/mdh-crawl.ts'
+import { countiesCentroid, countyList } from '../lib/mdh-geo.ts'
 import { csvToGrid, decodeText, normalizeTable, type NormalizeDiag, type NormalizedSeries, type NormalizeSpec } from '../lib/mdh-normalize.ts'
 import { parseMeaslesPage, parsePertussisPage } from '../lib/mdh-watch.ts'
 
 const SOURCE = 'mdh'
-export const MDH_HOSTS = ['www.health.state.mn.us', 'www.health.mn.gov']
+/** MDH serves the same site under several host names; the first is canonical. */
+export const MDH_HOSTS = ['www.health.state.mn.us', 'www.health.mn.gov', 'www2cdn.web.health.state.mn.us', 'www.web.health.state.mn.us']
+/** Stop starting downloads after this, so results and diagnostics return before the 8-minute module timeout. */
+const RUN_BUDGET_MS = 6.5 * 60_000
+/** A host is skipped for the rest of the run after this many consecutive failures. */
+const HOST_FAILURE_LIMIT = 3
 
 /** Weekly statistics pages crawled for downloadable data. */
 export const DATA_PAGES = [
@@ -59,22 +67,32 @@ export interface LinkSpec extends NormalizeSpec {
   key: string
   /** Matched against the link label/text (then the nearest heading). First match wins. */
   match: RegExp
-  /** Dataset id (stable). Defaults to one derived from the metric. */
+  /** Dataset id (stable). One dataset per surveillance program, so different programs never share ids. */
   dataset?: string
+  /** Per-metric dataset for page-level specs that may see files from more than one program. */
+  datasetByMetric?: Partial<Record<MetricKind, string>>
   /** Surveillance program, used in labels ("MDH RESP-NET"). */
   program: string
   /** Plain-language caveat stored as series.note. */
   note: string
+  /** Shorter note for county series (keeps 87-county files compact). */
+  countyNote?: string
   /** Appended to series ids (e.g. outbreak setting). */
   variant?: string
-  /** Series from specs in the same family merge (current season wins over archive). */
+  /** Series from specs in the same family merge; on overlapping weeks the primary/current file wins. */
   family?: string
+  /** This spec's file wins overlapping weeks within its family. */
+  familyPrimary?: boolean
+  /** Prior-season version of another spec (chosen by page path or a past year range in the link text). */
+  archiveOf?: string
   /** Display name used for 'respiratory-combined' series from this file. */
   combinedName?: string
-  /** Hospitalization/death files: mark the latest week provisional when the page says data are pending. */
+  /** Hospitalization/death files: mark recent weeks provisional when the page says data are pending. */
   pendingSensitive?: boolean
   /** Record the file but do not parse it (reason). */
   skip?: string
+  /** Skip a file whose header shows a layout this spec cannot use (returns the reason). */
+  headerSkip?: (header: string[]) => string | undefined
 }
 
 const FLU: PathogenId[] = ['influenza', 'influenza-a', 'influenza-b']
@@ -86,6 +104,8 @@ const MLS_PANEL: PathogenId[] = [
 const WW: PathogenId[] = ['covid', 'influenza', 'influenza-a', 'influenza-b', 'rsv', 'measles']
 
 const PRELIM = 'MDH data are preliminary and recent weeks are often revised.'
+const RESPNET_COUNTY_NOTE = 'Weekly lab-confirmed hospitalizations per 100,000 county residents (MDH RESP-NET); small counties can jump on one hospitalization.'
+const hasHeader = (header: string[], re: RegExp) => header.some((h) => re.test(h.trim()))
 
 export const LINK_SPECS: LinkSpec[] = [
   // Laboratory (Minnesota Laboratory System, MLS)
@@ -113,27 +133,31 @@ export const LINK_SPECS: LinkSpec[] = [
   {
     key: 'mls-other-molecular',
     match: /other molecular testing|mls other molecular/i,
-    dataset: 'mdh-lab',
+    dataset: 'mdh-lab-mls',
     program: 'MLS other molecular testing',
     // Flu and RSV have dedicated all-lab positivity files; panel-subset values for them would be a
     // different measure under the same series id, so they are not taken from this file.
     pathogens: MLS_PANEL.filter((p) => !['influenza', 'influenza-a', 'influenza-b', 'rsv'].includes(p)),
     metrics: ['test_positivity'],
     note: `Share of molecular (PCR panel) tests positive, from the subset of Minnesota Laboratory System labs that report multiplex panel results. ${PRELIM}`,
+    // Real layout (2026-10-07): per-county counts (MMP_TestTotal, MMP_hMPV, MMP_Rhinovirus, ...). The
+    // "MMP" denominator mixes limited flu/COVID/RSV multiplex assays with full respiratory panels (e.g.
+    // a county-week with 229 MMP tests and no non-flu/COVID/RSV detection), so pooled positivity for
+    // rhinovirus, hMPV etc. would be diluted by an unknown amount. Not computed.
+    headerSkip: (h) =>
+      hasHeader(h, /^mmp_testtotal$/i)
+        ? 'Per-county multiplex-panel counts; the panel test total mixes limited flu/COVID/RSV assays with full panels, so a percent positive for other viruses cannot be computed reliably.'
+        : undefined,
   },
   // Influenza hospital surveillance (all MN hospitals, lab-confirmed)
   {
     key: 'flu-hosp-type',
     match: /hospitali[sz]ed influenza cases by type/i,
-    dataset: 'mdh-hosp',
     program: 'influenza hospital surveillance',
-    pathogens: FLU,
-    defaultPathogen: 'influenza',
-    metrics: ['hosp_admissions'],
-    bareMeans: 'hosp_admissions',
-    family: 'flu-hosp-weekly',
-    pendingSensitive: true,
-    note: `Laboratory-confirmed influenza hospitalizations reported by Minnesota hospitals, by week. ${PRELIM}`,
+    metrics: [],
+    note: '',
+    // Real layout: Season, MMWR Week, Type ("A (not subtyped)", "A H3", "A (H1N1) pdm09", "B (no genotype)", "Unknown"), Frequency.
+    skip: 'Weekly hospitalizations split by influenza type/subtype; weekly totals come from "Hospitalized Influenza Cases by Season".',
   },
   {
     key: 'flu-hosp-season',
@@ -145,6 +169,7 @@ export const LINK_SPECS: LinkSpec[] = [
     metrics: ['hosp_admissions'],
     bareMeans: 'hosp_admissions',
     family: 'flu-hosp-weekly',
+    familyPrimary: true,
     pendingSensitive: true,
     note: `Laboratory-confirmed influenza hospitalizations reported by Minnesota hospitals, by week. ${PRELIM}`,
   },
@@ -156,21 +181,25 @@ export const LINK_SPECS: LinkSpec[] = [
     pathogens: FLU,
     defaultPathogen: 'influenza',
     metrics: ['hosp_admissions', 'hosp_rate'],
+    family: 'flu-hosp-weekly',
     pendingSensitive: true,
     note: `Laboratory-confirmed influenza hospitalizations by MDH region of residence. ${PRELIM}`,
+    // Real layout: Season, Region, Number of hospitalizations, Incidence rate (season totals, no weeks).
+    headerSkip: (h) => (hasHeader(h, /week|date|mmwr/i) ? undefined : 'Season-to-date totals by region (no weekly breakdown).'),
   },
   { key: 'flu-hosp-age', match: /influenza hospitali[sz]ations and incidence by age/i, program: '', metrics: [], note: '', skip: 'Age-stratified (not used).' },
   // Outpatient influenza-like illness (ILINet)
-  { key: 'ili-age', match: /\(ili\) by age|ili by age/i, program: '', metrics: [], note: '', skip: 'Age-stratified (not used).' },
+  { key: 'ili-age', match: /\(ili\) by age|ili by age|influenza[- ]like illness( \(ili\))? by age/i, program: '', metrics: [], note: '', skip: 'Age-stratified (not used).' },
   {
     key: 'ili-region',
-    match: /\(ili\) by region|ili by region/i,
+    match: /(\(ili\)|\bili|influenza[- ]like illness) by region/i,
     dataset: 'mdh-ili',
     program: 'ILINet outpatient surveillance',
     pathogens: ['ili'],
     defaultPathogen: 'ili',
     metrics: ['ili_pct'],
     bareMeans: 'ili_pct',
+    family: 'ili',
     note: `Percent of outpatient visits at sentinel clinics for influenza-like illness (fever with cough or sore throat), by region. Small regions can swing week to week. ${PRELIM}`,
   },
   {
@@ -182,6 +211,8 @@ export const LINK_SPECS: LinkSpec[] = [
     defaultPathogen: 'ili',
     metrics: ['ili_pct'],
     bareMeans: 'ili_pct',
+    family: 'ili',
+    familyPrimary: true,
     note: `Percent of outpatient visits at sentinel clinics for influenza-like illness (fever with cough or sore throat). ILI is a symptom measure, not a lab-confirmed flu count. ${PRELIM}`,
   },
   // Influenza deaths
@@ -201,7 +232,9 @@ export const LINK_SPECS: LinkSpec[] = [
   // RESP-NET hospitalization rates
   {
     key: 'respnet-county-archive',
-    match: /resp-?net (data )?by county.*20\d\d/i,
+    // Never matched by text: chosen for "RESP-NET by County" links on the archive page or with a past year range.
+    match: /(?!)/,
+    archiveOf: 'respnet-county',
     dataset: 'mdh-respnet-county',
     program: 'RESP-NET',
     pathogens: RESP3,
@@ -209,7 +242,8 @@ export const LINK_SPECS: LinkSpec[] = [
     bareMeans: 'hosp_rate',
     family: 'respnet-county',
     combinedName: 'COVID-19, flu and RSV',
-    note: 'Weekly laboratory-confirmed hospitalizations per 100,000 county residents (MDH RESP-NET). Rates in small counties can jump on a single hospitalization.',
+    note: 'Weekly laboratory-confirmed hospitalizations per 100,000 Minnesotans (MDH RESP-NET).',
+    countyNote: RESPNET_COUNTY_NOTE,
   },
   {
     key: 'respnet-county',
@@ -222,24 +256,27 @@ export const LINK_SPECS: LinkSpec[] = [
     family: 'respnet-county',
     combinedName: 'COVID-19, flu and RSV',
     pendingSensitive: true,
-    note: `Weekly laboratory-confirmed hospitalizations per 100,000 county residents (MDH RESP-NET). Rates in small counties can jump on a single hospitalization. ${PRELIM}`,
+    note: `Weekly laboratory-confirmed hospitalizations per 100,000 Minnesotans (MDH RESP-NET). ${PRELIM}`,
+    countyNote: RESPNET_COUNTY_NOTE,
   },
-  { key: 'respnet-age', match: /resp-?net by age/i, program: '', metrics: [], note: '', skip: 'Age-stratified (not used).' },
-  { key: 'respnet-race', match: /resp-?net by race/i, program: '', metrics: [], note: '', skip: 'Race/ethnicity-stratified (not used).' },
+  { key: 'respnet-age', match: /resp-?net (data )?by age/i, program: '', metrics: [], note: '', skip: 'Age-stratified (not used).' },
+  { key: 'respnet-race', match: /resp-?net (data )?by race/i, program: '', metrics: [], note: '', skip: 'Race/ethnicity-stratified (not used).' },
   {
     key: 'respnet-season',
-    match: /respiratory virus[- ]associated hospitali[sz]ations|rates of respiratory virus/i,
-    dataset: 'mdh-hosp',
+    match: /respiratory virus[- ]associated hospitali[sz]ations|rates of respiratory virus|rates of covid-?19, influenza,? and rsv hospitali[sz]ations/i,
+    dataset: 'mdh-respnet',
     program: 'RESP-NET',
     pathogens: RESP3,
     metrics: ['hosp_rate'],
     bareMeans: 'hosp_rate',
     family: 'respnet-state',
+    familyPrimary: true,
     combinedName: 'COVID-19, flu and RSV',
     pendingSensitive: true,
-    // RESP-NET covered only the 7-county metro before the 2023-24 season; earlier weeks are not statewide.
+    // RESP-NET covered only the 7-county metro before the 2023-24 season. The real file labels each row
+    // ("7-co", "80-co", "statewide"); minDate only applies if a file has no geography column.
     minDate: '2023-10-01',
-    note: `Weekly laboratory-confirmed hospitalizations per 100,000 Minnesotans (MDH RESP-NET, statewide since the 2023-24 season). ${PRELIM}`,
+    note: `Weekly laboratory-confirmed hospitalizations per 100,000 people (MDH RESP-NET; statewide since the 2023-24 season, 7-county metro before). The combined rate counts a patient with more than one of these viruses under each. ${PRELIM}`,
   },
   // Outbreaks by setting
   {
@@ -253,9 +290,16 @@ export const LINK_SPECS: LinkSpec[] = [
     bareMeans: 'outbreaks',
     variant: 'k12',
     combinedName: 'Respiratory illness in schools',
-    note: 'Acute respiratory illness outbreaks reported by K-12 schools (10% of students absent with respiratory symptoms on one day). Reported during the school year only.',
+    note: 'Acute respiratory illness outbreaks newly reported by K-12 schools (10% of students absent with respiratory symptoms on one day). MDH lists only weeks with reports; reported during the school year only.',
   },
-  { key: 'ltc-covid-cases', match: /(long[- ]term|congregate) care.*covid|covid.*(long[- ]term|congregate) care/i, program: '', metrics: [], note: '', skip: 'Resident/staff COVID-19 case counts (not mapped).' },
+  {
+    key: 'ltc-covid-cases',
+    match: /(long[- ]term|congregate) care.*covid|covid.*(long[- ]term|congregate) care|long[- ]term\/congregate care data|resident cases associated with/i,
+    program: '',
+    metrics: [],
+    note: '',
+    skip: 'Resident/staff COVID-19 case counts in long-term care (not mapped).',
+  },
   {
     key: 'ltc-outbreaks',
     match: /outbreaks in long[- ]term care|long[- ]term care facilit.*outbreak/i,
@@ -265,43 +309,48 @@ export const LINK_SPECS: LinkSpec[] = [
     metrics: ['outbreaks'],
     bareMeans: 'outbreaks',
     variant: 'ltc',
-    note: 'Influenza and RSV outbreaks reported by long-term care facilities (nursing homes and assisted living).',
+    note: 'Influenza and RSV outbreaks newly reported by long-term care facilities (nursing homes and assisted living). MDH lists only weeks with reports; outbreaks reported as both influenza and RSV are not counted in either series.',
   },
-  // Syndromic surveillance
+  // Syndromic surveillance. Real files (UTF-16): "Week of Visit Admit Datetime", "COVID-19 Diagnosis (%)",
+  // "Cough (%)", "Influenza-like illness (%)", "Shortness of Breath (%)", and by "Epi Field Staff Regions".
   {
     key: 'syndromic-region',
     match: /syndromic surveillance (data )?by region/i,
-    dataset: 'mdh-syndromic',
     program: 'syndromic surveillance',
-    pathogens: RESP3,
-    metrics: ['ed_visit_pct'],
-    note: 'Share of emergency department visits with a diagnosis of this illness, by region (hospital ADT messages).',
+    metrics: [],
+    note: '',
+    skip: 'Percent of hospital ADT visits (emergency and inpatient) with a diagnosis or symptom; not the same denominator as % of ED visits, so not mapped.',
   },
   {
     key: 'syndromic',
     match: /syndromic surveillance/i,
-    dataset: 'mdh-syndromic',
     program: 'syndromic surveillance',
-    pathogens: RESP3,
-    metrics: ['ed_visit_pct'],
-    note: 'Share of emergency department visits with a diagnosis of this illness (hospital ADT messages).',
+    metrics: [],
+    note: '',
+    skip: 'Percent of hospital ADT visits (emergency and inpatient) with a diagnosis or symptom; not the same denominator as % of ED visits, so not mapped.',
   },
-  // Wastewater
-  { key: 'ww-detection', match: /detection map/i, program: '', metrics: [], note: '', skip: 'Per-site detection status (presence/absence), not a concentration.' },
+  // Wastewater. Real regions are MDH's Field Services districts (South district labelled "Southwest").
+  // The detection-map file is not parsed into series, but its plant -> county list places the plants.
+  { key: 'ww-detection', match: /detection map/i, program: '', metrics: [], note: '', skip: 'Per-site detection status (presence/absence), not a concentration; used only for each plant\'s county.' },
   {
     key: 'ww-regional',
-    match: /regional wastewater/i,
+    match: /regional wastewater|wastewater concentrations by region/i,
     dataset: 'mdh-wastewater',
     program: 'wastewater monitoring',
     pathogens: WW,
     metrics: ['wastewater_conc'],
     bareMeans: 'wastewater_conc',
     combine: 'mean',
-    note: 'Viral RNA in wastewater normalized to PMMoV (a marker of human waste); regional values are sewershed-population-weighted averages of site values (MDH). Units are relative, so compare a place with its own history.',
+    wastewater: true,
+    family: 'ww-state',
+    familyPrimary: true,
+    // Checked on the 2026-10-07 file: each region's weekly value matches the population-weighted average
+    // of that week's plant values, i.e. the download is weekly (MDH's charts may smooth it).
+    note: 'Viral RNA in wastewater normalized to PMMoV (a marker of human waste): weekly average of the plants in the region, weighted by population served (MDH). Units are relative, so compare a place with its own history.',
   },
   {
     key: 'ww-site',
-    match: /treatment plant site data|wastewater treatment plant|plant site data/i,
+    match: /treatment plant site data|wastewater treatment plant|plant site data|wastewater concentrations by site/i,
     dataset: 'mdh-wastewater',
     program: 'wastewater monitoring',
     pathogens: WW,
@@ -309,49 +358,78 @@ export const LINK_SPECS: LinkSpec[] = [
     bareMeans: 'wastewater_conc',
     combine: 'mean',
     allowSites: true,
-    note: 'Viral RNA in wastewater at this treatment plant, normalized to PMMoV; several samples in one week are averaged. Units are relative, so compare a plant with its own history.',
+    wastewater: true,
+    note: 'Viral RNA in wastewater at this treatment plant, normalized to PMMoV; MDH averages the samples in each week. Units are relative, so compare a plant with its own history.',
   },
   {
     key: 'ww-hosp',
-    match: /wastewater compared to hospitali[sz]ation/i,
+    match: /wastewater compared to hospitali[sz]ation|wastewater values compared to hospitali[sz]ation/i,
     dataset: 'mdh-wastewater',
     program: 'wastewater monitoring',
     pathogens: ['covid'],
     defaultPathogen: 'covid',
     metrics: ['wastewater_conc'],
     combine: 'mean',
-    note: 'Statewide SARS-CoV-2 in wastewater normalized to PMMoV (MDH).',
+    wastewater: true,
+    family: 'ww-state',
+    note: 'Statewide SARS-CoV-2 in wastewater normalized to PMMoV, weighted by population served (MDH).',
   },
 ]
 
 /** Page-level fallback specs: only columns whose headers name both pathogen and measure are used. */
 const PAGE_DEFAULTS: Record<string, Omit<LinkSpec, 'key' | 'match'>> = {
-  '/diseases/flu/stats/lab.html': { program: 'MLS lab survey', pathogens: FLU, metrics: ['test_positivity'], note: PRELIM },
-  '/diseases/respiratory/stats/lab.html': { program: 'MLS lab survey', pathogens: MLS_PANEL, metrics: ['test_positivity'], note: PRELIM },
-  '/diseases/flu/stats/hosp.html': { program: 'influenza hospital surveillance', pathogens: FLU, metrics: ['hosp_admissions', 'hosp_rate'], note: PRELIM, pendingSensitive: true },
-  '/diseases/respiratory/stats/hosp.html': { program: 'RESP-NET', pathogens: RESP3, metrics: ['hosp_rate'], minDate: '2023-10-01', note: PRELIM, pendingSensitive: true },
-  '/diseases/flu/stats/out.html': { program: 'ILINet outpatient surveillance', pathogens: ['ili'], metrics: ['ili_pct'], note: PRELIM },
-  '/diseases/flu/stats/death.html': { program: 'influenza mortality surveillance', pathogens: FLU, metrics: ['deaths'], note: PRELIM, pendingSensitive: true },
-  '/diseases/respiratory/stats/setting.html': { program: 'outbreak reports', pathogens: ['influenza', 'rsv', 'covid', 'respiratory-combined'], metrics: ['outbreaks'], note: PRELIM },
-  '/diseases/respiratory/stats/tsys.html': { program: 'syndromic surveillance', pathogens: RESP3, metrics: ['ed_visit_pct'], note: PRELIM },
-  '/diseases/wastewater/stats/index.html': { program: 'wastewater monitoring', pathogens: WW, metrics: ['wastewater_conc'], combine: 'mean', note: 'Viral RNA in wastewater normalized to PMMoV (MDH).' },
-  '/diseases/flu/stats/index.html': { program: 'influenza surveillance', pathogens: FLU, metrics: ['test_positivity', 'hosp_admissions', 'hosp_rate', 'ili_pct'], note: PRELIM },
-  '/diseases/respiratory/stats/index.html': { program: 'respiratory surveillance', pathogens: RESP3, metrics: ['test_positivity', 'hosp_rate', 'ed_visit_pct'], note: PRELIM },
+  '/diseases/flu/stats/lab.html': { dataset: 'mdh-lab', program: 'MLS lab survey', pathogens: FLU, metrics: ['test_positivity'], note: PRELIM },
+  '/diseases/respiratory/stats/lab.html': { dataset: 'mdh-lab-mls', program: 'MLS lab survey', pathogens: MLS_PANEL, metrics: ['test_positivity'], note: PRELIM },
+  '/diseases/flu/stats/hosp.html': { dataset: 'mdh-hosp', program: 'influenza hospital surveillance', pathogens: FLU, metrics: ['hosp_admissions', 'hosp_rate'], note: PRELIM, pendingSensitive: true, family: 'flu-hosp-weekly' },
+  '/diseases/respiratory/stats/hosp.html': { dataset: 'mdh-respnet', program: 'RESP-NET', pathogens: RESP3, metrics: ['hosp_rate'], minDate: '2023-10-01', note: PRELIM, pendingSensitive: true, family: 'respnet-state' },
+  '/diseases/flu/stats/out.html': { dataset: 'mdh-ili', program: 'ILINet outpatient surveillance', pathogens: ['ili'], metrics: ['ili_pct'], note: PRELIM, family: 'ili' },
+  '/diseases/flu/stats/death.html': { dataset: 'mdh-deaths', program: 'influenza mortality surveillance', pathogens: FLU, metrics: ['deaths'], note: PRELIM, pendingSensitive: true },
+  '/diseases/respiratory/stats/setting.html': { dataset: 'mdh-outbreaks', program: 'outbreak reports', pathogens: ['influenza', 'rsv', 'covid', 'respiratory-combined'], metrics: ['outbreaks'], note: PRELIM },
+  '/diseases/respiratory/stats/tsys.html': { program: 'syndromic surveillance', metrics: [], note: '', skip: 'Syndromic page file without a recognized title; not mapped (see the syndromic specs).' },
+  '/diseases/wastewater/stats/index.html': { dataset: 'mdh-wastewater', program: 'wastewater monitoring', pathogens: WW, metrics: ['wastewater_conc'], combine: 'mean', wastewater: true, note: 'Viral RNA in wastewater (MDH).' },
+  '/diseases/flu/stats/index.html': {
+    program: 'influenza surveillance', pathogens: FLU, metrics: ['test_positivity', 'hosp_admissions', 'ili_pct'], note: PRELIM,
+    datasetByMetric: { test_positivity: 'mdh-lab', hosp_admissions: 'mdh-hosp', ili_pct: 'mdh-ili' },
+  },
+  '/diseases/respiratory/stats/index.html': {
+    program: 'respiratory surveillance', pathogens: RESP3, metrics: ['test_positivity', 'hosp_rate'], note: PRELIM,
+    datasetByMetric: { test_positivity: 'mdh-lab', hosp_rate: 'mdh-respnet' },
+  },
 }
 
 /** First spec whose pattern matches the link label or text, else its heading. */
 export function matchSpec(link: Pick<PageLink, 'label' | 'text' | 'heading'>): LinkSpec | undefined {
+  const textual = LINK_SPECS.filter((s) => !s.archiveOf)
   return (
-    LINK_SPECS.find((s) => s.match.test(link.label) || s.match.test(link.text)) ??
-    (link.heading ? LINK_SPECS.find((s) => s.match.test(link.heading)) : undefined)
+    textual.find((s) => s.match.test(link.label) || s.match.test(link.text)) ??
+    (link.heading ? textual.find((s) => s.match.test(link.heading)) : undefined)
   )
+}
+
+/** A link names a past season ("RESP-NET by County, 2023-2025") when its year range ends before `year`. */
+export function isPastSeasonLink(text: string, year: number): boolean {
+  const m = /\b(20\d\d)\s*[-–]\s*(20\d\d|\d\d)\b/.exec(text)
+  if (!m) return false
+  const end = m[2].length === 2 ? 2000 + Number(m[2]) : Number(m[2])
+  return end < year
+}
+
+/** The spec for a link on a page: the text match, swapped for its archive version on archive pages/past seasons. */
+export function specForLink(link: Pick<PageLink, 'label' | 'text' | 'heading'>, pagePath: string, year: number): { spec?: LinkSpec; archive: boolean } {
+  const archive = ARCHIVE_PAGES.has(pagePath) || isPastSeasonLink(`${link.label} ${link.text}`, year)
+  const spec = matchSpec(link)
+  if (spec && archive) {
+    const arch = LINK_SPECS.find((s) => s.archiveOf === spec.key)
+    if (arch) return { spec: arch, archive }
+  }
+  return { spec, archive }
 }
 
 const DATASET_BY_METRIC: Record<MetricKind, string> = {
   test_positivity: 'mdh-lab',
   detection_rate: 'mdh-lab',
   hosp_admissions: 'mdh-hosp',
-  hosp_rate: 'mdh-hosp',
+  hosp_rate: 'mdh-respnet',
   ili_pct: 'mdh-ili',
   outbreaks: 'mdh-outbreaks',
   deaths: 'mdh-deaths',
@@ -364,9 +442,23 @@ const DATASET_BY_METRIC: Record<MetricKind, string> = {
   rt: 'mdh-other',
 }
 
+/**
+ * Datasets. MDH influenza hospital surveillance ('mdh-hosp') and RESP-NET ('mdh-respnet',
+ * 'mdh-respnet-county') are different programs and never share a dataset.
+ */
 export const DATASETS = [
-  'mdh-lab', 'mdh-hosp', 'mdh-respnet-county', 'mdh-ili', 'mdh-outbreaks', 'mdh-wastewater', 'mdh-deaths', 'mdh-syndromic', 'mdh-other',
+  'mdh-lab', 'mdh-lab-mls', 'mdh-hosp', 'mdh-respnet', 'mdh-respnet-county', 'mdh-ili', 'mdh-outbreaks', 'mdh-wastewater', 'mdh-deaths',
+  'mdh-syndromic', 'mdh-other',
 ]
+
+/** Dataset and merge family for one normalized series from a spec. */
+export function placement(spec: LinkSpec, n: Pick<NormalizedSeries, 'metric' | 'geo'>): { dataset: string; family?: string } {
+  // RESP-NET by County also carries statewide (and possibly regional) rows: those belong with the
+  // statewide RESP-NET series, never with influenza hospital surveillance.
+  if (spec.dataset === 'mdh-respnet-county' && n.geo.type !== 'county') return { dataset: 'mdh-respnet', family: 'respnet-state' }
+  const dataset = spec.datasetByMetric?.[n.metric] ?? spec.dataset ?? DATASET_BY_METRIC[n.metric]
+  return { dataset, family: spec.family }
+}
 
 const NAMES: Partial<Record<PathogenId, string>> = {
   influenza: 'Flu', 'influenza-a': 'Flu A', 'influenza-b': 'Flu B', rsv: 'RSV', covid: 'COVID-19', hmpv: 'hMPV',
@@ -382,16 +474,21 @@ const METRIC_LABEL: Partial<Record<MetricKind, string>> = {
   ili_pct: '% of outpatient visits for influenza-like illness',
   outbreaks: 'outbreaks reported per week',
   deaths: 'deaths per week',
-  wastewater_conc: 'wastewater concentration (PMMoV-normalized)',
+  wastewater_conc: 'wastewater concentration',
   ed_visit_pct: '% of emergency department visits',
   cases: 'reported cases',
   cases_ytd: 'cases reported so far this year',
 }
 
+/** True when the value columns say the wastewater values are normalized (PMMoV). */
+const isNormalized = (n: Pick<NormalizedSeries, 'columns'>) => n.columns.some((c) => /normali[sz]|pmmov/i.test(c))
+
 function seriesLabel(spec: LinkSpec, n: NormalizedSeries): string {
   const name = n.pathogen === 'respiratory-combined' && spec.combinedName ? spec.combinedName : (NAMES[n.pathogen] ?? n.pathogen)
   const v = n.variant === 'avg' ? ', smoothed' : n.variant === 'unweighted' ? ', unweighted' : ''
-  return `${name} — ${METRIC_LABEL[n.metric] ?? n.metric}${v} (MDH ${spec.program})`
+  let what = METRIC_LABEL[n.metric] ?? n.metric
+  if (n.metric === 'wastewater_conc') what += isNormalized(n) ? ' (PMMoV-normalized)' : ' (units as published)'
+  return `${name} — ${what}${v} (MDH ${spec.program})`
 }
 
 // ───────────────────────── Fetching ─────────────────────────
@@ -421,23 +518,29 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T, i: number) =
 }
 
 class MdhFetcher {
-  /** Consecutive failures per host; a host is skipped for the rest of the run after 3. */
+  /** Consecutive failures per host; a host is skipped for the rest of the run after HOST_FAILURE_LIMIT. */
   private failures = new Map<string, number>()
   readonly attempts: { url: string; result: string }[] = []
+  constructor(private readonly deadline: number) {}
 
   async get(url: string, timeoutMs: number): Promise<{ buf: ArrayBuffer; url: string }> {
     const u = new URL(url)
     const hosts = MDH_HOSTS.includes(u.hostname) ? [u.hostname, ...MDH_HOSTS.filter((h) => h !== u.hostname)] : [u.hostname]
     const errs: string[] = []
     for (const host of hosts) {
-      if ((this.failures.get(host) ?? 0) >= 4) {
+      const left = this.deadline - Date.now()
+      if (left < 5_000) {
+        errs.push('run time budget reached')
+        break
+      }
+      if ((this.failures.get(host) ?? 0) >= HOST_FAILURE_LIMIT) {
         errs.push(`${host}: skipped (unreachable earlier in this run)`)
         continue
       }
       const target = new URL(url)
       target.hostname = host
       try {
-        const buf = await fetchBuffer(target.toString(), { timeoutMs, retries: 1 })
+        const buf = await fetchBuffer(target.toString(), { timeoutMs: Math.min(timeoutMs, left), retries: 1 })
         this.failures.set(host, 0)
         this.attempts.push({ url: target.toString(), result: `ok ${buf.byteLength}B` })
         return { buf, url: target.toString() }
@@ -447,7 +550,9 @@ class MdhFetcher {
         if (!(e instanceof HttpError && e.status === 404)) this.failures.set(host, (this.failures.get(host) ?? 0) + 1)
       }
     }
-    throw new Error(errs.join('; '))
+    // "HTTP 404" from every host reads better as one message.
+    const distinct = [...new Set(errs.map((e) => e.replace(/^[^:]+: /, '')))]
+    throw new Error(distinct.length === 1 && errs.length > 1 ? `${distinct[0]} (all ${errs.length} MDH hosts)` : errs.join('; '))
   }
 }
 
@@ -456,6 +561,7 @@ class MdhFetcher {
 interface Built {
   series: Series
   family?: string
+  /** Higher wins overlapping weeks within a family: archive 0, current 10, family primary +1. */
   priority: number
   file: string
 }
@@ -473,33 +579,78 @@ const basename = (u: string) => {
     return u
   }
 }
+const sameValue = (a: number | null | undefined, b: number | null | undefined) =>
+  a == null || b == null ? a == b : Math.abs(a - b) <= Math.max(1e-9, 1e-3 * Math.max(Math.abs(a), Math.abs(b)))
+
+/** Adds built series by id. Same-family series merge (higher priority wins overlapping weeks, conflicts logged). */
+export class SeriesBook {
+  readonly byId = new Map<string, Built>()
+  readonly collisions: string[] = []
+
+  add(b: Built): void {
+    const id = b.series.id
+    const prev = this.byId.get(id)
+    if (!prev) {
+      this.byId.set(id, b)
+      return
+    }
+    if (prev.family && prev.family === b.family) {
+      // Ties keep the earlier file (callers add files in a fixed order, so the result never depends on timing).
+      const [lo, hi] = b.priority > prev.priority ? [prev, b] : [b, prev]
+      const hiMap = new Map<string, number | null>(hi.series.points)
+      let differ = 0
+      let example = ''
+      for (const [d, v] of lo.series.points) {
+        if (!hiMap.has(d) || sameValue(hiMap.get(d), v)) continue
+        differ++
+        if (!example) example = `${d}: ${hiMap.get(d)} vs ${v}`
+      }
+      if (differ) this.collisions.push(`${id}: ${differ} overlapping week(s) differ; kept ${hi.file} over ${lo.file} (e.g. ${example})`)
+      const m = new Map<string, number | null>(lo.series.points)
+      for (const [d, v] of hi.series.points) m.set(d, v)
+      const merged: Series = { ...hi.series, points: [...m].sort(([a], [c]) => (a < c ? -1 : 1)) as Point[] }
+      const last = merged.points[merged.points.length - 1]?.[0]
+      if (!merged.official && lo.series.official?.asOf === last) merged.official = lo.series.official
+      if (lo.file !== hi.file) merged.attrs = { ...(merged.attrs ?? {}), mdhFile: `${hi.file} + ${lo.file}` }
+      if (!hi.series.provisionalFrom && lo.series.provisionalFrom) merged.provisionalFrom = lo.series.provisionalFrom
+      this.byId.set(id, { ...hi, series: merged })
+      return
+    }
+    const la = lastDateOf(prev.series)
+    const lb = lastDateOf(b.series)
+    const keepNew = lb > la || (lb === la && b.series.points.length > prev.series.points.length)
+    this.collisions.push(`${id}: kept ${keepNew ? b.file : prev.file}, dropped ${keepNew ? prev.file : b.file}`)
+    if (keepNew) this.byId.set(id, b)
+  }
+}
 
 export function buildSeries(
   n: NormalizedSeries,
   spec: LinkSpec,
   ctx: { file: string; updated?: string; pending: boolean },
 ): Series {
-  const metric = n.metric
-  const dataset =
-    spec.dataset && !(spec.dataset === 'mdh-respnet-county' && n.geo.type !== 'county')
-      ? spec.dataset
-      : n.geo.type === 'county' && metric === 'hosp_rate'
-        ? 'mdh-respnet-county'
-        : DATASET_BY_METRIC[metric]
+  const { dataset } = placement(spec, n)
   const variant = [spec.variant, n.variant].filter(Boolean).join('-') || undefined
-  const notes = [spec.note]
+  const notes = [n.geo.type === 'county' && spec.countyNote ? spec.countyNote : spec.note]
+  if (n.metric === 'wastewater_conc' && !isNormalized(n)) {
+    notes[0] = `Viral RNA in wastewater (MDH; column "${n.columns[0] ?? '?'}", normalization not stated). Compare a place with its own history.`
+  }
   if (n.computed) notes.push(`Percent positive computed as ${n.computed}.`)
+  // MDH marks the latest one to two weeks "data pending".
+  const last = n.points[n.points.length - 1]?.[0]
+  const first = n.points[0]?.[0]
+  const provisionalFrom = ctx.pending && spec.pendingSensitive && last ? [addDays(last, -7), first].sort().pop() : undefined
   const s = makeSeries({
     source: SOURCE,
     dataset,
     pathogen: n.pathogen,
-    metric,
+    metric: n.metric,
     geo: n.geo,
     label: seriesLabel(spec, n),
     points: n.points,
     note: notes.filter(Boolean).join(' '),
     variant,
-    provisionalFrom: ctx.pending && spec.pendingSensitive && n.points.length ? n.points[n.points.length - 1][0] : undefined,
+    provisionalFrom,
   })
   const attrs: Record<string, string> = { ...(n.attrs ?? {}), mdhFile: ctx.file }
   if (ctx.updated) attrs.mdhUpdated = ctx.updated
@@ -523,31 +674,82 @@ interface FileDiag {
   header?: string[]
   sample?: string[][]
   rows?: number
-  parse?: Omit<NormalizeDiag, 'valueColumns'> & { valueColumns: NormalizeDiag['valueColumns'] }
+  parse?: NormalizeDiag
   seriesIds?: string[]
 }
 
-function ytdSeries(
-  pathogen: PathogenId,
-  year: number,
-  total: number,
-  asOf: string,
-  attrs: Record<string, string>,
-  what: string,
-): Series {
+/**
+ * Statewide year-to-date count ('cases_ytd'): one point dated to MDH's as-of (report) date, as the
+ * contract defines for this metric. The analysis gives it no level or trend.
+ */
+export function ytdSeries(pathogen: PathogenId, year: number, total: number, asOf: string, attrs: Record<string, string>, what: string): Series {
   const s = makeSeries({
     source: SOURCE,
     dataset: 'mdh-other',
     pathogen,
-    metric: 'cases',
+    metric: 'cases_ytd',
     geo: STATE_GEO,
     label: `${NAMES[pathogen] ?? pathogen} — cases reported in ${year} so far (MDH)`,
-    points: [[weekEndingSaturday(asOf), total]],
-    note: `Year-to-date ${what} reported to MDH in ${year}, as of ${asOf}. This is a cumulative count, not weekly cases.`,
-    variant: 'ytd',
+    points: [[asOf, total]],
+    note: `${what[0].toUpperCase()}${what.slice(1)} reported to MDH in ${year}, as of ${asOf}. Cumulative for the year, not weekly cases.`,
   })
-  s.attrs = { ...attrs, asOf, year: String(year), cumulative: 'year-to-date' }
+  s.attrs = { ...attrs, asOf, year: String(year) }
   return s
+}
+
+/** Pertussis year-to-date cases per county (one point each at MDH's as-of date; map layer). */
+export function pertussisCountySeries(
+  counties: { fips: string; name: string; cases: number }[],
+  year: number,
+  asOf: string,
+  total: number | undefined,
+  file: string,
+): Series[] {
+  return counties.map((c) => {
+    const s = makeSeries({
+      source: SOURCE,
+      dataset: 'mdh-other',
+      pathogen: 'pertussis',
+      metric: 'cases_ytd',
+      geo: { type: 'county', code: c.fips, name: `${c.name} County` },
+      label: `Whooping cough — cases reported in ${year} so far (MDH)`,
+      points: [[asOf, c.cases]],
+      note: `Confirmed and probable pertussis cases reported to MDH in ${year} by county of residence, as of ${asOf}. Cumulative for the year, not weekly.`,
+    })
+    s.attrs = { asOf, year: String(year), mdhFile: file }
+    if (total != null) s.summary = `${c.name} County: ${c.cases} of ${total} Minnesota cases so far in ${year} (as of ${asOf}).`
+    return s
+  })
+}
+
+/** Plant name key shared by the detection-map and site files ("Duluth (WLSSD) WWTP*" -> "duluth wlssd wwtp"). */
+const plantKey = (s: string) => s.toLowerCase().replace(/[*]/g, '').replace(/[^a-z0-9]+/g, ' ').trim()
+
+/** Plant -> MDH-listed county (and population) from the wastewater detection-map file. */
+export function plantLookup(header: string[], rows: string[][]): Map<string, { counties: string[]; population?: number }> {
+  const h = header.map((x) => x.toLowerCase())
+  const plant = h.findIndex((x) => /treatment plant|\bplant\b|\bsite\b|\bwwtp\b/.test(x))
+  const county = h.findIndex((x) => /\bcount(y|ies)\b/.test(x))
+  const pop = h.findIndex((x) => /population/.test(x))
+  const out = new Map<string, { counties: string[]; population?: number }>()
+  if (plant < 0 || county < 0) return out
+  for (const r of rows) {
+    const name = (r[plant] ?? '').trim()
+    const fips = countyList(r[county] ?? '')
+    if (!name || !fips.length) continue
+    const p = pop >= 0 ? Number((r[pop] ?? '').replace(/,/g, '')) : NaN
+    out.set(plantKey(name), { counties: fips, population: Number.isFinite(p) && p > 0 ? p : undefined })
+  }
+  return out
+}
+
+/** "Percent of molecular laboratory tests positive: 1.10%" from the flu pages' key statistics. */
+export function fluPositivityKeyStat(stats: string[]): number | undefined {
+  for (const k of stats) {
+    const m = /percent of (?:molecular )?(?:laboratory |lab )?tests? (?:that were |were )?positive:?\s*([\d.]+)\s*%/i.exec(k)
+    if (m) return Number(m[1])
+  }
+  return undefined
 }
 
 async function writeDiagnostics(ctx: SourceContext, diagnostics: Record<string, unknown>, log: SourceContext['log']) {
@@ -571,6 +773,16 @@ async function writeDiagnostics(ctx: SourceContext, diagnostics: Record<string, 
   }
 }
 
+/** Previous published series of a dataset (for carrying forward series whose file failed this run). */
+async function previousSeries(rootDir: string, dataset: string): Promise<Series[]> {
+  try {
+    const f = JSON.parse(await readFile(path.join(rootDir, 'public', 'data', 'series', `${SOURCE}__${dataset}.json`), 'utf8')) as SeriesFile
+    return Array.isArray(f.series) ? f.series : []
+  } catch {
+    return []
+  }
+}
+
 // ───────────────────────── Module ─────────────────────────
 
 export const mdh: SourceModule = {
@@ -580,8 +792,8 @@ export const mdh: SourceModule = {
     publisher: 'Minnesota Department of Health (MDH)',
     url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html',
     description:
-      "MDH's weekly respiratory surveillance, read from the CSV files on its statistics pages: share of lab tests positive for flu, RSV and other respiratory viruses (Minnesota Laboratory System), flu hospitalizations, RESP-NET hospitalization rates statewide and by county, outpatient visits for influenza-like illness, K-12 school and long-term care outbreaks, and wastewater levels by region and treatment plant. Also year-to-date pertussis (whooping cough) and measles counts. These are reported and lab-confirmed cases only, so they undercount people who never see a doctor or get tested. Recent weeks are preliminary and are often revised upward.",
-    geography: 'Minnesota statewide; MDH regions; counties (RESP-NET); wastewater treatment plants',
+      "MDH's weekly respiratory surveillance, read from the CSV files on its statistics pages: share of lab tests positive for flu and RSV (Minnesota Laboratory System), weekly flu hospitalizations and deaths, RESP-NET hospitalization rates statewide, for the Twin Cities metro and Greater Minnesota, and by county (with MDH's own low/moderate/high risk level), outpatient visits for influenza-like illness, K-12 school and long-term care outbreaks, and wastewater levels by region and treatment plant. Also pertussis (whooping cough) and measles cases reported so far this year (pertussis also by county). These are reported and lab-confirmed cases only, so they undercount people who never see a doctor or get tested. Recent weeks are preliminary and are often revised upward.",
+    geography: 'Minnesota statewide; Twin Cities metro and Greater Minnesota; MDH districts; counties (RESP-NET, pertussis); wastewater treatment plants',
     cadence: 'Weekly (Thursdays 11 a.m. CT, data through the previous Saturday); pertussis and measles as updated',
     attribution: 'Minnesota Department of Health',
   },
@@ -589,24 +801,28 @@ export const mdh: SourceModule = {
   async run(ctx): Promise<SourceResult> {
     const log = ctx.log
     const t0 = Date.now()
-    const fetcher = new MdhFetcher()
+    const fetcher = new MdhFetcher(t0 + RUN_BUDGET_MS)
     const errors: string[] = []
-    const maxDate = weekEndingSaturday(ctx.now.slice(0, 10))
+    const year = Number(ctx.now.slice(0, 4))
+    // Last completed MMWR week: a sample from the current, unfinished week is never a weekly value.
+    const maxDate = addDays(weekEndingSaturday(ctx.now.slice(0, 10)), -7)
     const normOpts = { historyStart: ctx.historyStart, maxDate, rootDir: ctx.rootDir }
+    const fetchedOk = new Set<string>()
 
     // 1) Pages.
     const pertussis = pertussisPages(ctx.now)
     const pageList = [
       ...DATA_PAGES.map((p) => ({ path: p, kind: 'data' as const, year: 0 })),
       ...pertussis.map((p) => ({ path: p.path, kind: 'pertussis' as const, year: p.year })),
-      { path: MEASLES_PAGE, kind: 'measles' as const, year: Number(ctx.now.slice(0, 4)) },
+      { path: MEASLES_PAGE, kind: 'measles' as const, year },
     ]
     const pages = await mapLimit(pageList, 4, async (pg) => {
       const url = `https://${MDH_HOSTS[0]}${pg.path}`
       try {
-        const { buf, url: got } = await fetcher.get(url, 45_000)
+        const { buf, url: got } = await fetcher.get(url, 30_000)
         const html = decodeText(buf)
         const info = parsePage(html, got)
+        fetchedOk.add(basename(got))
         return { ...pg, url: got, info, bytes: buf.byteLength, error: undefined as string | undefined }
       } catch (e) {
         return { ...pg, url, info: undefined as PageInfo | undefined, bytes: 0, error: errMsg(e) }
@@ -617,11 +833,11 @@ export const mdh: SourceModule = {
     log.info(`pages: ${pagesOk.length}/${pages.length} fetched`)
 
     // 2) Links (dedupe by URL; prefer an occurrence whose text matches a spec, then non-index pages).
-    type Occ = { link: PageLink; page: (typeof pages)[number]; spec?: LinkSpec; order: number }
+    type Occ = { link: PageLink; page: (typeof pages)[number]; spec?: LinkSpec; archive: boolean; order: number }
     const occs: Occ[] = []
     pages.forEach((p, order) => {
       if (p.kind !== 'data' || !p.info) return
-      for (const link of p.info.links) occs.push({ link, page: p, spec: matchSpec(link), order })
+      for (const link of p.info.links) occs.push({ link, page: p, ...specForLink(link, p.path, year), order })
     })
     const byUrl = new Map<string, Occ>()
     const rank = (o: Occ) => (o.spec ? 0 : 2) + (/\/index\.html$/.test(o.page.path) ? 1 : 0)
@@ -632,37 +848,13 @@ export const mdh: SourceModule = {
     }
     const links = [...byUrl.values()]
 
-    // 3) Files.
-    const built = new Map<string, Built>()
-    const collisions: string[] = []
-    const add = (b: Built) => {
-      const id = b.series.id
-      const prev = built.get(id)
-      if (!prev) {
-        built.set(id, b)
-        return
-      }
-      if (prev.family && prev.family === b.family) {
-        const [lo, hi] = prev.priority <= b.priority ? [prev, b] : [b, prev]
-        const m = new Map<string, number | null>(lo.series.points)
-        for (const [d, v] of hi.series.points) m.set(d, v)
-        hi.series.points = [...m].sort(([a], [c]) => (a < c ? -1 : 1)) as Point[]
-        built.set(id, hi)
-        return
-      }
-      const la = lastDateOf(prev.series)
-      const lb = lastDateOf(b.series)
-      const keepNew = lb > la || (lb === la && b.series.points.length > prev.series.points.length)
-      collisions.push(`${id}: kept ${keepNew ? b.file : prev.file}, dropped ${keepNew ? prev.file : b.file}`)
-      if (keepNew) built.set(id, b)
-    }
-    const specsWithSeries = new Set<string>()
-
-    const fileDiags = await mapLimit(links, 4, async (o): Promise<FileDiag> => {
-      const isArchive = ARCHIVE_PAGES.has(o.page.path)
+    // 3) Files. Downloads run in parallel; series are added afterwards in link order, so merges and
+    //    collisions never depend on which download finished first.
+    type FileResult = { fd: FileDiag; built: Built[]; spec?: LinkSpec; plants?: ReturnType<typeof plantLookup> }
+    const results = await mapLimit(links, 4, async (o): Promise<FileResult> => {
       const fallback = PAGE_DEFAULTS[o.page.path]
       const spec: LinkSpec | undefined =
-        o.spec ?? (fallback && !isArchive ? { key: `generic:${o.page.path}`, match: /$^/, ...fallback } : undefined)
+        o.spec ?? (fallback && !o.archive ? { key: `generic:${o.page.path}`, match: /(?!)/, ...fallback } : undefined)
       const fd: FileDiag = {
         url: o.link.url,
         page: o.page.path,
@@ -674,14 +866,16 @@ export const mdh: SourceModule = {
       }
       if (o.link.ext !== 'csv') {
         fd.reason = `${o.link.ext.toUpperCase()} recorded only`
-        return fd
+        return { fd, built: [] }
       }
       if (!spec) {
-        fd.reason = isArchive ? 'archive file with no matching spec' : 'no spec for this page'
-        return fd
+        fd.reason = o.archive ? 'archive file with no matching spec' : 'no spec for this page'
+        return { fd, built: [] }
       }
       try {
         const { buf, url } = await fetcher.get(o.link.url, 90_000)
+        const file = basename(url)
+        fetchedOk.add(file)
         fd.fetchedFrom = url !== o.link.url ? url : undefined
         fd.bytes = buf.byteLength
         const grid = csvToGrid(decodeText(buf))
@@ -689,33 +883,41 @@ export const mdh: SourceModule = {
         fd.header = grid.header.slice(0, 60).map((h) => cut(h, 60))
         fd.sample = grid.rows.slice(0, 3).map((r) => r.slice(0, 60).map((c) => cut(c, 40)))
         fd.rows = grid.rows.length
-        if (spec.skip) {
+        const skipWhy = spec.skip ?? spec.headerSkip?.(grid.header)
+        if (skipWhy) {
           fd.status = 'skipped'
-          fd.reason = spec.skip
-          return fd
+          fd.reason = skipWhy
+          return { fd, built: [], spec, plants: spec.key === 'ww-detection' ? plantLookup(grid.header, grid.rows) : undefined }
         }
         const { series, diag } = normalizeTable(grid.header, grid.rows, spec, { ...normOpts, officialBy: `MDH ${spec.program}` })
         fd.parse = diag
-        const file = basename(url)
+        const built: Built[] = []
         const ids: string[] = []
         for (const n of series) {
           const s = buildSeries(n, spec, { file, updated: o.page.info?.updated, pending: !!o.page.info?.pendingNotice })
-          add({ series: s, family: spec.family, priority: isArchive ? 0 : 1, file })
+          built.push({ series: s, family: placement(spec, n).family, priority: (o.archive ? 0 : 10) + (spec.familyPrimary ? 1 : 0), file })
           ids.push(s.id)
         }
-        if (ids.length) specsWithSeries.add(spec.key)
         fd.seriesIds = ids.slice(0, 12)
         fd.status = ids.length ? 'parsed' : 'unparsed'
         if (!ids.length) fd.reason = diag.unparsed.join('; ').slice(0, 400) || 'no series'
         if (diag.unparsed.length) log.warn(`${file} (${spec.key}): ${diag.unparsed.join('; ').slice(0, 300)}`)
-        return fd
+        if (diag.warnings?.length) log.warn(`${file} (${spec.key}): ${diag.warnings.join('; ').slice(0, 300)}`)
+        return { fd, built, spec }
       } catch (e) {
         fd.status = 'error'
         fd.reason = errMsg(e)
         errors.push(`${basename(o.link.url)}: ${fd.reason}`)
-        return fd
+        return { fd, built: [], spec }
       }
     })
+    const fileDiags = results.map((r) => r.fd)
+    const book = new SeriesBook()
+    const specsWithSeries = new Set<string>()
+    for (const r of results) {
+      for (const b of r.built) book.add(b)
+      if (r.built.length && r.spec) specsWithSeries.add(r.spec.key)
+    }
 
     // 4) HTML data tables as a fallback for specs whose CSV did not parse.
     const tableDiags: Record<string, unknown>[] = []
@@ -728,10 +930,10 @@ export const mdh: SourceModule = {
         const { series, diag } = normalizeTable(t.headers, t.rows, spec, { ...normOpts, officialBy: `MDH ${spec.program}` })
         const file = `${p.path.split('/').pop()}#table`
         for (const n of series) {
-          add({
+          book.add({
             series: buildSeries(n, spec, { file, updated: p.info!.updated, pending: p.info!.pendingNotice }),
-            family: spec.family,
-            priority: ARCHIVE_PAGES.has(p.path) ? 0 : 1,
+            family: placement(spec, n).family,
+            priority: (ARCHIVE_PAGES.has(p.path) ? 0 : 10) + (spec.familyPrimary ? 1 : 0),
             file,
           })
         }
@@ -740,7 +942,57 @@ export const mdh: SourceModule = {
       }
     }
 
-    // 5) Watch-list pages: pertussis and measles year-to-date counts.
+    // 5) Wastewater plants: county (and population) as MDH lists them in the detection-map file.
+    const plants = results.find((r) => r.plants?.size)?.plants
+    let plantsPlaced = 0
+    if (plants) {
+      for (const b of book.byId.values()) {
+        const g = b.series.geo
+        if (g.type !== 'sewershed' || g.counties?.length) continue
+        const info = plants.get(plantKey(g.name))
+        if (!info) continue
+        const exact = b.series.attrs?.coordBasis === 'site coordinates (MDH)'
+        const coord = exact && g.coord ? g.coord : countiesCentroid(info.counties, ctx.rootDir)
+        b.series.geo = { ...g, counties: info.counties, population: g.population ?? info.population, coord }
+        const attrs: Record<string, string> = { ...(b.series.attrs ?? {}), countySource: 'plant county listed in the MDH detection-map file' }
+        if (!exact) {
+          if (coord) attrs.coordBasis = 'centroid of the plant county listed by MDH'
+          else delete attrs.coordBasis
+        }
+        b.series.attrs = attrs
+        plantsPlaced++
+      }
+    }
+
+    // 6) Proportion cross-check: MDH's flu page states the latest percent positive; a series ~100x
+    //    smaller is a proportion stored under a percent header and is not published.
+    const fluPages = pagesOk.filter((p) => p.path.includes('/flu/stats/'))
+    const fluKeyStat = fluPositivityKeyStat(fluPages.flatMap((p) => p.info!.keyStats))
+    const fluUpdated = fluPages.map((p) => p.info!.updated).filter((d): d is string => !!d).sort().pop()
+    const crossChecks: Record<string, unknown>[] = []
+    const fluId = 'mdh:mdh-lab:influenza:test_positivity:state:27'
+    const flu = book.byId.get(fluId)
+    if (flu && fluKeyStat != null) {
+      const last = [...flu.series.points].reverse().find((p) => p[1] != null)
+      const v = last?.[1] ?? null
+      // The key statistic describes the latest reported week, so compare only when the series reaches it.
+      const comparable = !!last && (!fluUpdated || last[0] >= addDays(fluUpdated, -14))
+      const asProportion = comparable && v != null && v <= 1 && fluKeyStat >= 0.5 && Math.abs(v * 100 - fluKeyStat) <= 0.05 * fluKeyStat
+      crossChecks.push({
+        series: fluId,
+        latest: last ?? null,
+        pageKeyStat: `${fluKeyStat}%`,
+        pageUpdated: fluUpdated,
+        agrees: comparable ? v != null && Math.abs(v - fluKeyStat) <= Math.max(0.05, 0.02 * fluKeyStat) : 'not comparable (series ends before the page week)',
+        asProportion,
+      })
+      if (asProportion) {
+        book.byId.delete(fluId)
+        errors.push(`${flu.file}: influenza positivity looks like a proportion (latest ${v} vs page ${fluKeyStat}%); not published`)
+      }
+    }
+
+    // 7) Watch-list pages: year-to-date counts (pertussis statewide + by county, measles statewide).
     const other: Series[] = []
     const watch: Record<string, unknown> = {}
     const pertPage = pages.find((p) => p.kind === 'pertussis' && p.info && p.year === pertussis[0].year) ??
@@ -748,16 +1000,13 @@ export const mdh: SourceModule = {
     if (pertPage?.info) {
       try {
         const pp = parsePertussisPage(pertPage.info, pertPage.year)
-        watch.pertussis = { page: pertPage.path, updated: pertPage.info.updated, ...pp, counties: pp.counties.slice(0, 15) }
+        const file = pertPage.path.split('/').pop()!
+        watch.pertussis = { page: pertPage.path, updated: pertPage.info.updated, ...pp, counties: pp.counties.slice(0, 15), countyRows: pp.counties.length }
+        if (pp.asOf && pp.counties.length) other.push(...pertussisCountySeries(pp.counties, pp.year, pp.asOf, pp.total, file))
         if (pp.total != null && pp.asOf) {
-          const top = pp.counties.slice(0, 8).map((c) => `${c.name} ${c.cases}`).join(', ')
+          const top = pp.counties.slice(0, 5).map((c) => `${c.name} ${c.cases}`).join(', ')
           other.push(
-            ytdSeries('pertussis', pp.year, pp.total, pp.asOf, {
-              ...(top ? { topCounties: top } : {}),
-              countiesWithCases: String(pp.counties.filter((c) => c.cases > 0).length),
-              totalBasis: pp.totalBasis ?? '',
-              mdhFile: pertPage.path.split('/').pop()!,
-            }, 'confirmed and probable pertussis cases'),
+            ytdSeries('pertussis', pp.year, pp.total, pp.asOf, { totalBasis: pp.totalBasis ?? '', ...(top ? { topCounties: top } : {}), mdhFile: file }, 'confirmed and probable pertussis cases'),
           )
         } else errors.push(`pertussis: ${pp.problem ?? 'no total or as-of date'}`)
       } catch (e) {
@@ -770,26 +1019,49 @@ export const mdh: SourceModule = {
         const mp = parseMeaslesPage(measPage.info, measPage.year)
         watch.measles = { page: measPage.path, updated: measPage.info.updated, ...mp, tables: measPage.info.tables.slice(0, 4).map((t) => compactTable(t)) }
         if (mp.cases != null && mp.asOf) {
-          other.push(ytdSeries('measles', mp.year, mp.cases, mp.asOf, { basis: cut(mp.basis ?? '', 120), mdhFile: 'stats.html' }, 'confirmed measles cases'))
+          other.push(ytdSeries('measles', mp.year, mp.cases, mp.asOf, { basis: cut(mp.basis ?? '', 160), mdhFile: 'stats.html' }, 'confirmed measles cases'))
         } else errors.push(`measles: ${mp.problem ?? 'no as-of date'}`)
       } catch (e) {
         errors.push(`measles: ${errMsg(e)}`)
       }
     } else watch.measles = { error: measPage?.error }
-    for (const s of other) add({ series: s, priority: 1, file: s.attrs?.mdhFile ?? '' })
+    for (const s of other) book.add({ series: s, priority: 10, file: s.attrs?.mdhFile ?? '' })
 
-    // 6) Datasets.
-    const all = [...built.values()].map((b) => b.series)
+    // 8) Datasets, carrying forward previously published series whose file could not be fetched this
+    //    run (the orchestrator rewrites a dataset file from scratch, so they would otherwise vanish).
+    //    Only for real fetch failures: the file's download or page failed, or a data page failed and the
+    //    file was not linked from any page that loaded. A file MDH simply stopped linking is not carried.
+    const erroredFiles = new Set(fileDiags.filter((f) => f.status === 'error').map((f) => basename(f.url)))
+    const linkedFiles = new Set(fileDiags.map((f) => basename(f.url)))
+    const failedPages = new Set(pages.filter((p) => !p.info).map((p) => p.path.split('/').pop()!))
+    const dataPageFailed = pages.some((p) => p.kind === 'data' && !p.info)
+    const fetchFailed = (files: string[]) =>
+      files.some((f) => erroredFiles.has(f) || failedPages.has(f)) || (dataPageFailed && files.every((f) => !linkedFiles.has(f) && !fetchedOk.has(f)))
+    const all = [...book.byId.values()].map((b) => b.series)
     const byDataset = new Map<string, Series[]>(DATASETS.map((d) => [d, []]))
     for (const s of all) {
       if (!byDataset.has(s.dataset)) byDataset.set(s.dataset, [])
       byDataset.get(s.dataset)!.push(s)
     }
+    const carried: string[] = []
+    const keepAfter = addDays(maxDate, -56)
+    for (const [dataset, list] of byDataset) {
+      if (!list.length) continue
+      const have = new Set(list.map((s) => s.id))
+      for (const prev of await previousSeries(ctx.rootDir, dataset)) {
+        const files = (prev.attrs?.mdhFile ?? '').split(' + ').map((f) => f.replace(/#table$/, '')).filter(Boolean)
+        if (have.has(prev.id) || !files.length || files.some((f) => fetchedOk.has(f)) || !fetchFailed(files)) continue
+        if (lastDateOf(prev) < keepAfter) continue
+        list.push({ ...prev, attrs: { ...(prev.attrs ?? {}), mdhCarriedForward: `file not fetched on ${ctx.now.slice(0, 10)}` } })
+        carried.push(prev.id)
+      }
+    }
     for (const list of byDataset.values()) list.sort((a, b) => (a.id < b.id ? -1 : 1))
 
-    // 7) Diagnostics + message.
+    // 9) Diagnostics + message.
     const csv = fileDiags.filter((f) => f.ext === 'csv')
     const count = (st: FileDiag['status']) => csv.filter((f) => f.status === st).length
+    const finalAll = [...byDataset.values()].flat()
     const latestByDataset = Object.fromEntries([...byDataset].map(([d, ss]) => [d, { series: ss.length, latest: latestDate(ss) ?? null }]))
     const summary = {
       pagesFetched: pagesOk.length,
@@ -803,8 +1075,11 @@ export const mdh: SourceModule = {
       csvNoSpec: count('recorded'),
       pdf: fileDiags.filter((f) => f.ext === 'pdf').length,
       xlsx: fileDiags.filter((f) => f.ext === 'xlsx' || f.ext === 'xls').length,
-      series: all.length,
-      latest: latestDate(all) ?? null,
+      series: finalAll.length,
+      carriedForward: carried.length,
+      plantsPlacedFromMdhCounty: plantsPlaced,
+      latest: latestDate(finalAll) ?? null,
+      maxDate,
       seconds: Math.round((Date.now() - t0) / 100) / 10,
     }
     const diagnostics: Record<string, unknown> = {
@@ -831,7 +1106,9 @@ export const mdh: SourceModule = {
       files: fileDiags,
       htmlTables: tableDiags,
       watch,
-      collisions: collisions.slice(0, 30),
+      crossChecks,
+      collisions: book.collisions.slice(0, 30),
+      carriedForward: carried.slice(0, 30),
       errors: errors.slice(0, 30),
       fetchAttempts: pagesOk.length ? undefined : fetcher.attempts.slice(0, 20),
     }
@@ -842,13 +1119,15 @@ export const mdh: SourceModule = {
       const sample = pages.find((p) => p.error)?.error ?? 'unknown error'
       message = `MDH pages unreachable (${pages.length} tried on ${MDH_HOSTS.join(', ')}): ${sample}`
     } else {
+      const ytd = other.filter((s) => s.geo.type === 'state').map((s) => `${s.pathogen} ${s.points[0][1]} as of ${s.points[0][0]}`)
       message =
         `${pagesOk.length}/${pages.length} MDH pages fetched; ${summary.csvFound} CSV links found, ${summary.csvParsed} parsed into ${all.length - other.length} series` +
         (summary.csvUnparsed ? `, ${summary.csvUnparsed} not yet parseable` : '') +
         (summary.csvSkipped ? `, ${summary.csvSkipped} skipped by design` : '') +
         (summary.csvErrors ? `, ${summary.csvErrors} failed to download` : '') +
         (summary.pdf || summary.xlsx ? `; ${summary.pdf} PDF / ${summary.xlsx} XLSX recorded` : '') +
-        `; watch list: ${other.map((s) => s.pathogen).join(', ') || 'none'}.`
+        (carried.length ? `; ${carried.length} series carried forward from the last run` : '') +
+        `; year to date: ${ytd.join(', ') || 'none'}.`
       if (errors.length) message += ` Problems: ${errors.slice(0, 3).join('; ')}${errors.length > 3 ? ` (+${errors.length - 3} more)` : ''}.`
     }
     log.info(message)
