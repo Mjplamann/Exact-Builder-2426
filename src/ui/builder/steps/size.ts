@@ -12,7 +12,9 @@ import {
   filledWeight,
   footprintM2,
   formatArea,
+  formatDim,
   formatDims,
+  formatGlass,
   formatVolumeBoth,
   formatWeight,
   glassThicknessMm,
@@ -90,14 +92,15 @@ export function sizeStep(env: StepEnv): StepView {
     const wt = filledWeight(fill, m.sg);
     volume.set(formatVolumeBoth(m.liters, units), `≈ ${formatLiters(m.netLiters, units)} of water once the substrate is in`);
     weight.set(`≈ ${formatWeight(wt.total, units)}`, `water ${formatWeight(wt.water, units)} · glass ${formatWeight(wt.glass, units)} · substrate ${formatWeight(wt.substrate, units)}`);
-    footprint.set(`${formatLength(s.size.widthCm, units)} × ${formatLength(s.size.depthCm, units)}`, formatArea(footprintM2(s.size), units));
-    glass.set(`${glassThicknessMm(s.size.heightCm)} mm panes`, 'thicker as the water gets deeper');
+    footprint.set(`${formatDim(s.size.widthCm, units)} × ${formatDim(s.size.depthCm, units)}`, formatArea(footprintM2(s.size), units));
+    glass.set(`${formatGlass(glassThicknessMm(s.size.heightCm), units)} panes`, 'thicker as the water gets deeper');
     customArt.innerHTML = tankOutline(s.size);
     setText(customDims, formatLiters(m.liters, units));
     setText(describe, s.shape === 'custom' ? 'Your own dimensions — anything from a desktop tank to a living-room centrepiece.' : shapes[s.shape].description + (s.shape === 'nano' ? ' Nano lets you go smaller than other shapes.' : ''));
     preview.innerHTML = scalePreview(s.size, sand());
-    fillScaleLabels(preview, { width: formatLength(s.size.widthCm, units), height: formatLength(s.size.heightCm, units), person: units === 'imperial' ? '5 ft 7 in' : '1.7 m' });
-    preview.setAttribute('aria-label', `To scale: a ${formatDims(s.size, units)} tank on its stand beside a person 1.7 m tall`);
+    const person = units === 'imperial' ? '5 ft 7 in' : '1.7 m';
+    fillScaleLabels(preview, { width: formatDim(s.size.widthCm, units), height: formatDim(s.size.heightCm, units), person });
+    preview.setAttribute('aria-label', `To scale: a ${formatDims(s.size, units)} tank on its stand beside a person ${person} tall`);
     notes.replaceChildren(...sizeNotes(fill, s.shape, m.sg, units).map((n) => h('li', null, n)));
   });
   repaint();

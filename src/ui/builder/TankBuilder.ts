@@ -176,8 +176,11 @@ export class TankBuilder {
     const c = this.content;
     c.classList.remove('is-from-next', 'is-from-prev');
     if (dir) {
+      // Commit the start state with a style flush rather than waiting two frames: a busy or
+      // throttled main thread must never leave a step blank.
       c.classList.add(dir > 0 ? 'is-from-next' : 'is-from-prev');
-      requestAnimationFrame(() => requestAnimationFrame(() => c.classList.remove('is-from-next', 'is-from-prev')));
+      void c.offsetWidth;
+      c.classList.remove('is-from-next', 'is-from-prev');
     }
     this.syncChrome();
     if (this.sheet.contains(document.activeElement) || dir) this.titleEl.focus({ preventScroll: true });
@@ -457,8 +460,10 @@ export class TankBuilder {
       const dx = e.clientX - d.x;
       const dy = e.clientY - d.y;
       if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 2 || performance.now() - d.t > 700) return;
-      if (dx < 0) this.next();
-      else if (this.step !== 'start') this.back();
+      // A swipe only turns pages: creating the tank takes a deliberate tap on "Create tank".
+      if (dx < 0) {
+        if (this.step !== 'review') this.next();
+      } else if (this.step !== 'start') this.back();
     };
     this.body.addEventListener('pointerup', (e) => end(e, false));
     this.body.addEventListener('pointercancel', (e) => end(e, true));

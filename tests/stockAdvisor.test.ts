@@ -175,6 +175,8 @@ describe('stock suggestions', () => {
   });
 });
 
+const nameMatches = (common: string, phrase: string) => phrase.toLowerCase().includes(common.replace(/\s*\(.*\)/, '').toLowerCase());
+
 describe('what an experienced aquarist would suggest', () => {
   const all = (water: WaterType, id: string, size: TankSize, patch: Partial<TankSpec> = {}) => suggestStock(specFor(water, id, size, patch), species, plants);
   const sp = (q: { speciesId: string }) => species.get(q.speciesId)!;
@@ -247,6 +249,23 @@ describe('what an experienced aquarist would suggest', () => {
     // A big reef gets a real crew, not six snails.
     const show = all('marine', 'reef', SIZES.huge);
     expect(show.some((s) => s.stock.some((q) => sp(q).group === 'snail' && q.count >= 15))).toBe(true);
+  });
+
+  it('suggests forgiving centrepieces, not delicate ones, for an ordinary community tank', () => {
+    for (const [id, size] of [['amazon', { widthCm: 60, heightCm: 40, depthCm: 50 }], ['amazon', SIZES.standard], ['dutch', SIZES.standard], ['nature', SIZES.tall], ['empty', SIZES.long]] as const) {
+      for (const s of all('freshwater', id, size)) for (const q of s.stock) expect(q.speciesId, `${id} ${s.title}`).not.toMatch(/^(mikrogeophagus-ramirezi|symphysodon-|trichogaster-lalius)/);
+    }
+  });
+
+  it('introduces the biggest of two showpieces as the centrepiece', () => {
+    for (const s of all('marine', 'reef', SIZES.huge)) {
+      const m = /, an? ([^,]+?) as the centrepiece/.exec(s.description);
+      if (!m) continue;
+      const centre = s.stock.find((q) => nameMatches(sp(q).commonName, m[1]))!;
+      expect(centre, `${s.title}: ${m[1]}`).toBeDefined();
+      const showpieces = s.stock.filter((q) => sp(q).group === 'fish' && ['tang', 'dwarf-angel', 'wrasse', 'basslet', 'dottyback', 'rabbitfish'].includes(sp(q).body.archetype) && q.count === 1);
+      for (const o of showpieces) expect(sp(centre).adultLengthCm, s.title).toBeGreaterThanOrEqual(sp(o).adultLengthCm);
+    }
   });
 
   it('fills a show tank with a community worth its size', () => {

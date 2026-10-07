@@ -51,7 +51,7 @@ const STAPLES = new Set([
   'paracheirodon-innesi', 'paracheirodon-axelrodi', 'trigonostigma-heteromorpha', 'trigonostigma-espei', 'danio-rerio', 'hyphessobrycon-amandae',
   'boraras-brigittae', 'petitella-bleheri', 'melanotaenia-praecox', 'corydoras-aeneus', 'corydoras-panda', 'corydoras-sterbai', 'pangio-kuhlii',
   'otocinclus-vittatus', 'ancistrus-cirrhosus', 'caridina-multidentata', 'neocaridina-davidi-red-cherry', 'neritina-natalensis', 'trichopodus-leerii',
-  'mikrogeophagus-ramirezi', 'betta-splendens-halfmoon-red', 'labidochromis-caeruleus', 'pseudotropheus-sp-acei', 'synodontis-petricola',
+  'mikrogeophagus-altispinosus', 'betta-splendens-halfmoon-red', 'labidochromis-caeruleus', 'pseudotropheus-sp-acei', 'synodontis-petricola',
   'carassius-auratus-oranda-red', 'carassius-auratus-ryukin', 'brachygobius-doriae', 'dichotomyctere-ocellatus', 'monodactylus-argenteus',
   'scatophagus-argus', 'toxotes-jaculatrix', 'amphiprion-ocellaris', 'gramma-loreto', 'nemateleotris-magnifica', 'elacatinus-oceanops',
   'chromis-viridis', 'zebrasoma-flavescens', 'lysmata-amboinensis', 'turbo-fluctuosus', 'trochus-maculatus', 'centropyge-loricula',
@@ -68,6 +68,12 @@ const DIFFICULT = new Set([
 /** Gobies that live only on a host coral: whip-coral gobies (no layout has whip corals), and Acropora clown gobies (reefs only). */
 const WHIP_GOBIES = /^Bryaninops$/;
 const CORAL_GOBIES = /^Gobiodon$/;
+/**
+ * Beautiful but delicate: German blue rams (inbred, short-lived, want 28 °C and spotless water),
+ * discus, and dwarf gouramis (often carry an incurable iridovirus) are not a first community — the
+ * Bolivian ram, pearl and honey gouramis are the beginner's choices.
+ */
+const DELICATE = /^(mikrogeophagus-ramirezi|symphysodon-|trichogaster-lalius)/;
 /** Snail families that breed until they overrun a tank. */
 const PLAGUE_SNAILS = new Set(['Physidae', 'Planorbidae', 'Lymnaeidae', 'Thiaridae']);
 
@@ -248,6 +254,7 @@ function baseScore(sp: Species, c: Ctx): number {
   if (sp.reproduction === 'annual' || sp.lifespanYears < 1.5) s -= 2;
   if (STAPLES.has(sp.id)) s += 1;
   if (DIFFICULT.has(sp.id)) s -= 5;
+  if (DELICATE.test(sp.id)) s -= 2;
   if (sp.group === 'fish' && NATURAL.has(c.style)) {
     if (/glofish/.test(sp.id)) s -= 3;
     else if (sp.variantOf) s -= 1;
@@ -705,6 +712,8 @@ function pluralOf(name: string): string {
   return m ? pluralName(m[1]) + m[2] : pluralName(name);
 }
 
+const NUMBER_WORDS: Record<number, string> = { 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six' };
+
 /** What shrimp pick over in each style. */
 const SURFACES: Record<string, string> = {
   amazon: 'wood and leaves', blackwater: 'wood and leaves', 'nano-shrimp': 'wood and moss', nature: 'wood and moss',
@@ -717,7 +726,8 @@ function phrase(p: Pick, c: Ctx, again: boolean): string {
   const n = p.count;
   const some = n === 1 ? withArticle(name) : `${n} ${many}`;
   // A harem is one male with his females; a big group holds several harems.
-  const harem = n <= 2 * p.sp.groupSize ? `a male ${name} with ${n - 1} females` : `${n} ${many}, a male to every ${Math.max(2, p.sp.groupSize - 1)} or so females`;
+  const per = Math.max(2, p.sp.groupSize - 1);
+  const harem = n <= 2 * p.sp.groupSize ? `a male ${name} with ${n - 1} females` : `${n} ${many} (a male to every ${NUMBER_WORDS[per] ?? per} or so females)`;
   const pair = n === 2 && (p.sp.social === 'pair' || has(p.sp, 'pair-bonding')) ? `a pair of ${many}` : p.sp.social === 'harem' && n > 2 ? harem : some;
   switch (p.role) {
     case 'shoal':
@@ -820,13 +830,16 @@ export function suggestStock(spec: TankSpec, species: SpeciesIndex, plants: Plan
       seen.add(key);
       leads.add(leadKey(picks[0].role, picks[0].sp));
       for (const p of picks) used.set(conspecificKey(p.sp), (used.get(conspecificKey(p.sp)) ?? 0) + 1);
+      // Within a role, the biggest animal is introduced first (of two showpieces, the tang leads).
+      const firstSlot = (r: RoleKey) => t.slots.findIndex((x) => x.role === r);
+      const shown = [...picks].sort((a, b) => firstSlot(a.role) - firstSlot(b.role) || adultLength(b.sp) - adultLength(a.sp));
       found.push({
         order: pass * 100 + ti + RANK[level] * 1000,
         s: {
           id: `${t.id}:${picks[0].sp.id}`,
-          title: title(picks),
-          description: describe(t, picks, c, level, notes),
-          stock: picks.map((p) => ({ speciesId: p.sp.id, count: p.count })),
+          title: title(shown),
+          description: describe(t, shown, c, level, notes),
+          stock: shown.map((p) => ({ speciesId: p.sp.id, count: p.count })),
           level,
           stocking: Math.round(stocking * 1000) / 1000,
           ...(notes.length && level !== 'good' ? { notes } : {}),

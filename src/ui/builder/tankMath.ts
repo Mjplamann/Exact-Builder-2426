@@ -79,6 +79,12 @@ export function displayRange(range: [number, number], units: Units): [number, nu
   return [Math.ceil((range[0] / CM_PER_IN) * 2) / 2, Math.floor((range[1] / CM_PER_IN) * 2) / 2];
 }
 
+/** A tank dimension as the size fields show it: "120 cm" / "47.5 in" (to the half inch). */
+export function formatDim(cm: number, units: Units): string {
+  const v = toDisplayLength(cm, units);
+  return `${v % 1 ? v.toFixed(1) : v} ${lengthUnit(units)}`;
+}
+
 /** "120 × 50 × 50 cm" (width × depth × height) / "47 × 20 × 20 in". */
 export function formatDims(size: TankSize, units: Units): string {
   const f = (cm: number) => {
@@ -86,6 +92,14 @@ export function formatDims(size: TankSize, units: Units): string {
     return v % 1 ? v.toFixed(1) : String(v);
   };
   return `${f(size.widthCm)} × ${f(size.depthCm)} × ${f(size.heightCm)} ${lengthUnit(units)}`;
+}
+
+/** Nominal glass in inches, as US glass is sold. */
+const GLASS_INCHES: Record<number, string> = { 4: '5/32', 5: '3/16', 6: '1/4', 8: '5/16', 10: '3/8', 12: '1/2', 15: '5/8', 19: '3/4', 25: '1' };
+
+/** "8 mm" / "5/16 in". */
+export function formatGlass(mm: number, units: Units): string {
+  return units === 'imperial' ? `${GLASS_INCHES[mm] ?? (mm / 25.4).toFixed(2)} in` : `${mm} mm`;
 }
 
 export function usGallons(liters: number): number {
