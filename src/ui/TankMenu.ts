@@ -36,6 +36,8 @@ export class TankMenu {
   private cancelRename: (() => void) | null = null;
   /** A long press opened the actions: swallow the click that follows the lift. */
   private suppressClick = false;
+  /** A duplicate or delete is under way (a second tap must not copy or delete twice). */
+  private acting = false;
   private readonly keyCapture = (e: KeyboardEvent) => this.onKeyCapture(e);
 
   constructor(
@@ -126,6 +128,13 @@ export class TankMenu {
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-in')));
     const cur = this.menu.querySelector<HTMLElement>('.aqm-item[aria-checked="true"]') ?? this.menu.querySelector<HTMLElement>('[data-nav]');
     cur?.focus({ preventScroll: true });
+    // With many tanks the open one may be far down the list: bring it into view.
+    const menu = this.menu;
+    if (cur && menu.scrollHeight > menu.clientHeight) {
+      const r = cur.getBoundingClientRect();
+      const m = menu.getBoundingClientRect();
+      menu.scrollTop = Math.max(0, menu.scrollTop + r.top - m.top - (m.height - r.height) / 2);
+    }
   }
 
   close(focusTrigger: boolean): void {
@@ -346,8 +355,15 @@ export class TankMenu {
   }
 
   private async duplicate(t: TankSummary): Promise<void> {
+    if (this.acting) return;
+    this.acting = true;
     this.expanded = null;
-    const id = await this.host.app.duplicateTank(t.id);
+    let id: string | null = null;
+    try {
+      id = await this.host.app.duplicateTank(t.id);
+    } finally {
+      this.acting = false;
+    }
     if (!id) {
       this.host.toast('That tank could not be copied right now.', 'warning');
       return;
@@ -402,14 +418,20 @@ export class TankMenu {
 
   private async delete(t: TankSummary): Promise<void> {
     this.closeDialog();
+    if (this.acting) return;
+    this.acting = true;
     let ok: boolean | undefined;
-    if (t.current) {
-      // Its replacement opens: fade through, as for any switch.
-      this.close(true);
-      ok = await fadeThrough(this.layer, () => this.host.app.deleteTank(t.id));
-    } else {
-      ok = await this.host.app.deleteTank(t.id);
-      this.focusRow(this.host.app.currentTankId());
+    try {
+      if (t.current) {
+        // Its replacement opens: fade through, as for any switch.
+        this.close(true);
+        ok = await fadeThrough(this.layer, () => this.host.app.deleteTank(t.id));
+      } else {
+        ok = await this.host.app.deleteTank(t.id);
+        this.focusRow(this.host.app.currentTankId());
+      }
+    } finally {
+      this.acting = false;
     }
     this.host.toast(ok ? `Deleted “${t.name}”.` : `“${t.name}” could not be deleted right now.`, ok ? 'info' : 'warning');
   }

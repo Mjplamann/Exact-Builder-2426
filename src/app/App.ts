@@ -35,6 +35,8 @@ import type { AquascapeInfo, StockCheck, StockSuggestion, TankSpec, TankSummary 
 const AUTOSAVE_SECONDS = 15;
 /** Longest absence we fast-forward (sim time), to keep catch-up bounded. */
 const MAX_CATCHUP_SIM_SECONDS = 2 * 365 * 86400;
+/** Absences shorter than this, with no births or deaths, don't get a "welcome back" card. */
+const WELCOME_QUIET_SECONDS = 10 * 60;
 /** A gap this long between two frames of a visible page means the computer slept: catch up. */
 const FRAME_GAP_CATCHUP_MS = 30_000;
 /** Remind the keeper at most this often that the browser refuses to store a tank. */
@@ -136,6 +138,8 @@ export class App implements AppApi {
     this.ambience.setEnabled(settings.sound, settings.volume);
 
     window.addEventListener('resize', () => this.engine.resize());
+    // Opened in a background tab: nothing runs until it is shown, so it counts as hidden from now.
+    if (document.hidden) this.hiddenAt = Date.now();
     document.addEventListener('visibilitychange', () => this.onVisibility());
     window.addEventListener('pagehide', () => this.save(true));
     // Tanks another device added, renamed or deleted since boot show up in the menu.
@@ -247,7 +251,7 @@ export class App implements AppApi {
 
   private onVisibility(): void {
     if (document.hidden) {
-      this.hiddenAt = Date.now();
+      this.hiddenAt ??= Date.now();
       this.save(true);
     } else if (this.hiddenAt !== null) {
       this.catchUpSince(this.hiddenAt);
@@ -266,7 +270,10 @@ export class App implements AppApi {
     const summary = this.life.catchUp(this.world, simSeconds);
     this.fishRenderer.sync(this.world);
     this.decorRenderer.sync(this.world);
-    if (summary.text && away > 60) queueMicrotask(() => this.ui?.showWelcomeBack(summary.text));
+    // A short absence where nothing happened (a quick look at another tank or another tab) passes
+    // quietly; longer ones, or any birth or death, get the calm "while you were away" card.
+    const notable = summary.born > 0 || summary.died.length > 0;
+    if (summary.text && (away >= WELCOME_QUIET_SECONDS || (notable && away > 60))) queueMicrotask(() => this.ui?.showWelcomeBack(summary.text));
   }
 
   private wireEvents(): void {
