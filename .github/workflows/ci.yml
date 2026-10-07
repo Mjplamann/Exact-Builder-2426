@@ -20,6 +20,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      # Re-derive pulse/forecasts/rollups from the committed series with this commit's analysis code (no network),
+      # so the data-integrity tests check what this code publishes, not what the last refresh left behind.
+      - run: npx tsx pipeline/run.ts --analysis-only
       - run: npm test
       - run: npm run build
 
