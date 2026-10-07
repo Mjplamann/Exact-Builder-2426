@@ -13,8 +13,8 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "pipeline": "tsx pipeline/run.ts",
-    "pipeline:offline": "tsx pipeline/run.ts --offline"
+    "pipeline": "NODE_USE_ENV_PROXY=1 tsx pipeline/run.ts",
+    "pipeline:analysis": "tsx pipeline/run.ts --analysis-only"
   },
   "dependencies": {
     "d3-geo": "^3.1.1",
