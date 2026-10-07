@@ -685,7 +685,9 @@ function dutch(tank: TankState, lib: PlantIndex, seed: number) {
   };
   // Dutch terraces are dense, trimmed bushes: many bunches per street, kept at stepped heights.
   const streets = (base: number) => Math.max(3, Math.round(base * Math.min(s.wf, 2)));
-  const deep = s.D > 0.8 ? 1 : 0;
+  const deep = s.D > 0.8 && s.water <= 0.65 ? 1 : 0;
+  // Deeper than any stem grows: a curtain of giant vallisneria behind the streets reaches the light.
+  if (s.water > 0.65) s.band(s.ribbon(), 0.02, 0.98, 0.035, s.count(2, 6), 0.02);
   groups(back, 0.06, 0.22, streets(6), 5 + deep, 0.82);
   groups(mid, 0.3, 0.46, streets(5), 5 + deep, 0.5);
   groups(front, 0.58, 0.85, streets(5), 4 + deep, 0.2);
