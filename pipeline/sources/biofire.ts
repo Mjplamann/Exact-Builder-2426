@@ -328,7 +328,10 @@ export function mergeWithPrior(fresh: Series[], prior: Series[]): Series[] {
     if (!p) return s
     const weeks = new Map<string, Point>(p.points.map((pt) => [pt[0], pt]))
     for (const pt of s.points) weeks.set(pt[0], pt)
-    return { ...s, points: [...weeks.values()].sort((a, b) => (a[0] < b[0] ? -1 : 1)) }
+    const points = [...weeks.values()].sort((a, b) => (a[0] < b[0] ? -1 : 1))
+    // attrs describe the report behind the newest point (a newer published report may not have been re-read).
+    const priorNewer = (p.points.at(-1)?.[0] ?? '') > (s.points.at(-1)?.[0] ?? '')
+    return { ...s, points, attrs: priorNewer ? p.attrs : s.attrs }
   })
   out.push(...byId.values())
   const rank = (s: Series) => (s.id.split(':').length > 6 ? 1 : 0)

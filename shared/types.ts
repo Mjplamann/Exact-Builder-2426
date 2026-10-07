@@ -295,6 +295,9 @@ export interface SignalSummary {
   /** Last ~16 points for sparklines. */
   spark: Point[]
   stale: boolean
+  /** Copied from the series for tooltips/headlines (e.g. HSA, plants). */
+  attrs?: Record<string, string>
+  note?: string
 }
 
 export interface PathogenPulse {

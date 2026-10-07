@@ -482,6 +482,9 @@ describe('USMA fetch policy', () => {
     })
     const merged = mergeWithPrior([mk([['2026-08-29', 1.6]])], [mk([['2026-08-15', 1.2], ['2026-08-29', 9.9]])])
     expect(merged[0].points).toEqual([['2026-08-15', 1.2], ['2026-08-29', 1.6]])
+    // A newer published point (its report not re-read this run) keeps its own attrs.
+    const newer = mergeWithPrior([{ ...mk([['2026-08-15', 1.2]]), attrs: { report: 'older' } }], [{ ...mk([['2026-08-29', 1.6]]), attrs: { report: 'newer' } }])
+    expect(newer[0]).toMatchObject({ points: [['2026-08-15', 1.2], ['2026-08-29', 1.6]], attrs: { report: 'newer' } })
 
     const root = await mkdtemp(path.join(tmpdir(), 'biofire-'))
     try {

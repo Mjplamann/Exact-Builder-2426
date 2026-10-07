@@ -2,8 +2,10 @@
 //
 // 1) nwss-wval: site-level Wastewater Viral Activity Level (data.cdc.gov atcp-73re) for SARS-CoV-2,
 //    influenza A and RSV at each Minnesota treatment plant, with CDC's category as the official level,
-//    plus a derived statewide weekly median across reporting sites. CDC's own current state category
-//    (cdc.gov NWSSWVALStateMap.json, undocumented) is attached when reachable.
+//    plus a derived statewide weekly median across reporting sites past their WVAL start-up period
+//    (rows dated before date_included_in_wval are flagged on site series and left out of the median).
+//    CDC's own current state category (cdc.gov NWSSWVALStateMap.json, undocumented) is attached when
+//    reachable.
 // 2) nwss-detections: weekly count of Minnesota sites with a measles (akvg-8vrb), H5 avian influenza
 //    (mtpu-urpp) or mpox (xpxn-rzgz) detection, from CDC's sample-level datasets.
 //

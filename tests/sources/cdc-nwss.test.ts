@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
-  DETECTION_SPECS, attachOfficialState, buildDetectionSeries, buildWvalSeries, checkCutpoints, countyAdjacency, countyCentroids, inMinnesota, median,
+  DETECTION_SPECS, attachOfficialState, buildDetectionSeries, buildWvalSeries, checkCutpoints, countyAdjacency, countyCentroids, inMinnesota, median, median2,
   normalizeSiteId, parseCountiesServed, parseFipsList, parseStateMap, parseWvalRows, servedCentroid, siteName,
   wvalLevel, wvalPathogen, wvalThresholds,
 } from '../../pipeline/lib/cdc-nwss-parse.ts'
@@ -120,6 +120,11 @@ describe('cdc-nwss mapping helpers', () => {
     expect(median([1, 1.42, 2.74, 5.04, 6.29])).toBe(2.74)
     expect(median([1, 2])).toBe(1.5)
     expect(median([])).toBeNull()
+    // Real MN COVID week 2022-09-03: 34 sites, middle values 9.05 / 9.28 → 9.165 → 9.17 (plain float rounding gives 9.16).
+    expect(Math.round(((9.05 + 9.28) / 2) * 100) / 100).toBe(9.16)
+    expect(median2([9.05, 9.28])).toBe(9.17)
+    expect(median2([2.09, 2.1, 1, 30])).toBe(2.1)
+    expect(median2([])).toBeNull()
   })
 })
 

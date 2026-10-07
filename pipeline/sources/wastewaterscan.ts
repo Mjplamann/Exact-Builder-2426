@@ -171,12 +171,10 @@ export const PUBLIC_TARGETS: Record<string, TargetSpec> = {
 }
 
 /**
- * Rare targets that get a statewide "plants with a detection" series. Measles, mpox and H5 are left
- * out: CDC NWSS (cdc-nwss) publishes the same statewide count across all Minnesota NWSS sites,
- * including these 4 plants, and the analysis de-duplicates by pathogen|metric|geo, so a fresher
- * 4-plant count would replace the fuller CDC count. Their weekly tallies stay in diagnostics.
+ * Rare targets that get a statewide "plants with a detection" series. The analysis keys series by
+ * measurement system (dataset), so these coexist with CDC NWSS's statewide detection counts.
  */
-export const STATE_DETECTION_PATHOGENS: PathogenId[] = ['hepatitis-a', 'west-nile']
+export const STATE_DETECTION_PATHOGENS: PathogenId[] = ['measles', 'h5n1', 'mpox', 'hepatitis-a', 'west-nile']
 
 /** Why known `public` targets are not published (shown in diagnostics). */
 const SKIP_REASONS: Record<string, string> = {

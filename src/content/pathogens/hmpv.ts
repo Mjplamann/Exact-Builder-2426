@@ -1,3 +1,9 @@
+// TODO(verify): the data-source notes are sourced below. The clinical content (identified in 2001, most
+// children infected by age 5, 3–6 day incubation, late-winter/spring season, spread, symptoms, risk groups,
+// no specific antiviral or vaccine) follows long-standing CDC and AAP (Red Book) information WITHOUT live web
+// verification (the shared WebSearch budget was exhausted during review on 2026-10-07). Before publishing,
+// confirm and add CDC's hMPV pages (About human metapneumovirus; HMPV clinical overview) using URLs that
+// appear in search results.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -17,7 +23,7 @@ const profile: PathogenProfile = {
     peakMonths: [2, 3, 4],
   },
   transmission:
-    'hMPV spreads through droplets when a sick person coughs or sneezes, through close contact such as touching or shaking hands, and by touching surfaces with the virus on them and then touching your mouth, nose, or eyes.',
+    'hMPV spreads through droplets when a sick person coughs or sneezes. It also spreads through close contact, like touching or shaking hands, and by touching a surface with the virus on it and then touching your mouth, nose, or eyes.',
   incubation: 'Symptoms usually start 3 to 6 days after a person is infected.',
   contagiousPeriod:
     'People are most likely to spread hMPV while they have symptoms. Young children and people with weakened immune systems may spread the virus for longer.',
@@ -49,7 +55,7 @@ const profile: PathogenProfile = {
         'Keep sick people away from your baby and ask visitors to wash their hands.',
         'Use saline drops and gentle suction to clear a stuffy nose, especially before feeds.',
         'Know that RSV shots do not protect against hMPV, so everyday precautions still matter.',
-        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
+        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom).',
         'Watch for fast or hard breathing and feeding trouble, and seek care quickly if you see them.',
       ],
     },
@@ -81,7 +87,7 @@ const profile: PathogenProfile = {
       actions: [
         'Wash hands often and avoid close contact with people who are sick, especially in late winter and spring.',
         'Call your clinician early if a cold makes your breathing, asthma, COPD, or heart failure worse.',
-        'Keep up with other recommended respiratory vaccines, such as flu, COVID-19, and RSV if you qualify, since they help prevent other illnesses that look similar.',
+        'Ask your clinician which respiratory vaccines fit you, such as flu, COVID-19, and RSV (recommended for adults 50 to 74 at higher risk). They prevent other illnesses that look similar.',
       ],
     },
     seniors: {
@@ -92,7 +98,7 @@ const profile: PathogenProfile = {
         'Wash hands often and avoid close contact with people who are sick.',
         'Seek care early for worsening shortness of breath, chest pain, or confusion.',
         'If you live in or visit a long-term care facility, follow its guidance during respiratory outbreaks.',
-        'Stay current on other recommended respiratory vaccines, such as flu, COVID-19, and RSV, since they prevent illnesses with similar symptoms.',
+        'Ask your clinician which respiratory vaccines fit you, such as flu, COVID-19, and RSV (recommended for everyone 75 and older and for some people 65 to 74). They prevent illnesses with similar symptoms.',
       ],
     },
     pregnant: {
@@ -165,14 +171,14 @@ const profile: PathogenProfile = {
     'hMPV is usually found with a lab (PCR) test on a nose swab, most often as part of a multi-virus panel that checks for many respiratory germs at once. These panels are mostly used for people in the hospital or emergency department, young children, and people with weakened immune systems. Healthy people with a mild cold usually do not need a test, because the result would not change their care. Home tests sold for COVID-19 and flu do not detect hMPV.',
   whenToSeekCare: [
     'Call 911 or go to the emergency department for any emergency warning sign, such as struggling to breathe, pauses in breathing, or blue or gray lips.',
-    'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
+    'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom).',
     'Call your clinician the same day if a baby or young child is feeding or drinking much less than usual or has fewer wet diapers.',
     'Call your clinician if symptoms get worse after a few days, a fever lasts more than 2 to 3 days, or wheezing is new or getting worse.',
     'Adults 65 and older, and anyone with heart or lung disease or a weakened immune system, should call early if breathing gets worse.',
     'Urgent care can help with a worsening cough or ear pain when your regular clinic is closed. Go to the emergency department, not urgent care, for trouble breathing.',
   ],
   readingTheNumbers:
-    'MN Pulse tracks hMPV mainly through the BioFire detection rate: the share of multi-virus panel tests at participating Midwest labs that find hMPV. MDH also reports hMPV results from Minnesota labs that run these panels. These tests are mostly done for people sick enough to visit a hospital, emergency department, or clinic, often children, so the number shows how much serious respiratory illness is due to hMPV, not how many people are infected. CDC’s public emergency department data cover COVID-19, flu, and RSV but not hMPV. hMPV is usually low in summer and fall and rises in late winter and spring, often after RSV peaks. A steady rise for two or more weeks means hMPV is spreading in the region. For most people, that means a higher chance a cough or cold is hMPV. Because there is no vaccine, it is a good time for extra handwashing, keeping sick children home, and protecting babies, older adults, and people with lung disease.',
+    'MN Pulse tracks hMPV with three kinds of data. Test positivity is the share of hMPV lab (PCR) tests that come back positive among people who were tested. It comes from Minnesota labs that run multi-virus panels and report to MDH, and from CDC’s lab network for Minnesota and five nearby states (HHS Region 5). It is not the share of people infected. BioFire detection rate is the share of multi-virus panel tests at participating labs in the Midwest (or nationwide, when regional data are not available) that find hMPV. No Minnesota-only BioFire data are public. These lab tests are mostly done for people sick enough to visit a hospital, emergency department, or clinic, often children. So the numbers show how much serious breathing illness is due to hMPV. They do not show how many people are infected. Wastewater levels measure hMPV in sewage at several Minnesota treatment plants (WastewaterSCAN). They can be an early signal, but they do not count cases. CDC’s public emergency department data cover COVID-19, flu, and RSV but not hMPV. hMPV is usually low in summer and fall and rises in late winter and spring, often after RSV peaks. A steady rise for two or more weeks means hMPV is spreading in the region. For most people, that means a higher chance a cough or cold is hMPV. Because there is no vaccine, it is a good time for extra handwashing, keeping sick children home, and protecting babies, older adults, and people with lung disease. Numbers for the most recent week or two may be revised.',
   watchNotes: [
     'There is no vaccine or antiviral medicine for hMPV. Vaccines that would protect against both RSV and hMPV are being studied, but none are approved.',
     'In Minnesota, most hMPV activity for the 2026–27 season is expected in late winter and spring 2027, after the usual RSV peak.',
@@ -180,8 +186,10 @@ const profile: PathogenProfile = {
   sources: [
     { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
     { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
-    { label: 'CDC: Respiratory illnesses data channel', url: 'https://www.cdc.gov/respiratory-viruses/data/index.html' },
+    { label: 'CDC NREVSS: Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
+    { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },
     { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
+    { label: 'CDC: RSV vaccines for older adults', url: 'https://www.cdc.gov/rsv/vaccines/older-adults.html' },
   ],
   lastReviewed: '2026-10-07',
 }

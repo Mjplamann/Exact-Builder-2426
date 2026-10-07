@@ -1,3 +1,10 @@
+// TODO(verify): the data-source notes are sourced below. The clinical content (four types, croup as the
+// leading cause, type-specific seasons including the every-other-year type 1 fall pattern, 2–7 day
+// incubation, croup warning signs, single-dose steroid and nebulized epinephrine with observation, mist not
+// shown to help) follows long-standing CDC and AAP (Red Book / HealthyChildren.org) information WITHOUT live
+// web verification (the shared WebSearch budget was exhausted during review on 2026-10-07). Before
+// publishing, confirm and add CDC's HPIV pages (About; seasons; clinical overview) and an AAP croup page
+// using URLs that appear in search results.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -13,11 +20,11 @@ const profile: PathogenProfile = {
     'Human parainfluenza viruses (HPIVs) are a group of four related viruses, called types 1, 2, 3, and 4, and people can catch them more than once. Despite the name, they are not a kind of influenza (flu). They commonly cause colds, and they are the most common cause of croup, a swelling around the voice box and windpipe that gives young children a barking cough. Type 3 can also cause bronchiolitis (swelling of the small airways) and pneumonia in babies, and HPIVs can be serious for people with weakened immune systems.',
   seasonality: {
     summary:
-      'Each type has its own season. Types 1 and 2 usually cause croup in the fall (about September through November), and type 1 has often had bigger fall seasons every other year. Type 3 usually peaks in spring and early summer but can be found all year. Type 4 is less well understood. In Minnesota this means parainfluenza often rises twice a year, though patterns shifted after the COVID-19 pandemic.',
+      'Each type has its own season. Types 1 and 2 usually cause croup in the fall (about September through November), and type 1 has often had bigger fall seasons every other year. Type 3 usually peaks in spring and early summer but can be found all year. Type 4 is less well understood. Across the U.S., including the Upper Midwest, this often means two rises a year, one in fall and one in spring. Patterns were disrupted during the COVID-19 pandemic and can vary from year to year.',
     peakMonths: [4, 5, 6, 10, 11],
   },
   transmission:
-    'Parainfluenza spreads through droplets when a sick person coughs or sneezes, through close contact such as touching or shaking hands, and by touching surfaces with the virus on them and then touching your mouth, nose, or eyes.',
+    'Parainfluenza spreads through droplets when a sick person coughs or sneezes. It also spreads through close contact, like shaking hands, and by touching a surface with the virus on it and then touching your mouth, nose, or eyes.',
   incubation: 'Symptoms usually start 2 to 7 days after a person is infected.',
   contagiousPeriod:
     'People are most likely to spread parainfluenza while they have symptoms, and they may spread it shortly before symptoms start. Young children and people with weakened immune systems can spread the virus for longer, sometimes for weeks.',
@@ -38,6 +45,8 @@ const profile: PathogenProfile = {
       'Bluish or gray color of the lips, tongue, nails, or skin',
       'Very sleepy, hard to wake, or very restless and anxious from trouble breathing',
       'Not drinking, with few or no wet diapers or very little urine',
+      'Fast breathing, or pauses in breathing, in a baby',
+      'High fever in a child who looks very sick or is getting worse quickly',
     ],
   },
   ageGroups: {
@@ -48,7 +57,7 @@ const profile: PathogenProfile = {
       actions: [
         'Keep sick people away from your baby and ask visitors to wash their hands.',
         'Use saline drops and gentle suction to clear a stuffy nose, especially before feeds.',
-        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
+        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom).',
         'Seek emergency care for noisy breathing at rest, fast or hard breathing, or trouble feeding.',
       ],
     },
@@ -107,7 +116,7 @@ const profile: PathogenProfile = {
     immunocompromised: {
       risk: 'higher',
       summary:
-        'People with weakened immune systems, especially transplant recipients and people getting cancer treatment, can develop severe pneumonia from parainfluenza (most often type 3) and may stay sick and contagious for weeks.',
+        'People with weakened immune systems, especially transplant recipients and people getting cancer treatment, can develop severe pneumonia from parainfluenza, most often type 3. They may stay sick and contagious for weeks.',
       actions: [
         'Contact your care team early if you get cold symptoms with fever or trouble breathing.',
         'Ask household members to wash hands often and stay away when they are sick.',
@@ -171,14 +180,14 @@ const profile: PathogenProfile = {
     'Croup is usually diagnosed from the barking cough and a clinician’s exam; most children do not need a test or X-ray. Parainfluenza can be found with a lab (PCR) test on a nose swab, most often as part of a multi-virus panel that also reports the type (1, 2, 3, or 4). These panels are mostly used for people in the hospital or emergency department, young children, and people with weakened immune systems. Home tests sold for COVID-19 and flu do not detect parainfluenza.',
   whenToSeekCare: [
     'Call 911 or go to the emergency department for any emergency warning sign, such as stridor while resting, struggling to breathe, drooling, or blue or gray lips.',
-    'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
+    'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom).',
     'Call your clinician the same day if a child has croup with stridor that comes and goes, or a barking cough that is not getting better.',
     'Call your clinician if a child is drinking much less than usual, a fever lasts more than 2 to 3 days, or there is ear pain.',
     'Adults 65 and older, and anyone with lung disease or a weakened immune system, should call early if breathing gets worse.',
     'Urgent care can check mild croup or ear pain when your regular clinic is closed. Go to the emergency department, not urgent care, for trouble breathing or stridor at rest.',
   ],
   readingTheNumbers:
-    'MN Pulse tracks parainfluenza mainly through the BioFire detection rate: the share of multi-virus panel tests at participating Midwest labs that find parainfluenza. BioFire reports types 1, 2, 3, and 4 separately, and each type has its own season, so a combined number can rise in both fall and spring. MDH also reports parainfluenza results from Minnesota labs that run these panels. These tests are mostly done for hospital, emergency department, and child patients, so the number shows how much serious respiratory illness is due to parainfluenza, not how many people are infected. CDC’s public emergency department data do not track parainfluenza. A fall rise, usually in types 1 or 2, often means croup season: expect more barking coughs in young children, especially at night. A spring or early summer rise, usually type 3, can mean more bronchiolitis and pneumonia in babies. For most adults, a rise just means a higher chance a cold is parainfluenza, which is usually mild.',
+    'MN Pulse tracks parainfluenza with two kinds of lab data. Test positivity is the share of parainfluenza lab (PCR) tests that come back positive among people who were tested. It comes from Minnesota labs that run multi-virus panels and report to MDH, and from CDC’s lab network for Minnesota and five nearby states (HHS Region 5). It is not the share of people infected. BioFire detection rate is the share of multi-virus panel tests at participating labs in the Midwest (or nationwide, when regional data are not available) that find parainfluenza. No Minnesota-only BioFire data are public. BioFire reports types 1, 2, 3, and 4 separately. Each type has its own season, so a combined number can rise in both fall and spring. These lab tests are mostly done for hospital, emergency department, and child patients. So the numbers show how much serious breathing illness is due to parainfluenza, not how many people are infected. CDC’s public emergency department data do not track parainfluenza, and Minnesota wastewater testing has not tracked it since 2024. A fall rise, usually in types 1 or 2, often means croup season: expect more barking coughs in young children, especially at night. A spring or early summer rise, usually type 3, can mean more bronchiolitis and pneumonia in babies. For most adults, a rise just means a higher chance a cold is parainfluenza, which is usually mild. Numbers for the most recent week or two may be revised.',
   watchNotes: [
     'Fall is the usual season for croup caused by types 1 and 2, so more barking coughs in young children are expected in October and November.',
     'There is no vaccine or approved antiviral medicine for parainfluenza.',
@@ -186,7 +195,7 @@ const profile: PathogenProfile = {
   sources: [
     { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
     { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
-    { label: 'CDC: Respiratory illnesses data channel', url: 'https://www.cdc.gov/respiratory-viruses/data/index.html' },
+    { label: 'CDC NREVSS: Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
     { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
   ],
   lastReviewed: '2026-10-07',

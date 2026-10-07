@@ -329,6 +329,15 @@ export function median(values: number[]): number | null {
 
 const round2 = (v: number) => Math.round(v * 100) / 100
 
+/**
+ * Median rounded half-up to 2 decimals, computed in integer hundredths so that e.g. (9.16 + 9.17) / 2
+ * gives 9.17 rather than 9.16 from binary floating-point error. CDC publishes WVAL to 2 decimals.
+ */
+export function median2(values: number[]): number | null {
+  const m = median(values.filter(Number.isFinite).map((v) => Math.round(v * 100)))
+  return m == null ? null : Math.round(m) / 100
+}
+
 /** Minimum reporting sites for a derived statewide median. */
 export const MIN_STATE_SITES = 3
 
@@ -359,7 +368,7 @@ const FLOOR_NOTE =
 /** Sites with rows dated before their WVAL inclusion date. */
 const PRE_NOTE = ' The first weeks, before CDC included the site in WVAL, are a baseline start-up period and can be extreme.'
 
-/** Weeks a site's data must be older than the newest week for its pathogen to count as not reporting. */
+/** Days a site's last week may trail the newest week for its pathogen before it counts as not reporting. */
 export const INACTIVE_DAYS = 28
 
 /** Share of exact-1 values among the last `n` points. */
@@ -505,7 +514,7 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
         skipped++
         continue
       }
-      points.push([w, round2(median(vals)!)])
+      points.push([w, median2(vals)!])
     }
     if (!points.length) continue
     const latest = points[points.length - 1][0]

@@ -9,7 +9,8 @@ import type {
 } from '../../shared/types.ts'
 import { addDays } from '../../shared/mmwr.ts'
 import { project } from '../../shared/projection.ts'
-import { quantile } from '../../shared/stats.ts'
+import { median, quantile } from '../../shared/stats.ts'
+import { pathogenShort } from '../../shared/pathogens.ts'
 import {
   LEVEL_LABEL, LEVELS, TREND_LABEL, compositeScore, computeTrend, levelFromPercentile, rankAgainstHistory,
 } from '../../shared/risk.ts'
@@ -97,6 +98,14 @@ export function summarize(s: Series, now: string): SignalSummary | null {
   } else if (official) {
     level = official.level
     levelBasis = official.basis
+  } else if (s.metric === 'ww_detections') {
+    // Any detection of a rare target is notable; none means not detected that week.
+    const tested = s.attrs?.plantsTestedLatestWeek ?? s.attrs?.sitesTested
+    level = value > 0 ? 'moderate' : 'minimal'
+    levelBasis =
+      value > 0
+        ? `Detected at ${value} wastewater site${value === 1 ? '' : 's'} in the latest week`
+        : `Not detected in the latest week${tested ? ` (${tested} sites tested)` : ''}`
   } else if (rank) {
     level = levelFromPercentile(rank.percentile)
     const years = rank.n / 52
@@ -125,6 +134,8 @@ export function summarize(s: Series, now: string): SignalSummary | null {
     levelBasis,
     spark: s.points.slice(-16),
     stale,
+    attrs: s.attrs,
+    note: s.note,
   }
 }
 
@@ -228,14 +239,7 @@ function outlookFrom(
   }
 }
 
-const NAMES: Partial<Record<PathogenId, string>> = {
-  influenza: 'Flu', 'influenza-a': 'Flu A', 'influenza-b': 'Flu B', covid: 'COVID-19', rsv: 'RSV', hmpv: 'hMPV',
-  'rhino-entero': 'Rhinovirus/enterovirus', adenovirus: 'Adenovirus', parainfluenza: 'Parainfluenza',
-  'seasonal-cov': 'Seasonal coronaviruses', mycoplasma: 'Mycoplasma pneumoniae', pertussis: 'Whooping cough',
-  'chlamydia-pneumoniae': 'Chlamydia pneumoniae', norovirus: 'Norovirus', 'respiratory-combined': 'Respiratory illness',
-  ili: 'Influenza-like illness', measles: 'Measles',
-}
-const nameOf = (p: PathogenId) => NAMES[p] ?? p
+const nameOf = (p: PathogenId) => pathogenShort(p)
 
 const METRIC_SUBJECT: Partial<Record<MetricKind, string>> = {
   ed_visit_pct: 'ER visits',
@@ -272,6 +276,21 @@ const METRIC_PHRASE: Record<MetricKind, string> = {
 
 function headlineFor(p: PathogenId, sig: SignalSummary | undefined, level: ActivityLevel, trend: TrendDirection) {
   if (!sig) return `${nameOf(p)}: no current data.`
+  if (sig.metric === 'ww_detections') {
+    return sig.latestValue > 0
+      ? `${nameOf(p)} was detected in Minnesota wastewater at ${sig.latestValue} site${sig.latestValue === 1 ? '' : 's'} in the week ending ${sig.latestDate}.`
+      : `${nameOf(p)} was not detected in Minnesota wastewater in the week ending ${sig.latestDate}.`
+  }
+  if (sig.metric === 'wastewater_conc' || sig.metric === 'wastewater_level') {
+    const what = sig.label.split(' — ')[0]
+    const lvl = level === 'unknown' ? 'reported' : LEVEL_LABEL[level].toLowerCase()
+    const tr = trend === 'unknown' || level === 'unknown' ? '' : ` and ${TREND_LABEL[trend].toLowerCase()}`
+    const scope = sig.attrs?.plants ? ` (${sig.attrs.plants} WastewaterSCAN plants)` : ''
+    return `${what} levels in Minnesota wastewater are ${lvl}${tr}${scope}, week ending ${sig.latestDate}.`
+  }
+  if (level === 'unknown') {
+    return `${nameOf(p)}: ${formatValue(sig)} ${METRIC_PHRASE[sig.metric]} in the week ending ${sig.latestDate} (not enough history to rate the level).`
+  }
   const lvl = LEVEL_LABEL[level].toLowerCase()
   const tr = trend === 'unknown' ? '' : ` and ${TREND_LABEL[trend].toLowerCase()}`
   const where =
@@ -283,12 +302,75 @@ function headlineFor(p: PathogenId, sig: SignalSummary | undefined, level: Activ
   return `${nameOf(p)} activity is ${lvl}${tr}: ${formatValue(sig)} ${METRIC_PHRASE[sig.metric]}${where}, week ending ${sig.latestDate}.`
 }
 
+/**
+ * Statewide rollups for measures published only per wastewater plant (e.g. WastewaterSCAN norovirus):
+ * weekly median across plants (≥ 2 reporting), so the pathogen gets a Minnesota-level signal.
+ * Plants with several series for the same measure (assay variants) are not rolled up.
+ */
+export function rollupSites(all: Series[]): Series[] {
+  const groups = new Map<string, Series[]>()
+  for (const s of all) {
+    if (s.geo.type !== 'sewershed') continue
+    const k = [s.source, s.dataset, s.pathogen, s.metric].join('|')
+    if (!groups.has(k)) groups.set(k, [])
+    groups.get(k)!.push(s)
+  }
+  const out: Series[] = []
+  for (const sites of groups.values()) {
+    const first = sites[0]
+    const codes = new Set(sites.map((x) => x.geo.code))
+    if (codes.size !== sites.length || codes.size < 2) continue
+    const exists = all.some(
+      (x) => x.geo.type === 'state' && x.pathogen === first.pathogen && x.metric === first.metric && measureFamily(x.dataset) === measureFamily(first.dataset),
+    )
+    if (exists) continue
+    const byWeek = new Map<string, number[]>()
+    for (const site of sites) for (const [d, v] of site.points) if (v != null) (byWeek.get(d) ?? byWeek.set(d, []).get(d)!).push(v)
+    const points = [...byWeek.entries()]
+      .filter(([, vs]) => vs.length >= 2)
+      .sort(([a], [b]) => (a < b ? -1 : 1))
+      .map(([d, vs]) => [d, Math.round(median(vs) * 1000) / 1000] as [string, number])
+    if (points.length < 4) continue
+    const lastDate = points[points.length - 1][0]
+    const reporting = sites.filter((x) => x.points.some(([d, v]) => d === lastDate && v != null))
+    const levels = reporting
+      .map((x) => (x.official?.asOf === undefined || x.official.asOf === lastDate ? x.official?.level : undefined))
+      .filter((l): l is ActivityLevel => !!l && l !== 'unknown')
+      .map((l) => LEVELS.indexOf(l))
+      .sort((a, b) => a - b)
+    const derived: Series = {
+      id: `${first.source}:${first.dataset}-mn:${first.pathogen}:${first.metric}:state:27`,
+      source: first.source,
+      dataset: `${first.dataset}-mn`,
+      pathogen: first.pathogen,
+      metric: first.metric,
+      unit: first.unit,
+      geo: { type: 'state', code: '27', name: 'Minnesota' },
+      label: `${first.label.split(' — ')[0]} — wastewater, median of ${codes.size} Minnesota ${sourceNameOf(first)} plants`,
+      points,
+      note: `Weekly median across ${codes.size} wastewater plants (${sites.map((x) => x.geo.name.replace(/ \(.*\)$/, '')).join(', ')}). Covers only the communities these plants serve. ${first.note ?? ''}`.trim(),
+      attrs: { derived: `median of ${reporting.length} reporting plants`, plants: String(codes.size) },
+    }
+    if (levels.length >= 2) {
+      derived.official = {
+        level: LEVELS[levels[Math.ceil((levels.length - 1) / 2)]],
+        label: `median of ${levels.length} plant categories`,
+        asOf: lastDate,
+        by: sourceNameOf(first),
+      }
+    }
+    out.push(derived)
+  }
+  return out
+}
+
 export function runAnalysis(
   files: SeriesFile[],
   sourceForecasts: Forecast[],
   ctx: AnalysisContext,
 ): { pulse: PulseFile; forecasts: Forecast[] } {
-  const all = dedupe(files.flatMap((f) => f.series))
+  const raw = dedupe(files.flatMap((f) => f.series))
+  const all = [...raw, ...rollupSites(raw)]
 
   // 1) Our projections for state/regional series.
   const ours: Forecast[] = []
@@ -386,11 +468,17 @@ export function runAnalysis(
   )
   const leader = [...known].sort((a, b) => b.score - a.score)[0]
   const watchList = pathogens.filter((p) => p.level !== 'unknown' && p.score >= 40).map((p) => p.pathogen)
-  const rising = pathogens.filter((p) => p.trend === 'rising' || p.trend === 'rising-fast').map((p) => nameOf(p.pathogen))
+  const BIG3: PathogenId[] = ['influenza', 'covid', 'rsv']
+  const big3 = BIG3.map((id) => pathogens.find((p) => p.pathogen === id)).filter((p): p is PathogenPulse => !!p)
+  const displayName = (p: PathogenPulse) =>
+    p.primary && p.primary.metric.startsWith('wastewater') ? `${p.primary.label.split(' — ')[0]} (wastewater)` : nameOf(p.pathogen)
+  const describe = (p: PathogenPulse) =>
+    `${displayName(p)} ${LEVEL_LABEL[p.level].toLowerCase()}${p.trend === 'rising' || p.trend === 'rising-fast' ? ` and ${TREND_LABEL[p.trend].toLowerCase()}` : ''}`
+  const others = pathogens.filter((p) => !BIG3.includes(p.pathogen) && p.pathogen !== 'respiratory-combined' && p.pathogen !== 'ili' && p.score >= 40)
   const headline = known.length
-    ? `Respiratory virus activity in Minnesota is ${LEVEL_LABEL[stateLevel].toLowerCase()} overall${
-        leader ? `, led by ${nameOf(leader.pathogen)}` : ''
-      }.${rising.length ? ` Rising: ${rising.slice(0, 4).join(', ')}.` : ' Nothing is rising quickly right now.'}`
+    ? `Respiratory virus activity in Minnesota is ${LEVEL_LABEL[stateLevel].toLowerCase()} overall (${big3.map(describe).join('; ')}).${
+        others.length ? ` Also watch: ${others.slice(0, 3).map(describe).join('; ')}.` : ''
+      }`
     : 'Waiting for the first data refresh.'
 
   // 5) Map layers (counties and sites).
@@ -426,7 +514,8 @@ function buildMap(all: Series[], now: string) {
   for (const s of all) {
     if (s.geo.type !== 'county' && s.geo.type !== 'sewershed') continue
     const sig = summarize(s, now)
-    if (!sig) continue
+    // Inactive sites/counties (no data in the last 4 weeks) are left off the map.
+    if (!sig || sig.stale) continue
     const kind = s.geo.type === 'county' ? 'county' : 'site'
     const layerId = `${kind === 'site' ? 'site-' : ''}${METRIC_SHORT[s.metric] ?? s.metric}:${s.pathogen}`
     const layer = layers.get(layerId)

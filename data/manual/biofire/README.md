@@ -36,11 +36,18 @@ participating labs.
   name. The date is the snapshot date and decides which file wins when files overlap. Leave the
   name exactly as exported. A browser suffix such as ` (1)` is tolerated.
 - **Columns:** `Week,US,Northeast,Midwest,West,South`.
-- **`Week`:** an ISO date (`YYYY-MM-DD`) inside the week. It is mapped to that week's MMWR
-  week-ending Saturday, so a week-start Sunday and a week-end Saturday both work. Diagnostics list
-  the weekday of every `Week` value so you can confirm the convention.
+- **`Week`:** an ISO date (`YYYY-MM-DD`) or U.S. `M/D/YYYY` date inside the week. It is mapped to
+  that week's MMWR week-ending Saturday, so a week-start Sunday and a week-end Saturday both work.
+  Invalid dates (for example day-first `30/06/2024`) and weeks more than 7 days after the run date
+  are skipped. Two rows in the same MMWR week (daily dates) trigger a warning; the last one wins.
+  Diagnostics list the weekday of every `Week` value so you can confirm the convention.
 - **Values:** proportions from 0 to 1, for example `0.0123` means 1.23%. If any value in the
-  file is greater than 1, the whole file is rejected rather than re-scaled.
+  file is greater than 1, the whole file is rejected rather than re-scaled. If **every** value
+  carries a `%` sign (a file re-saved from a spreadsheet with percent formatting, e.g. `1.23%`),
+  the numbers are read as percentages as written. A file that mixes `%` cells with bare numbers is
+  rejected.
+- **Plain `Adenovirus`:** read as the respiratory (RP2.1) target. Put a GI-panel export whose
+  organism is just "Adenovirus" in a `gi/` subfolder so it is read as Adenovirus F40/41.
 - **Blank and missing cells:** a blank cell is skipped. A marker such as `NA` or `*` is stored as
   missing (null).
 
@@ -66,16 +73,17 @@ One row per organism × geography × week. The header is case-insensitive.
 | `geo_code` | yes | `US`, `Northeast`, `Midwest`, `South`, `West` or a site id. Only `US` and `Midwest` are kept. |
 | `week_start` | yes, or `week_end` | ISO date of the Sunday that starts the MMWR week. |
 | `week_end` | yes, or `week_start` | ISO date of the Saturday that ends the MMWR week. |
-| `detection_rate` | yes | Proportion from 0 to 1. Rows outside 0–1 are skipped. A blank value is stored as missing. |
+| `detection_rate` | yes | Proportion from 0 to 1. Units are checked for the whole file: if any value is above 1 the whole file is rejected (not just that row). If every value carries a `%` sign they are read as percentages; mixed units reject the file. A blank value is stored as missing. |
 | `smoothing` | no | `3wk_centered` (default; the public Trend measure), `weekly_raw` or `2wk_window`. Each non-default value becomes its own series. |
 | `n_tests`, `n_positive`, `n_sites` | no | Counts behind the rate, if shared. The latest values appear in the series tooltip. |
 | `provisional` | no | `true` or `false`. The earliest provisional week starts the provisional tail. |
-| `retrieved_at` | no | ISO date or datetime of the snapshot. When the same week appears in several files, the newest snapshot wins. If blank, a date in the file name is used, then the file's modification time. |
+| `retrieved_at` | no | ISO date or datetime of the snapshot. When the same week appears in several files, the newest snapshot wins. If blank, a date in the file name is used. File modification times are never used (a fresh checkout resets them): an undated file ranks below every dated snapshot, with a warning. |
 | `source_url` | no | Where the numbers came from. |
 | `notes` | no | Free text. It is not published. |
 
 If a week date is not a Sunday or Saturday as expected, the row is assigned to the MMWR week that
-contains the middle of its 7-day window, and a warning is logged.
+contains the middle of its 7-day window, and a warning is logged. Week dates must be valid ISO or
+U.S. `M/D/YYYY` dates; weeks more than 7 days after the run date are skipped.
 
 ```csv
 source,panel,organism_code,organism_label,geo_type,geo_code,week_start,detection_rate,smoothing,n_tests,n_positive,n_sites,provisional,retrieved_at,source_url,notes
@@ -118,4 +126,6 @@ After a pipeline run, `public/data/diagnostics/biofire.json` lists each file wit
 - the number of rows read and values kept
 - the reasons rows were skipped
 - the weekday histogram for week dates
+- how the values were read (`scale`: `proportion` or `percent-sign`) and their min/median/max in
+  percent, so a file in the wrong unit stands out
 - any schema-drift warnings

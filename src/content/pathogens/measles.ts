@@ -73,7 +73,7 @@ const profile: PathogenProfile = {
         'If your child or teen missed a dose, catch up now. All children and teens need 2 doses at least 28 days apart, and Minnesota schools require 2 doses',
         'Before international travel, children 12 months and older need 2 doses at least 28 days apart, even if they are younger than 4',
         'If your child has a fever and rash, call the clinic before going in',
-        'If your child is exposed and not protected, they may need to stay home from school or child care until 21 days after the exposure, or 28 days if they got immune globulin',
+        'If your child is exposed and not protected, they may need to stay home from school or child care. This can last until 21 days after the exposure, or 28 days if they got immune globulin',
       ],
     },
     adults: {
@@ -177,7 +177,7 @@ const profile: PathogenProfile = {
         name: 'MMRV vaccine (ProQuad: measles, mumps, rubella and chickenpox)',
         who: 'Children 12 months through 12 years (the ages FDA approved it for). It is mostly used for the second dose at 4 to 6 years.',
         notes:
-          'For a child’s first dose at 12 to 47 months, separate MMR and chickenpox shots are recommended, because the combined shot has a slightly higher chance of fever-related seizures at that age. In 2025, CDC’s vaccine advisers voted to recommend against MMRV for all children under 4. Ask your child’s clinician which option fits your child.',
+          'For a child’s first dose at 12 to 47 months, separate MMR and chickenpox shots are recommended. The combined shot has a slightly higher chance of fever-related seizures at that age. In 2025, CDC’s vaccine advisers voted to recommend against MMRV for all children under 4. Ask your child’s clinician which option fits your child.',
       },
       {
         name: 'Immune globulin (IG) after exposure (not a vaccine)',

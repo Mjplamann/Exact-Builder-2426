@@ -246,11 +246,12 @@ describe('wastewaterscan reduction and series', () => {
     const mpox = det.find((s) => s.pathogen === 'mpox')!
     expect(mpox.attrs?.assays).toBe('MPXV_G2R_WA, MPXV_dD14-16')
     expect(det.map((s) => s.pathogen)).toEqual(['measles', 'mpox', 'h5n1'])
-    // Default: only targets CDC NWSS does not already count statewide.
+    // Default: every rare target (series are keyed by measurement system, so they coexist with CDC NWSS).
     const def = buildDetectionSeries(acc, dopts)
-    expect(def.map((s) => s.pathogen)).toEqual(['hepatitis-a', 'west-nile'])
-    expect(def[0].points).toEqual([['2026-02-28', 1]])
-    expect(def[0].attrs?.lastDetection).toBe('2026-02-23 (Rochester)')
+    expect(def.map((s) => s.pathogen)).toEqual(['measles', 'mpox', 'h5n1', 'hepatitis-a', 'west-nile'])
+    const hav = def.find((s) => s.pathogen === 'hepatitis-a')!
+    expect(hav.points).toEqual([['2026-02-28', 1]])
+    expect(hav.attrs?.lastDetection).toBe('2026-02-23 (Rochester)')
     // Last week flagged open by a plant → provisional.
     expect(buildDetectionSeries(acc, { ...dopts, openWeeks: new Set(['2026-02-28', '2026-03-07']) })[0].provisionalFrom).toBe('2026-02-28')
   })

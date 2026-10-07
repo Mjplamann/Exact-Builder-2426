@@ -1,5 +1,10 @@
 import type { PathogenProfile } from '../types'
 
+// TODO(verify): revised without live web verification (the shared WebSearch budget was exhausted). Before
+// release, confirm by search: every source URL (especially the MDH mpox path, which may still be
+// /diseases/monkeypox/), JYNNEOS approval status for ages 12–17, and current CDC booster guidance.
+// Minnesota year-to-date counts come from CDC's NNDSS weekly table (data.cdc.gov x9gk-5huc), as of 2026-09-26.
+
 const profile: PathogenProfile = {
   id: 'mpox',
   name: 'Mpox',
@@ -9,10 +14,10 @@ const profile: PathogenProfile = {
   kind: 'virus',
   oneLiner: 'A virus that causes a painful rash, spread mostly through close skin-to-skin contact. The JYNNEOS vaccine helps prevent it.',
   overview:
-    'Mpox (formerly called monkeypox) is a virus related to smallpox, but it is usually much milder. It causes a rash or sores that can be very painful, often with fever and swollen glands, and most people recover in 2 to 4 weeks. There are two main types (clades). Clade II caused the large 2022 outbreak, with more than 30,000 U.S. cases, and still causes most U.S. cases. Clade I has caused large outbreaks in central and eastern Africa since 2023 and has historically caused more severe illness. The risk to the general public in Minnesota is low.',
+    'Mpox (formerly called monkeypox) is a virus related to smallpox, but it is usually much milder. It causes a rash or sores that can be very painful, often with fever and swollen glands, and most people recover in 2 to 4 weeks. Of its two main types (clades), clade II causes most U.S. cases, including the large 2022 outbreak, while clade I has historically caused more severe illness. The risk to the general public in Minnesota is low.',
   seasonality: {
     summary:
-      'Mpox does not have a clear season in Minnesota. Nationally, the large 2022 outbreak peaked in late summer, and health officials often encourage vaccination before summer festivals, large gatherings and travel.',
+      'Mpox does not have a clear season in Minnesota, and recent cases have been reported throughout the year. Nationally, the large 2022 outbreak peaked in midsummer. Health officials often encourage vaccination before Pride events, summer festivals, large gatherings and travel.',
     peakMonths: [],
   },
   transmission:
@@ -72,7 +77,7 @@ const profile: PathogenProfile = {
       summary:
         'Most U.S. cases are in adults in this age group, mainly spread during sex. The illness can be very painful and last weeks, but it is rarely life-threatening for people with healthy immune systems.',
       actions: [
-        'Get both doses of the JYNNEOS vaccine, 4 weeks apart, if you are at higher risk. This includes gay, bisexual and other men who have sex with men, and transgender and nonbinary people, who have had a recent sexually transmitted infection, more than one partner, or sex at events or venues. Sex partners of people at risk also qualify',
+        'Get both doses of the JYNNEOS vaccine, 4 weeks apart, if you are at higher risk. This includes gay, bisexual and other men who have sex with men, and transgender and nonbinary people, with certain risks in the past 6 months. Examples are a new sexually transmitted infection, more than one sex partner, or sex at a commercial sex venue or large event. Sex partners of people at risk also qualify',
         'If you have a new rash or sores, avoid sex and close contact and get checked',
         'If you are exposed, ask about the vaccine within 4 days. It may still help up to 14 days after exposure',
         'Ask about HIV testing and HIV PrEP (medicine that prevents HIV) at the same visit',
@@ -159,9 +164,9 @@ const profile: PathogenProfile = {
     vaccines: [
       {
         name: 'JYNNEOS vaccine',
-        who: 'Recommended for adults at higher risk, including gay, bisexual and other men who have sex with men, and transgender and nonbinary people, who have had a recent sexually transmitted infection, more than one sex partner, or sex at commercial sex venues or large events; sex partners of people at risk; and people who expect to be in these situations. Also recommended after an exposure. Teens and children may be able to get it in some situations, such as after an exposure; ask a clinician.',
+        who: 'Recommended for adults at higher risk. This includes gay, bisexual and other men who have sex with men, and transgender and nonbinary people, with certain risks in the past 6 months. These risks are a new sexually transmitted infection, more than one sex partner, or sex at a commercial sex venue or at a large public event where mpox is spreading. Sex partners of people at risk can also get it, as can people who expect to be in these situations. It is also recommended after an exposure. Teens and children may be able to get it in some situations, such as after an exposure; ask a clinician.',
         notes:
-          'Two shots, 4 weeks apart. Protection is strongest about 2 weeks after the second dose, so get both. After an exposure, get it within 4 days if possible; it may still lessen illness if given up to 14 days after. It is expected to protect against both clade I and clade II. The vaccine virus cannot grow in the body, so it is safe for people with weakened immune systems and can be given during pregnancy. It is available at many clinics and pharmacies.',
+          'Two shots, 4 weeks apart. Protection is strongest about 2 weeks after the second dose, so get both. After an exposure, get it within 4 days if possible; it may still lessen illness if given up to 14 days after. It is expected to protect against both clade I and clade II. The vaccine virus cannot grow in the body, so it is safe for people with weakened immune systems and can be given during pregnancy. Booster doses are not currently recommended for most people, and people who have already had mpox generally do not need the vaccine. It is sold commercially, so ask your clinic, a sexual health clinic or a pharmacy whether they offer it.',
       },
       {
         name: 'ACAM2000 vaccine',
@@ -180,7 +185,7 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'A clinician tests for mpox by swabbing a sore and sending it to a lab for a PCR test (a test that finds the virus’s genetic material). Testing is only useful when there is a rash or sores. Many commercial labs and the MDH Public Health Laboratory can test. Public health labs can do further testing to tell whether an infection is clade I or clade II. Mpox is not part of standard BioFire respiratory or stomach panels. People tested for mpox are usually also offered HIV and other sexually transmitted infection testing. Mpox is a reportable disease in Minnesota.',
+    'A clinician tests for mpox by swabbing a sore and sending it to a lab for a PCR test (a test that finds the virus’s genetic material). If you have symptoms such as rectal pain or a sore throat but no visible sores, a clinician may swab the rectum or throat. People without symptoms are generally not tested. Many commercial labs and the MDH Public Health Laboratory can test. Public health labs can do further testing to tell whether an infection is clade I or clade II. Mpox is not part of standard BioFire respiratory or stomach panels. People tested for mpox are usually also offered HIV and other sexually transmitted infection testing. Mpox is a reportable disease in Minnesota (clinicians and labs must tell MDH about every case).',
   whenToSeekCare: [
     'Call a clinic or sexual health clinic if you have a new rash or sores and may have been exposed. Cover your sores and wear a mask when you go in.',
     'If you had close contact with someone who has mpox, call a clinician or MDH right away about the vaccine. It works best within 4 days of exposure.',
@@ -189,11 +194,12 @@ const profile: PathogenProfile = {
     'Go to the emergency department or call 911 for eye pain or vision changes, trouble breathing, confusion, or being unable to urinate or have a bowel movement.',
   ],
   readingTheNumbers:
-    'Mpox is tracked by counting confirmed cases reported to MDH and CDC. It is not on standard BioFire panels, and there is no test positivity or emergency visit percentage for it. Because only people with a rash get tested, counts reflect people who noticed symptoms and sought care. Since the 2022 outbreak, U.S. cases have continued at much lower levels. A rising count usually means more spread through sexual networks. It is a signal for people at higher risk to get both vaccine doses and to watch for symptoms. It does not mean everyday activities like work, school or shopping have become risky. A clade I case found in the U.S. gets extra public health attention because this type has historically caused more severe illness. Some wastewater programs also test for mpox. A wastewater detection is an early alert that health officials follow up on, not a count of cases.',
+    'Mpox is tracked by counting confirmed cases reported to MDH and CDC. It is not on standard BioFire panels, and there is no test positivity or emergency visit percentage for it. MN Pulse shows Minnesota cases from CDC’s weekly notifiable disease tables. These counts are provisional, and Minnesota often adds cases to earlier weeks, so a blank week does not mean zero. The year-to-date total is the better guide. Because only people with symptoms get tested, counts reflect people who noticed symptoms and sought care. Since the 2022 outbreak, U.S. cases have continued at much lower levels. A rising count usually means more spread through sexual networks. It is a signal for people at higher risk to get both vaccine doses and to watch for symptoms. It does not mean everyday activities like work, school or shopping have become risky. MN Pulse also shows mpox results from wastewater testing. CDC’s national program reports how many Minnesota sites found any type of mpox each week. WastewaterSCAN tests 4 plants outside the Twin Cities, with separate tests for clade II and clade Ib (a form of clade I). One infected person or a visitor can cause a detection, so it is an early alert, not a case count. A clade I detection or case gets extra public health follow-up because this type has historically caused more severe illness.',
   watchNotes: [
+    'As of late September 2026, CDC’s provisional weekly tables listed 25 Minnesota mpox cases so far in 2026, compared with 17 at the same point in 2025. Check the MDH mpox page for current Minnesota information.',
     'Clade II mpox continues to spread at low levels in the U.S., mostly during sex between men. Getting both JYNNEOS doses remains the best protection for people at higher risk.',
     'Since late 2024, a small number of clade I mpox cases have been found in the U.S. Most were in people who had traveled to affected countries, but a few in 2025 had no travel history. JYNNEOS is expected to protect against clade I.',
-    'The World Health Organization ended the global mpox emergency it had declared in 2024 in September 2025, but clade I outbreaks continue in parts of central and eastern Africa.',
+    'In September 2025, the World Health Organization ended the global mpox emergency it declared in August 2024. Clade I outbreaks continue in parts of central and eastern Africa.',
     'Studies found that tecovirimat (TPOXX) did not speed healing, so it is now reserved for people with severe illness or at high risk of it.',
   ],
   sources: [
@@ -202,6 +208,11 @@ const profile: PathogenProfile = {
     { label: 'CDC: Mpox Vaccines', url: 'https://www.cdc.gov/mpox/vaccines/index.html' },
     { label: 'CDC: Mpox Situation Summary', url: 'https://www.cdc.gov/mpox/situation-summary/index.html' },
     { label: 'FDA: JYNNEOS', url: 'https://www.fda.gov/vaccines-blood-biologics/jynneos' },
+    {
+      label: 'CDC: NNDSS weekly notifiable disease data (provisional)',
+      url: 'https://data.cdc.gov/d/x9gk-5huc',
+    },
+    { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },
     { label: 'MDH: Mpox', url: 'https://www.health.state.mn.us/diseases/mpox/index.html' },
     { label: 'WHO: Mpox fact sheet', url: 'https://www.who.int/news-room/fact-sheets/detail/mpox' },
   ],

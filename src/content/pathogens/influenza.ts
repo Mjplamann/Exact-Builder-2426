@@ -7,7 +7,14 @@ const profile: PathogenProfile = {
   aka: ['flu', 'seasonal flu', 'influenza A', 'influenza B'],
   category: 'respiratory-viral',
   kind: 'virus',
-  biofireTargets: ['Influenza A', 'Influenza A H1', 'Influenza A H1-2009', 'Influenza A H3', 'Influenza B'],
+  biofireTargets: [
+    'Influenza A',
+    'Influenza A/H1',
+    'Influenza A/H1-2009',
+    'Influenza A/H3',
+    'Influenza A (no subtype detected)',
+    'Influenza B',
+  ],
   oneLiner: 'A contagious respiratory virus that peaks in Minnesota winters. Yearly vaccines and early antivirals help prevent serious illness.',
   overview:
     'Influenza (flu) is a contagious illness of the nose, throat, and lungs caused by influenza viruses. Seasonal flu comes from influenza A (mainly the H1N1 and H3N2 subtypes) and influenza B. Most people recover in a week or two, but flu causes tens of thousands of U.S. deaths in many seasons, mostly among older adults. In 2025–26 a changed H3N2 strain called subclade K spread widely, and the 2026–27 vaccine was updated to better match it.',
@@ -20,7 +27,7 @@ const profile: PathogenProfile = {
     'Flu spreads mainly through droplets and tiny particles that people with flu release when they cough, sneeze, or talk. These can reach the mouth or nose of people nearby, or be breathed in. Less often, people catch flu by touching a surface with the virus on it and then touching their mouth, nose, or eyes.',
   incubation: 'Symptoms usually start about 2 days after exposure, with a range of 1 to 4 days.',
   contagiousPeriod:
-    'People are most contagious in the first 3 to 4 days after they get sick. Healthy adults can spread flu starting about 1 day before symptoms begin and up to 5 to 7 days after. Young children and people with weakened immune systems may spread it for longer.',
+    'People are most contagious in the first 3 days after they get sick. Healthy adults can spread flu starting about 1 day before symptoms begin and up to 5 to 7 days after. Young children and people with weakened immune systems may spread it for longer.',
   symptoms: {
     common: [
       'Symptoms that come on suddenly',
@@ -37,6 +44,7 @@ const profile: PathogenProfile = {
       'Ear infections or sinus infections (complications)',
       'Pneumonia (a lung infection), from the flu virus itself or a bacterial infection that follows',
       'Worsening of long-term conditions such as asthma, diabetes, or heart disease',
+      'Rarely, swelling or inflammation of the brain (encephalopathy), mostly in children, which can cause seizures, confusion, or trouble waking',
     ],
     emergencyWarningSigns: [
       'Adults: trouble breathing or shortness of breath',
@@ -69,9 +77,9 @@ const profile: PathogenProfile = {
     children: {
       risk: 'moderate',
       summary:
-        'Most healthy children get better in about a week. Children under 5, and kids with asthma, diabetes, heart disease, or brain and nerve conditions, have a higher risk of pneumonia and hospital stays. Flu kills children every year, and most who die were not vaccinated.',
+        'Most healthy children get better in about a week, but flu can be serious for any child. Children under 5 (especially under 2) and kids with asthma, diabetes, heart disease, or brain and nerve conditions have a higher risk of pneumonia and hospital stays. About half of children who die from flu had no known health problem before, and most were not vaccinated.',
       actions: [
-        'Get a flu vaccine every fall. Children under 9 getting a flu vaccine for the first time need 2 doses, 4 weeks apart.',
+        'Get a flu vaccine every fall. Children 6 months to 8 years who have not had at least 2 flu vaccine doses in the past need 2 doses this season, at least 4 weeks apart.',
         'Ask whether the nasal spray vaccine is an option for healthy kids 2 and older. It is not for children with weakened immune systems or some with asthma.',
         'Call your clinician early if your child is under 5 or has a long-term health condition. Antivirals work best when started within 2 days.',
         'Keep sick children home until they have had no fever for at least 24 hours without fever medicine and feel better overall.',
@@ -84,7 +92,7 @@ const profile: PathogenProfile = {
         'Most healthy adults recover within 1 to 2 weeks, though flu can keep you in bed for days. Adults with asthma, diabetes, heart disease, severe obesity, or other long-term conditions have a higher risk of serious illness.',
       actions: [
         'Get a flu vaccine every year, ideally in September or October.',
-        'If you have a long-term health condition, call your clinician within 1 to 2 days of flu symptoms to ask about antivirals.',
+        'If you have a long-term health condition or severe obesity, call your clinician as soon as flu symptoms start to ask about antivirals. The same goes for American Indian and Alaska Native adults.',
         'Stay home while sick, and take extra care around others for 5 days after you return to normal activities.',
         'Get vaccinated to help protect babies, older relatives, and anyone you care for.',
       ],
@@ -105,7 +113,7 @@ const profile: PathogenProfile = {
       summary:
         'People 65 and older account for most flu hospital stays and deaths. The immune system responds less strongly with age, so CDC prefers stronger flu vaccines for this group.',
       actions: [
-        'Get a high-dose, adjuvanted (with an added immune booster), or recombinant flu vaccine each fall. If none is available, get any flu vaccine.',
+        'Get a high-dose, adjuvanted (with an added immune booster), or recombinant (made without eggs or growing flu virus) flu vaccine each fall. If none is available, get any flu vaccine.',
         'Call your clinician as soon as flu symptoms start. Antivirals are recommended for everyone 65 and older with flu and work best within 2 days.',
         'If you live in a nursing home or assisted living, tell staff about symptoms right away. Antivirals may also be used to prevent flu during outbreaks.',
         'Ask about pneumococcal, RSV, and COVID-19 vaccines too.',
@@ -114,7 +122,7 @@ const profile: PathogenProfile = {
     pregnant: {
       risk: 'higher',
       summary:
-        'Pregnancy changes the immune system, heart, and lungs. This raises the risk of severe flu during pregnancy and up to 2 weeks after delivery, and flu can raise the risk of early (preterm) birth. A flu shot during pregnancy also helps protect your baby for several months after birth.',
+        'Pregnancy changes the immune system, heart, and lungs. This raises the risk of severe flu during pregnancy and up to 2 weeks after delivery. Flu can also raise the risk of early (preterm) birth. A flu shot during pregnancy helps protect your baby for several months after birth.',
       actions: [
         'Get a flu shot (not the nasal spray) during any trimester.',
         'Call your clinician right away if you get flu symptoms while pregnant or within 2 weeks after delivery. Antivirals are recommended, and oseltamivir is the preferred choice in pregnancy.',
@@ -136,7 +144,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Most people recover at home with rest and fluids. Prescription antiviral medicines can shorten illness by about a day and lower the risk of serious complications. They work best when started within 2 days (48 hours) of the first symptoms. CDC recommends antivirals as soon as possible for anyone who is hospitalized, very sick, or at higher risk, even after 2 days, and treatment should not wait for a test result.',
+      'Most people recover at home with rest and fluids. Prescription antiviral medicines can shorten illness by about a day and lower the risk of serious complications. They work best when started within 2 days (48 hours) of the first symptoms. CDC recommends antivirals as soon as possible for anyone who is hospitalized, very sick, or at higher risk, even after 2 days. Treatment should not wait for a test result. Antibiotics do not treat flu itself. Your clinician may prescribe them if a bacterial infection, such as pneumonia or an ear infection, follows the flu.',
     options: [
       {
         name: 'Oseltamivir (Tamiflu and generics)',
@@ -162,8 +170,9 @@ const profile: PathogenProfile = {
       {
         name: 'Peramivir (Rapivab)',
         type: 'antiviral',
-        detail: 'A single dose given through a vein (IV) in a clinic or hospital. It can be used for people 6 months and older.',
-        who: 'People 6 months and older who cannot take medicine by mouth or need treatment in a clinic or hospital.',
+        detail:
+          'A single dose given through a vein (IV) at a clinic, urgent care, or emergency department. It is approved for uncomplicated flu (flu without serious complications) in people 6 months and older.',
+        who: 'People 6 months and older with uncomplicated flu who cannot take or keep down medicine by mouth. For people in the hospital, oseltamivir is usually preferred.',
       },
       {
         name: 'Rest, fluids, and fever reducers',
@@ -179,9 +188,9 @@ const profile: PathogenProfile = {
     vaccines: [
       {
         name: 'Yearly flu shot (inactivated or recombinant vaccine)',
-        who: 'Everyone 6 months and older without a medical reason to skip it. CDC and the American Academy of Pediatrics both recommend it every year.',
+        who: 'Everyone 6 months and older without a medical reason to skip it. CDC, the American Academy of Pediatrics, and the Minnesota Department of Health all recommend it every year.',
         notes:
-          'Best given in September or October, but still worth getting later while flu is spreading. Protection builds over about 2 weeks. Children 6 months to 8 years who have not had at least 2 flu vaccine doses before need 2 doses, 4 weeks apart. People with an egg allergy can get any flu vaccine that fits their age and health.',
+          'Best given in September or October, but still worth getting later while flu is spreading. Protection builds over about 2 weeks. Children 6 months to 8 years who have not had at least 2 flu vaccine doses before need 2 doses this season, at least 4 weeks apart. People with an egg allergy can get any flu vaccine that fits their age and health.',
       },
       {
         name: 'High-dose, adjuvanted, or recombinant flu vaccine',
@@ -192,14 +201,14 @@ const profile: PathogenProfile = {
         name: 'Nasal spray flu vaccine (FluMist)',
         who: 'Healthy, non-pregnant people ages 2 through 49.',
         notes:
-          'This vaccine contains a weakened live virus. It is not for pregnant people, people with weakened immune systems, children 2 to 4 with asthma or recent wheezing, or people who recently took flu antiviral medicine. FDA approved a version that can be given at home in 2024.',
+          'This vaccine contains a weakened live virus. Do not use it if you are pregnant or have a weakened immune system. It is also not for children 2 to 4 with asthma or recent wheezing, children and teens taking aspirin, or people who recently took flu antiviral medicine. If you care for someone with a severely weakened immune system who needs a protected hospital setting, get a flu shot instead. One example is a person recovering from a stem cell transplant. FDA approved FluMist Home in 2024. Adults 18 to 49 can give it to themselves, and a parent or caregiver can give it to children 2 to 17. Ask whether it is available where you live.',
       },
     ],
     everyday: [
       'Wash your hands often with soap and water, or use an alcohol-based hand sanitizer.',
       'Cover coughs and sneezes with a tissue or your elbow.',
       'Stay home when sick until you have had no fever for at least 24 hours (without fever medicine) and feel better overall. Then take extra care, like masking, for 5 more days.',
-      'Bring in fresh air: open windows when you can, and use good HVAC filters or a portable HEPA air cleaner.',
+      'Bring in fresh air: open windows when you can, and use good filters in your heating and cooling system or a portable HEPA air cleaner.',
       'Consider a well-fitting mask in crowded indoor places when flu is high, especially if you or someone you live with is at higher risk.',
       'Clean surfaces that many people touch, such as doorknobs and phones.',
     ],
@@ -207,26 +216,36 @@ const profile: PathogenProfile = {
   testing:
     'During flu season, clinicians often diagnose flu based on symptoms. Clinics can test a nose or throat swab with a rapid test or a more accurate molecular (PCR) test, often with same-day results. Rapid tests can miss flu, so a negative result does not always rule it out. Some home tests check for both flu and COVID-19. If you are at higher risk, your clinician may start antivirals without waiting for a test result.',
   whenToSeekCare: [
-    'If you are at higher risk (65 or older, pregnant or recently gave birth, a child under 5, or living with a long-term condition or weakened immune system), call your clinician within the first 1 to 2 days of symptoms about antivirals.',
-    'Call your clinician if you are not starting to feel better after several days, or if you have ear pain, sinus pain, or a cough that keeps getting worse.',
+    'If you are at higher risk, call your clinician as soon as flu symptoms start to ask about antivirals. They work best when started within 1 to 2 days. If it has been longer, still call. Antivirals can still help people at higher risk or who are getting sicker.',
+    'Higher risk includes people 65 and older, children under 5 (especially under 2), and people who are pregnant or gave birth in the past 2 weeks. It also includes American Indian and Alaska Native people, nursing home residents, and anyone with severe obesity, a long-term health condition, or a weakened immune system.',
+    'Call your clinician if you are not starting to feel better after several days. Also call for ear pain, sinus pain, or a cough that keeps getting worse.',
     'If you cannot get in quickly, try telehealth or a same-day clinic. Antivirals can often be prescribed without an in-person visit.',
-    'Go to urgent care if you need to be seen today but have no emergency warning signs, for example a child who is drinking less than usual.',
+    'Go to urgent care if you need to be seen today but have no emergency warning signs. One example is a child who is drinking less than usual.',
     'Call 911 or go to the emergency department for any emergency warning sign, such as trouble breathing, chest pain, confusion, or a seizure.',
   ],
   readingTheNumbers:
-    'Flu test positivity is the share of lab flu tests that come back positive. Tests are mostly done on people sick enough to see a clinician or go to the hospital, so this number shows how much of that illness is flu, not how many people are infected. It is usually near zero in summer, then climbs over several weeks in winter, peaks, and falls. The BioFire detection rate is the share of multi-virus respiratory panel tests, run mostly in hospitals and emergency departments on sicker patients, that find influenza A or B. Because the panel checks for many germs at once, it shows how much flu is adding to all the respiratory illness going around. The ED-visit percent is the share of all emergency department visits diagnosed as flu. It shows how much flu is sending people to urgent care. A steady rise over 2 to 3 weeks means flu season is starting or speeding up. For most people, that means: get vaccinated now if you have not (protection takes about 2 weeks), stay home when sick, and if you are at higher risk, call your clinician at the first sign of flu. Numbers for the most recent week or two are often revised.',
+    'Flu test positivity is the share of lab flu tests that come back positive. Most tests are done on people sick enough to see a clinician or go to the hospital. So this number shows how much of that illness is flu, not how many people are infected. It is usually near zero in summer. In winter it climbs over several weeks, peaks, and then falls. The BioFire detection rate is the share of multi-virus respiratory panel tests at participating labs in the Midwest that find influenza A or B. These panels are run mostly in hospitals and emergency departments on sicker patients. Because they check for many germs at once, the rate shows how much flu adds to all the respiratory illness going around. The ED-visit percent is the share of all emergency department visits diagnosed as flu. It shows how much flu is sending people to the emergency department. In recent years in Minnesota, it has stayed well under 1% in summer and peaked at about 5% to 13% in winter. Weekly flu hospital admissions count people with lab-confirmed flu newly admitted to Minnesota hospitals, as reported to CDC. The rate per 100,000 residents makes it easier to compare with other places and past seasons. Admissions have ranged from a handful a week in summer to about 200 to more than 1,000 a week at recent winter peaks. A steady rise over 2 to 3 weeks means flu season is starting or speeding up. For most people, that means it is time to get vaccinated if you have not already, since protection takes about 2 weeks. Stay home when sick. If you are at higher risk, call your clinician at the first sign of flu. Numbers for the most recent week or two are often revised.',
   watchNotes: [
-    '2026–27 flu vaccines were updated for all three strains they cover, including a change aimed at the H3N2 subclade K virus that spread widely in the 2025–26 season.',
-    'In March 2026, a federal court paused changes to the federal vaccine schedule and votes by the reconstituted CDC vaccine advisory committee (ACIP). CDC says its July 2025 flu recommendations stay in effect for 2026–27: a yearly flu vaccine for everyone 6 months and older. The American Academy of Pediatrics’ 2026–27 recommendations also call for yearly flu vaccine for all children 6 months and older.',
-    'Bird flu (H5N1) and swine-origin “variant” flu viruses sometimes infect people who work with poultry, dairy cattle, or pigs. These are not seasonal flu and are tracked separately (see the H5N1 profile). Seasonal flu vaccine does not protect against H5N1.',
+    'As of the week ending September 26, 2026, flu made up about 0.3% of emergency department visits in Minnesota. There were 21 new flu hospital admissions statewide that week. Activity was still low but had been rising slowly since late August, a little earlier than in recent years.',
+    'Minnesota’s 2025–26 flu season was driven mostly by H3N2. MDH counted 5,526 flu hospitalizations, including the largest single week of flu hospitalizations since it began tracking in 2008–09.',
+    'All three strains in 2026–27 flu vaccines were updated. This includes a new H3N2 strain aimed at the subclade K virus that spread widely in the 2025–26 season.',
+    'Federal vaccine guidance changed several times in 2025–2026. In March 2026, a federal court paused recent changes to the childhood vaccine schedule and votes of the reconstituted CDC vaccine advisory committee (ACIP). Under that order, CDC says the flu recommendations in its July 2025 immunization schedules remain in effect for 2026–27. They call for a yearly flu vaccine for everyone 6 months and older. A federal appeals court heard arguments on October 6, 2026, and had not yet ruled.',
+    'The American Academy of Pediatrics recommends a yearly flu vaccine for all children 6 months and older. The Minnesota Department of Health recommends one for everyone 6 months and older. MDH bases its vaccine guidance on recommendations from professional medical groups such as the American Academy of Pediatrics, ACOG, and IDSA.',
+    'Bird flu (H5N1) and swine-origin “variant” flu viruses sometimes infect people who work with poultry, dairy cattle, or pigs, or who spend time around pigs at agricultural fairs. These are not seasonal flu and are tracked separately (see the H5N1 profile). Seasonal flu vaccine does not protect against H5N1.',
   ],
   sources: [
     {
       label: 'CDC — Interim clinical considerations for seasonal influenza vaccines',
       url: 'https://www.cdc.gov/flu/hcp/vax-summary/seasonal-influenza-vaccines.html',
     },
-    { label: 'CDC — 2026–2027 flu season', url: 'https://cdc.gov/flu/season/2026-2027.html' },
-    { label: 'CDC — ACIP flu recommendations summary', url: 'https://cdc.gov/flu/hcp/acip/index.html' },
+    { label: 'CDC — 2026–2027 flu season', url: 'https://www.cdc.gov/flu/season/2026-2027.html' },
+    { label: 'CDC — ACIP flu recommendations summary', url: 'https://www.cdc.gov/flu/hcp/acip/index.html' },
+    { label: 'CDC — Treating flu (antiviral medicines)', url: 'https://www.cdc.gov/flu/treatment/index.html' },
+    { label: 'CDC — Flu signs and symptoms', url: 'https://www.cdc.gov/flu/signs-symptoms/index.html' },
+    {
+      label: 'AAP policy statement — Recommendations for prevention and control of influenza in children, 2026–2027',
+      url: 'https://publications.aap.org/pediatrics/article/doi/10.1542/peds.2026-078778/208572/Recommendations-for-Prevention-and-Control-of',
+    },
     {
       label: 'HealthyChildren.org (AAP) — Flu prevention and treatment recommendations for 2026–27',
       url: 'https://www.healthychildren.org/English/news/Pages/aap-(influenza)-flu-prevention-recommendations-for-2026-27.aspx',
@@ -240,16 +259,37 @@ const profile: PathogenProfile = {
       url: 'https://www.immunize.org/ask-experts/topic/influenza/vaccine-recommendations-influenza/',
     },
     {
+      label: 'IDSA — 2026 guidelines on seasonal vaccines for immunocompromised patients',
+      url: 'https://www.idsociety.org/practice-guideline/Seasonal-RTI-Vaccinations-in-Immunocompromised-Patients/',
+    },
+    { label: 'MDH — Situation update for influenza', url: 'https://www.health.state.mn.us/diseases/flu/stats/index.html' },
+    { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
+    { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
+    { label: 'MDH — Respiratory virus vaccines', url: 'https://www.health.state.mn.us/diseases/respiratory/vaccine/index.html' },
+    {
+      label: 'MPR News (Sept. 2026) — What to know about COVID-19 and flu vaccines in Minnesota this fall',
+      url: 'https://www.mprnews.org/story/2026/09/25/heres-what-you-need-to-know-about-covid19-and-flu-vaccines-in-minnesota-this-fall',
+    },
+    {
+      label: 'FOX 9 (May 2026) — Minnesota flu season saw largest single week of flu hospitalizations since 2008–09',
+      url: 'https://www.fox9.com/news/mn-flu-season-saw-single-largest-week-flu-hospitalizations-since-2008-2009-may-2026',
+    },
+    {
+      label: 'CDC: Emergency department visits for COVID-19, flu, and RSV',
+      url: 'https://www.cdc.gov/respiratory-viruses/data/emergency-department-visits.html',
+    },
+    { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
+    {
       label: 'IDSA — Federal judge blocks immunization schedule changes, stays ACIP appointments (2026)',
       url: 'https://www.idsociety.org/news--publications-new/articles/2026/federal-judge-blocks-immunization-schedule-changes-stays-acip-member-appointments/',
     },
     {
-      label: 'IDSA — 2026 guidelines on seasonal vaccines for immunocompromised patients',
-      url: 'https://www.idsociety.org/practice-guideline/Seasonal-RTI-Vaccinations-in-Immunocompromised-Patients/',
-    },
-    {
       label: 'Congressional Research Service — Changes to CDC vaccine recommendations in 2025 and 2026',
       url: 'https://www.congress.gov/crs-product/IN12684',
+    },
+    {
+      label: 'Congressional Research Service — CDC’s updated childhood vaccine schedule litigation',
+      url: 'https://www.congress.gov/crs-product/LSB11427',
     },
   ],
   lastReviewed: '2026-10-07',
