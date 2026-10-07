@@ -35,6 +35,8 @@ const CLICK_SLOP = 6;
 const TOUCH_SLOP = 10;
 const CLICK_MS = 600;
 const DOUBLE_TAP_MS = 320;
+/** After a double-tap, the card opens this much later (past the tap's own click event). */
+const CARD_AFTER_TAP_MS = 120;
 /** Glide after a released swipe: velocity decays with this time constant (s); below MIN it stops. */
 const GLIDE_TAU = 0.3;
 const GLIDE_MIN_PX_S = 40;
@@ -80,6 +82,8 @@ export class CanvasInput {
   /** Last touch/pen activity (ms): WebKit also reports touch pinches as gesture events — ignore those. */
   private lastTouchAt = -1e9;
   private lastTap = { t: 0, x: 0, y: 0 };
+  /** A tapped animal's card, held back for the double-tap window (touch). */
+  private pendingCard = { id: '', timer: 0 };
   private hoverTimer = 0;
   private hoverPos = { x: 0, y: 0 };
   private plane = new Plane(new Vector3(0, 0, 1), 0);
@@ -253,16 +257,20 @@ export class CanvasInput {
     }
     const moved = Math.hypot(e.clientX - d.x, e.clientY - d.y);
     if (moved > CLICK_SLOP || at(e) - d.t > CLICK_MS) return;
-    this.click(e.clientX, e.clientY);
-    if (e.pointerType !== 'mouse') {
-      // Manual double-tap (dblclick is unreliable on touch). Timed by the events themselves: the
-      // first tap opens the animal's card, and that work must not eat into the double-tap window.
-      const now = at(e);
-      this.lastTouchUp = now;
-      if (now - this.lastTap.t < DOUBLE_TAP_MS && Math.hypot(e.clientX - this.lastTap.x, e.clientY - this.lastTap.y) < 30) {
-        this.onDouble(e.clientX, e.clientY);
-        this.lastTap.t = 0;
-      } else this.lastTap = { t: now, x: e.clientX, y: e.clientY };
+    if (e.pointerType === 'mouse') {
+      this.click(e.clientX, e.clientY, false);
+      return;
+    }
+    // Manual double-tap (dblclick is unreliable on touch), timed by the events themselves. The
+    // second tap is the double action only (it does not also count as a tap).
+    const now = at(e);
+    this.lastTouchUp = now;
+    if (now - this.lastTap.t < DOUBLE_TAP_MS && Math.hypot(e.clientX - this.lastTap.x, e.clientY - this.lastTap.y) < 30) {
+      this.lastTap.t = 0;
+      this.onDouble(e.clientX, e.clientY);
+    } else {
+      this.lastTap = { t: now, x: e.clientX, y: e.clientY };
+      this.click(e.clientX, e.clientY, true);
     }
   }
 
@@ -278,8 +286,9 @@ export class CanvasInput {
 
   // ------------------------------------------------------------------------------------------
 
-  private click(x: number, y: number): void {
+  private click(x: number, y: number, touch: boolean): void {
     const app = this.host.app;
+    this.cancelCard();
     if (this.mode === 'feed') {
       const kind = this.host.feedingKind;
       if (!kind) return;
@@ -298,8 +307,13 @@ export class CanvasInput {
     if (hit.kind === 'fish') {
       // Picking an animal during a tour hands the camera to it.
       this.view.picked(hit.id);
-      // The second tap of a double-tap must not replay the card's entrance.
-      if (app.world.selection.fishId !== hit.id || this.host.openPanelId) this.host.showFish(hit.id);
+      if (touch) {
+        // On a phone the card would open right under the finger (it covers the lower half of the
+        // screen) and swallow the second tap of a double-tap: it waits for the double-tap window.
+        // (Opening it later also keeps this tap's own click off the card's buttons.)
+        this.pendingCard.id = hit.id;
+        this.pendingCard.timer = window.setTimeout(() => this.flushCard(), DOUBLE_TAP_MS);
+      } else this.showCard(hit.id);
     } else if (app.world.selection.fishId || app.world.selection.decorId || app.world.selection.plantId) {
       // Tapping the water puts the card away; it never stops the camera (a tap may only be meant
       // to bring the controls back).
@@ -307,13 +321,40 @@ export class CanvasInput {
     }
   }
 
+  /** Show an animal's card (the second tap of a double-tap must not replay its entrance). */
+  private showCard(id: string): void {
+    const app = this.host.app;
+    if (!app.world.fishById.has(id)) return;
+    if (app.world.selection.fishId !== id || this.host.openPanelId) this.host.showFish(id);
+  }
+
+  private cancelCard(): void {
+    if (this.pendingCard.timer) clearTimeout(this.pendingCard.timer);
+    this.pendingCard.timer = 0;
+    this.pendingCard.id = '';
+  }
+
+  /** The tapped animal's card, now (its double-tap window has passed, or the double-tap came). */
+  private flushCard(): void {
+    const id = this.pendingCard.id;
+    this.cancelCard();
+    if (id && this.mode === 'view') this.showCard(id);
+  }
+
   /** Double-click / double-tap: on an animal, follow it; elsewhere a gentle knock on the front glass. */
   private onDouble(x: number, y: number): void {
     if (this.mode !== 'view') return;
     const app = this.host.app;
     const hit = app.pickAt(x, y);
-    if (hit.kind === 'fish') {
-      this.view.follow(hit.id);
+    // The first tap's animal counts even if it has swum a little from under the finger since.
+    const id = hit.kind === 'fish' ? hit.id : this.pendingCard.id;
+    if (id) {
+      this.view.follow(id);
+      // The card opens a moment later: the browser's click for this tap must land on the tank,
+      // not on a button of a card that has just appeared under the finger.
+      this.cancelCard();
+      this.pendingCard.id = id;
+      this.pendingCard.timer = window.setTimeout(() => this.flushCard(), CARD_AFTER_TAP_MS);
       return;
     }
     const b = tankBounds(app.world.tank);
