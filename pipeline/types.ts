@@ -26,6 +26,11 @@ export interface SourceResult {
    * (e.g. NNDSS tables whose current-week cells are often blank). Used for freshness checks.
    */
   latestData?: string
+  /**
+   * True when the source worked but has nothing to publish yet (e.g. awaiting partner data files).
+   * The source is then shown as "pending" with its message instead of as an error.
+   */
+  awaiting?: boolean
 }
 
 export type SourceMeta = Pick<

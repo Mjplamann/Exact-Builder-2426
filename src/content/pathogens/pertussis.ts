@@ -139,7 +139,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Whooping cough is treated with antibiotics. Starting them early, ideally in the first 1 to 2 weeks before coughing fits begin, can make the illness milder. Started later, antibiotics may not shorten the cough, but they still stop the spread to others. CDC advises treating people 1 year and older within 3 weeks of when the cough started, and babies under 1 and pregnant people (especially near their due date) within 6 weeks. The cough can go on for weeks after the infection is gone, because the airways take time to heal.',
+      'Whooping cough is treated with antibiotics. Starting them early, ideally in the first 1 to 2 weeks before coughing fits begin, can make the illness milder. Started later, antibiotics may not shorten the cough, but they still stop the spread to others. CDC advises treating people 1 year and older within 3 weeks of when the cough started. Babies under 1 and pregnant people (especially near their due date) should be treated within 6 weeks. The cough can go on for weeks after the infection is gone, because the airways take time to heal.',
     options: [
       {
         name: 'Azithromycin and similar antibiotics (macrolides)',
@@ -215,7 +215,7 @@ const profile: PathogenProfile = {
     'Call 911 or go to the emergency department if a baby has pauses in breathing, struggles to breathe, or turns blue or gray, or for any other emergency warning sign.',
     'Call your clinician the same day if a baby has any cough, gagging, or gasping, or if anyone has coughing fits with a whoop or vomiting.',
     'Call your clinician if a cough lasts more than 2 weeks, even if it seems mild.',
-    'Call your clinician right away if you were exposed to whooping cough and you live with or care for a baby, are pregnant, or have a weakened immune system or asthma.',
+    'Call your clinician right away if you were exposed to whooping cough and you live with or care for a baby. Also call right away after an exposure if you are pregnant or have a weakened immune system or asthma.',
     'Call your clinician if someone being treated is getting worse, develops a fever, or is not drinking enough.',
     'Urgent care can test for whooping cough when your clinic is closed. Babies with breathing problems need the emergency department, not urgent care.',
   ],

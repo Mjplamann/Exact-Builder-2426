@@ -96,6 +96,10 @@ async function runSource(
   try {
     const result = await withTimeout(mod.run({ ...ctx, log: slog }), mod.timeoutMs ?? 10 * 60_000, mod.meta.id)
     const nonEmpty = result.datasets.filter((d) => d.series.some((s) => s.points.length > 0))
+    if (nonEmpty.length === 0 && result.awaiting) {
+      slog.info(`awaiting data: ${result.message ?? ''}`)
+      return { status: { ...base, state: 'pending', message: result.message }, forecasts: [] }
+    }
     if (nonEmpty.length === 0) throw new Error(result.message ?? 'Source returned no data')
     for (const ds of nonEmpty) {
       const target = path.join(SERIES_DIR, seriesFileName(ds.source, ds.dataset))

@@ -92,7 +92,7 @@ export function summarize(s: Series, now: string): SignalSummary | null {
   let level: ActivityLevel = 'unknown'
   let levelBasis = 'Not enough history to compare'
   const pub = s.official && (!s.official.asOf || s.official.asOf === date) ? s.official : undefined
-  if (pub?.level) {
+  if (pub?.level && pub.level !== 'unknown') {
     level = pub.level
     levelBasis = `${pub.by ?? 'Publisher'} category${pub.label ? ` “${pub.label}”` : ''}`
   } else if (official) {

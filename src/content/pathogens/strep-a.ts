@@ -1,9 +1,12 @@
-// TODO(verify): drafted from long-standing CDC, IDSA (2012 pharyngitis guideline), AAP (Red Book) and AHA
-// information WITHOUT live web verification (the shared WebSearch budget was exhausted; cdc.gov and
-// health.state.mn.us were blocked). Minnesota STSS counts come from CDC's NNDSS weekly table
-// (data.cdc.gov x9gk-5huc) as downloaded on 2026-10-07. Before publishing, add pathogen-specific sources:
-// CDC group A strep pages (strep throat, scarlet fever, invasive GAS, clinical guidance), CDC ABCs GAS
-// reports, MDH group A strep / ABCs pages, IDSA GAS pharyngitis guideline, AAP Red Book GAS chapter.
+// Verified 2026-10-07 from search results: MDH invasive GAS counts (2022: 310 cases, 29 deaths; 2023: 625
+// cases, 55 deaths; 2024: 562 cases, more linked to long-term care facilities) and MN's ABCs participation.
+// MN Pulse has no strep A series (invasive GAS is not in NNDSS x9gk-5huc; STSS is deliberately unmapped).
+// TODO(verify): clinical details (treatment, 12-hour return rule, testing rules, 9-day rheumatic fever
+// window, impetigo exclusion, iGAS risk groups) follow long-standing CDC, IDSA 2012, AAP Red Book and AHA
+// guidance but were not re-checked live (WebSearch budget exhausted; cdc.gov blocked). Before publishing,
+// add URLs from search results for: CDC group A strep pages (strep throat, scarlet fever, impetigo, invasive
+// GAS, clinical guidance), CDC ABCs GAS reports, IDSA GAS pharyngitis guideline, AHA rheumatic fever
+// prevention statement, AAP Red Book GAS chapter.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -15,18 +18,18 @@ const profile: PathogenProfile = {
   kind: 'bacterium',
   oneLiner: 'Bacteria that cause strep throat and scarlet fever, and rarely serious infections of the blood, skin, and muscle.',
   overview:
-    'Group A Streptococcus (strep A) is a common bacterium that causes strep throat, scarlet fever, and skin infections such as impetigo. Most infections are mild and are easily treated with antibiotics. Treating strep throat matters, because untreated infections can rarely lead to rheumatic fever, which can damage the heart, or to kidney problems. Rarely, strep A causes invasive infections, such as blood infections, “flesh-eating” infection (necrotizing fasciitis), or toxic shock syndrome, which are emergencies.',
+    'Group A Streptococcus (strep A) is a common bacterium that causes strep throat, scarlet fever, and skin infections such as impetigo. Most infections are mild and are easily treated with antibiotics. Treating strep throat matters, because antibiotics help prevent rheumatic fever, a rare problem that can damage the heart. Rarely, strep A causes invasive infections, such as blood infections, “flesh-eating” infection (necrotizing fasciitis), or toxic shock syndrome (a sudden, severe illness with low blood pressure and organ failure), which are emergencies.',
   seasonality: {
     summary:
-      'Strep throat can happen any time of year but is most common during the school year. In Minnesota, as in other northern states, it is usually highest from winter into early spring. Serious (invasive) strep infections also tend to be more common in winter and spring.',
-    peakMonths: [1, 2, 3, 4],
+      'Strep throat can happen any time of year but is most common during the school year. In Minnesota, as in other northern states, it is usually highest from December into early spring. Serious (invasive) strep infections also tend to be more common in winter and spring.',
+    peakMonths: [12, 1, 2, 3, 4],
   },
   transmission:
     'Strep A spreads easily through droplets when a sick person coughs, sneezes, or talks, and through sharing cups, utensils, or food. It can also spread by touching skin sores from impetigo or infected wounds. People who carry the bacteria in their throat without symptoms are less likely to spread it.',
   incubation:
     'Strep throat and scarlet fever usually start 2 to 5 days after exposure. Impetigo (a skin infection) usually starts 7 to 10 days after exposure.',
   contagiousPeriod:
-    'People with strep throat or scarlet fever can return to school, child care, or work once they no longer have a fever and have taken antibiotics for at least 12 hours. Without antibiotics, people can stay contagious for weeks.',
+    'People with strep throat or scarlet fever can return to school, child care, or work once they no longer have a fever and have taken antibiotics for at least 12 hours. Without antibiotics, people can stay contagious for weeks. Children with impetigo should keep sores covered. They can usually return to school or child care once antibiotic treatment has started; follow your clinician’s and school’s guidance.',
   symptoms: {
     common: [
       'Sore throat that can start very quickly',
@@ -42,13 +45,13 @@ const profile: PathogenProfile = {
       'Impetigo: red sores, often around the nose and mouth, that break open and form honey-colored crusts',
       'Cellulitis: a red, warm, painful area of skin',
       'Rheumatic fever, weeks after untreated strep throat: fever, painful swollen joints, chest pain, shortness of breath, or jerky movements; it can damage the heart',
-      'Kidney inflammation (post-streptococcal glomerulonephritis) 1 to 3 weeks after infection: dark, tea- or cola-colored urine, less urine, or swelling of the face and legs',
-      'Invasive infections such as blood infection, pneumonia, necrotizing fasciitis, or streptococcal toxic shock syndrome (rare)',
+      'Kidney inflammation (post-streptococcal glomerulonephritis) 1 to 3 weeks after infection: dark, tea- or cola-colored urine, less urine, or swelling of the face and legs. Antibiotics may not prevent this',
+      'Rare invasive infections: blood infection, pneumonia, necrotizing fasciitis (“flesh-eating” infection), or streptococcal toxic shock syndrome (a sudden, severe illness with low blood pressure and organ failure)',
     ],
     emergencyWarningSigns: [
       'Trouble breathing, or trouble swallowing with drooling',
       'A red, warm, swollen, or blistered area of skin that spreads quickly, especially with severe pain that seems worse than the skin looks, or with fever',
-      'Fever with dizziness, fainting, confusion, or a very fast heartbeat or breathing, which can be signs of toxic shock or sepsis',
+      'Fever with dizziness, fainting, confusion, or a very fast heartbeat or breathing, which can be signs of toxic shock or sepsis (a life-threatening reaction to infection)',
       'Very sleepy, limp, or hard to wake',
       'Little or no urine',
     ],
@@ -113,7 +116,7 @@ const profile: PathogenProfile = {
     pregnant: {
       risk: 'higher',
       summary:
-        'Strep throat during pregnancy is treated much as it is for other adults. The risk of serious strep A infection is higher around childbirth and in the weeks after, when it can cause a dangerous infection of the uterus or sepsis.',
+        'Strep throat during pregnancy is treated much as it is for other adults. The risk of serious strep A infection is higher around childbirth and in the weeks after, when it can cause a dangerous infection of the uterus or sepsis (a life-threatening reaction to infection).',
       actions: [
         'See a clinician for a sore throat with fever. Penicillin and amoxicillin are commonly used and considered safe in pregnancy.',
         'After delivery, call your clinician right away for fever, chills, severe belly pain, foul-smelling discharge, or feeling very unwell.',
@@ -135,7 +138,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Strep throat and scarlet fever are treated with antibiotics, which shorten the illness, stop the spread to others, and help prevent rare but serious problems such as rheumatic fever. Penicillin or amoxicillin is the first choice, usually for 10 days, and they still work reliably against strep A. People with a penicillin allergy have other options. Invasive strep infections are emergencies that need hospital care, strong antibiotics through a vein, and sometimes surgery.',
+      'Strep throat and scarlet fever are treated with antibiotics, which shorten the illness, stop the spread to others, and help prevent rare but serious problems such as rheumatic fever. Penicillin or amoxicillin is the first choice, usually for 10 days, and they still work reliably against strep A. People with a penicillin allergy have other options. Starting antibiotics within about 9 days of when the sore throat began still prevents rheumatic fever, so waiting a day or two for a throat culture result is generally safe. Invasive strep infections are emergencies that need hospital care, strong antibiotics through a vein, and sometimes surgery.',
     options: [
       {
         name: 'Penicillin or amoxicillin',
@@ -169,7 +172,7 @@ const profile: PathogenProfile = {
         name: 'Hospital care for invasive infections',
         type: 'supportive',
         detail:
-          'Invasive strep A infections, such as blood infections, necrotizing fasciitis, or streptococcal toxic shock syndrome, need hospital care with antibiotics through a vein (often penicillin plus clindamycin), fluids, and support for blood pressure and breathing. Necrotizing fasciitis usually needs emergency surgery to remove infected tissue.',
+          'Invasive strep A infections need hospital care. These include blood infections, necrotizing fasciitis, and streptococcal toxic shock syndrome. Care includes antibiotics through a vein (often penicillin plus clindamycin), fluids, and support for blood pressure and breathing. Necrotizing fasciitis usually needs emergency surgery to remove infected tissue.',
         who: 'Anyone with a serious, invasive strep A infection',
       },
     ],
@@ -187,7 +190,7 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'A clinician tests for strep throat by swabbing the throat. A rapid strep test gives results in minutes. If a rapid test is negative in a child or teen, clinicians often send a throat culture (growing the bacteria in a lab) to be sure, because rapid tests can miss some cases; adults usually do not need a backup culture. A cough, runny nose, hoarse voice, pink eye, or mouth sores usually point to a virus instead, and testing is often not needed. Children younger than 3 are usually not tested unless they have a reason to, such as a brother or sister with strep. Some people carry strep A in their throat without being sick, which is one reason clinicians test only when symptoms suggest strep. Invasive strep A infections are found by testing blood or other body fluids or tissue in the hospital.',
+    'A clinician tests for strep throat by swabbing the throat. A rapid strep test gives results in minutes. Rapid antigen tests can miss some cases. If a rapid antigen test is negative in a child or teen, clinicians often confirm with a throat culture (growing the bacteria in a lab) or a molecular (PCR) test. Adults usually do not need this backup test. Some clinics use rapid molecular tests, which are more sensitive and usually do not need a backup test. A cough, runny nose, hoarse voice, pink eye, or mouth sores usually point to a virus instead, and testing is often not needed. Children younger than 3 are usually not tested unless they have a reason to, such as a brother or sister with strep. Some people carry strep A in their throat without being sick, which is one reason clinicians test only when symptoms suggest strep. Invasive strep A infections are found by testing blood or other body fluids or tissue in the hospital.',
   whenToSeekCare: [
     'Call 911 or go to the emergency department for trouble breathing, drooling or not being able to swallow, a fast-spreading or very painful red area of skin, or fever with confusion, dizziness, or fainting.',
     'See a clinician the same day for severe throat pain on one side, a muffled voice, or trouble opening the mouth, which can be signs of an abscess (a pocket of pus).',
@@ -197,17 +200,23 @@ const profile: PathogenProfile = {
     'Urgent care and many retail clinics can test for strep throat when your clinic is closed. Go to the emergency department for any emergency warning sign.',
   ],
   readingTheNumbers:
-    'Strep A is harder to track than many respiratory germs. Strep throat is diagnosed with quick tests in clinics and is not reported to the state, so there is no direct count of how much is going around. Strep A is also not part of the standard multi-pathogen respiratory panel behind BioFire detection rates, and CDC’s public emergency department data cover COVID-19, flu, and RSV, not strep. Numbers MN Pulse may show for strep A come from reports of serious disease. Invasive group A strep is a reportable disease in Minnesota, and MDH tracks it as part of CDC’s Active Bacterial Core surveillance (ABCs) program. Streptococcal toxic shock syndrome, a rare and severe complication, also appears in CDC’s weekly notifiable disease tables. These counts are small and are often updated weeks later, so one week’s number means little; look at trends over months and years. A rise in invasive strep does not mean strep throat is more dangerous for a typical person. It is a reminder to treat strep throat fully, care for wounds, and get care fast for any emergency warning sign.',
+    'Strep A is harder to track than many respiratory germs. Strep throat is diagnosed with quick tests in clinics and is not reported to the state, so there is no direct count of how much is going around. Strep A is also not part of the standard multi-pathogen respiratory panel behind BioFire detection rates. At this time, MN Pulse has no weekly Minnesota number or trend line for strep A. Serious (invasive) group A strep is a reportable disease in Minnesota. The Minnesota Department of Health (MDH) tracks it with CDC’s Active Bacterial Core surveillance (ABCs) program and publishes yearly totals, often more than a year later. These counts are small, so look at changes from year to year, not week to week. A rise in invasive strep does not mean strep throat is more dangerous for a typical person. It is a reminder to treat strep throat fully, care for wounds, and get care fast for any emergency warning sign.',
   watchNotes: [
     'Invasive group A strep infections rose across the U.S. starting in late 2022, first among children, and stayed higher than before the pandemic among adults. CDC lists higher risk for adults 65 and older, people with chronic conditions or wounds, people who inject drugs, people experiencing homelessness, residents of long-term care facilities, and American Indian and Alaska Native people.',
-    'In CDC’s provisional notifiable disease data, Minnesota reports of streptococcal toxic shock syndrome rose to 41 in 2023, up from 10 in 2022, then fell to 15 in 2024.',
+    'In Minnesota, serious (invasive) group A strep rose to 625 cases and 55 deaths in 2023, up from 310 cases and 29 deaths in 2022 (MDH). Nationally, CDC reported a 20-year high in 2023. Minnesota cases were lower in 2024, at 562, but more were linked to long-term care facilities, often among residents with wounds or getting wound care.',
     'Strep A is becoming more resistant to azithromycin and clindamycin, but penicillin and amoxicillin still work reliably.',
     'Several strep A vaccines are being studied, but none are approved.',
   ],
   sources: [
+    { label: 'MDH: Group A Streptococcus (GAS)', url: 'https://www.health.state.mn.us/diseases/strep/gas/index.html' },
+    { label: 'MDH: Invasive group A strep statistics', url: 'https://www.health.mn.gov/diseases/strep/gas/statistics.html' },
     {
-      label: 'CDC: NNDSS weekly notifiable disease data (provisional)',
-      url: 'https://data.cdc.gov/d/x9gk-5huc',
+      label: 'MDH: Invasive group A strep, annual summary of reportable diseases',
+      url: 'https://www.health.state.mn.us/diseases/reportable/dcn/strepga.html',
+    },
+    {
+      label: 'MDH: Invasive bacterial disease surveillance (ABCs), annual summary',
+      url: 'https://www.health.state.mn.us/diseases/reportable/dcn/invbact.html',
     },
   ],
   lastReviewed: '2026-10-07',

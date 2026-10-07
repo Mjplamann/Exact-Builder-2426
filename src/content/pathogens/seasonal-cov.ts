@@ -18,10 +18,10 @@ const profile: PathogenProfile = {
   biofireTargets: ['Coronavirus 229E', 'Coronavirus HKU1', 'Coronavirus NL63', 'Coronavirus OC43'],
   oneLiner: 'Four common coronaviruses that cause colds, mostly in winter. They are not the virus that causes COVID-19.',
   overview:
-    'Four coronaviruses, called 229E, NL63, OC43, and HKU1, cause many common colds. Two were discovered in the 1960s and two in the mid-2000s. They are different from SARS-CoV-2, the virus that causes COVID-19. Most people catch one or more of them during their lives and can catch them again, because protection fades. Infections are usually mild, but they can cause bronchitis or pneumonia (a lung infection) in babies, older adults, and people with weakened immune systems or heart or lung disease.',
+    'Four coronaviruses, called 229E, NL63, OC43, and HKU1, cause many common colds. They are different from SARS-CoV-2, the virus that causes COVID-19. Most people catch one or more of them during their lives and can catch them again, because protection fades. Infections are usually mild, but they can cause bronchitis or pneumonia (a lung infection) in babies, older adults, and people with weakened immune systems or heart or lung disease.',
   seasonality: {
     summary:
-      'In Minnesota, seasonal coronaviruses spread mostly from late fall through early spring, usually peaking in January and February, around the same time as flu and RSV. Few infections are found in summer. Which of the four types is most common changes from year to year, and some types tend to have bigger seasons every other year.',
+      'In Minnesota, seasonal coronaviruses spread mostly from late fall through early spring, usually peaking in mid-winter (often January or February), around the same time as flu and RSV. Few infections are found in summer. Which of the four types is most common changes from year to year.',
     peakMonths: [1, 2],
   },
   transmission:
@@ -61,13 +61,13 @@ const profile: PathogenProfile = {
   },
   ageGroups: {
     infants: {
-      risk: 'moderate',
+      risk: 'higher',
       summary:
-        'Most babies with a seasonal coronavirus have a cold. Some, especially babies born early or with heart or lung problems, can develop bronchiolitis, croup, or pneumonia and need hospital care.',
+        'Most babies with a seasonal coronavirus have a cold. But babies are among the groups more likely to get bronchiolitis, croup, or pneumonia from these viruses, especially babies born early or with heart or lung problems. Some need hospital care.',
       actions: [
         'Clear a stuffy nose with saline (saltwater) drops and gentle suction, especially before feeds and sleep.',
         'Do not give cough and cold medicines or honey to babies under 1 year.',
-        'Call your clinician right away for any fever of 100.4°F (38°C) or higher in a baby younger than 3 months.',
+        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom). Call before giving any fever medicine.',
         'Get care quickly if your baby is breathing fast or hard, is feeding poorly, or has fewer wet diapers.',
         'Ask anyone with a cold to stay away from your baby during winter cold season, and have everyone wash their hands first.',
       ],
@@ -77,7 +77,7 @@ const profile: PathogenProfile = {
       summary:
         'Children catch these viruses often, usually as a cold. Young children can get croup, and children with asthma can have flare-ups.',
       actions: [
-        'Keep your child home while they have a fever and until they feel well enough for normal activities.',
+        'Keep your child home until their symptoms are getting better and they have had no fever for 24 hours without fever-reducing medicine.',
         'If your child has asthma, follow their asthma action plan, and keep their quick-relief inhaler handy.',
         'If your child has a croup cough, keep them calm, since crying can make breathing harder. Get care right away if breathing is noisy while resting.',
         'Teach handwashing and coughing or sneezing into an elbow.',
@@ -101,6 +101,7 @@ const profile: PathogenProfile = {
         'Keep long-term conditions like COPD, asthma, and heart disease well managed.',
         'Call your clinician if a cold makes your breathing or a long-term condition worse.',
         'Wash your hands often, and avoid touching your eyes, nose, and mouth.',
+        'Ask your clinician which vaccines (flu, COVID-19, pneumococcal, and RSV if you are at higher risk) are right for you. They do not prevent these colds, but they protect against other serious lung infections.',
       ],
     },
     seniors: {
@@ -117,7 +118,7 @@ const profile: PathogenProfile = {
     pregnant: {
       risk: 'lower',
       summary:
-        'There is no evidence that seasonal coronaviruses are more serious during pregnancy. They usually cause a mild cold.',
+        'Seasonal coronaviruses are not known to be more serious during pregnancy. They usually cause a mild cold.',
       actions: [
         'Ask your prenatal care provider or pharmacist before taking any cold medicine.',
         'Try saline nose spray, a cool-mist humidifier, rest, and fluids to ease symptoms.',
@@ -138,20 +139,20 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'There is no specific medicine for seasonal coronaviruses, and most people get better on their own in about a week. Medicines for COVID-19, such as Paxlovid, are approved for COVID-19 only and are not used for these viruses. Treatment focuses on easing symptoms. Antibiotics do not help unless a bacterial infection, such as an ear infection or pneumonia, develops.',
+      'There is no specific medicine for seasonal coronaviruses, and most people get better on their own in about a week. COVID-19 medicines, such as nirmatrelvir with ritonavir (Paxlovid), are approved for COVID-19 only and are not used for these viruses. Treatment focuses on easing symptoms. Antibiotics do not help unless a bacterial infection, such as an ear infection or pneumonia, develops.',
     options: [
       {
         name: 'Rest, fluids, and moist air',
         type: 'supportive',
         detail:
-          'Rest and drink plenty of fluids. A cool-mist humidifier or a hot shower can ease a sore throat and cough. For babies, saline (saltwater) drops and gentle suction help clear the nose.',
+          'Rest and drink plenty of fluids. A cool-mist humidifier can ease a stuffy nose and cough. Some adults find a warm shower soothing, but do not use hot steam or boiling water with children, because it can cause burns. For babies, saline (saltwater) drops and gentle suction help clear the nose.',
         who: 'Everyone with a cold.',
       },
       {
         name: 'Pain and fever relievers (acetaminophen or ibuprofen)',
         type: 'supportive',
         detail:
-          'These can ease fever, sore throat, and aches. Follow the label for age and weight, and ask before giving ibuprofen to a baby under 6 months. Never give aspirin to children or teens, because it can cause Reye’s syndrome, a rare but serious illness.',
+          'These can ease fever, sore throat, and aches. Follow the label or your clinician’s advice for age and weight. Call your clinician before giving any fever medicine to a baby younger than 3 months, and do not give ibuprofen to babies under 6 months unless your clinician says to. Never give aspirin to children or teens, because it can cause Reye’s syndrome, a rare but serious illness.',
         who: 'People with fever or pain who are uncomfortable.',
       },
       {
@@ -196,22 +197,27 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'Most people with a cold do not need a test. Hospitals and some clinics use multiplex PCR panels (one test that checks a nose swab for many germs at once), such as the BioFire Respiratory Panel, which reports each type separately: Coronavirus 229E, HKU1, NL63, and OC43. These results are separate from the SARS-CoV-2 (COVID-19) result on the same panel, so a positive result for a seasonal coronavirus does not mean you have COVID-19. Home COVID-19 tests look only for SARS-CoV-2, so they cannot detect these viruses. Seasonal coronaviruses are often found along with another virus, so a positive result does not always explain an illness.',
+    'Most people with a cold do not need a test. Hospitals and some clinics use multiplex PCR panels, which check one nose swab for many germs at once by finding their genetic material. The full BioFire Respiratory Panel reports each type separately: Coronavirus 229E, HKU1, NL63, and OC43. Some other panels give a single “coronavirus” result instead. Either way, this result is separate from the SARS-CoV-2 (COVID-19) result on the same panel. So a positive result for a seasonal coronavirus does not mean you have COVID-19. Home COVID-19 tests look only for SARS-CoV-2, so they cannot detect these viruses. Seasonal coronaviruses are often found along with another virus, so a positive result does not always explain an illness.',
   whenToSeekCare: [
-    'Call your clinician if cold symptoms last more than 10 days without getting better, or if a fever lasts more than 4 days.',
-    'Call if symptoms such as fever or cough get better but then come back or get worse.',
+    'Call your clinician if a child under 2 has a fever for more than 24 hours, or if anyone older has a fever for more than 3 days.',
+    'Call if cold symptoms last more than 10 days without getting better, or if symptoms such as fever or cough get better but then come back or get worse.',
     'Call if a cold makes asthma, COPD, heart disease, or another long-term condition worse.',
     'Call early if you have a weakened immune system, or if your baby is younger than 3 months and has a fever.',
-    'Go to urgent care if you or your child needs to be seen today, for example for a croup cough that does not settle or ear pain, but has no emergency warning signs.',
+    'Go to urgent care if you or your child needs to be seen today but has no emergency warning signs. Examples include a croup cough that does not settle, or ear pain.',
     'Call 911 or go to the emergency department for any emergency warning sign, such as trouble breathing or bluish lips.',
   ],
   readingTheNumbers:
-    'MN Pulse shows seasonal coronaviruses mainly as a BioFire detection rate: the percent of BioFire respiratory panel tests at participating labs in the Midwest (not just Minnesota) that found any of the four types (229E, HKU1, NL63, or OC43). These panels are run mostly on people sick enough to go to a hospital, emergency department, or clinic. It shows trends, not how many people are sick. This number has a clear winter season. In BioFire data it stays low in summer and can rise more than 10 times higher during the fall-to-spring respiratory season. About half of positive tests also find another virus. The size of the winter peak changes from year to year, partly because some types have bigger seasons every other year. MDH also reports weekly seasonal coronavirus results from a group of Minnesota labs that run respiratory panels. None of these numbers include COVID-19, which has its own measures on MN Pulse. Public emergency department (ED) visit data and wastewater programs do not track seasonal coronaviruses separately. A steady rise over 2 to 3 weeks in late fall or winter means cold season is picking up. For most people, that means routine steps: wash hands, cover coughs, and stay home when sick, and take extra care around babies, older adults, and anyone with a weakened immune system. Numbers for the most recent week or two may be revised.',
+    'MN Pulse tracks seasonal coronaviruses with two kinds of lab data. Test positivity is the share of PCR lab tests for these viruses that come back positive. It comes from Minnesota labs that report to MDH, and from CDC’s lab network (NREVSS) for HHS Region 5: Minnesota, Wisconsin, Illinois, Indiana, Michigan, and Ohio. The BioFire detection rate is the share of BioFire panel tests at participating Midwest labs (or nationwide, when Midwest data are not available) that find any of the four types. These tests are done mostly on people sick enough to visit a clinic, emergency department, or hospital. So the numbers show trends among tested patients, not how many people are sick. None of them include COVID-19, which has its own measures on MN Pulse. These viruses have a clear winter season. In BioFire data from 2013 to 2017, they rose more than 10 times above their summer level during the October-to-March season. The size of the winter peak changes from year to year. Emergency department and wastewater data do not track these viruses. A steady rise over 2 to 3 weeks in late fall or winter means cold season is picking up. For most people, that means routine steps: wash hands, cover coughs, and stay home when sick. Take extra care around babies, older adults, and anyone with a weakened immune system. Numbers for the most recent week or two may be revised.',
   watchNotes: [
+    'As of early October 2026, seasonal coronavirus season has usually not yet started. These viruses typically begin rising in late fall, so an increase over the coming weeks would be expected.',
     'There is no vaccine for these four coronaviruses. COVID-19 vaccines are made for SARS-CoV-2 and are not designed to prevent seasonal coronavirus colds.',
-    'If a respiratory panel result says “coronavirus,” check which one. A positive result for 229E, HKU1, NL63, or OC43 means a common cold coronavirus, not COVID-19.',
   ],
   sources: [
+    { label: 'CDC — NREVSS dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
+    {
+      label: 'CDC — Preventing spread of respiratory viruses when you’re sick',
+      url: 'https://www.cdc.gov/respiratory-viruses/prevention/precautions-when-sick.html',
+    },
     {
       label: 'Meyers et al. — Automated real-time collection of pathogen-specific diagnostic data (BioFire Syndromic Trends), JMIR Public Health and Surveillance, 2018',
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6054708/',

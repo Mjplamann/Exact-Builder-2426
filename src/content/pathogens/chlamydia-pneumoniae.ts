@@ -1,7 +1,9 @@
-// TODO(verify): drafted from long-standing CDC, AAP (Red Book) and IDSA/ATS information WITHOUT live web
-// verification (the shared WebSearch budget was exhausted; cdc.gov was blocked). Before publishing, add
-// pathogen-specific sources: CDC Chlamydia pneumoniae "About" and clinical overview pages, AAP Red Book
-// Chlamydia pneumoniae chapter, IDSA/ATS community-acquired pneumonia guideline.
+// TODO(verify): drafted from long-standing CDC, AAP (Red Book), IDSA/ATS and FDA label information WITHOUT
+// live web verification (the shared WebSearch budget was exhausted in drafting and in the fix pass; cdc.gov
+// was blocked). No search result yet supplies a clinical source URL for this germ, so the only source is the
+// BioFire data site. Before publishing, add URLs from search results for: CDC Chlamydia pneumoniae "About"
+// and clinical overview pages, AAP Red Book Chlamydia pneumoniae chapter, IDSA/ATS community-acquired
+// pneumonia guideline, FDA clarithromycin label (pregnancy warning).
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -14,7 +16,7 @@ const profile: PathogenProfile = {
   biofireTargets: ['Chlamydia pneumoniae'],
   oneLiner: 'A common bacterium that causes sore throat, hoarseness, and lingering coughs. It is not the sexually transmitted chlamydia.',
   overview:
-    'Chlamydia pneumoniae is a type of bacteria that infects the nose, throat, and lungs. It usually causes mild illness, such as a sore throat, a hoarse voice, or bronchitis (a chest cold), but it can also cause pneumonia (a lung infection), often a mild “walking pneumonia.” Most people are infected at some point in their lives, and people can get it more than once. It is a different germ from Chlamydia trachomatis, which causes the sexually transmitted infection, and it does not spread through sex.',
+    'Chlamydia pneumoniae is a type of bacteria that infects the nose, throat, and lungs. It usually causes mild illness, such as a sore throat, a hoarse voice, or bronchitis (a chest cold). It can also cause pneumonia (a lung infection), often a mild “walking pneumonia.” Most people are infected at some point in their lives, and people can get it more than once. It is a different germ from Chlamydia trachomatis, which causes the sexually transmitted infection, and it does not spread through sex.',
   seasonality: {
     summary:
       'Chlamydia pneumoniae spreads year-round and does not follow a strong seasonal pattern in Minnesota or elsewhere in the U.S. Outbreaks can happen at any time in places where people are close together, such as schools, college dorms, military barracks, and nursing homes.',
@@ -91,6 +93,7 @@ const profile: PathogenProfile = {
         'See a clinician for a fever with a worsening cough, shortness of breath, or chest pain.',
         'If you have asthma or COPD, follow your action plan and call early if your breathing gets worse.',
         'Tell your clinician about all your medicines, since some antibiotics can interact with them.',
+        'Ask your clinician whether you are due for flu or pneumococcal vaccines. They do not prevent this infection, but they lower your risk from other causes of pneumonia.',
       ],
     },
     seniors: {
@@ -130,10 +133,10 @@ const profile: PathogenProfile = {
       'Mild illness often gets better on its own. When a clinician diagnoses pneumonia or strongly suspects Chlamydia pneumoniae, they may prescribe an antibiotic. Penicillin and amoxicillin do not reliably treat it, because the bacteria grow inside the body’s cells where those drugs do not work well. A cough can last for weeks after treatment while the airways heal.',
     options: [
       {
-        name: 'Azithromycin and other macrolide antibiotics',
+        name: 'Azithromycin and similar antibiotics (macrolides)',
         type: 'antibiotic',
         detail: 'Commonly used for children and adults. Clarithromycin and erythromycin are other choices in this group.',
-        who: 'Children and adults whose illness needs treatment, including most pregnant people',
+        who: 'Children and adults whose illness needs treatment. Azithromycin is the macrolide usually used during pregnancy; clarithromycin is generally avoided.',
       },
       {
         name: 'Doxycycline',
@@ -176,17 +179,17 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'Chlamydia pneumoniae is rarely tested for in everyday care. Clinicians often diagnose and treat pneumonia based on symptoms, an exam, and sometimes a chest X-ray. In hospitals and emergency departments, a PCR test (a lab test that finds the germ’s genetic material) on a nose or throat swab, often as part of a multi-germ respiratory panel, can find it. Blood antibody tests exist but are not very useful for deciding on treatment. Home COVID-19 and flu tests do not detect it.',
+    'Chlamydia pneumoniae is rarely tested for in everyday care. Clinicians often diagnose and treat pneumonia based on symptoms, an exam, and sometimes a chest X-ray. In hospitals and emergency departments, a PCR test (a lab test that finds the germ’s genetic material) on a nose or throat swab can find it. It is often part of a test that checks for many germs at once. Blood antibody tests exist but are not very useful for deciding on treatment. Home COVID-19 and flu tests do not detect it.',
   whenToSeekCare: [
     'Call 911 or go to the emergency department for any emergency warning sign, such as struggling to breathe or blue or gray lips.',
-    'Call your clinician if you have a fever with a cough that keeps getting worse, a fever lasting more than 2 to 3 days, or a cough lasting more than 3 weeks.',
+    'Call your clinician if you have a fever with a cough that keeps getting worse or a fever lasting more than 2 to 3 days. Also call for a cough lasting more than 3 weeks.',
     'Call your clinician if you are taking an antibiotic and are not better after 2 to 3 days, or if you get better and then get worse.',
     'Call right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
     'Older adults and people with heart or lung disease or a weakened immune system should call early if they develop a fever and cough.',
     'Urgent care can check a worsening cough when your clinic is closed. Go to the emergency department, not urgent care, for trouble breathing.',
   ],
   readingTheNumbers:
-    'MN Pulse tracks Chlamydia pneumoniae through the BioFire detection rate: the share of multi-pathogen respiratory panel tests at participating Midwest labs that find it. These panels are mostly run for people sick enough to visit a hospital, emergency department, or clinic, so the number reflects serious respiratory illness, not how many people are infected. C. pneumoniae turns up in only a small share of these tests, so the rate is low and can bounce around from week to week because of small numbers. It has no strong season. A steady rise over several weeks may point to more spread or a local outbreak. CDC’s public emergency department data cover COVID-19, flu, and RSV, not C. pneumoniae. For an average person, a rise is mostly a reminder that a slow-building cough with a hoarse voice may be caused by bacteria like this one, and to see a clinician if it lasts or gets worse.',
+    'MN Pulse tracks Chlamydia pneumoniae through the BioFire detection rate: the share of multi-pathogen respiratory panel tests at participating Midwest labs that find it. These panels are mostly run for people sick enough to visit a hospital, emergency department, or clinic. So the number shows the share of tested people with breathing symptoms who had C. pneumoniae found, not how many people are infected. C. pneumoniae turns up in only a small share of these tests. The rate is low and can bounce around from week to week because of small numbers. It has no strong season. A steady rise over several weeks may point to more spread or a local outbreak. MN Pulse does not show emergency department data or case counts for C. pneumoniae. For most people, a rise is a reminder that a slow cough with a hoarse voice may be caused by bacteria like this one. See a clinician if it lasts or gets worse.',
   watchNotes: [
     'There is no vaccine for Chlamydia pneumoniae. It is different from the sexually transmitted chlamydia, and a positive result on a respiratory test says nothing about sexual health.',
   ],

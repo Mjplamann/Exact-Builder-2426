@@ -547,6 +547,7 @@ export const biofire: SourceModule = {
       ],
       message,
       diagnostics,
+      awaiting: empty && !errors.length,
     }
   },
 }
