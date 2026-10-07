@@ -184,7 +184,7 @@ const profile: PathogenProfile = {
     'Go to an emergency department for trouble breathing, confusion, fainting, very dark urine, or yellow skin with extreme weakness.',
   ],
   readingTheNumbers:
-    'Babesiosis is tracked through cases that clinicians and labs report to the Minnesota Department of Health (MDH). CDC’s weekly national tables do not currently list Minnesota babesiosis counts, so this page may not show a current number. MDH publishes yearly totals, which are more complete. Babesiosis is much less common in Minnesota than Lyme disease or anaplasmosis. Counts are small and can jump up or down from year to year by chance. Reports lag behind real time. They also miss people with mild or no symptoms who are never tested. Babesiosis is not on the respiratory or stool BioFire panels. It also has no test positivity measure like the ones used for flu or COVID-19. Most cases appear in summer. For you, a rise in cases is a reminder that infected ticks are active. Most people are not at high risk. People without a spleen, people with weakened immune systems, and older adults should take extra care. They should prevent tick bites and get care quickly for fever.',
+    'Babesiosis is tracked through cases that clinicians and labs report to the Minnesota Department of Health (MDH). CDC’s weekly national tables do not currently list Minnesota babesiosis counts, so this page may not show a current number. MDH publishes yearly totals, which are more complete. Babesiosis is much less common in Minnesota than Lyme disease or anaplasmosis. For example, MDH counted 61 confirmed and probable cases in 2022. Counts this small can jump up or down from year to year by chance. Reports lag behind real time. They also miss people with mild or no symptoms who are never tested. Babesiosis is not on the respiratory or stool BioFire panels. It also has no test positivity measure like the ones used for flu or COVID-19. Most cases appear in summer. For you, a rise in cases is a reminder that infected ticks are active. Most people are not at high risk. People without a spleen, people with weakened immune systems, and older adults should take extra care. They should prevent tick bites and get care quickly for fever.',
   watchNotes: [
     'Minnesota is one of a small number of states where babesiosis is regularly found, along with Wisconsin and several states in the Northeast.',
     'Blood donations collected in Minnesota and other higher-risk states are tested for Babesia, or treated to kill germs, as the FDA recommends. This greatly lowers, but does not remove, the risk of getting it from a transfusion.',
@@ -192,21 +192,29 @@ const profile: PathogenProfile = {
     'October and November are adult tick season. Babesiosis is mostly spread by nymphs in summer, but fall tick bites are still worth preventing.',
   ],
   sources: [
-    { label: 'CDC: Babesiosis', url: 'https://www.cdc.gov/babesiosis/index.html' },
-    { label: 'CDC: Ticks', url: 'https://www.cdc.gov/ticks/index.html' },
+    { label: 'CDC: About Babesiosis', url: 'https://www.cdc.gov/babesiosis/about/index.html' },
+    { label: 'CDC: How Babesiosis Spreads', url: 'https://www.cdc.gov/babesiosis/spreads/index.html' },
     {
-      label: 'Minnesota Department of Health: Babesiosis',
-      url: 'https://www.health.state.mn.us/diseases/babesiosis/index.html',
+      label: 'CDC: Clinical Care of Babesiosis (for health professionals)',
+      url: 'https://www.cdc.gov/babesiosis/hcp/clinical-care/index.html',
     },
     {
-      label: 'Minnesota Department of Health: Tickborne Diseases',
-      url: 'https://www.health.state.mn.us/diseases/tickborne/index.html',
+      label: 'Minnesota Department of Health: About Babesiosis',
+      url: 'https://www.health.state.mn.us/diseases/babesiosis/basics.html',
     },
     {
-      label: 'IDSA/ASTMH: 2020 Clinical Practice Guideline for the Diagnosis and Management of Babesiosis',
+      label: 'Minnesota Department of Health: Babesiosis Statistics',
+      url: 'https://www.health.state.mn.us/diseases/babesiosis/statistics.html',
+    },
+    {
+      label: 'Minnesota Department of Health: Diseases That Can Be Transmitted by Ticks',
+      url: 'https://www.health.state.mn.us/diseases/tickborne/diseases.html',
+    },
+    {
+      label: 'IDSA: 2020 Guideline on Diagnosis and Management of Babesiosis',
       url: 'https://www.idsociety.org/practice-guideline/babesiosis/',
     },
-    { label: 'U.S. EPA: Insect Repellents', url: 'https://www.epa.gov/insect-repellents' },
+    { label: 'U.S. EPA: Repellents: Protection Against Mosquitoes, Ticks and Other Arthropods', url: 'https://www.epa.gov/insect-repellents' },
   ],
   lastReviewed: '2026-10-07',
 }

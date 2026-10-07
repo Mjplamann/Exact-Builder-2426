@@ -54,7 +54,7 @@ const profile: PathogenProfile = {
         'Lyme disease is uncommon in babies because they spend less time in tick habitat. When it happens, it is treated with antibiotics, as in older children. Young babies cannot use most bug repellents, so physical protection matters most.',
       actions: [
         'Do not use insect repellent on babies younger than 2 months. Cover strollers and carriers with netting instead.',
-        'For babies 2 months and older, the American Academy of Pediatrics says repellents with up to 30% DEET can be used. Do not use oil of lemon eucalyptus (OLE) or para-menthane-diol (PMD) on children under 3.',
+        'For babies 2 months and older, the American Academy of Pediatrics says a repellent with up to 30% DEET can be used, applied sparingly. Do not use oil of lemon eucalyptus (OLE) or para-menthane-diol (PMD) on children under 3.',
         'Check your baby for ticks after time outdoors, including the scalp, behind the ears, and skin folds.',
         'Call your baby’s health care provider about any tick bite, growing rash, or fever. Call right away for any fever in a baby younger than 3 months.',
       ],
@@ -163,7 +163,7 @@ const profile: PathogenProfile = {
         type: 'antibiotic',
         detail:
           'One dose of doxycycline can lower the chance of getting Lyme disease after a high-risk bite. It may be offered if all four of these are true. The tick was a blacklegged (deer) tick. It was attached for about 36 hours or more, or it looked swollen with blood. The dose can start within 72 hours after the tick came off. The bite happened in a state where Lyme disease is common, such as Minnesota. Ticks are less common in open prairie areas, so your clinician will also consider where the bite happened. This dose does not prevent other tick-borne infections, so keep watching for symptoms for 30 days.',
-        who: 'Adults and children who meet all of these conditions and can safely take doxycycline. Pregnant people should talk with their clinician.',
+        who: 'Adults and children of any age who meet all of these conditions and can safely take doxycycline. People who are pregnant or breastfeeding should talk with their clinician.',
       },
     ],
     antibioticsHelp: 'yes',
@@ -192,28 +192,39 @@ const profile: PathogenProfile = {
     'Call 911 or go to an emergency department (not urgent care) for fainting, chest pain, shortness of breath, or a very slow or irregular heartbeat. Call 911 for sudden face drooping with arm weakness or trouble speaking.',
   ],
   readingTheNumbers:
-    'Lyme disease is tracked mainly through cases that clinicians and labs report to the Minnesota Department of Health (MDH). MDH publishes Lyme counts once a year, and final counts usually come out the following year. CDC’s weekly national tables do not currently list Minnesota Lyme counts, so this page may not show a current weekly number. Reported counts also undercount true infections. Many people with the typical rash are treated without a lab test, and some never see a clinician. In 2022, the national rules for counting Lyme cases changed in states where it is common, including Minnesota. Counts from before and after 2022 are not directly comparable. Lyme disease is not on the respiratory or stool BioFire panels. It also has no test positivity measure like the ones used for flu or COVID-19. In a typical year, cases rise in late spring, peak in early summer, drop in late summer, and show a smaller bump in the fall. For you, a rise in cases means ticks are active. Use repellent, check for ticks every day, and watch for a growing rash or fever after time outdoors.',
+    'Lyme disease is tracked mainly through cases that clinicians and labs report to the Minnesota Department of Health (MDH). MDH publishes Lyme totals once a year, after the year ends, so the newest full year of data can be more than a year old. CDC’s weekly national tables do not currently list Minnesota Lyme counts, so this page may not show a current weekly number. Reported counts also undercount true infections. Many people with the typical rash are treated without a lab test, and some never see a clinician. In 2022, the national rules for counting Lyme cases changed in states where it is common, including Minnesota. Since then, MDH counts cases mainly from positive lab tests. Counts from before and after 2022 are not directly comparable. Lyme disease is not on the respiratory or stool BioFire panels. It also has no test positivity measure like the ones used for flu or COVID-19. In a typical year, cases rise in late spring, peak in early summer, drop in late summer, and show a smaller bump in the fall. For you, a rise in cases means ticks are active. Use repellent, check for ticks every day, and watch for a growing rash or fever after time outdoors.',
   watchNotes: [
     'October and November are adult tick season in Minnesota. Adult blacklegged ticks stay active on days above freezing. Deer hunters, hikers, and people doing fall yard work should keep using repellent and checking for ticks.',
     'Powassan virus is a rare but serious infection spread by the same blacklegged ticks. It can pass from a tick to a person much faster than Lyme bacteria. Many infected people have no symptoms. But it can cause swelling of the brain (encephalitis) or of the lining around the brain and spinal cord (meningitis). There is no vaccine or specific treatment, and antibiotics do not work against it. Minnesota reports a small number of cases most years. Get care right away for fever with a severe headache, confusion, weakness, or seizures after a tick bite.',
     'In Minnesota, the same tick can also spread anaplasmosis, babesiosis, Borrelia miyamotoi disease, and a type of ehrlichiosis. One bite can cause more than one infection. If you are not getting better on Lyme treatment, ask your clinician about these.',
-    'A Lyme disease vaccine for people has been tested in a large late-stage clinical trial. Check with CDC, MDH, or your clinician for its current status.',
+    'A Lyme disease vaccine for people, made by Pfizer and Valneva, prevented more than 70% of Lyme cases in a large late-stage trial of people 5 and older, with results reported in 2026. In August 2026, European regulators began reviewing it. As of October 2026, it is not available in the U.S. Check with CDC, MDH, or your clinician for updates.',
     'MDH publishes information on which Minnesota counties have the highest tick-borne disease risk. Risk is highest in wooded parts of east-central, north-central, and southeastern Minnesota. Blacklegged ticks have spread to more of the state over time.',
   ],
   sources: [
-    { label: 'CDC: Lyme Disease', url: 'https://www.cdc.gov/lyme/index.html' },
-    { label: 'CDC: Ticks', url: 'https://www.cdc.gov/ticks/index.html' },
-    { label: 'CDC: Powassan Virus', url: 'https://www.cdc.gov/powassan/index.html' },
-    { label: 'Minnesota Department of Health: Lyme Disease', url: 'https://www.health.state.mn.us/diseases/lyme/index.html' },
+    { label: 'CDC: About Lyme Disease', url: 'https://www.cdc.gov/lyme/about/index.html' },
+    { label: 'CDC: Preventing Lyme Disease', url: 'https://www.cdc.gov/lyme/prevention/index.html' },
     {
-      label: 'Minnesota Department of Health: Tickborne Diseases',
-      url: 'https://www.health.state.mn.us/diseases/tickborne/index.html',
+      label: 'CDC: Caring for Patients After a Tick Bite (guidance for clinicians)',
+      url: 'https://www.cdc.gov/lyme/media/pdfs/Caring-for-Patients-after-a-Tick-Bite.pdf',
+    },
+    { label: 'CDC: About Powassan Virus', url: 'https://www.cdc.gov/powassan/about/index.html' },
+    {
+      label: 'Minnesota Department of Health: Lyme Disease Statistics',
+      url: 'https://www.health.state.mn.us/diseases/lyme/statistics.html',
     },
     {
-      label: 'IDSA/AAN/ACR: 2020 Guidelines for the Prevention, Diagnosis and Treatment of Lyme Disease',
+      label: 'Minnesota Department of Health: Diseases That Can Be Transmitted by Ticks',
+      url: 'https://www.health.state.mn.us/diseases/tickborne/diseases.html',
+    },
+    {
+      label: 'AAN/ACR/IDSA: 2020 Guidelines for the Prevention, Diagnosis and Treatment of Lyme Disease',
       url: 'https://www.idsociety.org/practice-guideline/lyme-disease/',
     },
-    { label: 'U.S. EPA: Insect Repellents', url: 'https://www.epa.gov/insect-repellents' },
+    {
+      label: 'American Academy of Pediatrics (HealthyChildren.org): How to Choose an Insect Repellent for Your Child',
+      url: 'https://www.healthychildren.org/English/safety-prevention/at-play/Pages/Insect-Repellents.aspx',
+    },
+    { label: 'U.S. EPA: Repellents: Protection Against Mosquitoes, Ticks and Other Arthropods', url: 'https://www.epa.gov/insect-repellents' },
   ],
   lastReviewed: '2026-10-07',
 }

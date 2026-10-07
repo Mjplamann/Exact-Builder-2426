@@ -14,7 +14,7 @@ const profile: PathogenProfile = {
   oneLiner:
     'A bacterial infection spread by blacklegged (deer) ticks that causes sudden fever, headache, and body aches. Doxycycline treats it.',
   overview:
-    'Anaplasmosis is an infection caused by Anaplasma phagocytophilum bacteria, which infect white blood cells. It spreads through the bite of an infected blacklegged (deer) tick, and Minnesota is one of the states where it is most common. It is usually mild to moderate when treated quickly with the antibiotic doxycycline. Delayed treatment can lead to serious illness, especially in older adults and people with weakened immune systems.',
+    'Anaplasmosis is an infection caused by Anaplasma phagocytophilum bacteria, which infect white blood cells. It spreads through the bite of an infected blacklegged (deer) tick and is the second most common tick-borne disease in Minnesota, after Lyme disease. It is usually mild to moderate when treated quickly with the antibiotic doxycycline. Delayed treatment can lead to serious illness, especially in older adults and people with weakened immune systems.',
   seasonality: {
     summary:
       'Most Minnesota cases start in late spring and summer, when young blacklegged ticks (nymphs) are most active. Cases often peak in June and July. Some cases also happen in the fall, especially October and November, and in early spring, when adult ticks are active on days above freezing.',
@@ -127,13 +127,13 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Doxycycline is the treatment of choice for anaplasmosis in adults and children of all ages. Clinicians start it as soon as anaplasmosis is suspected, without waiting for test results. Delays can lead to serious illness. Fever usually gets better within 1 to 2 days. If it does not, the diagnosis may need another look. Treatment usually lasts about 10 to 14 days. This longer course also treats Lyme disease, which can come from the same tick bite.',
+      'Doxycycline is the treatment of choice for anaplasmosis in adults and children of all ages. Clinicians start it as soon as anaplasmosis is suspected, without waiting for test results. Delays can lead to serious illness. Fever usually gets better within 1 to 2 days. If it does not, the diagnosis may need another look. Treatment usually lasts 10 days. That length also treats Lyme disease, which can come from the same tick bite.',
     options: [
       {
         name: 'Doxycycline',
         type: 'antibiotic',
         detail:
-          'Usually taken by mouth for about 10 to 14 days. Very sick people may get it through a vein (IV). Start right away when anaplasmosis is suspected. Short courses can be used at any age, including young children, and have not been shown to stain teeth. Take it with a full glass of water, stay upright for at least 30 minutes afterward, and protect your skin from the sun.',
+          'Usually taken by mouth for 10 days. Very sick people may get it through a vein (IV). Start right away when anaplasmosis is suspected. Short courses can be used at any age, including young children, and have not been shown to stain teeth. Take it with a full glass of water, stay upright for at least 30 minutes afterward, and protect your skin from the sun.',
         who: 'Adults and children of all ages. It is also used for serious illness during pregnancy.',
       },
       {
@@ -183,8 +183,12 @@ const profile: PathogenProfile = {
     'The single dose of doxycycline sometimes given after a tick bite to prevent Lyme disease is not meant to prevent anaplasmosis. Keep watching for fever after any tick bite.',
   ],
   sources: [
-    { label: 'CDC: Anaplasmosis', url: 'https://www.cdc.gov/anaplasmosis/index.html' },
-    { label: 'CDC: Ticks', url: 'https://www.cdc.gov/ticks/index.html' },
+    { label: 'CDC: About Anaplasmosis', url: 'https://www.cdc.gov/anaplasmosis/about/index.html' },
+    { label: 'CDC: Treatment of Anaplasmosis', url: 'https://www.cdc.gov/anaplasmosis/treatment/index.html' },
+    {
+      label: 'CDC: Clinical Care of Anaplasmosis (for health professionals)',
+      url: 'https://www.cdc.gov/anaplasmosis/hcp/clinical-care/index.html',
+    },
     {
       label:
         'CDC MMWR: Diagnosis and Management of Tickborne Rickettsial Diseases (2016 recommendations, includes anaplasmosis)',
@@ -195,10 +199,10 @@ const profile: PathogenProfile = {
       url: 'https://www.health.state.mn.us/diseases/anaplasmosis/index.html',
     },
     {
-      label: 'Minnesota Department of Health: Tickborne Diseases',
-      url: 'https://www.health.state.mn.us/diseases/tickborne/index.html',
+      label: 'Minnesota Department of Health: Diseases That Can Be Transmitted by Ticks',
+      url: 'https://www.health.state.mn.us/diseases/tickborne/diseases.html',
     },
-    { label: 'U.S. EPA: Insect Repellents', url: 'https://www.epa.gov/insect-repellents' },
+    { label: 'U.S. EPA: Repellents: Protection Against Mosquitoes, Ticks and Other Arthropods', url: 'https://www.epa.gov/insect-repellents' },
   ],
   lastReviewed: '2026-10-07',
 }

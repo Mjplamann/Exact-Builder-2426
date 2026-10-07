@@ -58,7 +58,7 @@ export const LEARN_INTRO = {
 }
 
 const S = {
-  cdcResp: { label: 'CDC — Respiratory illnesses data channel', url: 'https://www.cdc.gov/respiratory-viruses/data/index.html' },
+  cdcResp: { label: 'CDC — Respiratory illness activity levels (data channel)', url: 'https://www.cdc.gov/respiratory-viruses/data/activity-levels.html' },
   mdhLab: { label: 'MDH — Weekly respiratory lab results', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
   mdhResp: { label: 'MDH — Respiratory illness statistics', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
   nrevss: { label: 'CDC — NREVSS dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
@@ -68,12 +68,16 @@ const S = {
     label: 'Meyers L, et al. Automated real-time collection of pathogen-specific diagnostic data (JMIR Public Health Surveill, 2018)',
     url: 'https://publichealth.jmir.org/2018/3/e59/',
   },
-  nssp: { label: 'CDC — National Syndromic Surveillance Program (NSSP)', url: 'https://www.cdc.gov/nssp/index.html' },
-  nhsn: { label: 'CDC — National Healthcare Safety Network (NHSN)', url: 'https://www.cdc.gov/nhsn/index.html' },
+  nssp: { label: 'CDC — About the National Syndromic Surveillance Program (NSSP)', url: 'https://www.cdc.gov/nssp/php/about/index.html' },
+  nhsn: { label: 'CDC — NHSN Hospital Respiratory Data', url: 'https://www.cdc.gov/nhsn/psc/hospital-respiratory-reporting.html' },
   respnet: { label: 'CDC — RESP-NET hospitalization dashboard', url: 'https://www.cdc.gov/resp-net/dashboard/index.html' },
-  nwss: { label: 'CDC — Wastewater data for respiratory illnesses (NWSS)', url: 'https://www.cdc.gov/nwss/rv/index.html' },
+  nwss: { label: 'CDC — Wastewater data for common respiratory viruses (NWSS)', url: 'https://www.cdc.gov/wastewater/respiratory-viruses/index.html' },
+  wval: { label: 'CDC — Using the Wastewater Viral Activity Level', url: 'https://www.cdc.gov/wastewater/about/wval.html' },
   wwscan: { label: 'WastewaterSCAN dashboard', url: 'https://data.wastewaterscan.org/' },
-  cfa: { label: 'CDC CFA — Rt estimates and epidemic trends', url: 'https://www.cdc.gov/cfa-modeling-and-forecasting/rt-estimates/index.html' },
+  cfa: {
+    label: 'CDC CFA — Behind the model: CDC’s tools to assess epidemic trends (Rt)',
+    url: 'https://www.cdc.gov/cfa-behind-the-model/php/data-research/rt-estimates/index.html',
+  },
   prism: { label: 'CDCgov/forecasttools — Minnesota activity-level cut-points (PRISM)', url: 'https://github.com/CDCgov/forecasttools' },
   flusight: { label: 'CDC FluSight Forecast Hub', url: 'https://github.com/cdcepi/FluSight-forecast-hub' },
   covidhub: { label: 'CDC COVID-19 Forecast Hub', url: 'https://github.com/CDCgov/covid19-forecast-hub' },
@@ -223,8 +227,8 @@ export const LEARN_SECTIONS: LearnSection[] = [
     summary:
       'Hospital numbers count people admitted with a lab-confirmed infection. They are the clearest sign of severe illness, but they rise later than other signals.',
     body: [
-      '**NHSN admissions.** Each week, hospitals report to CDC’s National Healthcare Safety Network (NHSN) how many patients were newly admitted with laboratory-confirmed flu, COVID-19 or RSV. Since November 2024, federal rules require most hospitals to report. MN Pulse shows the Minnesota count and the same count per 100,000 residents.',
-      '**RESP-NET rates.** CDC’s RESP-NET (FluSurv-NET, COVID-NET and RSV-NET), run in Minnesota by the Minnesota Department of Health’s Emerging Infections Program, actively finds residents of its catchment area who were hospitalized with a positive test. The catchment was historically the 7-county Twin Cities metro; MDH reports statewide RESP-NET coverage from the 2023–24 season. RESP-NET also reports rates by age group, which show who is hit hardest.',
+      '**NHSN admissions.** Each week, hospitals report to CDC’s National Healthcare Safety Network (NHSN) how many patients were newly admitted with laboratory-confirmed flu, COVID-19 or RSV. Since November 1, 2024, federal Medicare rules have required nearly all U.S. hospitals to report. MN Pulse shows the Minnesota count and the same count per 100,000 residents.',
+      '**RESP-NET rates.** CDC’s RESP-NET (FluSurv-NET, COVID-NET and RSV-NET), run in Minnesota by the Minnesota Department of Health’s Emerging Infections Program, actively finds residents of its catchment area who were hospitalized with a positive test. The catchment was historically the 7-county Twin Cities metro and now covers roughly the whole state. MDH’s files and CDC’s data place the switch in slightly different seasons (2023–24 and 2024–25), so compare rates from before and after that change with care. RESP-NET also reports rates by age group, which show who is hit hardest.',
       '**Per 100,000.** This makes places of different sizes comparable. Minnesota has about 5.7 million people, so a rate of 1 per 100,000 in a week means about 57 Minnesotans were admitted that week.',
     ],
     forYou:
@@ -262,8 +266,8 @@ export const LEARN_SECTIONS: LearnSection[] = [
       {
         title: 'How CDC sets the levels',
         items: [
-          'CDC sets a baseline for each plant from its earlier measurements and expresses the current value relative to it.',
-          'National cut-points for each virus turn that value into Very Low through Very High. CDC revised the method in August 2026 and re-applied it to past data.',
+          'CDC sets a baseline for each plant from that plant’s low levels over about the past 2 years, and expresses the current value relative to it.',
+          'National cut-points for each virus turn that value into Very Low through Very High. CDC reviews these cut-points every year and last updated them in 2026. MN Pulse shows each week’s level as CDC currently publishes it, so past weeks can change after an update.',
           'The statewide value on MN Pulse is the median across reporting Minnesota plants, calculated by MN Pulse.',
         ],
       },
@@ -276,7 +280,7 @@ export const LEARN_SECTIONS: LearnSection[] = [
         ],
       },
     ],
-    sources: [S.nwss, S.wwscan],
+    sources: [S.nwss, S.wval, S.wwscan],
   },
   {
     id: 'lab-positivity',
@@ -285,7 +289,7 @@ export const LEARN_SECTIONS: LearnSection[] = [
     summary:
       'NREVSS reports the share of PCR lab tests that were positive for RSV, COVID-19 and other respiratory viruses in HHS Region 5: Minnesota and five neighboring states.',
     body: [
-      'About 450 hospital, commercial and public health laboratories report weekly to CDC’s National Respiratory and Enteric Virus Surveillance System (NREVSS) how many tests they ran and how many were positive.',
+      'Hundreds of hospital, commercial and public health laboratories voluntarily report weekly to CDC’s National Respiratory and Enteric Virus Surveillance System (NREVSS) how many tests they ran and how many were positive.',
       'HHS Region 5 is Minnesota, Wisconsin, Illinois, Indiana, Michigan and Ohio. Minnesota is a small part of the region by population, so these values mostly reflect the larger states. Use them for the regional direction, and for viruses that have no Minnesota-specific source on MN Pulse.',
       'Like all positivity, this is the share of tests, not of people (see “Percent positive”).',
     ],
