@@ -1,5 +1,5 @@
 import type { TankState } from '../core/types';
-import type { LibraryIndex } from './tankLibrary';
+import { cleanSummary, type LibraryIndex } from './tankLibrary';
 
 /**
  * Optional cloud save for when the aquarium runs as a published claude.ai page: the keeper's
@@ -30,6 +30,54 @@ interface ClaudeLike {
 
 const DOC_LIMIT = 250 * 1024;
 const MIN_INTERVAL_MS = 60_000;
+const MAX_TOMBSTONES = 100;
+/** After a read times out, further reads fail fast for this long (the app stays responsive offline). */
+const OFFLINE_BACKOFF_MS = 30_000;
+
+class Timeout extends Error {}
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Timeout('cloud read timed out')), ms);
+    p.then(
+      (v) => {
+        clearTimeout(t);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(t);
+        reject(e);
+      },
+    );
+  });
+}
+
+/** Result of reading a document: `ok` false when the cloud could not be asked (offline, error, timeout). */
+export interface CloudRead<T> {
+  ok: boolean;
+  value: T | null;
+}
+
+/**
+ * Two devices' views of the collection, merged (what is written to the cloud index): every
+ * tank either side knows, the newer summary of each, deletions from both sides (a deleted tank
+ * stays deleted), and this device's open tank as `currentId`.
+ */
+export function mergeIndexes(local: LibraryIndex, remote: LibraryIndex | null): LibraryIndex {
+  const deleted = [...new Set([...(remote?.deleted ?? []), ...(local.deleted ?? [])].filter((x) => typeof x === 'string'))].slice(-MAX_TOMBSTONES);
+  const gone = new Set(deleted);
+  const byId = new Map<string, LibraryIndex['tanks'][number]>();
+  for (const raw of Array.isArray(remote?.tanks) ? remote!.tanks : []) {
+    const r = cleanSummary(raw);
+    if (r && !gone.has(r.id)) byId.set(r.id, r);
+  }
+  for (const t of local.tanks) {
+    if (gone.has(t.id)) continue;
+    const r = byId.get(t.id);
+    if (!r || t.lastSavedReal >= r.lastSavedReal) byId.set(t.id, t);
+  }
+  return { currentId: local.currentId ?? remote?.currentId ?? null, tanks: [...byId.values()], deleted };
+}
 
 async function gzipBase64(text: string): Promise<string | null> {
   if (typeof CompressionStream === 'undefined') return null;
@@ -56,6 +104,10 @@ class DocWriter {
   private lastWrite = 0;
   private writing: Promise<void> | null = null;
   private pending: (() => Promise<void>) | null = null;
+  /** Resolves once nothing is queued or in flight (tests, and callers that must wait). */
+  idle(): Promise<void> {
+    return this.writing ?? Promise.resolve();
+  }
   schedule(job: () => Promise<void>, force: boolean): void {
     const now = Date.now();
     if (!force && now - this.lastWrite < MIN_INTERVAL_MS) return;
@@ -78,6 +130,14 @@ class DocWriter {
 
 export class CloudSave {
   private writers = new Map<string, DocWriter>();
+  /** Longest wait for one cloud read before falling back to this browser's copy. */
+  readTimeoutMs = 6000;
+  private offlineUntil = 0;
+  /**
+   * Called with the cloud index as read just before each index write (another device may have
+   * added, renamed or deleted tanks since boot), so the open app can merge it into its collection.
+   */
+  onRemoteIndex: ((index: LibraryIndex) => void) | null = null;
 
   private constructor(
     private db: DbLike,
@@ -114,17 +174,29 @@ export class CloudSave {
     return w;
   }
 
-  private async readBody(path: string): Promise<string | null> {
+  /** One document, within `readTimeoutMs`; `ok` false when the cloud could not answer. */
+  private async readDoc(path: string): Promise<CloudRead<Record<string, unknown>>> {
+    if (Date.now() < this.offlineUntil) return { ok: false, value: null };
     try {
-      const snap = await this.db.doc(path).get();
-      if (!snap.exists) return null;
-      const d = snap.data() ?? {};
-      if (typeof d.gz === 'string') return await gunzipBase64(d.gz);
-      if (typeof d.json === 'string') return d.json;
-      return null;
-    } catch {
-      return null;
+      const snap = await withTimeout(this.db.doc(path).get(), this.readTimeoutMs);
+      return { ok: true, value: snap.exists ? (snap.data() ?? {}) : null };
+    } catch (err) {
+      if (err instanceof Timeout) this.offlineUntil = Date.now() + OFFLINE_BACKOFF_MS;
+      return { ok: false, value: null };
     }
+  }
+
+  private async readBody(path: string): Promise<CloudRead<string>> {
+    const r = await this.readDoc(path);
+    if (!r.ok || !r.value) return { ok: r.ok, value: null };
+    const d = r.value;
+    try {
+      if (typeof d.gz === 'string') return { ok: true, value: await gunzipBase64(d.gz) };
+      if (typeof d.json === 'string') return { ok: true, value: d.json };
+    } catch {
+      /* damaged document: there is a copy, but it can't be read */
+    }
+    return { ok: false, value: null };
   }
 
   private async writeTankBody(path: string, json: string): Promise<void> {
@@ -144,32 +216,64 @@ export class CloudSave {
 
   // ---- index ------------------------------------------------------------------------------
 
-  async loadIndex(): Promise<LibraryIndex | null> {
-    try {
-      const snap = await this.db.doc(`${this.base}/tanks`).get();
-      if (!snap.exists) return null;
-      const d = snap.data() as unknown as LibraryIndex | undefined;
-      if (!d || !Array.isArray(d.tanks)) return null;
-      return { currentId: d.currentId ?? null, tanks: d.tanks, deleted: Array.isArray(d.deleted) ? d.deleted.filter((x) => typeof x === 'string') : [] };
-    } catch {
-      return null;
-    }
+  /** The cloud index; `ok` false when it could not be read (then it must not be overwritten). */
+  async readIndex(): Promise<CloudRead<LibraryIndex>> {
+    const r = await this.readDoc(`${this.base}/tanks`);
+    if (!r.ok || !r.value) return { ok: r.ok, value: null };
+    const d = r.value as unknown as Partial<LibraryIndex>;
+    if (!Array.isArray(d.tanks)) return { ok: true, value: null };
+    const tanks = d.tanks.map(cleanSummary).filter((t): t is NonNullable<typeof t> => !!t);
+    return {
+      ok: true,
+      value: { currentId: typeof d.currentId === 'string' ? d.currentId : null, tanks, deleted: Array.isArray(d.deleted) ? d.deleted.filter((x) => typeof x === 'string') : [] },
+    };
   }
 
+  async loadIndex(): Promise<LibraryIndex | null> {
+    return (await this.readIndex()).value;
+  }
+
+  /**
+   * Write the index, merged with what the cloud holds now (so a tank another device added, or a
+   * deletion it made, is never overwritten). Skipped while the cloud index can't be read.
+   */
   saveIndex(index: LibraryIndex, force = false): void {
-    this.writer('index').schedule(() => this.db.doc(`${this.base}/tanks`).set({ currentId: index.currentId, tanks: index.tanks, deleted: index.deleted ?? [] }), force);
+    const local: LibraryIndex = { currentId: index.currentId, tanks: index.tanks.map((t) => ({ ...t, size: { ...t.size } })), deleted: [...(index.deleted ?? [])] };
+    this.writer('index').schedule(async () => {
+      const remote = await this.readIndex();
+      if (!remote.ok) throw new Error('cloud index unreadable: not overwriting it');
+      const merged = mergeIndexes(local, remote.value);
+      await this.db.doc(`${this.base}/tanks`).set({ currentId: merged.currentId, tanks: merged.tanks, deleted: merged.deleted ?? [] });
+      if (remote.value) {
+        try {
+          this.onRemoteIndex?.(remote.value);
+        } catch (err) {
+          console.warn('[tanks] merging the cloud index failed', err);
+        }
+      }
+    }, force);
+  }
+
+  /** Resolves once every queued cloud write has finished (or failed). */
+  async flushed(): Promise<void> {
+    await Promise.all([...this.writers.values()].map((w) => w.idle()));
   }
 
   // ---- tanks ------------------------------------------------------------------------------
 
-  /** A tank's saved JSON. */
+  /** A tank's saved JSON (null when missing or unreachable). */
   async loadTank(id: string): Promise<string | null> {
+    return (await this.readTank(id)).value;
+  }
+
+  /** A tank's saved JSON, telling "not in the cloud" (`ok`, null) from "couldn't ask" (`!ok`). */
+  readTank(id: string): Promise<CloudRead<string>> {
     return this.readBody(`${this.base}/${tankDoc(id)}`);
   }
 
   /** The pre-library single save, if any (`data/users/<id>/aquarium`). */
   async loadLegacy(): Promise<string | null> {
-    return this.readBody(`${this.base}/aquarium`);
+    return (await this.readBody(`${this.base}/aquarium`)).value;
   }
 
   /** Save a tank (throttled to once a minute per tank unless `force`). */
@@ -180,8 +284,12 @@ export class CloudSave {
 
   /** Delete a tank's document (queued behind any save of it still in flight). */
   deleteTank(id: string): void {
-    this.writer(id).schedule(async () => {
+    const w = this.writer(id);
+    w.schedule(async () => {
       await this.db.doc(`${this.base}/${tankDoc(id)}`).delete?.();
     }, true);
+    void w.idle().then(() => {
+      if (this.writers.get(id) === w) this.writers.delete(id);
+    });
   }
 }
