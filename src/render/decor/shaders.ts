@@ -20,7 +20,16 @@ export const DECOR_UNIFORMS = {
   uSwayScale: { value: 1 },
   /** Selection glow color (linear). */
   uSelColor: { value: new Color(0.55, 0.78, 0.9) },
+  /** 0 whole-tank view … 1 close-up (zoomed past ~1.5× or following): gates close-up-only detail. */
+  uCloseUp: { value: 0 },
 };
+
+/** How much of a close-up the view is: following, or zoomed in past ~1.15–1.6×. */
+export function closeUpAmount(zoom: number, following: boolean): number {
+  if (following) return 1;
+  const t = Math.min(1, Math.max(0, (zoom - 1.15) / 0.45));
+  return t * t * (3 - 2 * t);
+}
 
 // ---------------------------------------------------------------------------------------------
 // GLSL helpers
@@ -303,13 +312,15 @@ export interface LeafMicro {
  * spans several pixels and the blade turns into soft mush. This adds what a macro lens shows —
  * the finest vein network (areoles ≈ 1 mm) or the parallel veins and cross septa of strap
  * leaves, a little cell grain — in the leaf's own physical units, faded in by the pixel
- * footprint (fwidth) so nothing changes until a feature spans several pixels. The whole-tank
- * view (≈ 0.5 mm per pixel) never takes the branch: no cost and an identical image there.
+ * footprint (fwidth) so nothing changes until a feature spans several pixels, and only in
+ * close-ups (DECOR_UNIFORMS.uCloseUp): the whole-tank view never takes the branch — no cost and
+ * an identical image there, on any display.
  * Needs the bend variant of `patchPlant` (instanced leaf strips with `aWidth`).
  */
 export function patchLeafMicro(material: Material, m: LeafMicro): void {
   const uniforms = {
     uLeafMicro: { value: new Vector4(m.kind === 'parallel' ? 1 : 2, m.strength, m.size, m.relief ?? 1) },
+    uCloseUp: DECOR_UNIFORMS.uCloseUp,
   };
   addShaderPatch(
     material,
@@ -335,6 +346,7 @@ export function patchLeafMicro(material: Material, m: LeafMicro): void {
         '#include <common>',
         /* glsl */ `#include <common>
 uniform vec4 uLeafMicro; // kind (1 parallel, 2 net), strength, size (m), relief sign
+uniform float uCloseUp;
 varying vec2 vLeafDim;
 float lmH = 0.0;
 float lmHash(vec2 p) {
@@ -363,7 +375,9 @@ float lmValue(vec2 p) {
   float lmPx = max(lmFw.x, lmFw.y);
   float lmS = uLeafMicro.z;
   // Fade in once the coarsest micro feature spans ≥ 3 px (fully at 7 px).
-  float lmFade = smoothstep(3.0, 7.0, lmS / lmPx) * uLeafMicro.y;
+  // (Close-ups only: on a high-DPI screen the whole-tank view resolves front leaves almost as
+  // finely, and it must look — and cost — exactly as before.)
+  float lmFade = smoothstep(3.0, 7.0, lmS / lmPx) * uLeafMicro.y * uCloseUp;
   if (lmFade > 0.002) {
     float vein = 0.0, cellShade = 0.0;
     if (uLeafMicro.x < 1.5) {

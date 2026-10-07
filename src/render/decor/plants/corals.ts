@@ -160,44 +160,87 @@ function polypTuft(sp: PlantSpecies, rr = 0.07): ReturnType<typeof tentaclePart>
   return tentaclePart(`${sp.id}/polyp`, { rr, taper: 0.6, tip: 'point', rows: 4, radial: 4 }, { transl: 0.6, roughness: 0.6, fluor: fluorOf(sp, 0.5) }, { base: mixRGB(base, tip, 0.5), tip, from: 0.3 });
 }
 
+/**
+ * Sarcophyton polyp: a short pale stalk with a small crown (the eight tentacles read as a knob at
+ * aquarium distances). Thousands of them make the cap's fuzzy "lawn".
+ */
+function toadstoolPolyp(sp: PlantSpecies): ReturnType<typeof tentaclePart> {
+  const base = mixRGB(lin(sp.color), [0.86, 0.84, 0.74], 0.45), tip = lin(sp.color2 ?? sp.color);
+  return tentaclePart(`${sp.id}/polyp-crown`, { rr: 0.09, taper: 0.2, tip: 'knob', rows: 2, radial: 4, tipScale: 2.2, tipDetail: 0 }, { transl: 0.7, roughness: 0.55, fluor: fluorOf(sp, 0.5) }, { base, tip: mixRGB(tip, [0.9, 0.88, 0.76], 0.5), from: 0.45 });
+}
+
+/**
+ * Toadstool leather (Sarcophyton): a smooth, pale, slightly wrinkled stalk flaring into a fleshy
+ * capitulum whose margin rolls down and folds into lobes like a chanterelle (more so as the
+ * colony grows); by day the whole top is a dense fur of short polyps, at night it turns smooth.
+ * Not a flat plate: a thick rounded rim, a gently domed top, and mottled tan flesh.
+ */
 function genToadstool(a: GenArgs): void {
   const { sp, m, rng, out, ctx } = a;
   const g = m.growth;
   const H = Math.max(0.04, m.height);
   const up = growUp(m.normal, 0.8);
   const rc = Math.max(0.03, m.spread / 2);
-  const rs = rc * 0.24;
-  const hs = H * 0.55;
-  const ct = Math.max(0.01, rc * 0.12);
+  const rs = rc * 0.3;
+  const hs = H * 0.58;
+  const ct = Math.max(0.012, rc * 0.2);
+  // Stalk (rows 0–3), flare (4), rolled rim (5–8), domed top (9–12).
   const prof: [number, number][] = [
-    [rs * 1.3, -0.005], [rs * 1.08, hs * 0.12], [rs * 0.95, hs * 0.5], [rs, hs * 0.85], [rc * 0.5, hs + ct * 0.15],
-    [rc * 0.85, hs + ct * 0.3], [rc, hs + ct * 0.6], [rc * 0.97, hs + ct * 0.95], [rc * 0.75, hs + ct * 1.25], [rc * 0.4, hs + ct * 1.45], [0.001, hs + ct * 1.5],
+    [rs * 1.35, -0.005], [rs * 1.08, hs * 0.15], [rs * 0.96, hs * 0.5], [rs * 1.04, hs * 0.82], [rc * 0.55, hs + ct * 0.05],
+    [rc * 0.86, hs + ct * 0.12], [rc * 0.99, hs + ct * 0.42], [rc * 1.0, hs + ct * 0.8], [rc * 0.93, hs + ct * 1.05],
+    [rc * 0.78, hs + ct * 1.18], [rc * 0.55, hs + ct * 1.3], [rc * 0.28, hs + ct * 1.38], [0.001, hs + ct * 1.4],
   ];
   const noise = new Noise3(a.p.seed);
-  const stalk = mulRGB(lin(sp.color), [1.12, 1.1, 1.05]);
-  const cap = lin(sp.color);
-  const ph = rng.range(0, 6.28);
+  const ph = rng.range(0, 6.28), ph2 = rng.range(0, 6.28);
+  // Lobes: 5–8 big folds plus finer pleats, deeper in older colonies.
+  const lobes = Math.round(5 + 3 * rng.next());
+  const foldAmp = rc * (0.08 + 0.14 * g);
+  const fold = (th: number) => 0.65 * Math.sin(th * lobes + ph) + 0.35 * Math.sin(th * (lobes * 2 + 1) + ph2) + 0.4 * noise.noise(Math.cos(th) * 1.7, Math.sin(th) * 1.7, 0.4);
+  const flesh = lin(sp.color);
+  const stalk = mixRGB(flesh, [0.88, 0.85, 0.76], 0.4);
+  const capTop = mulRGB(flesh, [0.92, 0.9, 0.84]);
   const gb = new GeoBuilder();
   lathe(
-    gb, m.anchor, up, prof, 40,
-    (th, i) => (i >= 4 ? [1 + 0.1 * Math.sin(th * 5 + ph) + 0.05 * noise.noise(th * 2, i, 0.3), -(i >= 5 && i <= 7 ? 1 : 0) * rc * 0.12 * (0.5 + 0.5 * Math.sin(th * 4 + ph))] : [1 + 0.04 * Math.sin(th * 3), 0]),
-    (i) => (i < 4 ? stalk : mixRGB(cap, stalk, i === 4 ? 0.5 : 0)),
-    [m.anchor[1], H, flexOf(sp) * 0.4, ph],
+    gb, m.anchor, up, prof, 64,
+    (th, i) => {
+      if (i < 4) return [1 + 0.05 * Math.sin(th * 3 + ph) + 0.04 * noise.noise(th * 2, i * 0.7, 0.9), 0];
+      // The margin (rows 5–9) waves up and down and in and out; the top only gently.
+      const w = i === 4 ? 0.3 : i <= 8 ? 1 : i === 9 ? 0.6 : 0.25;
+      const f = fold(th);
+      return [1 + 0.07 * f * w + 0.04 * noise.noise(th * 3, i * 0.5, 0.2), foldAmp * f * w - (i >= 6 && i <= 8 ? rc * 0.05 : 0)];
+    },
+    (i, th) => {
+      if (i < 4) return mulRGB(stalk, [1 + 0.05 * noise.noise(th * 4, i, 2.1), 1, 1]);
+      const n = noise.noise(Math.cos(th) * 3, Math.sin(th) * 3, i * 0.35);
+      const c = i === 4 ? mixRGB(stalk, flesh, 0.5) : i <= 7 ? mixRGB(flesh, stalk, 0.25) : capTop;
+      return mulRGB(c, [1 + 0.1 * n, 1 + 0.08 * n, 1 + 0.04 * n]);
+    },
+    [m.anchor[1], H, flexOf(sp) * 0.35, ph],
   );
-  uniqueMesh(out, gb.build(), { roughness: 0.55, transl: 0.35, detail: { freq: 400, bump: 0.0002, albedoVar: 0.08 } });
-  // Polyps over the cap top: by day a fuzzy lawn, by night the cap turns smooth.
-  const tufts = use(out, polypTuft(sp));
-  const n = Math.round((120 + 380 * g) * ctx.density);
+  // Fleshy surface: fine wrinkles and the pores of retracted polyps.
+  uniqueMesh(out, gb.build(), { roughness: 0.6, transl: 0.35, detail: { freq: 420, bump: 0.0002, pores: 0.25, ridge: 0.5, albedoVar: 0.08 } });
+  // A dense lawn of polyps over the top and the upper margin (≈ one per 4 mm).
+  const tufts = use(out, toadstoolPolyp(sp));
+  const area = Math.PI * rc * rc;
+  const n = Math.round(Math.min(2400, Math.max(200, area / (0.004 * 0.004))) * (0.45 + 0.55 * g) * ctx.density);
   const [t1, t2] = basis(up);
+  const capY = (r: number, th: number): number => {
+    const t = r / rc;
+    // Interpolate the lathe's top rows (dome → rim) and its folds.
+    const dome = hs + ct * (1.4 - 0.22 * t * t - 0.3 * smoothstep(0.7, 1, t));
+    const w = smoothstep(0.45, 0.8, t);
+    return dome + foldAmp * fold(th) * w;
+  };
   for (let i = 0; i < n; i++) {
-    const r = Math.sqrt(rng.next()) * rc * 0.95;
+    const r = Math.sqrt(rng.next()) * rc * 0.97;
     const th = rng.range(0, Math.PI * 2);
-    const rr = r * (1 + 0.1 * Math.sin(th * 5 + ph));
-    const capY = hs + ct * (1.5 - 0.9 * Math.pow(r / rc, 2)) - (r > rc * 0.75 ? rc * 0.06 * (0.5 + 0.5 * Math.sin(th * 4 + ph)) : 0);
-    const p = add(add(m.anchor, up, capY), add(scl(t1, Math.cos(th)), t2, Math.sin(th)), rr);
-    const dir = norm(add(add(up, add(scl(t1, Math.cos(th)), t2, Math.sin(th)), (r / rc) * 0.6), [rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)], 0.2));
-    const L = cm(sp.leafLength, 1) * rng.range(0.6, 1.2);
-    pushLeaf(tufts, p, dir, [rng.range(-1, 1), 0, rng.range(-1, 1)], L * 0.14, L, tint(rng, 0.12, a.p.health), [m.anchor[1], H, 0.35, ph + i], [rng.range(-0.4, 0.6), 0, 0.3, 0.85]);
+    const rr = r * (1 + 0.07 * fold(th) * smoothstep(0.45, 0.8, r / rc));
+    const dirR = add(scl(t1, Math.cos(th)), t2, Math.sin(th));
+    const p = add(add(m.anchor, up, capY(r, th)), dirR, rr);
+    const t = r / rc;
+    const dir = norm(add(add(up, dirR, t * 0.7), [rng.range(-1, 1), rng.range(-1, 1), rng.range(-1, 1)], 0.25));
+    const L = cm(sp.leafLength, 1) * rng.range(0.35, 0.6);
+    pushLeaf(tufts, p, dir, [rng.range(-1, 1), 0, rng.range(-1, 1)], L * 0.18, L, tint(rng, 0.14, a.p.health), [m.anchor[1], H, 0.3, ph + i], [rng.range(-0.5, 0.7), 0, 0.35, 0.9]);
   }
   out.proxy = { a: m.anchor, b: add(m.anchor, up, H), r: rc };
 }
@@ -800,14 +843,26 @@ function genSps(a: GenArgs, style: Style): void {
       sprigs = growSprigs(rng, m.anchor, up, { trunks: Math.round(3 + 3 * g), len: H * 0.9 * sc, r0: 0.0075, tipR: 0.0055, spread: 0.9, branchProb: 0.13, angle: [0.4, 0.8], depth: 2, wander: 0.07, upBias: 0.06, step: 0.01 });
       break;
     case 'table': {
-      // A short stalk and a flat, finely branched table.
+      // Table Acropora (A. hyacinthus / cytherea): a short, stout stalk under a broad table of
+      // fused horizontal branches, cupped a little toward the light and bristling with short
+      // upright branchlets — a shelf with a rough top, never a bare skewer seen edge-on.
       const stalkTop = add(m.anchor, up, H * 0.45);
-      sprigs = [{ pts: [m.anchor, add(m.anchor, up, H * 0.25), stalkTop], r: [0.012, 0.01, 0.009], depth: 0 }];
-      sprigs.push(...growSprigs(rng, stalkTop, up, { trunks: 12, len: W * sc, r0: 0.004, tipR: 0.0028, spread: 6, branchProb: 0.42, angle: [0.25, 0.5], depth: 2, wander: 0.05, upBias: 0, planar: up, step: 0.01, maxSprigs: 70 }));
-      // Upturned branchlets on the table.
+      sprigs = [{ pts: [m.anchor, add(m.anchor, up, H * 0.25), stalkTop], r: [0.014, 0.012, 0.011], depth: 0 }];
+      const plate = growSprigs(rng, stalkTop, up, { trunks: 14, len: W * sc, r0: 0.0045, tipR: 0.003, spread: 6, branchProb: 0.5, angle: [0.25, 0.5], depth: 2, wander: 0.06, upBias: 0, planar: up, step: 0.008, maxSprigs: 110 });
+      const lift = tableLift(stalkTop, up, W);
+      for (const s of plate) s.pts = s.pts.map(lift);
+      sprigs.push(...plate);
       const extra: Sprig[] = [];
-      for (const s of sprigs.slice(1)) for (let i = 1; i < s.pts.length; i += 3) extra.push({ pts: [s.pts[i], add(s.pts[i], norm(add(up, [rng.range(-1, 1), 0, rng.range(-1, 1)], 0.2)), rng.range(0.005, 0.012))], r: [0.0026, 0.0022], depth: 3 });
+      for (const s of plate) {
+        for (let i = 1; i < s.pts.length; i++) {
+          for (let k = rng.chance(0.55) ? 2 : 1; k > 0; k--) {
+            const at = add(s.pts[i], [rng.range(-1, 1), 0, rng.range(-1, 1)], 0.003);
+            extra.push({ pts: [at, add(at, norm(add(up, [rng.range(-1, 1), 0, rng.range(-1, 1)], 0.25)), rng.range(0.006, 0.016))], r: [0.0024, 0.0019], depth: 3 });
+          }
+        }
+      }
       sprigs.push(...extra);
+      tableWeb(a, stalkTop, up, plate, lift);
       break;
     }
     case 'digitata':
@@ -830,14 +885,86 @@ function genSps(a: GenArgs, style: Style): void {
       sprigs = growSprigs(rng, m.anchor, up, { trunks: Math.round(8 + 8 * g), len: H * 0.7 * sc, r0: 0.0048, tipR: 0.0034, spread: 1.0, branchProb: 0.32, angle: [0.25, 0.5], depth: 2, wander: 0.09, upBias: 0.22, step: 0.007 });
   }
   const bumpy = style === 'pocillopora' || style === 'stylophora';
-  const geo = sprigMesh(sprigs, (t, depth) => mixRGB(base, tip, smoothstep(0.65, 1, t) * (depth >= 1 || style === 'staghorn' ? 1 : 0.6)), [m.anchor[1], H, 0, ph], style === 'birdsnest' ? 5 : 7);
+  // Table branchlets keep the colony's body colour with only pale/violet tips; the rim of the
+  // table (ends of the horizontal branches) carries the growth colour.
+  const tint3 = (t: number, depth: number): RGB => style === 'table'
+    ? (depth >= 3 ? mixRGB(base, tip, smoothstep(0.5, 1, t) * 0.4) : mixRGB(base, tip, smoothstep(0.8, 1, t) * 0.85))
+    : mixRGB(base, tip, smoothstep(0.65, 1, t) * (depth >= 1 || style === 'staghorn' ? 1 : 0.6));
+  const geo = sprigMesh(sprigs, tint3, [m.anchor[1], H, 0, ph], style === 'birdsnest' ? 5 : 7, 'dome');
   // Tips glow (growing tips are pale/fluorescent).
   const uvs = geo.getAttribute('uv');
+  const det = geo.getAttribute('aDetail');
   const glowArr = new Float32Array(uvs.count);
-  for (let i = 0; i < uvs.count; i++) glowArr[i] = smoothstep(0.7, 1, uvs.getY(i));
+  // (A table's short upright branchlets glow only faintly; its growing rim carries the colour.)
+  for (let i = 0; i < uvs.count; i++) glowArr[i] = smoothstep(0.7, 1, uvs.getY(i)) * (style === 'table' && det && det.getZ(i) >= 3 ? 0.2 : 1);
   geo.setAttribute('aGlow', new Float32BufferAttribute(glowArr, 1));
   uniqueMesh(out, geo, { roughness: 0.7, transl: 0.12, fluor: fluorOf(sp, 0.8), glow: true, detail: { freq: bumpy ? 260 : 650, bump: bumpy ? 0.0007 : 0.00035, pores: 0.7, ridge: 0.2, albedoVar: 0.12 } });
   out.proxy = { a: m.anchor, b: add(m.anchor, up, H), r: W };
+}
+
+/** Table corals cup upward: the rise grows with the square of the distance from the stalk. */
+function tableLift(center: V3, up: V3, W: number): (p: V3) => V3 {
+  return (p) => {
+    const d: V3 = [p[0] - center[0], p[1] - center[1], p[2] - center[2]];
+    const h = Math.max(0, Math.hypot(d[0], d[1], d[2]) ** 2 - (d[0] * up[0] + d[1] * up[1] + d[2] * up[2]) ** 2);
+    return add(p, up, (0.2 * h) / Math.max(0.02, W));
+  };
+}
+
+/**
+ * The fused meshwork under a table's branchlets: an irregular, cupped plate following the
+ * branches' own outline, so the table reads as a solid shelf from the side and from below.
+ */
+function tableWeb(a: GenArgs, center: V3, up: V3, plate: Sprig[], lift: (p: V3) => V3): void {
+  const { sp, m, rng } = a;
+  const [t1, t2] = basis(up);
+  const bins = 48;
+  const R = new Float64Array(bins);
+  for (const s of plate) {
+    for (const p of s.pts) {
+      const d: V3 = [p[0] - center[0], p[1] - center[1], p[2] - center[2]];
+      const x = d[0] * t1[0] + d[1] * t1[1] + d[2] * t1[2], z = d[0] * t2[0] + d[1] * t2[1] + d[2] * t2[2];
+      const b = Math.floor(((Math.atan2(z, x) / (Math.PI * 2) + 1) % 1) * bins) % bins;
+      R[b] = Math.max(R[b], Math.hypot(x, z));
+    }
+  }
+  let rMax = 0;
+  for (let i = 0; i < bins; i++) rMax = Math.max(rMax, R[i]);
+  if (rMax < 0.01) return;
+  // Smooth the outline (circular), never a spiky star; keep the plate a little inside the tips.
+  for (let pass = 0; pass < 3; pass++) {
+    const c = Float64Array.from(R);
+    for (let i = 0; i < bins; i++) R[i] = 0.25 * c[(i + bins - 1) % bins] + 0.5 * c[i] + 0.25 * c[(i + 1) % bins];
+  }
+  for (let i = 0; i < bins; i++) R[i] = Math.max(R[i], rMax * 0.45) * 0.9;
+  const base = lin(sp.color), rim = lin(sp.color2 ?? sp.color);
+  const ph = rng.range(0, 6.28);
+  const gb = new GeoBuilder();
+  const rows = 6;
+  for (let j = 0; j <= rows; j++) {
+    for (let k = 0; k <= bins; k++) {
+      const th = (k / bins) * Math.PI * 2;
+      const r = (R[k % bins] * j) / rows;
+      const dir = add(scl(t1, Math.cos(th)), t2, Math.sin(th));
+      // Just under the branch centrelines; the plate thins toward the rim.
+      const p = add(lift(add(center, dir, r)), up, -0.0025 * (1 - 0.5 * (j / rows)));
+      const edge = smoothstep(0.7, 1, j / rows);
+      gb.vertex(p, up, [k / bins, j / rows], mixRGB(base, rim, edge * 0.8), [Math.cos(th) * r, p[1] - m.anchor[1], Math.sin(th) * r]);
+      gb.attr('aSway', 4, [m.anchor[1], 1, 0, ph]);
+      gb.attr('aGlow', 1, [edge]);
+    }
+  }
+  const w = bins + 1;
+  for (let j = 0; j < rows; j++) {
+    for (let k = 0; k < bins; k++) {
+      const v0 = j * w + k;
+      gb.tri(v0, v0 + w, v0 + 1);
+      gb.tri(v0 + 1, v0 + w, v0 + w + 1);
+    }
+  }
+  const geo = gb.build();
+  geo.computeVertexNormals();
+  uniqueMesh(a.out, geo, { roughness: 0.75, transl: 0.12, fluor: fluorOf(sp, 0.8), glow: true, double: true, detail: { freq: 900, bump: 0.0003, pores: 0.75, ridge: 0.25, albedoVar: 0.12 } });
 }
 
 function genMontiCap(a: GenArgs, up: V3): void {

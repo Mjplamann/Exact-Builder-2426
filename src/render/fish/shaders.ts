@@ -311,6 +311,7 @@ uniform float uIridescence;
 uniform vec3 uIridColor;
 uniform float uGravidSpot;
 uniform float uFishTime;
+uniform float uFishCloseUp;
 uniform float uTranslucency;
 uniform vec4 uFishSkin;   // wrap (soft terminator), transmission, glint strength, thin-edge rim
 uniform vec4 uFishSkin2;  // scale cells across the body atlas (u, v), saturation, fin (1) / body (0)
@@ -556,8 +557,11 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
       // magnified, the free margins are also redrawn crisply (pigment line + relief).
       float sCols = uFishSkin2.x;
       float ssx = 1.0 / sCols, ssy = ssx * 0.64, sR = ssx * 0.78;
-      float near = smoothstep(4.0, 9.0, ssy / max(fishSkPx, 1e-7)) * flank;
+      float near = smoothstep(2.5, 7.0, ssy / max(fishSkPx, 1e-7)) * flank * uFishCloseUp;
       if (near > 0.001) {
+        // The atlas relief is tuned to read across the room; seen this close, the overlap of a
+        // scale is a slight step under a mucus film, not an embossed net: soften it.
+        normal = normalize(mix(normal, normalize(vNormal), 0.45 * near));
         float sX = vFishBody.x, sY = vFishY;
         int r0 = int(floor(sY / ssy));
         float bestCx = 1e9, bestD = 0.0, bestId = -1.0;
@@ -596,8 +600,11 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
           float kk = mix(1.0, k, near * field * (0.3 + 0.7 * g) * (1.0 - 0.6 * vFishState.w));
           material.diffuseColor *= kk;
           material.specularColorBlended *= kk;
-          // Iridophores (the neon's stripe) flicker scale by scale too.
+          // Iridophores (the neon's stripe) flicker scale by scale too; even pigmented and white
+          // skin varies a little from scale to scale (reflecting platelets under the pigment).
           material.diffuseContribution *= mix(1.0, kk, near * clamp(fishIri, 0.0, 1.0) * 0.7);
+          material.diffuseContribution *= 1.0 + near * field * (0.1 * (fract(bestId * 2.93) - 0.5) + 0.06 * (sky - 0.5));
+
           // Glints from the physical scale (shaped like its exposed field), not the atlas cell.
           float sparse2 = step(0.5, fract(bestId * 3.17)) * smoothstep(0.12, 0.35, e);
           fishGlintN = normalize(mix(fishGlintN, normalize(normal + (sT * tl.x + sB * tl.y) * 0.95), near));

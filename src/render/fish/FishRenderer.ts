@@ -7,7 +7,8 @@ import { sexMatters, variantKey } from './archetypes';
 import { createUnderwaterEnv } from './envMap';
 import { ThumbnailRenderer } from './thumbnails';
 import { FishVariant } from './variant';
-import { updateFishTime } from './fishMaterial';
+import { FISH_CLOSEUP, updateFishTime } from './fishMaterial';
+import { closeUpAmount } from '../decor/shaders';
 import { GLOBALS } from '../globals';
 
 /**
@@ -180,6 +181,8 @@ export class FishRenderer {
     // Close-ups (following, or zoomed past ~1.3×) have depth of field: lay down the fins' depth
     // so they stay sharp with their body. Never drawn in the whole-tank view (no extra cost).
     const closeUp = this.engine.qualityLevel !== 'low' && (world.follow !== null || this.engine.zoomLevel > 1.3);
+    // Close-up skin detail (scale shimmer) fades in with the zoom; never in the whole-tank view.
+    FISH_CLOSEUP.value = closeUpAmount(this.engine.zoomLevel ?? 1, world.follow !== null);
 
     const list = this.variantList;
     for (let vi = 0; vi < list.length; vi++) {

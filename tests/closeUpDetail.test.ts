@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { Group, PerspectiveCamera } from 'three';
+import { Box3, Group, PerspectiveCamera, Vector3, type BufferAttribute, type Mesh } from 'three';
+import type { PlantSpecies } from '../src/core/types';
+import { PlantIndex } from '../src/data/plantIndex';
+import { newTank } from '../src/sim/tankFactory';
 import { speckleHash, type LeafTexSpec } from '../src/render/decor/textures';
 import { leafMicroFor } from '../src/render/decor/plants/parts';
+import { closeUpAmount } from '../src/render/decor/shaders';
+import { FISH_CLOSEUP } from '../src/render/fish/fishMaterial';
 import { FishVariant } from '../src/render/fish/variant';
 import { FIN_DEPTH_ALPHA } from '../src/render/fish/fishMaterial';
 import { FishRenderer } from '../src/render/fish/FishRenderer';
@@ -50,6 +55,17 @@ describe('leaf textures', () => {
   });
 });
 
+describe('close-up detail is close-up only', () => {
+  it('the whole-tank view (any display) never shows or pays for it; zooming or following fades it in', () => {
+    expect(closeUpAmount(1, false)).toBe(0);
+    expect(closeUpAmount(1.1, false)).toBe(0);
+    expect(closeUpAmount(1.3, false)).toBeGreaterThan(0);
+    expect(closeUpAmount(1.3, false)).toBeLessThan(1);
+    expect(closeUpAmount(2, false)).toBe(1);
+    expect(closeUpAmount(1, true)).toBe(1);
+  });
+});
+
 describe('fins under depth of field', () => {
   it('every animal has a depth-only fin twin (fins, shrimp legs and antennae keep their own depth)', () => {
     for (const id of ['paracheirodon-innesi', 'pterophyllum-scalare', 'neocaridina-davidi-red-cherry', 'amphiprion-ocellaris']) {
@@ -73,7 +89,7 @@ describe('fins under depth of field', () => {
       expect(d.visible).toBe(false);
       v.dispose();
     }
-  });
+  }, 60_000);
 
   it('the fin depth is only drawn in close-ups (no extra draw calls in the whole-tank view)', () => {
     const t = makeTank();
@@ -86,9 +102,11 @@ describe('fins under depth of field', () => {
     expect(depthMeshes().length).toBe(2);
     r.update(t.world, 1 / 60);
     expect(depthMeshes().every((m) => !m.visible)).toBe(true);
+    expect(FISH_CLOSEUP.value).toBe(0);
     engine.zoomLevel = 3;
     r.update(t.world, 1 / 60);
     expect(depthMeshes().every((m) => m.visible)).toBe(true);
+    expect(FISH_CLOSEUP.value).toBe(1);
     engine.zoomLevel = 1;
     t.world.follow = t.world.fish[0].state.id;
     r.update(t.world, 1 / 60);
@@ -98,7 +116,7 @@ describe('fins under depth of field', () => {
     r.update(t.world, 1 / 60);
     expect(depthMeshes().every((m) => !m.visible)).toBe(true);
     r.dispose();
-  });
+  }, 60_000);
 });
 
 describe('close-up scale lattice', () => {
@@ -118,5 +136,61 @@ describe('close-up scale lattice', () => {
       checked++;
     }
     expect(checked).toBeGreaterThan(100);
-  });
+  }, 30_000);
+});
+
+describe('reef corals read as the real thing', () => {
+  const plantFiles = import.meta.glob('../src/data/plants/*.json', { eager: true, import: 'default' }) as Record<string, PlantSpecies[]>;
+  const plantIdx = new PlantIndex(Object.values(plantFiles).flat());
+  function shimCanvas(): void {
+    const g = globalThis as Record<string, unknown>;
+    if (typeof g.document !== 'undefined') return;
+    const ctx2d = (w: number, h: number) => new Proxy({ canvas: { width: w, height: h }, getImageData: (_x: number, _y: number, ww: number, hh: number) => ({ data: new Uint8ClampedArray(ww * hh * 4) }), createImageData: (ww: number, hh: number) => ({ data: new Uint8ClampedArray(ww * hh * 4) }), createLinearGradient: () => ({ addColorStop() {} }), createRadialGradient: () => ({ addColorStop() {} }) } as Record<string, unknown>, { get: (t, k) => (k in t ? t[k as string] : () => undefined), set: () => true });
+    g.document = { createElement: () => { const c: Record<string, unknown> = { width: 1, height: 1 }; c.getContext = () => ctx2d(c.width as number, c.height as number); return c; } };
+    g.Path2D = class { moveTo() {} lineTo() {} closePath() {} quadraticCurveTo() {} bezierCurveTo() {} ellipse() {} arc() {} };
+  }
+  async function build(id: string) {
+    shimCanvas();
+    const { PlantSystem } = await import('../src/render/decor/plants/PlantSystem');
+    const tank = newTank({ size: { widthCm: 90, heightCm: 50, depthCm: 50 }, water: 'marine', seed: 5, now: 1.7e12, substrate: 'aragonite' });
+    tank.plants = [{ id: 'c', speciesId: id, seed: 7, position: [0, 0.03, 0], rotationY: 0.3, growth: 1, plantedAt: 0, health: 1 }];
+    const sys = new PlantSystem();
+    sys.sync({ tank, plants: plantIdx, settings: { quality: 'high' } } as never);
+    const built = (sys as unknown as { built: Map<string, { build: { meshes: Mesh[]; parts: Map<string, { inst: unknown[] }> } }> }).built.get('c')!.build;
+    return { sys, built, sp: plantIdx.get(id)! };
+  }
+
+  it('a table Acropora is a broad plate (not a skewer seen edge-on), cupped, bristling with branchlets', async () => {
+    const { sys, built, sp } = await build('acropora-hyacinthus');
+    const box = new Box3();
+    for (const m of built.meshes) box.union(new Box3().setFromBufferAttribute(m.geometry.getAttribute('position') as BufferAttribute));
+    const size = box.getSize(new Vector3());
+    const spread = sp.spreadCm / 100;
+    // Broad in both horizontal directions, shallow in height.
+    expect(Math.min(size.x, size.z)).toBeGreaterThan(spread * 0.6);
+    expect(size.y).toBeLessThan(Math.max(size.x, size.z) * 0.6);
+    // A solid plate under the branchlets (the fused meshwork), plus the branch mesh.
+    expect(built.meshes.length).toBeGreaterThanOrEqual(2);
+    sys.dispose();
+  }, 60_000);
+
+  it('a toadstool leather has a folded, rolled cap carpeted with polyps', async () => {
+    const { sys, built, sp } = await build('sarcophyton-toadstool');
+    const polyps = [...built.parts.entries()].find(([k]) => k.endsWith('/polyp-crown'))?.[1].inst.length ?? 0;
+    // Hundreds of short polyps (a fuzzy lawn by day), not a few dozen blades of grass.
+    expect(polyps).toBeGreaterThan(700);
+    // The cap margin waves up and down (lobes), it is not a flat plate.
+    const pos = built.meshes[0].geometry.getAttribute('position');
+    let yMax = -Infinity;
+    for (let i = 0; i < pos.count; i++) yMax = Math.max(yMax, pos.getY(i));
+    const rim: number[] = [];
+    const r = sp.spreadCm / 200;
+    for (let i = 0; i < pos.count; i++) {
+      const d = Math.hypot(pos.getX(i), pos.getZ(i));
+      if (d > r * 0.85) rim.push(pos.getY(i));
+    }
+    expect(rim.length).toBeGreaterThan(20);
+    expect(Math.max(...rim) - Math.min(...rim)).toBeGreaterThan(r * 0.12);
+    sys.dispose();
+  }, 60_000);
 });

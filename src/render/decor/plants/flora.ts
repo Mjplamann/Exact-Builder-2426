@@ -805,7 +805,7 @@ function branchingThallus({ sp, p, m, rng, out }: GenArgs): Mesh[] {
 }
 
 /** Tube mesh for sprigs with per-vertex color and the plant sway attribute. */
-export function sprigMesh(sprigs: Sprig[], color: (t: number, depth: number, around: number) => RGB, sway: [number, number, number, number], radialIn: number, capTips = true): BufferGeometry {
+export function sprigMesh(sprigs: Sprig[], color: (t: number, depth: number, around: number) => RGB, sway: [number, number, number, number], radialIn: number, capTips: boolean | 'dome' = true): BufferGeometry {
   const gb = new GeoBuilder();
   for (const s of sprigs) {
     const n = s.pts.length;
@@ -836,10 +836,29 @@ export function sprigMesh(sprigs: Sprig[], color: (t: number, depth: number, aro
       }
     }
     if (capTips) {
-      const tipP = add(s.pts[n - 1], T[n - 1], s.r[n - 1]);
-      const tip = gb.vertex(tipP, T[n - 1], [0.5, 1], color(1, s.depth, 0), [0, n * 0.01, s.depth]);
+      let last = starts[n - 1];
+      const tn = T[n - 1], rEnd = s.r[n - 1];
+      if (capTips === 'dome') {
+        // Rounded tip (a coral branch's axial corallite), not a cone: one ring part-way up the dome.
+        const Nd = norm(add(N0, tn, -dotp(N0, tn)));
+        const Bd = cross3(tn, Nd);
+        const ring = gb.count;
+        for (let a = 0; a <= radial; a++) {
+          const th = (a / radial) * Math.PI * 2;
+          const dir = norm(add(scl(Nd, Math.cos(th)), Bd, Math.sin(th)));
+          gb.vertex(add(add(s.pts[n - 1], tn, rEnd * 0.6), dir, rEnd * 0.8), norm(add(scl(dir, 0.8), tn, 0.6)), [a / radial, 1], color(1, s.depth, a / radial), [th * rEnd, n * 0.01, s.depth]);
+          gb.attr('aSway', 4, sway);
+        }
+        for (let a = 0; a < radial; a++) {
+          gb.tri(last + a, last + a + 1, ring + a);
+          gb.tri(last + a + 1, ring + a + 1, ring + a);
+        }
+        last = ring;
+      }
+      const tipP = add(s.pts[n - 1], tn, rEnd);
+      const tip = gb.vertex(tipP, tn, [0.5, 1], color(1, s.depth, 0), [0, n * 0.01, s.depth]);
       gb.attr('aSway', 4, sway);
-      for (let a = 0; a < radial; a++) gb.tri(starts[n - 1] + a, starts[n - 1] + a + 1, tip);
+      for (let a = 0; a < radial; a++) gb.tri(last + a, last + a + 1, tip);
     }
   }
   return gb.build();

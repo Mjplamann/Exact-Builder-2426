@@ -6,7 +6,7 @@ import { buildDecor, disposeDecor, isSdfDecor, rockGeometry, type BuildCtx, type
 import { ROCK_CELLS, type RockMeshData } from './rockMesh';
 import { RockMesher } from './rockMesher';
 import { highlightMaterial } from './materials';
-import { DECOR_UNIFORMS } from './shaders';
+import { DECOR_UNIFORMS, closeUpAmount } from './shaders';
 import { PlantSystem } from './plants/PlantSystem';
 
 export interface DecorPick {
@@ -146,6 +146,7 @@ export class DecorRenderer {
     const k = 1 - Math.exp(-simDt / POLYP_TAU_SIM);
     this.polyp += (target - this.polyp) * Math.min(1, Math.max(k, dt * 0.02));
     DECOR_UNIFORMS.uPolyp.value = this.polyp;
+    DECOR_UNIFORMS.uCloseUp.value = closeUpAmount(this.engine.zoomLevel ?? 1, world.follow !== null);
     // Quality changes arrive as a settings event the App doesn't forward to us: rebuild densities.
     if (this.quality !== null && world.settings.quality !== this.quality) this.sync(world);
     this.plants.update(world, dt);

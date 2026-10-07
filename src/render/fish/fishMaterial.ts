@@ -37,6 +37,8 @@ export const FISH_TIME = { value: 0 };
  */
 export const FIN_DEPTH_ALPHA = 0.06;
 const FISH_TIME_WRAP = 3600;
+/** 0 whole-tank view … 1 close-up (set by FishRenderer): gates the close-up scale detail. */
+export const FISH_CLOSEUP = { value: 0 };
 export function updateFishTime(t: number): void {
   FISH_TIME.value = t % FISH_TIME_WRAP;
 }
@@ -200,6 +202,7 @@ export function createFishMaterials(
   const vertexPatch = (depthOnly: boolean) => (shader: Parameters<Parameters<typeof addShaderPatch>[2]>[0]) => {
     Object.assign(shader.uniforms, uniforms);
     shader.uniforms.uFishTime = FISH_TIME;
+    shader.uniforms.uFishCloseUp = FISH_CLOSEUP;
     patchFishVertex(shader, depthOnly);
   };
   addShaderPatch(body, 'fish-swim', (shader) => {
