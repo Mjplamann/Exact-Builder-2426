@@ -40,6 +40,8 @@ export interface PageInfo {
   statements: string[]
   /** The page says some data are pending (recent weeks incomplete). */
   pendingNotice: boolean
+  /** Whitespace-normalized main-content text (capped), for pages whose numbers sit in plain text. */
+  text?: string
 }
 
 const ws = (s: string) => s.replace(/\s+/g, ' ').trim()
@@ -196,6 +198,7 @@ export function parsePage(html: string, pageUrl: string): PageInfo {
     keyStats,
     statements,
     pendingNotice: /\b(data pending|pending data|are pending|is pending)\b/i.test(text),
+    text: text.slice(0, 60_000),
   }
 }
 

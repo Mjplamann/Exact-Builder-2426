@@ -25,7 +25,8 @@ import { latestDate, makeSeries, STATE_GEO } from '../lib/series.ts'
 import type { SourceContext, SourceModule, SourceResult } from '../types.ts'
 import { compactTable, parsePage, type PageInfo, type PageLink } from '../lib/mdh-crawl.ts'
 import { countiesCentroid, countyList } from '../lib/mdh-geo.ts'
-import { csvToGrid, decodeText, normalizeTable, type NormalizeDiag, type NormalizedSeries, type NormalizeSpec } from '../lib/mdh-normalize.ts'
+import { csvToGrid, decodeText, normalizeTable, type NormalizeDiag, type NormalizedSeries, type NormalizeOptions, type NormalizeSpec } from '../lib/mdh-normalize.ts'
+import { parseFluHospByType, parseMlsMolecular, parseSyndromic, type FileParse, type MlsDefinition } from '../lib/mdh-files.ts'
 import { parseMeaslesPage, parsePertussisPage } from '../lib/mdh-watch.ts'
 
 const SOURCE = 'mdh'
@@ -91,6 +92,10 @@ export interface LinkSpec extends NormalizeSpec {
   pendingSensitive?: boolean
   /** Record the file but do not parse it (reason). */
   skip?: string
+  /** Dedicated parser for a known real layout (used instead of the generic normalizer). */
+  parse?: (header: string[], rows: string[][], opts: NormalizeOptions) => FileParse
+  /** Measure wording in labels when the metric's default wording would be inaccurate. */
+  metricLabel?: string
   /** Skip a file whose header shows a layout this spec cannot use (returns the reason). */
   headerSkip?: (header: string[]) => string | undefined
 }
@@ -104,6 +109,9 @@ const MLS_PANEL: PathogenId[] = [
 const WW: PathogenId[] = ['covid', 'influenza', 'influenza-a', 'influenza-b', 'rsv', 'measles']
 
 const PRELIM = 'MDH data are preliminary and recent weeks are often revised.'
+const SYNDROMIC_NOTE =
+  "Share of emergency department and inpatient hospital visits (hospital ADT messages to MDH's syndromic surveillance) with the diagnosis or syndrome. The denominator includes inpatient stays, so the level is not directly comparable with CDC NSSP's percent of ED visits; compare weeks with each other."
+const WW_UNITS = 'Units are relative (MDH normalized concentration), so compare a place with its own history.'
 const RESPNET_COUNTY_NOTE = 'Weekly lab-confirmed hospitalizations per 100,000 county residents (MDH RESP-NET); small counties can jump on one hospitalization.'
 const hasHeader = (header: string[], re: RegExp) => header.some((h) => re.test(h.trim()))
 
@@ -113,18 +121,25 @@ export const LINK_SPECS: LinkSpec[] = [
     key: 'flu-lab-positivity',
     match: /influenza positive tests and percent positivity|weekly total of influenza positive/i,
     dataset: 'mdh-lab',
-    program: 'MLS lab survey',
+    program: 'Minnesota Laboratory System',
     pathogens: FLU,
     defaultPathogen: 'influenza',
     metrics: ['test_positivity'],
     note: `Share of influenza tests reported positive by Minnesota Laboratory System clinical labs (voluntary weekly reporting). ${PRELIM}`,
   },
-  { key: 'flu-lab-subtype', match: /positives by subtype|influenza a subtyp/i, program: 'MDH Public Health Laboratory', metrics: [], note: '', skip: 'Counts of positive specimens by influenza A subtype; no matching percentage measure.' },
+  {
+    key: 'flu-lab-subtype',
+    match: /positives by subtype|influenza a subtyp/i,
+    program: 'Minnesota Laboratory System',
+    metrics: [],
+    note: '',
+    skip: 'Counts of influenza A positives by subtype (no MetricKind for a subtype share); the recent subtype mix is attached to the flu A series from "MLS Other Molecular Testing Results by Week".',
+  },
   {
     key: 'rsv-lab-positivity',
     match: /rsv positive tests and percent positivity|mls weekly rsv/i,
     dataset: 'mdh-lab',
-    program: 'MLS lab survey',
+    program: 'Minnesota Laboratory System',
     pathogens: ['rsv'],
     defaultPathogen: 'rsv',
     metrics: ['test_positivity'],
@@ -133,31 +148,29 @@ export const LINK_SPECS: LinkSpec[] = [
   {
     key: 'mls-other-molecular',
     match: /other molecular testing|mls other molecular/i,
-    dataset: 'mdh-lab-mls',
-    program: 'MLS other molecular testing',
-    // Flu and RSV have dedicated all-lab positivity files; panel-subset values for them would be a
-    // different measure under the same series id, so they are not taken from this file.
-    pathogens: MLS_PANEL.filter((p) => !['influenza', 'influenza-a', 'influenza-b', 'rsv'].includes(p)),
+    dataset: 'mdh-lab',
+    program: 'Minnesota Laboratory System',
+    pathogens: MLS_PANEL,
     metrics: ['test_positivity'],
-    note: `Share of molecular (PCR panel) tests positive, from the subset of Minnesota Laboratory System labs that report multiplex panel results. ${PRELIM}`,
-    // Real layout (2026-10-07): per-county counts (MMP_TestTotal, MMP_hMPV, MMP_Rhinovirus, ...). The
-    // "MMP" denominator mixes limited flu/COVID/RSV multiplex assays with full respiratory panels (e.g.
-    // a county-week with 229 MMP tests and no non-flu/COVID/RSV detection), so pooled positivity for
-    // rhinovirus, hMPV etc. would be diluted by an unknown amount. Not computed.
-    headerSkip: (h) =>
-      hasHeader(h, /^mmp_testtotal$/i)
-        ? 'Per-county multiplex-panel counts; the panel test total mixes limited flu/COVID/RSV assays with full panels, so a percent positive for other viruses cannot be computed reliably.'
-        : undefined,
+    // Real layout (2026-10-07): Year, Week of date (Sunday), County, then per-assay counts:
+    // Molecular_FluTestTotal + flu A subtype/B columns, Singleplex_COVIDTestTotal/_COVID,
+    // Molecular_RSVTestTotal/_RSV, MMP_TestTotal (multiplex panels) + one column per panel target, and
+    // trailing notes columns F53–F62. Parsed by parseMlsMolecular (statewide sums of all county rows).
+    parse: parseMlsMolecular,
+    note: `Minnesota Laboratory System labs reporting weekly molecular test counts to MDH (voluntary), summed statewide. ${PRELIM}`,
   },
   // Influenza hospital surveillance (all MN hospitals, lab-confirmed)
   {
     key: 'flu-hosp-type',
     match: /hospitali[sz]ed influenza cases by type/i,
+    dataset: 'mdh-hosp',
     program: 'influenza hospital surveillance',
-    metrics: [],
-    note: '',
+    pathogens: ['influenza-a', 'influenza-b'],
+    metrics: ['hosp_admissions'],
+    pendingSensitive: true,
     // Real layout: Season, MMWR Week, Type ("A (not subtyped)", "A H3", "A (H1N1) pdm09", "B (no genotype)", "Unknown"), Frequency.
-    skip: 'Weekly hospitalizations split by influenza type/subtype; weekly totals come from "Hospitalized Influenza Cases by Season".',
+    parse: parseFluHospByType,
+    note: `Laboratory-confirmed influenza hospitalizations reported by Minnesota hospitals, by week and influenza type (sum of MDH's type rows; hospitalizations of unknown type are in neither flu A nor flu B). ${PRELIM}`,
   },
   {
     key: 'flu-hosp-season',
@@ -194,26 +207,26 @@ export const LINK_SPECS: LinkSpec[] = [
     key: 'ili-region',
     match: /(\(ili\)|\bili|influenza[- ]like illness) by region/i,
     dataset: 'mdh-ili',
-    program: 'ILINet outpatient surveillance',
+    program: 'outpatient ILI surveillance',
     pathogens: ['ili'],
     defaultPathogen: 'ili',
     metrics: ['ili_pct'],
     bareMeans: 'ili_pct',
     family: 'ili',
-    note: `Percent of outpatient visits at sentinel clinics for influenza-like illness (fever with cough or sore throat), by region. Small regions can swing week to week. ${PRELIM}`,
+    note: `Percent of outpatient visits reported to MDH that were for influenza-like illness (fever with cough or sore throat), Twin Cities metro vs Greater Minnesota. ${PRELIM}`,
   },
   {
     key: 'ili',
     match: /influenza[- ]like illness|\(ili\)/i,
     dataset: 'mdh-ili',
-    program: 'ILINet outpatient surveillance',
+    program: 'outpatient ILI surveillance',
     pathogens: ['ili'],
     defaultPathogen: 'ili',
     metrics: ['ili_pct'],
     bareMeans: 'ili_pct',
     family: 'ili',
     familyPrimary: true,
-    note: `Percent of outpatient visits at sentinel clinics for influenza-like illness (fever with cough or sore throat). ILI is a symptom measure, not a lab-confirmed flu count. ${PRELIM}`,
+    note: `Percent of outpatient visits reported to MDH that were for influenza-like illness (fever with cough or sore throat). ILI is a symptom measure, not a lab-confirmed flu count. ${PRELIM}`,
   },
   // Influenza deaths
   { key: 'flu-deaths-age', match: /deaths associated with influenza by age/i, program: '', metrics: [], note: '', skip: 'Age-stratified (not used).' },
@@ -311,23 +324,29 @@ export const LINK_SPECS: LinkSpec[] = [
     variant: 'ltc',
     note: 'Influenza and RSV outbreaks newly reported by long-term care facilities (nursing homes and assisted living). MDH lists only weeks with reports; outbreaks reported as both influenza and RSV are not counted in either series.',
   },
-  // Syndromic surveillance. Real files (UTF-16): "Week of Visit Admit Datetime", "COVID-19 Diagnosis (%)",
-  // "Cough (%)", "Influenza-like illness (%)", "Shortness of Breath (%)", and by "Epi Field Staff Regions".
+  // Syndromic surveillance. Real files are UTF-16LE with a byte-order mark, comma-delimited:
+  // "Week of Visit Admit Datetime" (MM/DD/YY, Sundays), "COVID-19 Diagnosis (%)", "Cough (%)",
+  // "Influenza-like illness (%)", "Shortness of Breath (%)", plus "Epi Field Staff Regions" in the regional
+  // file. MDH: emergency department and inpatient hospital visits from hospital ADT messages.
   {
     key: 'syndromic-region',
     match: /syndromic surveillance (data )?by region/i,
+    dataset: 'mdh-syndromic',
     program: 'syndromic surveillance',
-    metrics: [],
-    note: '',
-    skip: 'Percent of hospital ADT visits (emergency and inpatient) with a diagnosis or symptom; not the same denominator as % of ED visits, so not mapped.',
+    pathogens: ['covid', 'ili'],
+    metrics: ['ed_visit_pct'],
+    parse: parseSyndromic,
+    note: SYNDROMIC_NOTE,
   },
   {
     key: 'syndromic',
     match: /syndromic surveillance/i,
+    dataset: 'mdh-syndromic',
     program: 'syndromic surveillance',
-    metrics: [],
-    note: '',
-    skip: 'Percent of hospital ADT visits (emergency and inpatient) with a diagnosis or symptom; not the same denominator as % of ED visits, so not mapped.',
+    pathogens: ['covid', 'ili'],
+    metrics: ['ed_visit_pct'],
+    parse: parseSyndromic,
+    note: SYNDROMIC_NOTE,
   },
   // Wastewater. Real regions are MDH's Field Services districts (South district labelled "Southwest").
   // The detection-map file is not parsed into series, but its plant -> county list places the plants.
@@ -346,7 +365,7 @@ export const LINK_SPECS: LinkSpec[] = [
     familyPrimary: true,
     // Checked on the 2026-10-07 file: each region's weekly value matches the population-weighted average
     // of that week's plant values, i.e. the download is weekly (MDH's charts may smooth it).
-    note: 'Viral RNA in wastewater normalized to PMMoV (a marker of human waste): weekly average of the plants in the region, weighted by population served (MDH). Units are relative, so compare a place with its own history.',
+    note: `Viral RNA in wastewater, normalized by MDH: weekly average of the plants in the region, weighted by population served. ${WW_UNITS}`,
   },
   {
     key: 'ww-site',
@@ -359,7 +378,7 @@ export const LINK_SPECS: LinkSpec[] = [
     combine: 'mean',
     allowSites: true,
     wastewater: true,
-    note: 'Viral RNA in wastewater at this treatment plant, normalized to PMMoV; MDH averages the samples in each week. Units are relative, so compare a plant with its own history.',
+    note: `Viral RNA in wastewater at this treatment plant, normalized by MDH; weekly average of the samples. ${WW_UNITS}`,
   },
   {
     key: 'ww-hosp',
@@ -372,17 +391,17 @@ export const LINK_SPECS: LinkSpec[] = [
     combine: 'mean',
     wastewater: true,
     family: 'ww-state',
-    note: 'Statewide SARS-CoV-2 in wastewater normalized to PMMoV, weighted by population served (MDH).',
+    note: `Statewide SARS-CoV-2 in wastewater, normalized by MDH and weighted by population served. ${WW_UNITS}`,
   },
 ]
 
 /** Page-level fallback specs: only columns whose headers name both pathogen and measure are used. */
 const PAGE_DEFAULTS: Record<string, Omit<LinkSpec, 'key' | 'match'>> = {
-  '/diseases/flu/stats/lab.html': { dataset: 'mdh-lab', program: 'MLS lab survey', pathogens: FLU, metrics: ['test_positivity'], note: PRELIM },
-  '/diseases/respiratory/stats/lab.html': { dataset: 'mdh-lab-mls', program: 'MLS lab survey', pathogens: MLS_PANEL, metrics: ['test_positivity'], note: PRELIM },
+  '/diseases/flu/stats/lab.html': { dataset: 'mdh-lab', program: 'Minnesota Laboratory System', pathogens: FLU, metrics: ['test_positivity'], note: PRELIM },
+  '/diseases/respiratory/stats/lab.html': { dataset: 'mdh-lab', program: 'Minnesota Laboratory System', pathogens: MLS_PANEL, metrics: ['test_positivity'], note: PRELIM },
   '/diseases/flu/stats/hosp.html': { dataset: 'mdh-hosp', program: 'influenza hospital surveillance', pathogens: FLU, metrics: ['hosp_admissions', 'hosp_rate'], note: PRELIM, pendingSensitive: true, family: 'flu-hosp-weekly' },
   '/diseases/respiratory/stats/hosp.html': { dataset: 'mdh-respnet', program: 'RESP-NET', pathogens: RESP3, metrics: ['hosp_rate'], minDate: '2023-10-01', note: PRELIM, pendingSensitive: true, family: 'respnet-state' },
-  '/diseases/flu/stats/out.html': { dataset: 'mdh-ili', program: 'ILINet outpatient surveillance', pathogens: ['ili'], metrics: ['ili_pct'], note: PRELIM, family: 'ili' },
+  '/diseases/flu/stats/out.html': { dataset: 'mdh-ili', program: 'outpatient ILI surveillance', pathogens: ['ili'], metrics: ['ili_pct'], note: PRELIM, family: 'ili' },
   '/diseases/flu/stats/death.html': { dataset: 'mdh-deaths', program: 'influenza mortality surveillance', pathogens: FLU, metrics: ['deaths'], note: PRELIM, pendingSensitive: true },
   '/diseases/respiratory/stats/setting.html': { dataset: 'mdh-outbreaks', program: 'outbreak reports', pathogens: ['influenza', 'rsv', 'covid', 'respiratory-combined'], metrics: ['outbreaks'], note: PRELIM },
   '/diseases/respiratory/stats/tsys.html': { program: 'syndromic surveillance', metrics: [], note: '', skip: 'Syndromic page file without a recognized title; not mapped (see the syndromic specs).' },
@@ -447,7 +466,7 @@ const DATASET_BY_METRIC: Record<MetricKind, string> = {
  * 'mdh-respnet-county') are different programs and never share a dataset.
  */
 export const DATASETS = [
-  'mdh-lab', 'mdh-lab-mls', 'mdh-hosp', 'mdh-respnet', 'mdh-respnet-county', 'mdh-ili', 'mdh-outbreaks', 'mdh-wastewater', 'mdh-deaths',
+  'mdh-lab', 'mdh-hosp', 'mdh-respnet', 'mdh-respnet-county', 'mdh-ili', 'mdh-outbreaks', 'mdh-wastewater', 'mdh-deaths',
   'mdh-syndromic', 'mdh-other',
 ]
 
@@ -480,14 +499,17 @@ const METRIC_LABEL: Partial<Record<MetricKind, string>> = {
   cases_ytd: 'cases reported so far this year',
 }
 
-/** True when the value columns say the wastewater values are normalized (PMMoV). */
+/** True when the value columns say the wastewater values are normalized. */
 const isNormalized = (n: Pick<NormalizedSeries, 'columns'>) => n.columns.some((c) => /normali[sz]|pmmov/i.test(c))
 
 function seriesLabel(spec: LinkSpec, n: NormalizedSeries): string {
   const name = n.pathogen === 'respiratory-combined' && spec.combinedName ? spec.combinedName : (NAMES[n.pathogen] ?? n.pathogen)
   const v = n.variant === 'avg' ? ', smoothed' : n.variant === 'unweighted' ? ', unweighted' : ''
-  let what = METRIC_LABEL[n.metric] ?? n.metric
-  if (n.metric === 'wastewater_conc') what += isNormalized(n) ? ' (PMMoV-normalized)' : ' (units as published)'
+  let what = n.what ?? spec.metricLabel ?? METRIC_LABEL[n.metric] ?? n.metric
+  // MDH does not state its normalization (PMMoV is named only if a column says so).
+  if (n.metric === 'wastewater_conc') {
+    what += n.columns.some((c) => /pmmov/i.test(c)) ? ' (PMMoV-normalized)' : isNormalized(n) ? ' (normalized, relative units)' : ' (units as published)'
+  }
   return `${name} — ${what}${v} (MDH ${spec.program})`
 }
 
@@ -579,8 +601,21 @@ const basename = (u: string) => {
     return u
   }
 }
-const sameValue = (a: number | null | undefined, b: number | null | undefined) =>
-  a == null || b == null ? a == b : Math.abs(a - b) <= Math.max(1e-9, 1e-3 * Math.max(Math.abs(a), Math.abs(b)))
+const decimals = (v: number) => {
+  const t = String(v)
+  const i = t.indexOf('.')
+  return i < 0 || /e/i.test(t) ? 0 : t.length - i - 1
+}
+/** Decimal places a series is published to (the most seen in any point). */
+const precisionOf = (pts: Point[]) => pts.reduce((m, p) => (p[1] == null ? m : Math.max(m, decimals(p[1]))), 0)
+/**
+ * Equal within rounding: two files may publish the same rate to 1 and 2 decimals (4.8 vs 4.78), so
+ * values within half a unit of the coarser file's last decimal are the same value.
+ */
+const sameValue = (a: number | null | undefined, b: number | null | undefined, coarsest = 3) =>
+  a == null || b == null
+    ? a == b
+    : Math.abs(a - b) <= Math.max(1e-9, 1e-3 * Math.max(Math.abs(a), Math.abs(b)), 0.5 * 10 ** -Math.min(coarsest, 3) + 1e-9)
 
 /** Adds built series by id. Same-family series merge (higher priority wins overlapping weeks, conflicts logged). */
 export class SeriesBook {
@@ -598,10 +633,11 @@ export class SeriesBook {
       // Ties keep the earlier file (callers add files in a fixed order, so the result never depends on timing).
       const [lo, hi] = b.priority > prev.priority ? [prev, b] : [b, prev]
       const hiMap = new Map<string, number | null>(hi.series.points)
+      const coarsest = Math.min(precisionOf(hi.series.points), precisionOf(lo.series.points))
       let differ = 0
       let example = ''
       for (const [d, v] of lo.series.points) {
-        if (!hiMap.has(d) || sameValue(hiMap.get(d), v)) continue
+        if (!hiMap.has(d) || sameValue(hiMap.get(d), v, coarsest)) continue
         differ++
         if (!example) example = `${d}: ${hiMap.get(d)} vs ${v}`
       }
@@ -631,7 +667,7 @@ export function buildSeries(
 ): Series {
   const { dataset } = placement(spec, n)
   const variant = [spec.variant, n.variant].filter(Boolean).join('-') || undefined
-  const notes = [n.geo.type === 'county' && spec.countyNote ? spec.countyNote : spec.note]
+  const notes = [n.note ?? (n.geo.type === 'county' && spec.countyNote ? spec.countyNote : spec.note)]
   if (n.metric === 'wastewater_conc' && !isNormalized(n)) {
     notes[0] = `Viral RNA in wastewater (MDH; column "${n.columns[0] ?? '?'}", normalization not stated). Compare a place with its own history.`
   }
@@ -675,6 +711,8 @@ interface FileDiag {
   sample?: string[][]
   rows?: number
   parse?: NormalizeDiag
+  /** Parser-specific diagnostics (dedicated parsers). */
+  extra?: Record<string, unknown>
   seriesIds?: string[]
 }
 
@@ -714,6 +752,7 @@ export function pertussisCountySeries(
       geo: { type: 'county', code: c.fips, name: `${c.name} County` },
       label: `Whooping cough — cases reported in ${year} so far (MDH)`,
       points: [[asOf, c.cases]],
+      // MDH's page: "Confirmed and probable pertussis case counts by county as of 9/10/2026" (CI run 2026-10-07).
       note: `Confirmed and probable pertussis cases reported to MDH in ${year} by county of residence, as of ${asOf}. Cumulative for the year, not weekly.`,
     })
     s.attrs = { asOf, year: String(year), mdhFile: file }
@@ -750,6 +789,168 @@ export function fluPositivityKeyStat(stats: string[]): number | undefined {
     if (m) return Number(m[1])
   }
   return undefined
+}
+
+/** Series ids of MDH's own published measures that computed series are checked against. */
+export const OFFICIAL = {
+  fluPositivity: 'mdh:mdh-lab:influenza:test_positivity:state:27',
+  rsvPositivity: 'mdh:mdh-lab:rsv:test_positivity:state:27',
+  fluHospWeekly: 'mdh:mdh-hosp:influenza:hosp_admissions:state:27',
+}
+
+export interface Comparison {
+  weeks: number
+  within: number
+  share: number
+  medianAbsDiff?: number
+  examples: string[]
+}
+
+/**
+ * Week-by-week agreement of a computed series with a published one. The latest `skipLatest` published
+ * weeks are left out (files are revised at different times).
+ */
+export function compareSeries(computed: Point[] | undefined, published: Point[] | undefined, tol: (v: number) => number, skipLatest = 2): Comparison {
+  const pub = (published ?? []).filter((p): p is [string, number] => p[1] != null)
+  const cutoff = pub.length > skipLatest ? pub[pub.length - 1 - skipLatest][0] : ''
+  const cmap = new Map(computed ?? [])
+  const diffs: number[] = []
+  const examples: string[] = []
+  let within = 0
+  for (const [d, o] of pub) {
+    if (!cutoff || d > cutoff) continue
+    const c = cmap.get(d)
+    if (c == null) continue
+    const diff = Math.abs(c - o)
+    diffs.push(diff)
+    if (diff <= tol(o)) within++
+    else if (examples.length < 3) examples.push(`${d}: computed ${c} vs published ${o}`)
+  }
+  diffs.sort((a, b) => a - b)
+  const n = diffs.length
+  const med = n ? (n % 2 ? diffs[(n - 1) / 2] : (diffs[n / 2 - 1] + diffs[n / 2]) / 2) : undefined
+  return { weeks: n, within, share: n ? within / n : 0, medianAbsDiff: med == null ? undefined : Math.round(med * 1000) / 1000, examples }
+}
+
+/** Enough overlapping weeks to judge, and the share of weeks that must agree. */
+const CHECK_MIN_WEEKS = 6
+const CHECK_PASS_SHARE = 0.75
+
+/**
+ * MDH published values for enough weeks inside the computed series' span (beyond the latest weeks
+ * compareSeries leaves out), yet too few weeks could be compared: the two do not line up (dates or
+ * coverage), so the check cannot vouch for the computed series. "Not checked" is only for when MDH
+ * has nothing to compare against, or the computed series is too short.
+ */
+export function unaligned(c: Comparison, computed: Point[] | undefined, published: Point[] | undefined, skipLatest = 2): boolean {
+  const comp = (computed ?? []).filter((p) => p[1] != null)
+  if (c.weeks >= CHECK_MIN_WEEKS || comp.length < CHECK_MIN_WEEKS + skipLatest) return false
+  const [first, last] = [comp[0][0], comp[comp.length - 1][0]]
+  return (published ?? []).filter((p) => p[1] != null && p[0] >= first && p[0] <= last).length >= CHECK_MIN_WEEKS + skipLatest
+}
+
+export interface Verification {
+  decision: 'verified' | 'unverified' | 'fail'
+  series: NormalizedSeries[]
+  attrs: Record<string, string>
+  report: Record<string, unknown>
+  reason?: string
+}
+
+/**
+ * MLS molecular file: MN Pulse's influenza and RSV percent positive (computed from the file's counts under
+ * each reading of its test totals) must match MDH's published "% Flu Positive" / "% RSV Positive". The
+ * reading that matches decides how flu A, flu B and COVID-19 are computed; if a published series is
+ * available and no reading matches, nothing from the file is published.
+ */
+export function verifyMls(parsed: FileParse, published: { influenza?: Point[]; rsv?: Point[] }): Verification {
+  const tol = (v: number) => Math.max(0.3, 0.1 * v)
+  const defs: MlsDefinition[] = ['combined', 'dedicated']
+  const results: Record<string, Record<string, Comparison>> = {}
+  const notLinedUp: string[] = []
+  for (const def of defs) {
+    for (const p of ['influenza', 'rsv'] as const) {
+      const chk = parsed.checks?.[`${p}:${def}`]
+      if (!chk || !published[p]?.length) continue
+      const c = compareSeries(chk.points, published[p], tol)
+      ;(results[def] ??= {})[p] = c
+      if (unaligned(c, chk.points, published[p])) notLinedUp.push(`${p}/${def}: ${c.weeks} week(s) comparable`)
+    }
+  }
+  const comparable = (c: Comparison) => c.weeks >= CHECK_MIN_WEEKS
+  const passes = (def: string) => {
+    const cs = Object.values(results[def] ?? {}).filter(comparable)
+    return cs.length > 0 && cs.every((c) => c.share >= CHECK_PASS_SHARE)
+  }
+  const score = (def: string) => {
+    const cs = Object.values(results[def] ?? {}).filter(comparable)
+    return cs.reduce((a, c) => a + c.share, 0) / Math.max(1, cs.length) - cs.reduce((a, c) => a + (c.medianAbsDiff ?? 0), 0) / 100
+  }
+  const anyComparable = defs.some((d) => Object.values(results[d] ?? {}).some(comparable))
+  const passing = defs.filter((d) => passes(d) && (d === 'combined' || parsed.alternates?.dedicated?.length))
+  const chosen = passing.sort((a, b) => score(b) - score(a))[0]
+  const report: Record<string, unknown> = { comparisons: results, tolerance: 'max(0.3 points, 10%) per week', chosen: chosen ?? null }
+  const describe = (def: string) =>
+    Object.entries(results[def] ?? {})
+      .filter(([, c]) => comparable(c))
+      .map(([p, c]) => `${p === 'rsv' ? 'RSV' : 'flu'} matches MDH's published percent in ${c.within} of ${c.weeks} weeks (median difference ${c.medianAbsDiff} points)`)
+      .join('; ')
+  if (!chosen && anyComparable) {
+    return {
+      decision: 'fail',
+      series: [],
+      attrs: {},
+      report,
+      reason: `computed flu/RSV percent positive does not match MDH's published percentages under any reading of the test totals (${defs.map((d) => `${d}: ${describe(d) || 'n/a'}`).join(' | ')}); MLS molecular series withheld`,
+    }
+  }
+  if (!chosen && notLinedUp.length) {
+    return {
+      decision: 'fail',
+      series: [],
+      attrs: {},
+      report: { ...report, notLinedUp },
+      reason: `MDH published flu/RSV percentages for the weeks the file covers, but too few weeks line up to check MN Pulse's computed values (${notLinedUp.join('; ')}); MLS molecular series withheld`,
+    }
+  }
+  const def: MlsDefinition = chosen ?? 'combined'
+  let series = parsed.series
+  if (def === 'dedicated') {
+    const alt = parsed.alternates?.dedicated ?? []
+    const core = new Set(['influenza-a', 'influenza-b', 'covid'])
+    series = [...series.filter((s) => !core.has(s.pathogen)), ...alt]
+  }
+  const attrs: Record<string, string> = chosen
+    ? { mdhCheck: `MN Pulse's percent positive from the same file: ${describe(def)}` }
+    : { mdhCheck: "not checked this run (MDH's published flu/RSV percentages were not available for comparison)" }
+  return { decision: chosen ? 'verified' : 'unverified', series, attrs, report }
+}
+
+/**
+ * Influenza hospitalizations by type: the sum of all type rows (A, B and unknown) must equal MDH's weekly
+ * total from "Hospitalized Influenza Cases by Season"; otherwise the A/B split is withheld.
+ */
+export function verifyFluTypes(parsed: FileParse, publishedTotal: Point[] | undefined): Verification {
+  const all = parsed.checks?.['influenza:all-types']
+  const c = compareSeries(all?.points, publishedTotal, (v) => Math.max(1, 0.05 * v))
+  const report = { comparison: c, tolerance: 'max(1, 5%) per week' }
+  if (c.weeks >= CHECK_MIN_WEEKS && c.share < CHECK_PASS_SHARE) {
+    return { decision: 'fail', series: [], attrs: {}, report, reason: `sum of influenza type rows matches MDH's weekly total in only ${c.within} of ${c.weeks} weeks (${c.examples.join('; ')}); flu A/B hospitalizations withheld` }
+  }
+  if (unaligned(c, all?.points, publishedTotal)) {
+    return { decision: 'fail', series: [], attrs: {}, report, reason: `MDH published weekly influenza hospitalization totals for the weeks the by-type file covers, but only ${c.weeks} week(s) line up to check the sum of type rows; flu A/B hospitalizations withheld` }
+  }
+  const verified = c.weeks >= CHECK_MIN_WEEKS
+  return {
+    decision: verified ? 'verified' : 'unverified',
+    series: parsed.series,
+    attrs: {
+      mdhCheck: verified
+        ? `A + B + unknown type matches MDH's weekly influenza hospitalization total (within 1 or 5%) in ${c.within} of ${c.weeks} weeks`
+        : "not checked this run (too few weeks overlap MDH's weekly total)",
+    },
+    report,
+  }
 }
 
 async function writeDiagnostics(ctx: SourceContext, diagnostics: Record<string, unknown>, log: SourceContext['log']) {
@@ -792,7 +993,7 @@ export const mdh: SourceModule = {
     publisher: 'Minnesota Department of Health (MDH)',
     url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html',
     description:
-      "MDH's weekly respiratory surveillance, read from the CSV files on its statistics pages: share of lab tests positive for flu and RSV (Minnesota Laboratory System), weekly flu hospitalizations and deaths, RESP-NET hospitalization rates statewide, for the Twin Cities metro and Greater Minnesota, and by county (with MDH's own low/moderate/high risk level), outpatient visits for influenza-like illness, K-12 school and long-term care outbreaks, and wastewater levels by region and treatment plant. Also pertussis (whooping cough) and measles cases reported so far this year (pertussis also by county). These are reported and lab-confirmed cases only, so they undercount people who never see a doctor or get tested. Recent weeks are preliminary and are often revised upward.",
+      "MDH's weekly respiratory surveillance, read from the CSV files on its statistics pages: share of lab tests positive for flu and RSV (MDH's own percentages) and, computed from the Minnesota Laboratory System's weekly molecular test counts, for flu A, flu B, COVID-19 and the viruses multiplex respiratory panels detect (rhinovirus/enterovirus, hMPV, parainfluenza, adenovirus, seasonal coronaviruses); weekly flu hospitalizations (also split into flu A and B) and deaths; RESP-NET hospitalization rates statewide, for the Twin Cities metro and Greater Minnesota, and by county (with MDH's own low/moderate/high risk level); outpatient visits for influenza-like illness; emergency department and inpatient visits with a COVID-19 diagnosis or influenza-like illness (syndromic surveillance); K-12 school and long-term care outbreaks; and wastewater levels by region and treatment plant. Also pertussis (whooping cough) and measles cases reported so far this year (pertussis also by county). These are reported and lab-confirmed cases only, so they undercount people who never see a doctor or get tested. Recent weeks are preliminary and are often revised upward.",
     geography: 'Minnesota statewide; Twin Cities metro and Greater Minnesota; MDH districts; counties (RESP-NET, pertussis); wastewater treatment plants',
     cadence: 'Weekly (Thursdays 11 a.m. CT, data through the previous Saturday); pertussis and measles as updated',
     attribution: 'Minnesota Department of Health',
@@ -850,7 +1051,21 @@ export const mdh: SourceModule = {
 
     // 3) Files. Downloads run in parallel; series are added afterwards in link order, so merges and
     //    collisions never depend on which download finished first.
-    type FileResult = { fd: FileDiag; built: Built[]; spec?: LinkSpec; plants?: ReturnType<typeof plantLookup> }
+    type Custom = { parsed: FileParse; file: string; updated?: string; pending: boolean; archive: boolean }
+    type FileResult = { fd: FileDiag; built: Built[]; spec?: LinkSpec; plants?: ReturnType<typeof plantLookup>; custom?: Custom }
+    const buildAll = (list: NormalizedSeries[], spec: LinkSpec, c: { file: string; updated?: string; pending: boolean; archive: boolean }) =>
+      list.map((n): Built => ({
+        series: buildSeries(n, spec, c),
+        family: placement(spec, n).family,
+        priority: (c.archive ? 0 : 10) + (spec.familyPrimary ? 1 : 0),
+        file: c.file,
+      }))
+    const finish = (fd: FileDiag, built: Built[], diag: NormalizeDiag, why?: string) => {
+      const ids = built.map((b) => b.series.id)
+      fd.seriesIds = ids.slice(0, 12)
+      fd.status = ids.length ? 'parsed' : 'unparsed'
+      if (!ids.length) fd.reason = why ?? (diag.unparsed.join('; ').slice(0, 400) || 'no series')
+    }
     const results = await mapLimit(links, 4, async (o): Promise<FileResult> => {
       const fallback = PAGE_DEFAULTS[o.page.path]
       const spec: LinkSpec | undefined =
@@ -878,7 +1093,10 @@ export const mdh: SourceModule = {
         fetchedOk.add(file)
         fd.fetchedFrom = url !== o.link.url ? url : undefined
         fd.bytes = buf.byteLength
+        const bytes = new Uint8Array(buf.slice(0, 2))
         const grid = csvToGrid(decodeText(buf))
+        if (bytes[0] === 0xff && bytes[1] === 0xfe) fd.extra = { encoding: 'UTF-16LE (byte-order mark FF FE)' }
+        else if (bytes[0] === 0xfe && bytes[1] === 0xff) fd.extra = { encoding: 'UTF-16BE (byte-order mark FE FF)' }
         fd.headerRow = grid.headerRow || undefined
         fd.header = grid.header.slice(0, 60).map((h) => cut(h, 60))
         fd.sample = grid.rows.slice(0, 3).map((r) => r.slice(0, 60).map((c) => cut(c, 40)))
@@ -889,18 +1107,21 @@ export const mdh: SourceModule = {
           fd.reason = skipWhy
           return { fd, built: [], spec, plants: spec.key === 'ww-detection' ? plantLookup(grid.header, grid.rows) : undefined }
         }
-        const { series, diag } = normalizeTable(grid.header, grid.rows, spec, { ...normOpts, officialBy: `MDH ${spec.program}` })
-        fd.parse = diag
-        const built: Built[] = []
-        const ids: string[] = []
-        for (const n of series) {
-          const s = buildSeries(n, spec, { file, updated: o.page.info?.updated, pending: !!o.page.info?.pendingNotice })
-          built.push({ series: s, family: placement(spec, n).family, priority: (o.archive ? 0 : 10) + (spec.familyPrimary ? 1 : 0), file })
-          ids.push(s.id)
+        const opts = { ...normOpts, officialBy: `MDH ${spec.program}` }
+        const ctxFile = { file, updated: o.page.info?.updated, pending: !!o.page.info?.pendingNotice, archive: o.archive }
+        if (spec.parse) {
+          // Dedicated parser: series are verified against MDH's published numbers and added after step 3.
+          const parsed = spec.parse(grid.header, grid.rows, opts)
+          fd.parse = parsed.diag
+          if (parsed.extra) fd.extra = { ...(fd.extra ?? {}), ...parsed.extra }
+          if (parsed.diag.unparsed.length) log.warn(`${file} (${spec.key}): ${parsed.diag.unparsed.join('; ').slice(0, 300)}`)
+          if (parsed.diag.warnings?.length) log.warn(`${file} (${spec.key}): ${parsed.diag.warnings.join('; ').slice(0, 300)}`)
+          return { fd, built: [], spec, custom: { parsed, ...ctxFile } }
         }
-        fd.seriesIds = ids.slice(0, 12)
-        fd.status = ids.length ? 'parsed' : 'unparsed'
-        if (!ids.length) fd.reason = diag.unparsed.join('; ').slice(0, 400) || 'no series'
+        const { series, diag } = normalizeTable(grid.header, grid.rows, spec, opts)
+        fd.parse = diag
+        const built = buildAll(series, spec, ctxFile)
+        finish(fd, built, diag)
         if (diag.unparsed.length) log.warn(`${file} (${spec.key}): ${diag.unparsed.join('; ').slice(0, 300)}`)
         if (diag.warnings?.length) log.warn(`${file} (${spec.key}): ${diag.warnings.join('; ').slice(0, 300)}`)
         return { fd, built, spec }
@@ -919,13 +1140,51 @@ export const mdh: SourceModule = {
       if (r.built.length && r.spec) specsWithSeries.add(r.spec.key)
     }
 
+    // 3b) Files with dedicated parsers. Series computed by MN Pulse from MDH counts are checked against
+    //     the numbers MDH itself publishes for the same weeks, and withheld when they disagree.
+    const crossChecks: Record<string, unknown>[] = []
+    const pointsOf = (id: string) => book.byId.get(id)?.series.points
+    for (const r of results) {
+      if (!r.custom || !r.spec) continue
+      const { parsed, ...c } = r.custom
+      let list = parsed.series
+      let why: string | undefined
+      let attrs: Record<string, string> = {}
+      if (r.spec.parse === parseMlsMolecular) {
+        const v = verifyMls(parsed, { influenza: pointsOf(OFFICIAL.fluPositivity), rsv: pointsOf(OFFICIAL.rsvPositivity) })
+        crossChecks.push({ file: c.file, check: 'MLS computed percent positive vs MDH published flu and RSV percentages', ...v.report })
+        list = v.series
+        attrs = v.attrs
+        if (v.decision === 'fail') {
+          why = v.reason
+          errors.push(`${c.file}: ${v.reason}`)
+        }
+      } else if (r.spec.parse === parseFluHospByType) {
+        const v = verifyFluTypes(parsed, pointsOf(OFFICIAL.fluHospWeekly))
+        crossChecks.push({ file: c.file, check: 'sum of all influenza types vs MDH weekly influenza hospitalizations', ...v.report })
+        list = v.series
+        attrs = v.attrs
+        if (v.decision === 'fail') {
+          why = v.reason
+          errors.push(`${c.file}: ${v.reason}`)
+        }
+      }
+      const built = buildAll(list, r.spec, c)
+      for (const b of built) {
+        if (Object.keys(attrs).length) b.series.attrs = { ...(b.series.attrs ?? {}), ...attrs }
+        book.add(b)
+      }
+      if (built.length) specsWithSeries.add(r.spec.key)
+      finish(r.fd, built, parsed.diag, why)
+    }
+
     // 4) HTML data tables as a fallback for specs whose CSV did not parse.
     const tableDiags: Record<string, unknown>[] = []
     for (const p of pagesOk) {
       if (p.kind !== 'data') continue
       for (const t of p.info!.tables) {
         if (t.rows.length < 4) continue
-        const spec = LINK_SPECS.find((s) => !s.skip && (s.match.test(t.caption) || (!t.caption && s.match.test(t.heading))))
+        const spec = LINK_SPECS.find((s) => !s.skip && !s.parse && (s.match.test(t.caption) || (!t.caption && s.match.test(t.heading))))
         if (!spec || specsWithSeries.has(spec.key)) continue
         const { series, diag } = normalizeTable(t.headers, t.rows, spec, { ...normOpts, officialBy: `MDH ${spec.program}` })
         const file = `${p.path.split('/').pop()}#table`
@@ -969,8 +1228,7 @@ export const mdh: SourceModule = {
     const fluPages = pagesOk.filter((p) => p.path.includes('/flu/stats/'))
     const fluKeyStat = fluPositivityKeyStat(fluPages.flatMap((p) => p.info!.keyStats))
     const fluUpdated = fluPages.map((p) => p.info!.updated).filter((d): d is string => !!d).sort().pop()
-    const crossChecks: Record<string, unknown>[] = []
-    const fluId = 'mdh:mdh-lab:influenza:test_positivity:state:27'
+    const fluId = OFFICIAL.fluPositivity
     const flu = book.byId.get(fluId)
     if (flu && fluKeyStat != null) {
       const last = [...flu.series.points].reverse().find((p) => p[1] != null)

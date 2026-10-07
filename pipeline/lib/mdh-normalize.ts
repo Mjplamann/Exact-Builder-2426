@@ -270,6 +270,10 @@ export interface NormalizedSeries {
   points: Point[]
   columns: string[]
   computed?: string
+  /** Measure wording for the label when the metric's default wording would be inaccurate. */
+  what?: string
+  /** Series-specific caveat (replaces the file's note). */
+  note?: string
   official?: Series['official']
   attrs?: Record<string, string>
 }

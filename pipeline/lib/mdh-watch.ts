@@ -128,57 +128,129 @@ export interface MeaslesParse {
   cases?: number
   basis?: string
   asOf?: string
+  /** The current-year row(s) of the by-year table, as published (for diagnostics). */
+  tableRows?: string[][]
+  tableValue?: number
+  /** A "Total confirmed measles cases investigated in 2026: 17"-style statement in the page text. */
+  textValue?: number
+  textBasis?: string
   problem?: string
 }
 
-/** Current-year confirmed measles cases from a "by year" table, or a strict "Cases in 2026: 18" phrase. */
+const TOTAL_HEADER = /^total( confirmed)?( measles)? cases?$|^total$|^cases?$|^confirmed cases?$|^total cases? confirmed$/
+
+/**
+ * Current-year confirmed measles cases. Two places on MDH's page can state it: the "Annual incidence of
+ * measles disease in Minnesota" table (Year | Exposure outside U.S. (imported case) | Exposure within U.S. |
+ * Other* | Total cases) and a plain-text "Total confirmed measles cases investigated in 2026: N" line.
+ * A count is returned only when it is unambiguous:
+ *   * table: the explicit total column of the single current-year row, and when breakdown columns exist,
+ *     the total must equal their sum (the 2026-10-07 run read 0 from the imported-case column instead);
+ *   * text: exactly one strict "cases ... in 2026: N" statement;
+ *   * when both exist they must agree.
+ */
 export function parseMeaslesPage(info: PageInfo, year: number): MeaslesParse {
   const out: MeaslesParse = { year, asOf: info.updated ?? info.asOf }
   const y = String(year)
+  const problems: string[] = []
+  // 1) Table with a row per year.
   for (const t of info.tables) {
     const hs = t.headers.map(norm)
-    // Layout A: rows by year (Year | ... | Total cases). Prefer an explicit total column; the real MDH table
-    // also has "Exposure outside U.S. (imported case)" and "Exposure within U.S." breakdown columns.
     const yIdx = hs.findIndex((h) => /^(year|calendar year)$/.test(h))
-    if (yIdx >= 0) {
-      const others = hs.map((h, i) => ({ h, i })).filter((x) => x.i !== yIdx)
-      const col =
-        others.find((x) => /^total( confirmed)?( measles)? cases?$|^total$|^cases?$|^confirmed cases?$|^total cases? confirmed$/.test(x.h)) ??
-        others.find((x) => /\btotal\b/.test(x.h)) ??
-        (others.length === 1 && /\b(cases?|confirmed|number)\b/.test(others[0].h) ? others[0] : undefined)
-      const row = t.rows.find((r) => (r[yIdx] ?? '').trim().startsWith(y))
-      const v = row && col ? num(row[col.i]) : null
-      if (v != null) {
-        out.cases = v
-        out.basis = `table "${t.caption || t.heading || t.headers.join(' | ')}" row ${y}, column "${t.headers[col!.i]}"`.slice(0, 200)
-        return out
-      }
-    }
-    // Layout B: years as columns, a "Total"/"Cases" row.
-    const colIdx = t.headers.findIndex((h) => h.trim().startsWith(y))
-    if (colIdx >= 0) {
-      const row =
-        t.rows.find((r) => /^(total|total cases|confirmed cases|cases|all cases)\b/i.test((r[0] ?? '').trim())) ??
-        (t.rows.length === 1 ? t.rows[0] : undefined)
+    if (yIdx < 0) {
+      // Years as columns with a "Total" row.
+      const colIdx = t.headers.findIndex((h) => h.trim() === y || new RegExp(`^${y}\\b`).test(h.trim()))
+      if (colIdx < 0) continue
+      const row = t.rows.find((r) => /^(total|total cases|confirmed cases|cases|all cases)\b/i.test((r[0] ?? '').trim())) ?? (t.rows.length === 1 ? t.rows[0] : undefined)
       const v = row ? num(row[colIdx]) : null
-      if (v != null) {
-        out.cases = v
-        out.basis = `table "${t.caption || t.heading || 'cases by year'}" column ${y}`.slice(0, 160)
-        return out
+      if (v != null && out.tableValue == null) {
+        out.tableValue = v
+        out.tableRows = row ? [row] : undefined
+        out.basis = `table "${t.caption || t.heading || 'cases by year'}" column ${y}`.slice(0, 200)
+      }
+      continue
+    }
+    const others = hs.map((h, i) => ({ h, i })).filter((x) => x.i !== yIdx)
+    const totalCol = others.find((x) => TOTAL_HEADER.test(x.h)) ?? others.find((x) => /\btotal\b/.test(x.h))
+    const rows = t.rows.filter((r) => new RegExp(`^${y}\\b`).test((r[yIdx] ?? '').trim()))
+    if (!rows.length) continue
+    out.tableRows = rows.map((r) => r.slice(0, 8))
+    const label = `table "${t.caption || t.heading || t.headers.join(' | ')}" row ${y}`
+    if (!totalCol) {
+      // Only a single count column can stand for the total.
+      const single = others.length === 1 && /\b(cases?|confirmed|number)\b/.test(others[0].h) ? others[0] : undefined
+      if (!single) {
+        problems.push(`${label}: no total column (columns: ${t.headers.join(' | ')})`)
+        continue
+      }
+      const v = rows.length === 1 ? num(rows[0][single.i]) : null
+      if (v == null) problems.push(`${label}: ${rows.length} rows or no number`)
+      else {
+        out.tableValue = v
+        out.basis = `${label}, column "${t.headers[single.i]}"`.slice(0, 200)
+      }
+      continue
+    }
+    const vals = [...new Set(rows.map((r) => num(r[totalCol.i])))]
+    if (vals.length !== 1 || vals[0] == null) {
+      problems.push(`${label}: ${rows.length > 1 ? `${rows.length} rows with totals ${vals.join(', ')}` : 'total cell is not a number'}`)
+      continue
+    }
+    const total = vals[0]
+    const parts = others.filter((x) => x !== totalCol && rows[0][x.i] != null && rows[0][x.i].trim() !== '')
+    const partVals = parts.map((x) => num(rows[0][x.i]))
+    if (parts.length && partVals.every((v) => v != null)) {
+      const sum = (partVals as number[]).reduce((a, b) => a + b, 0)
+      if (sum !== total) {
+        problems.push(`${label}: total ${total} does not equal the sum of ${parts.map((x) => `"${t.headers[x.i]}"`).join(' + ')} (${sum})`)
+        continue
       }
     }
+    out.tableValue = total
+    out.basis = `${label}, column "${t.headers[totalCol.i]}"${parts.length ? ' (equals the sum of the exposure columns)' : ''}`.slice(0, 200)
+    break
   }
-  for (const s of info.keyStats) {
-    const m =
-      new RegExp(`\\b(?:total\\s+)?(?:confirmed\\s+)?(?:measles\\s+)?cases\\s+(?:in\\s+|for\\s+)?${y}(?:\\s+to date)?\\s*:\\s*(\\d{1,4})\\b`, 'i').exec(s) ??
-      new RegExp(`\\b${y}\\s+(?:total\\s+)?(?:confirmed\\s+)?cases\\s*:\\s*(\\d{1,4})\\b`, 'i').exec(s) ??
-      new RegExp(`\\b${y}\\s*:\\s*(\\d{1,4})\\s+(?:confirmed\\s+)?(?:measles\\s+)?cases\\b`, 'i').exec(s)
-    if (m) {
-      out.cases = Number(m[1])
-      out.basis = `text "${s.slice(0, 120)}"`
-      return out
+  // 2) Strict text statements ("Total confirmed measles cases investigated in 2026: 17").
+  const texts = [...info.keyStats, info.text ?? '']
+  const res = [
+    new RegExp(`\\b(?:total\\s+)?(?:number\\s+of\\s+)?(?:confirmed\\s+)?(?:measles\\s+)?cases\\s+(?:investigated\\s+|reported\\s+|confirmed\\s+)?(?:in|for)\\s+${y}(?:\\s+(?:to date|so far))?\\s*:\\s*(\\d{1,4})\\b`, 'gi'),
+    new RegExp(`\\b${y}\\s+(?:total\\s+)?(?:confirmed\\s+)?(?:measles\\s+)?cases(?:\\s+to date)?\\s*:\\s*(\\d{1,4})\\b`, 'gi'),
+  ]
+  const found = new Map<number, string>()
+  for (const s of texts) {
+    for (const re of res) {
+      for (const m of s.matchAll(re)) if (!found.has(Number(m[1]))) found.set(Number(m[1]), m[0].slice(0, 120))
     }
   }
-  out.problem = `no ${y} case count found in tables or key statistics`
+  if (found.size === 1) {
+    const [[v, phrase]] = [...found]
+    out.textValue = v
+    out.textBasis = `text "${phrase}"`
+  } else if (found.size > 1) problems.push(`page text states different ${y} counts: ${[...found.keys()].join(', ')}`)
+
+  // 3) Decide.
+  if (out.tableValue != null && out.textValue != null && out.tableValue !== out.textValue) {
+    out.problem = `table says ${out.tableValue} but the page text says ${out.textValue} for ${y}; not published`
+    out.basis = undefined
+    return out
+  }
+  if (found.size > 1) {
+    out.problem = problems.join('; ')
+    out.basis = undefined
+    return out
+  }
+  if (out.tableValue != null) {
+    out.cases = out.tableValue
+    if (out.textValue != null) out.basis = `${out.basis}; matches ${out.textBasis}`.slice(0, 240)
+    return out
+  }
+  if (out.textValue != null) {
+    out.cases = out.textValue
+    out.basis = out.textBasis
+    if (problems.length) out.problem = problems.join('; ')
+    return out
+  }
+  out.basis = undefined
+  out.problem = problems.length ? problems.join('; ') : `no ${y} case count found in tables or page text`
   return out
 }

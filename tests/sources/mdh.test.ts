@@ -18,9 +18,10 @@ import {
   roundValue, seasonWeekEnding, type NormalizeSpec,
 } from '../../pipeline/lib/mdh-normalize'
 import { parseMeaslesPage, parsePertussisPage } from '../../pipeline/lib/mdh-watch'
+import { fluTypeOf, mlsTarget, parseFluHospByType, parseMlsMolecular, parseSyndromic } from '../../pipeline/lib/mdh-files'
 import {
-  buildSeries, fluPositivityKeyStat, isPastSeasonLink, LINK_SPECS, matchSpec, mdh, pertussisCountySeries, placement, plantLookup,
-  SeriesBook, specForLink, ytdSeries,
+  buildSeries, compareSeries, fluPositivityKeyStat, isPastSeasonLink, LINK_SPECS, matchSpec, mdh, pertussisCountySeries, placement, plantLookup,
+  SeriesBook, specForLink, verifyFluTypes, verifyMls, ytdSeries,
 } from '../../pipeline/sources/mdh'
 import { MN_COUNTIES, countyByName } from '../../shared/geo/mnCounties'
 import type { Series } from '../../shared/types'
@@ -824,11 +825,13 @@ Not detected,RSV,Little Falls WWTP,8/30/2026,Central,Morrison,9140`)
   })
 
   it('skips layouts that cannot be mapped honestly (REAL headers)', () => {
-    const mls = ['Year', 'Week of date', 'County', 'Molecular_FluTestTotal', 'Singleplex_COVIDTestTotal', 'Singleplex_COVID', 'MMP_TestTotal', 'MMP_hMPV', 'MMP_Rhinovirus', 'MMP_PIV1', 'F53']
-    expect(specOf('mls-other-molecular').headerSkip!(mls)).toMatch(/panel test total mixes/)
     expect(specOf('flu-hosp-region').headerSkip!(['Season', 'Region', 'Number of hospitalizations', 'Incidence rate'])).toMatch(/no weekly/)
-    expect(specOf('flu-hosp-type').skip).toMatch(/by Season/)
-    expect(specOf('syndromic').skip).toMatch(/ADT/)
+    for (const k of ['flu-hosp-age', 'ili-age', 'flu-deaths-age', 'respnet-age', 'respnet-race', 'ww-detection', 'flu-lab-subtype', 'ltc-covid-cases']) expect(specOf(k).skip).toBeTruthy()
+    // Files with dedicated parsers are no longer skipped.
+    for (const k of ['mls-other-molecular', 'flu-hosp-type', 'syndromic', 'syndromic-region']) {
+      expect(specOf(k).skip).toBeUndefined()
+      expect(specOf(k).parse).toBeTypeOf('function')
+    }
   })
 
   // REAL layout and partial REAL values (MDH 9/10/2026 county table: Aitkin 0, Anoka 22, Becker 0, ...).
@@ -870,18 +873,409 @@ Not detected,RSV,Little Falls WWTP,8/30/2026,Central,Morrison,9140`)
     expect(pp.asOf).toBe('2026-09-10')
   })
 
-  // REAL header and 2016-2018 rows; 2026 row from MDH's reported 18 cases, all exposed within the U.S.
-  it('reads the measles "Total cases" column, not the imported-case column', () => {
-    const html = `<div id="block-bootstrap-mdh-content"><p>Updated 10/1/2026</p><h2>Annual incidence of measles disease in Minnesota, 2016-2026</h2>
+  // REAL header and 2016-2018 rows (measles/stats.html, 2026-10-07). The 2026 rows below are ILLUSTRATIVE in
+  // their breakdown: the 02:10 UTC run read 0 for 2026 from the imported-case column; the 02:40 UTC run read
+  // 21 from "Total cases" (the breakdown cells were not recorded).
+  const measlesPage = (row2026: string, text = '') =>
+    parsePage(
+      `<div id="block-bootstrap-mdh-content"><p>Last Updated: 10/01/2026</p>${text}<h2>Annual incidence of measles disease in Minnesota, 2016-2026</h2>
 <table><thead><tr><th>Year</th><th>Exposure outside U.S. (imported case)</th><th>Exposure within U.S.</th><th>Other*</th><th>Total cases</th></tr></thead><tbody>
 <tr><td>2016</td><td>2</td><td>0</td><td>0</td><td>2</td></tr><tr><td>2017</td><td>0</td><td>75</td><td>0</td><td>75</td></tr>
-<tr><td>2018</td><td>2</td><td>0</td><td>0</td><td>2</td></tr><tr><td>2026</td><td>0</td><td>18</td><td>0</td><td>18</td></tr></tbody></table></div>`
-    const mp = parseMeaslesPage(parsePage(html, 'https://www.health.state.mn.us/diseases/measles/stats.html'), 2026)
-    expect(mp).toMatchObject({ cases: 18, asOf: '2026-10-01' })
-    expect(mp.basis).toMatch(/Total cases/)
-    const s = ytdSeries('measles', 2026, 18, '2026-10-01', {}, 'confirmed measles cases')
-    expect(s).toMatchObject({ id: 'mdh:mdh-other:measles:cases_ytd:state:27', metric: 'cases_ytd', unit: 'count', points: [['2026-10-01', 18]] })
+<tr><td>2018</td><td>2</td><td>0</td><td>0</td><td>2</td></tr>${row2026}</tbody></table></div>`,
+      'https://www.health.state.mn.us/diseases/measles/stats.html',
+    )
+  it('reads the measles "Total cases" column, not the imported-case column, and checks it against the breakdown', () => {
+    const mp = parseMeaslesPage(measlesPage('<tr><td>2026</td><td>0</td><td>21</td><td>0</td><td>21</td></tr>'), 2026)
+    expect(mp).toMatchObject({ cases: 21, asOf: '2026-10-01', tableValue: 21 })
+    expect(mp.basis).toMatch(/Total cases.*sum of the exposure columns/)
+    expect(mp.tableRows).toEqual([['2026', '0', '21', '0', '21']])
+    const s = ytdSeries('measles', 2026, 21, '2026-10-01', {}, 'confirmed measles cases')
+    expect(s).toMatchObject({ id: 'mdh:mdh-other:measles:cases_ytd:state:27', metric: 'cases_ytd', unit: 'count', points: [['2026-10-01', 21]] })
   })
+
+  it('publishes no measles count when the page is ambiguous', () => {
+    // Total does not equal imported + within U.S. + other.
+    const bad = parseMeaslesPage(measlesPage('<tr><td>2026</td><td>0</td><td>17</td><td>0</td><td>0</td></tr>'), 2026)
+    expect(bad.cases).toBeUndefined()
+    expect(bad.problem).toMatch(/does not equal the sum/)
+    // Table and text disagree.
+    const clash = parseMeaslesPage(measlesPage('<tr><td>2026</td><td>0</td><td>14</td><td>0</td><td>14</td></tr>', '<p>Total confirmed measles cases investigated in 2026: 17</p>'), 2026)
+    expect(clash.cases).toBeUndefined()
+    expect(clash.problem).toMatch(/table says 14 but the page text says 17/)
+    // Two different 2026 rows.
+    const two = parseMeaslesPage(measlesPage('<tr><td>2026</td><td>0</td><td>14</td><td>0</td><td>14</td></tr><tr><td>2026*</td><td>0</td><td>17</td><td>0</td><td>17</td></tr>'), 2026)
+    expect(two.cases).toBeUndefined()
+  })
+
+  it('reads a strict measles text statement when the table has no current-year row', () => {
+    const mp = parseMeaslesPage(measlesPage('', '<div>Total confirmed measles cases investigated in 2026: 17</div>'), 2026)
+    expect(mp).toMatchObject({ cases: 17, textValue: 17 })
+    expect(mp.basis).toMatch(/text "Total confirmed measles cases investigated in 2026: 17"/)
+    // Table and text agree: the table is the basis, the text is noted.
+    const both = parseMeaslesPage(measlesPage('<tr><td>2026</td><td>0</td><td>17</td><td>0</td><td>17</td></tr>', '<p>Total confirmed measles cases investigated in 2026: 17</p>'), 2026)
+    expect(both.cases).toBe(17)
+    expect(both.basis).toMatch(/matches text/)
+    const none = parseMeaslesPage(measlesPage(''), 2026)
+    expect(none.cases).toBeUndefined()
+    expect(none.problem).toMatch(/no 2026 case count/)
+  })
+})
+
+// ───────────────────────── Dedicated parsers (REAL layouts) ─────────────────────────
+
+// REAL: mls_othervirus.csv header (46 columns) and first three rows, CI run 2026-10-07.
+const MLS_HEADER = ['Year', 'Week of date', 'County', 'Molecular_FluTestTotal', 'Molecular_FluAUnk', 'Molecular_FluAH1_2009', 'Molecular_FluAH1_Seasonal', 'Molecular_FluAH3', 'Molecular_FluA_NonTypeable', 'Molecular_FluB', 'Molecular_Flu_Indeterminate', 'Singleplex_COVIDTestTotal', 'Singleplex_COVID', 'Molecular_RSVTestTotal', 'Molecular_RSV', 'MMP_TestTotal', 'MMP_FluAUnk', 'MMP_FluAH1_2009', 'MMP_FluAH1_Seasonal', 'MMP_FluAH3', 'MMP_FluA_NonTypeable', 'MMP_FluB', 'MMP_RSV', 'MMP_COVID', 'MMP_hMPV', 'MMP_Rhinovirus', 'MMP_PIV1', 'MMP_PIV2', 'MMP_PIV3', 'MMP_PIV4', 'MMP_Adenovirus', 'MMP_CoV_HKU1', 'MMP_CoV_NL63', 'MMP_CoV_229E', 'MMP_CoV_OC43', 'MMP_Indeterminate', 'F53', 'F54', 'F55', 'F56', 'F57', 'F58', 'F59', 'F60', 'F61', 'F62']
+const BLANK10 = ['', '', '', '', '', '', '', '', '', '']
+const MLS_REAL_ROWS = [
+  ['2024', '9/29/2024', 'Stearns', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '229', '1', '0', '0', '0', '0', '0', '0', '11', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', ...BLANK10],
+  ['2024', '9/29/2024', 'Douglas', '20', '0', '0', '0', '0', '0', '0', '0', '38', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', ...BLANK10],
+  ['2024', '9/29/2024', 'Olmsted', '371', '3', '0', '0', '0', '0', '0', '0', '418', '40', '190', '0', '56', '0', '0', '0', '0', '0', '0', '0', '2', '0', '8', '1', '0', '0', '1', '0', '0', '0', '0', '0', '0', ...BLANK10],
+]
+/** ILLUSTRATIVE row in the REAL layout: named counts, everything else 0, optional F53 note. */
+const mlsRow = (date: string, county: string, counts: Record<string, number>, note = '') =>
+  MLS_HEADER.map((h, i) => (i === 0 ? date.slice(-4) : i === 1 ? date : i === 2 ? county : h === 'F53' ? note : /^F\d+$/.test(h) ? '' : String(counts[h] ?? 0)))
+const toCsv = (header: string[], rows: string[][]) => [header, ...rows].map((r) => r.map((c) => (/[",]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)).join(',')).join('\n')
+
+describe('mdh dedicated parsers (REAL layouts, CI run 2026-10-07)', () => {
+  const OLD = { ...OPTS, historyStart: '2019-01-01' }
+  const grid = (csv: string) => csvToGrid(csv)
+
+  it('maps MLS column targets to pathogens', () => {
+    expect(mlsTarget('FluAH3')).toEqual({ pathogen: 'influenza-a', subtype: 'A(H3)' })
+    expect(mlsTarget('FluAH1_2009')).toEqual({ pathogen: 'influenza-a', subtype: 'A(H1N1)pdm09' })
+    expect(mlsTarget('FluAUnk')).toEqual({ pathogen: 'influenza-a', subtype: 'not subtyped' })
+    expect(mlsTarget('FluA_NonTypeable')).toEqual({ pathogen: 'influenza-a', subtype: 'not typeable' })
+    expect(mlsTarget('FluB').pathogen).toBe('influenza-b')
+    expect(mlsTarget('Flu_Indeterminate').pathogen).toBe('ignore')
+    expect(mlsTarget('Indeterminate').pathogen).toBe('ignore')
+    expect(mlsTarget('hMPV').pathogen).toBe('hmpv')
+    expect(mlsTarget('Rhinovirus').pathogen).toBe('rhino-entero')
+    expect(mlsTarget('PIV4').pathogen).toBe('parainfluenza')
+    expect(mlsTarget('Adenovirus').pathogen).toBe('adenovirus')
+    expect(mlsTarget('CoV_229E').pathogen).toBe('seasonal-cov')
+    expect(mlsTarget('COVID').pathogen).toBe('covid')
+    expect(mlsTarget('Mycoplasma').pathogen).toBe('mycoplasma')
+    expect(mlsTarget('Something').pathogen).toBeUndefined()
+  })
+
+  it('computes statewide MLS percent positive from the REAL rows (positives ÷ tests summed over counties)', () => {
+    const g = grid(toCsv(MLS_HEADER, MLS_REAL_ROWS))
+    expect(g.header).toEqual(MLS_HEADER)
+    const { series, diag, checks, alternates, extra } = parseMlsMolecular(g.header, g.rows, OLD)
+    const by = (p: string) => series.find((s) => s.pathogen === p)!
+    // Week of 9/29/2024 (Sunday) -> MMWR week ending 2024-10-05.
+    // Flu A: (3 single-target + 1 panel) / (391 flu tests + 285 panel tests) = 4/676.
+    expect(by('influenza-a').points).toEqual([['2024-10-05', 0.592]])
+    expect(by('influenza-b').points).toEqual([['2024-10-05', 0]])
+    // COVID-19: (4 + 40 single-target + 11 + 2 panel) / (456 + 285) = 57/741.
+    expect(by('covid').points).toEqual([['2024-10-05', 7.692]])
+    expect(by('covid').attrs).toMatchObject({ testsLatestWeek: '741', positivesLatestWeek: '57', countiesLatestWeek: '3' })
+    // Panel-only viruses: panel positives / 285 panel tests.
+    expect(by('rhino-entero').points).toEqual([['2024-10-05', 2.807]]) // 8/285
+    expect(by('parainfluenza').points).toEqual([['2024-10-05', 0.702]]) // (PIV1 1 + PIV4 1)/285
+    expect(by('hmpv').points).toEqual([['2024-10-05', 0]])
+    expect(by('adenovirus').points).toEqual([['2024-10-05', 0]])
+    expect(by('seasonal-cov').points).toEqual([['2024-10-05', 0]])
+    expect(series.map((s) => s.pathogen)).not.toContain('influenza') // MDH publishes its own flu %
+    expect(series.map((s) => s.pathogen)).not.toContain('rsv') // and RSV %
+    expect(by('rhino-entero').what).toBe('% of multiplex panel tests positive')
+    expect(by('covid').what).toBe('% of molecular tests positive')
+    expect(by('rhino-entero').note).toMatch(/understates positivity among full respiratory panels/)
+    expect(by('influenza-a').attrs!.fluASubtypesLast4Weeks).toMatch(/^not subtyped 4 \(weeks ending 2024-10-05/)
+    // Checks against MDH's published flu / RSV percentages, under both readings of the test totals.
+    expect(checks!['influenza:combined'].points).toEqual([['2024-10-05', 0.592]])
+    expect(checks!['influenza:dedicated'].points).toEqual([['2024-10-05', 0.767]]) // 3/391
+    expect(checks!['rsv:combined'].points).toEqual([['2024-10-05', 0]])
+    expect(alternates!.dedicated.find((s) => s.pathogen === 'covid')!.points).toEqual([['2024-10-05', 9.649]]) // 44/456
+    expect(diag.dateStrategy).toMatch(/Week of date/)
+    expect(diag.weekdays).toEqual({ Sun: 3 })
+    expect(extra!.ignoredColumns).toEqual(expect.arrayContaining(['Molecular_Flu_Indeterminate', 'MMP_Indeterminate', 'F53', 'F62']))
+    // Stearns: 229 panel tests, no non-flu/COVID/RSV detection (most likely flu/COVID/RSV-only multiplex assays).
+    expect(extra!.panelTestsFromCountiesWithNoNonCoreDetection).toBe('80.4% of 285')
+  })
+
+  it('ignores the notes columns (REAL F53 values) and nulls weeks with too few tests', () => {
+    const rows = [
+      ...MLS_REAL_ROWS,
+      // ILLUSTRATIVE counts; the F53 values are REAL values seen in the file.
+      mlsRow('10/6/2024', 'Olmsted', { Molecular_FluTestTotal: 300, Molecular_FluAH3: 6, MMP_TestTotal: 60, MMP_Rhinovirus: 9 }, 'Week 38 - Week starting September 14, 2025'),
+      mlsRow('10/6/2024', 'Hennepin', { Molecular_FluTestTotal: 500, Molecular_FluB: 2, MMP_TestTotal: 140, MMP_Rhinovirus: 21 }, 'Complete'),
+      mlsRow('10/13/2024', 'Douglas', { Molecular_FluTestTotal: 12, Molecular_FluAH3: 1, MMP_TestTotal: 10, MMP_hMPV: 1 }),
+    ]
+    const g = grid(toCsv(MLS_HEADER, rows))
+    const { series, extra } = parseMlsMolecular(g.header, g.rows, OLD)
+    const fa = series.find((s) => s.pathogen === 'influenza-a')!
+    expect(fa.points).toEqual([['2024-10-05', 0.592], ['2024-10-12', 0.6], ['2024-10-19', null]]) // 6/1000; 22 tests < 30
+    expect(series.find((s) => s.pathogen === 'rhino-entero')!.points).toEqual([['2024-10-05', 2.807], ['2024-10-12', 15], ['2024-10-19', null]])
+    expect(fa.attrs!.fluASubtypesLast4Weeks).toMatch(/^A\(H3\) 7, not subtyped 4/)
+    expect(extra!.notesColumnValues).toMatchObject({ 'Week 38 - Week starting September 14, 2025': 1, Complete: 1 })
+  })
+
+  // REAL: tsys.csv / tsysreg.csv are UTF-16LE with a byte-order mark (header and first rows from the CI sample).
+  const utf16 = (text: string) => {
+    const body = Buffer.from(text, 'utf16le')
+    const buf = new Uint8Array(body.length + 2)
+    buf.set([0xff, 0xfe])
+    buf.set(body, 2)
+    return buf.buffer
+  }
+  const TSYS = 'Week of Visit Admit Datetime,COVID-19 Diagnosis (%),Cough (%),Influenza-like illness (%),Shortness of Breath (%),\r\n07/12/20,0.2%,0.2%,0.0%,0.5%,\r\n07/19/20,0.1%,0.1%,0.0%,0.3%,\r\n07/26/20,0.2%,0.1%,0.0%,0.3%,\r\n'
+  const TSYSREG = 'Epi Field Staff Regions,Week of Visit Admit Datetime,COVID-19 Diagnosis (%),Cough (%),Influenza-like illness (%),Shortness of Breath (%),\r\nMetro,07/12/20,0.4%,0.3%,0.0%,0.7%,\r\nMetro,07/19/20,0.2%,0.1%,0.0%,0.5%,\r\nMetro,07/26/20,0.3%,0.2%,0.0%,0.5%,\r\n'
+
+  it('parses statewide syndromic surveillance (REAL UTF-16 rows) into % of ED and inpatient visits', () => {
+    const g = csvToGrid(decodeText(utf16(TSYS)))
+    const { series, diag } = parseSyndromic(g.header, g.rows, OLD)
+    expect(series.map((s) => [s.pathogen, s.metric, s.geo.code, s.points])).toEqual([
+      ['covid', 'ed_visit_pct', '27', [['2020-07-18', 0.2], ['2020-07-25', 0.1], ['2020-08-01', 0.2]]],
+      ['ili', 'ed_visit_pct', '27', [['2020-07-18', 0], ['2020-07-25', 0], ['2020-08-01', 0]]],
+    ])
+    expect(series[0].what).toBe('% of ED and inpatient visits with a COVID-19 diagnosis')
+    expect(diag.weekdays).toEqual({ Sun: 3 })
+    expect(diag.valueColumns.filter((c) => /not mapped/.test(c.status)).map((c) => c.column)).toEqual(['Cough (%)', 'Shortness of Breath (%)'])
+    const built = buildSeries(series[0], specOf('syndromic'), { file: 'tsys.csv', pending: false })
+    expect(built.id).toBe('mdh:mdh-syndromic:covid:ed_visit_pct:state:27')
+    expect(built.label).toBe('COVID-19 — % of ED and inpatient visits with a COVID-19 diagnosis (MDH syndromic surveillance)')
+    expect(built.note).toMatch(/not directly comparable with CDC NSSP/)
+  })
+
+  it('parses syndromic surveillance by region (REAL Metro rows; ILLUSTRATIVE other district labels)', () => {
+    const g = csvToGrid(decodeText(utf16(TSYSREG)))
+    const metroOnly = parseSyndromic(g.header, g.rows, OLD)
+    expect(metroOnly.series.find((s) => s.pathogen === 'covid')!.points).toEqual([['2020-07-18', 0.4], ['2020-07-25', 0.2], ['2020-08-01', 0.3]])
+    const more = TSYSREG + ['Central', 'Northeast', 'Northwest', 'South', 'Southeast', 'West Central'].map((r) => `${r},07/12/20,0.1%,0.1%,0.0%,0.2%,\r\n`).join('')
+    const g2 = csvToGrid(decodeText(utf16(more)))
+    const { series, diag } = parseSyndromic(g2.header, g2.rows, OLD)
+    expect(diag.geo).toMatchObject({ level: 'region', column: 'Epi Field Staff Regions', scheme: 'district' })
+    const metro = series.find((s) => s.pathogen === 'covid' && s.geo.code === 'Metro')!
+    expect(metro.geo.type).toBe('mdh-district')
+    expect(metro.geo.population).toBeUndefined() // a share of visits, not a population rate
+    expect(series.filter((s) => s.pathogen === 'covid').map((s) => s.geo.code).sort()).toEqual(['Central', 'Metro', 'Northeast', 'Northwest', 'South', 'Southeast', 'West Central'])
+  })
+
+  it('refuses syndromic region labels that are not an MDH scheme', () => {
+    const g = csvToGrid('Epi Field Staff Regions,Week of Visit Admit Datetime,COVID-19 Diagnosis (%)\nRegion 1,07/12/20,0.1%\nRegion 2,07/12/20,0.2%')
+    const { series, diag } = parseSyndromic(g.header, g.rows, OLD)
+    expect(series).toEqual([])
+    expect(diag.unparsed[0]).toMatch(/not recognized/)
+  })
+
+  // REAL: hospflu_bytype.csv header and first three rows; the B and Unknown rows and week 41 are ILLUSTRATIVE.
+  it('sums influenza hospitalizations by type into flu A and flu B', () => {
+    expect(['A (not subtyped)', 'A H3', 'A (H1N1) pdm09', 'B (no genotype)', 'Unknown', 'A/B', 'Other'].map(fluTypeOf)).toEqual(['A', 'A', 'A', 'B', 'unknown', null, null])
+    const csv = `Season,MMWR Week,Type,Frequency
+2025-2026,40,A (not subtyped),1
+2025-2026,40,A H3,0
+2025-2026,40,A (H1N1) pdm09,0
+2025-2026,40,B (no genotype),0
+2025-2026,40,Unknown,1
+2025-2026,41,A (not subtyped),3
+2025-2026,41,A H3,2
+2025-2026,41,A (H1N1) pdm09,1
+2025-2026,41,B (no genotype),1
+2025-2026,41,Unknown,0
+2025-2026,42,A (not subtyped),
+2025-2026,42,A H3,`
+    const g = grid(csv)
+    const { series, checks, diag } = parseFluHospByType(g.header, g.rows, OLD)
+    expect(series.map((s) => [s.pathogen, s.metric, s.points])).toEqual([
+      ['influenza-a', 'hosp_admissions', [['2025-10-04', 1], ['2025-10-11', 6]]],
+      ['influenza-b', 'hosp_admissions', [['2025-10-04', 0], ['2025-10-11', 1]]],
+    ])
+    expect(checks!['influenza:all-types'].points).toEqual([['2025-10-04', 2], ['2025-10-11', 7]])
+    expect(diag.skipped['blank count']).toBe(2)
+    const built = buildSeries(series[0], specOf('flu-hosp-type'), { file: 'hospflu_bytype.csv', pending: false })
+    expect(built.id).toBe('mdh:mdh-hosp:influenza-a:hosp_admissions:state:27')
+    expect(built.note).toMatch(/unknown type are in neither/)
+  })
+
+  it('verifies flu A/B hospitalizations against the weekly total', () => {
+    const parsed = { series: [], diag: {} as never, checks: { 'influenza:all-types': { pathogen: 'influenza' as const, metric: 'hosp_admissions' as const, geo: { type: 'state' as const, code: '27', name: 'Minnesota' }, columns: [], points: Array.from({ length: 10 }, (_, i) => [`2025-10-${String(4 + i).padStart(2, '0')}`, i] as [string, number]) } } }
+    const total = parsed.checks['influenza:all-types'].points
+    expect(verifyFluTypes(parsed, total).decision).toBe('verified')
+    expect(verifyFluTypes(parsed, total.map(([d, v]) => [d, v + 5] as [string, number])).decision).toBe('fail')
+    expect(verifyFluTypes(parsed, undefined).decision).toBe('unverified')
+  })
+
+  it('compares computed and published series, leaving out the latest weeks', () => {
+    const pub: [string, number][] = [['2026-09-05', 1], ['2026-09-12', 2], ['2026-09-19', 3], ['2026-09-26', 9]]
+    const c = compareSeries([['2026-09-05', 1.1], ['2026-09-12', 2], ['2026-09-19', 5], ['2026-09-26', 1]], pub, () => 0.3, 1)
+    expect(c).toMatchObject({ weeks: 3, within: 2, examples: ['2026-09-19: computed 5 vs published 3'] })
+  })
+
+  // REAL: respnetall.csv first rows; the 80-co, COVID-19 and later rows are ILLUSTRATIVE.
+  it('keeps statewide, 7-county metro and 80-county Greater Minnesota RESP-NET rates apart, and merges with RESP-NET by County', () => {
+    const csv = `Season,MMWR Week,MMWR Start Date,Pathogen,Geography,Count of Hospitalizations,Population,Rate per 100000
+2024-2025,202508,2/16/2025,Total,7-co,357,3065147,11.65
+2023-2024,202414,3/31/2024,Total,statewide,266,5563378,4.78
+2024-2025,202505,1/26/2025,Total,statewide,1364,5563378,24.52
+2024-2025,202505,1/26/2025,Total,80-co,600,2498231,24.02
+2024-2025,202505,1/26/2025,COVID-19,statewide,300,5563378,5.39`
+    const g = grid(csv)
+    const { series } = normalizeTable(g.header, g.rows, specOf('respnet-season'), OLD)
+    expect(series.map((s) => `${s.pathogen}|${s.geo.code}`).sort()).toEqual(['covid|27', 'respiratory-combined|27', 'respiratory-combined|Greater Minnesota', 'respiratory-combined|Metro'])
+    expect(series.find((s) => s.geo.code === 'Greater Minnesota')!.geo.counties).toHaveLength(80)
+    // RESP-NET by County's statewide row (1 decimal) and respnetall (2 decimals) share one id; respnetall wins.
+    const county = normalizeTable(...(() => {
+      const c = grid(`Season,MMWR Week,MMWR Start Date,Pathogen,County,Count,Population,"Rate per 100,000",Risk Level
+2024-2025,202505,1/26/2025,COVID-19,Statewide,300,5563378,5.4,Moderate
+2024-2025,202506,2/2/2025,COVID-19,Statewide,280,5563378,5.0,Moderate`)
+      return [c.header, c.rows] as const
+    })(), specOf('respnet-county'), OLD)
+    const book = new SeriesBook()
+    const all = series.find((s) => s.pathogen === 'covid')!
+    const st = county.series.find((s) => s.geo.code === '27')!
+    book.add({ series: buildSeries(all, specOf('respnet-season'), { file: 'respnetall.csv', pending: false }), family: 'respnet-state', priority: 11, file: 'respnetall.csv' })
+    book.add({ series: buildSeries(st, specOf('respnet-county'), { file: 'respnetcounty.csv', pending: false }), family: 'respnet-state', priority: 10, file: 'respnetcounty.csv' })
+    const merged = book.byId.get('mdh:mdh-respnet:covid:hosp_rate:state:27')!.series
+    expect(merged.points).toEqual([['2025-02-01', 5.39], ['2025-02-08', 5]])
+    expect(book.collisions).toEqual([]) // 5.39 vs 5.4 is rounding, not a conflict
+    expect(merged.official).toMatchObject({ level: 'moderate', label: 'Moderate' })
+  })
+})
+
+describe('mdh MLS verification against MDH published percentages', () => {
+  const geo = { type: 'state' as const, code: '27', name: 'Minnesota' }
+  const weeks = Array.from({ length: 10 }, (_, i) => new Date(Date.UTC(2026, 6, 25 + 7 * i)).toISOString().slice(0, 10))
+  const ns = (pathogen: string, vals: number[]) => ({ pathogen: pathogen as never, metric: 'test_positivity' as const, geo, columns: [], points: weeks.map((d, i) => [d, vals[i]] as [string, number]) })
+  const flu = [1, 1.2, 1.5, 2, 2.5, 3, 3.4, 4, 5, 6]
+  const fluDed = flu.map((v) => v * 1.6)
+  const rsv = [0.2, 0.3, 0.3, 0.4, 0.5, 0.7, 0.9, 1.2, 1.5, 2]
+  const parsed = {
+    series: [ns('influenza-a', flu), ns('rhino-entero', flu)],
+    alternates: { dedicated: [ns('influenza-a', fluDed)] },
+    checks: { 'influenza:combined': ns('influenza', flu), 'influenza:dedicated': ns('influenza', fluDed), 'rsv:combined': ns('rsv', rsv), 'rsv:dedicated': ns('rsv', rsv.map((v) => v * 1.5)) },
+    diag: {} as never,
+  }
+  const pts = (vals: number[]) => weeks.map((d, i) => [d, Math.round(vals[i] * 10) / 10] as [string, number])
+
+  it('publishes with the reading that matches MDH', () => {
+    const v = verifyMls(parsed, { influenza: pts(flu), rsv: pts(rsv) })
+    expect(v.decision).toBe('verified')
+    expect(v.report.chosen).toBe('combined')
+    expect(v.series.find((s) => s.pathogen === 'influenza-a')!.points[9][1]).toBe(6)
+    expect(v.attrs.mdhCheck).toMatch(/flu matches MDH's published percent in 8 of 8 weeks/)
+    const ded = verifyMls(parsed, { influenza: pts(fluDed), rsv: pts(rsv.map((v) => v * 1.5)) })
+    expect(ded.report.chosen).toBe('dedicated')
+    expect(ded.series.find((s) => s.pathogen === 'influenza-a')!.points[9][1]).toBeCloseTo(9.6)
+    expect(ded.series.map((s) => s.pathogen).sort()).toEqual(['influenza-a', 'rhino-entero'])
+  })
+
+  it('withholds everything when no reading matches, and publishes unverified when MDH has nothing to compare', () => {
+    const bad = verifyMls(parsed, { influenza: pts(flu.map((v) => v * 3)), rsv: pts(rsv) })
+    expect(bad.decision).toBe('fail')
+    expect(bad.series).toEqual([])
+    expect(bad.reason).toMatch(/withheld/)
+    const none = verifyMls(parsed, {})
+    expect(none.decision).toBe('unverified')
+    expect(none.series).toHaveLength(2)
+    expect(none.attrs.mdhCheck).toMatch(/not checked/)
+  })
+
+  // ILLUSTRATIVE: MDH's values dated one day off (week start instead of week end) never line up.
+  const shift = (p: [string, number][], days: number) => p.map(([d, v]) => [new Date(Date.parse(`${d}T00:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10), v] as [string, number])
+  it('withholds instead of publishing "not checked" when MDH published the same weeks but none line up', () => {
+    const off = verifyMls(parsed, { influenza: shift(pts(flu), 1), rsv: shift(pts(rsv), 1) })
+    expect(off.decision).toBe('fail')
+    expect(off.series).toEqual([])
+    expect(off.reason).toMatch(/too few weeks line up/)
+    const total = weeks.map((d, i) => [d, 10 + i] as [string, number])
+    const byType = { series: [ns('influenza-a', flu)], diag: {} as never, checks: { 'influenza:all-types': { pathogen: 'influenza' as const, metric: 'hosp_admissions' as const, geo, columns: [], points: total } } }
+    expect(verifyFluTypes(byType, total).decision).toBe('verified')
+    const v = verifyFluTypes(byType, shift(total, 1))
+    expect(v.decision).toBe('fail')
+    expect(v.reason).toMatch(/line up/)
+    // A computed series too short to compare (e.g. the first weeks of a season) stays "not checked".
+    const short = { ...byType, checks: { 'influenza:all-types': { ...byType.checks['influenza:all-types'], points: total.slice(0, 3) } } }
+    expect(verifyFluTypes(short, shift(total, 1)).decision).toBe('unverified')
+  })
+})
+
+describe('mdh source end-to-end with the new files (stubbed fetch, ILLUSTRATIVE counts in REAL layouts)', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.unstubAllEnvs()
+  })
+  const page = (body: string) => `<html><body><div id="block-bootstrap-mdh-content"><p>Updated 10/1/2026</p>${body}</div></body></html>`
+  const sundays = Array.from({ length: 10 }, (_, i) => new Date(Date.UTC(2026, 6, 19 + 7 * i)))
+  const md = (d: Date) => `${d.getUTCMonth() + 1}/${d.getUTCDate()}/${d.getUTCFullYear()}`
+  const counts = (i: number) => ({
+    Hennepin: { Molecular_FluTestTotal: 400, Molecular_FluAH3: 2 + (i % 3), Molecular_FluB: 1, Singleplex_COVIDTestTotal: 500, Singleplex_COVID: 30 + i, Molecular_RSVTestTotal: 300, Molecular_RSV: 1 + (i % 2), MMP_TestTotal: 200, MMP_FluAH3: 1, MMP_COVID: 10, MMP_RSV: 1, MMP_Rhinovirus: 30 + i, MMP_hMPV: 2, MMP_PIV3: 3, MMP_Adenovirus: 4, MMP_CoV_OC43: 1 },
+    Olmsted: { Molecular_FluTestTotal: 150, Molecular_FluAUnk: 1, Singleplex_COVIDTestTotal: 120, Singleplex_COVID: 9, Molecular_RSVTestTotal: 90, Molecular_RSV: 0, MMP_TestTotal: 60, MMP_Rhinovirus: 8, MMP_FluB: i % 2 },
+  })
+  const fluPct = (i: number, dedicated = false) => {
+    const c = counts(i)
+    const pos = c.Hennepin.Molecular_FluAH3 + c.Hennepin.Molecular_FluB + c.Olmsted.Molecular_FluAUnk + (dedicated ? 0 : c.Hennepin.MMP_FluAH3 + c.Olmsted.MMP_FluB)
+    const tests = 400 + 150 + (dedicated ? 0 : 260)
+    return Math.round((pos / tests) * 1000) / 10
+  }
+  const rsvPct = (i: number) => Math.round(((counts(i).Hennepin.Molecular_RSV + 1) / (390 + 260)) * 1000) / 10
+  const files = (fluScale = 1): Record<string, string | ArrayBuffer> => ({
+    '/diseases/flu/stats/lab.html': page(`<a href="mls_flutype.csv">Weekly Total of Influenza Positive Tests and Percent Positivity (CSV)</a>`),
+    '/diseases/flu/stats/mls_flutype.csv': ['Season,Week Start Date,Flu Type A/B,Frequency,% Flu Positive', ...sundays.map((d, i) => `2026-27,${md(d)},Flu A,1,${Math.round(fluPct(i) * fluScale * 10) / 10}`)].join('\n'),
+    '/diseases/respiratory/stats/lab.html': page(`<h2>Minnesota Laboratory System (MLS)</h2><a href="mls_rsv.csv">MLS Weekly RSV Positive Tests and Percent Positivity (CSV)</a><a href="mls_othervirus.csv">MLS Other Molecular Testing Results by Week (CSV)</a>`),
+    '/diseases/respiratory/stats/mls_rsv.csv': ['Season,MMWR Week,Week Start Date,Pathogen,Frequency,% RSV Positive', ...sundays.map((d, i) => `2026-27,${30 + i},${md(d)},RSV,1,${rsvPct(i)}`)].join('\n'),
+    '/diseases/respiratory/stats/mls_othervirus.csv': toCsv(MLS_HEADER, sundays.flatMap((d, i) => Object.entries(counts(i)).map(([county, c]) => mlsRow(md(d), county, c, i === 3 ? 'Complete' : '')))),
+    '/diseases/flu/stats/hosp.html': page(`<a href="hospflu_byseason.csv">Hospitalized Influenza Cases by Season (CSV)</a><a href="hospflu_bytype.csv">Hospitalized Influenza Cases by Type (CSV)</a>`),
+    '/diseases/flu/stats/hospflu_byseason.csv': ['Season,MMWR Week,Number of Hospitalizations', ...sundays.map((_, i) => `2025-2026,${30 + i},${3 * i + 2}`)].join('\n'),
+    '/diseases/flu/stats/hospflu_bytype.csv': ['Season,MMWR Week,Type,Frequency', ...sundays.flatMap((_, i) => [`2025-2026,${30 + i},A (not subtyped),${i}`, `2025-2026,${30 + i},A H3,${i}`, `2025-2026,${30 + i},B (no genotype),${i}`, `2025-2026,${30 + i},Unknown,2`])].join('\n'),
+    '/diseases/respiratory/stats/tsys.html': page(`<h2>Syndromic surveillance</h2><a href="/diseases/coronavirus/stats/tsys.csv">Syndromic surveillance (CSV)</a>`),
+    '/diseases/coronavirus/stats/tsys.csv': (() => {
+      const text = `Week of Visit Admit Datetime,COVID-19 Diagnosis (%),Cough (%),Influenza-like illness (%),Shortness of Breath (%),\r\n${sundays.map((d, i) => `${String(d.getUTCMonth() + 1).padStart(2, '0')}/${String(d.getUTCDate()).padStart(2, '0')}/26,${(0.5 + i / 10).toFixed(1)}%,0.4%,0.${i}%,0.6%,`).join('\r\n')}\r\n`
+      const body = Buffer.from(text, 'utf16le')
+      const buf = new Uint8Array(body.length + 2)
+      buf.set([0xff, 0xfe])
+      buf.set(body, 2)
+      return buf.buffer
+    })(),
+  })
+  const run = async (f: Record<string, string | ArrayBuffer>) => {
+    vi.stubEnv('GITHUB_ACTIONS', '')
+    vi.stubGlobal('fetch', async (input: string | URL) => {
+      const body = f[new URL(String(input)).pathname]
+      return body == null ? new Response('Not found', { status: 404 }) : new Response(body, { status: 200 })
+    })
+    const root = mkdtempSync(path.join(tmpdir(), 'mdh-root-'))
+    const log = createLogger('mdh-test')
+    log.info = () => {}
+    log.warn = () => {}
+    return mdh.run({ now: '2026-10-07T18:00:00Z', log, historyStart: '2021-07-01', cacheDir: mkdtempSync(path.join(tmpdir(), 'mdh-c-')), rootDir: root })
+  }
+
+  it('publishes verified MLS, flu-type and syndromic series', async () => {
+    const res = await run(files())
+    const all = res.datasets.flatMap((d) => d.series)
+    const get = (id: string) => all.find((s) => s.id === id)
+    for (const p of ['influenza-a', 'influenza-b', 'covid', 'rhino-entero', 'hmpv', 'parainfluenza', 'adenovirus', 'seasonal-cov']) {
+      expect(get(`mdh:mdh-lab:${p}:test_positivity:state:27`), p).toBeDefined()
+    }
+    const rhino = get('mdh:mdh-lab:rhino-entero:test_positivity:state:27')!
+    expect(rhino.label).toBe('Rhinovirus/enterovirus — % of multiplex panel tests positive (MDH Minnesota Laboratory System)')
+    expect(rhino.points).toHaveLength(10)
+    expect(rhino.points[0]).toEqual(['2026-07-25', 14.615]) // (30 + 8) / 260
+    expect(rhino.attrs!.mdhCheck).toMatch(/flu matches MDH's published percent in 8 of 8 weeks.*RSV matches/)
+    expect(get('mdh:mdh-lab:covid:test_positivity:state:27')!.label).toBe('COVID-19 — % of molecular tests positive (MDH Minnesota Laboratory System)')
+    expect(get('mdh:mdh-lab:influenza:test_positivity:state:27')!.attrs!.mdhFile).toBe('mls_flutype.csv') // MDH's own, untouched
+    // MMWR weeks 30-32 of 2026 (season 2025-2026).
+    expect(get('mdh:mdh-hosp:influenza-a:hosp_admissions:state:27')!.points.slice(0, 3)).toEqual([['2026-08-01', 0], ['2026-08-08', 2], ['2026-08-15', 4]])
+    expect(get('mdh:mdh-hosp:influenza-b:hosp_admissions:state:27')!.attrs!.mdhCheck).toMatch(/matches MDH's weekly influenza hospitalization total \(within 1 or 5%\) in 8 of 8 weeks/)
+    const syn = get('mdh:mdh-syndromic:covid:ed_visit_pct:state:27')!
+    expect(syn.points[0]).toEqual(['2026-07-25', 0.5])
+    expect(get('mdh:mdh-syndromic:ili:ed_visit_pct:state:27')).toBeDefined()
+    expect(res.datasets.map((d) => d.dataset)).not.toContain('mdh-lab-mls')
+    const diag = res.diagnostics as { files: { url: string; status: string; extra?: Record<string, unknown> }[]; crossChecks: { file?: string; chosen?: string }[] }
+    expect(diag.files.find((f) => f.url.endsWith('tsys.csv'))).toMatchObject({ status: 'parsed', extra: { encoding: 'UTF-16LE (byte-order mark FF FE)' } })
+    expect(diag.crossChecks.find((c) => c.file === 'mls_othervirus.csv')).toMatchObject({ chosen: 'combined' })
+  }, 60_000)
+
+  it('withholds MLS series when they disagree with MDH\'s published flu percent', async () => {
+    const res = await run(files(3))
+    const ids = res.datasets.flatMap((d) => d.series).map((s) => s.id)
+    expect(ids).toContain('mdh:mdh-lab:influenza:test_positivity:state:27')
+    expect(ids.filter((id) => id.startsWith('mdh:mdh-lab:') && !/:(influenza|rsv):/.test(id))).toEqual([])
+    const diag = res.diagnostics as { files: { url: string; status: string; reason?: string }[]; errors: string[] }
+    expect(diag.files.find((f) => f.url.endsWith('mls_othervirus.csv'))).toMatchObject({ status: 'unparsed', reason: expect.stringMatching(/withheld/) })
+    expect(diag.errors.some((e) => /mls_othervirus\.csv: computed flu\/RSV percent positive does not match/.test(e))).toBe(true)
+  }, 60_000)
 })
 
 describe('mdh series assembly', () => {
