@@ -500,7 +500,7 @@ function bommie(s: Scape, rk: number, u: number, v: number, width: number, heigh
     if (top > maxY) scale *= Math.max(0.5, (maxY - y) / Math.max(1e-6, top - y));
     list.push(s.addDecor('rock', 'live-rock', x, z, { scale, seed, sink: 0.01 }));
   }
-  const tiers = clamp(Math.round(height / (0.11 * rk)), 2, 6);
+  const tiers = clamp(Math.round(height / (0.11 * rk)), 3, 6);
   for (let tier = 1; tier <= tiers; tier++) {
     const n = Math.max(1, nBase - tier);
     const narrow = Math.max(0.15, 1 - tier * (0.66 / tiers));
@@ -516,18 +516,14 @@ function bommie(s: Scape, rk: number, u: number, v: number, width: number, heigh
       list.push(s.addDecor('rock', 'live-rock', x, z, { scale: sc, y, seed: probe.seed, rotY: s.rng.range(0, Math.PI * 2) }));
     }
   }
-  // Too shallow for whole tiers: a smaller crown stone still brings the bommie up to its height,
-  // so the focal bommie always stands tallest.
-  const top = Math.max(...list.map((r) => itemWorldBounds(r).max[1]));
-  if (top < maxY - height * 0.25) {
-    const x = cx + s.rng.range(-0.02, 0.02), z = cz + s.rng.range(-0.03, 0.01);
-    const y = s.supportAt(x, z, list) - 0.02 * rk;
-    const probe: DecorItem = { id: 'probe', kind: 'rock', variant: 'live-rock', seed: s.liveRockSeed('pillar'), position: [x, y, z], rotation: [0, 0, 0], scale: rk * 0.7 };
-    const rise = itemWorldBounds(probe).max[1] - y;
-    const sc = Math.min(rk * 1.1, (probe.scale * (maxY - y)) / Math.max(1e-6, rise));
-    if (sc > rk * 0.25) list.push(s.addDecor('rock', 'live-rock', x, z, { scale: sc, y, seed: probe.seed, rotY: s.rng.range(0, Math.PI * 2) }));
-  }
   return list;
+}
+
+/** How high a group of rocks rises above the sand at (u, v) (m). */
+function riseOf(s: Scape, rocks: DecorItem[], u: number, v: number): number {
+  let top = 0;
+  for (const r of rocks) top = Math.max(top, itemWorldBounds(r).max[1]);
+  return Math.max(0.02, top - s.ground(s.x(u), s.z(v)));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -897,9 +893,12 @@ function reef(tank: TankState, lib: PlantIndex, seed: number) {
   const rk = clamp(k * 0.85, 0.55, 1.45);
   const rocks: DecorItem[] = [];
   const reach = s.water * 0.6;
-  // Bommie widths follow the tank but leave open water around them in a narrow cube.
-  rocks.push(...bommie(s, rk, 1 - PHI, 0.42, Math.min(0.42 * k, 0.3 * s.W), reach, true));
-  const second = bommie(s, rk, 0.8, 0.45, Math.min(0.26 * k, 0.18 * s.W), reach * 0.72, false);
+  // Bommie widths follow the tank but leave open water around them in a narrow cube; the second
+  // stays lower than the focal one as it actually came out.
+  const main = bommie(s, rk, 1 - PHI, 0.42, Math.min(0.42 * k, 0.3 * s.W), reach, true);
+  rocks.push(...main);
+  const mainRise = riseOf(s, main, 1 - PHI, 0.42);
+  const second = bommie(s, rk, 0.8, 0.45, Math.min(0.26 * k, 0.18 * s.W), Math.min(reach * 0.72, mainRise * 0.8), false);
   rocks.push(...second);
   if (k > 0.9) rocks.push(...bommie(s, rk, 0.1, 0.32, 0.14 * k, reach * 0.45, false));
   if (s.wf > 1.8) rocks.push(...bommie(s, rk, PHI + 0.04, 0.3, 0.16 * k, reach * 0.55, false));
@@ -945,7 +944,7 @@ function nanoReef(tank: TankState, lib: PlantIndex, seed: number) {
   const rocks: DecorItem[] = [];
   const island = bommie(s, rk, 1 - PHI + 0.04, 0.45, Math.max(0.12, 0.3 * k), s.water * 0.55, true);
   rocks.push(...island);
-  const side = bommie(s, rk, 0.8, 0.5, Math.max(0.08, 0.14 * k), s.water * 0.3, false);
+  const side = bommie(s, rk, 0.8, 0.5, Math.max(0.08, 0.14 * k), Math.min(s.water * 0.3, riseOf(s, island, 1 - PHI + 0.04, 0.45) * 0.75), false);
   rocks.push(...side);
   s.addDecor('coral-skeleton', 'rubble', s.x(0.58), s.z(0.75), { scale: k * 0.8 });
   s.corals(rocks, [
