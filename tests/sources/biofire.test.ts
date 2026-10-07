@@ -4,14 +4,22 @@
 // formats (BioFire Trend export "Trend <Organism> Detection Rates <date>.csv" with Week,US,Northeast,Midwest,
 // West,South proportions; the MN Pulse long format in data/manual/biofire/README.md; and report wording quoted
 // in public search snippets of bioMérieux USMA TRENDS reports). The numbers are illustrative, not real data.
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { findOrganismsInText, matchOrganism } from '../../pipeline/lib/biofire-organisms.ts'
-import { columnsOf, detectFormat, mergeObservations, parseLongCsv, parseWideCsv } from '../../pipeline/lib/biofire-manual.ts'
+import type { Series } from '../../shared/types.ts'
+import { findOrganismsInText, matchOrganism, panelFromName, panelInText } from '../../pipeline/lib/biofire-organisms.ts'
 import {
-  PAGE_BREAK, extractPdfLinks, itemsToRows, parseMidwestTables, parseSentence, parseUsmaReport, parseWindowFromName,
-  parseWindowFromText, reportNumber, windowWeek,
+  columnsOf, detectFormat, mergeObservations, parseDateStrict, parseLongCsv, parseWideCsv,
+} from '../../pipeline/lib/biofire-manual.ts'
+import {
+  PAGE_BREAK, USMA_PARSER_VERSION, extractPdfLinks, itemsToRows, parseMidwestTables, parseSentence, parseUsmaReport,
+  parseWindowFromName, parseWindowFromText, reportNumber, toSentences, windowWeek,
 } from '../../pipeline/lib/biofire-usma.ts'
-import { biofire, buildTrendSeries, buildUsmaSeries } from '../../pipeline/sources/biofire.ts'
+import {
+  USMA_SERIES_FILE, biofire, buildTrendSeries, buildUsmaSeries, fetchBudget, isPdf, mergeWithPrior, readPriorUsma, usmaMode,
+} from '../../pipeline/sources/biofire.ts'
 
 describe('organism mapping', () => {
   it('maps BioFire target names, file-name spellings and codes', () => {
@@ -115,7 +123,6 @@ biofire_trend,RP2.1,PIV3,Parainfluenza Virus 3,census_region,Midwest,2026-09-20,
 biofire_trend,GI,,Adenovirus,census_region,Midwest,2026-09-20,0.0310,,,,,,2026-10-05,,
 biofire_trend,RP2.1,RSV,Respiratory Syncytial Virus,census_region,Northeast,2026-09-20,0.0050,3wk_centered,,,,,2026-10-05,,
 partner_lab,RP2.1,RSV,Respiratory Syncytial Virus,site,LAB-01,2026-09-20,0.0040,weekly_raw,250,1,1,,2026-10-05,,
-biofire_trend,RP2.1,RSV,Respiratory Syncytial Virus,census_region,Midwest,2026-09-20,1.5,3wk_centered,,,,,2026-10-05,,
 biofire_trend,RP2.1,RSV,Respiratory Syncytial Virus,nation,US,2026-09-21,0.0060,weekly_raw,,,,,2026-10-05,,
 biofire_trend,GI,NORO,Norovirus GI/GII,census_region,Midwest,2026-09-20,,3wk_centered,,,,,2026-10-05,,
 biofire_trend,GI,EPEC,,census_region,Midwest,2026-09-20,0.0800,3wk_centered,,,,,2026-10-05,,
@@ -127,7 +134,8 @@ describe('MN Pulse long CSV (format fixture)', () => {
     expect(detectFormat(columnsOf(LONG))).toBe('long')
     const { obs, report } = parseLongCsv('long.csv', LONG, '2026-01-01')
     expect(report.accepted).toBe(5)
-    expect(report.skipped).toEqual({ 'other-region': 1, 'site-level': 1, 'out-of-range': 1, 'untracked-organism': 1, 'unmapped-organism': 1 })
+    expect(report.skipped).toEqual({ 'other-region': 1, 'site-level': 1, 'untracked-organism': 1, 'unmapped-organism': 1 })
+    expect(report.scale).toBe('proportion')
     expect(report.notes).toEqual({ 'week_start-not-sunday': 1 })
     const piv = obs.filter((o) => o.def.code === 'PIV3')
     expect(piv.map((o) => [o.week, Math.round(o.value! * 100) / 100, o.provisional, o.nSites])).toEqual([
@@ -145,6 +153,83 @@ describe('MN Pulse long CSV (format fixture)', () => {
     const { obs } = parseLongCsv('x.csv', csv, '2026-09-30')
     expect(obs).toHaveLength(1)
     expect(obs[0]).toMatchObject({ week: '2026-09-26', vintage: '2026-09-30', value: 0.4 })
+  })
+
+  it('never uses file times: an undated file gets an empty vintage (lowest rank), a warning and no snapshot attr', () => {
+    const csv = 'organism_code,geo_type,geo_code,week_end,detection_rate\nFLUB,census_region,Midwest,2026-09-26,0.004\n'
+    const undated = parseLongCsv('partner.csv', csv, '')
+    expect(undated.obs[0].vintage).toBe('')
+    expect(undated.report.warnings.join(' ')).toMatch(/no retrieved_at and the file name has no date/)
+    const dated = parseWideCsv('Trend Influenza B Detection Rates 2026-09-20.csv', 'Week,US,Midwest\n2026-09-20,0.003,0.005\n').obs
+    const merged = mergeObservations([...dated, ...undated.obs], '2021-07-01')
+    // The dated export wins the shared week even though the undated file was read last.
+    expect(merged.find((g) => g.geo === 'Midwest')!.obs[0]).toMatchObject({ vintage: '2026-09-20', value: 0.5 })
+    expect(buildTrendSeries(mergeObservations(undated.obs, '2021-07-01'))[0].attrs?.snapshot).toBeUndefined()
+  })
+})
+
+describe('manual import units are decided per file (no silent 100x)', () => {
+  it('reads "%"-suffixed cells (spreadsheet re-save) as percent, not proportions', () => {
+    const wide = 'Week,US,Northeast,Midwest,West,South\n2026-09-13,0.45%,0.40%,0.50%,0.41%,0.44%\n2026-09-20,0.55%,0.50%,0.62%,0.51%,0.54%\n'
+    const { obs, report } = parseWideCsv('Trend Influenza A Detection Rates 2026-09-27.csv', wide)
+    expect(obs.filter((o) => o.geo === 'Midwest').map((o) => [o.week, o.value])).toEqual([['2026-09-19', 0.5], ['2026-09-26', 0.62]])
+    expect(report.scale).toBe('percent-sign')
+    expect(report.warnings.join(' ')).toMatch(/% sign; read as percentages/)
+    const long = parseLongCsv('y.csv', 'organism_code,geo_type,geo_code,week_start,detection_rate\nRSV,census_region,Midwest,2026-09-20,0.62%\n', '2026-10-01')
+    expect(long.obs.map((o) => [o.week, o.value])).toEqual([['2026-09-26', 0.62]])
+  })
+
+  it('rejects files that mix "%" cells with bare numbers', () => {
+    const wide = 'Week,US,Midwest\n2026-09-13,0.0045,0.50%\n'
+    const { obs, report } = parseWideCsv('Trend RSV Detection Rates 2026-09-27.csv', wide)
+    expect(obs).toEqual([])
+    expect(report.warnings.join(' ')).toMatch(/mixed units: 1 of 2 values carry a % sign; file rejected/)
+  })
+
+  it('rejects a whole long file when any rate exceeds 1 (percent written by mistake), instead of keeping the rows <= 1', () => {
+    const csv = 'organism_code,geo_type,geo_code,week_start,detection_rate\nNORO,census_region,Midwest,2026-09-13,0.8\nNORO,census_region,Midwest,2026-09-20,1.4\nNORO,census_region,Midwest,2026-09-27,0.9\n'
+    const { obs, report } = parseLongCsv('x.csv', csv, '2026-10-01')
+    expect(obs).toEqual([])
+    expect(report.warnings.join(' ')).toMatch(/values up to 1.4 exceed 1 .* file rejected/)
+  })
+
+  it('records value stats and warns when kept values look implausibly high', () => {
+    // A percent-scale file whose values all sit below 1 cannot be told apart by the scale check alone.
+    const wide = 'Week,US,Northeast,Midwest,West,South\n2026-09-13,0.31,0.22,0.45,0.30,0.28\n2026-09-20,0.35,0.25,0.52,0.33,0.30\n'
+    const { report } = parseWideCsv('Trend Cyclospora cayetanensis Detection Rates 2026-09-27.csv', wide)
+    expect(report.stats).toEqual({ n: 4, min: 31, median: 40, max: 52 })
+    expect(report.warnings.join(' ')).toMatch(/reach 52% — unusually high/)
+  })
+})
+
+describe('manual import date checks', () => {
+  it('parses ISO and U.S. dates strictly (no D/M/Y roll-over)', () => {
+    expect(parseDateStrict('2026-09-20')).toBe('2026-09-20')
+    expect(parseDateStrict('2026-09-20T00:00:00Z')).toBe('2026-09-20')
+    expect(parseDateStrict('9/20/2026')).toBe('2026-09-20')
+    expect(parseDateStrict('30/06/2024')).toBeNull()
+    expect(parseDateStrict('2026-02-30')).toBeNull()
+    expect(parseDateStrict('Sep 20')).toBeNull()
+  })
+
+  it('skips invalid and future weeks and warns about several rows in one MMWR week', () => {
+    const wide = 'Week,US,Northeast,Midwest,West,South\n30/06/2024,0.01,0.01,0.02,0.01,0.01\n2031-01-05,0.01,0.01,0.03,0.01,0.01\n2026-09-20,0.01,0.01,0.020,0.01,0.01\n2026-09-21,0.01,0.01,0.021,0.01,0.01\n'
+    const { obs, report } = parseWideCsv('Trend RSV Detection Rates 2026-09-23.csv', wide, { maxDate: '2026-10-14' })
+    expect(report.skipped).toEqual({ 'bad-week': 1, 'future-week': 1 })
+    expect(report.notes).toEqual({ 'duplicate-week': 1 })
+    expect(report.warnings.join(' ')).toMatch(/already in this file/)
+    expect([...new Set(obs.map((o) => o.week))]).toEqual(['2026-09-26'])
+    const long = parseLongCsv('x.csv', 'organism_code,geo_type,geo_code,week_start,detection_rate\nRSV,census_region,Midwest,2031-01-05,0.01\n', '2026-10-01', { maxDate: '2026-10-14' })
+    expect(long.obs).toEqual([])
+    expect(long.report.skipped).toEqual({ 'future-week': 1 })
+  })
+
+  it('maps plain "Adenovirus" exports to GI F40/41 only with a GI folder/file hint', () => {
+    const wide = 'Week,US,Midwest\n2026-09-13,0.028,0.031\n'
+    expect(parseWideCsv('Trend Adenovirus Detection Rates 2026-09-27.csv', wide, { panel: panelFromName('gi/Trend Adenovirus Detection Rates 2026-09-27.csv') }).report.organismCode).toBe('ADV_F4041')
+    const rp = parseWideCsv('Trend Adenovirus Detection Rates 2026-09-27.csv', wide)
+    expect(rp.report.organismCode).toBe('ADV')
+    expect(rp.report.warnings.join(' ')).toMatch(/read as the respiratory/)
   })
 })
 
@@ -206,6 +291,8 @@ describe('USMA TRENDS reports', () => {
     expect(w('24--USMA-TRENDS-Insights-Report-14DEC25-3JAN26.pdf')).toEqual(['2025-12-14', '2026-01-03'])
     expect(w('25-USMA-TRENDS-Insights-Report-4JAN26-17JAN26.pdf')).toEqual(['2026-01-04', '2026-01-17'])
     expect(w('36--USMA-TRENDS-Insights-Respiratory-Report-16AUG26-29AUG26.pdf')).toEqual(['2026-08-16', '2026-08-29'])
+    expect(w('30--USMA-TRENDS-Insights-Report-1JUNE26-14JUNE26.pdf')).toEqual(['2026-06-01', '2026-06-14'])
+    expect(w('34--USMA-TRENDS-Insights-Respiratory-Report-19JULY26-1AUG26.pdf')).toEqual(['2026-07-19', '2026-08-01'])
     expect(w('USMA-TRENDS-Report.pdf')).toBeNull()
     expect(reportNumber('.../2026/25-USMA-TRENDS-Insights-Report-4JAN26-17JAN26.pdf')).toBe(25)
     expect(reportNumber('/2025/06--USMA-TRENDS-Report-02FEB2025-15FEB2025.pdf')).toBe(6)
@@ -226,6 +313,9 @@ describe('USMA TRENDS reports', () => {
     expect(ok).toMatchObject({ def: { code: 'NORO' }, rate: 17, avg12wk: 12.2, strategy: 'sentence' })
     const ok2 = parseSentence('In the Midwest, influenza A detection rose to 3.2% over the past 2 weeks, above the 12-week average (1.1%).')
     expect(ok2).toMatchObject({ def: { code: 'FLUA' }, rate: 3.2, avg12wk: 1.1 })
+    expect(parseSentence('RSV detection in the Midwest was 1.0% in the past two weeks vs a 12-week average of 0.5%.')).toMatchObject({ rate: 1, avg12wk: 0.5 })
+    expect(parseSentence('The Midwest’s hMPV detection reached 2.2% over the past two weeks, compared with a 12-week average of 1.4%.')).toMatchObject({ def: { code: 'HMPV' }, rate: 2.2 })
+    expect(parseSentence('In the midwest, RSV was 1.0% in the past two weeks vs a 12-week average of 0.5%.')).toMatchObject({ rate: 1 })
     // Not relevant: no 12-week average phrase.
     expect(parseSentence('Midwest HRV/EV peaked at 25.4% then fell to 22.9%.')).toBeNull()
     expect(parseSentence('In the South, RSV was 1.0% in the past two weeks vs a 12-week average of 0.5%.')).toBeNull()
@@ -236,6 +326,59 @@ describe('USMA TRENDS reports', () => {
     expect(parseSentence('In the Midwest, RSV was 1.0% compared with 0.5% for the 12-week average.')).toEqual({ reason: 'no 2-week window cue' })
     expect(parseSentence('Midwest RSV had a 12-week average of 0.8%, below the national rate of 1.5% in the past two weeks.')).toEqual({ reason: 'also mentions national or other geographies' })
     expect(parseSentence('In the Midwest, RSV was 1.0% in the past two weeks vs a 12-week average of 0.5% (U.S. trend shown).')).toEqual({ reason: 'also mentions national or other geographies' })
+  })
+
+  it('never reads a relative or absolute change as a detection rate', () => {
+    const reason = (s: string) => {
+      const r = parseSentence(s)
+      return r && 'reason' in r ? r.reason : r
+    }
+    for (const s of [
+      'In the Midwest, norovirus detections in the past two weeks were 39% higher than the 12-week average of 12.2%.',
+      'In the Midwest, SARS-CoV-2 increased 45% over the past 2 weeks relative to the 12-week average of 1.1%.',
+      'Midwest hMPV detection fell 20% in the past two weeks, below its 12-week average of 2.4%.',
+      'In the Midwest, RSV rose by 1.2% in the past two weeks compared with a 12-week average of 0.5%.',
+      'In the Midwest, RSV detection was up 45% in the past two weeks vs a 12-week average of 0.5%.',
+      'In the Midwest, there was an increase of 20% in RSV over the past two weeks vs a 12-week average of 0.5%.',
+      'In the Midwest, RSV detections were 1.2% above the 12-week average of 0.5% in the past two weeks.',
+      'In the Midwest, RSV was 1.2 percentage points above 0.5% in the past two weeks (12-week average 0.5%).',
+    ]) {
+      expect(reason(s), s).toEqual(expect.stringMatching(/change|level/))
+    }
+  })
+
+  it('requires the Midwest to scope the numbers (no "overall", "all regions", "except", or trailing mentions)', () => {
+    for (const s of [
+      'Across all regions, RSV was 1.0% in the past two weeks vs a 12-week average of 0.5%, with the highest rates in the Midwest.',
+      'Overall, SARS-CoV-2 detection was 2.4% in the past two weeks compared to a 12-week average of 1.9%, led by the Midwest.',
+      'Except for the Midwest, hMPV was 1.2% in the past two weeks vs a 12-week average of 0.8%.',
+    ]) {
+      expect(parseSentence(s), s).toEqual({ reason: expect.stringMatching(/^scope wording/) })
+    }
+    expect(parseSentence('RSV was 1.0% in the past two weeks vs a 12-week average of 0.5% in the Midwest.')).toEqual({ reason: 'no Midwest anchor before the numbers' })
+  })
+
+  it('tells GI adenovirus from respiratory adenovirus by panel context, and rejects it when the panel is unknown', () => {
+    const s = 'In the Midwest, adenovirus was 3.1% in the past two weeks vs a 12-week average of 2.5%.'
+    expect(parseSentence(s)).toEqual({ reason: 'adenovirus without a known panel (respiratory vs GI F40/41)' })
+    expect(parseSentence(s, 'GI')).toMatchObject({ def: { code: 'ADV_F4041', pathogen: 'adenovirus-gi' } })
+    expect(parseSentence(s, 'RP')).toMatchObject({ def: { code: 'ADV', pathogen: 'adenovirus' } })
+    // A panel named in the sentence wins.
+    expect(parseSentence('In the Midwest, adenovirus was detected in 3.1% of GI panels in the past two weeks vs a 12-week average of 2.5%.')).toMatchObject({ def: { code: 'ADV_F4041' } })
+    // Section heading (file name gives no panel) and file name.
+    expect(parseUsmaReport({ text: [`Gastrointestinal Panel\n${s}`], rows: [] }).accepted.map((f) => f.def.code)).toEqual(['ADV_F4041'])
+    expect(parseUsmaReport({ text: [s], rows: [] }, panelFromName('35--USMA-TRENDS-Insights-GI-Report-2AUG26-15AUG26.pdf')).accepted.map((f) => f.def.code)).toEqual(['ADV_F4041'])
+    expect(panelFromName('36--USMA-TRENDS-Insights-Respiratory-Report-16AUG26-29AUG26.pdf')).toBe('RP')
+    expect(panelFromName('25-USMA-TRENDS-Insights-Report-4JAN26-17JAN26.pdf')).toBeUndefined()
+    expect(panelInText('detected in 3.1% of GI panels')).toBe('GI')
+    expect(findOrganismsInText('adenovirus').map((h) => h.ambiguous)).toEqual([true])
+  })
+
+  it('joins sentences wrapped across short lines but keeps real headings apart', () => {
+    expect(toSentences('In the Midwest, RSV was\n1.0% in the past two weeks vs a\n12-week average of 0.5%.')).toEqual([
+      'In the Midwest, RSV was 1.0% in the past two weeks vs a 12-week average of 0.5%.',
+    ])
+    expect(toSentences('Midwest\nRSV was 1.0% in the past two weeks.')).toEqual(['Midwest', 'RSV was 1.0% in the past two weeks.'])
   })
 
   it('parses Midwest table rows only under a Midwest heading with an explicit header', () => {
@@ -267,6 +410,19 @@ describe('USMA TRENDS reports', () => {
     expect(parseMidwestTables(rows('Midwest values are 3-week centered')).accepted.map((f) => f.def.code)).toEqual(['RSV', 'RVEV'])
   })
 
+  it('handles region headings in any capitalization and a header repeated without a region heading', () => {
+    const H = 'Organism | Past 2 Weeks | 12-Week Average'
+    const codes = (rows: string[]) => parseMidwestTables(rows).accepted.map((f) => [f.def.code, f.rate])
+    expect(codes(['Midwest', H, 'RSV | 1.0% | 0.5%', 'SOUTH', H, 'hMPV | 3.1% | 2.0%'])).toEqual([['RSV', 1]])
+    expect(codes(['MIDWEST', H, 'RSV | 1.0% | 0.5%'])).toEqual([['RSV', 1]])
+    expect(codes(['Midwest', H, 'RSV | 1.0% | 0.5%', H, 'Norovirus GI/GII | 17.0% | 12.2%'])).toEqual([['RSV', 1]])
+    // A header right after a region heading is the normal layout.
+    expect(codes(['South', H, 'RSV | 2.0% | 1.0%', 'Midwest', H, 'RSV | 1.0% | 0.5%'])).toEqual([['RSV', 1]])
+    // Plain adenovirus rows need a panel (section heading or file name).
+    expect(codes(['GI Panel', 'Midwest', H, 'Adenovirus | 3.1% | 2.5%'])).toEqual([['ADV_F4041', 3.1]])
+    expect(parseMidwestTables(['Midwest', H, 'Adenovirus | 3.1% | 2.5%']).rejected[0].reason).toMatch(/adenovirus without a known panel/)
+  })
+
   it('drops organisms with conflicting values inside one report', () => {
     const r = parseUsmaReport({
       text: ['In the Midwest, RSV was 1.0% in the past two weeks vs a 12-week average of 0.5%.\nIn the Midwest, RSV was 1.4% in the past two weeks vs a 12-week average of 0.5%.'],
@@ -291,8 +447,54 @@ describe('USMA TRENDS reports', () => {
     expect(series[0]).toMatchObject({
       id: 'biofire:biofire-usma:covid:detection_rate:census-region:Midwest',
       points: [['2026-08-29', 1.6]],
-      attrs: { report: report.name, window: '2026-08-16 to 2026-08-29', avg12wk: '0.9%', parsedBy: 'sentence' },
+      attrs: { report: report.name, window: '2026-08-16 to 2026-08-29', windowDays: '14', avg12wk: '0.9%', parsedBy: 'sentence', parser: USMA_PARSER_VERSION },
     })
+    expect(series[0].note).toMatch(/usually 2 weeks, some reports 3/)
+  })
+})
+
+describe('USMA fetch policy', () => {
+  it('fetches at most once a day (06–09 UTC slot) unless forced or switched off', () => {
+    expect(usmaMode('2026-10-07T06:17:00Z', undefined)).toBe('fetch')
+    expect(usmaMode('2026-10-07T09:17:00Z', undefined)).toBe('carry')
+    expect(usmaMode('2026-10-07T02:17:00Z', 'force')).toBe('fetch')
+    expect(usmaMode('2026-10-07T06:17:00Z', 'off')).toBe('off')
+  })
+
+  it('fits every request inside the run deadline', () => {
+    const now = 1_000_000
+    expect(fetchBudget(now + 300_000, 90_000, now)).toEqual({ timeoutMs: 90_000, retries: 1 })
+    expect(fetchBudget(now + 100_000, 90_000, now)).toEqual({ timeoutMs: 90_000, retries: 0 })
+    expect(fetchBudget(now + 40_000, 90_000, now)).toEqual({ timeoutMs: 35_000, retries: 0 })
+    expect(fetchBudget(now + 12_000, 90_000, now)).toBeNull()
+  })
+
+  it('only caches real PDFs', () => {
+    expect(isPdf(new TextEncoder().encode('%PDF-1.4\n...'))).toBe(true)
+    expect(isPdf(new TextEncoder().encode('<!DOCTYPE html><title>Just a moment...</title>'))).toBe(false)
+  })
+
+  it('keeps published points from the same parser version and lets new reports win the same week', async () => {
+    const mk = (points: Series['points'], parser = USMA_PARSER_VERSION): Series => ({
+      id: 'biofire:biofire-usma:covid:detection_rate:census-region:Midwest', source: 'biofire', dataset: 'biofire-usma', pathogen: 'covid',
+      metric: 'detection_rate', unit: '%', geo: { type: 'census-region', code: 'Midwest', name: 'Midwest (12 states incl. MN)' },
+      label: 'x', points, attrs: { parser },
+    })
+    const merged = mergeWithPrior([mk([['2026-08-29', 1.6]])], [mk([['2026-08-15', 1.2], ['2026-08-29', 9.9]])])
+    expect(merged[0].points).toEqual([['2026-08-15', 1.2], ['2026-08-29', 1.6]])
+
+    const root = await mkdtemp(path.join(tmpdir(), 'biofire-'))
+    try {
+      await mkdir(path.join(root, path.dirname(USMA_SERIES_FILE)), { recursive: true })
+      const file = { source: 'biofire', dataset: 'biofire-usma', generatedAt: 'x', series: [mk([['2020-01-04', 1], ['2026-08-15', 1.2]]), { ...mk([['2026-08-15', 5]], 'usma-v1'), id: 'old' }] }
+      await writeFile(path.join(root, USMA_SERIES_FILE), JSON.stringify(file))
+      const ctx = { now: '2026-10-07T02:00:00Z', log: { info() {}, warn() {}, error() {}, child() { return this } } as never, historyStart: '2021-07-01', cacheDir: 'c', rootDir: root }
+      const prior = await readPriorUsma(ctx)
+      // Older parser versions are dropped; points before historyStart are trimmed.
+      expect(prior.map((s) => [s.id.split(':')[2], s.points])).toEqual([['covid', [['2026-08-15', 1.2]]]])
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
   })
 })
 

@@ -62,6 +62,26 @@ function valueAt(s: Series, date: string): number | undefined {
   return p?.[1] ?? undefined
 }
 
+/** Display names for datasets (what system the number comes from). */
+const DATASET_NAMES: [RegExp, string][] = [
+  [/^nssp/, 'CDC NSSP (ER visits)'],
+  [/^nhsn/, 'CDC NHSN (hospital reports)'],
+  [/^nwss/, 'CDC NWSS wastewater'],
+  [/^wwscan/, 'WastewaterSCAN'],
+  [/^nrevss/, 'CDC NREVSS (lab network)'],
+  [/^respnet|^covidnet|^rsvnet|^flusurv/, 'CDC RESP-NET'],
+  [/^nndss/, 'CDC NNDSS (case reports)'],
+  [/^fluview|^ilinet/, 'CDC FluView'],
+  [/^cfa/, 'CDC CFA (Rt)'],
+  [/^mdh/, 'Minnesota Dept. of Health'],
+  [/^biofire/, 'BioFire Syndromic Trends'],
+]
+
+export function sourceNameOf(s: Pick<Series, 'dataset' | 'source'>): string {
+  for (const [re, name] of DATASET_NAMES) if (re.test(s.dataset)) return name
+  return s.source
+}
+
 export function summarize(s: Series, now: string): SignalSummary | null {
   const last = lastObs(s)
   if (!last) return null
@@ -90,6 +110,7 @@ export function summarize(s: Series, now: string): SignalSummary | null {
   return {
     seriesId: s.id,
     source: s.source,
+    sourceName: sourceNameOf(s),
     label: s.label,
     metric: s.metric,
     unit: s.unit,
@@ -113,9 +134,29 @@ function ordinal(n: number): string {
   return `${n}${suffix}`
 }
 
+/**
+ * Measurement system a dataset belongs to. Series from the same system that describe the same
+ * pathogen/metric/place are duplicates (e.g. NSSP ED % from the forecast hub and from data.cdc.gov);
+ * series from different systems are distinct measures (e.g. NHSN admissions per 100k vs RESP-NET rates).
+ */
+export function measureFamily(dataset: string): string {
+  if (/^nssp/.test(dataset)) return 'nssp'
+  if (/^nhsn/.test(dataset)) return 'nhsn'
+  return dataset
+}
+
 /** Series identity independent of source, used to de-duplicate and to match forecasts. */
-export const seriesKey = (x: { pathogen: string; metric: string; geo: { type: string; code: string }; age?: string }) =>
-  [x.pathogen, x.metric, x.geo.type, x.geo.code, x.age ?? ''].join('|')
+export const seriesKey = (x: {
+  pathogen: string
+  metric: string
+  geo: { type: string; code: string }
+  age?: string
+  dataset?: string
+}) => [x.pathogen, x.metric, x.geo.type, x.geo.code, x.age ?? '', measureFamily(x.dataset ?? '')].join('|')
+
+/** Forecasts carry no dataset; map their metric to the system the hubs forecast. */
+const forecastKey = (f: Forecast) =>
+  seriesKey({ ...f, dataset: f.metric === 'ed_visit_pct' ? 'nssp' : f.metric.startsWith('hosp') ? 'nhsn' : '' })
 
 /** When two sources publish the same measure for the same place, prefer the one listed first. */
 const SOURCE_PRIORITY = ['cdc-nssp', 'cdc-hubs', 'mdh', 'cdc-respnet', 'cdc-fluview', 'cdc-nwss', 'wastewaterscan']
@@ -133,8 +174,14 @@ function dedupe(series: Series[]): Series[] {
     else {
       const a = lastObs(prev)?.[0] ?? ''
       const b = lastObs(s)?.[0] ?? ''
-      // Fresher data wins; ties go to the higher-priority source.
-      if (b > a || (b === a && sourceRank(s.source) < sourceRank(prev.source))) best.set(k, s)
+      // Fresher data wins; on ties live data beats archived copies, then source priority decides.
+      const archived = (x: Series) => (/archive/.test(x.dataset) ? 1 : 0)
+      const better =
+        b > a ||
+        (b === a &&
+          (archived(s) < archived(prev) ||
+            (archived(s) === archived(prev) && sourceRank(s.source) < sourceRank(prev.source))))
+      if (better) best.set(k, s)
     }
   }
   return [...best.values()]
@@ -145,7 +192,12 @@ function priorityOf(sig: SignalSummary): number {
   return i === -1 ? PRIMARY_PRIORITY.length : i
 }
 
-function outlookFrom(forecast: Forecast | undefined, latest: number, series: Series | undefined): PathogenPulse['outlook'] {
+function outlookFrom(
+  forecast: Forecast | undefined,
+  latest: number,
+  series: Series | undefined,
+  pathogen: PathogenId,
+): PathogenPulse['outlook'] {
   if (!forecast) return undefined
   const ahead = forecast.points.filter((p) => p.horizon >= 1)
   const target = ahead.find((p) => p.horizon === 3) ?? ahead[ahead.length - 1]
@@ -171,7 +223,7 @@ function outlookFrom(forecast: Forecast | undefined, latest: number, series: Ser
   }
   return {
     direction,
-    text: `${words[direction]} over the next ${target.horizon} week${target.horizon === 1 ? '' : 's'} (${who}).`,
+    text: `${nameOf(pathogen)} ${METRIC_SUBJECT[forecast.metric] ?? 'activity'} ${words[direction]} over the next ${target.horizon} week${target.horizon === 1 ? '' : 's'} (${who}).`,
     forecastId: forecast.id,
   }
 }
@@ -184,6 +236,17 @@ const NAMES: Partial<Record<PathogenId, string>> = {
   ili: 'Influenza-like illness', measles: 'Measles',
 }
 const nameOf = (p: PathogenId) => NAMES[p] ?? p
+
+const METRIC_SUBJECT: Partial<Record<MetricKind, string>> = {
+  ed_visit_pct: 'ER visits',
+  hosp_admissions: 'hospital admissions',
+  hosp_rate: 'hospitalizations',
+  test_positivity: 'test positivity',
+  detection_rate: 'detections',
+  wastewater_level: 'wastewater levels',
+  wastewater_conc: 'wastewater levels',
+  ili_pct: 'flu-like illness visits',
+}
 
 function formatValue(sig: SignalSummary): string {
   if (sig.unit === '%') return `${sig.latestValue < 1 ? sig.latestValue.toFixed(2) : sig.latestValue.toFixed(1)}%`
@@ -211,7 +274,12 @@ function headlineFor(p: PathogenId, sig: SignalSummary | undefined, level: Activ
   if (!sig) return `${nameOf(p)}: no current data.`
   const lvl = LEVEL_LABEL[level].toLowerCase()
   const tr = trend === 'unknown' ? '' : ` and ${TREND_LABEL[trend].toLowerCase()}`
-  const where = sig.geo.type === 'census-region' ? ` (${sig.geo.name} region)` : ''
+  const where =
+    sig.geo.type === 'census-region'
+      ? ` (${sig.geo.name} region)`
+      : sig.geo.type === 'hhs-region' || sig.geo.type === 'national'
+        ? ` (${sig.geo.name})`
+        : ''
   return `${nameOf(p)} activity is ${lvl}${tr}: ${formatValue(sig)} ${METRIC_PHRASE[sig.metric]}${where}, week ending ${sig.latestDate}.`
 }
 
@@ -252,7 +320,7 @@ export function runAnalysis(
   const byKey = new Map(all.map((s) => [seriesKey(s), s]))
   const matched = sourceForecasts
     .map((f) => {
-      const s = byKey.get(seriesKey(f))
+      const s = byKey.get(forecastKey(f))
       return s ? { ...f, seriesId: s.id } : null
     })
     .filter((f): f is Forecast => !!f)
@@ -302,7 +370,7 @@ export function runAnalysis(
       signals: ranked,
       outlook:
         primary && !primary.stale
-          ? outlookFrom(fc, primary.latestValue, all.find((s) => s.id === primary.seriesId))
+          ? outlookFrom(fc, primary.latestValue, all.find((s) => s.id === primary.seriesId), pathogen)
           : undefined,
       asOf: primary?.latestDate,
     })

@@ -128,11 +128,10 @@ export interface TargetSpec {
   categoryNote?: string
 }
 
-const SEASONAL_CATEGORY_NOTE =
-  'WastewaterSCAN labels this target Low out of season even when nothing was detected (see attrs.detectedLatestWeek).'
+const SEASONAL_CATEGORY_NOTE = 'Its category reads Low out of season even when nothing is detected.'
 
 const H5_NOTE =
-  'The H5 assay detects the H5 influenza subtype (not only H5N1). Detections can come from animal sources such as milk or bird droppings, so they do not by themselves show human infection.'
+  'Detects any H5 influenza (not only H5N1); animal sources such as milk or bird droppings can cause detections, so they do not by themselves show human infection.'
 
 /** Keyed by targets.json `public` id, which merges assay versions. */
 export const PUBLIC_TARGETS: Record<string, TargetSpec> = {
@@ -148,8 +147,8 @@ export const PUBLIC_TARGETS: Record<string, TargetSpec> = {
     pathogen: 'rhino-entero',
     name: 'EV-D68',
     variant: 'ev-d68',
-    note: 'Enterovirus D68 only. It does not measure rhinovirus or other enteroviruses.',
-    categoryNote: 'WastewaterSCAN’s category for EV-D68 has two levels only (Low or Very high).',
+    note: 'EV-D68 only, not rhinovirus or other enteroviruses.',
+    categoryNote: 'Its category has two levels only (Low, Very high).',
   },
   HPIV: { pathogen: 'parainfluenza', name: 'Parainfluenza (HPIV)' },
   HAV: { pathogen: 'hepatitis-a', name: 'Hepatitis A', rare: true },
@@ -157,14 +156,14 @@ export const PUBLIC_TARGETS: Record<string, TargetSpec> = {
     pathogen: 'measles',
     name: 'Measles (wild-type assay)',
     rare: true,
-    note: 'The measles assay targets wild-type virus. A detection can come from a single infected person or a visitor.',
+    note: 'Wild-type measles assay; one infected person or visitor can cause a detection.',
   },
   MPXV_G2R: {
     pathogen: 'mpox',
     name: 'Mpox clade II (MPXV G2R)',
     variant: 'clade-ii',
     rare: true,
-    note: 'Since Dec 2022 WastewaterSCAN has used the clade II-specific G2R_WA assay. Earlier samples used the generic G2R_G assay.',
+    note: 'Clade II-specific G2R_WA assay since Dec 2022 (generic G2R_G before).',
   },
   'MPXV_dD14-16': { pathogen: 'mpox', name: 'Mpox clade Ib (MPXV dD14-16)', variant: 'clade-ib', rare: true },
   InfA_H5: { pathogen: 'h5n1', name: 'Influenza A H5', rare: true, note: H5_NOTE },
@@ -592,7 +591,7 @@ export interface BuildOptions {
 }
 
 const CONC_NOTE =
-  'WastewaterSCAN: gene copies per gram of dry solids ÷ PMMoV (a marker of human fecal content) × 1,000,000; weekly mean of that week’s samples (usually 3). Compare within one plant and target only, not with CDC NWSS or other targets. The official level is WastewaterSCAN’s category for the latest sample (available since Jan 2026), judged against this plant’s own history.'
+  'Gene copies per gram of dry solids ÷ PMMoV (fecal-strength marker) × 1,000,000; weekly mean of samples (usually 3). Compare within one plant and target only. Official level: WastewaterSCAN’s category for the latest sample (since Jan 2026).'
 
 /**
  * Keys to try in the categories file for one target: the assay id, then the targets.json public id,
@@ -644,7 +643,7 @@ export function buildPlantSeries(input: PlantInput, opts: BuildOptions): PlantBu
     const lastWeek = points[points.length - 1][0]
     const switchNote =
       Object.keys(d.assays).length > 1
-        ? ` Assay versions merged by WastewaterSCAN under "${pub}": ${Object.entries(d.assays)
+        ? ` Assays merged by WastewaterSCAN: ${Object.entries(d.assays)
             .sort(([, x], [, y]) => (x.first < y.first ? -1 : 1))
             .map(([a, r]) => `${a} ${r.first}–${r.last}`)
             .join('; ')}.`

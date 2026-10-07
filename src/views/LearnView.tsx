@@ -99,7 +99,9 @@ function LiveData({ id, data }: { id: string; data: DashboardData }) {
 
     case 'ed-visits': {
       const countyIds = new Set(pulse.mapLayers.filter((l) => l.kind === 'county' && l.metric === 'ed_visit_pct').map((l) => l.id))
-      const counties = pulse.counties.filter((c) => Object.keys(c.metrics).some((k) => countyIds.has(k))).length
+      const fromPulse = pulse.counties.filter((c) => Object.keys(c.metrics).some((k) => countyIds.has(k))).length
+      const fromSeries = new Set(series.filter((s) => s.metric === 'ed_visit_pct' && s.geo.type === 'county').map((s) => s.geo.code)).size
+      const counties = Math.max(fromPulse, fromSeries)
       return (
         <>
           <LatestTable

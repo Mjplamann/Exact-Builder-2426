@@ -36,9 +36,17 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Cache immutable downloads
+        uses: actions/cache@v4
+        with:
+          path: pipeline/.cache
+          key: pipeline-cache-${{ github.run_id }}
+          restore-keys: pipeline-cache-
       - name: Run pipeline
         env:
           SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
+          DELPHI_API_KEY: ${{ secrets.DELPHI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "${{ github.event.inputs.only }}" ]; then
             npx tsx pipeline/run.ts --only=${{ github.event.inputs.only }}

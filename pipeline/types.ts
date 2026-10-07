@@ -21,6 +21,11 @@ export interface SourceResult {
   message?: string
   /** Machine-readable diagnostics written to public/data/diagnostics/<source>.json (schemas, row counts). */
   diagnostics?: Record<string, unknown>
+  /**
+   * Publication date of the newest data, when it differs from the newest non-null observation
+   * (e.g. NNDSS tables whose current-week cells are often blank). Used for freshness checks.
+   */
+  latestData?: string
 }
 
 export type SourceMeta = Pick<

@@ -9,6 +9,7 @@ import { EmptyState } from '../components/ui'
 import { ExternalLink } from '../components/learn/ExternalLink'
 import { jumpToSection } from '../components/learn/LearnToc'
 import { SourceCard } from '../components/sources/SourceCard'
+import { STATE_LABEL, StatusIcon } from '../components/sources/StatusChip'
 import { SourceSummary } from '../components/sources/SourceSummary'
 import { PipelineSteps } from '../components/sources/PipelineSteps'
 import { DataFiles } from '../components/sources/DataFiles'
@@ -58,6 +59,25 @@ export default function SourcesView() {
         title="Data sources"
         intro="Each source shows what it measures, the area it covers, how often it updates, and when MN Pulse last fetched it."
       >
+        {sources.length > 3 && (
+          <nav aria-label="Jump to a source" className="mb-4">
+            <ul className="flex flex-wrap gap-2">
+              {sources.map((s) => (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    onClick={() => jumpToSection(`src-${s.id}`)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-surface-1 px-3 py-1 text-left text-sm text-ink-2 hover:bg-surface-2 hover:text-ink-1"
+                  >
+                    <StatusIcon state={s.state} size={14} />
+                    <span>{s.name}</span>
+                    <span className="sr-only">({STATE_LABEL[s.state]})</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
         {sources.length ? (
           <div className="space-y-4">
             {sources.map((s) => (

@@ -151,6 +151,13 @@ function valueStats(values: (number | null)[]): FileReport['stats'] {
   return { n: v.length, min: r(v[0]), median: r(mid), max: r(v[v.length - 1]) }
 }
 
+/** Log-only plausibility note (outputs are unchanged): helps spot a percent-scale file whose values all sit below 1. */
+function statsNote(rep: FileReport) {
+  if (rep.stats && rep.stats.max > 50) {
+    rep.warnings.push(`kept values reach ${rep.stats.max}% — unusually high for a detection rate; check that the file uses proportions (0–1)`)
+  }
+}
+
 function scaleNote(rep: FileReport) {
   if (rep.scale === 'percent-sign') {
     rep.warnings.push('values carry a % sign; read as percentages (e.g. "0.50%" = 0.5%), not as proportions')
@@ -255,6 +262,7 @@ export function parseWideCsv(fileName: string, text: string, opts: ParseOptions 
     }
   }
   rep.stats = valueStats(obs.map((o) => o.value))
+  statsNote(rep)
   if (rep.skipped['bad-week']) rep.warnings.push(`${rep.skipped['bad-week']} row(s) with an unparseable or invalid Week skipped (YYYY-MM-DD or M/D/YYYY)`)
   if (rep.skipped['future-week']) rep.warnings.push(`${rep.skipped['future-week']} row(s) dated after ${opts.maxDate} skipped`)
   if (rep.notes['duplicate-week']) {
@@ -389,6 +397,7 @@ export function parseLongCsv(
     trackWeeks(rep, week)
   }
   rep.stats = valueStats(obs.map((o) => o.value))
+  statsNote(rep)
   if (unmapped.size) rep.warnings.push(`unrecognized organism(s) skipped: ${[...unmapped].slice(0, 10).join(', ')}`)
   if (rep.skipped.negative) rep.warnings.push(`${rep.skipped.negative} row(s) with a negative detection_rate skipped`)
   if (rep.skipped['bad-week']) rep.warnings.push(`${rep.skipped['bad-week']} row(s) with a missing or invalid week date skipped (YYYY-MM-DD or M/D/YYYY)`)

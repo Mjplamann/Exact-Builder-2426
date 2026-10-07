@@ -450,14 +450,16 @@ export async function loadUsma(ctx: SourceContext, deadline: number): Promise<Pa
   if (built.conflicts.length) diag.conflicts = built.conflicts.slice(0, 20)
   const series = mergeWithPrior(built.series, prior)
   const latest = latestDate(series)
+  const pts = (list: Series[]) => list.reduce((n, x) => n + x.points.length, 0)
   diag.series = series.length
-  diag.carriedForward = series.length - built.series.length
+  diag.priorOnlySeries = series.length - built.series.length
+  diag.priorPointsKept = pts(series) - pts(built.series)
   diag.latestWeek = latest ?? null
   const read = pdfDiag.filter((d) => d.pages != null).length
   ctx.log.info(`USMA: ${links.length} PDF link(s), ${read}/${recent.length} read, ${items.length} Midwest value(s) accepted`)
   const summary =
     `bioMérieux reports: ${read}/${recent.length} PDF(s) read, ${items.length} Midwest value(s) parsed → ${series.length} series` +
-    `${latest ? ` through ${latest}` : ''}${prior.length ? ` (with ${prior.length} published series carried forward)` : ''}`
+    `${latest ? ` through ${latest}` : ''}${prior.length ? ` (merged with ${prior.length} published series)` : ''}`
   return { series, diag, summary, errors }
 }
 
@@ -476,10 +478,11 @@ export const biofire: SourceModule = {
       'Minnesota is part of the 12-state Midwest region. It does NOT measure how many people are infected ' +
       '(it is not prevalence), is not specific to Minnesota, and one germ’s share can fall simply because ' +
       'another is surging. Loaded from BioFire Trend CSV exports placed in data/manual/biofire/ and from ' +
-      'bioMérieux’s “USMA TRENDS Insights” PDF reports (Midwest 2-week rates vs. 12-week averages); ' +
+      'bioMérieux’s “USMA TRENDS Insights” PDF reports (Midwest rates over each report’s 2–3-week window vs. ' +
+      '12-week averages, read only where the wording is unambiguous); ' +
       'syndromictrends.com itself is not scraped.',
     geography: 'U.S. Census Midwest region (12 states incl. Minnesota); United States',
-    cadence: 'Weekly when CSV exports are added; bioMérieux reports every 2–4 weeks',
+    cadence: 'Weekly when CSV exports are added; bioMérieux reports every 2–4 weeks (checked once a day)',
     attribution: 'BIOFIRE® Syndromic Trends / bioMérieux (syndromictrends.com)',
   },
   timeoutMs: MODULE_TIMEOUT_MS,
@@ -506,7 +509,10 @@ export const biofire: SourceModule = {
       const timedOut = new Promise<null>((resolve) => {
         timer = setTimeout(() => resolve(null), Math.max(0, deadline - Date.now()))
       })
-      const r = await Promise.race([loadUsma(ctx, deadline), timedOut])
+      // A late rejection after the deadline must not surface as an unhandled rejection.
+      const usmaRun = loadUsma(ctx, deadline)
+      usmaRun.catch(() => undefined)
+      const r = await Promise.race([usmaRun, timedOut])
       if (r) {
         usma = r.series
         diagnostics.usma = r.diag

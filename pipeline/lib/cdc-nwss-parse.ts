@@ -349,17 +349,35 @@ export interface WvalBuildOptions {
 }
 
 const SITE_NOTE =
-  'CDC Wastewater Viral Activity Level (WVAL) compares this site’s current viral level with its own baseline. ' +
-  'Categories are comparable across sites; raw WVAL numbers are not. Data reported to CDC NWSS by MDH and/or WastewaterSCAN.'
+  'CDC Wastewater Viral Activity Level (WVAL): this site’s viral level relative to its own baseline, so WVAL values and categories can be compared across sites (raw viral concentrations cannot). ' +
+  'Reported to CDC NWSS by MDH and/or WastewaterSCAN.'
 
+/** Sites whose last 52 weeks are mostly exactly 1. */
 const FLOOR_NOTE =
-  ' Caution: this site reports a WVAL of exactly 1 in most recent weeks for this virus (a floor value seen at many MDH-tested sites for influenza A and RSV), with occasional isolated spikes.'
+  ' Most recent weeks are exactly 1, as are most influenza A and RSV site-weeks nationally (fewer for COVID-19): most likely at or below the site’s baseline. A jump from 1 is how the index behaves, not necessarily an error.'
+
+/** Sites with rows dated before their WVAL inclusion date. */
+const PRE_NOTE = ' The first weeks, before CDC included the site in WVAL, are a baseline start-up period and can be extreme.'
+
+/** Weeks a site's data must be older than the newest week for its pathogen to count as not reporting. */
+export const INACTIVE_DAYS = 28
 
 /** Share of exact-1 values among the last `n` points. */
 export function floorShare(points: Point[], n = 52): number {
   const recent = points.slice(-n).filter(([, v]) => v != null)
   if (!recent.length) return 0
   return recent.filter(([, v]) => v === 1).length / recent.length
+}
+
+/**
+ * True for a row dated before the site's date_included_in_wval. In atcp-73re every site has exactly
+ * 6 (COVID-19) or 10 (influenza A, RSV) such weeks — CDC's minimum data requirement before a site is
+ * included in WVAL — and their values can be extreme (e.g. RSV 77,542.94 at ID:1008).
+ */
+export const isPreInclusion = (r: Pick<WvalRow, 'week' | 'since'>) => !!r.since && r.week < r.since
+
+function daysBetween(a: string, b: string): number {
+  return Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86_400_000)
 }
 
 /** Build per-site series and the derived statewide median series. */
@@ -396,17 +414,21 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
     geoOf.set(site, geo)
   }
 
-  // Group rows by site × pathogen.
+  // Group rows by site × pathogen; newest week per pathogen (to spot sites that stopped reporting).
   const groups = new Map<string, WvalRow[]>()
+  const newestWeek: Partial<Record<WvalPathogen, string>> = {}
   for (const r of rows) {
     if (r.week < opts.historyStart) continue
     const k = `${r.site}|${r.pathogen}`
     const arr = groups.get(k) ?? []
     arr.push(r)
     groups.set(k, arr)
+    if (r.week > (newestWeek[r.pathogen] ?? '')) newestWeek[r.pathogen] = r.week
   }
 
   const sites: Series[] = []
+  const inactive: string[] = []
+  const notYetIncluded: string[] = []
   for (const [k, list] of [...groups].sort(([a], [b]) => (a < b ? -1 : 1))) {
     const [site, pathogen] = k.split('|') as [string, WvalPathogen]
     const byWeek = new Map<string, WvalRow>()
@@ -415,7 +437,11 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
     const points: Point[] = sorted.map((r) => [r.week, round2(r.value)])
     const last = sorted[sorted.length - 1]
     const geo = geoOf.get(site)!
-    const floor = pathogen !== 'covid' && /^state_territory$/i.test(last.source) ? floorShare(points) : 0
+    const floor = floorShare(points)
+    const preWeeks = sorted.filter(isPreInclusion).length
+    // Every value so far predates CDC's inclusion of the site in WVAL: publish the values but no level.
+    const latestPre = isPreInclusion(last)
+    const lagDays = daysBetween(last.week, newestWeek[pathogen] ?? last.week)
     const s = makeSeries({
       source: SOURCE_ID,
       dataset: 'nwss-wval',
@@ -424,27 +450,48 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
       geo,
       label: `${PATHOGEN_NAME[pathogen]} — wastewater viral activity level, ${KNOWN_SITES[site]?.name ?? geo.name}`,
       points,
-      note: SITE_NOTE + (floor >= 0.5 ? FLOOR_NOTE : ''),
+      note:
+        SITE_NOTE +
+        (floor >= 0.5 ? FLOOR_NOTE : '') +
+        (latestPre
+          ? ` All values so far are from before CDC included this site in WVAL (${last.since}), so no activity level is assigned yet.`
+          : preWeeks
+            ? PRE_NOTE
+            : ''),
     })
-    if (last.level) {
+    if (last.level && !latestPre) {
       s.official = { level: last.level, label: last.category, asOf: last.week, by: 'CDC NWSS WVAL' }
     }
-    if (opts.thresholdsFor?.has(pathogen) ?? true) s.thresholds = wvalThresholds(pathogen)
+    if ((opts.thresholdsFor?.has(pathogen) ?? true) && !latestPre) s.thresholds = wvalThresholds(pathogen)
     const attrs: Record<string, string> = { site, reportedBy: reporterLabel(last.source) }
     if (locationBasis[site]) attrs.location = locationBasis[site]
     if (last.since) attrs.inWvalSince = last.since
-    if (floor >= 0.5) attrs.dataQuality = `${Math.round(floor * 100)}% of the last year's weeks are exactly 1`
+    if (preWeeks) attrs.preInclusionWeeks = String(preWeeks)
+    if (floor >= 0.5) attrs.weeksAtOne = `${Math.round(floor * 100)}% of the last ${Math.min(52, points.length)} weeks`
+    if (latestPre) {
+      if (last.category) attrs.cdcCategory = `${last.category} (before WVAL inclusion)`
+      attrs.status = `Not yet included in CDC WVAL (from ${last.since})`
+      notYetIncluded.push(`${site} ${pathogen}`)
+    } else if (lagDays > INACTIVE_DAYS) {
+      attrs.status = `Not reporting since week ending ${last.week}`
+      inactive.push(`${site} ${pathogen} (${last.week})`)
+    }
     s.attrs = attrs
     sites.push(s)
   }
 
-  // Derived statewide median per pathogen.
+  // Derived statewide median per pathogen, over sites past their WVAL start-up period.
   const state: Series[] = []
   const stateDiag: Record<string, unknown> = {}
   for (const pathogen of Object.keys(PATHOGEN_NAME) as WvalPathogen[]) {
     const byWeek = new Map<string, number[]>()
+    let excludedPre = 0
     for (const r of rows) {
       if (r.pathogen !== pathogen || r.week < opts.historyStart) continue
+      if (isPreInclusion(r)) {
+        excludedPre++
+        continue
+      }
       const arr = byWeek.get(r.week) ?? []
       arr.push(r.value)
       byWeek.set(r.week, arr)
@@ -462,7 +509,9 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
     }
     if (!points.length) continue
     const latest = points[points.length - 1][0]
-    const n = byWeek.get(latest)!.length
+    const latestVals = byWeek.get(latest)!
+    const n = latestVals.length
+    const atOne = latestVals.filter((v) => v === 1).length
     const first = points[0][0]
     const nFirst = byWeek.get(first)!.length
     const s = makeSeries({
@@ -474,18 +523,17 @@ export function buildWvalSeries(rows: WvalRow[], opts: WvalBuildOptions) {
       label: `${PATHOGEN_NAME[pathogen]} — wastewater viral activity level, Minnesota (median of ${n} reporting sites, derived)`,
       points,
       note:
-        `Derived by MN Pulse from CDC NWSS site data: each week's median Wastewater Viral Activity Level across the Minnesota sites reporting ${PATHOGEN_NAME[pathogen]} that week ` +
-        `(CDC also uses the median of site levels for state levels, but CDC's own state value may differ slightly). Weeks with fewer than ${MIN_STATE_SITES} reporting sites are omitted; ${nFirst} sites reported in the first week shown (${first}) and ${n} in the latest, so the mix of sites behind the median changes over time.` +
-        (pathogen === 'covid'
-          ? ''
-          : ' Many MDH-tested sites report exactly 1 for influenza A and RSV for long stretches, which can hold the median near 1 outside peaks.'),
+        `Derived by MN Pulse from CDC NWSS site data: each week's median Wastewater Viral Activity Level across the Minnesota sites reporting ${PATHOGEN_NAME[pathogen]} that week, ` +
+        `leaving out sites still in their baseline start-up period (before CDC's WVAL inclusion date). This is similar to CDC's described approach for state levels (median of site WVALs), but CDC's own state value may differ. ` +
+        `Weeks with fewer than ${MIN_STATE_SITES} reporting sites are omitted; ${nFirst} sites reported in the first week shown (${first}) and ${n} in the latest, so the mix of sites behind the median changes over time. ` +
+        `A WVAL of exactly 1 is common (most likely at or below a site's baseline), so the median is 1 whenever most sites report 1 (${atOne} of ${n} in the latest week).`,
     })
     if (opts.thresholdsFor?.has(pathogen) ?? true) s.thresholds = wvalThresholds(pathogen)
-    s.attrs = { sites: String(n), method: 'median of site WVALs' }
+    s.attrs = { sites: String(n), sitesAtOne: `${atOne}/${n}`, method: 'median of site WVALs (sites past WVAL start-up)' }
     state.push(s)
-    stateDiag[pathogen] = { weeks: points.length, weeksSkippedFewSites: skipped, latest, latestSites: n }
+    stateDiag[pathogen] = { weeks: points.length, weeksSkippedFewSites: skipped, preInclusionRowsExcluded: excludedPre, latest, latestSites: n, latestSitesAtOne: atOne }
   }
-  return { sites, state, unmatchedCounties: [...unmatchedCounties], stateDiag, locationBasis }
+  return { sites, state, unmatchedCounties: [...unmatchedCounties], stateDiag, locationBasis, inactive, notYetIncluded }
 }
 
 function reporterLabel(source: string): string {
@@ -623,8 +671,10 @@ export const DETECTION_SPECS: DetectionSpec[] = [
     datasetId: 'xpxn-rzgz',
     pathogen: 'mpox',
     name: 'Mpox',
-    // 'hmpxv' (all clades), 'hmpxv clade i', 'hmpxv clade ii'. 'nvo' (non-variola orthopoxvirus) is not mpox-specific.
-    targetOk: (t) => t.startsWith('hmpxv') || t.includes('mpox'),
+    // Documented: 'hmpxv' (all clades), 'hmpxv clade i', 'hmpxv clade ii' (not seen in data here); also accept
+    // 'mpxv …' spellings (WastewaterSCAN names its assays 'MPXV Clade Ib' / 'MPXV G2R'). 'nvo' (non-variola
+    // orthopoxvirus) is not mpox-specific and is excluded.
+    targetOk: (t) => t !== 'nvo' && /(^|[^a-z])h?mpxv|mpox/.test(t),
     note: `${COMMON_DETECT_NOTE} Counts detections of any mpox virus clade (pcr_target hmpxv, clade I or clade II); the broader non-variola orthopoxvirus target is excluded.`,
   },
 ]

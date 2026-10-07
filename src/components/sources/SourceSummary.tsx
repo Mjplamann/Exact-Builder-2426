@@ -54,7 +54,7 @@ export function SourceSummary({ manifest, onJump }: { manifest: Manifest; onJump
                   <StatusIcon state={s.state} size={14} />
                 </span>
                 <span>
-                  <button type="button" onClick={() => onJump(`src-${s.id}`)} className="font-medium text-accent underline underline-offset-2">
+                  <button type="button" onClick={() => onJump(`src-${s.id}`)} className="text-left font-medium text-accent underline underline-offset-2">
                     {s.name}
                   </button>{' '}
                   ({STATE_LABEL[s.state].toLowerCase()}){s.message ? `: ${s.message}` : ''}

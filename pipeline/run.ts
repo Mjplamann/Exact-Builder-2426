@@ -107,7 +107,8 @@ async function runSource(
     }
     if (result.diagnostics) await writeJson(path.join(DIAG_DIR, `${mod.meta.id}.json`), result.diagnostics)
     const all = nonEmpty.flatMap((d) => d.series)
-    const newest = latestDate(all)
+    const observed = latestDate(all)
+    const newest = result.latestData && (!observed || result.latestData > observed) ? result.latestData : observed
     const stale = !!newest && newest < addDays(now.slice(0, 10), -STALE_DAYS)
     slog.info(
       `ok: ${nonEmpty.length} dataset(s), ${all.length} series, latest ${newest ?? 'n/a'} (${((Date.now() - started) / 1000).toFixed(1)}s)`,

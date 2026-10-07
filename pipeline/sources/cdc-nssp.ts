@@ -3,33 +3,36 @@
 // Datasets (data.cdc.gov, Socrata):
 //   * rdmq-nq56  weekly % of ED visits for COVID-19, influenza and RSV by state and county, with CDC's
 //                trend category (Increasing / Decreasing / No Change / Sparse / Limited Data / Data
-//                Unavailable). County rows repeat their Health Service Area (HSA) estimate.
-//                Live SODA API first, PopHIVE GitHub mirror second (pipeline/lib/cdcData.ts).
+//                Unavailable). County rows repeat their Health Service Area (HSA) estimate. Weeks CDC marks
+//                "Data Unavailable" carry a blank or a placeholder 0 (2022-10 → 2023-10); both become null.
+//                Live SODA API first, PopHIVE GitHub mirror second (pipeline/lib/cdc-nssp-fetch.ts).
 //   * vjzj-u7u8  daily % of ED visits by state for ARI (acute respiratory illness), COVID, Influenza,
 //                RSV. We keep ARI only and average complete Sunday–Saturday weeks. Not mirrored.
 //   * f3zz-zga5  CDC's official current ARI activity level by state (snapshot of the latest week only).
 // Archive (raw.githubusercontent.com, pinned to a commit so it can never change under us):
 //   * CDCgov/covid19-forecast-hub auxiliary-data/nssp-raw-data/latest.parquet — the NSSP file CDC shared
 //     with forecasters, which also carried county/HSA ARI % and CDC's per-HSA activity classifications
-//     (2022-10-01 → 2026-09-26). CDC removed it from the hub on 2026-10-12. It provides archived ARI
-//     history and is the last-resort fallback for rdmq-nq56 when both data.cdc.gov and the mirror fail.
+//     (2022-10-01 → 2026-09-26). It is scheduled for removal from the hub on 2026-10-12. It provides
+//     archived ARI history and is the last-resort fallback for rdmq-nq56 when data.cdc.gov and the
+//     mirror both fail.
+// Time budget: every sub-source has a per-request budget and a hard deadline (LIMITS) well inside
+// timeoutMs, so a hanging host costs that sub-source only and the rest of the run is still published.
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { parquetMetadata, parquetReadObjects, parquetSchema } from 'hyparquet'
 import type { ActivityLevel, PathogenId, Point, Series, TrendDirection } from '../../shared/types.ts'
 import { MN_COUNTY_BY_FIPS, countyByName } from '../../shared/geo/mnCounties.ts'
-import { loadCdcRows } from '../lib/cdcData.ts'
+import { loadRowsBounded, sodaRows, withDeadline, type Budget } from '../lib/cdc-nssp-fetch.ts'
 import { num } from '../lib/csv.ts'
 import { fetchBuffer } from '../lib/http.ts'
 import type { Logger } from '../lib/log.ts'
 import { loadPrismThresholds, type PrismTable } from '../lib/prism.ts'
 import { latestDate, makeSeries, roundValue, STATE_GEO, toIsoDate, toWeekEnding } from '../lib/series.ts'
-import { socrataQuery } from '../lib/socrata.ts'
 import type { SourceContext, SourceModule, SourceResult } from '../types.ts'
 
 const SOURCE = 'cdc-nssp'
 export const DATASETS = {
-  /** rdmq-nq56: COVID-19 / flu / RSV, state + 87 counties. */
+  /** rdmq-nq56: COVID-19 / flu / RSV, state + counties (76 of 87 have data). */
   ed: 'nssp-ed',
   /** vjzj-u7u8 (weekly mean of daily) + f3zz-zga5 official level: statewide ARI. */
   ariState: 'nssp-ari-state',
@@ -67,6 +70,29 @@ export const RDMQ_REQUIRED = [
 export const DAILY_REQUIRED = ['date', 'geography', 'pathogen', 'percent_visits']
 export const LEVEL_REQUIRED = ['week_end', 'geography', 'label']
 
+/** Per-request budgets and per-sub-source deadlines (mutable only so tests can shorten them). */
+export const LIMITS: {
+  live: Budget
+  mirror: Budget
+  bestEffort: Budget
+  archive: Budget
+  rdmqDeadlineMs: number
+  bestEffortDeadlineMs: number
+  archiveDeadlineMs: number
+  prismDeadlineMs: number
+} = {
+  // rdmq-nq56 worst case: hanging live API 2 × 90 s, then the mirror 2 × 150 s ≈ 8 min.
+  live: { timeoutMs: 90_000, retries: 1 },
+  mirror: { timeoutMs: 150_000, retries: 1 },
+  // vjzj-u7u8 / f3zz-zga5 (data.cdc.gov only, no mirror): 2 × 60 s.
+  bestEffort: { timeoutMs: 60_000, retries: 1 },
+  archive: { timeoutMs: 180_000, retries: 1 },
+  rdmqDeadlineMs: 9 * 60_000,
+  bestEffortDeadlineMs: 3 * 60_000,
+  archiveDeadlineMs: 7 * 60_000,
+  prismDeadlineMs: 3 * 60_000,
+}
+
 const ARCHIVE_SHA = '43581db5e1778d69ac136a7c7f2386223b8a9b07'
 export const ARCHIVE_URL = `https://raw.githubusercontent.com/CDCgov/covid19-forecast-hub/${ARCHIVE_SHA}/auxiliary-data/nssp-raw-data/latest.parquet`
 export const ARCHIVE_COLUMNS = [
@@ -86,6 +112,7 @@ export function mapTrend(label: string | undefined): TrendDirection | undefined 
 }
 
 const LEVEL: Record<string, ActivityLevel> = {
+  minimal: 'minimal', // CDC wording before the 2025–26 season
   'very low': 'minimal',
   low: 'low',
   moderate: 'moderate',
@@ -115,16 +142,22 @@ export interface NsspRow {
   trends: Partial<Record<NsspKey, string>>
   /** CDC activity classification per pathogen (only in the hub archive). */
   levels: Partial<Record<NsspKey, string>>
+  /** Placeholder values dropped because CDC flagged the pathogen "Data Unavailable" that week. */
+  unavailable: Partial<Record<NsspKey, number>>
   hsa: string
   hsaCounties: string
   hsaId: string
 }
 
 const clean = (v: string | undefined) => (v ?? '').trim()
+const isUnavailable = (label: string | undefined) => label?.toLowerCase() === 'data unavailable'
 
 /**
  * Normalize one rdmq-nq56 / archive row (keyed by SODA field names, values as strings).
  * Returns null for non-Minnesota rows, unparseable dates or unknown counties.
+ * A value is null when blank or when CDC labels that pathogen "Data Unavailable" (trend or
+ * classification): those rows carry a placeholder 0, e.g. Ramsey HSA 286 every week 2022-10-01 →
+ * 2023-06-17, never a real measurement. Other zeros (with a trend such as "No Change") are kept.
  */
 export function normalizeRow(raw: Record<string, string>, keys: NsspKey[]): NsspRow | null {
   if (clean(raw.geography) !== 'Minnesota') return null
@@ -145,17 +178,21 @@ export function normalizeRow(raw: Record<string, string>, keys: NsspKey[]): Nssp
     values: {},
     trends: {},
     levels: {},
+    unavailable: {},
     hsa: clean(raw.hsa),
     hsaCounties: clean(raw.hsa_counties),
     hsaId: clean(raw.hsa_nci_id),
   }
   for (const k of keys) {
     const v = num(raw[`percent_visits_${k}`])
-    row.values[k] = v == null ? null : roundValue(v, 'ed_visit_pct')
     const t = clean(raw[`ed_trends_${k}`])
     if (t) row.trends[k] = t
     const l = clean(raw[`${k}_threshold_classification`])
     if (l) row.levels[k] = l
+    if (v != null && (isUnavailable(t) || isUnavailable(l))) {
+      row.unavailable[k] = v
+      row.values[k] = null
+    } else row.values[k] = v == null ? null : roundValue(v, 'ed_visit_pct')
   }
   return row
 }
@@ -184,6 +221,8 @@ export interface BuildOptions {
   retrieved: string
   /** Archived snapshot: labels and notes say so. Value is the snapshot's last week. */
   archivedThrough?: string
+  /** Points on/after this week are preliminary (set on series that reach it). */
+  provisionalFrom?: string
 }
 
 const stripPopulation = <T extends { population?: number }>(t: T): Omit<T, 'population'> => {
@@ -194,7 +233,7 @@ const stripPopulation = <T extends { population?: number }>(t: T): Omit<T, 'popu
 function noteFor(key: NsspKey, isState: boolean, opts: BuildOptions): string {
   const base = isState
     ? `Weekly share of all emergency department visits in Minnesota with a diagnosis of ${DIAGNOSIS[key]}, from hospitals reporting to CDC's National Syndromic Surveillance Program. Recent weeks can be revised as more data arrive.`
-    : `Weekly share of emergency department visits for ${key === 'ari' ? 'acute respiratory illness' : DIAGNOSIS[key]}, reported by CDC for the county's Health Service Area (HSA): every county in the HSA shows the same value, so it is not a county-only measurement. Blank weeks are "Data Unavailable".`
+    : `Weekly share of emergency department visits for ${key === 'ari' ? 'acute respiratory illness' : DIAGNOSIS[key]}, reported by CDC for the county's Health Service Area (HSA): every county in the HSA shows the same value, so it is not a county-only measurement. Weeks CDC marks "Data Unavailable" are left blank. Recent weeks can be revised.`
   if (!opts.archivedThrough) return base
   return `${base} Archived: from the NSSP file CDC published with the COVID-19 Forecast Hub (data through week ending ${opts.archivedThrough}); not updated.`
 }
@@ -235,6 +274,7 @@ export function buildSeries(rows: NsspRow[], key: NsspKey, opts: BuildOptions): 
       label: `${NAME[key]} — % of ED visits (NSSP${isState ? '' : ', HSA estimate'}${archived})`,
       points,
       note: noteFor(key, isState, opts),
+      provisionalFrom: opts.provisionalFrom && points[points.length - 1][0] >= opts.provisionalFrom ? opts.provisionalFrom : undefined,
     })
     const official = officialFrom(latest, key)
     if (official) s.official = official
@@ -354,7 +394,7 @@ async function loadArchive(ctx: SourceContext): Promise<ArchiveData> {
     /* not cached yet */
   }
   if (!buf) {
-    buf = await fetchBuffer(ARCHIVE_URL, { timeoutMs: 180_000, retries: 2 })
+    buf = await fetchBuffer(ARCHIVE_URL, LIMITS.archive)
     if (!isParquet(buf)) throw new Error('archive download is not a parquet file')
     try {
       await mkdir(path.dirname(cacheFile), { recursive: true })
@@ -410,6 +450,36 @@ function latestWeek(rows: NsspRow[]): string | undefined {
   return max
 }
 
+/** Count of "Data Unavailable" placeholders dropped per pathogen, and how many were not 0. */
+function unavailableStats(rows: NsspRow[], keys: NsspKey[]) {
+  const dropped: Partial<Record<NsspKey, number>> = {}
+  let nonZero = 0
+  for (const r of rows) {
+    for (const k of keys) {
+      const v = r.unavailable[k]
+      if (v == null) continue
+      dropped[k] = (dropped[k] ?? 0) + 1
+      if (v !== 0) nonZero++
+    }
+  }
+  return { dropped, nonZero }
+}
+
+/**
+ * The archived statewide ARI series duplicates the live vjzj-u7u8 series (same pathogen, metric and
+ * place). Drop the archived one once the live series reaches at least the archive's last week, so the
+ * frozen copy never wins a tie in the analysis.
+ */
+export function dropSupersededArchiveState(archive: Series[], live: Series | undefined): { series: Series[]; dropped: boolean } {
+  const liveLatest = live ? latestDate([live]) : undefined
+  const state = archive.find((s) => s.geo.type === 'state')
+  const archLatest = state ? latestDate([state]) : undefined
+  if (!state || !liveLatest || !archLatest || liveLatest < archLatest) return { series: archive, dropped: false }
+  return { series: archive.filter((s) => s !== state), dropped: true }
+}
+
+const PRISM_PATHOGENS: PathogenId[] = ['covid', 'influenza', 'rsv', 'respiratory-combined']
+
 // ───────────────────────────── module ─────────────────────────────
 
 export const cdcNssp: SourceModule = {
@@ -420,12 +490,13 @@ export const cdcNssp: SourceModule = {
     url: 'https://data.cdc.gov/d/rdmq-nq56',
     description:
       'The share of all emergency department (ER) visits in Minnesota whose diagnosis is COVID-19, flu or RSV, each week, statewide and for every county, with CDC’s own trend call (increasing, decreasing or no change). Also the share of ER visits for any acute respiratory illness (ARI) statewide and CDC’s official Minnesota respiratory illness activity level. It shows how much these illnesses are sending people to the ER; it does not count infections, lab-confirmed cases or hospital admissions, and it only covers hospitals that send data to CDC. County numbers are CDC estimates for the county’s Health Service Area (a group of counties that share hospitals), so neighboring counties in the same area show the same value, and some areas have no data.',
-    geography: 'Minnesota statewide and 87 counties (county values are Health Service Area estimates)',
+    geography: 'Minnesota statewide and counties: 76 of 87 counties have data; county values are Health Service Area estimates',
     cadence: 'Weekly, Sunday–Saturday weeks (CDC posts preliminary data Wednesday and final data Friday)',
     attribution:
       'CDC National Syndromic Surveillance Program via data.cdc.gov (rdmq-nq56, vjzj-u7u8, f3zz-zga5); mirror: PopHIVE/Ingest (Yale School of Public Health); archive: CDC COVID-19 Forecast Hub',
   },
-  timeoutMs: 8 * 60_000,
+  // Above every LIMITS deadline (max 9 min) plus parsing, so the run always returns what it has.
+  timeoutMs: 11 * 60_000,
   async run(ctx): Promise<SourceResult> {
     const { log } = ctx
     const errors: string[] = []
@@ -434,24 +505,40 @@ export const cdcNssp: SourceModule = {
     const histFloor = ctx.historyStart.slice(0, 10)
 
     const [prismR, rdmqR, archiveR, dailyR, levelR] = await Promise.allSettled([
-      loadPrismThresholds(),
-      loadCdcRows(
+      withDeadline(loadPrismThresholds(), LIMITS.prismDeadlineMs, 'PRISM thresholds'),
+      withDeadline(
+        loadRowsBounded(
+          'rdmq-nq56',
+          { where: `geography='Minnesota' AND week_end >= '${histFloor}T00:00:00.000'` },
+          {
+            filter: (row) => row.geography === 'Minnesota',
+            lineHint: (line) => line.includes('Minnesota'),
+            live: LIMITS.live,
+            mirror: LIMITS.mirror,
+          },
+          log,
+        ),
+        LIMITS.rdmqDeadlineMs,
         'rdmq-nq56',
-        { where: `geography='Minnesota' AND week_end >= '${histFloor}T00:00:00.000'` },
-        (row) => row.geography === 'Minnesota',
-        log,
       ),
-      loadArchive(ctx),
-      socrataQuery<Record<string, unknown>>('vjzj-u7u8', {
-        select: 'date,geography,pathogen,percent_visits',
-        where: "geography='Minnesota'",
-      }),
-      socrataQuery<Record<string, unknown>>('f3zz-zga5', { where: "geography='Minnesota'" }),
+      withDeadline(loadArchive(ctx), LIMITS.archiveDeadlineMs, 'hub NSSP archive'),
+      withDeadline(
+        sodaRows('vjzj-u7u8', { select: 'date,geography,pathogen,percent_visits', where: "geography='Minnesota'" }, LIMITS.bestEffort),
+        LIMITS.bestEffortDeadlineMs,
+        'vjzj-u7u8',
+      ),
+      withDeadline(sodaRows('f3zz-zga5', { where: "geography='Minnesota'" }, LIMITS.bestEffort), LIMITS.bestEffortDeadlineMs, 'f3zz-zga5'),
     ])
 
+    // loadPrismThresholds resolves with empty tables when no vintage loads, so check each pathogen.
     const prism = prismR.status === 'fulfilled' ? prismR.value : null
-    if (!prism) log.warn(`PRISM thresholds unavailable: ${errText((prismR as PromiseRejectedResult).reason)}`)
-    diagnostics.prism = { nsspVintage: prism?.nsspVintage, pathogens: prism ? [...prism.nssp.keys()] : [] }
+    const prismMissing = PRISM_PATHOGENS.filter((p) => !prism?.nssp.has(p))
+    if (prismMissing.length) {
+      const why = prismR.status === 'rejected' ? errText(prismR.reason) : 'not found in CDCgov/forecasttools'
+      notes.push(`CDC PRISM thresholds unavailable for ${prismMissing.join(', ')} (${why}); those statewide series have no official cut-points`)
+      log.warn(`PRISM thresholds unavailable for ${prismMissing.join(', ')}: ${why}`)
+    }
+    diagnostics.prism = { nsspVintage: prism?.nsspVintage, pathogens: prism ? [...prism.nssp.keys()] : [], missing: prismMissing }
 
     // Hub archive rows (used for archived ARI and as the rdmq-nq56 fallback).
     let archiveRows: NsspRow[] = []
@@ -462,6 +549,7 @@ export const cdcNssp: SourceModule = {
         .filter((r): r is NsspRow => !!r)
       archiveThrough = latestWeek(archiveRows)
       diagnostics.archive = {
+        dataUnavailableNulled: unavailableStats(archiveRows, ['ari', ...RESP_KEYS]),
         url: ARCHIVE_URL,
         cached: archiveR.value.cached,
         fileRows: archiveR.value.totalRows,
@@ -478,27 +566,39 @@ export const cdcNssp: SourceModule = {
     const ed: Series[] = []
     try {
       if (rdmqR.status === 'rejected') throw rdmqR.reason
-      const { rows, via, updatedAt } = rdmqR.value
+      const { rows, via, updatedAt, liveError } = rdmqR.value
       const cols = columnsSeen(rows)
       const missing = checkColumns('rdmq-nq56', cols, RDMQ_REQUIRED, log)
       const norm = rows.map((r) => normalizeRow(r, RESP_KEYS)).filter((r): r is NsspRow => !!r)
       const retrieved = via === 'data.cdc.gov' ? 'data.cdc.gov rdmq-nq56' : 'PopHIVE mirror of data.cdc.gov rdmq-nq56'
+      const unavailable = unavailableStats(norm, RESP_KEYS)
+      if (unavailable.nonZero) log.warn(`rdmq-nq56: ${unavailable.nonZero} non-zero value(s) flagged "Data Unavailable" were published as null`)
+      // NSSP backfills: the newest week is preliminary (CDC posts a preliminary build on Wednesday).
+      const newest = latestWeek(norm)
       const skipped: Record<string, string[]> = {}
       for (const key of RESP_KEYS) {
-        const out = buildSeries(norm, key, { dataset: DATASETS.ed, historyStart: histFloor, thresholds: prism?.nssp, retrieved })
+        const out = buildSeries(norm, key, {
+          dataset: DATASETS.ed,
+          historyStart: histFloor,
+          thresholds: prism?.nssp,
+          retrieved,
+          provisionalFrom: newest,
+        })
         ed.push(...out.series)
         skipped[key] = out.skipped
       }
       const builds = [...new Set(rows.map((r) => r.buildnumber).filter(Boolean))].sort()
       diagnostics.rdmq = {
         via,
+        liveError,
         updatedAt,
         rowsRead: rows.length,
         rowsUsable: norm.length,
         columnsSeen: [...cols],
         missingColumns: missing,
-        latestWeek: latestWeek(norm),
+        latestWeek: newest,
         buildnumber: builds[builds.length - 1],
+        dataUnavailableNulled: unavailable,
         series: ed.length,
         geosWithoutData: skipped,
       }
@@ -555,6 +655,7 @@ export const cdcNssp: SourceModule = {
         label: `${NAME.ari} — % of ED visits (NSSP)`,
         points,
         note: `Weekly average of CDC's daily share of emergency department visits in Minnesota with a diagnosis of ${DIAGNOSIS.ari} (data.cdc.gov vjzj-u7u8). Only weeks with all 7 days reported are shown. Recent weeks can be revised.`,
+        provisionalFrom: points[points.length - 1][0],
       })
       s.attrs = { retrieved: 'data.cdc.gov vjzj-u7u8 (daily, averaged by week)' }
       const t = prism?.nssp.get('respiratory-combined')
@@ -599,8 +700,13 @@ export const cdcNssp: SourceModule = {
         retrieved: 'CDC COVID-19 Forecast Hub NSSP archive',
         archivedThrough: archiveThrough,
       })
-      archive.push(...out.series)
-      Object.assign(diagnostics.archive as object, { ariSeries: out.series.length, ariGeosWithoutData: out.skipped })
+      const superseded = dropSupersededArchiveState(out.series, ariState[0])
+      archive.push(...superseded.series)
+      Object.assign(diagnostics.archive as object, {
+        ariSeries: archive.length,
+        ariGeosWithoutData: out.skipped,
+        stateAriDroppedForLive: superseded.dropped,
+      })
     }
 
     for (const err of errors) log.warn(err)

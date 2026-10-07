@@ -28,6 +28,14 @@ const WVAL_CSV_ROWS: string[][] = [
   ['Minnesota', 'Otter Tail', 'ID:1018', '14119', 'State_Territory', '1', 'Very Low', '2025-09-09', '2026-09-19', 'RSV', '2026-10-02 11:03'],
   ['Minnesota', 'Carlton, Saint Louis', 'ID:1024', '130086', 'State_Territory', '1', 'Very Low', '2022-05-24', '2026-09-05', 'SARS-CoV-2', '2026-10-02 11:03'],
   ['Minnesota', 'Carlton, Saint Louis', 'ID:1024', '130086', 'State_Territory', '8', 'High', '2022-05-24', '2024-09-28', 'SARS-CoV-2', '2026-10-02 11:03'],
+  // Site that stopped reporting in 2022.
+  ['Minnesota', 'Koochiching', 'ID:1009', '6371', 'State_Territory', '12.59', 'Very High', '2022-05-23', '2022-12-17', 'SARS-CoV-2', '2026-10-02 11:03'],
+  // RSV week 2026-02-07: ID:1008 is still in its WVAL start-up period (included 2026-03-18) with an extreme value.
+  ['Minnesota', 'Kandiyohi', 'ID:1008', '21015', 'State_Territory', '77542.94', 'Very High', '2026-03-18', '2026-02-07', 'RSV', '2026-10-02 11:03'],
+  ['Minnesota', 'Olmsted', 'ID:1017', '121395', 'State_Territory, WastewaterSCAN', '5.12', 'Moderate', '2023-01-13', '2026-02-07', 'RSV', '2026-10-02 11:03'],
+  ['Minnesota', 'Anoka, Dakota, Hennepin, Ramsey, Washington', 'ID:1021', '1955095', 'State_Territory', '1', 'Very Low', '2025-09-09', '2026-02-07', 'RSV', '2026-10-02 11:03'],
+  ['Minnesota', 'Benton, Sherburne, Stearns', 'ID:1028', '120961', 'State_Territory, WastewaterSCAN', '4.21', 'Moderate', '2023-06-12', '2026-02-07', 'RSV', '2026-10-02 11:03'],
+  ['Minnesota', 'Blue Earth, Nicollet', 'ID:993', '70000', 'State_Territory, WastewaterSCAN', '3.95', 'Moderate', '2022-11-07', '2026-02-07', 'RSV', '2026-10-02 11:03'],
 ]
 const wvalRaw = () => WVAL_CSV_ROWS.map((r) => Object.fromEntries(HEADER.map((h, i) => [h, r[i]])) as Record<string, string>)
 
@@ -58,8 +66,8 @@ describe('cdc-nwss mapping helpers', () => {
   it('cut-points agree with CDC categories on real rows, tolerating rounding at the boundary', () => {
     const { rows } = parseWvalRows(wvalRaw())
     const check = checkCutpoints(rows.map((r) => ({ pathogen: r.pathogen, value: r.value, level: r.level! })))
-    expect(check.covid).toMatchObject({ checked: 10, mismatches: 0 })
-    expect(check.rsv).toMatchObject({ checked: 3, mismatches: 0 })
+    expect(check.covid).toMatchObject({ checked: 11, mismatches: 0 })
+    expect(check.rsv).toMatchObject({ checked: 8, mismatches: 0 })
     // CDC rows with WVAL 2.6 are labelled both Very Low and Low (unrounded value decides) — both accepted.
     const edge = checkCutpoints([
       { pathogen: 'covid', value: 2.6, level: 'minimal' },
@@ -136,6 +144,10 @@ describe('cdc-nwss WVAL series', () => {
     const otter = built.sites.find((s) => s.id === 'cdc-nwss:nwss-wval:rsv:wastewater_level:sewershed:ID:1018')!
     expect(otter.official?.level).toBe('very-high')
     expect(otter.points.at(-1)).toEqual(['2026-09-26', 56.35])
+    // A WVAL of exactly 1 is flagged for every pathogen/source (here 1 of 2 weeks), with the index caveat.
+    expect(otter.attrs?.weeksAtOne).toBe('50% of the last 2 weeks')
+    expect(otter.note).toMatch(/at or below the site’s baseline/)
+    expect(metro.attrs?.weeksAtOne).toBeUndefined()
 
     // WastewaterSCAN plant: known name and plant coordinates.
     const roch = built.sites.find((s) => s.id === 'cdc-nwss:nwss-wval:influenza-a:wastewater_level:sewershed:ID:1017')!
@@ -148,6 +160,48 @@ describe('cdc-nwss WVAL series', () => {
     expect(duluth.geo.counties).toEqual(['27017', '27137'])
     expect(duluth.points).toEqual([['2024-09-28', 8], ['2026-09-05', 1]])
     expect(duluth.official?.asOf).toBe('2026-09-05')
+    expect(duluth.attrs?.status).toBeUndefined() // 3 weeks behind the newest COVID week: normal lag
+
+    // Long-inactive site: history and its last CDC category kept, but marked as not reporting.
+    const kooch = built.sites.find((s) => s.geo.code === 'ID:1009')!
+    expect(kooch.official).toMatchObject({ level: 'very-high', asOf: '2022-12-17' })
+    expect(kooch.attrs?.status).toBe('Not reporting since week ending 2022-12-17')
+    expect(built.inactive).toContain('ID:1009 covid (2022-12-17)')
+    expect(built.inactive.some((x) => x.startsWith('ID:1024'))).toBe(false)
+  })
+
+  it('flags WVAL start-up weeks and assigns no level when every value predates inclusion', () => {
+    // ID:2713 (Itasca) RSV: included in WVAL from 2026-09-28, after its latest week (2026-09-26).
+    const itasca = built.sites.find((s) => s.id === 'cdc-nwss:nwss-wval:rsv:wastewater_level:sewershed:ID:2713')!
+    expect(itasca.points).toEqual([['2026-09-26', 31.57]]) // value kept, not altered
+    expect(itasca.official).toBeUndefined()
+    expect(itasca.thresholds).toBeUndefined()
+    expect(itasca.attrs).toMatchObject({
+      inWvalSince: '2026-09-28',
+      preInclusionWeeks: '1',
+      cdcCategory: 'Very High (before WVAL inclusion)',
+      status: 'Not yet included in CDC WVAL (from 2026-09-28)',
+    })
+    expect(itasca.note).toMatch(/no activity level is assigned yet/)
+    // ID:1008 RSV has only its start-up week in this fixture, so it is in the same state.
+    expect(built.notYetIncluded).toEqual(['ID:1008 rsv', 'ID:2713 rsv'])
+    const kandi = built.sites.find((s) => s.id === 'cdc-nwss:nwss-wval:rsv:wastewater_level:sewershed:ID:1008')!
+    expect(kandi.points).toEqual([['2026-02-07', 77542.94]])
+    expect(kandi.attrs?.preInclusionWeeks).toBe('1')
+    // A site with later, included weeks keeps its level; the start-up weeks are only flagged.
+    // (Second row = real ID:1008 RSV row for 2026-09-26: WVAL 1, Very Low, included 2026-03-18.)
+    const later = buildWvalSeries(
+      parseWvalRows([
+        ...wvalRaw().filter((r) => r.site === 'ID:1008'),
+        { ...wvalRaw().find((r) => r.site === 'ID:1008')!, site_wval: '1', site_wval_category: 'Very Low', week_end: '2026-09-26' },
+      ]).rows,
+      { historyStart: '2021-07-01', centroids },
+    ).sites[0]
+    expect(later.official?.level).toBe('minimal')
+    expect(later.thresholds).toBeDefined()
+    expect(later.attrs).toMatchObject({ preInclusionWeeks: '1' })
+    expect(later.attrs?.status).toBeUndefined()
+    expect(later.note).toMatch(/baseline start-up period/)
   })
 
   it('derives a statewide weekly median only for weeks with ≥3 reporting sites', () => {
@@ -156,12 +210,20 @@ describe('cdc-nwss WVAL series', () => {
     // 2026-09-19: 1.56, 1.76, 4.21, 1 → median 1.66; 2026-09-26: 1.42, 2.74, 5.04, 6.29 → 3.89.
     // 2024-09-28 and 2026-09-05 have only one site in this fixture and are omitted.
     expect(covid.points).toEqual([['2026-09-19', 1.66], ['2026-09-26', 3.89]])
-    expect(covid.attrs?.sites).toBe('4')
+    expect(covid.attrs).toMatchObject({ sites: '4', sitesAtOne: '0/4' })
     expect(covid.thresholds).toMatchObject({ low: 2.6, moderate: 4.9, high: 7.9, veryHigh: 11.6, by: 'CDC NWSS WVAL cut-points (Aug 2026)' })
     expect(covid.label).toContain('median of 4 reporting sites, derived')
     expect(covid.official).toBeUndefined()
-    // RSV has at most 2 sites per week here → no statewide series.
-    expect(built.state.find((s) => s.pathogen === 'rsv')).toBeUndefined()
+    expect(covid.note).toMatch(/0 of 4 in the latest week/)
+  })
+
+  it('leaves sites in their WVAL start-up period out of the statewide median', () => {
+    const rsv = built.state.find((s) => s.pathogen === 'rsv')!
+    // 2026-02-07: ID:1008 (77,542.94, pre-inclusion) excluded → median of 1, 3.95, 4.21, 5.12 = 4.08 (not 4.21).
+    // 2026-09-19 / 2026-09-26 have fewer than 3 included RSV sites in this fixture and are omitted.
+    expect(rsv.points).toEqual([['2026-02-07', 4.08]])
+    expect(rsv.attrs).toMatchObject({ sites: '4', sitesAtOne: '1/4' })
+    expect(built.stateDiag.rsv).toMatchObject({ preInclusionRowsExcluded: 2 })
   })
 })
 
@@ -169,6 +231,7 @@ describe('cdc-nwss official state map', () => {
   it('attaches CDC\'s state category only when it matches the derived series\' latest week', () => {
     const { rows } = parseWvalRows(wvalRaw())
     const { state } = buildWvalSeries(rows, { historyStart: '2021-07-01', centroids })
+    // Illustrative values (cdc.gov is unreachable from the dev sandbox); field names from the research notes.
     const warnings = attachOfficialState(state, [
       { pathogen: 'covid', category: 'Low', level: 'low', value: 2.9, sites: 27, week: '2026-09-26' },
       { pathogen: 'influenza-a', category: 'Very Low', level: 'minimal', value: 1, sites: 24, week: '2026-09-26' },
@@ -183,6 +246,7 @@ describe('cdc-nwss official state map', () => {
   })
 
   it('parses the BOM-prefixed CDC state JSON (documented field names)', () => {
+    // Illustrative values with the documented field names; replace with a real row from the first CI run.
     const text =
       '﻿' +
       JSON.stringify([
@@ -245,6 +309,9 @@ describe('cdc-nwss emerging-pathogen detections', () => {
     expect(mpox.targetOk('hmpxv')).toBe(true)
     expect(mpox.targetOk('hmpxv clade ii')).toBe(true)
     expect(mpox.targetOk('nvo')).toBe(false)
+    expect(mpox.targetOk('mpxv clade ib')).toBe(true) // WastewaterSCAN-style spelling
+    expect(mpox.targetOk('mpxv_dd14-16')).toBe(true)
+    expect(mpox.targetOk('fluav a h5')).toBe(false)
     const h5 = DETECTION_SPECS.find((s) => s.key === 'h5')!
     expect(h5.targetOk('fluav a h5')).toBe(true)
     expect(h5.note).toMatch(/animal sources/)

@@ -183,7 +183,7 @@ describe('wastewaterscan reduction and series', () => {
     })
     const flu = series.find((s) => s.pathogen === 'influenza-a')!
     expect(flu.official?.level).toBe('high')
-    expect(flu.note).toContain('Low out of season')
+    expect(flu.note).toContain("Low out of season")
     // Measles: the latest category is 'not calculated' → no official level (only the publisher's own
     // categories go in `official`); the non-detection is recorded as a plain fact in attrs.
     const measles = series.find((s) => s.pathogen === 'measles')!

@@ -32,7 +32,16 @@ export function latestRows(all: Series[], q: LatestQuery): LatestRow[] {
     if (!lp) continue
     rows.push({ series: s, date: lp[0], value: lp[1] })
   }
-  return rows
+  // The same published number can arrive by two routes (e.g. NSSP via the CDC hubs and via
+  // data.cdc.gov). Show it once, keeping the copy that carries the publisher's own label.
+  const byKey = new Map<string, LatestRow>()
+  for (const r of rows) {
+    const s = r.series
+    const key = [s.pathogen, s.metric, s.geo.type, s.geo.code, s.age ?? '', r.date, r.value].join('|')
+    const prev = byKey.get(key)
+    if (!prev || (!prev.series.official?.label && s.official?.label)) byKey.set(key, r)
+  }
+  return [...byKey.values()]
 }
 
 export function sourceName(manifest: Manifest, id: string): string {

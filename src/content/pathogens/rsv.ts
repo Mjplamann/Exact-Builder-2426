@@ -1,10 +1,17 @@
+// TODO(verify): the vaccine, antibody, eligibility and data-source content is sourced below. The general
+// clinical facts (4–6 day incubation, 3–8 day contagious period with up to 4 weeks of shedding, survival on
+// hard surfaces, almost all children infected by age 2, leading cause of infant hospitalization) follow
+// long-standing CDC guidance, and the bronchiolitis treatment advice follows the AAP 2014 bronchiolitis
+// clinical practice guideline (Ralston et al., Pediatrics). Their URLs (CDC About RSV / How RSV spreads,
+// the AAP guideline) and an MDH RSV recommendations page still need confirming in a run with search budget
+// (the shared WebSearch budget was exhausted during review on 2026-10-07).
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
   id: 'rsv',
   name: 'Respiratory syncytial virus (RSV)',
   shortName: 'RSV',
-  aka: ['Human respiratory syncytial virus', 'Human orthopneumovirus'],
+  aka: ['Human respiratory syncytial virus'],
   category: 'respiratory-viral',
   kind: 'virus',
   biofireTargets: ['Respiratory Syncytial Virus'],
@@ -13,7 +20,7 @@ const profile: PathogenProfile = {
     'RSV is a very common virus: almost all children have had it by their second birthday, and people can catch it again throughout life. In most people it causes a cold, but it can spread to the lungs and cause bronchiolitis (swelling of the small airways) or pneumonia. RSV is the leading cause of hospital stays for babies in the U.S., and it also puts many older adults in the hospital each winter. Babies can be protected by a vaccine given during pregnancy or by an antibody shot, and many older adults can get a one-time vaccine.',
   seasonality: {
     summary:
-      'In Minnesota, RSV usually starts to rise in October or November, peaks between December and February, and fades by spring. The exact timing shifts from year to year, and some recent seasons started earlier than usual. Infant RSV protection is timed to this season, which runs about October through March in most of the U.S.',
+      'In Minnesota, RSV usually starts to rise in October or November, peaks between December and February, and fades by spring. The exact timing shifts from year to year. Recent Minnesota peaks have come as early as mid-November (2022) and as late as early March (2026). Infant RSV protection is timed to this season, which runs about October through March in most of the U.S.',
     peakMonths: [12, 1, 2],
   },
   transmission:
@@ -53,11 +60,11 @@ const profile: PathogenProfile = {
       summary:
         'Babies, especially those younger than 6 months and those born early, are the most likely to get very sick from RSV. RSV can inflame the small airways and make it hard for a baby to breathe or feed.',
       actions: [
-        'Ask your clinician about one dose of an RSV antibody (Beyfortus or Enflonsia) for your baby’s first RSV season, unless the mother got the RSV vaccine at least 14 days before birth.',
-        'If your baby is born October through March, the antibody is best given in the first week of life, often before leaving the hospital.',
+        'Ask your clinician about one dose of an RSV antibody (Beyfortus or Enflonsia) for your baby’s first RSV season. Most babies do not need it if the mother got the RSV vaccine at least 14 days before birth, but in a few special cases a clinician may still advise it.',
+        'If your baby is born October through March, the antibody is best given in the first week of life, often before leaving the hospital. If your baby was born April through September, plan for it shortly before RSV season starts, usually in October.',
         'Keep sick people away from your baby, ask visitors to wash their hands, and avoid kissing a baby’s face when you are sick.',
         'Use saline drops and gentle suction to clear a stuffy nose, especially before feeds.',
-        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
+        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom).',
       ],
     },
     children: {
@@ -65,11 +72,11 @@ const profile: PathogenProfile = {
       summary:
         'Toddlers and young children often get RSV in child care or school. Most have a cold, but children under 5 and those with asthma, heart or lung disease, or weak immune systems can get wheezing or pneumonia.',
       actions: [
-        'Ask whether your child qualifies for an RSV antibody before a second RSV season (ages 8 to 19 months with certain conditions, such as chronic lung disease from being born early or a severely weakened immune system, and American Indian and Alaska Native children).',
+        'Ask whether your child qualifies for an RSV antibody before a second RSV season. This applies to some children 8 to 19 months old, such as those with lung disease from being born early who needed treatment in the 6 months before the season, a severely weakened immune system, or cystic fibrosis with severe lung disease or poor growth.',
+        'American Indian and Alaska Native children 8 to 19 months old are also recommended to get an RSV antibody before their second season.',
         'Keep children home from school or child care while they have a fever.',
-        'Teach handwashing and coughing into an elbow.',
+        'Teach handwashing and coughing into an elbow, and keep sick siblings away from newborns.',
         'If your child has asthma, follow their asthma action plan and call if wheezing gets worse.',
-        'Keep sick siblings away from newborns.',
       ],
     },
     adults: {
@@ -88,7 +95,8 @@ const profile: PathogenProfile = {
       summary:
         'Adults 50 to 64 with chronic health conditions can get seriously ill from RSV, and it can trigger flare-ups of COPD, asthma, or heart failure. CDC recommends a single RSV vaccine dose for people in this age group who are at increased risk.',
       actions: [
-        'Ask your clinician about one dose of RSV vaccine if you have a chronic condition such as heart or lung disease, diabetes with complications, kidney or liver disease, severe obesity, or a weakened immune system, or if you live in a nursing home.',
+        'Ask your clinician about one dose of RSV vaccine if you have a condition that raises your risk. These include long-term heart or lung disease, advanced kidney disease or dialysis, chronic liver disease, diabetes with complications or that needs insulin, or a weakened immune system.',
+        'Other conditions also count, such as sickle cell disease, nerve or muscle conditions that make it hard to cough or breathe, severe obesity, or living in a nursing home. Your clinician can also consider frailty or other health problems.',
         'Get it in late summer or early fall if you can, before RSV season, though it can be given at any time.',
         'Remember it is one dose, not a yearly shot. If you already had an RSV vaccine, another dose is not recommended at this time.',
         'Call your clinician early if your breathing, heart failure, COPD, or asthma gets worse.',
@@ -99,7 +107,7 @@ const profile: PathogenProfile = {
       summary:
         'Risk of severe RSV rises with age and is greatest at 75 and older. Each winter RSV puts many older adults in the hospital, and it can worsen heart and lung disease. CDC recommends a single RSV vaccine dose for everyone 75 and older and for adults 65 to 74 at increased risk.',
       actions: [
-        'If you are 75 or older, or 65 to 74 with a chronic condition or living in a nursing home, ask about one dose of RSV vaccine (Arexvy, Abrysvo, or mResvia).',
+        'If you are 75 or older, ask about one dose of RSV vaccine (Arexvy, Abrysvo, or mResvia). If you are 65 to 74, ask if you have a condition that raises your risk, such as heart or lung disease, or if you live in a nursing home.',
         'Aim for late summer or early fall, before RSV season.',
         'If you already got an RSV vaccine in an earlier season, you do not need another dose at this time.',
         'Seek care early for worsening shortness of breath, chest pain, or confusion.',
@@ -168,25 +176,25 @@ const profile: PathogenProfile = {
     vaccines: [
       {
         name: 'Nirsevimab (Beyfortus), an infant RSV antibody',
-        who: 'Babies younger than 8 months who are born during or entering their first RSV season (about October through March) if the mother did not get the RSV vaccine during pregnancy, her vaccine status is unknown, or the baby was born less than 14 days after her vaccine. Some children 8 to 19 months old at higher risk can get a dose before their second season.',
+        who: 'Babies younger than 8 months in their first RSV season (about October through March). This applies if the mother did not get the RSV vaccine in pregnancy, it is not known whether she did, or the baby was born less than 14 days after her vaccine. Some children 8 to 19 months old can get a dose before their second season. This includes children with lung disease from being born early, a severely weakened immune system, or cystic fibrosis with severe lung disease, and American Indian and Alaska Native children.',
         notes:
-          'One shot. It is a ready-made antibody, not a vaccine, so protection starts right away and lasts through the season. Recommended by CDC and the American Academy of Pediatrics. It is the only infant antibody approved for the second season.',
+          'One shot. It is a ready-made antibody, not a vaccine, so protection starts right away and lasts through the season. Recommended by CDC and the American Academy of Pediatrics. Of the two long-acting infant antibodies, it is the only one recommended for a second season. In rare cases, a clinician may advise it even after the maternal vaccine.',
       },
       {
         name: 'Clesrovimab (Enflonsia), an infant RSV antibody',
         who: 'Babies younger than 8 months in their first RSV season who are not protected by a maternal vaccine.',
         notes:
-          'FDA-approved in June 2025. The American Academy of Pediatrics lists it as an equal choice to nirsevimab for the first season. CDC’s advisory committee voted to recommend it in June 2025, but that vote is among those paused by a March 2026 court order, so its federal recommendation status is unclear. Ask your clinician about availability and coverage.',
+          'FDA-approved in June 2025 for a baby’s first RSV season only. The American Academy of Pediatrics lists it as an equal choice to nirsevimab for the first season. CDC’s vaccine advisory committee voted to recommend it in June 2025. That committee’s actions are part of an ongoing federal court case (see the notes below), so ask your clinician about its current federal status, availability, and coverage.',
       },
       {
         name: 'Maternal RSV vaccine (Abrysvo)',
         who: 'Pregnant people at 32 through 36 weeks of pregnancy, given September through January in most of the continental U.S., so the baby is born with protection.',
         notes:
-          'Recommended by CDC and the American College of Obstetricians and Gynecologists. Abrysvo is the only RSV vaccine approved for use in pregnancy. If the vaccine was given in an earlier pregnancy, the baby should get an RSV antibody instead of a repeat vaccine dose.',
+          'Recommended by CDC and the American College of Obstetricians and Gynecologists. Abrysvo is the only RSV vaccine approved for use in pregnancy. It is given only at 32 through 36 weeks as a precaution, because studies raised a possible small risk of early (preterm) birth. If the vaccine was given in an earlier pregnancy, the baby should get an RSV antibody instead of a repeat vaccine dose.',
       },
       {
         name: 'Adult RSV vaccines (Arexvy, Abrysvo, mResvia)',
-        who: 'CDC recommends a single dose for all adults 75 and older, and for adults 50 to 74 at increased risk, such as people with chronic heart or lung disease, diabetes with complications, kidney or liver disease, severe obesity, a weakened immune system, or who live in a nursing home.',
+        who: 'CDC recommends a single dose for all adults 75 and older and for adults 50 to 74 at increased risk. Increased risk includes long-term heart or lung disease, advanced kidney disease or dialysis, chronic liver disease, diabetes with complications or that needs insulin, sickle cell disease and other blood disorders, and nerve or muscle conditions that make it hard to cough or breathe. It also includes severe obesity, a weakened immune system, living in a nursing home, and other conditions your clinician thinks raise your risk, such as frailty.',
         notes:
           'One dose, not a yearly shot. If you already had one, another dose is not recommended at this time. Best given in late summer or early fall. Some of these vaccines are FDA-approved for adults under 50 at higher risk; talk with your clinician. FDA added a warning about a small risk of Guillain-Barré syndrome (a rare nerve disorder) to the Abrysvo and Arexvy labels.',
       },
@@ -204,17 +212,17 @@ const profile: PathogenProfile = {
     'A clinician can test a nose swab with a rapid test or a lab (PCR) test, sometimes as part of a multi-virus panel that also checks for flu, COVID-19, and other viruses. Testing matters most for babies, older adults, people in the hospital, and people with weakened immune systems. Healthy people with a mild cold often do not need a test. If you use a home test, check the label: many home tests detect only COVID-19 and flu. A negative rapid test does not always rule out RSV, especially in adults.',
   whenToSeekCare: [
     'Call 911 or go to the emergency department for any emergency warning sign, such as struggling to breathe, pauses in breathing, or blue or gray lips.',
-    'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
+    'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom).',
     'Call your clinician the same day if a baby or young child is feeding or drinking much less than usual or has fewer wet diapers.',
     'Call your clinician if symptoms get worse after a few days, a fever lasts more than 2 to 3 days, or a child has ear pain.',
     'Adults 65 and older, and anyone with heart or lung disease or a weakened immune system, should call early if breathing gets worse.',
     'Urgent care can help with a worsening cough or ear pain when your regular clinic is closed. Go to the emergency department, not urgent care, for trouble breathing.',
   ],
   readingTheNumbers:
-    'MN Pulse shows several RSV signals. Test positivity is the share of RSV lab tests at Minnesota labs that come back positive. BioFire detection rate is the share of multi-virus panel tests at participating Midwest labs that find RSV. These panels are mostly run for hospital, emergency department, and child patients, so they show how much serious respiratory illness is due to RSV, not how many people are infected. Many RSV cases are found with quicker single tests and never reach these panels. ED-visit % is the share of all emergency department visits diagnosed as RSV. MDH also reports RSV hospital rates by county and tests wastewater for RSV, which can be an early sign of change. In summer and early fall, RSV numbers are usually close to zero. They often start rising in October or November and can climb many times higher by the winter peak. A steady rise for two or more weeks means RSV is spreading in your community. For most people, that means a higher chance a winter cold is RSV. It is also the time to make sure babies, pregnant people in their third trimester, and older adults who qualify are protected, and to keep sick people away from newborns.',
+    'MN Pulse shows several RSV signals. Test positivity is the share of RSV lab tests that come back positive among people who were tested. It comes from Minnesota labs that report to MDH and from CDC’s lab network for Minnesota and five nearby states (HHS Region 5). It is not the share of people infected. In recent winters, regional positivity peaked at about 10% to 25%, and it was under 1% in late summer 2026. BioFire detection rate is the share of multi-virus panel tests at participating labs in the Midwest (or nationwide, when regional data are not available) that find RSV. No Minnesota-only BioFire data are public. These lab tests are mostly done for babies, young children, and people sick enough to go to a hospital or emergency department. So they show how much serious breathing illness is due to RSV, not how many people are infected. ED-visit % is the share of all emergency department visits diagnosed as RSV. Because most RSV emergency visits are for babies and young children, the statewide share stays small even at the peak: about 1% to 2.4% in each of the last four winters, and close to 0% in late summer. Watch the trend, not the size of the number. A small statewide rise can mean busy children’s emergency departments. Hospital numbers show weekly RSV hospital admissions in Minnesota and hospital rates per 100,000 people, and MDH also reports RSV hospital rates by county. Wastewater testing at Minnesota treatment plants measures RSV in sewage and can show a change early. RSV numbers often start rising in October or November. A steady rise for two or more weeks means RSV is spreading in your community. For most people, that means a higher chance a winter cold is RSV. It is also the time to make sure babies, pregnant people at 32 to 36 weeks, and older adults who qualify are protected, and to keep sick people away from newborns. Numbers for the most recent week or two may be revised.',
   watchNotes: [
-    'As of early October 2026, statewide RSV activity in Minnesota was low, which is typical before the season starts. The 2026–27 window for infant antibodies runs about October through March, and the maternal vaccine is given September through January.',
-    'In January 2026, HHS changed CDC’s childhood immunization schedule, relabeling infant RSV antibodies from a recommendation for all children to one for certain high-risk groups. On March 16, 2026, a federal court paused those changes and the votes of the reconstituted CDC vaccine advisory committee, restoring the earlier schedule while the case continues. A federal appeals court heard arguments on October 6, 2026, and had not yet ruled.',
+    'In the week ending September 26, 2026, Minnesota had very few RSV emergency visits (about 0.01% of all visits) and RSV hospital admissions, which is typical before the season starts. The 2026–27 window for infant antibodies runs about October through March, and the maternal vaccine is given September through January.',
+    'In January 2026, the U.S. Department of Health and Human Services (HHS) narrowed several childhood immunization recommendations, including infant RSV antibodies. In March 2026, a federal court paused those changes and votes by CDC’s vaccine advisory committee, whose members were replaced in 2025. The case is still ongoing, so federal guidance could change. Ask your clinician what applies now.',
     'The American Academy of Pediatrics continues to recommend an RSV antibody (nirsevimab or clesrovimab, no preference) for all babies younger than 8 months entering their first RSV season unless the mother got the RSV vaccine at least 14 days before birth.',
     'Adult RSV vaccine guidance has not changed for 2026–27: one dose for everyone 75 and older and for adults 50 to 74 at increased risk. Repeat doses are not recommended at this time.',
   ],
@@ -226,7 +234,7 @@ const profile: PathogenProfile = {
       url: 'https://www.cdc.gov/mmwr/volumes/72/wr/mm7234a4.htm',
     },
     {
-      label: 'CDC MMWR (2025): ACIP recommendations for clesrovimab',
+      label: 'MMWR (2025) via PubMed Central: ACIP recommendations for clesrovimab',
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12393692/',
     },
     { label: 'CDC: Adult immunization schedule addendum', url: 'https://www.cdc.gov/vaccines/hcp/imz-schedules/adult-addendum.html' },
@@ -251,11 +259,20 @@ const profile: PathogenProfile = {
       label: 'Congressional Research Service: CDC’s updated childhood vaccine schedule litigation',
       url: 'https://www.congress.gov/crs-product/LSB11427',
     },
-    { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
     {
-      label: 'CDC: Emergency department visits for COVID-19, flu, and RSV',
-      url: 'https://www.cdc.gov/respiratory-viruses/data/emergency-department-visits.html',
+      label: 'IDSA: Federal judge blocks immunization schedule changes, stays ACIP appointments (2026)',
+      url: 'https://www.idsociety.org/news--publications-new/articles/2026/federal-judge-blocks-immunization-schedule-changes-stays-acip-member-appointments/',
     },
+    { label: 'MDH: Viral respiratory illness in Minnesota', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/index.html' },
+    { label: 'MDH: Respiratory laboratory surveillance data', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html' },
+    { label: 'MDH: Respiratory hospitalizations (RESP-NET), including by county', url: 'https://www.health.state.mn.us/diseases/respiratory/stats/hosp.html' },
+    { label: 'CDC NREVSS: Respiratory virus lab test positivity dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
+    { label: 'CDC RESP-NET: Respiratory virus hospitalization dashboard', url: 'https://www.cdc.gov/resp-net/dashboard/index.html' },
+    {
+      label: 'CDC NSSP: Emergency department visit data by state and county',
+      url: 'https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56',
+    },
+    { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },
     { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
   ],
   lastReviewed: '2026-10-07',

@@ -171,6 +171,11 @@ export interface Series {
   /** Extra identifying attributes (e.g. HSA name, plant name, assay) shown in tooltips. */
   attrs?: Record<string, string>
   /**
+   * Plain-language fact derived by MN Pulse from the source (not the publisher's own wording),
+   * e.g. "119 cases so far in 2026 vs 1,125 by this week in 2025".
+   */
+  summary?: string
+  /**
    * Publisher-defined activity cut-points for this exact measure and place (lower bounds of each
    * level), e.g. CDC's PRISM respiratory-activity thresholds for Minnesota. Used to classify the
    * latest value and drawn as reference bands on charts.
@@ -270,6 +275,8 @@ export type TrendDirection = 'rising-fast' | 'rising' | 'steady' | 'falling' | '
 export interface SignalSummary {
   seriesId: string
   source: string
+  /** Short publisher/system name for display, e.g. "CDC NSSP (ER visits)". */
+  sourceName: string
   label: string
   metric: MetricKind
   unit: Unit

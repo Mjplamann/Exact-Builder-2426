@@ -141,6 +141,9 @@ async function runWval(ctx: SourceContext, errors: string[], diagnostics: Record
     unmatchedCounties: built.unmatchedCounties,
     siteLocations: countBy(Object.values(built.locationBasis)),
     sitesPlacedAtLargestCounty: Object.entries(built.locationBasis).filter(([, b]) => b.includes('largest')).map(([id]) => id),
+    // Site series whose last week is >28 days behind the newest week for that pathogen (attrs.status set).
+    seriesNotReporting: built.inactive.length,
+    seriesNotYetInWval: built.notYetIncluded,
     siteMap: siteMapDiag,
     state: stateDiag,
   }
@@ -164,7 +167,11 @@ async function runDetections(ctx: SourceContext, errors: string[], diagnostics: 
         diag[spec.key] = { dataset: spec.datasetId, via: loaded.via, datasetUpdatedAt: loaded.updatedAt, rowsRead: loaded.rows.length, columns: cols, missingColumns: missing, ...d }
         if (loaded.via === 'pophive-mirror') errors.push(`${spec.name} detections served from the PopHIVE mirror of ${spec.datasetId}`)
         if (!series) {
-          log.warn(`${spec.datasetId}: no usable Minnesota samples`)
+          // Show what was there so a renamed target or detect value is visible in CI logs.
+          log.warn(
+            `${spec.datasetId}: no usable Minnesota samples (${loaded.rows.length} rows; pcr_target counts ${JSON.stringify(d.targets)}; ` +
+              `skipped ${d.skippedTarget} for target, ${d.skippedDetect} for pcr_target_detect not yes/no)`,
+          )
           return undefined
         }
         log.info(`${spec.datasetId} via ${loaded.via}: ${loaded.rows.length} MN rows, ${series.points.length} weeks, latest ${series.points[series.points.length - 1][0]}`)
@@ -207,12 +214,12 @@ export const cdcNwss: SourceModule = {
     id: SOURCE_ID,
     name: 'CDC wastewater surveillance (NWSS)',
     publisher: 'CDC — National Wastewater Surveillance System',
-    url: 'https://www.cdc.gov/nwss/rv/index.html',
+    url: 'https://www.cdc.gov/wastewater/',
     description:
       'How much SARS-CoV-2 (COVID-19), influenza A and RSV virus is in sewage at Minnesota treatment plants, as CDC’s Wastewater Viral Activity Level: each plant’s current level compared with its own baseline, grouped from Very Low to Very High. ' +
       'Includes a statewide weekly median across reporting plants (calculated by MN Pulse) and weekly counts of Minnesota sites where measles, H5 avian influenza or mpox was detected. ' +
       'Wastewater reflects virus shed by everyone connected to a sewer system, including people without symptoms or tests; it does not count cases, does not cover homes on septic systems, and a non-detect does not rule out infections. ' +
-      'Raw activity numbers are not comparable between plants, and H5 can come from animal sources.',
+      'Because each plant is measured against its own baseline, activity levels can be compared between plants but raw virus concentrations cannot; H5 can come from animal sources.',
     geography: 'Minnesota wastewater treatment plants (sewersheds) and statewide',
     cadence: 'Weekly (CDC updates Fridays; data through the prior Saturday)',
     attribution:
