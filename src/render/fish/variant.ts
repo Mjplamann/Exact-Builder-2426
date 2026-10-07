@@ -44,6 +44,8 @@ export class FishVariant {
   readonly mats: FishMaterials;
   bodyMesh!: InstancedMesh;
   finMesh!: InstancedMesh;
+  /** Depth-only fins for close-ups (see FishMaterials.finDepth); hidden unless the renderer shows it. */
+  finDepthMesh!: InstancedMesh;
   capacity = 0;
   /** Animals currently drawn by this variant (set by FishRenderer.sync). */
   members: FishEntity[] = [];
@@ -108,9 +110,9 @@ export class FishVariant {
   /** (Re)allocate instance buffers and meshes for at least `n` animals. */
   ensureCapacity(n: number, onReplace: (oldMeshes: InstancedMesh[], fresh: InstancedMesh[]) => void): void {
     if (n <= this.capacity) return;
-    const old = [this.bodyMesh, this.finMesh];
+    const old = [this.bodyMesh, this.finMesh, this.finDepthMesh];
     this.allocate(Math.max(n, Math.ceil(this.capacity * 1.6)));
-    onReplace(old, [this.bodyMesh, this.finMesh]);
+    onReplace(old, [this.bodyMesh, this.finMesh, this.finDepthMesh]);
   }
 
   private allocate(cap: number): void {
@@ -135,10 +137,21 @@ export class FishVariant {
     }
     this.bodyMesh?.dispose();
     this.finMesh?.dispose();
+    this.finDepthMesh?.dispose();
     const bodyMesh = new InstancedMesh(this.geoBody, this.mats.body, cap);
     const finMesh = new InstancedMesh(this.geoFins, this.mats.fins, cap);
+    const finDepthMesh = new InstancedMesh(this.geoFins, this.mats.finDepth, cap);
     bodyMesh.instanceMatrix.setUsage(DynamicDrawUsage);
     finMesh.instanceMatrix = bodyMesh.instanceMatrix;
+    finDepthMesh.instanceMatrix = bodyMesh.instanceMatrix;
+    finDepthMesh.castShadow = false;
+    finDepthMesh.frustumCulled = false;
+    finDepthMesh.count = 0;
+    finDepthMesh.visible = false;
+    finDepthMesh.name = `fin-depth:${this.key}`;
+    // After every translucent surface (fins, water, glass): it only lays down depth.
+    finDepthMesh.renderOrder = 1e6;
+    this.finDepthMesh = finDepthMesh;
     bodyMesh.customDepthMaterial = this.mats.depth;
     bodyMesh.castShadow = !this.opts.thumbnail;
     bodyMesh.receiveShadow = false;
@@ -172,8 +185,10 @@ export class FishVariant {
   dispose(): void {
     this.bodyMesh.removeFromParent();
     this.finMesh.removeFromParent();
+    this.finDepthMesh.removeFromParent();
     this.bodyMesh.dispose();
     this.finMesh.dispose();
+    this.finDepthMesh.dispose();
     this.geoBody.dispose();
     this.geoFins.dispose();
     this.mats.dispose();

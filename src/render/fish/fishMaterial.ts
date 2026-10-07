@@ -30,6 +30,12 @@ import { blackTexture, type FishTextures } from './textures';
  * stutter), so the fish clock wraps once an hour — a single imperceptible phase hop.
  */
 export const FISH_TIME = { value: 0 };
+/**
+ * Fin opacity above which the fin owns the depth (and so the focus) of its pixel. Clear fins
+ * are ≈ 0.1–0.36 opaque (membrane … rays), so nearly the whole visible fin stays sharp with its
+ * body; only the faintest membrane edge falls back to the background's blur.
+ */
+export const FIN_DEPTH_ALPHA = 0.06;
 const FISH_TIME_WRAP = 3600;
 export function updateFishTime(t: number): void {
   FISH_TIME.value = t % FISH_TIME_WRAP;
@@ -39,6 +45,14 @@ export interface FishMaterials {
   body: MeshPhysicalMaterial;
   fins: MeshPhysicalMaterial;
   depth: MeshDepthMaterial;
+  /**
+   * Depth-only twin of the fins (no colour), drawn after every translucent surface during
+   * close-ups: the translucent fins do not write depth (so they blend over each other in any
+   * order), which would hand them the background's depth-of-field blur — a sharp body inside a
+   * grey halo of melted fins, legs and antennae. With this the depth buffer holds the fins'
+   * own depth wherever the membrane is more than faintly visible.
+   */
+  finDepth: MeshDepthMaterial;
   uniforms: FishUniforms;
   /** Per-frame light-dependent factors (env reflections, glow, fin transmission). */
   setLight(daylight: number, moonlight: number): void;
@@ -178,6 +192,11 @@ export function createFishMaterials(
   const depth = new MeshDepthMaterial({ depthPacking: RGBADepthPacking });
   depth.name = `fish-depth:${sp.id}`;
 
+  // Translucent (transparent list) so it sorts after the fins themselves; it never writes colour.
+  const finDepth = new MeshDepthMaterial({ map: tex.map, alphaTest: FIN_DEPTH_ALPHA, side: DoubleSide, transparent: true, depthWrite: true, colorWrite: false });
+  finDepth.forceSinglePass = true;
+  finDepth.name = `fish-fin-depth:${sp.id}`;
+
   const vertexPatch = (depthOnly: boolean) => (shader: Parameters<Parameters<typeof addShaderPatch>[2]>[0]) => {
     Object.assign(shader.uniforms, uniforms);
     shader.uniforms.uFishTime = FISH_TIME;
@@ -194,6 +213,7 @@ export function createFishMaterials(
     patchFishFragment(shader, false);
   }, -10);
   addShaderPatch(depth, 'fish-swim-depth', vertexPatch(true), -10);
+  addShaderPatch(finDepth, 'fish-swim-depth', vertexPatch(true), -10);
   if (opts.underwater) {
     applyUnderwater(body);
     applyUnderwater(fins);
@@ -207,6 +227,7 @@ export function createFishMaterials(
     body,
     fins,
     depth,
+    finDepth,
     uniforms,
     setLight(daylight: number, moonlight: number) {
       const env = 0.12 + 0.88 * daylight + 0.35 * moonlight;
@@ -219,6 +240,7 @@ export function createFishMaterials(
       body.dispose();
       fins.dispose();
       depth.dispose();
+      finDepth.dispose();
     },
   };
 }

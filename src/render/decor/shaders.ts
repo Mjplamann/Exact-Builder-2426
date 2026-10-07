@@ -283,6 +283,164 @@ varying float vAlong;
 }
 
 // ---------------------------------------------------------------------------------------------
+// Leaf micro-detail (close-ups only)
+// ---------------------------------------------------------------------------------------------
+
+export interface LeafMicro {
+  /** 'parallel': longitudinal veins with ladder-like cross septa (Vallisneria, grasses, crinum);
+   *  'net': the areole network of the finest veins (swords, crypts, anubias, ferns, stem leaves). */
+  kind: 'parallel' | 'net';
+  /** 0..1 contrast of the veins / cells. */
+  strength: number;
+  /** Areole size (net) or the largest vein spacing (parallel), m. */
+  size: number;
+  /** Veins raised (+1, thin soft leaves) or sunk into the blade (−1, leathery anubias / java fern). */
+  relief?: number;
+}
+
+/**
+ * Magnification-only leaf detail. Leaf textures are 16–128 px across, so at 4–8× zoom a texel
+ * spans several pixels and the blade turns into soft mush. This adds what a macro lens shows —
+ * the finest vein network (areoles ≈ 1 mm) or the parallel veins and cross septa of strap
+ * leaves, a little cell grain — in the leaf's own physical units, faded in by the pixel
+ * footprint (fwidth) so nothing changes until a feature spans several pixels. The whole-tank
+ * view (≈ 0.5 mm per pixel) never takes the branch: no cost and an identical image there.
+ * Needs the bend variant of `patchPlant` (instanced leaf strips with `aWidth`).
+ */
+export function patchLeafMicro(material: Material, m: LeafMicro): void {
+  const uniforms = {
+    uLeafMicro: { value: new Vector4(m.kind === 'parallel' ? 1 : 2, m.strength, m.size, m.relief ?? 1) },
+  };
+  addShaderPatch(
+    material,
+    'decor-leaf-micro',
+    (shader: WebGLProgramParametersWithUniforms) => {
+      Object.assign(shader.uniforms, uniforms);
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec2 vLeafDim;')
+        .replace(
+          '#include <begin_vertex>',
+          /* glsl */ `#include <begin_vertex>
+{
+  // Leaf strips span x ∈ [−½, ½]·aWidth, y ∈ [0, 1] before the (uniform) length scale.
+  mat4 lmM = modelMatrix;
+  #ifdef USE_INSTANCING
+    lmM = modelMatrix * instanceMatrix;
+  #endif
+  vLeafDim = vec2(length(lmM[0].xyz) * aWidth, length(lmM[1].xyz));
+}`,
+        );
+      let fs = shader.fragmentShader;
+      fs = fs.replace(
+        '#include <common>',
+        /* glsl */ `#include <common>
+uniform vec4 uLeafMicro; // kind (1 parallel, 2 net), strength, size (m), relief sign
+varying vec2 vLeafDim;
+float lmH = 0.0;
+float lmHash(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+vec2 lmHash2(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973));
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.xx + p3.yz) * p3.zy);
+}
+float lmValue(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(mix(lmHash(i), lmHash(i + vec2(1.0, 0.0)), u.x), mix(lmHash(i + vec2(0.0, 1.0)), lmHash(i + vec2(1.0, 1.0)), u.x), u.y);
+}`,
+      );
+      fs = fs.replace(
+        '#include <map_fragment>',
+        /* glsl */ `#include <map_fragment>
+#ifdef USE_MAP
+{
+  vec2 lmP = vMapUv * vLeafDim;           // position on the blade (m): across, along
+  vec2 lmFw = max(fwidth(lmP), vec2(1e-7)); // pixel footprint (m)
+  float lmPx = max(lmFw.x, lmFw.y);
+  float lmS = uLeafMicro.z;
+  // Fade in once the coarsest micro feature spans ≥ 3 px (fully at 7 px).
+  float lmFade = smoothstep(3.0, 7.0, lmS / lmPx) * uLeafMicro.y;
+  if (lmFade > 0.002) {
+    float vein = 0.0, cellShade = 0.0;
+    if (uLeafMicro.x < 1.5) {
+      // Parallel veins (spacing scales with the blade width, ≥ 0.45 mm) with a finer vein midway,
+      // and cross septa at staggered heights in every channel: the ladder of a strap leaf.
+      float sv = clamp(vLeafDim.x / 7.0, 4.5e-4, lmS);
+      float xu = lmP.x / sv;
+      float d = abs(fract(xu + 0.5) - 0.5) * sv;
+      float dm = abs(fract(xu) - 0.5) * sv; // to the finer vein midway between two main ones
+      vein = 1.0 - smoothstep(0.05 * sv, 0.05 * sv + 1.5 * lmFw.x, d);
+      vein += 0.45 * (1.0 - smoothstep(0.025 * sv, 0.025 * sv + 1.5 * lmFw.x, dm)) * smoothstep(3.0, 7.0, 0.5 * sv / lmFw.x);
+      float ch = floor(xu * 2.0);
+      float sc = sv * (1.6 + 1.2 * lmHash(vec2(ch, 3.1)));
+      float yv = lmP.y / sc + lmHash(vec2(ch, 7.7));
+      float dc = abs(fract(yv) - 0.5) * sc;
+      float septum = (1.0 - smoothstep(0.03 * sv, 0.03 * sv + 1.5 * lmFw.y, 0.5 * sc - dc)) * smoothstep(3.0, 7.0, sc / lmFw.y);
+      vein = max(vein, 0.55 * septum);
+      // Channels between veins: elongated cells, slightly darker in the middle (air lacunae).
+      cellShade = -0.5 * (1.0 - abs(fract(xu * 2.0) - 0.5) * 2.0) + 0.6 * (lmValue(lmP * vec2(1.0 / (0.12 * sv), 1.0 / (0.6 * sv))) - 0.5);
+    } else {
+      // Areoles: the smallest vein-bounded fields (Voronoi cells, jittered), each gently domed.
+      vec2 q = lmP / lmS;
+      vec2 qi = floor(q), qf = fract(q);
+      float F1 = 8.0, F2 = 8.0;
+      vec2 cid = qi;
+      for (int j = -1; j <= 1; j++) {
+        for (int k = -1; k <= 1; k++) {
+          vec2 o = vec2(float(j), float(k));
+          vec2 r = o + 0.1 + 0.8 * lmHash2(qi + o) - qf;
+          float dd = dot(r, r);
+          if (dd < F1) { F2 = F1; F1 = dd; cid = qi + o; }
+          else if (dd < F2) F2 = dd;
+        }
+      }
+      float e = (sqrt(F2) - sqrt(F1)) * 0.5 * lmS; // ≈ distance to the cell wall (m)
+      vein = 1.0 - smoothstep(0.035 * lmS, 0.035 * lmS + 1.5 * lmPx, e);
+      cellShade = 0.35 * (lmHash(cid) - 0.5) - 0.4 * (1.0 - smoothstep(0.0, 0.18 * lmS, e)) * (1.0 - vein);
+    }
+    // Chlorophyll grain (≈ 0.2 mm), only where it is resolved.
+    float grain = (lmValue(lmP / 2.0e-4) - 0.5) * smoothstep(3.0, 6.0, 2.0e-4 / lmPx);
+    float rel = uLeafMicro.w;
+    // Veins carry less chlorophyll: paler and a touch less saturated; sunken veins sit in shade.
+    vec3 c = diffuseColor.rgb;
+    float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+    vec3 veinC = mix(c, vec3(l), 0.25) * (rel > 0.0 ? 1.22 : 0.82);
+    c = mix(c, veinC, vein * lmFade);
+    c *= 1.0 + lmFade * (0.1 * cellShade + 0.08 * grain);
+    diffuseColor.rgb = c;
+    // Relief (m): veins ±12 µm, domed cells, faint grain.
+    lmH = lmFade * (rel * 1.2e-5 * vein - 4.0e-6 * cellShade + 1.5e-6 * grain);
+  }
+}
+#endif`,
+      );
+      fs = fs.replace(
+        '#include <normal_fragment_maps>',
+        /* glsl */ `#include <normal_fragment_maps>
+{
+  // Bump from the micro relief (derivatives taken outside the branch above).
+  vec2 lmD = vec2(dFdx(lmH), dFdy(lmH));
+  if (dot(lmD, lmD) > 0.0) {
+    vec3 sp = -vViewPosition;
+    vec3 sx = normalize(dFdx(sp)), sy = normalize(dFdy(sp));
+    vec3 R1 = cross(sy, normal), R2 = cross(normal, sx);
+    float det = dot(sx, R1) * faceDirection;
+    vec3 g = sign(det) * (lmD.x * R1 + lmD.y * R2);
+    normal = normalize(abs(det) * normal - g);
+  }
+}`,
+      );
+      shader.fragmentShader = fs;
+    },
+    -9,
+  );
+}
+
+// ---------------------------------------------------------------------------------------------
 // Procedural surface detail (rocks, wood, shells)
 // ---------------------------------------------------------------------------------------------
 

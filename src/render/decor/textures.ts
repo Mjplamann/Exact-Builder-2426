@@ -593,6 +593,19 @@ function paintFernFrond(ctx: CanvasRenderingContext2D, W: number, H: number, bas
 }
 
 /** Low-frequency blotches + per-pixel speckle applied to opaque pixels. */
+/**
+ * Per-texel speckle value in [0, 1). A plain XOR of two multiplicative hashes keeps the top bits
+ * of each term a slow sawtooth (period ≈ 11 texels across, ≈ 6 along), which painted a regular
+ * diamond lattice over every leaf — invisible across the room, a checkered net at 6× zoom. The
+ * finalizer mixes the bits so neighbouring texels are independent.
+ */
+export function speckleHash(x: number, y: number, seed: number): number {
+  let h = Math.imul(x + 1, 374761393) ^ Math.imul(y + 7, 668265263) ^ Math.imul(seed | 0, 1274126177);
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+}
+
 function mottle(ctx: CanvasRenderingContext2D, W: number, H: number, seed: number, blotch: number, speckle: number): void {
   const img = ctx.getImageData(0, 0, W, H);
   const d = img.data;
@@ -603,7 +616,7 @@ function mottle(ctx: CanvasRenderingContext2D, W: number, H: number, seed: numbe
       const i = (y * W + x) * 4;
       if (d[i + 3] === 0) continue;
       const n = noise.fbm(x * fx, y * fy, 0.37, 3);
-      const h = ((Math.imul(x + 1, 374761393) ^ Math.imul(y + 7, 668265263) ^ seed) >>> 0) / 4294967296 - 0.5;
+      const h = speckleHash(x, y, seed) - 0.5;
       const f = 1 + n * blotch * 1.6 + h * speckle * 2;
       d[i] = Math.min(255, d[i] * f * (n > 0 ? 1 + n * blotch * 0.3 : 1));
       d[i + 1] = Math.min(255, d[i + 1] * f);

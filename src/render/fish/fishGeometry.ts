@@ -127,7 +127,9 @@ function buildBody(gb: GeoBuilder, prof: BodyProfile, body: ResolvedBody, lod: F
       const py = prof.patternY(x, y);
       const ty = py + (arcY[j] - py) * flat;
       bodyUV(x, ty, uv);
-      gb.v(x, y, z, uv[0], uv[1], x, PART.body, jawWeight(x, y), gillWeight(x, y), ty, 0, 0, 0);
+      // aFin.y = the painter's half height at x: ty·hd is the skin's physical height (SL units),
+      // where the atlas painter laid out the scale rows (close-up scale detail follows them).
+      gb.v(x, y, z, uv[0], uv[1], x, PART.body, jawWeight(x, y), gillWeight(x, y), ty, prof.textureHalfHeight(clamp(x, 0, 1)), 0, 0);
     }
   }
   // Rear pole slightly behind the caudal base (inside the fin root).

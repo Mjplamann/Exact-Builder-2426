@@ -8,7 +8,7 @@ import {
   type Material, type Side, type Texture,
 } from 'three';
 import { applyUnderwater } from '../../underwater';
-import { patchPlant } from '../shaders';
+import { patchLeafMicro, patchPlant, type LeafMicro } from '../shaders';
 import { leafStrip, tentacle, unitCylinder, unitSphere, disc } from '../geom';
 import { leafTexture, type LeafTexSpec } from '../textures';
 
@@ -46,6 +46,8 @@ export interface PlantMatOptions {
   transparent?: boolean;
   opacity?: number;
   vertexColors?: boolean;
+  /** Close-up vein / cell detail (textured, bending leaf strips only). */
+  micro?: LeafMicro;
 }
 
 /** A lit plant material with sway/bend/translucency and the underwater look, plus its depth twin. */
@@ -64,17 +66,40 @@ export function plantMaterial(o: PlantMatOptions): { material: MeshStandardMater
   if (o.map) m.alphaToCoverage = true;
   if (o.emissive) m.emissive = o.emissive;
   patchPlant(m, { bend: o.bend, translucency: o.transl, fluor: o.fluor });
+  if (o.micro && o.map && o.bend) patchLeafMicro(m, o.micro);
   applyUnderwater(m);
   const d = new MeshDepthMaterial({ depthPacking: RGBADepthPacking, map: o.map ?? null, alphaTest: o.map ? 0.5 : 0, side: o.side ?? DoubleSide });
   patchPlant(d, { bend: o.bend, depthOnly: true });
   return { material: m, depth: d };
 }
 
+/**
+ * Close-up micro-detail for a leaf texture: real blades only (not roots, moss shoots, polyp
+ * sheets or algae). Parallel-veined straps get veins and cross septa; everything else the
+ * areole network of its finest veins — larger and sunk into the blade on leathery anubias and
+ * ferns, small and raised on thin stem-plant leaves.
+ */
+export function leafMicroFor(tex: LeafTexSpec, roughness: number): LeafMicro | undefined {
+  switch (tex.outline) {
+    case 'feather-whorl': case 'fan': case 'needle-fork': case 'moss': case 'root': case 'feathery-root':
+    case 'squiggle': case 'star-polyp': case 'fern-frond': case 'carpet-mat': case 'lace': case 'grape':
+      return undefined;
+    default:
+      break;
+  }
+  const veins = tex.veins ?? 'pinnate';
+  if (veins === 'none') return undefined;
+  if (veins === 'parallel') return { kind: 'parallel', strength: 0.85, size: 1.4e-3, relief: 1 };
+  // Leathery, glossy leaves (anubias, bucephalandra, java fern) show sunken vein nets.
+  const leathery = roughness < 0.55;
+  return { kind: 'net', strength: leathery ? 0.9 : veins === 'net' ? 0.85 : 0.65, size: leathery ? 1.3e-3 : veins === 'net' ? 1.5e-3 : 0.9e-3, relief: leathery || veins === 'net' ? -1 : 1 };
+}
+
 /** Textured leaf strip part for a species (or a species' secondary organ). */
 export function leafPart(key: string, tex: LeafTexSpec, geo: { rows: number; fold?: number; ruffle?: number; ruffleFreq?: number; cup?: number; cols?: number }, mat: { transl: number; roughness: number; fluor?: Color; shadow?: boolean }): PartDef {
   return getPart(key, () => {
     const map = leafTexture(tex);
-    const { material, depth } = plantMaterial({ map, bend: true, transl: mat.transl, roughness: mat.roughness, fluor: mat.fluor });
+    const { material, depth } = plantMaterial({ map, bend: true, transl: mat.transl, roughness: mat.roughness, fluor: mat.fluor, micro: leafMicroFor(tex, mat.roughness) });
     return { geometry: leafStrip(geo), material, depth, bend: true, castShadow: mat.shadow ?? true };
   });
 }

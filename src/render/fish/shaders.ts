@@ -32,6 +32,7 @@ uniform float uFishTime;
 varying vec4 vFishLook;
 varying vec4 vFishState;
 varying vec4 vFishBody;
+varying float vFishY;
 
 float fishEnv(float s) {
   float sc = clamp(s, 0.0, 1.0);
@@ -172,6 +173,8 @@ void fishDeform(vec3 p, vec3 n, out vec3 po, out vec3 no) {
   float SL = uSwimWave.z;
   float mode = uSwimMode.x;
   vFishBody = vec4(s, part < 0.5 ? aFin.x : 0.0, part, 0.0);
+  // Physical skin height (SL units) of body vertices: the painter's scale-row coordinate.
+  vFishY = part < 0.5 ? aFin.x * aFin.y : 0.0;
   if (mode > 3.5) {
     invertDeform(p, n);
     po = p;
@@ -315,6 +318,7 @@ uniform vec4 uFishSkin3;  // x (SL) of the gill-cover edge: scale glints only be
 varying vec4 vFishLook;
 varying vec4 vFishState;
 varying vec4 vFishBody;
+varying float vFishY;
 vec3 fishHue(vec3 c, float h) {
   // Rotate hue in YIQ space (cheap, keeps luminance).
   float Y = dot(c, vec3(0.299, 0.587, 0.114));
@@ -326,6 +330,12 @@ vec3 fishHue(vec3 c, float h) {
 }
 float fishHash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+// Bit-exact port of patterns.ts hash2 (the atlas painter's scale jitter and per-scale values).
+float fishHash2(int ix, int iy, int seed) {
+  uint h = uint(ix) * 374761393u ^ uint(iy) * 668265263u ^ uint(seed) * 1274126177u;
+  h = (h ^ (h >> 13u)) * 1274126177u;
+  return float(h ^ (h >> 16u)) / 4294967296.0;
 }
 
 // Per-fragment shading state, set in main() before the light loop and read by RE_Direct_Fish.
@@ -477,6 +487,14 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
     bool isBody = part < 0.5;
     bool isEye = part > 0.5 && part < 1.5;
     float g = metalnessFactor;
+    // Pixel footprint on the skin (SL units) and screen pixels per atlas texel, for the close-up
+    // scale detail below (derivatives taken here, outside any branch).
+    float fishSkPx = max(fwidth(vFishBody.x), fwidth(vFishY));
+    float fishTexPx = 0.0;
+    #ifdef USE_MAP
+      vec2 fishTexFw = fwidth(vMapUv * vec2(textureSize(map, 0)));
+      fishTexPx = 1.0 / max(max(fishTexFw.x, fishTexFw.y), 1e-4);
+    #endif
     vec3 silver = vec3(0.62, 0.65, 0.68);
     fishGuanine = mix(silver, max(diffuseColor.rgb, uIridColor * 0.5), clamp(fishIri, 0.0, 1.0));
     // The iris's reflectors are tinted by its own pigment (gold, copper, red, silver-blue).
@@ -529,6 +547,74 @@ export const FISH_FRAGMENT_SKIN = /* glsl */ `
       // Only the scaled flank glints (not the naked head), never on scales smaller than ~3 px.
       float flank = smoothstep(uFishSkin3.x - 0.01, uFishSkin3.x + 0.04, vFishBody.x);
       fishGlint = uFishSkin.z * (0.15 + 0.85 * g) * sparse * flank * (1.0 - smoothstep(0.18, 0.4, fp)) * (1.0 - 0.8 * vFishState.w);
+      #if defined( USE_NORMALMAP_TANGENTSPACE )
+      // ---- Close-ups: every scale a small mirror of its own, on the painter's own lattice ----
+      // Across the room a scale is far below a pixel and the atlas carries the skin. Once a scale
+      // row spans ≥ 4–9 px (zoom, following), each exposed scale field gets its own platelet
+      // tilt: the flank becomes a shimmering mosaic of brighter and darker scales that changes
+      // as the fish turns, instead of a smooth, plastic sheen. Where the atlas itself is
+      // magnified, the free margins are also redrawn crisply (pigment line + relief).
+      float sCols = uFishSkin2.x;
+      float ssx = 1.0 / sCols, ssy = ssx * 0.64, sR = ssx * 0.78;
+      float near = smoothstep(4.0, 9.0, ssy / max(fishSkPx, 1e-7)) * flank;
+      if (near > 0.001) {
+        float sX = vFishBody.x, sY = vFishY;
+        int r0 = int(floor(sY / ssy));
+        float bestCx = 1e9, bestD = 0.0, bestId = -1.0;
+        vec2 bestDel = vec2(0.0);
+        // Same search as textures.ts skinField: the visible scale is the most anterior one
+        // covering the point (scales overlap like shingles, free margin toward the tail).
+        for (int dr = -1; dr <= 2; dr++) {
+          int row = r0 + dr;
+          float cy = float(row) * ssy;
+          float off = float(row & 1) * 0.5;
+          int ci = int(floor(sX / ssx - off));
+          for (int dc = -1; dc <= 1; dc++) {
+            int col = ci + dc;
+            float cx = (float(col) + off + 0.18 * (fishHash2(col, row, 77) - 0.5)) * ssx;
+            vec2 del = vec2(sX - cx, sY - cy);
+            float d = sqrt(del.x * del.x + del.y * del.y * 1.15);
+            if (d < sR && cx < bestCx) {
+              bestCx = cx;
+              bestD = d;
+              bestId = fishHash2(col, row, 911);
+              bestDel = del;
+            }
+          }
+        }
+        if (bestId >= 0.0) {
+          float e = (sR - bestD) / sR; // 0 at the free margin → 1 at the centre
+          vec3 sT = normalize(tbn[0]), sB = -normalize(tbn[1]); // along the body, up
+          vec2 tl = vec2(fract(bestId * 13.37), fract(bestId * 71.13)) - 0.5;
+          vec3 sN = normalize(normal + (sT * tl.x + sB * tl.y) * 0.5);
+          vec3 sV = normalize(vViewPosition);
+          vec3 sUp = normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz);
+          // Bright where the scale mirrors the lit water above, dim where it mirrors the depths.
+          float sky = smoothstep(-0.3, 0.9, dot(reflect(-sV, sN), sUp));
+          float field = smoothstep(0.0, 0.22, e);
+          float k = mix(0.62, 1.45, sky) * (0.85 + 0.3 * fract(bestId * 5.71));
+          float kk = mix(1.0, k, near * field * (0.3 + 0.7 * g) * (1.0 - 0.6 * vFishState.w));
+          material.diffuseColor *= kk;
+          material.specularColorBlended *= kk;
+          // Iridophores (the neon's stripe) flicker scale by scale too.
+          material.diffuseContribution *= mix(1.0, kk, near * clamp(fishIri, 0.0, 1.0) * 0.7);
+          // Glints from the physical scale (shaped like its exposed field), not the atlas cell.
+          float sparse2 = step(0.5, fract(bestId * 3.17)) * smoothstep(0.12, 0.35, e);
+          fishGlintN = normalize(mix(fishGlintN, normalize(normal + (sT * tl.x + sB * tl.y) * 0.95), near));
+          fishGlint = mix(fishGlint, uFishSkin.z * (0.15 + 0.85 * g) * sparse2 * (1.0 - 0.8 * vFishState.w), near);
+          // Magnified atlas: crisp free margin (melanophore line) and the shingle relief.
+          float mag = near * smoothstep(1.4, 3.0, fishTexPx);
+          if (mag > 0.001) {
+            material.diffuseContribution *= 1.0 - 0.2 * (1.0 - smoothstep(0.0, 0.14, e)) * mag;
+            float t = clamp(e / 0.3, 0.0, 1.0);
+            float dhde = 0.5 * 6.0 * t * (1.0 - t) / 0.3 - 0.3;
+            vec2 dedp = -vec2(bestDel.x, 1.15 * bestDel.y) / max(bestD * sR, 1e-6);
+            vec2 slope = 0.05 * sR * dhde * dedp;
+            normal = normalize(normal - (sT * slope.x + sB * slope.y) * mag);
+          }
+        }
+      }
+      #endif
     }
     #endif
   }

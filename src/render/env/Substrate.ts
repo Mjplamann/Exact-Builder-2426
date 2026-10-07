@@ -60,6 +60,24 @@ function antiTilingPatch(material: MeshStandardMaterial, macroScale: number, mac
   // Macro variation: brightness patches with a slight tint toward fines/mulm.
   float subMacro = uwFbm(vMapUv * uSubMacro.x + 7.1) - 0.5;
   sampledDiffuseColor.rgb *= (1.0 + subMacro * 2.0 * uSubMacro.y) * mix(vec3(1.0), uSubMacroTint, clamp(-subMacro * 2.5, 0.0, 1.0));
+  // [substrate] close-ups: sand grains are only 3–6 texels across, so at 4–8× zoom bilinear
+  // magnification melts them into a soft speckle. Where a texel spans more than ~1.3 px, the
+  // grain outlines are re-sharpened from the height channel against its local mean (a mask
+  // with a one-pixel edge: crisp grains, dark interstices) and the crowns turn glossy like
+  // single wet grains. Whole-tank views never take the branch.
+  vec2 subFw = fwidth(vMapUv * vec2(textureSize(map, 0)));
+  float subTexPx = 1.0 / max(max(subFw.x, subFw.y), 1e-4);
+  float subMag = smoothstep(1.3, 3.0, subTexPx);
+  float subH = subA.a * subWA + subB.a * subWB;
+  float subHw = max(fwidth(subH), 1e-3);
+  float subCrown = 0.0;
+  if (subMag > 0.001) {
+    float subMean = textureLod(map, subUvA, 2.2).a * subWA + textureLod(map, subUvB, 2.2).a * subWB;
+    float subDh = subH - subMean;
+    float subEdge = smoothstep(-subHw, subHw, subDh + 0.25 * subHw);
+    sampledDiffuseColor.rgb *= mix(1.0, 0.8 + 0.26 * subEdge, subMag);
+    subCrown = subMag * smoothstep(0.5, 3.0, subDh / subHw);
+  }
   diffuseColor *= sampledDiffuseColor;`,
       );
       fs = fs.replace(
@@ -67,7 +85,8 @@ function antiTilingPatch(material: MeshStandardMaterial, macroScale: number, mac
         /* glsl */ `
   float roughnessFactor = roughness;
   vec4 subOrm = texture2D(roughnessMap, subUvA) * subWA + texture2D(roughnessMap, subUvB) * subWB;
-  roughnessFactor *= subOrm.g;`,
+  roughnessFactor *= subOrm.g;
+  roughnessFactor *= 1.0 - 0.45 * subCrown;`,
       );
       fs = fs.replace(
         '#include <normal_fragment_maps>',
