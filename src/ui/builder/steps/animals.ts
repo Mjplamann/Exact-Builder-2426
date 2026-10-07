@@ -320,10 +320,22 @@ export function animalsStep(env: StepEnv): StepView {
         b.setAttribute('aria-label', have ? `Add one more ${sp.commonName} (${have} chosen)` : `Add ${sp.commonName}`);
       },
     });
+    // Animals that could live in this water and room come first (a 1 m knifefish should not head
+    // the list for an 84 L goldfish tank); the search order is kept within each part.
+    const wp = m.spec.waterParams ?? {};
+    const T = wp.temperatureC ?? 25;
+    const pH = wp.ph ?? 7;
+    const room = m.netLiters;
+    const fits = (sp: Species) => sp.tempC[0] <= T + 0.5 && sp.tempC[1] >= T - 0.5 && sp.ph[0] <= pH + 0.3 && sp.ph[1] >= pH - 0.3 && sp.minTankLiters <= room;
     const fill = () => {
-      const list = species.search(env.cache.pickerQuery, { water });
+      const found = species.search(env.cache.pickerQuery, { water });
+      const good = found.filter(fits);
+      const list = good.length && good.length < found.length ? [...good, ...found.filter((sp) => !fits(sp))] : found;
       vlist!.setItems(list, true);
-      setText(resultsMeta, `${list.length.toLocaleString()} ${plural(list.length, 'animal')} for ${water === 'marine' ? 'saltwater' : water} tanks`);
+      setText(
+        resultsMeta,
+        `${found.length.toLocaleString()} ${plural(found.length, 'animal')} for ${water === 'marine' ? 'saltwater' : water} tanks${good.length && good.length < found.length ? ` — the ${good.length.toLocaleString()} that suit this water and room first` : ''}`,
+      );
     };
     search.addEventListener(
       'input',
