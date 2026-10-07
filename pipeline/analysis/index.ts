@@ -12,7 +12,7 @@ import { project } from '../../shared/projection.ts'
 import { median, quantile } from '../../shared/stats.ts'
 import { pathogenShort } from '../../shared/pathogens.ts'
 import {
-  LEVEL_LABEL, LEVELS, TREND_LABEL, compositeScore, computeTrend, levelFromPercentile, rankAgainstHistory,
+  LEVEL_LABEL, LEVELS, TREND_LABEL, compositeScore, computeTrend, historicalValues, levelFromPercentile, rankAgainstHistory,
 } from '../../shared/risk.ts'
 import type { Logger } from '../lib/log.ts'
 import { officialLevel } from './thresholds.ts'
@@ -112,6 +112,9 @@ export function summarize(s: Series, now: string): SignalSummary | null {
     levelBasis = `Compared with the past ${years >= 1.5 ? `${Math.round(years)} years` : `${rank.n} weeks`} of this measure (${ordinal(Math.round(rank.percentile))} percentile)`
   }
   const computed = computeTrend(s.points, { minFloor: s.unit === 'count' ? 5 : 0 })
+  const hist = historicalValues(s.points, date)
+  const typical = hist.length >= 26 ? median(hist) : NaN
+  const vsTypical = typical > 0 ? Math.round((value / typical) * 10) / 10 : undefined
   const trend = pub?.trend ?? computed.trend
   const change2w = computed.change2w
   const prev = valueAt(s, addDays(date, -7))
@@ -129,6 +132,7 @@ export function summarize(s: Series, now: string): SignalSummary | null {
     previousValue: prev,
     change2w,
     percentile: rank ? Math.round(rank.percentile) : undefined,
+    vsTypical,
     level,
     trend,
     levelBasis,
@@ -224,17 +228,20 @@ function outlookFrom(
   else if (lr <= -Math.log(1.4)) direction = 'falling-fast'
   else if (lr <= -Math.log(1.1)) direction = 'falling'
   const who = forecast.source === 'mn-pulse' ? 'MN Pulse projection' : `CDC ${forecast.model}`
+  const subject = METRIC_SUBJECT[forecast.metric] ?? 'activity'
+  const plural = /s$/.test(subject)
+  const be = plural ? 'are' : 'is'
   const words: Record<TrendDirection, string> = {
-    'rising-fast': 'is projected to rise sharply',
-    rising: 'is projected to rise',
-    steady: 'is projected to stay about the same',
-    falling: 'is projected to decline',
-    'falling-fast': 'is projected to decline sharply',
-    unknown: 'has an uncertain outlook',
+    'rising-fast': `${be} projected to rise sharply`,
+    rising: `${be} projected to rise`,
+    steady: `${be} projected to stay about the same`,
+    falling: `${be} projected to decline`,
+    'falling-fast': `${be} projected to decline sharply`,
+    unknown: `${plural ? 'have' : 'has'} an uncertain outlook`,
   }
   return {
     direction,
-    text: `${nameOf(pathogen)} ${METRIC_SUBJECT[forecast.metric] ?? 'activity'} ${words[direction]} over the next ${target.horizon} week${target.horizon === 1 ? '' : 's'} (${who}).`,
+    text: `${series?.metric.startsWith('wastewater') ? series.label.split(' — ')[0] : nameOf(pathogen)} ${subject} ${words[direction]} over the next ${target.horizon} week${target.horizon === 1 ? '' : 's'} (${who}).`,
     forecastId: forecast.id,
   }
 }
@@ -351,12 +358,12 @@ export function rollupSites(all: Series[]): Series[] {
       note: `Weekly median across ${codes.size} wastewater plants (${sites.map((x) => x.geo.name.replace(/ \(.*\)$/, '')).join(', ')}). Covers only the communities these plants serve. ${first.note ?? ''}`.trim(),
       attrs: { derived: `median of ${reporting.length} reporting plants`, plants: String(codes.size) },
     }
+    // Publisher plant categories compare against national levels; the statewide rollup is rated
+    // against Minnesota's own history like every other measure, so we only note them.
     if (levels.length >= 2) {
-      derived.official = {
-        level: LEVELS[levels[Math.ceil((levels.length - 1) / 2)]],
-        label: `median of ${levels.length} plant categories`,
-        asOf: lastDate,
-        by: sourceNameOf(first),
+      derived.attrs = {
+        ...derived.attrs,
+        plantCategories: `${sourceNameOf(first)} plant categories (vs. national levels): median ${LEVEL_LABEL[LEVELS[levels[Math.ceil((levels.length - 1) / 2)]]].toLowerCase()}`,
       }
     }
     out.push(derived)
@@ -507,6 +514,15 @@ const METRIC_SHORT: Partial<Record<MetricKind, string>> = {
   cases: 'cases',
 }
 
+const LAYER_PHRASE: Partial<Record<MetricKind, string>> = {
+  ed_visit_pct: '% of ER visits',
+  wastewater_level: 'wastewater activity level',
+  wastewater_conc: 'wastewater concentration',
+  hosp_rate: 'hospitalizations per 100,000',
+  cases: 'reported cases',
+  test_positivity: '% of lab tests positive',
+}
+
 function buildMap(all: Series[], now: string) {
   const layers = new Map<string, MapLayer>()
   const counties = new Map<string, CountyPulse>()
@@ -523,7 +539,7 @@ function buildMap(all: Series[], now: string) {
       layers.set(layerId, {
         id: layerId,
         kind,
-        label: `${nameOf(s.pathogen)} — ${METRIC_PHRASE[s.metric]}`,
+        label: `${nameOf(s.pathogen)} — ${LAYER_PHRASE[s.metric] ?? METRIC_PHRASE[s.metric]}`,
         pathogen: s.pathogen,
         metric: s.metric,
         unit: s.unit,

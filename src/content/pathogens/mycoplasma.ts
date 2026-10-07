@@ -1,8 +1,11 @@
-// TODO(verify): drafted from long-standing CDC, AAP (Red Book) and IDSA/ATS information WITHOUT live web
-// verification (the shared WebSearch budget was exhausted; cdc.gov and health.state.mn.us were blocked).
-// Before publishing, confirm current (Oct 2026) activity and add pathogen-specific sources: CDC Mycoplasma
-// pneumoniae "About" and clinical overview pages, CDC 2024 M. pneumoniae increase update, AAP Red Book
-// Mycoplasma chapter (doxycycline in children), IDSA/ATS community-acquired pneumonia guideline, MDH page.
+// Verified 2026-10-07 from search results: CDC surveillance (NSSP national ED data; 2024 wave peaked in
+// August 2024, largest rise in ages 2-4; decreasing since early 2025 but elevated in some regions into 2026).
+// Research notes: Mycoplasma is not reportable in Minnesota and is not in NNDSS.
+// TODO(verify): clinical details (incubation, macrolide/doxycycline/fluoroquinolone use, AAP doxycycline
+// note, FDA fluoroquinolone and clarithromycin-in-pregnancy warnings) follow long-standing CDC, AAP Red Book,
+// IDSA/ATS and FDA label information but were not re-checked live (WebSearch budget exhausted; cdc.gov
+// blocked). Before publishing, add URLs from search results for: CDC Mycoplasma "About" and clinical
+// overview pages, AAP Red Book Mycoplasma chapter, IDSA/ATS community-acquired pneumonia guideline.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -18,7 +21,7 @@ const profile: PathogenProfile = {
     'Mycoplasma pneumoniae is a type of bacteria that infects the airways and lungs. Most people get a chest cold (tracheobronchitis), but some get pneumonia (a lung infection). It is often called “walking pneumonia” because many people feel well enough to keep going about their day. It spreads most where people are close together, such as homes, schools, and college dorms, and large waves of illness come every few years.',
   seasonality: {
     summary:
-      'Walking pneumonia can happen any time of year. In Minnesota, as in the rest of the U.S., it tends to be more common in late summer and fall. It also follows multi-year cycles, with large waves every few years (often 3 to 7 years apart) and quieter years in between. After several very quiet years during the COVID-19 pandemic, cases rose sharply across the U.S. in 2024.',
+      'Walking pneumonia can happen any time of year. In Minnesota, as in the rest of the U.S., it tends to be more common in late summer and fall. It also follows multi-year cycles, with large waves every few years (often 3 to 7 years apart) and quieter years in between. After several very quiet years during the COVID-19 pandemic, cases rose sharply across the U.S. in 2024. CDC data show cases have been dropping since early 2025, though they stayed higher than usual in some regions into 2026.',
     peakMonths: [8, 9, 10, 11],
   },
   transmission:
@@ -97,6 +100,7 @@ const profile: PathogenProfile = {
         'If you have asthma or COPD, follow your action plan and call early if your breathing gets worse.',
         'Tell your clinician about all your medicines, because some antibiotics used for walking pneumonia can interact with other drugs or affect heart rhythm.',
         'Rest, drink fluids, and stay home while you have a fever.',
+        'Ask your clinician whether you are due for flu or pneumococcal vaccines. They do not prevent walking pneumonia, but they lower your risk from other causes of pneumonia.',
       ],
     },
     seniors: {
@@ -136,11 +140,11 @@ const profile: PathogenProfile = {
       'Many people, especially those with only a chest cold, get better without antibiotics. When walking pneumonia is diagnosed or strongly suspected, a clinician may prescribe an antibiotic. Common antibiotics such as penicillin and amoxicillin do not work against Mycoplasma, because these bacteria have no cell wall for those drugs to attack. A cough can last for weeks even after treatment, and that alone does not mean the antibiotic failed.',
     options: [
       {
-        name: 'Azithromycin and other macrolide antibiotics',
+        name: 'Azithromycin and similar antibiotics (macrolides)',
         type: 'antibiotic',
         detail:
           'Azithromycin is the usual first choice, especially for children. Clarithromycin and erythromycin are in the same group. Most Mycoplasma in the U.S. still responds to these drugs, but some strains are resistant, and resistance is much more common in parts of Asia. Call your clinician if symptoms are not improving after about 2 to 3 days.',
-        who: 'Children and adults with walking pneumonia, including most pregnant people',
+        who: 'Children and adults with walking pneumonia. Azithromycin is the macrolide usually used during pregnancy; clarithromycin is generally avoided.',
       },
       {
         name: 'Doxycycline',
@@ -184,24 +188,32 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'A clinician often diagnoses walking pneumonia from symptoms and an exam, sometimes with a chest X-ray. A PCR test (a lab test that finds the germ’s genetic material) on a throat or nose swab can confirm it, often as part of a multi-germ respiratory panel used in hospitals and emergency departments. Because some people carry the bacteria without being sick, a positive test does not always mean it is causing the illness, so clinicians look at the whole picture. Blood antibody tests are less useful for deciding on treatment. Home COVID-19 and flu tests do not detect Mycoplasma.',
+    'A clinician often diagnoses walking pneumonia from symptoms and an exam, sometimes with a chest X-ray. A PCR test (a lab test that finds the germ’s genetic material) on a throat or nose swab can confirm it. Hospitals and emergency departments often use a test that checks for many germs at once. Because some people carry the bacteria without being sick, a positive test does not always mean it is causing the illness, so clinicians look at the whole picture. Blood antibody tests are less useful for deciding on treatment. Home COVID-19 and flu tests do not detect Mycoplasma.',
   whenToSeekCare: [
     'Call 911 or go to the emergency department for any emergency warning sign, such as struggling to breathe, blue or gray lips, or blistering sores in the mouth or eyes.',
-    'Call your clinician if you or your child has a fever with a cough that keeps getting worse, a fever lasting more than 2 to 3 days, or a cough lasting more than 3 weeks.',
+    'Call your clinician if you or your child has a fever with a cough that keeps getting worse or a fever lasting more than 2 to 3 days. Also call for a cough lasting more than 3 weeks.',
     'Call your clinician if you are taking an antibiotic and are not better after 2 to 3 days, or if you get better and then get worse.',
     'Call right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher.',
     'People with asthma, sickle cell disease, or a weakened immune system should call early if they develop a fever and cough.',
     'Urgent care can check a worsening cough or possible pneumonia when your clinic is closed. Go to the emergency department, not urgent care, for trouble breathing.',
   ],
   readingTheNumbers:
-    'MN Pulse tracks Mycoplasma mainly through the BioFire detection rate: the share of multi-pathogen respiratory panel tests at participating Midwest labs that find M. pneumoniae. These panels are mostly run for people sick enough to visit a hospital, emergency department, or clinic, often children, so the number shows how much serious respiratory illness is due to Mycoplasma, not how many people are infected. Most walking pneumonia is treated without any test and is never counted. The rate is usually low between epidemic waves. During a wave it can climb for months, because the illness spreads slowly and has a long incubation period, and waves often build through late summer and fall. Some detections are bacteria a person carries without being sick, so small week-to-week changes mean little. CDC’s public emergency department data cover COVID-19, flu, and RSV, not Mycoplasma. A steady rise over several weeks means walking pneumonia is spreading in the region. For most people, that means a lingering cough with fever is more likely to be Mycoplasma. Mention it to your clinician, because amoxicillin, a common first choice for other pneumonia, does not treat it.',
+    'MN Pulse tracks Mycoplasma mainly through the BioFire detection rate: the share of multi-pathogen respiratory panel tests at participating Midwest labs that find M. pneumoniae. These panels are mostly run for people sick enough to visit a hospital, emergency department, or clinic, often children. So the number shows the share of tested people with breathing symptoms who had Mycoplasma found, not how many people in the region are infected. Most walking pneumonia is treated without any test and is never counted. Mycoplasma is not a reportable disease in Minnesota, so there is no state case count. CDC publishes national emergency department data for Mycoplasma, but not data for Minnesota alone. The detection rate is usually low between epidemic waves. During a wave it can climb for months, because the illness spreads slowly and has a long incubation period. Waves often build through late summer and fall. Some detections are bacteria a person carries without being sick, so small week-to-week changes mean little. A steady rise over several weeks means walking pneumonia is spreading in the region. For most people, that means a lingering cough with fever is more likely to be Mycoplasma. Mention it to your clinician, because amoxicillin, a common first choice for other pneumonia, does not treat it.',
   watchNotes: [
-    'Walking pneumonia rose sharply across the U.S. in 2024 after several quiet years during the COVID-19 pandemic. The rise was especially notable in children ages 2 to 4, who were thought to get it less often in the past.',
+    'As of 2026, CDC reports that U.S. Mycoplasma infections have been dropping since early 2025. They stayed higher than usual in some regions into 2026.',
+    'Background: walking pneumonia rose sharply across the U.S. in 2024 after several quiet years during the COVID-19 pandemic. CDC data showed the rise peaked in August 2024. It was especially notable in children ages 2 to 4, who were thought to get it less often in the past.',
+    'Mycoplasma is not a reportable disease in Minnesota, so MN Pulse relies on Midwest BioFire lab data to track it.',
     'Large waves usually come every few years, so quieter periods often follow a big wave.',
     'Most Mycoplasma in the U.S. still responds to azithromycin. Clinicians watch for resistance, which is common in parts of Asia.',
     'There is no vaccine for Mycoplasma pneumoniae.',
   ],
-  sources: [{ label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' }],
+  sources: [
+    {
+      label: 'CDC: Mycoplasma pneumoniae infection surveillance and trends',
+      url: 'https://www.cdc.gov/mycoplasma/php/surveillance/index.html',
+    },
+    { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
+  ],
   lastReviewed: '2026-10-07',
 }
 

@@ -9,7 +9,11 @@ export function formatValue(v: number | null | undefined, unit: Unit, opts: { co
   if (unit === '%') return `${v < 1 && v > 0 ? v.toFixed(2) : v < 10 ? v.toFixed(1) : v.toFixed(0)}%`
   if (unit === 'per100k') return `${v < 10 ? v.toFixed(1) : v.toFixed(0)}`
   if (unit === 'index') return v.toFixed(1)
-  if (unit === 'ratio') return v < 0.01 ? v.toExponential(1) : v.toPrecision(2)
+  if (unit === 'ratio') {
+    if (v === 0) return '0'
+    if (Math.abs(v) >= 100) return Math.round(v).toLocaleString('en-US')
+    return Number(v.toPrecision(3)).toLocaleString('en-US', { maximumSignificantDigits: 3 })
+  }
   if (opts.compact && Math.abs(v) >= 1000) {
     return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(v)
   }

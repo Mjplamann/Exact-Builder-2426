@@ -1,10 +1,11 @@
-// TODO(verify): drafted from long-standing CDC/ACIP, AAP and ACOG pertussis guidance WITHOUT live web
-// verification (the shared WebSearch budget was exhausted; cdc.gov and health.state.mn.us were blocked).
-// Minnesota case counts come from CDC's NNDSS weekly table (data.cdc.gov x9gk-5huc) as downloaded on
-// 2026-10-07. Policy context mirrors the verified RSV/influenza profiles. Before publishing, confirm
-// current (Oct 2026) DTaP/Tdap status and add pathogen-specific sources: CDC pertussis clinical overview,
-// CDC pertussis treatment and postexposure prophylaxis guidance, CDC Tdap-in-pregnancy page, MDH pertussis
-// page and statistics, AAP Red Book pertussis chapter, ACOG Tdap committee opinion.
+// Verified 2026-10-07 from search results: MDH case counts (2023: 61; 2024: more than 3,100, most since 2012;
+// 2025: 1,237 or 1,283 depending on the update, so "more than 1,200"; 2026: 186 as of 9/10/2026), and the
+// federal schedule litigation (March 16, 2026 stay; First Circuit argument October 6, 2026, no ruling yet).
+// TODO(verify): clinical details (treatment windows, PEP groups, TMP-SMX cautions, Tdap timing and
+// effectiveness) follow long-standing CDC/ACIP, AAP Red Book and ACOG guidance but were not re-checked live
+// (WebSearch budget exhausted; cdc.gov blocked). Before publishing, add URLs from search results for: CDC
+// pertussis clinical overview / treatment and postexposure prophylaxis, CDC Tdap-in-pregnancy page, ACOG
+// Tdap committee opinion, AAP Red Book pertussis chapter, MDH school immunization requirements.
 import type { PathogenProfile } from '../types'
 
 const profile: PathogenProfile = {
@@ -14,17 +15,17 @@ const profile: PathogenProfile = {
   aka: ['Whooping cough', 'Bordetella pertussis', '100-day cough'],
   category: 'respiratory-bacterial',
   kind: 'bacterium',
-  biofireTargets: ['Bordetella pertussis'],
+  biofireTargets: ['Bordetella pertussis (ptxP)'],
   oneLiner: 'A very contagious bacterial infection that causes weeks of hard coughing fits and can be deadly for babies.',
   overview:
     'Whooping cough (pertussis) is an infection of the airways caused by the bacterium Bordetella pertussis. It starts like a cold, then causes coughing fits that can last for weeks and may end with a “whoop” sound or vomiting. It spreads very easily and is most dangerous for babies, who can stop breathing and often need hospital care. Vaccines for children, teens, adults, and pregnant people are the best protection, though protection fades over time.',
   seasonality: {
     summary:
-      'Whooping cough can spread any time of year, and in the U.S. cases are often higher in summer and fall. It also comes in waves every few years. Minnesota had a large wave that began in mid-2024 and continued into early 2025, after very few cases during the COVID-19 pandemic. Provisional reports for 2026 have been much lower so far.',
+      'Whooping cough can spread any time of year, and in the U.S. cases are often higher in summer and fall. It also comes in waves every few years. After very few cases during the COVID-19 pandemic, Minnesota had a large wave that began in mid-2024 and continued through 2025 at a lower level. The Minnesota Department of Health (MDH) counted more than 3,100 cases in 2024 and more than 1,200 in 2025. Reports for 2026 have been much lower so far.',
     peakMonths: [8, 9, 10, 11],
   },
   transmission:
-    'Whooping cough spreads very easily when a sick person coughs or sneezes and others breathe in the droplets. It also spreads through close contact, such as spending a lot of time near someone who is coughing or sharing a home. Many babies catch it from an older brother or sister, a parent, or a caregiver who does not know they have it, because in teens and adults it can seem like a bad cold or a cough that will not go away.',
+    'Whooping cough spreads very easily when a sick person coughs or sneezes and others breathe in the droplets. It also spreads through close contact, such as sharing a home or spending a lot of time near someone who is coughing. Many babies catch it from a brother or sister, a parent, or a caregiver. In teens and adults it can seem like a bad cold or a cough that will not go away, so they may not know they have it.',
   incubation: 'Symptoms usually start 5 to 10 days after exposure, but it can take as long as 3 weeks.',
   contagiousPeriod:
     'People are most contagious during the early, cold-like stage and the first 2 weeks after the cough starts. Without treatment, they can spread it for about 3 weeks after coughing begins. After 5 full days of the right antibiotic, a person is no longer considered contagious. Health officials advise staying home from school, child care, and work until 5 days of antibiotics are finished, or for 21 days after the cough started if not treated.',
@@ -141,7 +142,7 @@ const profile: PathogenProfile = {
       'Whooping cough is treated with antibiotics. Starting them early, ideally in the first 1 to 2 weeks before coughing fits begin, can make the illness milder. Started later, antibiotics may not shorten the cough, but they still stop the spread to others. CDC advises treating people 1 year and older within 3 weeks of when the cough started, and babies under 1 and pregnant people (especially near their due date) within 6 weeks. The cough can go on for weeks after the infection is gone, because the airways take time to heal.',
     options: [
       {
-        name: 'Azithromycin and other macrolide antibiotics',
+        name: 'Azithromycin and similar antibiotics (macrolides)',
         type: 'antibiotic',
         detail:
           'Azithromycin is the most common choice and is the preferred antibiotic for babies younger than 1 month. Clarithromycin and erythromycin are other options for older babies, children, and adults. Clinicians often start treatment before test results come back when whooping cough is likely, especially for babies.',
@@ -150,15 +151,16 @@ const profile: PathogenProfile = {
       {
         name: 'Trimethoprim-sulfamethoxazole (Bactrim, Septra)',
         type: 'antibiotic',
-        detail: 'An alternative for people who cannot take macrolide antibiotics. It is not used in babies younger than 2 months.',
-        who: 'People 2 months and older who cannot take azithromycin or similar antibiotics',
+        detail:
+          'An alternative for people who cannot take macrolide antibiotics. It is not used in babies younger than 2 months. It is usually avoided during pregnancy, especially near the due date, and while breastfeeding a baby younger than 2 months. In those cases, your clinician will choose another option.',
+        who: 'People 2 months and older who cannot take azithromycin or similar antibiotics (usually not during pregnancy)',
       },
       {
         name: 'Preventive antibiotics after exposure (post-exposure prophylaxis)',
         type: 'antibiotic',
         detail:
           'The same antibiotics used for treatment can prevent illness in people who were exposed. They work best when started as soon as possible and are recommended within 21 days of the exposure. They are recommended even for people who are vaccinated, because vaccine protection is not complete.',
-        who: 'Everyone in the household of a person with whooping cough, and close contacts at higher risk: babies, people in the third trimester of pregnancy, people with weakened immune systems or moderate to severe asthma, and people who spend time with these groups, such as child care staff',
+        who: 'Everyone in the home of a person with whooping cough. Also close contacts at higher risk: babies, people in the last 3 months of pregnancy, and people with weakened immune systems or moderate to severe asthma. Also close contacts who spend time with people in these groups, such as child care staff.',
       },
       {
         name: 'Hospital care',
@@ -218,14 +220,30 @@ const profile: PathogenProfile = {
     'Urgent care can test for whooping cough when your clinic is closed. Babies with breathing problems need the emergency department, not urgent care.',
   ],
   readingTheNumbers:
-    'MN Pulse can show whooping cough in two ways. Reported cases are the confirmed and probable cases that clinicians and labs report to MDH and CDC. These weekly counts often arrive in batches and are revised later, so the most recent weeks usually look lower than they will end up. The BioFire detection rate is the share of multi-pathogen respiratory panel tests at participating Midwest labs that find Bordetella pertussis. Most of these panels are run for people with other breathing illnesses, often in hospitals and emergency departments, so the rate stays very low even during outbreaks, and small changes can still matter. CDC’s public emergency department data cover COVID-19, flu, and RSV, not whooping cough. Between waves, cases are uncommon. During a wave like Minnesota’s in 2024 and 2025, reports can climb many times higher over several months. A steady rise means more spread in your community. For most people, it is a good reason to check that your family’s vaccines are up to date, especially if you are pregnant or around a baby, and to see a clinician for any cough that lasts 2 weeks or more.',
+    'MN Pulse can show whooping cough in two ways. Reported cases are the confirmed and probable cases that clinicians and labs report to MDH. These counts often arrive in batches and are revised later, so the most recent weeks usually look lower than they will end up. MDH’s own counts are usually higher and more up to date than CDC’s weekly tables, so check the source and date. The BioFire detection rate is the share of multi-pathogen respiratory panel tests at participating Midwest labs that find Bordetella pertussis. These panels are ordered for people with breathing symptoms, often in hospitals and emergency departments, and usually not to look for whooping cough in particular. So the rate shows the share of tested patients who had the germ, not how many people in Minnesota have it. The rate is usually low, so look for a steady rise over several weeks rather than a change in one week. MN Pulse does not show emergency department data for whooping cough. Between waves, cases are uncommon. During a wave like Minnesota’s in 2024, reports can climb many times higher over several months. A steady rise means more spread in your community. For most people, it is a good reason to check that your family’s vaccines are up to date. This matters most if you are pregnant or spend time with a baby. Also see a clinician for any cough that lasts 2 weeks or more.',
   watchNotes: [
-    'Minnesota had a large whooping cough wave in 2024 and 2025. CDC’s provisional notifiable disease data list more than 3,000 Minnesota cases for 2024 and more than 1,100 for 2025, compared with fewer than 100 a year in 2022 and 2023.',
-    'Provisional Minnesota reports for 2026 have been much lower so far, in line with a national decline. Minnesota’s weekly counts are often updated weeks later, and whooping cough still circulates, so babies remain at risk.',
-    'Federal vaccine guidance changed several times in 2025 and 2026, and in March 2026 a federal court paused changes to CDC’s childhood immunization schedule. As of October 2026, the CDC schedule in effect and the American Academy of Pediatrics both recommend DTaP for young children and Tdap at age 11 or 12, and CDC and ACOG recommend Tdap during every pregnancy. Talk with your clinician if you have questions.',
+    'Minnesota had a large whooping cough wave in 2024 and 2025. MDH counted more than 3,100 cases in 2024, the most since 2012, and more than 1,200 in 2025. That compares with 61 cases in 2023.',
+    'As of September 10, 2026, MDH had counted 186 cases for 2026. That is much lower than in the past two years and in line with a national decline. These counts are preliminary. Whooping cough still circulates, so babies remain at risk.',
+    'Federal vaccine guidance changed several times in 2025 and 2026. In March 2026, a federal court paused changes to CDC’s childhood immunization schedule. A federal appeals court heard arguments on October 6, 2026, and had not yet ruled, so federal guidance could change. As of October 2026, the CDC schedule in effect and the American Academy of Pediatrics both recommend DTaP for young children and Tdap at age 11 or 12. CDC and ACOG recommend Tdap during every pregnancy. Talk with your clinician if you have questions.',
     'Minnesota schools require DTaP for kindergarten and Tdap for 7th grade.',
   ],
   sources: [
+    {
+      label: 'MDH: Pertussis disease statistics, 2026',
+      url: 'https://www.health.state.mn.us/diseases/pertussis/stats/stats26.html',
+    },
+    {
+      label: 'MDH: Pertussis disease statistics, 2025',
+      url: 'https://www.health.state.mn.us/diseases/pertussis/stats/stats25.html',
+    },
+    {
+      label: 'MDH: Pertussis disease statistics and maps',
+      url: 'https://www.health.state.mn.us/diseases/pertussis/stats/index.html',
+    },
+    {
+      label: 'MDH: Pertussis annual summary of reportable diseases',
+      url: 'https://www.health.state.mn.us/diseases/reportable/dcn/pertussis.html',
+    },
     {
       label: 'CDC: NNDSS weekly notifiable disease data (provisional)',
       url: 'https://data.cdc.gov/d/x9gk-5huc',

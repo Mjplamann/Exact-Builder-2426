@@ -1,5 +1,5 @@
 // Small helpers shared by the overview (pulse) components.
-import type { ActivityLevel, Manifest, MetricKind, PathogenId, PathogenPulse, PulseFile, Unit } from '../../../shared/types'
+import type { SignalSummary, ActivityLevel, Manifest, MetricKind, PathogenId, PathogenPulse, PulseFile, Unit } from '../../../shared/types'
 import { formatValue, metricMeaning } from '../../lib/format'
 import { toHash, type AppState, type View } from '../../lib/state'
 import { pathogenName } from '../../content'
@@ -57,11 +57,38 @@ export function meaningAfterValue(metric: MetricKind, value: number | null | und
   return rest
 }
 
-/** Outlook text from the pipeline starts with a verb ("is projected to…"); prefix the pathogen name. */
+/**
+ * The headline figure for a watch card. Raw wastewater concentrations mean little to most readers,
+ * so wastewater measures are shown relative to their own usual level; detection counts as "N of M".
+ */
+export function cardFigure(s: SignalSummary, name: string): { figure: string; caption: string } {
+  const what = s.label.split(' — ')[0]
+  if (s.metric === 'ww_detections') {
+    const tested = s.attrs?.plantsTestedLatestWeek ?? s.attrs?.sitesTested
+    return {
+      figure: tested ? `${formatValue(s.latestValue, s.unit)} of ${tested}` : formatValue(s.latestValue, s.unit),
+      caption: `Minnesota wastewater sites detected ${name} in the latest week`,
+    }
+  }
+  if (s.metric === 'wastewater_conc' || (s.metric === 'wastewater_level' && !s.attrs?.sites)) {
+    const scope = s.attrs?.plants ? `median of ${s.attrs.plants} Minnesota plants` : s.geo.name
+    if (s.latestValue === 0) return { figure: 'None', caption: `${what} found in wastewater this week (${scope})` }
+    if (s.vsTypical != null) {
+      return { figure: `${s.vsTypical < 10 ? s.vsTypical.toFixed(1) : Math.round(s.vsTypical)}×`, caption: `its usual wastewater level — ${what} (${scope})` }
+    }
+    if (s.percentile != null && s.percentile >= 50) {
+      return { figure: `Top ${Math.max(1, 100 - s.percentile)}%`, caption: `of weeks in the past 3 years — ${what} in wastewater (${scope})` }
+    }
+    return { figure: 'Below usual', caption: `${what} in wastewater (${scope})` }
+  }
+  return { figure: formatValue(s.latestValue, s.unit), caption: meaningAfterValue(s.metric, s.latestValue, s.unit, name) }
+}
+
+/** Outlook text from the pipeline is a full sentence. */
 export function outlookSentence(p: PathogenPulse): string | undefined {
   const t = p.outlook?.text?.trim()
   if (!t) return undefined
-  return /^[a-z]/.test(t) ? `${pathogenName(p.pathogen)} ${t}` : t
+  return t
 }
 
 /** Human source name from the manifest (falls back to the id). */

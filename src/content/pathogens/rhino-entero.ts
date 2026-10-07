@@ -19,10 +19,10 @@ const profile: PathogenProfile = {
   biofireTargets: ['Human Rhinovirus/Enterovirus'],
   oneLiner: 'The top cause of the common cold. Usually mild, but it can trigger asthma flares, and some enteroviruses cause rarer illness.',
   overview:
-    'Rhinoviruses are the most common cause of the common cold. Enteroviruses are close relatives. They include enterovirus D68 (EV-D68), which can cause serious breathing trouble, mostly in children with asthma, and coxsackieviruses, which cause hand, foot, and mouth disease. The BioFire respiratory test reports these viruses together because they are so alike. Most infections are mild, but rhinoviruses are a leading trigger of asthma attacks, and rarely an enterovirus can cause serious illness of the heart, brain, or nerves.',
+    'Rhinoviruses are the most common cause of the common cold. Their close relatives, the enteroviruses, include enterovirus D68 (EV-D68), which can cause serious breathing trouble, mostly in children with asthma, and the viruses that cause hand, foot, and mouth disease. Most infections are mild, but rhinoviruses are a leading trigger of asthma attacks. Rarely, an enterovirus causes serious illness of the heart, brain, or nerves.',
   seasonality: {
     summary:
-      'Rhinoviruses spread all year in Minnesota. They usually rise in late August and September, when children go back to school, and again in spring. Enteroviruses, including EV-D68 and the viruses that cause hand, foot, and mouth disease, spread mostly in summer and early fall. In the past, EV-D68 caused larger outbreaks about every other year, usually peaking in late summer, but the pattern can vary.',
+      'Rhinoviruses spread all year in Minnesota. They usually rise in late August and September, when children go back to school, and again in spring. Enteroviruses, including EV-D68 and the viruses that cause hand, foot, and mouth disease, spread mostly in summer and early fall. In the past, EV-D68 caused larger outbreaks about every other year, usually in late summer and early fall, but the pattern can vary.',
     peakMonths: [9, 10],
   },
   transmission:
@@ -42,7 +42,7 @@ const profile: PathogenProfile = {
       'Wheezing or an asthma flare in people with asthma',
     ],
     lessCommon: [
-      'Hand, foot, and mouth disease (from coxsackieviruses and other enteroviruses): fever, painful mouth sores, and a rash or blisters on the hands and feet, and sometimes the knees, elbows, buttocks, or diaper area',
+      'Hand, foot, and mouth disease: fever, painful mouth sores, and a rash or blisters on the hands and feet. The rash can also show up on the knees, elbows, buttocks, or diaper area.',
       'Peeling skin, or loss of fingernails or toenails, a few weeks after hand, foot, and mouth disease (the nails grow back)',
       'Ear infections or sinus infections after a cold',
       'Severe breathing trouble from EV-D68, mostly in children with asthma',
@@ -56,6 +56,7 @@ const profile: PathogenProfile = {
       'Bluish or gray lips, face, or fingernails',
       'Sudden weakness or floppiness in an arm or leg',
       'Face drooping, trouble moving the eyes, drooping eyelids, trouble swallowing, or slurred speech',
+      'Chest pain or pressure, a racing or irregular heartbeat, or fainting',
       'Severe headache with a stiff neck, confusion, or being very hard to wake up',
       'Seizures',
       'Signs of dehydration, such as no urine (pee) for 8 hours, a very dry mouth, or no tears when crying, often because mouth sores make drinking painful',
@@ -70,7 +71,7 @@ const profile: PathogenProfile = {
       actions: [
         'Clear a stuffy nose with saline (saltwater) drops and gentle suction, especially before feeds and sleep.',
         'Do not give cough and cold medicines or honey to babies under 1 year.',
-        'Call your clinician right away for any fever of 100.4°F (38°C) or higher in a baby younger than 3 months.',
+        'Call your clinician right away if a baby younger than 3 months has a fever of 100.4°F (38°C) or higher, taken rectally (in the bottom). Call before giving any fever medicine.',
         'Get care quickly if your baby is breathing fast or hard, is feeding poorly, or has fewer wet diapers.',
         'Ask anyone with a cold to stay away from your baby, and have everyone wash their hands before holding the baby.',
       ],
@@ -83,7 +84,7 @@ const profile: PathogenProfile = {
         'If your child has asthma, give their daily controller medicine as prescribed, and keep an up-to-date asthma action plan at home and at school.',
         'Make sure your child has a quick-relief inhaler that is not expired and knows how to use it, especially in late summer and fall.',
         'Teach handwashing and coughing or sneezing into an elbow.',
-        'For hand, foot, and mouth disease, offer cool drinks and soft foods, and keep your child home while they have a fever or feel too sick for normal activities. Check your child care or school’s rules.',
+        'For hand, foot, and mouth disease, offer cool drinks and soft foods. Keep your child home while they have a fever or feel too sick for normal activities, and check your child care or school’s rules.',
         'Get care right away for trouble breathing or sudden weakness in an arm or leg.',
       ],
     },
@@ -106,6 +107,7 @@ const profile: PathogenProfile = {
         'Keep long-term conditions like COPD, asthma, diabetes, and heart disease well managed.',
         'Call your clinician if a cold makes your breathing or a long-term condition worse.',
         'Wash your hands often, and avoid touching your eyes, nose, and mouth.',
+        'Ask your clinician which vaccines (flu, COVID-19, pneumococcal, and RSV if you are at higher risk) are right for you. They do not prevent colds, but they protect against other serious lung infections.',
       ],
     },
     seniors: {
@@ -122,7 +124,7 @@ const profile: PathogenProfile = {
     pregnant: {
       risk: 'lower',
       summary:
-        'Colds are not known to be more serious during pregnancy, though a stuffy nose may feel worse because pregnancy itself can cause congestion. Hand, foot, and mouth disease is usually mild in adults. Rarely, an enterovirus infection right before delivery can pass to the newborn, who can get very sick.',
+        'Colds are not known to be more serious during pregnancy, though pregnancy itself can make a stuffy nose worse. An enterovirus infection right before delivery can pass to the newborn. Most of these babies have mild illness, but rarely a newborn gets very sick, with infection of the heart, liver, or brain.',
       actions: [
         'Ask your prenatal care provider or pharmacist before taking any cold medicine.',
         'Try saline nose spray, a cool-mist humidifier, rest, and fluids to ease symptoms.',
@@ -157,7 +159,7 @@ const profile: PathogenProfile = {
         name: 'Pain and fever relievers (acetaminophen or ibuprofen)',
         type: 'supportive',
         detail:
-          'These can ease fever, sore throat, and painful mouth sores. Follow the label for age and weight, and ask before giving ibuprofen to a baby under 6 months. Never give aspirin to children or teens, because it can cause Reye’s syndrome, a rare but serious illness.',
+          'These can ease fever, sore throat, and painful mouth sores. Follow the label or your clinician’s advice for age and weight. Call your clinician before giving any fever medicine to a baby younger than 3 months, and do not give ibuprofen to babies under 6 months unless your clinician says to. Never give aspirin to children or teens, because it can cause Reye’s syndrome, a rare but serious illness.',
         who: 'People with fever or pain who are uncomfortable.',
       },
       {
@@ -203,21 +205,23 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'Most colds and cases of hand, foot, and mouth disease are diagnosed by symptoms and an exam, with no test needed. Hospitals and some clinics use multiplex PCR panels (one test that checks a nose swab for many germs at once), such as the BioFire Respiratory Panel. This panel reports “Human Rhinovirus/Enterovirus” as a single result because the two viruses are so alike. It cannot tell which one is present, or which type, such as EV-D68. Finding EV-D68 takes special testing, usually done by a public health lab. These panels can stay positive for weeks after a cold, and they often find rhinovirus in people with mild or no symptoms, so a positive result does not always explain an illness. Home tests for COVID-19 and flu do not detect these viruses.',
+    'Most colds and cases of hand, foot, and mouth disease are diagnosed by symptoms and an exam, with no test needed. Hospitals and some clinics use multiplex PCR panels, which check one nose swab for many germs at once by finding their genetic material. The BioFire Respiratory Panel reports “Human Rhinovirus/Enterovirus” as a single result because the two viruses are so alike. It cannot tell which one is present, or which type, such as EV-D68. Finding EV-D68 takes special testing, usually done by a public health lab. These panels can stay positive for weeks after a cold, and they often find rhinovirus in people with mild or no symptoms. So a positive result does not always explain an illness. Home tests for COVID-19 and flu do not detect these viruses.',
   whenToSeekCare: [
-    'Call your clinician if cold symptoms last more than 10 days without getting better, or if a fever lasts more than 4 days.',
-    'Call if symptoms such as fever or cough get better but then come back or get worse.',
+    'Call your clinician if a child under 2 has a fever for more than 24 hours, or if anyone older has a fever for more than 3 days.',
+    'Call if cold symptoms last more than 10 days without getting better, or if symptoms such as fever or cough get better but then come back or get worse.',
+    'For hand, foot, and mouth disease, call your clinician if your child is younger than 6 months, has a weakened immune system, or has severe symptoms. Also call if they are not drinking enough, have a fever for more than 3 days, or are not better after 10 days.',
     'Call if you have ear pain or sinus pain that does not go away.',
     'Call your clinician if a cold makes asthma, COPD, or another long-term condition worse, or if you need your quick-relief inhaler more often than your action plan allows.',
     'Go to urgent care the same day if a child with mouth sores will not drink and is peeing less, but is alert and breathing comfortably.',
     'Call 911 or go to the emergency department for any emergency warning sign, especially trouble breathing or sudden weakness in an arm or leg.',
   ],
   readingTheNumbers:
-    'MN Pulse shows this virus group mainly as a BioFire detection rate: the percent of BioFire respiratory panel tests at participating labs in the Midwest (not just Minnesota) that found rhinovirus or enterovirus. These panels are run mostly on people sick enough to go to a hospital, emergency department, or clinic, and many are children. Rhinovirus/enterovirus is the virus these panels find most often. It is found all year, in at least about 1 in 10 tests even in winter, and it often shows up along with another virus. So a high number here is normal and is not a warning sign by itself. Watch the direction instead: the rate usually climbs 2 to 3 times higher in early fall and again in spring. A rise in late August or September often lines up with more colds and asthma flares as school starts. MDH also reports weekly rhinovirus/enterovirus results from a group of Minnesota labs that run respiratory panels. Because the test cannot tell rhinovirus from enterovirus, these numbers cannot show an EV-D68 outbreak on their own. WastewaterSCAN tests sewage from four Minnesota treatment plants (Rochester, Mankato, Red Wing, and St. Cloud) for EV-D68 specifically. Public emergency department (ED) visit data do not break out this virus group. For an average person, a fall rise means: wash hands often, keep sick kids home, and if your child has asthma, make sure they take their controller medicine and have a quick-relief inhaler on hand. Numbers for the most recent week or two may be revised.',
+    'MN Pulse tracks rhinovirus/enterovirus with three kinds of data. Test positivity is the share of PCR lab tests for this virus group that come back positive. It comes from Minnesota labs that report to MDH, and from CDC’s lab network (NREVSS) for HHS Region 5: Minnesota, Wisconsin, Illinois, Indiana, Michigan, and Ohio. The BioFire detection rate is the share of BioFire respiratory panel tests at participating Midwest labs (or nationwide, when Midwest data are not available) that find this virus group. These tests are done mostly on people sick enough to visit a clinic, emergency department, or hospital, and many are children. So the numbers show the share of tested patients with the virus. They do not show how many Minnesotans are sick. This is the virus these panels find most often. In BioFire data from 2013 to 2017, it was found in at least 1 in 10 tests even in winter, and it rose 2 to 3 times higher in early fall and spring. So a high number is normal. Watch the direction instead. These lab tests cannot tell rhinovirus from EV-D68. WastewaterSCAN tests sewage from four Minnesota plants (Rochester, Mankato, Red Wing, and St. Cloud) for EV-D68 specifically. Emergency department data do not track this virus group. For most people, a fall rise means more colds and asthma flares. Wash hands often, keep sick kids home, and make sure children with asthma take their controller medicine. Numbers for the most recent week or two may be revised.',
   watchNotes: [
-    'Late summer and early fall is the usual season for EV-D68. In the U.S., large EV-D68 outbreaks happened every other year in 2014, 2016, and 2018. Each was followed by more cases of AFM, which peaked in September, about a month after EV-D68 peaked. AFM is rare, but if a child suddenly develops weakness in an arm or leg, get medical care right away.',
+    'As of early October 2026, WastewaterSCAN rated EV-D68 levels in sewage “very high” at the Rochester plant (since September 8) and at the Mankato plant (on October 1). Red Wing and St. Cloud were rated low. Wastewater shows a virus is spreading in a community, not how many people are sick. If your child has asthma, keep up their daily controller medicine. Get care right away for trouble breathing or sudden weakness in an arm or leg.',
+    'Late summer and fall is the usual season for EV-D68. Large U.S. outbreaks happened in 2014, 2016, and 2018, and each was followed by more cases of AFM. The every-other-year pattern broke in 2020, during COVID-19 precautions. EV-D68 rose again in 2022, but AFM cases stayed much lower than in 2018. AFM is rare, but if a child suddenly develops weakness in an arm or leg, get medical care right away.',
+    'WastewaterSCAN switched to an updated EV-D68 wastewater test in mid-September 2026, so Minnesota EV-D68 wastewater levels from before and after the switch may not line up exactly.',
     'There is no vaccine in the U.S. for rhinoviruses, EV-D68, or the enteroviruses that cause hand, foot, and mouth disease. Polio vaccine protects only against poliovirus.',
-    'WastewaterSCAN switched to an updated EV-D68 wastewater test in September 2026, so Minnesota EV-D68 wastewater levels from before and after the switch may not line up exactly.',
   ],
   sources: [
     {
@@ -225,9 +229,18 @@ const profile: PathogenProfile = {
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6054708/',
     },
     {
-      label: 'Park et al. — Epidemiological dynamics of enterovirus D68 in the US: implications for acute flaccid myelitis (preprint; later published in Science Translational Medicine)',
-      url: 'https://doi.org/10.1101/2020.07.23.20069468',
+      label: 'Park et al. — Epidemiological dynamics of enterovirus D68 in the United States and implications for acute flaccid myelitis, Science Translational Medicine, 2021',
+      url: 'https://www.science.org/doi/10.1126/scitranslmed.abd2400',
     },
+    {
+      label: 'CDC MMWR — Surveillance for acute flaccid myelitis, United States, 2018–2022',
+      url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10843070/',
+    },
+    {
+      label: 'AAP News — CDC advisory reports increase in enterovirus D68, which has been linked to AFM',
+      url: 'https://publications.aap.org/aapnews/news/22131/CDC-advisory-reports-increase-in-enterovirus-D68',
+    },
+    { label: 'CDC — NREVSS dashboard', url: 'https://www.cdc.gov/nrevss/php/dashboard/index.html' },
     {
       label: 'MDH — Viral respiratory illness in Minnesota: laboratory data',
       url: 'https://www.health.state.mn.us/diseases/respiratory/stats/lab.html',

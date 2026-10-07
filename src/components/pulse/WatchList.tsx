@@ -2,11 +2,11 @@
 import { useState } from 'react'
 import type { Manifest, PathogenPulse, PulseFile } from '../../../shared/types'
 import { pathogenName } from '../../content'
-import { formatDate, formatValue } from '../../lib/format'
+import { formatDate } from '../../lib/format'
 import { useAppState } from '../../lib/state'
 import { Sparkline } from '../charts/Sparkline'
 import { EmptyState, LevelBadge, SourceTag, TrendPill } from '../ui'
-import { hrefFor, meaningAfterValue, naturalFrequency, outlookSentence, rankPathogens, sourceName } from './util'
+import { cardFigure, hrefFor, naturalFrequency, outlookSentence, rankPathogens } from './util'
 
 const TOP = 6
 
@@ -61,6 +61,7 @@ function WatchCard({ p, manifest }: { p: PathogenPulse; manifest: Manifest }) {
   const rising = p.trend === 'rising' || p.trend === 'rising-fast'
   const freq = s ? naturalFrequency(s.latestValue, s.metric, s.unit) : undefined
   const outlook = outlookSentence(p)
+  const fig = s ? cardFigure(s, name) : undefined
 
   return (
     <a
@@ -89,8 +90,8 @@ function WatchCard({ p, manifest }: { p: PathogenPulse; manifest: Manifest }) {
         <>
           <div className="mt-4 flex items-end justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-3xl leading-none font-semibold tracking-tight text-ink-1">{formatValue(s.latestValue, s.unit)}</p>
-              <p className="mt-1.5 text-sm leading-snug text-ink-2">{meaningAfterValue(s.metric, s.latestValue, s.unit, name)}</p>
+              <p className="text-3xl leading-none font-semibold tracking-tight text-ink-1">{fig?.figure}</p>
+              <p className="mt-1.5 text-sm leading-snug text-ink-2">{fig?.caption}</p>
             </div>
             <div className="shrink-0 pb-1">
               <Sparkline points={s.spark} width={104} height={36} color="var(--accent)" label={`${name}, last ${s.spark.length} weeks`} />
@@ -111,7 +112,7 @@ function WatchCard({ p, manifest }: { p: PathogenPulse; manifest: Manifest }) {
       )}
 
       <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-3 text-xs text-ink-3">
-        {s && <SourceTag>{sourceName(manifest, s.source)}</SourceTag>}
+        {s && <SourceTag>{s.sourceName ?? manifest.sources.find((m) => m.id === s.source)?.name ?? s.source}</SourceTag>}
         {(p.asOf ?? s?.latestDate) && <span>Week ending {formatDate(p.asOf ?? s?.latestDate, true)}</span>}
       </div>
     </a>

@@ -288,6 +288,8 @@ export interface SignalSummary {
   change2w?: number
   /** Percentile (0–100) of the latest value within this series' historical weekly values. */
   percentile?: number
+  /** Latest value divided by the median of the past ~3 years (e.g. 3.2 = "3.2× its usual level"). */
+  vsTypical?: number
   level: ActivityLevel
   trend: TrendDirection
   /** How the level was determined, e.g. "MDH RESP-NET threshold" or "vs. 3 prior seasons". */
