@@ -446,6 +446,8 @@ export class Engine {
   private picker: ((clientX: number, clientY: number) => Vector3 | null) | null = null;
   /** Seconds until the lens refocuses on the frame centre (after a zoom or pan without an anchor); < 0 = none. */
   private refocusT = -1;
+  /** Where to autofocus (client px) when `valid`; else the frame centre. */
+  private refocusPoint = { x: 0, y: 0, valid: false };
 
   /**
    * Follow a moving subject (its arrays are read every frame — pass live references, refreshed in
@@ -499,16 +501,27 @@ export class Engine {
     }
   }
 
-  /** Autofocus on the frame centre once the view has settled (like a camera's centre AF point). */
-  private refocusSoon(): void {
-    if (!this.rig.isFollowing) this.refocusT = 0.35;
+  /**
+   * Autofocus once the view has settled: on the frame centre (like a camera's centre AF point), or
+   * where the fingers are when they carried a zoom anchor along (`at`, client px).
+   */
+  private refocusSoon(at?: { x: number; y: number }): void {
+    if (this.rig.isFollowing) return;
+    this.refocusT = 0.35;
+    this.refocusPoint.valid = !!at;
+    if (at) {
+      this.refocusPoint.x = at.x;
+      this.refocusPoint.y = at.y;
+    }
   }
 
   private refocus(): void {
     if (this.rig.isFollowing || this.rig.targetZoom < 1.3) return;
     const rect = this.canvas.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    const rp = this.refocusPoint;
+    const inside = rp.valid && rp.x > rect.left && rp.x < rect.right && rp.y > rect.top && rp.y < rect.bottom;
+    const x = inside ? rp.x : rect.left + rect.width / 2;
+    const y = inside ? rp.y : rect.top + rect.height / 2;
     const p = this.picker?.(x, y) ?? (this.anchorInTank(this.rayFromScreen(x, y), this.tmpV) ? this.tmpV : null);
     if (p) this.rig.focusAt(p.z);
   }
@@ -580,7 +593,9 @@ export class Engine {
       a.x -= MathUtils.clamp(dx, -1, 1) * rect.width * 0.5;
       a.y += MathUtils.clamp(dy, -1, 1) * rect.height * 0.5;
       a.time = performance.now();
-      this.refocusT = -1;
+      // A pinch keeps the lens on its anchor (that point is still under the fingers); a long
+      // drag onward refocuses on whatever is under the finger once it rests.
+      this.refocusSoon(a);
       return;
     }
     this.refocusSoon();
