@@ -7,11 +7,11 @@ const weekly = (start: string, values: number[]): Point[] => values.map((v, i) =
 
 describe('risk levels', () => {
   it('maps percentiles to bands', () => {
-    expect(levelFromPercentile(10)).toBe('minimal')
-    expect(levelFromPercentile(30)).toBe('low')
-    expect(levelFromPercentile(60)).toBe('moderate')
-    expect(levelFromPercentile(80)).toBe('high')
-    expect(levelFromPercentile(95)).toBe('very-high')
+    expect(levelFromPercentile(40)).toBe('minimal')
+    expect(levelFromPercentile(60)).toBe('low')
+    expect(levelFromPercentile(80)).toBe('moderate')
+    expect(levelFromPercentile(95)).toBe('high')
+    expect(levelFromPercentile(99)).toBe('very-high')
     expect(levelFromPercentile(NaN)).toBe('unknown')
   })
   it('maps explicit cut-points', () => {

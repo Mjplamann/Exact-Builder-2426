@@ -75,6 +75,8 @@ export type MetricKind =
   | 'cases' // reported case count
   | 'outbreaks' // reported outbreak count
   | 'deaths' // reported deaths
+  | 'ww_detections' // wastewater sites (or samples) with a detection that week (count)
+  | 'rt' // effective reproduction number estimate (unitless; > 1 means growing)
 
 export type Unit = '%' | 'count' | 'per100k' | 'index' | 'ratio'
 
@@ -90,6 +92,8 @@ export const METRIC_UNITS: Record<MetricKind, Unit> = {
   cases: 'count',
   outbreaks: 'count',
   deaths: 'count',
+  ww_detections: 'count',
+  rt: 'index',
 }
 
 export type GeoType =
@@ -149,6 +153,38 @@ export interface Series {
   provisionalFrom?: string
   /** Free-text caveat shown with the chart. */
   note?: string
+  /**
+   * The publisher's own classification of the latest week, when it provides one
+   * (e.g. CDC NSSP trend "Increasing", CDC wastewater category "Moderate", CDC Rt "Likely growing").
+   * The analysis prefers these over its own computed level/trend.
+   */
+  official?: {
+    level?: ActivityLevel
+    trend?: TrendDirection
+    /** Publisher's wording, shown verbatim (e.g. "Likely growing"). */
+    label?: string
+    /** Week the classification applies to. */
+    asOf?: string
+    /** e.g. "CDC NSSP", "CDC NWSS WVAL". */
+    by?: string
+  }
+  /** Extra identifying attributes (e.g. HSA name, plant name, assay) shown in tooltips. */
+  attrs?: Record<string, string>
+  /**
+   * Publisher-defined activity cut-points for this exact measure and place (lower bounds of each
+   * level), e.g. CDC's PRISM respiratory-activity thresholds for Minnesota. Used to classify the
+   * latest value and drawn as reference bands on charts.
+   */
+  thresholds?: ActivityThresholds
+}
+
+export interface ActivityThresholds {
+  low: number
+  moderate: number
+  high: number
+  veryHigh: number
+  /** Who defined them, e.g. "CDC respiratory activity levels (PRISM, 2026-09-04)". */
+  by: string
 }
 
 /** A dataset file: public/data/series/<file>.json */
@@ -284,6 +320,8 @@ export interface CountyPulse {
 
 export interface MapLayer {
   id: string
+  /** 'county' = choropleth over counties; 'site' = point markers (e.g. wastewater plants). */
+  kind: 'county' | 'site'
   label: string
   pathogen: PathogenId
   metric: MetricKind
@@ -291,6 +329,17 @@ export interface MapLayer {
   source: string
   description: string
   latestDate?: string
+}
+
+/** A point feature such as a wastewater treatment plant. */
+export interface SitePulse {
+  id: string
+  name: string
+  coord?: [number, number]
+  counties?: string[]
+  population?: number
+  /** Keyed by layer id, e.g. "ww:covid". */
+  metrics: Record<string, CountyMetric>
 }
 
 export interface PulseFile {
@@ -304,4 +353,5 @@ export interface PulseFile {
   pathogens: PathogenPulse[]
   mapLayers: MapLayer[]
   counties: CountyPulse[]
+  sites: SitePulse[]
 }

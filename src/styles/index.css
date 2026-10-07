@@ -1,0 +1,222 @@
+@import 'tailwindcss';
+
+/*
+ * MN Pulse design tokens.
+ * Chart colors follow the dataviz reference palette (validated for CVD separation and contrast).
+ * Activity levels use a validated ordinal "heat" ramp (light + dark steps), always paired with a text label.
+ * Theme: OS preference by default; [data-theme] on <html> overrides both ways.
+ */
+:root {
+  color-scheme: light;
+  --page: #f6f6f3;
+  --surface-1: #fcfcfb;
+  --surface-2: #f1f0ec;
+  --surface-3: #e7e6e0;
+  --ink-1: #0b0b0b;
+  --ink-2: #52514e;
+  --ink-3: #6f6d68;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --border-strong: rgba(11, 11, 11, 0.18);
+  --accent: #1c5cab;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3eefb;
+  --focus: #2a78d6;
+
+  /* categorical series (fixed order; never cycled) */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
+  --series-muted: #b5b3ab;
+
+  /* sequential blue (magnitude) */
+  --seq-100: #cde2fb;
+  --seq-200: #9ec5f4;
+  --seq-300: #6da7ec;
+  --seq-400: #3987e5;
+  --seq-500: #256abf;
+  --seq-600: #184f95;
+  --seq-700: #0d366b;
+
+  /* activity levels (ordinal heat ramp) */
+  --level-minimal: #e0952c;
+  --level-low: #dc7431;
+  --level-moderate: #c95228;
+  --level-high: #a3351e;
+  --level-very-high: #742013;
+  --level-unknown: #c3c2b7;
+  --level-ink-minimal: #0b0b0b;
+  --level-ink-low: #0b0b0b;
+  --level-ink-moderate: #ffffff;
+  --level-ink-high: #ffffff;
+  --level-ink-very-high: #ffffff;
+
+  /* status (reserved meaning; always with icon + label) */
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+  --good-ink: #006300;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --surface-2: #222220;
+    --surface-3: #2c2c2a;
+    --ink-1: #ffffff;
+    --ink-2: #c3c2b7;
+    --ink-3: #a3a29a;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.18);
+    --accent: #5598e7;
+    --accent-ink: #0b0b0b;
+    --accent-soft: #16263b;
+    --focus: #6da7ec;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+    --series-muted: #5b5a55;
+    --seq-100: #104281;
+    --seq-200: #184f95;
+    --seq-300: #256abf;
+    --seq-400: #2a78d6;
+    --seq-500: #5598e7;
+    --seq-600: #86b6ef;
+    --seq-700: #b7d3f6;
+    --level-minimal: #6e4c12;
+    --level-low: #985019;
+    --level-moderate: #c25724;
+    --level-high: #e66a3c;
+    --level-very-high: #f7a07f;
+    --level-unknown: #383835;
+    --level-ink-minimal: #ffffff;
+    --level-ink-low: #ffffff;
+    --level-ink-moderate: #ffffff;
+    --level-ink-high: #0b0b0b;
+    --level-ink-very-high: #0b0b0b;
+    --good-ink: #0ca30c;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface-1: #1a1a19;
+  --surface-2: #222220;
+  --surface-3: #2c2c2a;
+  --ink-1: #ffffff;
+  --ink-2: #c3c2b7;
+  --ink-3: #a3a29a;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --accent: #5598e7;
+  --accent-ink: #0b0b0b;
+  --accent-soft: #16263b;
+  --focus: #6da7ec;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+  --series-muted: #5b5a55;
+  --seq-100: #104281;
+  --seq-200: #184f95;
+  --seq-300: #256abf;
+  --seq-400: #2a78d6;
+  --seq-500: #5598e7;
+  --seq-600: #86b6ef;
+  --seq-700: #b7d3f6;
+  --level-minimal: #6e4c12;
+  --level-low: #985019;
+  --level-moderate: #c25724;
+  --level-high: #e66a3c;
+  --level-very-high: #f7a07f;
+  --level-unknown: #383835;
+  --level-ink-minimal: #ffffff;
+  --level-ink-low: #ffffff;
+  --level-ink-moderate: #ffffff;
+  --level-ink-high: #0b0b0b;
+  --level-ink-very-high: #0b0b0b;
+  --good-ink: #0ca30c;
+}
+
+/* Expose tokens to Tailwind utilities: bg-surface-1, text-ink-2, border-line, etc. */
+@theme inline {
+  --color-page: var(--page);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink-1: var(--ink-1);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-muted: var(--muted);
+  --color-grid: var(--grid);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+html,
+body {
+  background: var(--page);
+  color: var(--ink-1);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Card: the standard container for every panel. */
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

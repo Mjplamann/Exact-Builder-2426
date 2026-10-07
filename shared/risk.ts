@@ -3,9 +3,11 @@
 // Level answers "how much is going around compared with normal for this measure?"
 //   * When a publisher defines official thresholds (e.g. MDH RESP-NET cut-points, CDC wastewater
 //     viral activity levels) those are used directly.
-//   * Otherwise the latest value is ranked against this series' own weekly history (excluding
-//     pandemic-disrupted seasons), using fixed percentile bands — so "high" means "higher than
-//     ~4 out of 5 weeks in recent years" for this exact measure and place.
+//   * Otherwise the latest value is ranked against this series' own trailing ~3 years of weekly
+//     values (excluding pandemic-disrupted seasons) with fixed percentile cut-points at the 50th,
+//     75th, 90th and 97.5th percentiles (the empirical-percentile scheme recommended for
+//     non-seasonal or short series). "Very high" therefore means "higher than all but ~1 in 40
+//     weeks in recent years" for this exact measure and place.
 // Trend answers "is it growing or shrinking?" from smoothed values two weeks apart, ignoring
 // changes too small to matter relative to the series' typical seasonal range.
 
@@ -16,8 +18,11 @@ import { PANDEMIC_SEASONS } from './projection.ts'
 
 export const LEVELS: ActivityLevel[] = ['minimal', 'low', 'moderate', 'high', 'very-high']
 
-/** Percentile band upper bounds: <25 minimal, <50 low, <75 moderate, <90 high, ≥90 very high. */
-export const PERCENTILE_BANDS = [25, 50, 75, 90] as const
+/** Percentile cut-points: <50 very low, <75 low, <90 moderate, <97.5 high, ≥97.5 very high. */
+export const PERCENTILE_BANDS = [50, 75, 90, 97.5] as const
+
+/** Trailing window used for percentile ranking (~3 years of weekly values). */
+export const HISTORY_WEEKS = 156
 
 export function levelFromPercentile(p: number): ActivityLevel {
   if (!Number.isFinite(p)) return 'unknown'
@@ -52,12 +57,13 @@ export interface HistoryOptions {
   minWeeks?: number
 }
 
-/** Historical weekly values strictly before `before`, excluding disrupted seasons. */
+/** Trailing weekly values strictly before `before` (≤ HISTORY_WEEKS), excluding disrupted seasons. */
 export function historicalValues(points: Point[], before: string, opts: HistoryOptions = {}): number[] {
   const exclude = new Set(opts.excludeSeasons ?? PANDEMIC_SEASONS)
+  const start = addDays(before, -7 * HISTORY_WEEKS)
   const out: number[] = []
   for (const [d, v] of points) {
-    if (d >= before || v == null || !Number.isFinite(v)) continue
+    if (d >= before || d < start || v == null || !Number.isFinite(v)) continue
     if (exclude.has(seasonOf(d))) continue
     out.push(v)
   }
@@ -78,10 +84,14 @@ export interface TrendResult {
 
 /**
  * Trend from 3-week trailing means two weeks apart, using symmetric log-ratio thresholds.
- * `floor` is the smallest absolute change considered meaningful (default: 5% of the series'
- * 90th percentile), which keeps tiny off-season wiggles from reading as "rising fast".
+ * `floor` is the smallest absolute change considered meaningful (default: 1.5% of the series'
+ * 90th percentile, at least `minFloor`), which keeps tiny off-season wiggles from reading as
+ * "rising fast" while still catching early-season growth from a low base.
  */
-export function computeTrend(points: Point[], opts: { floor?: number; asOf?: string } = {}): TrendResult {
+export function computeTrend(
+  points: Point[],
+  opts: { floor?: number; minFloor?: number; asOf?: string } = {},
+): TrendResult {
   const vals = new Map<string, number>()
   for (const [d, v] of points) if (v != null && Number.isFinite(v) && (!opts.asOf || d <= opts.asOf)) vals.set(d, v)
   const dates = [...vals.keys()].sort()
@@ -95,7 +105,7 @@ export function computeTrend(points: Point[], opts: { floor?: number; asOf?: str
   const before = smooth(addDays(last, -14))
   if (now == null || before == null) return { trend: 'unknown' }
   const all = [...vals.values()]
-  const floor = opts.floor ?? Math.max(1e-9, 0.05 * quantile(all, 0.9))
+  const floor = opts.floor ?? Math.max(opts.minFloor ?? 1e-9, 0.015 * quantile(all, 0.9))
   const diff = now - before
   const change2w = before > 0 ? diff / before : diff > 0 ? Infinity : 0
   if (Math.abs(diff) < floor) return { trend: 'steady', change2w: finite(change2w) }
@@ -139,8 +149,9 @@ export function maxLevel(levels: ActivityLevel[]): ActivityLevel {
   return best
 }
 
+// CDC renamed its lowest respiratory activity level from "Minimal" to "Very low" in 2025.
 export const LEVEL_LABEL: Record<ActivityLevel, string> = {
-  minimal: 'Minimal',
+  minimal: 'Very low',
   low: 'Low',
   moderate: 'Moderate',
   high: 'High',

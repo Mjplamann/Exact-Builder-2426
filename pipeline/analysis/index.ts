@@ -1,0 +1,397 @@
+// Analysis step: turns normalized series into the dashboard's "pulse":
+//   * our own short-term projection for every state/regional series with enough history,
+//   * a SignalSummary (latest value, change, historical percentile, level, trend) per series,
+//   * a per-pathogen pulse (level, trend, outlook, plain-language headline),
+//   * county/site map layers.
+import type {
+  ActivityLevel, CountyPulse, Forecast, MapLayer, MetricKind, PathogenId, PathogenPulse, PulseFile, Series,
+  SeriesFile, SignalSummary, SitePulse, TrendDirection,
+} from '../../shared/types.ts'
+import { addDays } from '../../shared/mmwr.ts'
+import { project } from '../../shared/projection.ts'
+import { quantile } from '../../shared/stats.ts'
+import {
+  LEVEL_LABEL, LEVELS, TREND_LABEL, compositeScore, computeTrend, levelFromPercentile, rankAgainstHistory,
+} from '../../shared/risk.ts'
+import type { Logger } from '../lib/log.ts'
+import { officialLevel } from './thresholds.ts'
+
+export interface AnalysisContext {
+  now: string
+  log: Logger
+}
+
+/** Signals older than this are flagged stale and never drive a pathogen's level. */
+const STALE_DAYS = 28
+const PROJECTABLE_GEOS = new Set(['state', 'census-region', 'national', 'mdh-region', 'hhs-region'])
+const PROJECTABLE_METRICS = new Set<MetricKind>([
+  'detection_rate', 'test_positivity', 'ed_visit_pct', 'ili_pct', 'hosp_admissions', 'hosp_rate', 'wastewater_conc',
+  'wastewater_level',
+])
+const PERCENT_METRICS = new Set<MetricKind>(['detection_rate', 'test_positivity', 'ed_visit_pct', 'ili_pct'])
+
+/**
+ * Which signal drives a pathogen's headline level, best first. Minnesota-wide, timely measures
+ * outrank regional or lagging ones.
+ */
+const PRIMARY_PRIORITY: { metric: MetricKind; geo: string[] }[] = [
+  { metric: 'ed_visit_pct', geo: ['state'] },
+  { metric: 'test_positivity', geo: ['state'] },
+  { metric: 'hosp_rate', geo: ['state'] },
+  { metric: 'hosp_admissions', geo: ['state'] },
+  { metric: 'wastewater_level', geo: ['state'] },
+  { metric: 'ili_pct', geo: ['state'] },
+  { metric: 'detection_rate', geo: ['census-region'] },
+  { metric: 'test_positivity', geo: ['hhs-region'] },
+  { metric: 'cases', geo: ['state'] },
+]
+
+/** Pathogens whose sub-type series roll up into a parent card. */
+const PARENT: Partial<Record<PathogenId, PathogenId>> = { 'influenza-a': 'influenza', 'influenza-b': 'influenza' }
+
+const lastObs = (s: Series): [string, number] | null => {
+  for (let i = s.points.length - 1; i >= 0; i--) {
+    const v = s.points[i][1]
+    if (v != null) return [s.points[i][0], v]
+  }
+  return null
+}
+
+function valueAt(s: Series, date: string): number | undefined {
+  const p = s.points.find(([d]) => d === date)
+  return p?.[1] ?? undefined
+}
+
+export function summarize(s: Series, now: string): SignalSummary | null {
+  const last = lastObs(s)
+  if (!last) return null
+  const [date, value] = last
+  const official = officialLevel(s, value)
+  const rank = rankAgainstHistory(s.points, date, value)
+  let level: ActivityLevel = 'unknown'
+  let levelBasis = 'Not enough history to compare'
+  const pub = s.official && (!s.official.asOf || s.official.asOf === date) ? s.official : undefined
+  if (pub?.level) {
+    level = pub.level
+    levelBasis = `${pub.by ?? 'Publisher'} category${pub.label ? ` “${pub.label}”` : ''}`
+  } else if (official) {
+    level = official.level
+    levelBasis = official.basis
+  } else if (rank) {
+    level = levelFromPercentile(rank.percentile)
+    const years = rank.n / 52
+    levelBasis = `Compared with the past ${years >= 1.5 ? `${Math.round(years)} years` : `${rank.n} weeks`} of this measure (${ordinal(Math.round(rank.percentile))} percentile)`
+  }
+  const computed = computeTrend(s.points, { minFloor: s.unit === 'count' ? 5 : 0 })
+  const trend = pub?.trend ?? computed.trend
+  const change2w = computed.change2w
+  const prev = valueAt(s, addDays(date, -7))
+  const stale = date < addDays(now.slice(0, 10), -STALE_DAYS)
+  return {
+    seriesId: s.id,
+    source: s.source,
+    label: s.label,
+    metric: s.metric,
+    unit: s.unit,
+    geo: s.geo,
+    latestDate: date,
+    latestValue: value,
+    previousValue: prev,
+    change2w,
+    percentile: rank ? Math.round(rank.percentile) : undefined,
+    level,
+    trend,
+    levelBasis,
+    spark: s.points.slice(-16),
+    stale,
+  }
+}
+
+function ordinal(n: number): string {
+  const v = n % 100
+  const suffix = v >= 11 && v <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[n % 10] ?? 'th'
+  return `${n}${suffix}`
+}
+
+/** Series identity independent of source, used to de-duplicate and to match forecasts. */
+export const seriesKey = (x: { pathogen: string; metric: string; geo: { type: string; code: string }; age?: string }) =>
+  [x.pathogen, x.metric, x.geo.type, x.geo.code, x.age ?? ''].join('|')
+
+/** When two sources publish the same measure for the same place, prefer the one listed first. */
+const SOURCE_PRIORITY = ['cdc-nssp', 'cdc-hubs', 'mdh', 'cdc-respnet', 'cdc-fluview', 'cdc-nwss', 'wastewaterscan']
+const sourceRank = (src: string) => {
+  const i = SOURCE_PRIORITY.indexOf(src)
+  return i === -1 ? SOURCE_PRIORITY.length : i
+}
+
+function dedupe(series: Series[]): Series[] {
+  const best = new Map<string, Series>()
+  for (const s of series) {
+    const k = seriesKey(s)
+    const prev = best.get(k)
+    if (!prev) best.set(k, s)
+    else {
+      const a = lastObs(prev)?.[0] ?? ''
+      const b = lastObs(s)?.[0] ?? ''
+      // Fresher data wins; ties go to the higher-priority source.
+      if (b > a || (b === a && sourceRank(s.source) < sourceRank(prev.source))) best.set(k, s)
+    }
+  }
+  return [...best.values()]
+}
+
+function priorityOf(sig: SignalSummary): number {
+  const i = PRIMARY_PRIORITY.findIndex((p) => p.metric === sig.metric && p.geo.includes(sig.geo.type))
+  return i === -1 ? PRIMARY_PRIORITY.length : i
+}
+
+function outlookFrom(forecast: Forecast | undefined, latest: number, series: Series | undefined): PathogenPulse['outlook'] {
+  if (!forecast) return undefined
+  const ahead = forecast.points.filter((p) => p.horizon >= 1)
+  const target = ahead.find((p) => p.horizon === 3) ?? ahead[ahead.length - 1]
+  if (!target) return undefined
+  // Same "meaningful change" floor as the trend classifier.
+  const vals = (series?.points ?? []).map((p) => p[1]).filter((v): v is number => v != null)
+  const minFloor = series?.unit === 'count' ? 5 : 1e-9
+  const floor = vals.length ? Math.max(minFloor, 0.015 * quantile(vals, 0.9)) : 1e-6
+  const lr = Math.abs(target.median - latest) < floor ? 0 : Math.log((target.median + floor) / (latest + floor))
+  let direction: TrendDirection = 'steady'
+  if (lr >= Math.log(1.4)) direction = 'rising-fast'
+  else if (lr >= Math.log(1.1)) direction = 'rising'
+  else if (lr <= -Math.log(1.4)) direction = 'falling-fast'
+  else if (lr <= -Math.log(1.1)) direction = 'falling'
+  const who = forecast.source === 'mn-pulse' ? 'MN Pulse projection' : `CDC ${forecast.model}`
+  const words: Record<TrendDirection, string> = {
+    'rising-fast': 'is projected to rise sharply',
+    rising: 'is projected to rise',
+    steady: 'is projected to stay about the same',
+    falling: 'is projected to decline',
+    'falling-fast': 'is projected to decline sharply',
+    unknown: 'has an uncertain outlook',
+  }
+  return {
+    direction,
+    text: `${words[direction]} over the next ${target.horizon} week${target.horizon === 1 ? '' : 's'} (${who}).`,
+    forecastId: forecast.id,
+  }
+}
+
+const NAMES: Partial<Record<PathogenId, string>> = {
+  influenza: 'Flu', 'influenza-a': 'Flu A', 'influenza-b': 'Flu B', covid: 'COVID-19', rsv: 'RSV', hmpv: 'hMPV',
+  'rhino-entero': 'Rhinovirus/enterovirus', adenovirus: 'Adenovirus', parainfluenza: 'Parainfluenza',
+  'seasonal-cov': 'Seasonal coronaviruses', mycoplasma: 'Mycoplasma pneumoniae', pertussis: 'Whooping cough',
+  'chlamydia-pneumoniae': 'Chlamydia pneumoniae', norovirus: 'Norovirus', 'respiratory-combined': 'Respiratory illness',
+  ili: 'Influenza-like illness', measles: 'Measles',
+}
+const nameOf = (p: PathogenId) => NAMES[p] ?? p
+
+function formatValue(sig: SignalSummary): string {
+  if (sig.unit === '%') return `${sig.latestValue < 1 ? sig.latestValue.toFixed(2) : sig.latestValue.toFixed(1)}%`
+  if (sig.unit === 'per100k') return `${sig.latestValue.toFixed(1)} per 100k`
+  return Math.round(sig.latestValue).toLocaleString('en-US')
+}
+
+const METRIC_PHRASE: Record<MetricKind, string> = {
+  detection_rate: 'of BioFire panel tests',
+  test_positivity: 'of lab tests positive',
+  ed_visit_pct: 'of ER visits',
+  ili_pct: 'of clinic visits for flu-like illness',
+  hosp_admissions: 'new hospital admissions last week',
+  hosp_rate: 'hospitalizations',
+  wastewater_level: 'wastewater activity index',
+  wastewater_conc: 'wastewater concentration',
+  cases: 'reported cases',
+  outbreaks: 'reported outbreaks',
+  deaths: 'reported deaths',
+  ww_detections: 'wastewater detections',
+  rt: 'estimated Rt',
+}
+
+function headlineFor(p: PathogenId, sig: SignalSummary | undefined, level: ActivityLevel, trend: TrendDirection) {
+  if (!sig) return `${nameOf(p)}: no current data.`
+  const lvl = LEVEL_LABEL[level].toLowerCase()
+  const tr = trend === 'unknown' ? '' : ` and ${TREND_LABEL[trend].toLowerCase()}`
+  const where = sig.geo.type === 'census-region' ? ` (${sig.geo.name} region)` : ''
+  return `${nameOf(p)} activity is ${lvl}${tr}: ${formatValue(sig)} ${METRIC_PHRASE[sig.metric]}${where}, week ending ${sig.latestDate}.`
+}
+
+export function runAnalysis(
+  files: SeriesFile[],
+  sourceForecasts: Forecast[],
+  ctx: AnalysisContext,
+): { pulse: PulseFile; forecasts: Forecast[] } {
+  const all = dedupe(files.flatMap((f) => f.series))
+
+  // 1) Our projections for state/regional series.
+  const ours: Forecast[] = []
+  for (const s of all) {
+    if (!PROJECTABLE_GEOS.has(s.geo.type) || !PROJECTABLE_METRICS.has(s.metric)) continue
+    const last = lastObs(s)
+    if (!last || last[0] < addDays(ctx.now.slice(0, 10), -STALE_DAYS)) continue
+    const r = project(s.points, {
+      horizon: 4,
+      max: PERCENT_METRICS.has(s.metric) ? 100 : undefined,
+      origin: s.provisionalFrom ? addDays(s.provisionalFrom, -7) : undefined,
+    })
+    if (!r) continue
+    ours.push({
+      id: `mn-pulse:${s.id}`,
+      source: 'mn-pulse',
+      model: 'MN Pulse analog–trend ensemble',
+      seriesId: s.id,
+      pathogen: s.pathogen,
+      metric: s.metric,
+      geo: s.geo,
+      referenceDate: r.origin,
+      issuedAt: ctx.now,
+      points: r.points,
+      skill: r.skill,
+      method: r.method,
+    })
+  }
+  const byKey = new Map(all.map((s) => [seriesKey(s), s]))
+  const matched = sourceForecasts
+    .map((f) => {
+      const s = byKey.get(seriesKey(f))
+      return s ? { ...f, seriesId: s.id } : null
+    })
+    .filter((f): f is Forecast => !!f)
+  const forecasts = [...matched, ...ours]
+  ctx.log.info(`projections: ${ours.length} MN Pulse + ${matched.length}/${sourceForecasts.length} source forecasts matched`)
+
+  // 2) Signals for non-county series.
+  const signals = all
+    .filter((s) => s.geo.type !== 'county' && s.geo.type !== 'sewershed' && !s.age)
+    .map((s) => summarize(s, ctx.now))
+    .filter((x): x is SignalSummary => !!x)
+
+  // 3) Pathogen pulses.
+  const byPathogen = new Map<PathogenId, SignalSummary[]>()
+  for (const sig of signals) {
+    const series = all.find((s) => s.id === sig.seriesId)!
+    const key = PARENT[series.pathogen] ?? series.pathogen
+    if (!byPathogen.has(key)) byPathogen.set(key, [])
+    byPathogen.get(key)!.push(sig)
+  }
+  const pathogens: PathogenPulse[] = []
+  for (const [pathogen, sigs] of byPathogen) {
+    const ranked = [...sigs].sort((a, b) => {
+      // Fresh MN signals first, then by priority, then by own-pathogen over sub-types.
+      if (a.stale !== b.stale) return a.stale ? 1 : -1
+      const pa = priorityOf(a)
+      const pb = priorityOf(b)
+      if (pa !== pb) return pa - pb
+      const sa = all.find((s) => s.id === a.seriesId)!.pathogen === pathogen ? 0 : 1
+      const sb = all.find((s) => s.id === b.seriesId)!.pathogen === pathogen ? 0 : 1
+      return sa - sb
+    })
+    const primary = ranked.find((s) => !s.stale && s.geo.code !== 'US') ?? ranked[0]
+    const level = primary && !primary.stale ? primary.level : 'unknown'
+    const trend = primary && !primary.stale ? primary.trend : 'unknown'
+    const fc =
+      primary &&
+      (forecasts.find((f) => f.seriesId === primary.seriesId && f.source !== 'mn-pulse') ??
+        forecasts.find((f) => f.seriesId === primary.seriesId))
+    pathogens.push({
+      pathogen,
+      level,
+      trend,
+      score: compositeScore(level, trend),
+      headline: headlineFor(pathogen, primary, level, trend),
+      primary,
+      signals: ranked,
+      outlook:
+        primary && !primary.stale
+          ? outlookFrom(fc, primary.latestValue, all.find((s) => s.id === primary.seriesId))
+          : undefined,
+      asOf: primary?.latestDate,
+    })
+  }
+  pathogens.sort((a, b) => b.score - a.score)
+
+  // 4) Statewide summary from the respiratory big three.
+  const resp = pathogens.filter((p) => ['influenza', 'covid', 'rsv', 'respiratory-combined'].includes(p.pathogen))
+  const known = resp.filter((p) => p.level !== 'unknown')
+  const stateLevel = known.reduce<ActivityLevel>(
+    (best, p) => (LEVELS.indexOf(p.level) > LEVELS.indexOf(best) ? p.level : best),
+    known.length ? 'minimal' : 'unknown',
+  )
+  const leader = [...known].sort((a, b) => b.score - a.score)[0]
+  const watchList = pathogens.filter((p) => p.level !== 'unknown' && p.score >= 40).map((p) => p.pathogen)
+  const rising = pathogens.filter((p) => p.trend === 'rising' || p.trend === 'rising-fast').map((p) => nameOf(p.pathogen))
+  const headline = known.length
+    ? `Respiratory virus activity in Minnesota is ${LEVEL_LABEL[stateLevel].toLowerCase()} overall${
+        leader ? `, led by ${nameOf(leader.pathogen)}` : ''
+      }.${rising.length ? ` Rising: ${rising.slice(0, 4).join(', ')}.` : ' Nothing is rising quickly right now.'}`
+    : 'Waiting for the first data refresh.'
+
+  // 5) Map layers (counties and sites).
+  const { mapLayers, counties, sites } = buildMap(all, ctx.now)
+
+  return {
+    pulse: {
+      generatedAt: ctx.now,
+      statewide: { level: stateLevel, trend: leader?.trend ?? 'unknown', headline, watchList },
+      pathogens,
+      mapLayers,
+      counties,
+      sites,
+    },
+    forecasts,
+  }
+}
+
+const METRIC_SHORT: Partial<Record<MetricKind, string>> = {
+  ed_visit_pct: 'ed',
+  hosp_rate: 'hosp',
+  hosp_admissions: 'hospn',
+  wastewater_level: 'ww',
+  wastewater_conc: 'wwc',
+  test_positivity: 'pos',
+  cases: 'cases',
+}
+
+function buildMap(all: Series[], now: string) {
+  const layers = new Map<string, MapLayer>()
+  const counties = new Map<string, CountyPulse>()
+  const sites = new Map<string, SitePulse>()
+  for (const s of all) {
+    if (s.geo.type !== 'county' && s.geo.type !== 'sewershed') continue
+    const sig = summarize(s, now)
+    if (!sig) continue
+    const kind = s.geo.type === 'county' ? 'county' : 'site'
+    const layerId = `${kind === 'site' ? 'site-' : ''}${METRIC_SHORT[s.metric] ?? s.metric}:${s.pathogen}`
+    const layer = layers.get(layerId)
+    if (!layer || (sig.latestDate > (layer.latestDate ?? ''))) {
+      layers.set(layerId, {
+        id: layerId,
+        kind,
+        label: `${nameOf(s.pathogen)} — ${METRIC_PHRASE[s.metric]}`,
+        pathogen: s.pathogen,
+        metric: s.metric,
+        unit: s.unit,
+        source: s.source,
+        description: s.note ?? s.label,
+        latestDate: sig.latestDate > (layer?.latestDate ?? '') ? sig.latestDate : layer?.latestDate,
+      })
+    }
+    const metric = { seriesId: s.id, value: sig.latestValue, date: sig.latestDate, level: sig.level, trend: sig.trend }
+    if (kind === 'county') {
+      const c = counties.get(s.geo.code) ?? { fips: s.geo.code, metrics: {} }
+      c.metrics[layerId] = metric
+      counties.set(s.geo.code, c)
+    } else {
+      const site = sites.get(s.geo.code) ?? {
+        id: s.geo.code,
+        name: s.geo.name,
+        coord: s.geo.coord,
+        counties: s.geo.counties,
+        population: s.geo.population,
+        metrics: {},
+      }
+      site.metrics[layerId] = metric
+      sites.set(s.geo.code, site)
+    }
+  }
+  return { mapLayers: [...layers.values()], counties: [...counties.values()], sites: [...sites.values()] }
+}
