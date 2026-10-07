@@ -87,13 +87,23 @@ export interface AppApi {
   /** Tighter/looser framing of the followed animal. */
   setFollowFill(fill: number): void;
   /**
+   * The part of the screen (client px) left uncovered by the animal's card or an open panel: a
+   * followed animal is framed there (the camera comes closer if the glass would otherwise stop
+   * it). null = the whole screen.
+   */
+  setFollowSafeArea(area: { left: number; top: number; right: number; bottom: number } | null): void;
+  /**
    * Zoom by wheel-notch steps (positive = closer), toward a screen point when given (pinch centre,
    * cursor). While following, zoom changes how tightly the animal is framed.
    */
   zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number): void;
   setZoom(zoom: number): void;
-  /** 1 = whole tank; `max` ≈ 8× telephoto through the front glass. */
-  getZoom(): { zoom: number; min: number; max: number };
+  /**
+   * 1 = whole tank; `max` ≈ 8× telephoto through the front glass. `atHome`: the view rests on the
+   * whole-tank framing — false while following, zoomed in, or panned away from it at 1× (cubes and
+   * tall tanks on a wide screen, wide tanks on a phone held upright can be panned at 1×).
+   */
+  getZoom(): { zoom: number; min: number; max: number; atHome: boolean };
   /** Pan a zoomed view by fractions of the visible half-width/height (ends a tour). */
   panBy(dx: number, dy: number): void;
   /** Back to the whole-tank view (stops following and touring). */

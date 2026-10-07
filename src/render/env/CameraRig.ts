@@ -134,6 +134,67 @@ export function defaultFill(lengthM: number): number {
   return 0.22 + 0.08 * t;
 }
 
+/** A piece of the aquascape seen through the front glass: its x extent (m) and visual weight. */
+export interface ScapeMass {
+  x0: number;
+  x1: number;
+  w: number;
+}
+
+/**
+ * Where a window `win` m wide (the whole-tank view of a phone held upright) shows most of the
+ * aquascape: the x (window centre, inside ±(halfW − win/2)) holding the largest share of the
+ * scape's weight, then centred on what it holds (weighted by how much of each piece is in view).
+ * A previous focus is kept while it still shows nearly as much (no hop between two equal
+ * bommies). 0 for an empty tank or a window as wide as the tank.
+ */
+export function scapeFocusX(items: readonly ScapeMass[], halfW: number, win: number, prev?: number): number {
+  const lim = halfW - win / 2;
+  if (!(lim > 1e-4) || !(win > 0) || items.length === 0) return 0;
+  const score = (c: number) => {
+    let s = 0;
+    for (const it of items) {
+      const ov = Math.min(it.x1, c + win / 2) - Math.max(it.x0, c - win / 2);
+      if (ov > 0) s += (it.w * ov) / Math.max(1e-4, it.x1 - it.x0);
+    }
+    // A slight preference for the middle of the tank among equals.
+    return s * (1 - 0.06 * (c / halfW) * (c / halfW));
+  };
+  const N = 48;
+  let best = 0;
+  let bestS = -1;
+  for (let i = 0; i <= N; i++) {
+    const c = -lim + (2 * lim * i) / N;
+    const sc = score(c);
+    if (sc > bestS + 1e-12) {
+      bestS = sc;
+      best = c;
+    }
+  }
+  if (!(bestS > 0)) return 0;
+  let c = best;
+  if (prev !== undefined && Number.isFinite(prev)) {
+    const p = MathUtils.clamp(prev, -lim, lim);
+    if (score(p) >= 0.9 * bestS) c = p;
+  }
+  // Centre on what the window holds (a few mean-shift steps).
+  for (let k = 0; k < 4; k++) {
+    let sw = 0;
+    let sx = 0;
+    for (const it of items) {
+      const a = Math.max(it.x0, c - win / 2);
+      const b = Math.min(it.x1, c + win / 2);
+      if (b <= a) continue;
+      const w = (it.w * (b - a)) / Math.max(1e-4, it.x1 - it.x0);
+      sw += w;
+      sx += w * (a + b) / 2;
+    }
+    if (!(sw > 0)) break;
+    c = MathUtils.clamp(sx / sw, -lim, lim);
+  }
+  return c;
+}
+
 export class CameraRig {
   readonly camera: PerspectiveCamera;
 
@@ -143,6 +204,13 @@ export class CameraRig {
   /** Visible height on the front-glass plane at 1× (m). */
   private homeH = 0.4;
   private homeY = 0.2;
+  /**
+   * Home frame centre x: the middle of the tank, except where a phone held upright shows only a
+   * slice of a wide tank — then the slice that holds the aquascape's focus (see setScape).
+   */
+  private homeX = 0;
+  /** The aquascape's pieces (x extents + weights) for the portrait home framing. */
+  private scape: ScapeMass[] = [];
   private aspect = 1;
   /** Region of the front glass plane that may be shown: x ∈ [-halfW, halfW], y ∈ [yMin, yMax]. */
   private halfW = 0.5;
@@ -381,7 +449,7 @@ export class CameraRig {
     const b = tankBounds(tank);
     // A view resting on the whole tank stays on it through a resize or a phone's rotation (the
     // new home framing may crop differently); a closer view keeps its spot, clamped to the glass.
-    const atHome = this.initialized && Math.abs(this.free.x) < 1e-6 && Math.abs(this.free.y - this.homeY) < 1e-6 && this.free.z < 1e-6;
+    const atHome = this.initialized && this.isHome(this.free);
     const prevAspect = this.aspect;
     this.camera.aspect = aspect;
     this.camera.updateProjectionMatrix();
@@ -420,17 +488,73 @@ export class CameraRig {
     this.homeH = visH;
     this.homeDist = visH / 2 / tanHalf;
     this.homeY = cy;
+    this.homeX = this.portraitFocus(this.homeX);
     if (!this.initialized) {
-      this.free.set(0, cy, 0);
+      this.free.set(this.homeX, cy, 0);
       this.initialized = true;
       this.clampView(this.free);
       this.snap();
     } else {
-      if (atHome) this.free.set(0, cy, 0);
+      if (atHome) this.free.set(this.homeX, cy, 0);
       this.clampView(this.free);
       if (Math.abs(aspect / prevAspect - 1) > 0.02) this.reframeAfterResize();
     }
     this.applyProjection();
+  }
+
+  /**
+   * Home x for the current screen: on a phone held upright (portrait) facing a tank wider than the
+   * screen, the whole-tank view is a slice of the tank — centred on the aquascape's focus rather
+   * than on whatever open water lies at the middle. Landscape screens keep the centred framing.
+   */
+  private portraitFocus(prev?: number): number {
+    if (!(this.aspect < 1)) return 0;
+    const visW = this.homeH * this.aspect;
+    const lim = Math.max(0, this.halfW * 0.995 - visW / 2 - DRIFT_AMP.x);
+    if (!(lim > 1e-4)) return 0;
+    // The window in the middle depth of the tank (perspective: the back shows a little more).
+    const win = visW * (1 + (this.frontZ - this.backZ) / 2 / Math.max(1e-3, this.homeDist));
+    return MathUtils.clamp(scapeFocusX(this.scape, this.halfW, win, prev), -lim, lim);
+  }
+
+  /**
+   * The aquascape's pieces (x extents and visual weights; see ScapeMass) for the portrait home
+   * framing. The home framing follows; a view resting on the whole tank moves with it (`snap`: at
+   * once, e.g. for a tank just opened; otherwise a slow glide), any other view is left alone.
+   */
+  setScape(items: readonly ScapeMass[], opts: { snap?: boolean } = {}): void {
+    this.scape = items.filter((m) => Number.isFinite(m.x0) && Number.isFinite(m.x1) && m.x1 > m.x0 && m.w > 0);
+    if (!this.initialized) return;
+    const wasHome = this.isHome(this.free);
+    const x = this.portraitFocus(opts.snap ? undefined : this.homeX);
+    if (Math.abs(x - this.homeX) < 1e-6) return;
+    this.homeX = x;
+    if (!wasHome) return;
+    this.free.x = x;
+    this.clampView(this.free);
+    // While following, the free view (where "stop following" returns to) just moves with it.
+    if (this.subject) return;
+    if (opts.snap) {
+      this.snap();
+    } else {
+      this.freeOmega = OMEGA_SETTLE;
+      this.startTransition(false);
+    }
+  }
+
+  /** Is the view state (x, y, ln zoom) the whole-tank framing (within a hair of it)? */
+  private isHome(v: Vector3): boolean {
+    const visH = this.homeH;
+    return v.z < 1e-3 && Math.abs(v.x - this.homeX) <= 0.02 * visH * this.aspect + 1e-6 && Math.abs(v.y - this.homeY) <= 0.02 * visH + 1e-6;
+  }
+
+  /**
+   * The view rests on (or is heading for) the whole-tank framing: not following, at 1×, and not
+   * panned away from home — at 1× a cube or tall tank on a wide screen, or a wide tank on a phone
+   * held upright, can still be panned.
+   */
+  get atHome(): boolean {
+    return !this.subject && this.isHome(this.free);
   }
 
   /**
@@ -457,7 +581,7 @@ export class CameraRig {
 
   /** Back to the whole-tank framing (does not stop a follow). `gentle`: a slow documentary pull-back. */
   resetView(gentle = false): void {
-    this.free.set(0, this.homeY, 0);
+    this.free.set(this.homeX, this.homeY, 0);
     this.clampView(this.free);
     this.freeFocusZ = 0;
     this.userMoved(gentle ? OMEGA_SETTLE : OMEGA_RESET);
@@ -521,13 +645,13 @@ export class CameraRig {
       // Zooming out, drift back toward the home framing as 1× approaches.
       if (lz < lz0) {
         const w = smooth01((2 - z1) / 1);
-        f.x += (0 - f.x) * w;
+        f.x += (this.homeX - f.x) * w;
         f.y += (this.homeY - f.y) * w;
       }
     } else if (lz < lz0 && z0 > 1) {
       // Zooming out about the centre: re-centre proportionally, home exactly at 1×.
       const r = (1 - 1 / z1) / (1 - 1 / z0);
-      f.x *= r;
+      f.x = this.homeX + (f.x - this.homeX) * r;
       f.y = this.homeY + (f.y - this.homeY) * r;
     }
     if (lz <= 1e-4) this.freeFocusZ = 0;

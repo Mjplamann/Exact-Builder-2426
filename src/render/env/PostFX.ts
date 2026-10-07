@@ -1,4 +1,25 @@
-import { DepthTexture, HalfFloatType, LinearFilter, ShaderMaterial, Vector2, Vector3, WebGLRenderTarget, type Camera, type Scene, type Texture, type WebGLRenderer } from 'three';
+import {
+  AddEquation,
+  BufferGeometry,
+  CustomBlending,
+  DepthTexture,
+  Float32BufferAttribute,
+  HalfFloatType,
+  LinearFilter,
+  Mesh,
+  OneFactor,
+  ShaderMaterial,
+  SrcAlphaFactor,
+  Vector2,
+  Vector3,
+  WebGLRenderTarget,
+  ZeroFactor,
+  type Camera,
+  type Object3D,
+  type Scene,
+  type Texture,
+  type WebGLRenderer,
+} from 'three';
 import { FullScreenQuad, Pass } from 'three/examples/jsm/postprocessing/Pass.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -22,6 +43,20 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
  * extra full-resolution pass. Depth-aware weights keep the sharp subject's colour out of the blur
  * (no halo) and the blurred background off the subject, while out-of-focus foreground spreads
  * over what is behind it like real bokeh.
+ *
+ * Clear fins (FishRenderer's fin twins, close-ups only): a defocused fin, or a solid part of one,
+ * owns its pixel's depth and blurs like its body; a clear part of a fin in focus leaves the depth
+ * to the background seen through it and marks its share of the pixel in the HDR alpha (alpha =
+ * −opacity × sharpness, from the same lens as here: DOF_LENS; the scene's alpha is ≥ 0 elsewhere,
+ * and bloom is blended so that it keeps the alpha). The composite keeps that share sharp — all of
+ * the pixel along the fin's outline and rays, where its opacity changes, so the fin's own structure
+ * stays crisp — and blurs the rest like the background beside the fin: no sharp fin-shaped window
+ * into the background.
+ *
+ * The half-resolution blur is brought back to full resolution with a jittered 4-tap filter (a
+ * small grid turned per pixel), so high-contrast textures out of focus (a spotted catfish behind
+ * the subject) blur smoothly instead of showing the half-res grid as stair-steps. (Weighting the
+ * taps by depth was tried: it re-aliases the silhouettes between two out-of-focus layers.)
  */
 
 /** Bloom threshold in exposed (pre-tone-map) units: a lit white surface is ≈ 1–2. */
@@ -32,12 +67,25 @@ const ACES_GAIN_DIV = 0.66;
 const MAX_COC_FRAC = 0.011;
 const MAX_COC_PX = 14;
 
+/**
+ * Half-res texels mostly covered by a clear fin in focus carry their CoC as −(this + CoC) (CoCs are
+ * at most MAX_COC_PX), so the gather can tell them apart even between bilinear neighbours.
+ */
+const DOF_FIN_MARK = 64;
+
 /** Linear view depth and signed circle of confusion (half-res px; + behind the focus) from the depth buffer. */
 const CocGlsl = /* glsl */ `
   uniform vec3 uCoc;  // scale (half-res px per 1/m), 1/focus, max radius
   uniform vec2 uClip; // camera near, far
   float dofDepth(float d) { return uClip.x * uClip.y / (uClip.y - d * (uClip.y - uClip.x)); }
   float dofCoc(float d) { return clamp(uCoc.x * (uCoc.y - 1.0 / dofDepth(d)), -uCoc.z, uCoc.z); }`;
+
+/**
+ * The lens this frame, shared with materials that must agree with the depth of field (the fin
+ * twins judge which fins are in focus): CoC scale (half-res px per 1/m; 0 = no depth of field),
+ * 1/focus distance, largest radius; camera near and far.
+ */
+export const DOF_LENS = { uCoc: { value: new Vector3() }, uClip: { value: new Vector2(0.03, 12) } };
 
 const SoftKneeHighPass = /* glsl */ `
   uniform sampler2D tDiffuse;
@@ -67,6 +115,8 @@ const FinalShader = {
     uDofOn: { value: 0 },
     uCoc: { value: new Vector3() },
     uClip: { value: new Vector2(0.03, 12) },
+    /** Texel of the half-resolution blur. */
+    uHalfTexel: { value: new Vector2(1, 1) },
   },
   vertexShader: /* glsl */ `
     varying vec2 vUv;
@@ -81,8 +131,18 @@ const FinalShader = {
     uniform sampler2D tDof;
     uniform sampler2D tDepth;
     uniform float uDofOn;
+    uniform vec2 uHalfTexel;
     ${CocGlsl}
     varying vec2 vUv;
+
+    // Half-res blur → full res: four bilinear taps on a small grid turned per pixel (interleaved
+    // gradient noise), so the half-res grid never shows as stair-steps on high-contrast textures.
+    vec4 dofUpsample() {
+      float a = 6.2831853 * fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
+      vec2 d = 0.7 * vec2(cos(a), sin(a)) * uHalfTexel;
+      vec2 e = 0.7 * vec2(-sin(a), cos(a)) * uHalfTexel;
+      return 0.25 * (texture2D(tDof, vUv + d) + texture2D(tDof, vUv - d) + texture2D(tDof, vUv + e) + texture2D(tDof, vUv - e));
+    }
 
     // ACES filmic (same fit as three.js ACESFilmicToneMapping).
     vec3 RRTAndODTFit(vec3 v) {
@@ -114,13 +174,21 @@ const FinalShader = {
       return fract((p3.x + p3.y) * p3.z);
     }
     void main() {
-      vec3 c = texture2D(tDiffuse, vUv).rgb;
+      vec4 src = texture2D(tDiffuse, vUv);
+      vec3 c = src.rgb;
       if (uDofOn > 0.5) {
         // Depth of field: blend toward the half-res blur by this pixel's own circle of confusion
         // (sharp subject stays full-res sharp), or where out-of-focus foreground spreads over it.
         float k = dofCoc(texture2D(tDepth, vUv).x);
-        vec4 b = texture2D(tDof, vUv);
-        c = mix(c, b.rgb, max(smoothstep(0.35, 1.25, abs(k)), b.a));
+        vec4 b = dofUpsample();
+        // A clear fin in focus (HDR alpha = −its share of the pixel) keeps that share sharp and lets
+        // the blurred background through — except along its outline and rays, where its opacity
+        // changes: the fin's own structure stays crisp.
+        float fin = clamp(-src.a, 0.0, 1.0);
+        float finEdge = clamp(fwidth(fin) * 24.0, 0.0, 1.0); // (derivatives outside any per-pixel branch)
+        float keep = fin > 0.0 ? max(fin, finEdge) : 0.0;
+        float t = max(smoothstep(0.35, 1.25, abs(k)) * (1.0 - keep), b.a);
+        c = mix(c, b.rgb, t);
       }
       c = acesFilmic(c);
       float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
@@ -193,15 +261,20 @@ const DofPrefilter = /* glsl */ `
   void main() {
     vec2 o = 0.5 * uTexel;
     vec2 uv0 = vUv - o, uv1 = vUv + vec2(o.x, -o.y), uv2 = vUv + vec2(-o.x, o.y), uv3 = vUv + o;
+    vec4 c0 = texture2D(tColor, uv0), c1 = texture2D(tColor, uv1), c2 = texture2D(tColor, uv2), c3 = texture2D(tColor, uv3);
     float k0 = dofCoc(texture2D(tDepth, uv0).x), k1 = dofCoc(texture2D(tDepth, uv1).x);
     float k2 = dofCoc(texture2D(tDepth, uv2).x), k3 = dofCoc(texture2D(tDepth, uv3).x);
     // Defocused taps dominate, so the in-focus subject's colour never smears into the blur.
     float w0 = 0.02 + smoothstep(0.0, 1.0, abs(k0)), w1 = 0.02 + smoothstep(0.0, 1.0, abs(k1));
     float w2 = 0.02 + smoothstep(0.0, 1.0, abs(k2)), w3 = 0.02 + smoothstep(0.0, 1.0, abs(k3));
-    vec3 c = texture2D(tColor, uv0).rgb * w0 + texture2D(tColor, uv1).rgb * w1 + texture2D(tColor, uv2).rgb * w2 + texture2D(tColor, uv3).rgb * w3;
+    vec3 c = c0.rgb * w0 + c1.rgb * w1 + c2.rgb * w2 + c3.rgb * w3;
     float kMin = min(min(k0, k1), min(k2, k3));
     float kMax = max(max(k0, k1), max(k2, k3));
-    gl_FragColor = vec4(c / (w0 + w1 + w2 + w3), -kMin > kMax ? kMin : kMax);
+    float k = -kMin > kMax ? kMin : kMax;
+    // Mostly covered by a clear fin in focus (HDR alpha < 0): marked by moving its CoC (that of the
+    // background behind the fin) below -${DOF_FIN_MARK}, so the gather blurs it only within the fin.
+    float fins = step(c0.a, -1e-4) + step(c1.a, -1e-4) + step(c2.a, -1e-4) + step(c3.a, -1e-4);
+    gl_FragColor = vec4(c / (w0 + w1 + w2 + w3), fins >= 2.0 ? -(${DOF_FIN_MARK}.0 + max(k, 0.0)) : k);
   }`;
 
 /**
@@ -217,9 +290,10 @@ function dofGather(taps: number): string {
     const a = i * 2.399963229728653;
     body += `
     s = texture2D(tSrc, vUv + vec2(${(r * Math.cos(a)).toFixed(5)}, ${(r * Math.sin(a)).toFixed(5)}) * rad);
-    c = s.a >= 0.0 ? min(s.a, cp) : -s.a;
+    fn = step(s.a, ${-DOF_FIN_MARK / 2}.0);
+    c = fn > 0.5 ? ctrFin * min(max(-s.a - ${DOF_FIN_MARK}.0, 0.0), cp) : s.a >= 0.0 ? min(s.a, cp) : s.a > -20.0 ? -s.a : 0.0;
     w = clamp(c - ${r.toFixed(5)} * uRadius + 1.0, 0.0, 1.0);
-    acc += s.rgb * w; wsum += w; fg += s.a < 0.0 ? w : 0.0;`;
+    acc += s.rgb * w; wsum += w; fg += s.a < 0.0 && fn < 0.5 ? w : 0.0;`;
   }
   return /* glsl */ `
   uniform sampler2D tSrc;
@@ -228,10 +302,13 @@ function dofGather(taps: number): string {
   varying vec2 vUv;
   void main() {
     vec4 ctr = texture2D(tSrc, vUv);
-    float cp = max(ctr.a, 0.0);
+    // A clear fin in focus (see the prefilter) gathers the background behind it; its own colour
+    // spreads only within the fin (no halo around it).
+    float ctrFin = step(ctr.a, ${-DOF_FIN_MARK / 2}.0);
+    float cp = ctrFin > 0.5 ? -ctr.a - ${DOF_FIN_MARK}.0 : max(ctr.a, 0.0);
     vec2 rad = uRadius * uTexel;
     vec3 acc = ctr.rgb;
-    float wsum = 1.0, fg = 0.0, c, w;
+    float wsum = 1.0, fg = 0.0, c, w, fn;
     vec4 s;${body}
     gl_FragColor = vec4(acc / wsum, min(1.0, fg * ${(3 / taps).toFixed(5)}));
   }`;
@@ -325,6 +402,7 @@ class DofPass extends Pass {
     this.blur.setSize(w, h);
     this.out.setSize(w, h);
     this.fullTexel.set(1 / Math.max(1, width), 1 / Math.max(1, height));
+    this.final.uniforms.uHalfTexel.value.set(1 / w, 1 / h);
     this.gather.uniforms.uTexel.value.set(1 / w, 1 / h);
     this.tent.uniforms.uTexel.value.set(1 / w, 1 / h);
   }
@@ -344,6 +422,26 @@ class DofPass extends Pass {
     renderer.setRenderTarget(this.out);
     this.quad.render(renderer);
     renderer.setRenderTarget(prev);
+  }
+
+  /** Compile this pass's shaders now (for the targets they draw into), not at the first close-up. */
+  prewarm(renderer: WebGLRenderer, camera: Camera): void {
+    // A stand-in for the full-screen triangle (same attributes, so the same programs).
+    const geo = new BufferGeometry();
+    geo.setAttribute('position', new Float32BufferAttribute([-1, 3, 0, -1, -1, 0, 3, -1, 0], 3));
+    geo.setAttribute('uv', new Float32BufferAttribute([0, 2, 0, 0, 2, 0], 2));
+    const mesh = new Mesh(geo, this.prefilter);
+    const prev = renderer.getRenderTarget();
+    try {
+      renderer.setRenderTarget(this.half);
+      for (const m of [this.prefilter, this.gather, this.tent]) {
+        mesh.material = m;
+        void renderer.compileAsync(mesh, camera);
+      }
+    } finally {
+      renderer.setRenderTarget(prev);
+      mesh.geometry.dispose();
+    }
   }
 
   override dispose(): void {
@@ -395,10 +493,21 @@ export class PostFX {
       this.bloom = new UnrealBloomPass(new Vector2(this.size.x * settings.bloomScale, this.size.y * settings.bloomScale), 0.3, 0.5, 3);
       this.bloom.materialHighPassFilter.fragmentShader = SoftKneeHighPass;
       this.bloom.materialHighPassFilter.needsUpdate = true;
+      // Same additive glow, but the HDR alpha (the fin-coverage mask) is left as it is.
+      const blend = this.bloom.blendMaterial;
+      blend.blending = CustomBlending;
+      blend.blendEquation = AddEquation;
+      blend.blendSrc = SrcAlphaFactor;
+      blend.blendDst = OneFactor;
+      blend.blendSrcAlpha = ZeroFactor;
+      blend.blendDstAlpha = OneFactor;
       this.composer.addPass(this.bloom);
     }
     this.final = new ShaderPass(FinalShader);
     (this.final.material as ShaderMaterial).toneMapped = false;
+    // The lens is shared with the fin twins (see DOF_LENS); every pass below references these.
+    this.final.uniforms.uCoc = DOF_LENS.uCoc;
+    this.final.uniforms.uClip = DOF_LENS.uClip;
     if (dofTaps > 0) {
       this.dof = new DofPass(dofTaps, this.final);
       this.dof.enabled = false;
@@ -413,6 +522,22 @@ export class PostFX {
     this.final.uniforms.uRes.value.set(width, height);
   }
 
+  /**
+   * Compile the close-up-only shaders ahead of time (depth-of-field passes, and `closeUp` scene
+   * objects for the HDR target they are drawn into), so the first close-up does not stall on them.
+   * With KHR_parallel_shader_compile the driver compiles them in the background.
+   */
+  prewarm(renderer: WebGLRenderer, camera: Camera, scene: Scene, closeUp: readonly Object3D[]): void {
+    const prev = renderer.getRenderTarget();
+    try {
+      renderer.setRenderTarget(this.composer.readBuffer);
+      for (const o of closeUp) void renderer.compileAsync(o, camera, scene);
+    } finally {
+      renderer.setRenderTarget(prev);
+    }
+    this.dof?.prewarm(renderer, camera);
+  }
+
   /** Low-res linear HDR copy of the last rendered scene (before bloom). */
   get prevFrame(): Texture {
     return this.capture.target.texture;
@@ -425,6 +550,8 @@ export class PostFX {
     const dofOn = !!this.dof && !!dof && dof.amount > 0.01 && dof.scale > 0;
     if (this.dof) this.dof.enabled = dofOn;
     fu.uDofOn.value = dofOn ? 1 : 0;
+    // No depth of field: everything counts as in focus (the fin twins then lay down nothing).
+    if (!dofOn) fu.uCoc.value.x = 0;
     if (dofOn) {
       // dof.scale is a CoC diameter as a fraction of the frame height; the shaders work with
       // radii in half-resolution pixels (÷2 twice).

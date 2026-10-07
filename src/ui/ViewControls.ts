@@ -170,6 +170,14 @@ export function followSafeArea(vw: number, vh: number, covers: readonly RectLike
   return r;
 }
 
+/**
+ * Is the view away from the whole-tank framing? Zoomed in, or panned at 1× (a cube or tall tank on
+ * a wide screen, a wide tank on a phone held upright); `atHome` absent = judged by the zoom alone.
+ */
+export function awayFromHome(z: { zoom: number; atHome?: boolean }): boolean {
+  return z.zoom > CLOSE_ZOOM || z.atHome === false;
+}
+
 export type ViewKeyAction = 'zoom-in' | 'zoom-out' | 'reset' | 'tour' | 'follow' | 'pan-left' | 'pan-right' | 'pan-up' | 'pan-down';
 
 /**
@@ -227,10 +235,10 @@ export class ViewRouter {
     private viewport: Viewport,
   ) {}
 
-  /** Closer than the whole tank: zoomed in, following or touring. */
+  /** Away from the whole tank: zoomed in, panned away from it at 1×, following or touring. */
   isClose(): boolean {
     const app = this.app;
-    return !!app.world.follow || app.isTouring() || app.getZoom().zoom > CLOSE_ZOOM;
+    return !!app.world.follow || app.isTouring() || awayFromHome(app.getZoom());
   }
 
   /**
@@ -508,7 +516,7 @@ export class ViewControls {
     if (!app.world.follow) {
       if (this.safeKey) {
         this.safeKey = '';
-        app.engine.setFollowSafeArea(null);
+        app.setFollowSafeArea(null);
       }
       return;
     }
@@ -536,7 +544,7 @@ export class ViewControls {
     const key = area ? `${Math.round(area.left)},${Math.round(area.top)},${Math.round(area.right)},${Math.round(area.bottom)}` : '';
     if (key === this.safeKey) return;
     this.safeKey = key;
-    app.engine.setFollowSafeArea(area);
+    app.setFollowSafeArea(area);
   }
 
   private sync(): void {
@@ -552,7 +560,7 @@ export class ViewControls {
       this.shownZoom = tenths;
       setText(this.readout, zoomLabel(z.zoom));
     }
-    const close = !!id || touring || z.zoom > CLOSE_ZOOM;
+    const close = !!id || touring || awayFromHome(z);
     if (this.resetBtn.hidden === close) this.resetBtn.hidden = !close;
     const atMax = z.zoom >= z.max - 0.01;
     const atMin = z.zoom <= z.min + 0.01;

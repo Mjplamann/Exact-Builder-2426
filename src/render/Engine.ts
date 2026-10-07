@@ -19,7 +19,7 @@ import type { World } from '../core/world';
 import { substrateHeight, tankBounds } from '../core/tankGeometry';
 import { GLOBALS } from './globals';
 import { Bubbles } from './env/Bubbles';
-import { CameraRig, MAX_ZOOM, type FollowSubject } from './env/CameraRig';
+import { CameraRig, MAX_ZOOM, type FollowSubject, type ScapeMass } from './env/CameraRig';
 import { Caustics } from './env/Caustics';
 import { GodRays } from './env/GodRays';
 import { Lighting } from './env/Lighting';
@@ -89,6 +89,8 @@ const MOON = new Color(0.1, 0.24, 1.0);
  *    the owner (the substrate always receives).
  *  - Lit materials must go through `applyUnderwater(material)`.
  *  - Objects on layer 1 (FX_LAYER) are not mirrored in the water surface.
+ *  - Objects drawn only in close-ups (`userData.closeUpOnly`) have their shaders compiled ahead,
+ *    when the main thread is idle after boot.
  */
 export class Engine {
   readonly renderer: WebGLRenderer;
@@ -131,6 +133,14 @@ export class Engine {
   private tmpV = new Vector3();
   private dof: DofParams = { amount: 0, focus: 1, scale: 0, near: 0.1, far: 2, cameraNear: 0.03, cameraFar: 12 };
   private unsubscribe: (() => void)[] = [];
+  /**
+   * The aquascape changed (another tank, decor or planting edits): the portrait home framing is
+   * worked out again on the next update (after the App has rebuilt the colliders); 'snap' for a
+   * tank just opened (a cut), 'glide' for an edit.
+   */
+  private scapeDirty: 'snap' | 'glide' | null = 'snap';
+  /** Close-up shaders compiled ahead (after boot, when idle): frames until then, -1 = scheduled. */
+  private prewarmIn = 4;
 
   constructor(canvas: HTMLCanvasElement, world: World) {
     this.canvas = canvas;
@@ -164,6 +174,11 @@ export class Engine {
       world.events.on('food-dropped', ({ at, count }) => this.surface.addRipple(at[0], at[2], 0.8 + 0.3 * Math.min(4, count))),
       // A knock on the glass sends a faint shiver across the surface from the front pane.
       world.events.on('tap-glass', ({ at, strength }) => this.surface.addRipple(at[0], GLOBALS.uTankHalf.value.z - 0.005, 0.4 * strength)),
+      // The keeper rearranged the scape (plants growing on their own do not move the camera).
+      world.events.on('decor-changed', () => (this.scapeDirty ??= 'glide')),
+      world.events.on('plants-changed', (e) => {
+        if (e && ('plant' in e || 'removedId' in e)) this.scapeDirty ??= 'glide';
+      }),
     );
 
     this.setQuality(world.settings.quality);
@@ -199,6 +214,8 @@ export class Engine {
     // never a glide from wherever the last tank's close-up was.
     const otherTank = sizeChanged || prev?.id !== t.id;
     if (otherTank) {
+      this.rig.setScape([], { snap: true });
+      this.scapeDirty = 'snap';
       this.rig.resetView();
       this.anchor.valid = false;
       this.refocusT = -1;
@@ -236,6 +253,7 @@ export class Engine {
     this.post?.dispose();
     this.post = null;
     this.ghostReady = false;
+    if (this.prewarmIn < 0) this.prewarmIn = 4;
     this.resize();
   }
 
@@ -325,6 +343,10 @@ export class Engine {
 
     // Camera. It sits at the refraction-corrected (virtual) eye through which every in-water
     // line of sight passes (see CameraRig), which is also the eye for water path lengths.
+    if (this.scapeDirty) {
+      this.rig.setScape(this.scapeMasses(world), { snap: this.scapeDirty === 'snap' });
+      this.scapeDirty = null;
+    }
     this.rig.drift = world.settings.cameraDrift;
     this.rig.update(dt);
     if (this.refocusT >= 0) {
@@ -362,6 +384,57 @@ export class Engine {
       this.shadowScanTimer = 0.5;
       this.contents.traverse(this.enableShadow);
     }
+  }
+
+  /**
+   * The aquascape as the camera's portrait home framing sees it: each piece of hardscape (the
+   * outline of its colliders) and each plant or coral, by x extent, weighted by how much of the
+   * view it fills from the front and how tall it stands — a bommie, a root tangle or a sword plant
+   * draws the eye; open sand and a carpet do not, and a background curtain (vallisneria along the
+   * back glass) is the backdrop, not the subject. Floating plants are at the surface.
+   */
+  private scapeMasses(world: World): ScapeMass[] {
+    const out: ScapeMass[] = [];
+    const H = Math.max(0.05, tankBounds(world.tank).height);
+    const add = (x0: number, x1: number, top: number, area: number, k: number) => {
+      if (!(x1 > x0 && area > 0)) return;
+      out.push({ x0, x1, w: k * area * (0.35 + MathUtils.clamp(top / H, 0, 1)) });
+    };
+    // Hardscape: the front outline (x extent × height) of each item's colliders.
+    const items = new Map<string, { x0: number; x1: number; y0: number; y1: number }>();
+    const grow = (id: string, x0: number, x1: number, y0: number, y1: number) => {
+      const b = items.get(id);
+      if (!b) items.set(id, { x0, x1, y0, y1 });
+      else {
+        b.x0 = Math.min(b.x0, x0);
+        b.x1 = Math.max(b.x1, x1);
+        b.y0 = Math.min(b.y0, y0);
+        b.y1 = Math.max(b.y1, y1);
+      }
+    };
+    for (const c of world.colliders ?? []) {
+      if (c.type === 'sphere') grow(c.ownerId, c.center[0] - c.radius, c.center[0] + c.radius, c.center[1] - c.radius, c.center[1] + c.radius);
+      else if (c.type === 'capsule') {
+        grow(c.ownerId, Math.min(c.a[0], c.b[0]) - c.radius, Math.max(c.a[0], c.b[0]) + c.radius, Math.min(c.a[1], c.b[1]) - c.radius, Math.max(c.a[1], c.b[1]) + c.radius);
+      } else if (c.type === 'box') {
+        const [hx, hy, hz] = c.halfExtents;
+        const ex = Math.abs(Math.cos(c.rotationY)) * hx + Math.abs(Math.sin(c.rotationY)) * hz;
+        grow(c.ownerId, c.center[0] - ex, c.center[0] + ex, c.center[1] - hy, c.center[1] + hy);
+      }
+    }
+    for (const b of items.values()) add(b.x0, b.x1, b.y1, 0.6 * (b.x1 - b.x0) * Math.max(0, b.y1 - Math.max(0, b.y0)), 1.5);
+    for (const p of world.tank.plants) {
+      const sp = world.plants.get(p.speciesId);
+      if (!sp || sp.placement === 'floating' || sp.form === 'floating' || sp.form === 'lily') continue;
+      const g = MathUtils.clamp(p.growth, 0.05, 1);
+      let h = (sp.maxHeightCm / 100) * g;
+      if (sp.form === 'carpet' || sp.form === 'moss') h = Math.min(h, 0.03);
+      const spread = Math.max(0.01, (sp.spreadCm / 100) * Math.sqrt(g));
+      const k = sp.placement === 'background' ? 0.2 : sp.placement === 'foreground' ? 0.6 : 1;
+      // Leaves and polyps are airy: ~60 % of their outline.
+      add(p.position[0] - spread / 2, p.position[0] + spread / 2, p.position[1] + h, 0.6 * spread * h, k);
+    }
+    return out;
   }
 
   private enableShadow = (o: Object3D): void => {
@@ -415,6 +488,40 @@ export class Engine {
       r.render(this.scene, this.camera);
     }
     this.ghostReady = !!post;
+    if (this.prewarmIn > 0 && --this.prewarmIn === 0) this.schedulePrewarm();
+  }
+
+  /**
+   * After boot, when the main thread is idle: compile the shaders the first close-up needs (depth
+   * of field, the fin twins) so following an animal for the first time does not stall. Never on
+   * the first frames; the driver compiles in the background where KHR_parallel_shader_compile is
+   * available. Again after a quality change (new post chain).
+   */
+  private schedulePrewarm(): void {
+    this.prewarmIn = -1;
+    const run = () => {
+      const post = this.preset.post ? this.post : null;
+      if (!post || this.preset.dofTaps <= 0) return;
+      // One object per program (all fin twins of a kind share theirs).
+      const seen = new Set<string>();
+      const closeUp: Object3D[] = [];
+      this.contents.traverse((o) => {
+        const m = (o as Mesh).material;
+        if (!o.userData.closeUpOnly || !m || Array.isArray(m)) return;
+        const key = `${m.type}|${m.customProgramCacheKey()}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        closeUp.push(o);
+      });
+      try {
+        post.prewarm(this.renderer, this.camera, this.scene, closeUp);
+      } catch (err) {
+        console.warn('[engine] shader prewarm failed', err);
+      }
+    };
+    const idle = (globalThis as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+    if (idle) idle(run, { timeout: 4000 });
+    else setTimeout(run, 1500);
   }
 
   // ------------------------------------------------------------------------------------------
@@ -585,9 +692,14 @@ export class Engine {
     this.refocusSoon();
   }
 
-  /** The TARGET zoom (what the view is heading for): 1 = the whole tank framed; `max` = closest telephoto framing. */
-  getZoom(): { zoom: number; min: number; max: number } {
-    return { zoom: this.rig.targetZoom, min: 1, max: MAX_ZOOM };
+  /**
+   * The TARGET zoom (what the view is heading for): 1 = the whole tank framed; `max` = closest
+   * telephoto framing. `atHome`: the view rests on (or is heading for) the whole-tank framing —
+   * false while following, zoomed in, or after a pan away from it at 1× (cubes and tall tanks on a
+   * wide screen, wide tanks on a phone held upright).
+   */
+  getZoom(): { zoom: number; min: number; max: number; atHome: boolean } {
+    return { zoom: this.rig.targetZoom, min: 1, max: MAX_ZOOM, atHome: this.rig.atHome };
   }
 
   /** Current (animated) zoom, for indicators that follow the motion. */

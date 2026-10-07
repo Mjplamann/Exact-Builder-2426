@@ -91,13 +91,30 @@ fed by `biotopes.ts` styles and the `stockAdvisor`) always add a new tank — no
 eye), so close-ups behave like a telephoto lens. The App passes one `FollowSubject` whose arrays it
 refreshes in place each frame; `Engine.follow/zoomBy/panBy/resetView` drive the rig, PostFX adds
 depth of field while following or zoomed, and `Tour` (`src/app/tour.ts`) picks subjects for the
-documentary mode. The UI talks only to the AppApi view methods.
+documentary mode. The UI talks only to the AppApi view methods. While following, ViewControls tells
+the camera which part of the screen is uncovered (setFollowSafeArea); the rig frames the animal
+there, coming closer if the glass would otherwise stop it.
 
-Close-ups: `FishRenderer` shows a depth-only twin of every fin mesh (fins, legs, antennae) while
-following or zoomed past 1.3×, so depth of field keeps them sharp with their body. Close-up-only
-surface detail (leaf venation, scale shimmer, sand grain) is gated by `closeUpAmount(zoom,
-following)` via `DECOR_UNIFORMS.uCloseUp` / `FISH_CLOSEUP`, so the whole-tank view is identical on
-any display.
+Whole-tank (home) view: 1× frames the tank's front glass. On a phone held upright facing a tank
+wider than the screen, it shows a slice of the tank centred on the aquascape's focus (the slice
+holding most of the hardscape and tall plants or corals, by visible area and height —
+`CameraRig.setScape`, fed by the Engine from `world.colliders` and the plants), worked out again
+when another tank opens or the keeper edits decor or plants, and only moving a view that rests on
+the whole tank; landscape screens keep the centred framing. `getZoom().atHome` is false after any
+pan away from the home framing, even at 1× (cubes and tall tanks on a wide screen, wide tanks on an
+upright phone), so "whole tank", the two-finger tap and 0 bring it back.
+
+Close-ups: `FishRenderer` shows two twins of every fin mesh (fins, legs, antennae) while following
+or zoomed past 1.3×. The depth twin gives defocused fins, and solid fin parts, their own depth so
+depth of field blurs or keeps them with their body; the mask twin marks clear fin parts in focus
+in the HDR alpha (−opacity × sharpness, judged with PostFX's `DOF_LENS`), and the composite keeps
+that share sharp (all of it along the fin's outline and rays) while the background seen through the
+fin blurs like the background beside it. The half-res blur is upsampled with a jittered 4-tap
+filter (no stair-steps on high-contrast textures out of focus). Their
+shaders and the depth-of-field passes are compiled when the main thread is idle after boot
+(`userData.closeUpOnly`), so the first close-up does not stall. Close-up-only surface detail (leaf
+venation, scale shimmer, sand grain) is gated by `closeUpAmount(zoom, following)` via
+`DECOR_UNIFORMS.uCloseUp` / `FISH_CLOSEUP`, so the whole-tank view is identical on any display.
 
 ### Events (`src/core/events.ts`)
 `fish-added | fish-removed | fish-died | fish-born` → App calls `FishRenderer.sync`.

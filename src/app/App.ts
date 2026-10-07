@@ -633,6 +633,10 @@ export class App implements AppApi {
     this.engine.setFollowFill(fill);
   }
 
+  setFollowSafeArea(area: { left: number; top: number; right: number; bottom: number } | null): void {
+    this.engine.setFollowSafeArea(area);
+  }
+
   zoomBy(steps: number, anchorClientX?: number, anchorClientY?: number): void {
     if (this.tour.active) this.setTour(false);
     // The anchor is whatever is under the pointer: an animal, a plant, decor (else the engine
@@ -652,7 +656,7 @@ export class App implements AppApi {
     this.engine.setZoom(zoom);
   }
 
-  getZoom(): { zoom: number; min: number; max: number } {
+  getZoom(): { zoom: number; min: number; max: number; atHome: boolean } {
     return this.engine.getZoom();
   }
 

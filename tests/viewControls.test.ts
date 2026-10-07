@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   BUTTON_STEPS,
   ViewRouter,
+  awayFromHome,
   ZOOM_STEP_RATIO,
   dragToPan,
   followSafeArea,
@@ -127,7 +128,7 @@ describe('viewKeyAction', () => {
  * on the current shot; a pan lets go of a followed animal; a tour opens on the whole tank.
  */
 function fakeApp(opts: { zoom?: number } = {}) {
-  const state = { zoom: opts.zoom ?? 1, touring: false };
+  const state = { zoom: opts.zoom ?? 1, touring: false, atHome: true as boolean | undefined };
   const world = { follow: null as string | null, selection: {} as { fishId?: string }, fishById: new Map<string, unknown>([['a', {}], ['b', {}]]) };
   const app = {
     world,
@@ -141,7 +142,7 @@ function fakeApp(opts: { zoom?: number } = {}) {
       void y;
       state.touring = false;
     }),
-    getZoom: () => ({ zoom: state.zoom, min: 1, max: 8 }),
+    getZoom: () => ({ zoom: state.zoom, min: 1, max: 8, atHome: state.atHome === undefined ? undefined : state.atHome && state.zoom <= 1.001 }),
     panBy: vi.fn((dx: number, dy: number): void => {
       void dx;
       void dy;
@@ -282,6 +283,32 @@ describe('ViewRouter', () => {
     f.world.follow = null;
     f.state.touring = true;
     expect(f.router.isClose()).toBe(true);
+  });
+
+  it('counts a pan away from the whole-tank framing at 1× as away (whole tank, 0, two-finger tap)', () => {
+    const f = fakeApp();
+    expect(f.router.isClose()).toBe(false);
+    // A wide tank on a phone held upright, or a cube on a wide screen, panned at 1×.
+    f.state.atHome = false;
+    expect(f.router.isClose()).toBe(true);
+    expect(f.router.key('0')).toBe(true);
+    expect(f.app.resetView).toHaveBeenCalledTimes(1);
+    expect(f.router.key('ArrowLeft')).toBe(true);
+    f.state.atHome = true;
+    expect(f.router.isClose()).toBe(false);
+    expect(f.router.key('0')).toBe(false);
+    // Without the signal (an older app), the zoom alone decides.
+    f.state.atHome = undefined;
+    expect(f.router.isClose()).toBe(false);
+    f.state.zoom = 1.5;
+    expect(f.router.isClose()).toBe(true);
+  });
+
+  it('awayFromHome: zoomed in, or panned at 1×', () => {
+    expect(awayFromHome({ zoom: 1, atHome: true })).toBe(false);
+    expect(awayFromHome({ zoom: 1, atHome: false })).toBe(true);
+    expect(awayFromHome({ zoom: 1.01 })).toBe(false);
+    expect(awayFromHome({ zoom: 1.5 })).toBe(true);
   });
 });
 

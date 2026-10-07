@@ -12,6 +12,7 @@ import { createFishMaterials, swimUniforms, type FishMaterials } from './fishMat
 import { buildInvertebrate } from './invertebrates';
 import { buildSeahorse } from './seahorse';
 import { swimParams } from './swim';
+import { FX_LAYER } from '../env/TankShell';
 import { atlasSizeFor, paintFishAtlas, type FishTextures } from './textures';
 
 /**
@@ -46,6 +47,8 @@ export class FishVariant {
   finMesh!: InstancedMesh;
   /** Depth-only fins for close-ups (see FishMaterials.finDepth); hidden unless the renderer shows it. */
   finDepthMesh!: InstancedMesh;
+  /** Coverage of the fins in focus for close-ups (see FishMaterials.finMask); shown with finDepthMesh. */
+  finMaskMesh!: InstancedMesh;
   capacity = 0;
   /** Animals currently drawn by this variant (set by FishRenderer.sync). */
   members: FishEntity[] = [];
@@ -110,9 +113,9 @@ export class FishVariant {
   /** (Re)allocate instance buffers and meshes for at least `n` animals. */
   ensureCapacity(n: number, onReplace: (oldMeshes: InstancedMesh[], fresh: InstancedMesh[]) => void): void {
     if (n <= this.capacity) return;
-    const old = [this.bodyMesh, this.finMesh, this.finDepthMesh];
+    const old = [this.bodyMesh, this.finMesh, this.finDepthMesh, this.finMaskMesh];
     this.allocate(Math.max(n, Math.ceil(this.capacity * 1.6)));
-    onReplace(old, [this.bodyMesh, this.finMesh, this.finDepthMesh]);
+    onReplace(old, [this.bodyMesh, this.finMesh, this.finDepthMesh, this.finMaskMesh]);
   }
 
   private allocate(cap: number): void {
@@ -138,20 +141,32 @@ export class FishVariant {
     this.bodyMesh?.dispose();
     this.finMesh?.dispose();
     this.finDepthMesh?.dispose();
+    this.finMaskMesh?.dispose();
     const bodyMesh = new InstancedMesh(this.geoBody, this.mats.body, cap);
     const finMesh = new InstancedMesh(this.geoFins, this.mats.fins, cap);
     const finDepthMesh = new InstancedMesh(this.geoFins, this.mats.finDepth, cap);
+    const finMaskMesh = new InstancedMesh(this.geoFins, this.mats.finMask, cap);
     bodyMesh.instanceMatrix.setUsage(DynamicDrawUsage);
     finMesh.instanceMatrix = bodyMesh.instanceMatrix;
-    finDepthMesh.instanceMatrix = bodyMesh.instanceMatrix;
-    finDepthMesh.castShadow = false;
-    finDepthMesh.frustumCulled = false;
-    finDepthMesh.count = 0;
-    finDepthMesh.visible = false;
-    finDepthMesh.name = `fin-depth:${this.key}`;
-    // After every translucent surface (fins, water, glass): it only lays down depth.
+    for (const [m, name] of [[finDepthMesh, 'fin-depth'], [finMaskMesh, 'fin-mask']] as const) {
+      m.instanceMatrix = bodyMesh.instanceMatrix;
+      m.castShadow = false;
+      // Depth-of-field helpers only: never shadow casters (the Engine's shadow scan skips them);
+      // shown only in close-ups, so the Engine compiles their shaders ahead of the first one.
+      m.userData.castShadow = false;
+      m.userData.closeUpOnly = true;
+      // Only for the main view's depth of field: not drawn into the surface's mirror image.
+      m.layers.set(FX_LAYER);
+      m.frustumCulled = false;
+      m.count = 0;
+      m.visible = false;
+      m.name = `${name}:${this.key}`;
+    }
+    // After every translucent surface (fins, water, glass): they only lay down depth, then the mask.
     finDepthMesh.renderOrder = 1e6;
+    finMaskMesh.renderOrder = 1e6 + 1;
     this.finDepthMesh = finDepthMesh;
+    this.finMaskMesh = finMaskMesh;
     bodyMesh.customDepthMaterial = this.mats.depth;
     bodyMesh.castShadow = !this.opts.thumbnail;
     bodyMesh.receiveShadow = false;
@@ -186,9 +201,11 @@ export class FishVariant {
     this.bodyMesh.removeFromParent();
     this.finMesh.removeFromParent();
     this.finDepthMesh.removeFromParent();
+    this.finMaskMesh.removeFromParent();
     this.bodyMesh.dispose();
     this.finMesh.dispose();
     this.finDepthMesh.dispose();
+    this.finMaskMesh.dispose();
     this.geoBody.dispose();
     this.geoFins.dispose();
     this.mats.dispose();

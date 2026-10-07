@@ -145,7 +145,7 @@ export class FishRenderer {
           continue;
         }
         this.variants.set(key, v);
-        this.group.add(v.bodyMesh, v.finMesh, v.finDepthMesh);
+        this.group.add(v.bodyMesh, v.finMesh, v.finDepthMesh, v.finMaskMesh);
       }
       v.members.push(f);
     }
@@ -179,7 +179,8 @@ export class FishRenderer {
     _cam.copy(this.engine.camera.position).applyMatrix4(_inv);
     const simTime = world.clock.simTime;
     // Close-ups (following, or zoomed past ~1.3×) have depth of field: lay down the fins' depth
-    // so they stay sharp with their body. Never drawn in the whole-tank view (no extra cost).
+    // so they stay sharp with their body, and their coverage so the background seen through a
+    // clear fin still blurs. Never drawn in the whole-tank view (no extra cost).
     const closeUp = this.engine.qualityLevel !== 'low' && (world.follow !== null || this.engine.zoomLevel > 1.3);
     // Close-up skin detail (scale shimmer) fades in with the zoom; never in the whole-tank view.
     FISH_CLOSEUP.value = closeUpAmount(this.engine.zoomLevel ?? 1, world.follow !== null);
@@ -252,6 +253,8 @@ export class FishRenderer {
       v.finMesh.count = n;
       v.finDepthMesh.count = n;
       v.finDepthMesh.visible = closeUp;
+      v.finMaskMesh.count = n;
+      v.finMaskMesh.visible = closeUp;
       markDirty(v.bodyMesh.instanceMatrix);
       markDirty(v.aA);
       markDirty(v.aB);

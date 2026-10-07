@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Vector3 } from 'three';
-import { CameraRig, MAX_ZOOM, ZOOM_STEP, defaultFill, type FollowSubject } from '../src/render/env/CameraRig';
+import { CameraRig, MAX_ZOOM, ZOOM_STEP, defaultFill, scapeFocusX, type FollowSubject, type ScapeMass } from '../src/render/env/CameraRig';
 import { substrateHeight, tankBounds } from '../src/core/tankGeometry';
 import type { TankState } from '../src/core/types';
 
@@ -453,5 +453,147 @@ describe('camera big animals', () => {
     const c = ndc(rig, new Vector3(...s.pos));
     expect(Math.abs(c.x)).toBeLessThan(0.03);
     expect(rig.zoom).toBeCloseTo(1, 2);
+  });
+});
+
+describe('portrait home framing of wide tanks', () => {
+  const wide = {
+    size: { widthCm: 300, heightCm: 120, depthCm: 120 },
+    substrate: 'beige-sand',
+    substrateDepthFrontCm: 4,
+    substrateDepthBackCm: 7,
+    seed: 3,
+  } as unknown as TankState;
+  const PORTRAIT = 0.46;
+  /** A tall bommie right of centre, a smaller one left, a low rubble patch in the middle. */
+  const scape: ScapeMass[] = [
+    { x0: 0.45, x1: 0.85, w: 0.3 },
+    { x0: -0.6, x1: -0.35, w: 0.08 },
+    { x0: -0.05, x1: 0.05, w: 0.005 },
+  ];
+  const wideRig = (aspect: number) => {
+    const rig = new CameraRig(aspect);
+    rig.drift = false;
+    rig.frame(wide, aspect);
+    rig.update(DT);
+    return rig;
+  };
+
+  it('finds the window that holds most of the scape, and centres on what it holds', () => {
+    expect(scapeFocusX([], 1.5, 0.5)).toBe(0);
+    // A window as wide as the tank: nothing to choose.
+    expect(scapeFocusX(scape, 0.3, 0.7)).toBe(0);
+    const x = scapeFocusX(scape, 1.5, 0.55);
+    expect(x).toBeGreaterThan(0.55);
+    expect(x).toBeLessThan(0.75);
+    // Never past the tank's end.
+    expect(scapeFocusX([{ x0: 1.4, x1: 1.5, w: 1 }], 1.5, 0.5)).toBeCloseTo(1.25, 6);
+    // Two equal bommies: the middle of the tank wins among equals, a previous focus is kept.
+    const twins: ScapeMass[] = [
+      { x0: -0.5, x1: -0.2, w: 1 },
+      { x0: 0.2, x1: 0.5, w: 1 },
+    ];
+    const a = scapeFocusX(twins, 1.5, 0.4);
+    expect(Math.abs(Math.abs(a) - 0.35)).toBeLessThan(0.02);
+    expect(scapeFocusX(twins, 1.5, 0.4, 0.35)).toBeCloseTo(0.35, 2);
+    expect(scapeFocusX(twins, 1.5, 0.4, -0.35)).toBeCloseTo(-0.35, 2);
+  });
+
+  it('centres a phone held upright on the scape; landscape screens keep the centred framing', () => {
+    const rig = wideRig(PORTRAIT);
+    expect(rig.camera.position.x).toBeCloseTo(0, 6);
+    rig.setScape(scape, { snap: true });
+    rig.update(DT);
+    const x = rig.camera.position.x;
+    expect(x).toBeGreaterThan(0.5);
+    expect(x).toBeLessThan(0.8);
+    expect(rig.atHome).toBe(true);
+    // The bommie is in the picture.
+    expect(Math.abs(ndc(rig, new Vector3(0.65, 0.5, 0)).x)).toBeLessThan(0.5);
+    // Rotated to landscape at home: the whole-tank view is centred as always…
+    rig.frame(wide, 16 / 9);
+    rig.update(DT);
+    expect(rig.camera.position.x).toBeCloseTo(0, 6);
+    const ref = wideRig(16 / 9);
+    ref.setScape(scape, { snap: true });
+    ref.update(DT);
+    expect(ref.camera.position.x).toBeCloseTo(0, 6);
+    // …and back upright it returns to the scape.
+    rig.frame(wide, PORTRAIT);
+    rig.update(DT);
+    expect(rig.camera.position.x).toBeCloseTo(x, 3);
+  });
+
+  it('moves the home framing only for a view resting on it', () => {
+    const rig = wideRig(PORTRAIT);
+    rig.setScape(scape, { snap: true });
+    run(rig, 0.5);
+    // The keeper looked around: a decor edit does not yank the view.
+    rig.panBy(-1, 0);
+    run(rig, 1);
+    const x = rig.camera.position.x;
+    expect(rig.atHome).toBe(false);
+    rig.setScape([{ x0: -1.2, x1: -0.9, w: 1 }]);
+    run(rig, 4);
+    expect(rig.camera.position.x).toBeCloseTo(x, 6);
+    // Back to the whole tank: the new focus.
+    rig.resetView();
+    run(rig, 3);
+    expect(rig.camera.position.x).toBeLessThan(-0.7);
+    expect(rig.atHome).toBe(true);
+    // At home, an edit glides there (no cut).
+    rig.setScape(scape);
+    const start = rig.camera.position.x;
+    rig.update(DT);
+    expect(Math.abs(rig.camera.position.x - start)).toBeLessThan(0.01);
+    run(rig, 6);
+    expect(rig.camera.position.x).toBeGreaterThan(0.5);
+  });
+
+  it('zooming back out to 1× lands on the scape-centred home', () => {
+    const rig = wideRig(PORTRAIT);
+    rig.setScape(scape, { snap: true });
+    run(rig, 0.5);
+    const home = rig.camera.position.x;
+    rig.setZoom(4);
+    rig.panBy(-1, 0);
+    run(rig, 1);
+    rig.zoomBy(-30);
+    run(rig, 2);
+    expect(rig.camera.position.x).toBeCloseTo(home, 3);
+    expect(rig.atHome).toBe(true);
+  });
+});
+
+describe('camera at home', () => {
+  it('is at home only on the whole-tank framing: not after a pan at 1×, a zoom or a follow', () => {
+    // A cube on a landscape screen keeps most of its height, so it pans up and down at 1×.
+    const cube = { ...tank, size: { widthCm: 60, heightCm: 60, depthCm: 60 } } as TankState;
+    const rig = new CameraRig(16 / 9);
+    rig.drift = false;
+    rig.frame(cube, 16 / 9);
+    rig.update(DT);
+    expect(rig.atHome).toBe(true);
+    rig.panBy(0, 1);
+    expect(rig.targetZoom).toBeCloseTo(1, 6);
+    expect(rig.atHome).toBe(false);
+    rig.resetView();
+    expect(rig.atHome).toBe(true);
+    rig.setZoom(2);
+    expect(rig.atHome).toBe(false);
+    rig.setZoom(1);
+    expect(rig.atHome).toBe(true);
+    rig.follow({ pos: [0, 0.2, 0], lengthM: 0.04 });
+    expect(rig.atHome).toBe(false);
+    rig.follow(null);
+    expect(rig.atHome).toBe(true);
+  });
+
+  it('a tank that fits the screen has no room to pan at 1×, so a drag leaves it at home', () => {
+    const rig = makeRig(16 / 9);
+    rig.panBy(1, 1);
+    rig.panBy(-1, -1);
+    run(rig, 1);
+    expect(rig.atHome).toBe(true);
   });
 });

@@ -1,15 +1,21 @@
 import {
+  AddEquation,
   Color,
+  CustomBlending,
   DoubleSide,
   FrontSide,
   MeshDepthMaterial,
   MeshPhysicalMaterial,
+  MinEquation,
+  OneFactor,
   RGBADepthPacking,
   Vector2,
   Vector4,
+  ZeroFactor,
   type Texture,
 } from 'three';
 import type { Appearance, Species } from '../../core/types';
+import { DOF_LENS } from '../env/PostFX';
 import { addShaderPatch } from '../materialPatch';
 import { applyUnderwater } from '../underwater';
 import { hex, srgbToLinear } from './color';
@@ -36,6 +42,8 @@ export const FISH_TIME = { value: 0 };
  * body; only the faintest membrane edge falls back to the background's blur.
  */
 export const FIN_DEPTH_ALPHA = 0.06;
+/** At or above this opacity a fin in focus owns its depth like the body (painted, solid parts). */
+const FIN_SOLID_ALPHA = 0.5;
 const FISH_TIME_WRAP = 3600;
 /** 0 whole-tank view … 1 close-up (set by FishRenderer): gates the close-up scale detail. */
 export const FISH_CLOSEUP = { value: 0 };
@@ -52,9 +60,18 @@ export interface FishMaterials {
    * close-ups: the translucent fins do not write depth (so they blend over each other in any
    * order), which would hand them the background's depth-of-field blur — a sharp body inside a
    * grey halo of melted fins, legs and antennae. With this the depth buffer holds the fins'
-   * own depth wherever the membrane is more than faintly visible.
+   * own depth wherever the membrane is more than faintly visible — except where a clear part of
+   * a fin is in focus: there the depth stays the background's (seen through the fin), so depth of
+   * field blurs that background like the background beside the fin, and `finMask` keeps the fin's
+   * own share of the pixel sharp.
    */
   finDepth: MeshDepthMaterial;
+  /**
+   * Coverage of the fins in focus, for depth of field: drawn after `finDepth`, it leaves the colour
+   * and depth alone and writes alpha = −(opacity × sharpness) into the HDR target (the scene's
+   * alpha is ≥ 0 elsewhere). See PostFX.
+   */
+  finMask: MeshDepthMaterial;
   uniforms: FishUniforms;
   /** Per-frame light-dependent factors (env reflections, glow, fin transmission). */
   setLight(daylight: number, moonlight: number): void;
@@ -198,6 +215,23 @@ export function createFishMaterials(
   const finDepth = new MeshDepthMaterial({ map: tex.map, alphaTest: FIN_DEPTH_ALPHA, side: DoubleSide, transparent: true, depthWrite: true, colorWrite: false });
   finDepth.forceSinglePass = true;
   finDepth.name = `fish-fin-depth:${sp.id}`;
+  // Its blending keeps the colour and the most-covering fin's mask (min of negatives) in alpha.
+  const finMask = new MeshDepthMaterial({
+    map: tex.map,
+    alphaTest: FIN_DEPTH_ALPHA,
+    side: DoubleSide,
+    transparent: true,
+    depthWrite: false,
+    blending: CustomBlending,
+    blendEquation: AddEquation,
+    blendSrc: ZeroFactor,
+    blendDst: OneFactor,
+    blendEquationAlpha: MinEquation,
+    blendSrcAlpha: OneFactor,
+    blendDstAlpha: OneFactor,
+  });
+  finMask.forceSinglePass = true;
+  finMask.name = `fish-fin-mask:${sp.id}`;
 
   const vertexPatch = (depthOnly: boolean) => (shader: Parameters<Parameters<typeof addShaderPatch>[2]>[0]) => {
     Object.assign(shader.uniforms, uniforms);
@@ -217,6 +251,32 @@ export function createFishMaterials(
   }, -10);
   addShaderPatch(depth, 'fish-swim-depth', vertexPatch(true), -10);
   addShaderPatch(finDepth, 'fish-swim-depth', vertexPatch(true), -10);
+  addShaderPatch(finMask, 'fish-swim-depth', vertexPatch(true), -10);
+  // How sharp this fragment is under the current lens (1 in focus … 0 blurred), as PostFX sees it.
+  const lensGlsl = /* glsl */ `
+    uniform vec3 uDofCoc;
+    uniform vec2 uDofClip;
+    float finSharp() {
+      float d = uDofClip.x * uDofClip.y / (uDofClip.y - gl_FragCoord.z * (uDofClip.y - uDofClip.x));
+      return 1.0 - smoothstep(0.35, 1.25, abs(uDofCoc.x * (uDofCoc.y - 1.0 / d)));
+    }`;
+  const finLens = (body: string) => (shader: Parameters<Parameters<typeof addShaderPatch>[2]>[0]) => {
+    shader.uniforms.uDofCoc = DOF_LENS.uCoc;
+    shader.uniforms.uDofClip = DOF_LENS.uClip;
+    const fs = shader.fragmentShader.replace('void main() {', `${lensGlsl}\nvoid main() {`);
+    const at = fs.lastIndexOf('}');
+    shader.fragmentShader = `${fs.slice(0, at)}${body}\n${fs.slice(at)}`;
+  };
+  // Clear parts of a fin in focus leave the depth to the background behind them.
+  // (Distinct patch keys: the key is what tells their programs apart.)
+  addShaderPatch(finDepth, 'fin-lens-depth', finLens(`  if (diffuseColor.a < ${FIN_SOLID_ALPHA.toFixed(2)} && finSharp() > 0.5) discard;`));
+  addShaderPatch(
+    finMask,
+    'fin-lens-mask',
+    finLens(`  float finM = diffuseColor.a * finSharp();
+  if (finM < 0.004) discard;
+  gl_FragColor = vec4(0.0, 0.0, 0.0, -finM);`),
+  );
   if (opts.underwater) {
     applyUnderwater(body);
     applyUnderwater(fins);
@@ -231,6 +291,7 @@ export function createFishMaterials(
     fins,
     depth,
     finDepth,
+    finMask,
     uniforms,
     setLight(daylight: number, moonlight: number) {
       const env = 0.12 + 0.88 * daylight + 0.35 * moonlight;
@@ -244,6 +305,7 @@ export function createFishMaterials(
       fins.dispose();
       depth.dispose();
       finDepth.dispose();
+      finMask.dispose();
     },
   };
 }
