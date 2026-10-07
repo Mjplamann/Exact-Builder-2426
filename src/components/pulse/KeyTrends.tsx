@@ -64,6 +64,7 @@ export function KeyTrends({ data }: { data: DashboardData }) {
     [picked, data.forecasts.forecasts],
   )
 
+  const latestDates = [...new Set(picked.map((p) => lastPoint(p.series.points)?.[0]).filter((d): d is string => !!d))]
   const where = isCounty ? `${countyName} County (hospital service area)` : 'Minnesota'
   const names = picked.map((p) => pathogenName(p.id))
   const sources = [...new Set(picked.map((p) => sourceName(data.manifest, p.series.source)))]
@@ -135,7 +136,7 @@ export function KeyTrends({ data }: { data: DashboardData }) {
                   </div>
                   <p className="text-xs text-ink-3">
                     {freq ?? 'No recent value'}
-                    {lp && <> · wk ending {formatDate(lp[0])}</>}
+                    {lp && latestDates.length > 1 && <> · wk ending {formatDate(lp[0])}</>}
                   </p>
                 </li>
               )
@@ -143,6 +144,7 @@ export function KeyTrends({ data }: { data: DashboardData }) {
           </ul>
 
           <p className="mt-3 text-xs text-ink-3">
+            {latestDates.length === 1 && <>Latest week ending {formatDate(latestDates[0], true)}. </>}
             Counts how much illness is sending people to the ER, not how many people are infected. Recent weeks may be revised.
             {!compare && forecastModels.length > 0 && <> Forecasts: {listify(forecastModels)}.</>} Source: {sources.join(', ')}.
           </p>

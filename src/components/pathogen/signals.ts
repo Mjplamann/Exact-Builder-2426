@@ -96,7 +96,7 @@ export interface BuildResult {
   groups: SignalGroup[]
   ages: AgeGroupChart[]
   /** Pulse signals whose series file did not load (shown as plain figures). */
-  orphans: SignalSummary[]
+  orphans: { signal: SignalSummary; pathogen: PathogenId }[]
   /** Map layers exist for this illness (county or wastewater-plant detail on the Map). */
   hasMap: boolean
   /** A county is selected and has its own series on this page. */
@@ -229,7 +229,8 @@ export function buildSignals(
           series: s,
           signal: signalById.get(s.id),
           name: s.age ?? s.label,
-          color: `var(--series-${i + 1})`,
+          // Emphasis: the selected band keeps its fixed slot color; the rest go gray (TrendChart's muted color).
+          color: emphasis && !highlight ? undefined : `var(--series-${i + 1})`,
           muted: emphasis && !highlight,
           group: g,
           highlight,
@@ -240,9 +241,9 @@ export function buildSignals(
 
   const seriesIds = new Set(data.series.map((s) => s.id))
   const orphans = pulseEntries
-    .flatMap((p) => p.signals)
-    .filter((s) => !seriesIds.has(s.seriesId) && s.geo.type !== 'national')
-    .filter((s, i, arr) => arr.findIndex((x) => x.seriesId === s.seriesId) === i)
+    .flatMap((p) => p.signals.map((signal) => ({ signal, pathogen: p.pathogen })))
+    .filter(({ signal }) => !seriesIds.has(signal.seriesId) && signal.geo.type !== 'national')
+    .filter((o, i, arr) => arr.findIndex((x) => x.signal.seriesId === o.signal.seriesId) === i)
 
   const countyName =
     county && overall.some((s) => s.geo.type === 'county') ? `${MN_COUNTY_BY_FIPS[county]?.name ?? county} County` : undefined

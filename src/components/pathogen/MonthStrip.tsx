@@ -20,6 +20,14 @@ export function peakPhrase(months: number[]): string {
     .join(', ')
 }
 
+/** Full sentence about the usual peak, e.g. "In Minnesota it usually peaks from December to February." */
+export function seasonSentence(months: number[]): string {
+  const p = peakPhrase(months)
+  if (p === 'No clear seasonal peak') return 'It has no clear seasonal peak in Minnesota, so it can show up any time of year.'
+  if (p === 'Year-round') return 'It circulates year-round in Minnesota.'
+  return `In Minnesota it usually peaks ${p.includes(' to ') && !p.includes(',') ? 'from ' : 'in '}${p}.`
+}
+
 export function MonthStrip({ months, now = new Date(), size = 'sm' }: { months: number[]; now?: Date; size?: 'sm' | 'md' }) {
   const current = now.getMonth() + 1
   const peaks = new Set(months)
@@ -42,7 +50,14 @@ export function MonthStrip({ months, now = new Date(), size = 'sm' }: { months: 
                 peak ? 'bg-accent text-accent-ink' : 'bg-surface-2 text-ink-3'
               } ${isNow ? 'ring-2 ring-ink-1 ring-offset-1 ring-offset-[var(--surface-1)]' : ''}`}
             >
-              {size === 'md' ? m : m.charAt(0)}
+              {size === 'md' ? (
+                <>
+                  <span className="xl:hidden">{m.charAt(0)}</span>
+                  <span className="hidden xl:inline">{m}</span>
+                </>
+              ) : (
+                m.charAt(0)
+              )}
             </li>
           )
         })}

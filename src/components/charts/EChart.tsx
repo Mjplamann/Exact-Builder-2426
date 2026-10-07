@@ -28,6 +28,7 @@ export function EChart({
   onBlur,
   focusable = false,
   title,
+  ariaDescribedBy,
 }: {
   option: EChartsCoreOption
   height?: number
@@ -40,8 +41,10 @@ export function EChart({
   onBlur?: (chart: echarts.ECharts) => void
   /** Put the chart in the tab order (pair with onKeyDown). */
   focusable?: boolean
-  /** Native tooltip hint, e.g. keyboard instructions. */
+  /** Native tooltip hint. Prefer ariaDescribedBy for instructions (a native tooltip competes with the chart's). */
   title?: string
+  /** id of an element describing how to use the chart (e.g. keyboard instructions). */
+  ariaDescribedBy?: string
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const chart = useRef<echarts.ECharts | null>(null)
@@ -76,6 +79,7 @@ export function EChart({
       ref={ref}
       role="img"
       aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
       title={title}
       tabIndex={focusable ? 0 : undefined}
       onKeyDown={onKeyDown ? (e) => chart.current && onKeyDown(e, chart.current) : undefined}

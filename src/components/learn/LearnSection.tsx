@@ -38,9 +38,7 @@ export function LearnSectionBlock({ section, index, children }: { section: Secti
     <SectionShell id={section.id} index={index} title={section.title}>
       <p className="text-base leading-relaxed font-medium text-ink-1 sm:text-lg">{section.summary}</p>
       {section.body.map((p, i) => (
-        <p key={i} className="mt-3 leading-relaxed text-ink-2">
-          {p}
-        </p>
+        <Paragraph key={i} text={p} />
       ))}
 
       {children}
@@ -62,14 +60,26 @@ export function LearnSectionBlock({ section, index, children }: { section: Secti
         </div>
       )}
 
-      {section.forYou && (
-        <div className="mt-6 rounded-xl border border-line bg-accent-soft p-4">
-          <p className="text-sm font-semibold text-ink-1">What it means for you</p>
-          <p className="mt-1 text-sm leading-relaxed text-ink-2">{section.forYou}</p>
+      {section.forYou && !section.detailsAsCards && <ForYou text={section.forYou} />}
+
+      {section.detailsAsCards && section.details && (
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          {section.details.map((d) => (
+            <div key={d.title} className="rounded-xl border border-line bg-surface-1 p-4">
+              <h3 className="text-sm font-semibold text-ink-1">{d.title}</h3>
+              <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink-2">
+                {d.items.map((it) => (
+                  <li key={it}>{it}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       )}
 
-      {section.details && section.details.length > 0 && (
+      {section.forYou && section.detailsAsCards && <ForYou text={section.forYou} />}
+
+      {!section.detailsAsCards && section.details && section.details.length > 0 && (
         <div className="mt-4 divide-y divide-line rounded-xl border border-line bg-surface-1">
           {section.details.map((d) => (
             <details key={d.title} className="group">
@@ -91,6 +101,31 @@ export function LearnSectionBlock({ section, index, children }: { section: Secti
 
       <SourcesLine sources={section.sources} />
     </SectionShell>
+  )
+}
+
+function ForYou({ text }: { text: string }) {
+  return (
+    <div className="mt-6 rounded-xl border border-line bg-accent-soft p-4">
+      <p className="text-sm font-semibold text-ink-1">What it means for you</p>
+      <p className="mt-1 text-sm leading-relaxed text-ink-2">{text}</p>
+    </div>
+  )
+}
+
+/** Body paragraph; a leading "**Lead-in.**" is rendered bold for scanning. */
+function Paragraph({ text }: { text: string }) {
+  const m = /^\*\*(.+?)\*\*\s*([\s\S]*)$/.exec(text)
+  return (
+    <p className="mt-3 leading-relaxed text-ink-2">
+      {m ? (
+        <>
+          <strong className="font-semibold text-ink-1">{m[1]}</strong> {m[2]}
+        </>
+      ) : (
+        text
+      )}
+    </p>
   )
 }
 

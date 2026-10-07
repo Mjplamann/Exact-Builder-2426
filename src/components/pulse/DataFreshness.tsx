@@ -94,7 +94,9 @@ export function DataFreshness({ manifest }: { manifest: Manifest }) {
                   <span className="block text-xs text-ink-3">
                     <span className="font-medium text-ink-2">{STATE_TEXT[s.state]}</span>
                     {s.latestData && <> · data through {formatDate(s.latestData, true)}</>}
-                    {!s.latestData && s.lastSuccess && <> · fetched {formatDate(s.lastSuccess.slice(0, 10), true)}</>}
+                    {!s.latestData && s.lastSuccess && (s.state === 'ok' || s.state === 'stale' || s.state === 'error') && (
+                      <> · last fetched {centralDate(s.lastSuccess)}</>
+                    )}
                   </span>
                 </span>
               </a>
@@ -104,6 +106,13 @@ export function DataFreshness({ manifest }: { manifest: Manifest }) {
       )}
     </section>
   )
+}
+
+/** Calendar date in Minnesota time (matches the header's "Updated …" stamp). */
+function centralDate(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return formatDate(iso.slice(0, 10), true)
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Chicago' })
 }
 
 function order(s: SourceState): number {

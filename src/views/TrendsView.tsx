@@ -129,6 +129,13 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
     const set = new Set(all.filter((s) => s.pathogen === pathogen && s.geo.type === state.geo.type && s.geo.code === state.geo.code).map((s) => s.metric))
     return metrics.filter((m) => set.has(m) && m !== metric)
   }, [all, pathogen, state.geo, metrics, metric])
+  // Is there a rate series for another place, so "compare using the rate" leads somewhere?
+  const rateComparable = useMemo(
+    () =>
+      !!primary &&
+      all.some((s) => s.pathogen === pathogen && s.metric === 'hosp_rate' && !s.age && s.geo.type !== 'county' && s.geo.type !== primary.geo.type),
+    [all, pathogen, primary],
+  )
   const requestedPlace =
     state.geo.type === 'county' ? geoLabel({ type: 'county', code: state.geo.code, name: state.geo.code }) : state.geo.type === 'mdh-region' ? state.geo.code : 'Minnesota'
 
@@ -194,6 +201,10 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
   }
 
   const tab = METRIC_TAB[metric]
+  const sameGeo = !sel || new Set(sel.alternatives.map((s) => `${s.geo.type}:${s.geo.code}`)).size <= 1
+  const seasonHidden: string[] = []
+  if (compareSeasons && showProjections && forecast) seasonHidden.push('the projection')
+  if (compareSeasons && (sel?.state || (showCompare && sel?.regional.length))) seasonHidden.push('other places')
   const title = `${who}: ${tab.title}`
   const stale = primaryRow?.stale && primaryRow.latestDate
   const ariaLabel = primary
@@ -256,23 +267,17 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
               </p>
             </div>
             {sel && sel.alternatives.length > 1 && primary && (
-              <LabeledSelect label="Data source" value={primary.id} onChange={setSourcePref} id="trends-source">
+              <LabeledSelect label={sameGeo ? 'Data source' : 'Site'} value={primary.id} onChange={setSourcePref} id="trends-source">
                 {sel.alternatives.map((s) => (
                   <option key={s.id} value={s.id}>
-                    {sourceInfo(data.manifest, s.source)?.name ?? s.source}
+                    {sameGeo ? (sourceInfo(data.manifest, s.source)?.name ?? s.source) : geoLabel(s.geo)}
                   </option>
                 ))}
               </LabeledSelect>
             )}
           </div>
 
-          {primaryRow && (
-            <div className="mb-4">
-              <LatestSummary row={primaryRow} who={whoText} />
-            </div>
-          )}
-
-          <div className="mb-3 space-y-2">
+          <div className="mb-3 space-y-2 empty:hidden">
             {sel?.localMissing && (
               <Callout title={`No ${tab.title} data for ${requestedPlace}`}>
                 {primary ? `Showing ${geoLabel(primary.geo)} instead.` : ''}{' '}
@@ -301,20 +306,44 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
                 the off-season, or the source may be delayed.
               </Callout>
             )}
-            {showCompare && !compareSeasons && sel && sel.regional.length === 0 && primary && (
-              <p className="text-xs text-ink-3">No U.S. or regional numbers in the same units are published for this measure.</p>
-            )}
-            {compareSeasons && (sel?.state || (showCompare && sel?.regional.length)) && (
-              <p className="text-xs text-ink-3">Comparison lines are hidden while comparing seasons.</p>
-            )}
-            {showProjections && !forecast && primary && (
-              <p className="text-xs text-ink-3">No projection is available for this measure.</p>
-            )}
-            {showProjections && forecast && compareSeasons && (
-              <p className="text-xs text-ink-3">Projections appear in the regular view. Turn off “Compare seasons” to see them.</p>
-            )}
           </div>
 
+          {primaryRow && (
+            <div className="mb-4">
+              <LatestSummary row={primaryRow} who={whoText} />
+            </div>
+          )}
+
+          <div className="mb-2 space-y-1 empty:hidden">
+            {sel?.comparisonBlocked && (showCompare || state.geo.type !== 'state') && !compareSeasons && (
+              <p className="text-xs text-ink-3">
+                {sel.comparisonBlocked === 'count'
+                  ? 'Weekly counts depend on how many people live in each place, so other places are not drawn on this chart.'
+                  : 'Wastewater concentrations use lab-specific units, so other places are not drawn on this chart.'}
+                {sel.comparisonBlocked === 'count' && metric === 'hosp_admissions' && rateComparable && (
+                  <>
+                    {' '}
+                    <button type="button" onClick={() => setMetricPref('hosp_rate')} className="font-medium text-accent underline underline-offset-2">
+                      Compare places using the hospitalization rate
+                    </button>
+                    .
+                  </>
+                )}
+              </p>
+            )}
+            {showCompare && !compareSeasons && sel && !sel.comparisonBlocked && sel.regional.length === 0 && primary && (
+              <p className="text-xs text-ink-3">No U.S. or regional numbers in the same units are published for this measure.</p>
+            )}
+            {seasonHidden.length > 0 && (
+              <p className="text-xs text-ink-3">
+                While comparing seasons, {seasonHidden.join(' and ')} {seasonHidden.length > 1 ? 'are' : 'is'} hidden. Turn off “Compare
+                seasons” to see {seasonHidden.length > 1 ? 'them' : 'it'}.
+              </p>
+            )}
+            {showProjections && !forecast && primary && !compareSeasons && (
+              <p className="text-xs text-ink-3">No projection is available for this measure.</p>
+            )}
+          </div>
           {primary && showProjections && !compareSeasons && primaryForecasts.length > 1 && forecast && (
             <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-ink-2">
               <span>Projection model</span>
@@ -335,6 +364,10 @@ function TrendsExplorer({ data }: { data: DashboardData }) {
               height={340}
               ariaLabel={ariaLabel}
             />
+          ) : sel?.siteOnly ? (
+            <EmptyState title="This measure is reported by wastewater plant">
+              Choose a county under “Where” to see the treatment plants that serve it.
+            </EmptyState>
           ) : sel?.countyOnly ? (
             <EmptyState title="This measure is published by county only">
               Choose a county under “Where” to see {whoText} {tab.title} for that county.

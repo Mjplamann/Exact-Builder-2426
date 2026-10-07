@@ -46,7 +46,7 @@ export function DataTable({ caption, columns, rows, maxHeight = 320, footnote, i
                 <th
                   key={c.key}
                   scope="col"
-                  className={`sticky top-0 z-[1] border-b border-line bg-surface-2 px-3 py-2 font-semibold whitespace-nowrap text-ink-1 ${
+                  className={`sticky top-0 z-[1] border-b border-line bg-surface-2 px-2.5 py-2 align-bottom font-semibold leading-tight whitespace-nowrap text-ink-1 sm:px-3 ${
                     (c.numeric ?? i > 0) ? 'text-right' : 'text-left'
                   } ${i === 0 ? 'left-0 z-[2]' : ''}`}
                 >
@@ -60,13 +60,13 @@ export function DataTable({ caption, columns, rows, maxHeight = 320, footnote, i
               <tr key={r.key} className="border-b border-line last:border-b-0">
                 {r.cells.map((cell, i) =>
                   i === 0 ? (
-                    <th key={i} scope="row" className="sticky left-0 bg-surface-1 px-3 py-1.5 text-left font-medium whitespace-nowrap text-ink-1">
+                    <th key={i} scope="row" className="sticky left-0 bg-surface-1 px-2.5 py-1.5 sm:px-3 text-left font-medium whitespace-nowrap text-ink-1">
                       {cell}
                     </th>
                   ) : (
                     <td
                       key={i}
-                      className={`px-3 py-1.5 whitespace-nowrap text-ink-2 ${(columns[i]?.numeric ?? true) ? 'text-right' : 'text-left'}`}
+                      className={`px-2.5 py-1.5 whitespace-nowrap text-ink-2 sm:px-3 ${(columns[i]?.numeric ?? true) ? 'text-right' : 'text-left'}`}
                     >
                       {cell}
                     </td>

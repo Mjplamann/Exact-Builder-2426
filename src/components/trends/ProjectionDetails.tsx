@@ -120,7 +120,8 @@ export function ProjectionDetails({
               In backtests on {s1.n} past weeks, {s1.horizon}-week-ahead projections were off by{' '}
               <strong className="font-semibold text-ink-1">{formatAmount(s1.mae, unit, series.metric)}</strong> on average, and
               the 95% range contained the actual value <strong className="font-semibold text-ink-1">{Math.round(s1.coverage95 * 100)}%</strong>{' '}
-              of the time. {relText(s1.relMae)}
+              of the time. {relText(s1.relMae)} Misses tend to be larger around a season’s peak, when numbers are high and
+              change quickly, and smaller in quiet weeks.
             </p>
             {skill.length > 1 && (
               <details className="group mt-2 rounded-xl border border-line">

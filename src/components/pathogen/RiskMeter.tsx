@@ -14,7 +14,7 @@ export function RiskMeter({ risk, className = '' }: { risk: RiskTier; className?
           <span
             key={t}
             className="block w-2.5 rounded-[2px]"
-            style={{ height: 6 + i * 3, background: i < n ? STEP_FILL[i] : 'var(--surface-3)' }}
+            style={{ height: 6 + i * 3, background: i < n ? STEP_FILL[i] : 'var(--border-strong)' }}
           />
         ))}
       </span>

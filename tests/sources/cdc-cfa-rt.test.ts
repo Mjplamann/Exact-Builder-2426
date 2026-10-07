@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
+  AHFS_MAX_ROWS,
   ahfsMnWhere,
+  ahfsReleaseWhere,
   buildRtSeries,
+  checkStateSchema,
   detectAhfsSchema,
   newestPerDate,
   newestRuns,
@@ -90,6 +93,38 @@ describe('parseStateRows', () => {
   })
 })
 
+// The same real rows as data.cdc.gov's SODA JSON returns them: ISO timestamps, and null fields
+// omitted entirely (Minnesota's 'Not Estimated' rows come first in the dataset's natural order).
+const LIVE_NOT_ESTIMATED = { as_of: '2026-06-02T00:00:00.000', disease: 'Influenza', state: 'Minnesota', date: '2026-05-05T00:00:00.000', category: 'Not Estimated', buildnumber: '2026-10-02T00:00:00.000' }
+const LIVE_DECLINING = {
+  as_of: '2026-01-06T00:00:00.000', disease: 'Influenza', state: 'Minnesota', date: '2026-01-06T00:00:00.000', median: '0.5785',
+  lower: '0.455', upper: '0.7394', interval_width: '0.95', p_growing: '0', category: 'Declining', buildnumber: '2026-10-02T00:00:00.000',
+}
+const DECLARED = ['as_of', 'disease', 'state', 'date', 'median', 'lower', 'upper', 'interval_width', 'p_growing', 'category', 'buildnumber']
+
+describe('checkStateSchema', () => {
+  it('scans every row, so leading null-omitted rows do not look like drift', () => {
+    const rows = [...Array(1015).fill(LIVE_NOT_ESTIMATED), LIVE_DECLINING]
+    expect(checkStateSchema(rows)).toMatchObject({ missing: [], missingRequired: [] })
+    expect(checkStateSchema(rows, DECLARED)).toMatchObject({ missing: [], missingRequired: [], noValues: [] })
+    const { estimates } = parseStateRows(rows)
+    expect(estimates[0]).toMatchObject({ asOf: '2026-06-02', date: '2026-05-05', median: null, pGrowing: null })
+    expect(estimates[1015]).toMatchObject({ asOf: '2026-01-06', median: 0.5785, pGrowing: 0, category: 'Declining' })
+  })
+  it('does not call blank value columns drift when nothing was estimated', () => {
+    expect(checkStateSchema([LIVE_NOT_ESTIMATED]).missingRequired).toEqual([])
+    expect(checkStateSchema([LIVE_NOT_ESTIMATED], DECLARED)).toMatchObject({ missing: [], noValues: ['median', 'lower', 'upper', 'interval_width', 'p_growing'] })
+  })
+  it('flags a renamed column', () => {
+    const { median, ...rest } = LIVE_DECLINING
+    const renamed = { ...rest, rt_median: median }
+    expect(checkStateSchema([LIVE_NOT_ESTIMATED, renamed]).missingRequired).toEqual(['median'])
+    expect(checkStateSchema([LIVE_NOT_ESTIMATED], DECLARED.map((c) => (c === 'median' ? 'rt_median' : c))).missingRequired).toEqual(['median'])
+    const { category: _category, ...noCategory } = LIVE_DECLINING
+    expect(checkStateSchema([noCategory]).missingRequired).toEqual(['category'])
+  })
+})
+
 describe('newestPerDate', () => {
   it('takes the newest run that produced an estimate for each date', () => {
     const daily = newestPerDate(parseStateRows(RSV_ROWS).estimates).get('27|rsv')!
@@ -130,7 +165,8 @@ describe('weeklyLast / buildRtSeries', () => {
       ['2026-09-26', 1.365],
       ['2026-10-03', 1.341],
     ])
-    expect(s.official).toEqual({ trend: 'rising', label: 'Likely Growing (86% chance Rt > 1)', asOf: '2026-10-03', by: 'CDC CFA' })
+    // CDC publishes no activity level for Rt: level 'unknown' keeps the analysis from inventing one.
+    expect(s.official).toEqual({ level: 'unknown', trend: 'rising', label: 'Likely Growing (86% chance Rt > 1)', asOf: '2026-10-03', by: 'CDC CFA' })
     expect(s.attrs).toMatchObject({ modelRun: '2026-09-29', estimateDate: '2026-09-29', category: 'Likely Growing', pGrowing: '0.862', lower: '0.799', upper: '2.006' })
     expect(s.attrs?.newestRun).toBeUndefined()
     // The run's window starts 2026-09-19 here; the next weekly run re-estimates from a week later.
@@ -145,8 +181,11 @@ describe('weeklyLast / buildRtSeries', () => {
       ['2026-09-19', 1.067],
       ['2026-09-26', null],
     ])
-    expect(s.official).toEqual({ trend: 'rising', label: 'Growing (>99% chance Rt > 1)', asOf: '2026-09-19', by: 'CDC CFA' })
+    expect(s.official).toEqual({ level: 'unknown', trend: 'rising', label: 'Growing (>99% chance Rt > 1)', asOf: '2026-09-19', by: 'CDC CFA' })
     expect(s.attrs).toMatchObject({ modelRun: '2026-09-15', newestRun: '2026-09-22', newestRunCategory: 'Not Estimated' })
+    // The blank 2026-09-22 run's window starts 2026-09-15, so the next run revises from 2026-09-22 on.
+    expect(newestRuns(est).get('27|covid')).toEqual({ asOf: '2026-09-22', category: 'Not Estimated', start: '2026-09-15' })
+    expect(s.provisionalFrom).toBe('2026-09-26')
   })
 
   it('maps a real Declining run', () => {
@@ -233,6 +272,12 @@ describe('parseAhfsRows', () => {
     expect(daily.get('27123|covid')![0].median).toBe(1.0533)
   })
 
+  it('builds the release filter with a server-side horizon cut when horizon is numeric', () => {
+    expect(ahfsReleaseWhere(schema, '2026-09-29T00:00:00.000')).toBe("county_fips like '27%' AND origin_date = '2026-09-29T00:00:00.000'")
+    expect(ahfsReleaseWhere({ ...schema, horizonNumeric: true }, '2026-09-29')).toBe("county_fips like '27%' AND origin_date = '2026-09-29' AND horizon <= 0")
+    expect(AHFS_MAX_ROWS).toBeGreaterThan(87 * 3 * 60)
+  })
+
   it('counts conflicting values for one county/date as ambiguous', () => {
     const { stats } = parseAhfsRows([r('27053', '2026-09-29', '0', '1.3406'), r('27053', '2026-09-29', '0', '1.2')], schema)
     expect(stats.conflicts).toBe(1)
@@ -245,5 +290,8 @@ describe('parseAhfsRows', () => {
     const { estimates } = parseAhfsRows([q('0.025', '1.0459'), q('0.5', '1.1192'), q('0.975', '1.1867')], long)
     expect(estimates).toHaveLength(1)
     expect(estimates[0]).toMatchObject({ loc: '27001', pathogen: 'influenza', median: 1.1192, lower: 1.0459, upper: 1.1867, intervalWidth: 0.95, category: 'Growing' })
+    // A repeated quantile with the same value is fine; a different value is ambiguous.
+    expect(parseAhfsRows([q('0.5', '1.1192'), q('0.5', '1.1192')], long).stats.conflicts).toBe(0)
+    expect(parseAhfsRows([q('0.5', '1.1192'), q('0.5', '1.2')], long).stats.conflicts).toBe(1)
   })
 })

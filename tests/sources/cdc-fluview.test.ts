@@ -1,15 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import { unzipEntries } from '../../pipeline/lib/cdc-fluview-zip.ts'
+import { HttpError } from '../../pipeline/lib/http.ts'
 import {
+  Budget,
+  budgeted,
   buildSeries,
   cdcSeasonIds,
+  checkScale,
+  isTimeout,
   latestWeek,
   parseCdcFluviewCsv,
   parsePopHive,
   parseV3,
   parseV5Rows,
   referenceWeek,
+  selectCdcCsv,
   vizRows,
+  type WeekTable,
 } from '../../pipeline/sources/cdc-fluview.ts'
 import { parseCsv } from '../../pipeline/lib/csv.ts'
 
@@ -71,6 +78,21 @@ wili,2026-10-02T00:00:00Z,state,mn,all,source,2026-09-26,0.95
     expect(p.weeks.get('2026-09-19')).toEqual({ ili: 0.713098 })
     expect(p.reportTime).toBe('2026-10-02T00:00:00Z')
     expect(latestWeek(p.weeks, 'ili')).toBe('2026-09-26')
+  })
+
+  it('ignores age-stratum signals in the real V5 layout (separate num_ili_age_* signals, no age_group)', () => {
+    // Delphi's EpiVis requests fluview_ilinet signals wili, ili, num_ili, ..., num_ili_age_0_4, ... and splits
+    // rows by `signal`; there is no age_group column. MN values are the real ILINet numbers (PopHIVE mirror).
+    const v5 = `signal,report_time,geo_type,geo_value,reference_time,value
+ili,2026-10-02T00:00:00Z,state,mn,2026-09-26,0.957166
+num_ili,2026-10-02T00:00:00Z,state,mn,2026-09-26,402
+num_ili_age_0_4,2026-10-02T00:00:00Z,state,mn,2026-09-26,57
+num_patients,2026-10-02T00:00:00Z,state,mn,2026-09-26,41999
+num_providers,2026-10-02T00:00:00Z,state,mn,2026-09-26,100
+`
+    const p = parseV5Rows(parseCsv(v5), 'ilinet')
+    expect(p.weeks.get('2026-09-26')).toEqual({ ili: 0.957166, num_ili: 402, num_patients: 41999, num_providers: 100 })
+    expect(p.warnings).toEqual([])
   })
 
   it('drops a signal whose values conflict within a week (age strata without an age key)', () => {
@@ -176,7 +198,8 @@ describe('buildSeries', () => {
     expect(s.unit).toBe('%')
     expect(s.geo).toEqual({ type: 'state', code: '27', name: 'Minnesota' })
     expect(s.points).toEqual([['2026-09-19', 0.713], ['2026-09-26', 0.957]])
-    expect(s.provisionalFrom).toBe('2026-09-26')
+    // The newest two weeks are provisional.
+    expect(s.provisionalFrom).toBe('2026-09-19')
     expect(s.attrs?.['Reporting providers']).toBe('100')
     expect(s.attrs?.['Retrieved via']).toMatch(/PopHIVE/)
     expect(s.official).toBeUndefined()
@@ -192,6 +215,108 @@ describe('buildSeries', () => {
     expect(series[0].points).toEqual([['2017-10-21', 1.01], ['2017-10-28', 1.05]])
     expect(series[2].points).toEqual([['2017-10-21', 0], ['2017-10-28', 0.35]])
     expect(series[0].attrs?.['Specimens tested']).toBe('285')
+  })
+})
+
+describe('checkScale (percent vs counts)', () => {
+  it('accepts real ILINet and clinical-lab rows', () => {
+    const [ili] = checkScale(parsePopHive(POPHIVE_CSV).weeks, 'ilinet')
+    expect(ili).toEqual({ field: 'ili', weeksChecked: 2, weeksAgreeing: 2, medianRatio: 1 })
+    const clin = checkScale(parseCdcFluviewCsv(CDC_CLINICAL, 'clinical').weeks, 'clinical')
+    expect(clin.map((c) => c.error)).toEqual([undefined, undefined, undefined])
+    // pct_positive_b is 0 in 2017w42, so only two weeks can be checked for flu B.
+    expect(clin.map((c) => c.weeksChecked)).toEqual([3, 3, 2])
+  })
+
+  it('rejects proportions where percents are expected', () => {
+    const weeks = parsePopHive(POPHIVE_CSV).weeks
+    const scaled: WeekTable = new Map([...weeks].map(([k, r]) => [k, { ...r, ili: r.ili! / 100 }]))
+    const [c] = checkScale(scaled, 'ilinet')
+    expect(c.medianRatio).toBe(0.01)
+    expect(c.error).toMatch(/proportions/)
+  })
+
+  it('does not judge a route that has no counts', () => {
+    const weeks: WeekTable = new Map([['2026-09-26', { ili: 0.957166 }], ['2026-09-19', { ili: 0.713098 }]])
+    expect(checkScale(weeks, 'ilinet')).toEqual([{ field: 'ili', weeksChecked: 0, weeksAgreeing: 0, medianRatio: undefined }])
+  })
+})
+
+describe('selectCdcCsv (CDC FluView zip entries)', () => {
+  it('finds the clinical-lab CSV under its current ICL_ name and its older WHO_ name', () => {
+    const current = ['ILINet.csv', 'ICL_NREVSS_Public_Health_Labs.csv', 'ICL_NREVSS_Clinical_Labs.csv']
+    expect(selectCdcCsv(current, 'clinical')).toBe('ICL_NREVSS_Clinical_Labs.csv')
+    expect(selectCdcCsv(current, 'ilinet')).toBe('ILINet.csv')
+    expect(selectCdcCsv(['FluViewPhase2Data/WHO_NREVSS_Clinical_Labs.csv'], 'clinical')).toBe('FluViewPhase2Data/WHO_NREVSS_Clinical_Labs.csv')
+  })
+
+  it('never picks the public-health-lab or pre-2015 combined tables', () => {
+    expect(selectCdcCsv(['WHO_NREVSS_Public_Health_Labs.csv', 'WHO_NREVSS_Combined_prior_to_2015_16.csv'], 'clinical')).toBeUndefined()
+  })
+
+  it('reads a zip laid out like a current CDC download', () => {
+    // Built with Python's zipfile (deflated): ILINet.csv, ICL_NREVSS_Public_Health_Labs.csv (header only)
+    // and ICL_NREVSS_Clinical_Labs.csv, holding real CDC rows.
+    const ZIP_ICL =
+      'UEsDBBQAAAAIAAAAQl2HUXEcxgAAACQBAAAKAAAASUxJTmV0LmNzdlWPuw7CMAxF936FFzYHpaUtMAZwi0VIoiQFysbAwAID/X/R8hTy4OMrHenakV+SiaomsBXsOHAMUFkPbCrdkDkqoXlDgrU2FAJ4ctZHWsGihdCLbEiD83bHK/Ih8VSzNRBbR/hibEl53BNtcAR74no92KwZR435u4cOUuTPnRUin3+ofGWFyN4gP1FZYG9GG5VG02zHww/fMvjMwanIfdGQhO7Une+4vVyv5/utO2EmU4m5xAPKcTHNZz38ZjLDdIplmabJA1BLAwQUAAAACAAAAEJdTCWD9nAAAAB5AAAAIQAAAElDTF9OUkVWU1NfUHVibGljX0hlYWx0aF9MYWJzLmNzdgtydff091MIiQxw1QkCs3WCXR2D/f3iXVyDnYM8A0JAQiH+IY4+CsEBrs6evq5+wTqOChpGBgaWCh6GfoaaIJ6HMZgKLk0qqSzIzEtXyMsvUQhILUrLL8pNTdHUcdJxCstM1nGKTMzV8TD2MyrjAgBQSwMEFAAAAAgAAABCXXZ8s1Q5AQAAAgIAABwAAABJQ0xfTlJFVlNTX0NsaW5pY2FsX0xhYnMuY3N2dZHBbsIwDIbvPIW14+RVpYzBjsCyCW1ARSsmjmnrQrSQREk6xJ5+oSDgsB3i2PEn+3d8dz+mjVBKqA3U2oLfEiRxt//QfQJH3GmFYMlo6x3UVu/ANIUUJWyJS78FrioopVCi5BIkL7TlXltBDrglMJYcKU9VKGV4SJE8gFBtkz3RVxvVsiH1w6ExVQAQXmWzErSP4IV7fur5dwehStlUdFvNax8o1ewKsqBrcIZKsSPlwJMLOrCFr3mjnfDim25kHEFs5zqihmwZJriCxa1kfzAU3XWW7G26mEO+ThmefFyz0RI/GXvHfJGPPiBL2WQ6Y/PsHI/O9xhTtpyweQ7pIpvm0xW7PIwu3riT+fA1DmdhUeTCjBhWNMDHBJPnIfYwxm4Ud08m/g/uYTLsY4It18c4GoTT63d+AVBLAQIUAxQAAAAIAAAAQl2HUXEcxgAAACQBAAAKAAAAAAAAAAAAAACAAQAAAABJTElOZXQuY3N2UEsBAhQDFAAAAAgAAABCXUwlg/ZwAAAAeQAAACEAAAAAAAAAAAAAAIAB7gAAAElDTF9OUkVWU1NfUHVibGljX0hlYWx0aF9MYWJzLmNzdlBLAQIUAxQAAAAIAAAAQl12fLNUOQEAAAICAAAcAAAAAAAAAAAAAACAAZ0BAABJQ0xfTlJFVlNTX0NsaW5pY2FsX0xhYnMuY3N2UEsFBgAAAAADAAMA0QAAABADAAAAAA=='
+    const files = unzipEntries(Buffer.from(ZIP_ICL, 'base64'))
+    const name = selectCdcCsv(files.keys(), 'clinical')
+    expect(name).toBe('ICL_NREVSS_Clinical_Labs.csv')
+    const p = parseCdcFluviewCsv(new TextDecoder().decode(files.get(name!)), 'clinical')
+    expect(p.weeks.get('2017-10-28')).toEqual({
+      total_specimens: 285, positive_a: 2, positive_b: 1, pct_positive: 1.05, pct_positive_a: 0.7, pct_positive_b: 0.35,
+    })
+  })
+})
+
+describe('Budget and budgeted (time limits)', () => {
+  const timeoutError = () => new DOMException('The operation was aborted due to timeout', 'TimeoutError')
+
+  it('caps each request to the time left and refuses to start near the deadline', () => {
+    let now = 0
+    const b = new Budget(100_000, () => now)
+    expect(b.timeoutFor('delphi.cmu.edu', 45_000)).toBe(45_000)
+    now = 70_000
+    expect(b.timeoutFor('delphi.cmu.edu', 45_000)).toBe(30_000)
+    now = 95_000
+    expect(() => b.timeoutFor('delphi.cmu.edu', 45_000)).toThrow(/budget used up/)
+  })
+
+  it('skips a host for the rest of the run after it times out, and never retries a timeout', async () => {
+    const b = new Budget(Date.now() + 60_000)
+    let calls = 0
+    const hang = async () => {
+      calls++
+      throw timeoutError()
+    }
+    await expect(budgeted(b, 'https://delphi.cmu.edu/epidata/v5/viz/?x=1', 45_000, 3, hang)).rejects.toThrow(/timeout/)
+    expect(calls).toBe(1)
+    expect(b.hostsDown()).toEqual({ 'delphi.cmu.edu': 'timed out after 45 s' })
+    await expect(budgeted(b, 'https://delphi.cmu.edu/epidata/v5/snapshot/', 120_000, 0, hang)).rejects.toThrow(/skipped: delphi\.cmu\.edu timed out/)
+    expect(calls).toBe(1)
+    // Other hosts are unaffected.
+    await expect(budgeted(b, 'https://raw.githubusercontent.com/x', 1_000, 0, async () => 'ok')).resolves.toBe('ok')
+  })
+
+  it('retries HTTP 5xx but not 4xx or connection errors', async () => {
+    const b = new Budget(Date.now() + 60_000)
+    let calls = 0
+    const flaky = async () => (++calls === 1 ? Promise.reject(new HttpError('https://gis.cdc.gov/x', 503, '')) : 'ok')
+    await expect(budgeted(b, 'https://gis.cdc.gov/x', 30_000, 1, flaky)).resolves.toBe('ok')
+    expect(calls).toBe(2)
+    calls = 0
+    const notFound = async () => {
+      calls++
+      throw new HttpError('https://gis.cdc.gov/y', 404, '')
+    }
+    await expect(budgeted(b, 'https://gis.cdc.gov/y', 30_000, 3, notFound)).rejects.toThrow(/HTTP 404/)
+    expect(calls).toBe(1)
+    expect(b.hostsDown()).toEqual({})
+  })
+
+  it('recognizes fetch timeouts', () => {
+    expect(isTimeout(timeoutError())).toBe(true)
+    expect(isTimeout(new TypeError('fetch failed'))).toBe(false)
   })
 })
 

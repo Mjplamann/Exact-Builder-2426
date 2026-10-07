@@ -14,14 +14,14 @@ const profile: PathogenProfile = {
   oneLiner:
     'A bacterial infection spread by blacklegged (deer) ticks that causes sudden fever, headache, and body aches. Doxycycline treats it.',
   overview:
-    'Anaplasmosis is an infection caused by Anaplasma phagocytophilum bacteria, which infect white blood cells. It spreads through the bite of an infected blacklegged (deer) tick, the same tick that spreads Lyme disease, and Minnesota is one of the states where it is most common. It is usually mild to moderate when treated quickly with the antibiotic doxycycline. It can become serious if treatment is delayed, especially for older adults and people with weakened immune systems.',
+    'Anaplasmosis is an infection caused by Anaplasma phagocytophilum bacteria, which infect white blood cells. It spreads through the bite of an infected blacklegged (deer) tick, and Minnesota is one of the states where it is most common. It is usually mild to moderate when treated quickly with the antibiotic doxycycline. Delayed treatment can lead to serious illness, especially in older adults and people with weakened immune systems.',
   seasonality: {
     summary:
       'Most Minnesota cases start in late spring and summer, when young blacklegged ticks (nymphs) are most active. Cases often peak in June and July. Some cases also happen in the fall, especially October and November, and in early spring, when adult ticks are active on days above freezing.',
     peakMonths: [6, 7],
   },
   transmission:
-    'Anaplasmosis spreads through the bite of an infected blacklegged (deer) tick. These ticks live in wooded and brushy areas in much of Minnesota. The bacteria may pass from the tick to a person faster than Lyme bacteria do, possibly in less than a day, so check for ticks and remove them quickly. Many people do not remember being bitten. Rarely, anaplasmosis has spread through blood transfusions.',
+    'Anaplasmosis spreads through the bite of an infected blacklegged (deer) tick, the same tick that spreads Lyme disease. These ticks live in wooded and brushy areas in much of Minnesota. The bacteria may pass from the tick to a person faster than Lyme bacteria do, possibly in less than a day. Check for ticks and remove them quickly. Many people do not remember being bitten. Rarely, anaplasmosis has spread through blood transfusions.',
   incubation: 'Symptoms usually start 1 to 2 weeks after the tick bite.',
   contagiousPeriod:
     'Anaplasmosis does not spread from person to person through touching, coughing, or sharing a home. In rare cases it has spread through a blood transfusion.',
@@ -37,7 +37,6 @@ const profile: PathogenProfile = {
       'Mild symptoms or none at all (some people)',
       'Rash (uncommon; a rash may mean another tick-borne infection, such as Lyme disease, is also present)',
       'Confusion',
-      'Routine blood tests showing low white blood cell or platelet counts, or high liver enzymes',
     ],
     emergencyWarningSigns: [
       'Trouble breathing or shortness of breath',
@@ -62,9 +61,9 @@ const profile: PathogenProfile = {
     children: {
       risk: 'lower',
       summary:
-        'Children can get anaplasmosis, but it is reported less often in children than in adults. Most children recover quickly with doxycycline. Short courses are safe at any age and do not stain teeth.',
+        'Children can get anaplasmosis, but it is reported less often in children than in adults. Most children recover quickly with doxycycline. Short courses have not been shown to stain teeth and are recommended at any age.',
       actions: [
-        'Use an EPA-registered repellent and do tick checks after outdoor play.',
+        'Use a repellent registered with the U.S. Environmental Protection Agency (EPA), and do tick checks after outdoor play.',
         'Call your clinician if your child has fever, headache, and body aches after a tick bite or time in the woods.',
         'If doxycycline is prescribed, give the full course. It is the right medicine for children of all ages.',
         'Call back if the fever is not better within 1 to 2 days of starting treatment.',
@@ -77,7 +76,7 @@ const profile: PathogenProfile = {
       actions: [
         'Use repellent on skin and permethrin-treated clothing in wooded or brushy areas.',
         'Check your body for ticks every day you spend outdoors in tick areas.',
-        'See a clinician for sudden fever, headache, and body aches from spring through fall, and mention any tick exposure.',
+        'See a clinician for sudden fever, headache, and body aches from spring through fall. Mention any tick exposure.',
         'Take doxycycline exactly as prescribed and finish the full course.',
       ],
     },
@@ -128,13 +127,13 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Doxycycline is the treatment of choice for anaplasmosis in adults and children of all ages. Clinicians start it as soon as anaplasmosis is suspected, without waiting for test results, because delays can lead to serious illness. Fever usually gets better within 1 to 2 days. If it does not, the diagnosis may need another look. Treatment usually lasts 1 to 2 weeks.',
+      'Doxycycline is the treatment of choice for anaplasmosis in adults and children of all ages. Clinicians start it as soon as anaplasmosis is suspected, without waiting for test results. Delays can lead to serious illness. Fever usually gets better within 1 to 2 days. If it does not, the diagnosis may need another look. Treatment usually lasts about 10 to 14 days. This longer course also treats Lyme disease, which can come from the same tick bite.',
     options: [
       {
         name: 'Doxycycline',
         type: 'antibiotic',
         detail:
-          'Usually taken by mouth; very sick people may get it through a vein (IV). Start right away when anaplasmosis is suspected. Short courses are safe at any age, including young children. Take it with a full glass of water, stay upright for at least 30 minutes afterward, and protect your skin from the sun.',
+          'Usually taken by mouth for about 10 to 14 days. Very sick people may get it through a vein (IV). Start right away when anaplasmosis is suspected. Short courses can be used at any age, including young children, and have not been shown to stain teeth. Take it with a full glass of water, stay upright for at least 30 minutes afterward, and protect your skin from the sun.',
         who: 'Adults and children of all ages. It is also used for serious illness during pregnancy.',
       },
       {
@@ -148,7 +147,7 @@ const profile: PathogenProfile = {
         name: 'Rest, fluids, and fever relief',
         type: 'supportive',
         detail:
-          'Rest, drink plenty of fluids, and use fever reducers such as acetaminophen as directed. Very sick people may need hospital care.',
+          'Rest, drink plenty of fluids, and use fever reducers such as acetaminophen as directed. Ask your clinician before using aspirin, ibuprofen, or naproxen. Anaplasmosis can lower platelets (cells that help blood clot), and these medicines can raise the risk of bleeding. Very sick people may need hospital care.',
         who: 'Everyone who is sick.',
       },
     ],
@@ -157,8 +156,8 @@ const profile: PathogenProfile = {
   prevention: {
     vaccines: [],
     everyday: [
-      'Use an EPA-registered repellent on skin, such as DEET, picaridin, IR3535, oil of lemon eucalyptus (OLE), PMD, or 2-undecanone. Follow the label.',
-      'Treat clothing, boots, and gear with 0.5% permethrin, or buy pre-treated items. Do not put permethrin on skin.',
+      'Use a repellent registered with the U.S. Environmental Protection Agency (EPA). Look for one of these active ingredients: DEET, picaridin, IR3535, oil of lemon eucalyptus (OLE), para-menthane-diol (PMD), or 2-undecanone. Follow the label.',
+      'Treat clothing, boots, and gear with 0.5% permethrin (an insect-killing treatment for clothing), or buy pre-treated items. Do not put permethrin on skin.',
       'Walk in the center of trails. Avoid brushy areas, tall grass, and leaf litter.',
       'Check your whole body for ticks every day after time outdoors, and remove them right away with fine-tipped tweezers.',
       'Shower within 2 hours of coming indoors. Tumble dry clothes on high heat for 10 minutes to kill ticks.',
@@ -167,20 +166,20 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'Clinicians often suspect anaplasmosis from symptoms, tick exposure, and routine blood tests that show low white blood cell or platelet counts or high liver enzymes. The best test in the first week of illness is a PCR test on blood, which looks for the bacteria’s genetic material. Antibody tests are less helpful early; they usually need two blood samples taken 2 to 4 weeks apart. Sometimes a lab can see the bacteria inside white blood cells on a blood smear. Treatment should not wait for test results. There is no home test.',
+    'Clinicians often suspect anaplasmosis from symptoms and tick exposure. Routine blood tests may show low white blood cell or platelet counts, or signs of liver irritation. In the first week of illness, the best test is a PCR test on blood, which looks for the bacteria’s genetic material. Antibody tests are less helpful early. They usually need two blood samples taken 2 to 4 weeks apart. Sometimes a lab can see the bacteria inside white blood cells on a blood smear (a drop of blood looked at under a microscope). Treatment should not wait for test results. There is no home test.',
   whenToSeekCare: [
-    'Call your clinician the same day for fever, chills, severe headache, or body aches within a few weeks of a tick bite or time in tick areas from spring through fall.',
+    'Call your clinician the same day for fever, chills, bad headache, or body aches. This matters most if you had a tick bite or spent time in tick areas in the past few weeks.',
     'Mention tick exposure even if you never saw a tick. Many people do not remember a bite.',
     'Call back if your fever is not better within 1 to 2 days of starting doxycycline.',
     'Seek care early if you are 65 or older or have a weakened immune system. Do not wait to see if it passes.',
     'Go to an emergency department for trouble breathing, confusion, unusual bleeding, or fainting.',
   ],
   readingTheNumbers:
-    'Anaplasmosis is tracked through cases that clinicians and labs report to the Minnesota Department of Health (MDH). These reports lag behind real time, often by weeks or more. Diagnosis needs a lab test, so counts depend on how often clinicians test, and they miss people with mild illness who are never tested. Long-term changes can reflect both real changes in tick activity and changes in testing. Anaplasmosis is not on the respiratory or stool BioFire panels, so there is no BioFire detection rate for it, and there is no test positivity measure like the ones used for flu or COVID-19. Counts usually climb in late spring, peak in early summer, and drop by late summer, with a smaller rise in the fall. For you, a rising count means infected ticks are active where people spend time outdoors. Use tick prevention, and seek care promptly for sudden fever after time outdoors.',
+    'Anaplasmosis is tracked through cases that clinicians and labs report to the Minnesota Department of Health (MDH). CDC’s weekly national tables do not currently list Minnesota anaplasmosis counts, so this page may not show a current number. MDH publishes yearly totals, which are more complete. Final totals usually come out the following year. Diagnosis needs a lab test, so counts depend on how often clinicians test. They miss people with mild illness who are never tested. Long-term changes can reflect both real changes in tick activity and changes in testing. Anaplasmosis is not on the respiratory or stool BioFire panels. It also has no test positivity measure like the ones used for flu or COVID-19. In a typical year, cases climb in late spring, peak in early summer, and drop by late summer, with a smaller rise in the fall. For you, a rise in cases means infected ticks are active where people spend time outdoors. Use tick prevention, and seek care promptly for sudden fever after time outdoors.',
   watchNotes: [
     'October and November are adult tick season in Minnesota. Adult blacklegged ticks are active on days above freezing, so fall cases can still happen.',
     'The same tick can spread more than one germ. A person can have anaplasmosis together with Lyme disease or babesiosis. A rash is unusual with anaplasmosis alone and may point to Lyme disease as well.',
-    'Doxycycline is recommended for children of all ages with suspected anaplasmosis. Short courses do not stain teeth.',
+    'Doxycycline is recommended for children of all ages with suspected anaplasmosis. Short courses have not been shown to stain teeth.',
     'The single dose of doxycycline sometimes given after a tick bite to prevent Lyme disease is not meant to prevent anaplasmosis. Keep watching for fever after any tick bite.',
   ],
   sources: [
@@ -199,6 +198,7 @@ const profile: PathogenProfile = {
       label: 'Minnesota Department of Health: Tickborne Diseases',
       url: 'https://www.health.state.mn.us/diseases/tickborne/index.html',
     },
+    { label: 'U.S. EPA: Insect Repellents', url: 'https://www.epa.gov/insect-repellents' },
   ],
   lastReviewed: '2026-10-07',
 }

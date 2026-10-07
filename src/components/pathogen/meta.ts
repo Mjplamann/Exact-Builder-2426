@@ -1,6 +1,7 @@
 // Display vocabulary and data-matching helpers for the illness library and illness detail pages.
 import type { AgeGroupId, Manifest, MetricKind, PathogenCategory, PathogenId, PathogenPulse, PulseFile, Series } from '../../../shared/types'
 import type { GuidanceGroup, PathogenProfile, RiskTier, TreatmentOption } from '../../content/types'
+import { pathogenName } from '../../content'
 
 export const CATEGORY_LABEL: Record<PathogenCategory, string> = {
   'respiratory-viral': 'Respiratory virus',
@@ -92,6 +93,26 @@ export function inlineName(p: PathogenProfile): string {
   const s = p.shortName
   if (/[A-Z]{2}|\d|\./.test(s) || p.id === 'lyme' || p.id === 'west-nile') return s
   return s.charAt(0).toLowerCase() + s.slice(1)
+}
+
+/** Mid-sentence name for a series' own pathogen ("flu A" on the flu page, otherwise the page's name). */
+export function seriesNoun(p: PathogenProfile, pathogen: PathogenId): string {
+  const base = inlineName(p)
+  if (pathogen === p.id) return base
+  const sub = pathogenName(pathogen)
+  return base.charAt(0) === base.charAt(0).toLowerCase() ? sub.charAt(0).toLowerCase() + sub.slice(1) : sub
+}
+
+/** Plain description of where a measure comes from, for sentences ("in Minnesota", "in the Midwest (…)"). */
+export function wherePhrase(geo: Series['geo'], short = false): string {
+  if (geo.type === 'state') return `in ${geo.name || 'Minnesota'}`
+  if (geo.type === 'county') return `in ${geo.name.replace(/ County$/, '')} County`
+  if (geo.type === 'hhs-region' && /5$/.test(geo.code))
+    return short ? 'in Minnesota and 5 nearby states' : 'in HHS Region 5 (Minnesota, Wisconsin, Michigan, Illinois, Indiana and Ohio)'
+  if (geo.type === 'census-region' && /midwest/i.test(geo.code + geo.name))
+    return short ? 'in the Midwest' : 'in the Midwest (12 states including Minnesota)'
+  if (geo.type === 'national') return 'nationwide'
+  return `in ${geo.name || geo.code}`
 }
 
 /** Human source name from the manifest, plus the dataset abbreviation in the series label ("NSSP"). */

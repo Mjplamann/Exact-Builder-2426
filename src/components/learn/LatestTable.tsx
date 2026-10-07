@@ -90,10 +90,7 @@ export function LatestTable({
               Measure
             </th>
             <th scope="col" className="px-3 pt-2 pb-1 text-right font-medium">
-              Latest
-            </th>
-            <th scope="col" className="px-3 pt-2 pb-1 text-right font-medium whitespace-nowrap">
-              Week ending
+              Latest week
             </th>
           </tr>
         </thead>
@@ -110,15 +107,13 @@ export function LatestTable({
                     {s.age ? ` · ages ${s.age}` : ''} · {sourceName(manifest, s.source)}
                   </span>
                 </th>
-                <td className="tabular px-3 py-2 text-right whitespace-nowrap">
-                  <span className="font-semibold text-ink-1">
+                <td className="tabular px-3 py-2 text-right">
+                  <span className="block font-semibold whitespace-nowrap text-ink-1">
                     {formatValue(value, s.unit)}
                     {UNIT_SUFFIX[s.unit]}
                   </span>
                   {official && <span className="block text-xs text-ink-2">{official}</span>}
-                </td>
-                <td className="tabular px-3 py-2 text-right text-ink-2 whitespace-nowrap">
-                  {formatDate(date, true)}
+                  <span className="block text-xs whitespace-nowrap text-ink-3">wk ending {formatDate(date, true)}</span>
                   {prelim && <span className="block text-xs text-ink-3">preliminary</span>}
                 </td>
               </tr>

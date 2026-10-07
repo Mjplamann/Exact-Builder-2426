@@ -1,6 +1,6 @@
 // Client-side CSV export of the charted series (RFC 4180 quoting + spreadsheet-formula guard).
 import type { Forecast, Series } from '../../../shared/types'
-import { geoLabel } from './model'
+import { forecastSourceName, geoLabel } from './model'
 
 type Cell = string | number | null | undefined
 
@@ -46,7 +46,7 @@ export function chartedCsv(
     const s = series.find((x) => x.id === f.seriesId)
     for (const p of f.points) {
       rows.push([
-        p.date, 'projection', f.seriesId, s?.label ?? f.seriesId, geoLabel(f.geo), s?.age ?? 'all ages', sourceName(f.source),
+        p.date, 'projection', f.seriesId, s?.label ?? f.seriesId, geoLabel(f.geo), s?.age ?? 'all ages', forecastSourceName(f),
         f.metric, s?.unit ?? '', p.median, p.lo50, p.hi50, p.lo95, p.hi95, 'n/a', f.model,
       ])
     }

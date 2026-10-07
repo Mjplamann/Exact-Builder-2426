@@ -1,19 +1,19 @@
 // Side panel for one selected county: plain-language summary, every metric available for the
 // county, a county-vs-Minnesota trend, wastewater plants serving it, and who lives there.
 import { useMemo } from 'react'
-import type { AgeGroupId, CountyMetric, MapLayer, PulseFile, Series, SignalSummary } from '../../../shared/types'
+import type { AgeGroupId, CountyMetric, MapLayer, PulseFile, Series } from '../../../shared/types'
 import { MN_COUNTIES, MN_COUNTY_BY_FIPS, type CountyPopulation } from '../../../shared/geo/mnCounties'
 import { getProfile, pathogenName } from '../../content'
 import { formatDate, formatValue, LEVEL_LABEL, UNIT_SUFFIX } from '../../lib/format'
-import { findSeries, lastPoint } from '../../lib/series'
 import type { TimeRange } from '../../lib/state'
 import { TrendChart, type TrendSeriesInput } from '../charts/TrendChart'
 import { AUDIENCES } from '../layout/FilterBar'
 import { EmptyState, LevelBadge, SourceTag, TrendPill } from '../ui'
 import {
-  groupTitle, HSA_NOTE, isHsaEstimate, layerPhrase, levelRank, metricLevel, sourceName, TREND_PHRASE,
+  groupTitle, HSA_NOTE, isHsaEstimate, layerPhrase, levelRank, metricLevel, sourceName, stateSeriesFor, stateSignal, TREND_PHRASE,
 } from './mapData'
 import type { Manifest } from '../../../shared/types'
+import { StatewideSignals } from './StatewidePanel'
 
 interface Props {
   pulse: PulseFile
@@ -31,22 +31,6 @@ interface Props {
 interface Row {
   layer: MapLayer
   metric: CountyMetric
-}
-
-/** Minnesota-wide signal for the same pathogen + metric, if the pulse has one. */
-export function stateSignal(pulse: PulseFile, layer: MapLayer): SignalSummary | undefined {
-  const p = pulse.pathogens.find((x) => x.pathogen === layer.pathogen)
-  return p?.signals.find((s) => s.metric === layer.metric && s.geo.type === 'state')
-}
-
-/** Statewide series with the same pathogen, metric and unit (prefer the same source, then the freshest). */
-export function stateSeriesFor(series: Series[], layer: MapLayer): Series | undefined {
-  const cands = findSeries(series, { pathogen: layer.pathogen, metric: layer.metric, geoType: 'state', geoCode: '27' }).filter(
-    (s) => s.unit === layer.unit,
-  )
-  if (!cands.length) return undefined
-  const last = (s: Series) => lastPoint(s.points)?.[0] ?? ''
-  return [...cands].sort((a, b) => Number(b.source === layer.source) - Number(a.source === layer.source) || (last(b) > last(a) ? 1 : -1))[0]
 }
 
 const AGE_ROWS: { key: Exclude<keyof CountyPopulation, 'total'>; label: string }[] = [
@@ -210,6 +194,9 @@ export function CountyPanel({ pulse, series, manifest, fips, layer, audience, ra
         </div>
       </section>
 
+      {!withValue.length && <StatewideSignals pulse={pulse} manifest={manifest} limit={4} title="Statewide signals that apply here" />}
+
+      {pulse.mapLayers.some((l) => l.kind === 'county') && (
       <section aria-labelledby="county-latest">
         <h3 id="county-latest" className="mb-1.5 text-sm font-semibold text-ink-1">
           Latest data for {county.name} County
@@ -253,6 +240,7 @@ export function CountyPanel({ pulse, series, manifest, fips, layer, audience, ra
         )}
         {rows.some((r) => isHsaEstimate(r.layer)) && <p className="mt-1.5 text-xs text-ink-3">{HSA_NOTE}, not this county alone.</p>}
       </section>
+      )}
 
       {chartLayer && (
         <section aria-labelledby="county-trend">

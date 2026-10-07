@@ -16,7 +16,7 @@ import { DataTable, type DataTableColumn, type DataTableRow } from './DataTable'
 import { ForecastCaption, ForecastKey, LineKey } from './ForecastLegend'
 import {
   axisTickLabel, axisTitle, escapeHtml, forecastSourceDescription, forecastSourceLabel, isoFromMs, LEVEL_TOKEN,
-  msFromIso, niceScale, prefersReducedMotion, readTokens, resolveColor, seasonLabel, seriesVar, useThemeKey,
+  msFromIso, niceScale, readTokens, resolveColor, seasonLabel, seriesVar, useThemeKey,
   withAlpha, type ChartTokens,
 } from './chartTheme'
 
@@ -84,6 +84,8 @@ interface Model {
 }
 
 type ForecastPref = 'cdc' | 'mn-pulse'
+
+const NONE_HIDDEN: Set<string> = new Set()
 
 const SEASON_OPACITY = [0.85, 0.62, 0.45, 0.33, 0.25, 0.2]
 
@@ -182,7 +184,10 @@ function buildSeasonModel(inputs: TrendSeriesInput[], range: TimeRange): Model |
   const input = inputs[0]
   if (!input) return null
   const s = input.series
-  const lines = bySeason(s.points, range === '5y' ? 6 : 4).filter((l) => l.points.some((p) => p[1] != null))
+  const nonNull = (l: { points: [number, number | null][] }) => l.points.filter((p) => p[1] != null).length
+  const all = bySeason(s.points, 12).filter((l) => nonNull(l) > 0)
+  // Prior seasons need enough weeks to be a meaningful comparison (data that starts mid-season is dropped).
+  const lines = all.filter((l, i) => i === all.length - 1 || nonNull(l) >= 8).slice(-(range === '5y' ? 6 : 4))
   if (!lines.length) return null
   const current = lines[lines.length - 1]
   const priors = lines.slice(0, -1).reverse()
@@ -221,6 +226,12 @@ function buildSeasonModel(inputs: TrendSeriesInput[], range: TimeRange): Model |
 // ───────────────────────── option ─────────────────────────
 
 const fmt = (v: number | null | undefined, unit: Unit) => (v == null ? '—' : `${formatValue(v, unit)}${UNIT_SUFFIX[unit]}`)
+
+/** "0.13–0.63%" / "15–53" / "0.1–0.9 per 100k" (unit written once). */
+function fmtRange(lo: number, hi: number, unit: Unit): string {
+  const a = formatValue(Math.max(0, lo), unit).replace('%', '')
+  return `${a}–${fmt(hi, unit)}`
+}
 
 interface ThresholdPlan {
   shown: { level: ActivityLevel; value: number }[]
@@ -287,7 +298,6 @@ function buildOption(model: Model, hidden: Set<string>, showThresholds: boolean,
   if (metric === 'rt') top = Math.max(top, 1.2)
   const scale = niceScale(top)
 
-  const reduced = prefersReducedMotion()
   const series: Record<string, unknown>[] = []
 
   // Series 0: invisible helper spanning every x — carries reference lines/bands and keyboard focus.
@@ -329,7 +339,16 @@ function buildOption(model: Model, hidden: Set<string>, showThresholds: boolean,
           symbol: 'none',
           animation: false,
           lineStyle: { color: T.muted, width: 1, type: [4, 3], opacity: 0.8 },
-          label: { position: 'insideEndTop', color: T.ink3, fontSize: 10, fontFamily: T.font, distance: [2, 2] },
+          label: {
+            position: 'insideEndTop',
+            color: T.ink3,
+            fontSize: 10,
+            fontFamily: T.font,
+            distance: [2, 2],
+            backgroundColor: withAlpha(T.surface1, 0.85),
+            padding: [1, 3],
+            borderRadius: 3,
+          },
           emphasis: { disabled: true },
           data: markLineData,
         }
@@ -447,9 +466,7 @@ function buildOption(model: Model, hidden: Set<string>, showThresholds: boolean,
         const p = e.fc?.get(key)
         if (!p) continue
         html += tooltipRow(T, lineKeySvg(color, 1, true), fmt(p.median, unit), e.name)
-        html += `<div style="color:${T.ink3};font-size:11px;margin-left:22px">95% range ${escapeHtml(
-          `${formatValue(Math.max(0, p.lo95), unit)}–${fmt(p.hi95, unit)}`,
-        )}</div>`
+        html += `<div style="color:${T.ink3};font-size:11px;margin-left:22px">95% range ${escapeHtml(fmtRange(p.lo95, p.hi95, unit))}</div>`
         continue
       }
       if (!e.values.has(key)) continue
@@ -499,9 +516,8 @@ function buildOption(model: Model, hidden: Set<string>, showThresholds: boolean,
 
   const option: EChartsCoreOption = {
     useUTC: true,
-    animation: !reduced,
-    animationDuration: 300,
-    animationDurationUpdate: 200,
+    // No animation: charts redraw on filter/theme changes and should hold still (calm, no flashes).
+    animation: false,
     textStyle: { fontFamily: T.font },
     grid: { left: 2, right: 10, top: 26, bottom: 2, outerBoundsMode: 'same', outerBoundsContain: 'axisLabel' },
     xAxis,
@@ -557,15 +573,34 @@ export function TrendChart({
   defaultView = 'chart',
 }: TrendChartProps) {
   const themeKey = useThemeKey()
-  const [hidden, setHidden] = useState<Set<string>>(() => new Set())
+  const uid = useId().replace(/:/g, '')
+  const tableId = `trend-table-${uid}`
+  const hintId = `trend-hint-${uid}`
   const [table, setTable] = useState(defaultView === 'table' && allowTable)
   const [pref, setPref] = useState<ForecastPref>('cdc')
   const tipIndex = useRef(-1)
-  const tableId = `trend-table-${useId().replace(/:/g, '')}`
+
+  // Content signatures: callers often pass fresh arrays on every render; rebuilding only when the data
+  // actually changes keeps the chart from redrawing (and the legend state from resetting) needlessly.
+  const ids = series.map((i) => i.series.id)
+  const idsKey = `${compareSeasons ? 'season' : 'cal'}|${ids.join('|')}`
+  const sig = [
+    idsKey,
+    ...series.map((i) => {
+      const pts = i.series.points
+      return `${pts.length}:${pts[0]?.[0]}:${pts[pts.length - 1]?.[0]}:${pts[pts.length - 1]?.[1]}:${i.name ?? ''}:${i.color ?? ''}:${i.muted ? 1 : 0}:${i.series.provisionalFrom ?? ''}`
+    }),
+    ...forecasts.filter((f) => ids.includes(f.seriesId)).map((f) => `${f.id}@${f.issuedAt}:${f.points.length}`),
+  ].join(';')
+
+  const [hiddenState, setHiddenState] = useState<{ key: string; set: Set<string> }>({ key: idsKey, set: new Set() })
+  const hidden = hiddenState.key === idsKey ? hiddenState.set : NONE_HIDDEN
 
   const model = useMemo(
     () => (compareSeasons ? buildSeasonModel(series, range) : buildCalendarModel(series, forecasts, range, pref)),
-    [series, forecasts, range, compareSeasons, pref],
+    // `sig` captures the content of `series` and `forecasts`
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sig, range, compareSeasons, pref],
   )
   const hasData = !!model && model.entities.some((e) => e.kind !== 'forecast' && e.points.some((p) => p[1] != null))
 
@@ -576,18 +611,22 @@ export function TrendChart({
     [model, hasData, hidden, showThresholds, themeKey],
   )
 
+  /** Toggle one legend entry, or a group (all keys follow the first key's new state). */
   const toggle = useCallback(
-    (key: string) => {
-      setHidden((prev) => {
-        const next = new Set(prev)
-        if (next.has(key)) next.delete(key)
-        else next.add(key)
+    (keys: string[]) => {
+      setHiddenState((prev) => {
+        const next = new Set(prev.key === idsKey ? prev.set : [])
+        const show = keys.some((k) => next.has(k)) && keys.every((k) => next.has(k))
+        for (const k of keys) {
+          if (show) next.delete(k)
+          else next.add(k)
+        }
         // Never hide every line.
         const anyLine = model?.entities.some((e) => e.kind !== 'forecast' && !next.has(e.key))
-        return anyLine ? next : prev
+        return anyLine ? { key: idsKey, set: next } : prev
       })
     },
-    [model],
+    [model, idsKey],
   )
 
   const focusIndex = useCallback(() => {
@@ -648,7 +687,17 @@ export function TrendChart({
   }
 
   const { unit, metric } = model
-  const legendItems = model.entities
+  // Legend: one entry per line; several forecasts collapse into a single "Forecasts" toggle (the tooltip,
+  // caption and "How to read" still name each forecast's source).
+  const fcAll = model.entities.filter((e) => e.kind === 'forecast')
+  const legendItems: { keys: string[]; name: string; entity?: Entity; forecastGroup?: boolean }[] = [
+    ...model.entities.filter((e) => e.kind !== 'forecast').map((e) => ({ keys: [e.key], name: e.name, entity: e })),
+    ...(fcAll.length === 1
+      ? [{ keys: [fcAll[0].key], name: fcAll[0].name, entity: fcAll[0] }]
+      : fcAll.length > 1
+        ? [{ keys: fcAll.map((e) => e.key), name: 'Forecasts', forecastGroup: true }]
+        : []),
+  ]
   const showLegend = legendItems.length >= 2
   const primary = model.entities.find((e) => e.kind !== 'forecast' && !e.muted && !hidden.has(e.key)) ?? model.entities[0]
   const primaryLast = primary.points.filter((p) => p[1] != null).pop()
@@ -669,21 +718,28 @@ export function TrendChart({
         <div className="mb-2 flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
           {showLegend ? (
             <ul className="flex min-w-0 flex-wrap items-center gap-x-1 gap-y-1" aria-label="Legend — select to show or hide a line">
-              {legendItems.map((e) => {
-                const on = !hidden.has(e.key)
+              {legendItems.map((item) => {
+                const on = item.keys.some((k) => !hidden.has(k))
+                const e = item.entity
                 return (
-                  <li key={e.key}>
+                  <li key={item.keys.join(',')}>
                     <button
                       type="button"
                       aria-pressed={on}
-                      onClick={() => toggle(e.key)}
+                      onClick={() => toggle(item.keys)}
                       className={`inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 text-xs text-ink-2 hover:bg-surface-2 ${
                         on ? '' : 'line-through opacity-50'
                       }`}
-                      title={on ? `Hide ${e.name}` : `Show ${e.name}`}
+                      title={on ? `Hide ${item.name}` : `Show ${item.name}`}
                     >
-                      {e.kind === 'forecast' ? <ForecastKey color={e.color} width={18} /> : <LineKey color={e.color} opacity={e.opacity} />}
-                      <span className={e.emphasized ? 'font-semibold text-ink-1' : ''}>{e.name}</span>
+                      {item.forecastGroup ? (
+                        <ForecastKey color="var(--ink-3)" width={18} />
+                      ) : e!.kind === 'forecast' ? (
+                        <ForecastKey color={e!.color} width={18} />
+                      ) : (
+                        <LineKey color={e!.color} opacity={e!.opacity} />
+                      )}
+                      <span className={e?.emphasized ? 'font-semibold text-ink-1' : ''}>{item.name}</span>
                     </button>
                   </li>
                 )
@@ -699,7 +755,7 @@ export function TrendChart({
                 <div className="flex overflow-hidden rounded-md border border-line">
                   {(
                     [
-                      ['cdc', 'CDC ensemble'],
+                      ['cdc', 'CDC'],
                       ['mn-pulse', 'MN Pulse'],
                     ] as [ForecastPref, string][]
                   ).map(([id, text]) => (
@@ -708,6 +764,7 @@ export function TrendChart({
                       type="button"
                       role="radio"
                       aria-checked={pref === id}
+                      aria-label={forecastSourceLabel(id === 'cdc' ? 'cdc' : 'mn-pulse')}
                       onClick={() => setPref(id)}
                       className={`px-2 py-1 text-xs ${pref === id ? 'bg-accent text-accent-ink' : 'bg-surface-1 text-ink-2 hover:bg-surface-2'}`}
                     >
@@ -726,7 +783,10 @@ export function TrendChart({
                 className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface-1 px-2 py-1 text-xs font-medium text-ink-2 hover:bg-surface-2 hover:text-ink-1"
               >
                 <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3">
-                  {table ? (
+                  <p id={hintId} className="sr-only">
+        Focus the chart and use the left and right arrow keys to read values week by week. The table view lists every value.
+      </p>
+      {table ? (
                     <path d="M1 10.5 4 6.5l2.5 2L11 2" strokeLinecap="round" strokeLinejoin="round" />
                   ) : (
                     <>
@@ -750,7 +810,7 @@ export function TrendChart({
           height={height}
           ariaLabel={label}
           focusable
-          title="Use the left and right arrow keys to read weekly values"
+          ariaDescribedBy={hintId}
           onKeyDown={onKeyDown}
           onFocus={onFocus}
           onBlur={onBlur}
@@ -759,7 +819,10 @@ export function TrendChart({
 
       <figcaption className="mt-2 space-y-1.5">
         {visibleForecasts.length > 0 && !table && (
-          <ForecastCaption sources={visibleForecasts.map((f) => f.forecast!.source)} color={visibleForecasts[0].color} />
+          <ForecastCaption
+            sources={visibleForecasts.map((f) => f.forecast!.source)}
+            color={visibleForecasts.length > 1 ? 'var(--ink-3)' : visibleForecasts[0].color}
+          />
         )}
         {hasProvisional && !table && (
           <p className="flex items-center gap-2 text-xs text-ink-2">
@@ -835,7 +898,7 @@ function TrendTable({ id, model, visible, maxHeight }: { id: string; model: Mode
         key: e.key,
         label: (
           <>
-            {e.name}
+            {e.name.replace('CDC ensemble forecast', 'CDC forecast')}
             <span className="block text-[11px] font-normal text-ink-3">middle (95% range)</span>
           </>
         ),
@@ -853,7 +916,14 @@ function TrendTable({ id, model, visible, maxHeight }: { id: string; model: Mode
           }),
           ...fcs.map((e) => {
             const p = e.fc?.get(d)
-            return p ? `${formatValue(p.median, unit)} (${formatValue(Math.max(0, p.lo95), unit)}–${formatValue(p.hi95, unit)})` : ''
+            return p ? (
+              <>
+                {formatValue(p.median, unit)}
+                <span className="block text-[11px] text-ink-3">{fmtRange(p.lo95, p.hi95, unit)}</span>
+              </>
+            ) : (
+              ''
+            )
           }),
         ]
         return { key: d, cells, empty: cells.slice(1).every((c) => c === '') }

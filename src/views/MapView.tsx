@@ -79,7 +79,7 @@ export default function MapView() {
 
       <div className="flex flex-wrap items-end gap-3" role="group" aria-label="Map options">
         <LayerPicker layers={pulse.mapLayers} value={layerId} onChange={pickLayer} />
-        <ModeToggle value={mode} onChange={setMode} disabled={!layer || layer.kind === 'site'} />
+        {layer && layer.kind !== 'site' && <ModeToggle value={mode} onChange={setMode} />}
         {hasSiteLayers && layer?.kind !== 'site' && <SitesToggle checked={sitesOn} onChange={setSitesOn} />}
       </div>
 
@@ -184,12 +184,13 @@ function Limit({ title, children }: { title: string; children: React.ReactNode }
 }
 
 function mapExplainer(layer: MapLayer | undefined, mode: MapMode): string {
-  if (!layer) return 'Select a county to see who lives there. Illness layers appear here once county or wastewater-plant data is published.'
+  if (!layer) return 'Each shape is one of Minnesota’s 87 counties. Select one to see who lives there.'
+  const phrase = layerPhrase(layer)
   if (layer.kind === 'site')
-    return `Each dot is a wastewater treatment plant, colored by how its ${layerPhrase(layer).toLowerCase()} compare with that plant’s own baseline. Bigger dots serve more people.`
+    return `Each dot is a wastewater treatment plant, colored by how its ${phrase} compare with that plant’s own baseline. Bigger dots serve more people.`
   if (mode === 'value')
-    return `Darker counties had higher ${layerPhrase(layer).toLowerCase()} in the latest week. Use this to compare places on the same measure.`
-  return `Each county is colored by how its latest ${layerPhrase(layer).toLowerCase()} compare with normal for that place — from very low to very high.`
+    return `Counties are shaded by their latest ${phrase} (the scale below shows which shade means more), so you can compare places on the same measure.`
+  return `Each county is colored by how its latest ${phrase} compare with normal for that place — from very low to very high.`
 }
 
 /** Table twin of the map (every chart has a table view). */

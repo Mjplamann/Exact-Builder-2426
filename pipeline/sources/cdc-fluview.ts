@@ -12,7 +12,14 @@
 //   5. ILINet only: PopHIVE (Yale) GitHub mirror of Delphi's FluView pull (raw/data.csv.xz).
 // Anonymous Delphi limits are tight (60 requests/hour; 3/min on /snapshot/). Normally this module
 // sends 2 Delphi requests per run. Set DELPHI_API_KEY to send a key: as a `token` header on V5,
-// as a Bearer token on V3. The key never goes in a URL, so it never appears in logs.
+// as a Bearer token on V3. The key never goes in a URL, so it never appears in logs or diagnostics.
+// Unverified: Delphi's EpiVis passes the key to /viz/ as `?api_key=`, so /viz/ may ignore the
+// header and treat the request as anonymous (harmless at 2 requests per run).
+//
+// Time budget: the two sub-datasets run in parallel. Every request's timeout is capped by the time
+// left before MODULE_BUDGET_MS, so a hanging host cannot push the module past the orchestrator's
+// timeoutMs (which would discard both sub-datasets). A host that times out is skipped for the rest
+// of the run, and timeouts are never retried (only quick HTTP 429/5xx failures are).
 //
 // FluSurv-NET (Delphi `flusurv`) is deliberately left out. The CDC RESP-NET source already covers
 // Minnesota's FluSurv-NET overall rate, and a second influenza/hosp_rate/state series would share
@@ -20,7 +27,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Point, Series, SeriesFile } from '../../shared/types.ts'
-import { daysBetween, epiweekNumber, epiweekToDate, mmwrWeekEnding, seasonOf, seasonStartYear } from '../../shared/mmwr.ts'
+import { addDays, daysBetween, epiweekNumber, epiweekToDate, mmwrWeekEnding, seasonOf, seasonStartYear } from '../../shared/mmwr.ts'
 import { fetchBuffer, fetchJson, fetchText, HttpError } from '../lib/http.ts'
 import { parseCsv, num } from '../lib/csv.ts'
 import { xzDecompress } from '../lib/cdcData.ts'
@@ -37,6 +44,21 @@ const CDC = 'https://gis.cdc.gov/flu2'
 const POPHIVE_ILI = 'https://raw.githubusercontent.com/PopHIVE/Ingest/main/data/delphi_ili_fluview/raw/data.csv.xz'
 /** CDC posts data on Friday for the week that ended the previous Saturday (6 days), so a normal week is 6–13 days old. */
 const FRESH_DAYS = 20
+/** Orchestrator limit for this module. */
+const MODULE_TIMEOUT_MS = 8 * 60_000
+/** Every request must finish within this much time from the start of run(), leaving a minute of headroom. */
+const MODULE_BUDGET_MS = 7 * 60_000
+/** Do not start a request with less time than this left in the budget. */
+const MIN_REQUEST_MS = 10_000
+/** Per-request timeouts (before the budget cap). Small JSON routes get short limits. */
+const ROUTE_TIMEOUT_MS = {
+  v5Viz: 45_000,
+  v5Snapshot: 120_000,
+  cdcMeta: 30_000,
+  cdcDownload: 120_000,
+  v3: 60_000,
+  popHive: 90_000,
+} as const
 
 // ───────────────────────── sub-dataset definitions ─────────────────────────
 
@@ -69,6 +91,8 @@ interface DatasetDef {
   cdcFile: RegExp
   /** CDC CSV header → canonical field. */
   cdcColumns: Record<string, Field>
+  /** Percent fields that must equal 100 × sum(numerator) / denominator (catches a proportion/percent scale change). */
+  scaleChecks: { field: Field; numerator: Field[]; denominator: Field }[]
 }
 
 export const DATASETS: Record<DatasetKey, DatasetDef> = {
@@ -87,6 +111,8 @@ export const DATASETS: Record<DatasetKey, DatasetDef> = {
       'TOTAL PATIENTS': 'num_patients',
       'NUM. OF PROVIDERS': 'num_providers',
     },
+    // State %UNWEIGHTED ILI is ILITOTAL / TOTAL PATIENTS (MN 2026-09-26: 402 / 41,999 = 0.957166%).
+    scaleChecks: [{ field: 'ili', numerator: ['num_ili'], denominator: 'num_patients' }],
   },
   clinical: {
     label: 'Clinical labs',
@@ -102,7 +128,10 @@ export const DATASETS: Record<DatasetKey, DatasetDef> = {
       percent_a: 'pct_positive_a',
       percent_b: 'pct_positive_b',
     },
-    cdcFile: /(^|\/)WHO_NREVSS_Clinical_Labs\.csv$/i,
+    // CDC renamed the file from WHO_NREVSS_ to ICL_NREVSS_ (Delphi's acquisition code reads
+    // "ICL_NREVSS_Clinical_Labs.csv"); older exports use WHO_NREVSS_. Public-health-lab and
+    // "Combined_prior_to_2015_16" files are different tables and must not match.
+    cdcFile: /(^|\/)(WHO|ICL)_NREVSS_Clinical_Labs\.csv$/i,
     cdcColumns: {
       'TOTAL SPECIMENS': 'total_specimens',
       'TOTAL A': 'positive_a',
@@ -111,7 +140,19 @@ export const DATASETS: Record<DatasetKey, DatasetDef> = {
       'PERCENT A': 'pct_positive_a',
       'PERCENT B': 'pct_positive_b',
     },
+    // CDC rounds these to 2 decimals (MN 2017w43: 100 × (2 + 1) / 285 = 1.05).
+    scaleChecks: [
+      { field: 'pct_positive', numerator: ['positive_a', 'positive_b'], denominator: 'total_specimens' },
+      { field: 'pct_positive_a', numerator: ['positive_a'], denominator: 'total_specimens' },
+      { field: 'pct_positive_b', numerator: ['positive_b'], denominator: 'total_specimens' },
+    ],
   },
+}
+
+/** Picks the sub-dataset's CSV from the files in a CDC FluView Interactive zip. */
+export function selectCdcCsv(names: Iterable<string>, key: DatasetKey): string | undefined {
+  for (const n of names) if (DATASETS[key].cdcFile.test(n)) return n
+  return undefined
 }
 
 export type Via = 'delphi-v5-viz' | 'delphi-v5-snapshot' | 'cdc-fluview-interactive' | 'delphi-v3' | 'pophive-mirror'
@@ -331,6 +372,50 @@ export function latestWeek(weeks: WeekTable, field: Field): string | undefined {
   return max
 }
 
+export interface ScaleCheck {
+  field: Field
+  /** Recent weeks where the percent and its counts were all present and non-zero. */
+  weeksChecked: number
+  /** Weeks within 5% (or 0.006 points, for CDC's 2-decimal rounding) of 100 × numerator / denominator. */
+  weeksAgreeing: number
+  /** Median of reported ÷ recomputed; about 0.01 means proportions arrived where percents were expected. */
+  medianRatio?: number
+  error?: string
+}
+
+/**
+ * Cross-checks each percent field against its own counts over the latest `recent` weeks where all
+ * are present. A route whose percents disagree with its counts in most of those weeks (for example a
+ * switch from percent to proportion) is reported with `error` so the caller can reject it. Fields
+ * without counts are reported with weeksChecked 0 and are not judged.
+ */
+export function checkScale(weeks: WeekTable, key: DatasetKey, recent = 8): ScaleCheck[] {
+  const newestFirst = [...weeks.keys()].sort().reverse()
+  return DATASETS[key].scaleChecks.map((c) => {
+    const ratios: number[] = []
+    let agreeing = 0
+    for (const wk of newestFirst) {
+      if (ratios.length >= recent) break
+      const row = weeks.get(wk)!
+      const reported = row[c.field]
+      const denom = row[c.denominator]
+      const parts = c.numerator.map((f) => row[f])
+      if (reported == null || !denom || denom <= 0 || parts.some((x) => x == null)) continue
+      const expected = (100 * parts.reduce<number>((a, x) => a + (x as number), 0)) / denom
+      if (expected <= 0 || reported <= 0) continue
+      ratios.push(reported / expected)
+      if (Math.abs(reported - expected) <= Math.max(0.05 * expected, 0.006)) agreeing++
+    }
+    const sorted = [...ratios].sort((a, b) => a - b)
+    const medianRatio = sorted.length ? Math.round(sorted[Math.floor(sorted.length / 2)] * 1e4) / 1e4 : undefined
+    const out: ScaleCheck = { field: c.field, weeksChecked: ratios.length, weeksAgreeing: agreeing, medianRatio }
+    if (ratios.length >= 2 && agreeing * 2 < ratios.length) {
+      out.error = `${c.field} disagrees with 100 × ${c.numerator.join(' + ')} / ${c.denominator} in ${ratios.length - agreeing} of the latest ${ratios.length} weeks (median ratio ${medianRatio}; a ratio near 0.01 means proportions, not percents)`
+    }
+    return out
+  })
+}
+
 // ───────────────────────── series ─────────────────────────
 
 interface SeriesSpec {
@@ -351,7 +436,7 @@ const SERIES_SPECS: Record<DatasetKey, SeriesSpec[]> = {
 
 const NOTES: Record<DatasetKey, string> = {
   ilinet:
-    'The share of all patient visits to Minnesota ILINet sentinel outpatient providers (clinics, urgent care and some emergency departments) that were for influenza-like illness: a fever of 100°F (37.8°C) or higher plus a cough or sore throat, with no other known cause. It counts symptoms, not lab-confirmed flu, so COVID-19, RSV and other viruses add to it. This is an unweighted statewide percentage, and the mix of reporting providers changes over time. The latest 2–4 weeks are preliminary and often revised.',
+    'The share of all patient visits to Minnesota ILINet sentinel outpatient providers (clinics, urgent care and some emergency departments) that were for influenza-like illness: a fever of 100°F (37.8°C) or higher plus a cough and/or sore throat. It counts symptoms, not lab-confirmed flu, so COVID-19, RSV and other viruses add to it. This is an unweighted statewide percentage, and the mix of reporting providers changes over time. The latest 2–4 weeks are preliminary and often revised.',
   clinical:
     'The share of respiratory specimens tested for influenza at Minnesota clinical laboratories (hospital and commercial labs reporting to CDC through WHO/NREVSS) that were positive. Testing goes mostly to people sick enough to seek care, so this is not the share of Minnesotans infected. The latest 2–4 weeks are preliminary and often revised.',
 }
@@ -378,8 +463,9 @@ export function buildSeries(key: DatasetKey, parsed: Parsed, via: Via, historySt
       geo: STATE_GEO,
       label: spec.label,
       points,
-      // CDC revises the most recent weeks as late reports arrive.
-      provisionalFrom: latest,
+      // CDC revises recent weeks as late reports arrive (MN 2017w40 moved 8% after 3 weeks), so the
+      // newest two weeks are flagged, as in cdc-respnet. The analysis projects from the week before.
+      provisionalFrom: addDays(latest, -7),
       note: NOTES[key],
     })
     const row = parsed.weeks.get(latest)!
@@ -406,6 +492,71 @@ export function buildSeries(key: DatasetKey, parsed: Parsed, via: Via, historySt
   return out
 }
 
+// ───────────────────────── time budget ─────────────────────────
+
+/** True for a request that hit its AbortSignal.timeout (during the request or while reading the body). */
+export function isTimeout(e: unknown): boolean {
+  const err = e as { name?: string; cause?: { name?: string } } | null | undefined
+  return err?.name === 'TimeoutError' || err?.name === 'AbortError' || err?.cause?.name === 'TimeoutError'
+}
+
+/**
+ * Keeps every request inside the module's time budget. Each request's timeout is its route's own
+ * limit capped by the time left, and a host that timed out once is skipped for the rest of the run
+ * (both sub-datasets share one Budget, so the clinical chain does not wait on a host that just hung).
+ */
+export class Budget {
+  private down = new Map<string, string>()
+  constructor(
+    readonly deadline: number,
+    private clock: () => number = () => Date.now(),
+  ) {}
+
+  /** Timeout for one request to `host`. Throws (without sending anything) when the request should not start. */
+  timeoutFor(host: string, routeMs: number): number {
+    const why = this.down.get(host)
+    if (why) throw new Error(`skipped: ${host} ${why} earlier in this run`)
+    const left = this.deadline - this.clock()
+    if (left < MIN_REQUEST_MS) throw new Error(`skipped: module time budget used up (${Math.max(0, Math.round(left / 1000))} s left)`)
+    return Math.min(routeMs, left)
+  }
+
+  noteFailure(host: string, e: unknown, timeoutMs: number): void {
+    if (isTimeout(e)) this.down.set(host, `timed out after ${Math.round(timeoutMs / 1000)} s`)
+  }
+
+  hostsDown(): Record<string, string> {
+    return Object.fromEntries(this.down)
+  }
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+/**
+ * Sends one request through the budget. `send` must make a single attempt with the given timeout.
+ * Only quick, retryable failures (HTTP 429/5xx) are retried; timeouts and connection errors are not.
+ */
+export async function budgeted<T>(
+  budget: Budget,
+  url: string,
+  routeMs: number,
+  retries: number,
+  send: (timeoutMs: number) => Promise<T>,
+): Promise<T> {
+  const host = new URL(url).host
+  for (let attempt = 0; ; attempt++) {
+    const timeoutMs = budget.timeoutFor(host, routeMs)
+    try {
+      return await send(timeoutMs)
+    } catch (e) {
+      budget.noteFailure(host, e, timeoutMs)
+      const retryable = e instanceof HttpError && (e.status === 429 || e.status >= 500)
+      if (!retryable || attempt >= retries) throw e
+      await sleep(2000 * 2 ** attempt)
+    }
+  }
+}
+
 // ───────────────────────── fetching ─────────────────────────
 
 interface Fetched extends Parsed {
@@ -419,7 +570,7 @@ function delphiHeaders(version: 'v5' | 'v3'): Record<string, string> {
   return version === 'v5' ? { token: key } : { Authorization: `Bearer ${key}` }
 }
 
-async function fromV5Viz(key: DatasetKey): Promise<Fetched> {
+async function fromV5Viz(key: DatasetKey, budget: Budget): Promise<Fetched> {
   const def = DATASETS[key]
   const qs = new URLSearchParams({
     source: def.v5Source,
@@ -429,63 +580,60 @@ async function fromV5Viz(key: DatasetKey): Promise<Fetched> {
     format: 'json',
   })
   const url = `${V5}/viz/?${qs}`
-  const body = await fetchJson<unknown>(url, { headers: delphiHeaders('v5'), retries: 1, timeoutMs: 90_000 })
+  const body = await budgeted(budget, url, ROUTE_TIMEOUT_MS.v5Viz, 1, (timeoutMs) =>
+    fetchJson<unknown>(url, { headers: delphiHeaders('v5'), retries: 0, timeoutMs }),
+  )
   return { via: 'delphi-v5-viz', url, ...parseV5Rows(vizRows(body), key) }
 }
 
-async function fromV5Snapshot(key: DatasetKey): Promise<Fetched> {
+async function fromV5Snapshot(key: DatasetKey, budget: Budget): Promise<Fetched> {
   const def = DATASETS[key]
   // /snapshot/ ignores geo filters and returns every state; Minnesota is picked out client-side.
   const qs = new URLSearchParams({ source: def.v5Source, signal: def.signals.join(','), geo_type: 'state', fill_method: 'source' })
   const url = `${V5}/snapshot/?${qs}`
-  const text = await fetchText(url, { headers: delphiHeaders('v5'), retries: 1, timeoutMs: 180_000 })
+  // No retry: /snapshot/ allows 3 requests a minute, so a quick retry after a 429 would only fail again.
+  const text = await budgeted(budget, url, ROUTE_TIMEOUT_MS.v5Snapshot, 0, (timeoutMs) =>
+    fetchText(url, { headers: delphiHeaders('v5'), retries: 0, timeoutMs }),
+  )
   const head = text.trimStart().slice(0, 1)
   if (head === '{' || head === '[') throw new Error(`Delphi V5 snapshot returned JSON, not CSV: ${text.slice(0, 160)}`)
   return { via: 'delphi-v5-snapshot', url, ...parseV5Rows(parseCsv(text), key) }
 }
 
-async function fromV3(key: DatasetKey, historyStart: string, today: string): Promise<Fetched> {
+async function fromV3(key: DatasetKey, historyStart: string, today: string, budget: Budget): Promise<Fetched> {
   const def = DATASETS[key]
   const url = `${V3}/${def.v3Endpoint}/?regions=mn&epiweeks=${epiweekNumber(historyStart)}-${epiweekNumber(today)}`
-  const body = await fetchJson<V3Response>(url, { headers: delphiHeaders('v3'), retries: 1, timeoutMs: 90_000 })
+  const body = await budgeted(budget, url, ROUTE_TIMEOUT_MS.v3, 1, (timeoutMs) =>
+    fetchJson<V3Response>(url, { headers: delphiHeaders('v3'), retries: 0, timeoutMs }),
+  )
   return { via: 'delphi-v3', url, ...parseV3(body, key) }
 }
 
-async function fromPopHive(): Promise<Fetched> {
-  const text = xzDecompress(await fetchBuffer(POPHIVE_ILI, { timeoutMs: 120_000 }))
-  return { via: 'pophive-mirror', url: POPHIVE_ILI, ...parsePopHive(text) }
+async function fromPopHive(budget: Budget): Promise<Fetched> {
+  const buf = await budgeted(budget, POPHIVE_ILI, ROUTE_TIMEOUT_MS.popHive, 2, (timeoutMs) =>
+    fetchBuffer(POPHIVE_ILI, { retries: 0, timeoutMs }),
+  )
+  return { via: 'pophive-mirror', url: POPHIVE_ILI, ...parsePopHive(xzDecompress(buf)) }
 }
 
 const UA = 'MN-Pulse/0.1 (+https://github.com/Mjplamann/Exact-Builder-2426; public-health dashboard)'
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-async function postForBuffer(url: string, body: unknown, timeoutMs = 180_000, retries = 1): Promise<ArrayBuffer> {
-  let lastErr: unknown
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'User-Agent': UA,
-          'Content-Type': 'application/json',
-          Accept: 'application/json, text/plain, */*',
-          Origin: 'https://gis.cdc.gov',
-          Referer: 'https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html',
-        },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(timeoutMs),
-      })
-      if (res.ok) return await res.arrayBuffer()
-      const err = new HttpError(url, res.status, await res.text().catch(() => ''))
-      if (res.status !== 429 && res.status < 500) throw err
-      lastErr = err
-    } catch (e) {
-      if (e instanceof HttpError && e.status !== 429 && e.status < 500) throw e
-      lastErr = e
-    }
-    if (attempt < retries) await sleep(2000 * 2 ** attempt)
-  }
-  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr))
+/** One POST attempt (retries are handled by `budgeted`). */
+async function postForBuffer(url: string, body: unknown, timeoutMs: number): Promise<ArrayBuffer> {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'User-Agent': UA,
+      'Content-Type': 'application/json',
+      Accept: 'application/json, text/plain, */*',
+      Origin: 'https://gis.cdc.gov',
+      Referer: 'https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html',
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(timeoutMs),
+  })
+  if (!res.ok) throw new HttpError(url, res.status, await res.text().catch(() => ''))
+  return res.arrayBuffer()
 }
 
 interface CdcInitApp {
@@ -509,8 +657,11 @@ interface CdcDownload {
 }
 
 /** One POST returns both the ILINet and the WHO/NREVSS clinical-lab CSVs (shared by both sub-datasets). */
-async function downloadCdc(historyStart: string, today: string): Promise<CdcDownload> {
-  const meta = await fetchJson<CdcInitApp>(`${CDC}/GetPhase02InitApp?appVersion=Public`, { retries: 1, timeoutMs: 60_000 })
+async function downloadCdc(historyStart: string, today: string, budget: Budget): Promise<CdcDownload> {
+  const metaUrl = `${CDC}/GetPhase02InitApp?appVersion=Public`
+  const meta = await budgeted(budget, metaUrl, ROUTE_TIMEOUT_MS.cdcMeta, 1, (timeoutMs) =>
+    fetchJson<CdcInitApp>(metaUrl, { retries: 0, timeoutMs }),
+  )
   const regionTypeId = meta.regiontypes?.find((r) => r.description === 'State')?.regiontypeid ?? 5
   const states = meta.states ?? []
   const mn = states.find((s) => Object.values(s).some((v) => typeof v === 'string' && v.trim().toLowerCase() === 'minnesota'))
@@ -522,13 +673,14 @@ async function downloadCdc(historyStart: string, today: string): Promise<CdcDown
   )
   const entry = (id: number) => ({ ID: id, Name: String(id) })
   const url = `${CDC}/PostPhase02DataDownload`
-  const buf = await postForBuffer(url, {
+  const payload = {
     AppVersion: 'Public',
     DatasourceDT: [{ ID: 1, Name: 'ILINet' }, { ID: 0, Name: 'WHO_NREVSS' }],
     RegionTypeId: regionTypeId,
     SubRegionsDT: (stateIds.length ? stateIds : Array.from({ length: 59 }, (_, i) => i + 1)).map(entry),
     SeasonsDT: seasons.map(entry),
-  })
+  }
+  const buf = await budgeted(budget, url, ROUTE_TIMEOUT_MS.cdcDownload, 1, (timeoutMs) => postForBuffer(url, payload, timeoutMs))
   const files = new Map<string, string>()
   const decoder = new TextDecoder('utf-8')
   for (const [name, data] of unzipEntries(buf)) files.set(name, decoder.decode(data))
@@ -538,7 +690,7 @@ async function downloadCdc(historyStart: string, today: string): Promise<CdcDown
 async function fromCdc(key: DatasetKey, cdc: () => Promise<CdcDownload>): Promise<Fetched> {
   const { url, files } = await cdc()
   const def = DATASETS[key]
-  const name = [...files.keys()].find((n) => def.cdcFile.test(n))
+  const name = selectCdcCsv(files.keys(), key)
   if (!name) throw new Error(`CDC FluView zip has no ${def.cdcFile.source} (files: ${[...files.keys()].join(', ')})`)
   return { via: 'cdc-fluview-interactive', url: `${url} → ${name}`, ...parseCdcFluviewCsv(files.get(name)!, key) }
 }
@@ -548,6 +700,8 @@ interface Attempt {
   ok: boolean
   rows?: number
   latestWeek?: string
+  ms?: number
+  scale?: ScaleCheck[]
   error?: string
 }
 
@@ -563,27 +717,33 @@ async function loadDataset(
   key: DatasetKey,
   ctx: SourceContext,
   log: Logger,
+  budget: Budget,
   cdc: () => Promise<CdcDownload>,
 ): Promise<{ chosen?: Fetched; attempts: Attempt[] }> {
   const def = DATASETS[key]
   const today = ctx.now.slice(0, 10)
   const routes: [Via, () => Promise<Fetched>][] = [
-    ['delphi-v5-viz', () => fromV5Viz(key)],
-    ['delphi-v5-snapshot', () => fromV5Snapshot(key)],
+    ['delphi-v5-viz', () => fromV5Viz(key, budget)],
+    ['delphi-v5-snapshot', () => fromV5Snapshot(key, budget)],
     ['cdc-fluview-interactive', () => fromCdc(key, cdc)],
-    ['delphi-v3', () => fromV3(key, ctx.historyStart, today)],
+    ['delphi-v3', () => fromV3(key, ctx.historyStart, today, budget)],
   ]
-  if (key === 'ilinet') routes.push(['pophive-mirror', fromPopHive])
+  if (key === 'ilinet') routes.push(['pophive-mirror', () => fromPopHive(budget)])
   const attempts: Attempt[] = []
   let chosen: Fetched | undefined
   let chosenLatest: string | undefined
   for (const [via, run] of routes) {
+    const t0 = Date.now()
     try {
       const r = await run()
       for (const w of r.warnings) log.warn(`${def.label} via ${via}: ${w}`)
       const latest = latestWeek(r.weeks, def.primary)
       if (!latest) throw new Error(`no Minnesota ${def.primary} values (${r.rowsRead} rows read; signals ${r.signals.join(', ') || 'none'})`)
-      attempts.push({ via, ok: true, rows: r.rowsRead, latestWeek: latest })
+      const scale = checkScale(r.weeks, key)
+      const badScale = scale.filter((c) => c.error)
+      if (badScale.length) throw new Error(`scale check failed: ${badScale.map((c) => c.error).join('; ')}`)
+      if (!scale.some((c) => c.weeksChecked > 0)) log.warn(`${def.label} via ${via}: no counts to cross-check the percentages against`)
+      attempts.push({ via, ok: true, rows: r.rowsRead, latestWeek: latest, ms: Date.now() - t0, scale })
       if (!chosenLatest || latest > chosenLatest) {
         chosen = r
         chosenLatest = latest
@@ -595,7 +755,7 @@ async function loadDataset(
       }
       log.warn(`${def.label}: ${via} latest week ${latest} is ${age} days old; trying the next route`)
     } catch (e) {
-      attempts.push({ via, ok: false, error: errMsg(e) })
+      attempts.push({ via, ok: false, ms: Date.now() - t0, error: errMsg(e) })
       log.warn(`${def.label}: ${via} failed: ${errMsg(e)}`)
     }
   }
@@ -614,6 +774,67 @@ async function previousSeries(ctx: SourceContext, key: DatasetKey): Promise<Seri
   }
 }
 
+interface Refreshed {
+  series: Series[]
+  note: string
+  failed: boolean
+  diagnostics: Record<string, unknown>
+}
+
+async function refresh(
+  key: DatasetKey,
+  ctx: SourceContext,
+  budget: Budget,
+  cdc: () => Promise<CdcDownload>,
+): Promise<Refreshed> {
+  const def = DATASETS[key]
+  const today = ctx.now.slice(0, 10)
+  try {
+    const { chosen, attempts } = await loadDataset(key, ctx, ctx.log, budget, cdc)
+    const failedBefore = attempts.filter((a) => !a.ok).map((a) => VIA_LABEL[a.via])
+    if (!chosen) {
+      const kept = await previousSeries(ctx, key)
+      const keptLatest = latestDate(kept)
+      return {
+        series: kept,
+        failed: true,
+        note: `${def.label}: every route failed${kept.length ? `; kept previously published data through ${keptLatest}` : ''} (${attempts.map((a) => `${a.via}: ${a.error}`).join('; ')})`,
+        diagnostics: { ok: false, attempts, keptPrevious: kept.length, keptLatest },
+      }
+    }
+    const built = buildSeries(key, chosen, chosen.via, ctx.historyStart)
+    const latest = latestWeek(chosen.weeks, def.primary)!
+    const age = daysBetween(latest, today)
+    let note = `${def.label} via ${VIA_LABEL[chosen.via]}`
+    if (age > FRESH_DAYS) note += ` (newest week ${latest}, ${age} days old)`
+    if (failedBefore.length) note += `; unavailable: ${failedBefore.join(', ')}`
+    const sortedWeeks = [...chosen.weeks.keys()].sort()
+    return {
+      series: built,
+      failed: false,
+      note,
+      diagnostics: {
+        ok: true,
+        via: chosen.via,
+        url: chosen.url,
+        rowsRead: chosen.rowsRead,
+        columns: chosen.columns.slice(0, 30),
+        signals: chosen.signals,
+        mnWeeks: chosen.weeks.size,
+        firstWeek: sortedWeeks[0],
+        latestWeek: latest,
+        latestValue: chosen.weeks.get(latest)?.[def.primary],
+        reportTime: chosen.reportTime,
+        warnings: chosen.warnings,
+        series: built.map((s) => ({ id: s.id, points: s.points.length, last: s.points[s.points.length - 1] })),
+        attempts,
+      },
+    }
+  } catch (e) {
+    return { series: [], failed: true, note: `${def.label}: ${errMsg(e)}`, diagnostics: { ok: false, error: errMsg(e) } }
+  }
+}
+
 // ───────────────────────── module ─────────────────────────
 
 export const cdcFluview: SourceModule = {
@@ -629,69 +850,31 @@ export const cdcFluview: SourceModule = {
     attribution:
       'CDC FluView: U.S. Outpatient Influenza-like Illness Surveillance Network (ILINet) and WHO/NREVSS clinical laboratories. Retrieved through the CMU Delphi Epidata API, with CDC FluView Interactive and the PopHIVE mirror as fallbacks. Public domain.',
   },
-  timeoutMs: 8 * 60_000,
+  timeoutMs: MODULE_TIMEOUT_MS,
   async run(ctx): Promise<SourceResult> {
-    const log = ctx.log
+    const started = Date.now()
+    const budget = new Budget(started + MODULE_BUDGET_MS)
     const today = ctx.now.slice(0, 10)
     let cdcPromise: Promise<CdcDownload> | undefined
-    const cdc = () => (cdcPromise ??= downloadCdc(ctx.historyStart, today))
+    const cdc = () => (cdcPromise ??= downloadCdc(ctx.historyStart, today, budget))
 
-    const series: Series[] = []
-    const notes: string[] = []
-    const diagnostics: Record<string, unknown> = { keyConfigured: !!process.env.DELPHI_API_KEY, freshDays: FRESH_DAYS }
-    let anyFailure = false
+    // The two chains share no state except the budget and the single CDC download, so they run in
+    // parallel; this also halves the worst case when a host is slow rather than down.
+    const keys: DatasetKey[] = ['ilinet', 'clinical']
+    const results = await Promise.all(keys.map((key) => refresh(key, ctx, budget, cdc)))
 
-    for (const key of ['ilinet', 'clinical'] as DatasetKey[]) {
-      const def = DATASETS[key]
-      try {
-        const { chosen, attempts } = await loadDataset(key, ctx, log, cdc)
-        const failedBefore = attempts.filter((a) => !a.ok).map((a) => VIA_LABEL[a.via])
-        if (!chosen) {
-          anyFailure = true
-          const kept = await previousSeries(ctx, key)
-          series.push(...kept)
-          const keptLatest = latestDate(kept)
-          notes.push(
-            `${def.label}: every route failed${kept.length ? `; kept previously published data through ${keptLatest}` : ''} (${attempts.map((a) => `${a.via}: ${a.error}`).join('; ')})`,
-          )
-          diagnostics[key] = { ok: false, attempts, keptPrevious: kept.length, keptLatest }
-          continue
-        }
-        const built = buildSeries(key, chosen, chosen.via, ctx.historyStart)
-        series.push(...built)
-        const latest = latestWeek(chosen.weeks, def.primary)!
-        const age = daysBetween(latest, today)
-        let note = `${def.label} via ${VIA_LABEL[chosen.via]}`
-        if (age > FRESH_DAYS) note += ` (newest week ${latest}, ${age} days old)`
-        if (failedBefore.length) note += `; unavailable: ${failedBefore.join(', ')}`
-        notes.push(note)
-        const sortedWeeks = [...chosen.weeks.keys()].sort()
-        diagnostics[key] = {
-          ok: true,
-          via: chosen.via,
-          url: chosen.url,
-          rowsRead: chosen.rowsRead,
-          columns: chosen.columns.slice(0, 30),
-          signals: chosen.signals,
-          mnWeeks: chosen.weeks.size,
-          firstWeek: sortedWeeks[0],
-          latestWeek: latest,
-          latestValue: chosen.weeks.get(latest)?.[def.primary],
-          reportTime: chosen.reportTime,
-          warnings: chosen.warnings,
-          series: built.map((s) => ({ id: s.id, points: s.points.length, last: s.points[s.points.length - 1] })),
-          attempts,
-        }
-      } catch (e) {
-        anyFailure = true
-        notes.push(`${def.label}: ${errMsg(e)}`)
-        diagnostics[key] = { ok: false, error: errMsg(e) }
-      }
+    const diagnostics: Record<string, unknown> = {
+      keyConfigured: !!process.env.DELPHI_API_KEY,
+      freshDays: FRESH_DAYS,
+      elapsedSec: Math.round((Date.now() - started) / 1000),
+      budgetSec: MODULE_BUDGET_MS / 1000,
+      hostsTimedOut: budget.hostsDown(),
     }
-    for (const n of notes) log.info(n)
+    keys.forEach((key, i) => (diagnostics[key] = results[i].diagnostics))
+    for (const r of results) ctx.log.info(r.note)
     return {
-      datasets: [{ source: SOURCE, dataset: DATASET, series }],
-      message: (anyFailure ? 'Partial refresh. ' : '') + notes.join('. ') + '.',
+      datasets: [{ source: SOURCE, dataset: DATASET, series: results.flatMap((r) => r.series) }],
+      message: (results.some((r) => r.failed) ? 'Partial refresh. ' : '') + results.map((r) => r.note).join('. ') + '.',
       diagnostics,
     }
   },

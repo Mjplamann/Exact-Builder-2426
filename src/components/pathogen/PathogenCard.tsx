@@ -49,6 +49,11 @@ export function PathogenCard({
       <div className="flex flex-wrap items-center gap-1.5 text-xs">
         <span className="rounded-md border border-line px-1.5 py-0.5 font-medium text-ink-2">{KIND_LABEL[profile.kind]}</span>
         <span className="text-ink-3">{CATEGORY_LABEL[profile.category]}</span>
+        {live && (
+          <span className="ml-auto">
+            <LiveDot />
+          </span>
+        )}
       </div>
 
       <div>
@@ -81,9 +86,6 @@ export function PathogenCard({
             {pulse.asOf && <span className="text-xs text-ink-3">week ending {formatDate(pulse.asOf)}</span>}
           </div>
         ) : null}
-        <div className="flex items-center justify-between gap-2">
-          {live ? <LiveDot /> : <span className="text-xs text-ink-3">Not tracked weekly in public data</span>}
-        </div>
         <div>
           <p className="mb-1 text-xs text-ink-3">
             Usually peaks: <span className="text-ink-2">{peakPhrase(profile.seasonality.peakMonths)}</span>

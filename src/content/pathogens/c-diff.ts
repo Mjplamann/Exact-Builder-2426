@@ -1,7 +1,9 @@
-// TODO(verify): drafted from long-standing CDC, IDSA/SHEA and FDA-label information WITHOUT live web
-// verification (the shared WebSearch budget was exhausted). Verify current (Oct 2026) treatment
-// guidance and add authoritative source URLs before publishing.
 import type { PathogenProfile } from '../types'
+
+// TODO(verify): the BioFire panel and data-interpretation notes are sourced below. The treatment, testing,
+// recurrence and risk statements follow IDSA/SHEA 2017 and 2021 guidance, CDC patient pages and FDA labels,
+// but their source URLs (CDC, IDSA/SHEA, FDA) could not be confirmed in search results this session. Add
+// them from a run with search budget before publishing.
 
 const profile: PathogenProfile = {
   id: 'c-diff',
@@ -10,13 +12,13 @@ const profile: PathogenProfile = {
   aka: ['C. difficile', 'Clostridium difficile (former name)', 'C. diff infection (CDI)'],
   category: 'gastrointestinal',
   kind: 'bacterium',
-  biofireTargets: ['Clostridioides (Clostridium) difficile toxin A/B'],
+  biofireTargets: ['Clostridioides (Clostridium) difficile (toxin A/B)'],
   oneLiner: 'A germ that causes severe diarrhea, most often after taking antibiotics. Its spores are hard to kill and spread on hands and surfaces.',
   overview:
-    'C. diff is a bacterium that can cause diarrhea and colitis (inflammation of the colon). It usually strikes after antibiotics upset the healthy bacteria in the gut, letting C. diff grow and make toxins. It is a common infection linked to hospitals and nursing homes, but many cases now begin in the community, in people who have not recently stayed in a hospital. C. diff forms spores (a tough, resting form) that can last on surfaces for months and are not killed by alcohol hand sanitizer.',
+    'C. diff is a bacterium that can cause diarrhea and colitis (inflammation of the colon). It usually strikes after antibiotics upset the healthy bacteria in the gut, letting C. diff grow and make toxins. It is often linked to hospitals and nursing homes. But many cases now begin in the community, in people who have not recently stayed in a hospital. C. diff forms spores (a tough, resting form) that can last on surfaces for months and are not killed by alcohol hand sanitizer.',
   seasonality: {
     summary:
-      'C. diff happens year-round in Minnesota and does not have a strong season. Changes over time are usually tied to antibiotic use and health care exposures rather than to weather.',
+      'C. diff happens year-round in Minnesota and does not have a strong season. Some studies show a small rise in late winter and spring, likely because more antibiotics are used during cold and flu season. Changes over time are usually tied to antibiotic use and health care exposures rather than to weather.',
     peakMonths: [],
   },
   transmission:
@@ -24,7 +26,7 @@ const profile: PathogenProfile = {
   incubation:
     'Symptoms often start while taking antibiotics or within a few weeks after finishing them. Risk is highest during antibiotic use and the month after, and it stays higher for up to a few months.',
   contagiousPeriod:
-    'People spread spores mainly while they have diarrhea. Some people carry C. diff without symptoms and can still shed spores. Because spores last on surfaces for months, cleaning matters even after symptoms stop.',
+    'People shed the most spores while they have diarrhea. Shedding often continues for days to weeks after diarrhea stops and after treatment. Some people carry C. diff without symptoms and can also shed spores. Because spores last on surfaces for months, keep washing hands with soap and water and cleaning the bathroom even after symptoms stop.',
   symptoms: {
     common: [
       'Frequent watery diarrhea (3 or more loose stools in a day)',
@@ -123,13 +125,13 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'C. diff is treated with specific antibiotics taken by mouth that target it. If possible, your clinician will also stop the antibiotic that led to the infection. C. diff often comes back after treatment, so call your clinician if diarrhea returns. Products made from healthy gut bacteria can help prevent repeat infections in some adults.',
+      'C. diff is treated with specific antibiotics taken by mouth that target it. If possible, your clinician will also stop the antibiotic that led to the infection. C. diff often comes back: about 1 in 6 people treated for it get it again within 2 to 8 weeks. Call your clinician if diarrhea returns. Products made from healthy gut bacteria can help prevent repeat infections in some adults.',
     options: [
       {
         name: 'Fidaxomicin (Dificid)',
         type: 'antibiotic',
         detail:
-          'An antibiotic taken by mouth, usually for about 10 days. Infectious disease guidelines (IDSA/SHEA) prefer it for adults because the infection comes back less often than with vancomycin. It can cost more, so insurance coverage may matter.',
+          'An antibiotic taken by mouth, usually for about 10 days. Guidelines from U.S. infectious disease experts (the Infectious Diseases Society of America and the Society for Healthcare Epidemiology of America) prefer it for adults. That is because the infection comes back less often than with vancomycin. It can cost more, so insurance coverage may matter.',
         who: 'Adults with a first or repeat C. diff infection; also approved for children 6 months and older',
       },
       {
@@ -143,14 +145,14 @@ const profile: PathogenProfile = {
         name: 'Metronidazole',
         type: 'antibiotic',
         detail:
-          'An older option. For adults, guidelines suggest it only for mild illness when fidaxomicin or vancomycin cannot be used. It is still sometimes used for mild C. diff in children.',
-        who: 'Selected patients with mild illness',
+          'An older option. Taken by mouth, it is suggested for adults only for a first, non-severe infection when fidaxomicin or vancomycin cannot be used. Repeated or long courses can damage nerves. In very severe cases, hospitals may give it through a vein along with vancomycin. It is still sometimes used for mild C. diff in children.',
+        who: 'Selected patients with mild illness; hospital patients with very severe illness (through a vein, with vancomycin)',
       },
       {
         name: 'Fecal microbiota products (Rebyota, Vowst) and fecal transplant',
         type: 'other',
         detail:
-          'These restore healthy gut bacteria to help keep C. diff from coming back. Rebyota is given into the rectum and Vowst is taken as capsules by mouth, both after antibiotic treatment for a repeat infection. A fecal microbiota transplant (FMT) may be offered after several recurrences.',
+          'These restore healthy gut bacteria to help keep C. diff from coming back. Rebyota is given into the rectum and Vowst is taken as capsules by mouth, both after antibiotic treatment for a repeat infection. A fecal microbiota transplant (FMT) may be offered after several recurrences (repeat infections).',
         who: 'Adults 18 and older whose C. diff has come back',
       },
       {
@@ -172,24 +174,35 @@ const profile: PathogenProfile = {
       'Wash soiled clothes and linens right away with detergent.',
       'Tell your clinicians if you have had C. diff before, especially before starting a new antibiotic.',
       'Ask your clinician whether you still need daily stomach-acid medicine.',
+      'Ask your clinician before using probiotics to prevent C. diff. Expert groups do not agree on whether they help, and the evidence is limited.',
     ],
   },
   testing:
-    'C. diff is diagnosed with a stool test, usually only for people with new, unexplained diarrhea (3 or more loose stools in 24 hours). Labs use tests that find the germ’s genes (PCR) or its toxins, sometimes in steps. Because some people carry C. diff without being sick, testing is not recommended for people without diarrhea, for babies under 1 year, or after treatment to “prove” it is gone. There is no home test.',
+    'C. diff is diagnosed with a stool test, usually only for people with new, unexplained diarrhea (3 or more loose stools in 24 hours). Labs use tests that find the germ’s genes (PCR) or its toxins, sometimes in steps. Because some people carry C. diff without being sick, testing is not recommended for people without diarrhea or for babies under 1 year. It is also not done after treatment to “prove” the infection is gone. There is no home test.',
   whenToSeekCare: [
     'Call a health care provider if you have watery diarrhea 3 or more times in a day while taking antibiotics or in the weeks after.',
-    'Call if diarrhea comes back after C. diff treatment; it may be a recurrence that needs different treatment.',
+    'Call if diarrhea comes back after C. diff treatment. The infection may have come back and may need a different treatment.',
     'Do not stop a prescribed antibiotic on your own; call your clinician first.',
-    'Go to urgent care or an emergency department for severe belly pain, a swollen belly, fever with feeling very ill, a lot of blood in the stool, or signs of dehydration.',
+    'Go to urgent care or an emergency department for severe belly pain or a swollen belly. Also go for fever with feeling very ill, a lot of blood in the stool, or signs of dehydration.',
     'Call 911 for confusion, fainting or trouble staying awake.',
   ],
   readingTheNumbers:
-    'C. diff numbers mostly come from stool testing, such as the share of BioFire stomach (gastrointestinal) panel tests that detect C. diff toxin genes. Read these with care: a positive panel result can mean infection, but it can also mean someone carries C. diff without being sick, which is common in babies and some adults. So panel detection can look higher than true illness. C. diff does not have a strong season, and changes are usually gradual. A rise is more often tied to antibiotic use and health care settings than to the fast community spread seen with flu. For an average person, the best steps are the same any time of year: avoid antibiotics you do not need, and call your clinician about diarrhea during or after antibiotics.',
+    'MN Pulse shows C. diff as a BioFire detection rate. This is the percent of BioFire GI (stomach and gut) panel tests at participating labs in the Midwest (not just Minnesota) that found C. diff toxin genes. C. diff is often the most common germ these panels find, but that does not mean it is the most common cause of illness. A positive panel result can mean infection. It can also mean someone carries C. diff without being sick, which is common in babies, young children and some adults. Many C. diff tests are also done as separate stand-alone tests, and some labs do not report C. diff results from these panels. So this number is a rough trend signal, not a count of infections. MN Pulse does not have a weekly count of C. diff cases in Minnesota. C. diff does not have a strong season, and changes are usually gradual. A rise is more often tied to antibiotic use and health care settings than to the fast community spread seen with flu. For an average person, the best steps are the same any time of year. Avoid antibiotics you do not need, and call your clinician about diarrhea during or after antibiotics.',
   watchNotes: [
     'There is no approved C. diff vaccine.',
     'Two FDA-approved products made from healthy gut bacteria (Rebyota and Vowst) can help prevent repeat C. diff in adults. Ask your clinician whether one is right for you.',
   ],
-  sources: [],
+  sources: [
+    {
+      label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',
+      url: 'https://www.biomerieux.com/corp/en/our-offer/clinical-products/biofire-filmarray-gastrointestinal-panel.html',
+    },
+    {
+      label: 'bioMérieux: Syndromic Trends digests (GI panel reports; C. diff colonization caveat)',
+      url: 'https://www.biomerieux.com/us/en/education/resource-hub/trends-reports.html',
+    },
+    { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
+  ],
   lastReviewed: '2026-10-07',
 }
 

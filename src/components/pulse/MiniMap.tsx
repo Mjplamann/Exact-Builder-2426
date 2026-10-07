@@ -37,7 +37,38 @@ export function MiniMap({ pulse, top }: { pulse: PulseFile; top?: PathogenId }) 
   const layer = pickDefaultLayer(pulse, top)
   const selected = state.geo.type === 'county' ? state.geo.code : null
   const selectedName = selected ? MN_COUNTY_BY_FIPS[selected]?.name : undefined
-  const top = layer ? topCounties(pulse, layer.id) : []
+  const hottest = layer ? topCounties(pulse, layer.id) : []
+
+  const openMap = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    go('map')
+  }
+
+  if (!layer) {
+    // No county or site layers published yet: a slim notice instead of an empty map frame.
+    return (
+      <section className="card flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:gap-4 sm:p-6" aria-labelledby="minimap-title">
+        <MapGlyph />
+        <div className="min-w-0 flex-1">
+          <h2 id="minimap-title" className="text-base font-semibold text-ink-1">
+            County map: data isn’t available yet
+          </h2>
+          <p className="mt-0.5 text-sm text-ink-2">
+            County ER visits and wastewater sites will appear here once those sources publish. Until then, the numbers on this
+            page are statewide.
+          </p>
+        </div>
+        <a
+          href={hrefFor(state, 'map')}
+          onClick={openMap}
+          className="self-start rounded-lg border border-line px-3 py-1.5 text-sm font-medium text-ink-1 hover:bg-surface-2 sm:self-center"
+        >
+          Open map
+        </a>
+      </section>
+    )
+  }
 
   return (
     <section className="card flex h-full flex-col p-5 sm:p-6" aria-labelledby="minimap-title">
@@ -47,87 +78,64 @@ export function MiniMap({ pulse, top }: { pulse: PulseFile; top?: PathogenId }) 
             Across Minnesota
           </h2>
           <p className="mt-0.5 text-sm text-ink-2">
-            {layer ? (
-              <>
-                {layer.label}
-                {layer.latestDate && <> · week ending {formatDate(layer.latestDate, true)}</>}
-              </>
-            ) : (
-              'County-level activity'
-            )}
+            {layer.label}
+            {layer.latestDate && <> · week ending {formatDate(layer.latestDate, true)}</>}
           </p>
         </div>
         <a
           href={hrefFor(state, 'map')}
-          onClick={(e) => {
-            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
-            e.preventDefault()
-            go('map')
-          }}
+          onClick={openMap}
           className="shrink-0 rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink hover:opacity-90"
         >
           Open map
         </a>
       </div>
 
-      {layer ? (
-        <>
-          <div className="mt-3">
-            <CountyMap
-              pulse={pulse}
-              layerId={layer.id}
-              selected={selected}
-              onSelect={(fips) => update({ geo: fips ? { type: 'county', code: fips } : { type: 'state', code: '27' } })}
-              compact
-              height={300}
-            />
-          </div>
-          {layer.kind === 'county' && (
-            <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1" aria-label="Map key: activity level colors">
-              {LEVELS.map((l) => (
-                <li key={l} className="flex items-center gap-1 text-[11px] text-ink-2">
-                  <span aria-hidden="true" className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: LEVEL_VAR[l] }} />
-                  {LEVEL_LABEL[l]}
-                </li>
-              ))}
-            </ul>
-          )}
-          <p className="mt-2 text-xs text-ink-3">
-            {selectedName ? `${selectedName} County selected. ` : 'Select a county to see its local numbers above. '}
-            Open the full map for other illnesses and wastewater sites.
-          </p>
-          {layer.kind === 'county' && top.length > 0 && (
-            <div className="mt-4 border-t border-line pt-3">
-              <h3 className="text-sm font-medium text-ink-1">Highest this week</h3>
-              <ul className="mt-1.5 divide-y divide-line">
-                {top.map(({ fips, m }) => (
-                  <li key={fips}>
-                    <button
-                      type="button"
-                      onClick={() => update({ geo: { type: 'county', code: fips } })}
-                      aria-pressed={selected === fips}
-                      className="flex w-full items-center justify-between gap-2 rounded py-1.5 text-left text-sm hover:bg-surface-2"
-                    >
-                      <span className="min-w-0 truncate text-ink-1">{MN_COUNTY_BY_FIPS[fips].name}</span>
-                      <span className="flex shrink-0 items-center gap-2">
-                        <span className="text-xs text-ink-2">{formatValue(m.value, layer.unit)}</span>
-                        {m.level && <LevelBadge level={m.level} size="sm" />}
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="mt-4 flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-line-strong p-6 text-center">
-          <MapGlyph />
-          <p className="mt-2 font-medium text-ink-1">County data isn’t available yet</p>
-          <p className="mt-1 max-w-xs text-sm text-ink-2">
-            County ER visits and wastewater sites will appear here once those sources publish. Statewide numbers are shown
-            elsewhere on this page.
-          </p>
+      <div className="mt-3">
+        <CountyMap
+          pulse={pulse}
+          layerId={layer.id}
+          selected={selected}
+          onSelect={(fips) => update({ geo: fips ? { type: 'county', code: fips } : { type: 'state', code: '27' } })}
+          compact
+          height={300}
+        />
+      </div>
+      {layer.kind === 'county' && (
+        <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1" aria-label="Map key: activity level colors">
+          {LEVELS.map((l) => (
+            <li key={l} className="flex items-center gap-1 text-[11px] text-ink-2">
+              <span aria-hidden="true" className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: LEVEL_VAR[l] }} />
+              {LEVEL_LABEL[l]}
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="mt-2 text-xs text-ink-3">
+        {selectedName ? `${selectedName} County selected. ` : 'Select a county to see its local numbers above. '}
+        Open the full map for other illnesses and wastewater sites.
+      </p>
+      {layer.kind === 'county' && hottest.length > 0 && (
+        <div className="mt-4 border-t border-line pt-3">
+          <h3 className="text-sm font-medium text-ink-1">Highest this week</h3>
+          <ul className="mt-1.5 divide-y divide-line">
+            {hottest.map(({ fips, m }) => (
+              <li key={fips}>
+                <button
+                  type="button"
+                  onClick={() => update({ geo: { type: 'county', code: fips } })}
+                  aria-pressed={selected === fips}
+                  className="flex w-full items-center justify-between gap-2 rounded py-1.5 text-left text-sm hover:bg-surface-2"
+                >
+                  <span className="min-w-0 truncate text-ink-1">{MN_COUNTY_BY_FIPS[fips].name}</span>
+                  <span className="flex shrink-0 items-center gap-2">
+                    <span className="text-xs text-ink-2">{formatValue(m.value, layer.unit)}</span>
+                    {m.level && <LevelBadge level={m.level} size="sm" />}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </section>

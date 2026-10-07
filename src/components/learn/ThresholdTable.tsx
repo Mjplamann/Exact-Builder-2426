@@ -17,11 +17,11 @@ const fmtCut = (v: number) => (v < 10 ? v.toFixed(2) : v.toFixed(1))
 function cells(s: Series): Record<Exclude<ActivityLevel, 'unknown'>, string> {
   const t = s.thresholds!
   return {
-    minimal: `< ${fmtCut(t.low)}`,
-    low: `${fmtCut(t.low)}–${fmtCut(t.moderate)}`,
-    moderate: `${fmtCut(t.moderate)}–${fmtCut(t.high)}`,
-    high: `${fmtCut(t.high)}–${fmtCut(t.veryHigh)}`,
-    'very-high': `≥ ${fmtCut(t.veryHigh)}`,
+    minimal: `under ${fmtCut(t.low)}`,
+    low: fmtCut(t.low),
+    moderate: fmtCut(t.moderate),
+    high: fmtCut(t.high),
+    'very-high': fmtCut(t.veryHigh),
   }
 }
 
@@ -50,15 +50,15 @@ export function ThresholdTable({
   })
   const latestDates = [...new Set(latest.filter(Boolean).map((l) => l!.date))]
   return (
-    <div className="mt-5 overflow-x-auto rounded-xl border border-line bg-surface-1">
-      <table className="w-full min-w-[19rem] text-left text-xs sm:text-sm">
+    <div className="mt-5 overflow-hidden rounded-xl border border-line bg-surface-1">
+      <table className="w-full text-left text-xs sm:text-sm">
         <caption className="border-b border-line bg-surface-2 px-3 py-2 text-left">
           <span className="block text-sm font-semibold text-ink-1">{title}</span>
-          <span className="block text-xs text-ink-2">{unitNote}</span>
+          <span className="block text-xs text-ink-2">{unitNote}. Each number is where that level starts.</span>
         </caption>
         <thead>
           <tr className="text-ink-3">
-            <th scope="col" className="px-3 pt-2 pb-1 font-medium">
+            <th scope="col" className="px-2 pt-2 pb-1 font-medium sm:px-3">
               Level
             </th>
             {cols.map((c) => (
@@ -71,7 +71,7 @@ export function ThresholdTable({
         <tbody>
           {ROWS.map((lvl) => (
             <tr key={lvl} className="border-t border-line">
-              <th scope="row" className="px-3 py-1.5 font-normal whitespace-nowrap">
+              <th scope="row" className="px-2 py-1.5 font-normal whitespace-nowrap sm:px-3">
                 <LevelBadge level={lvl} size="sm" />
               </th>
               {cols.map((c) => (
@@ -81,37 +81,32 @@ export function ThresholdTable({
               ))}
             </tr>
           ))}
-          {showLatest && (
-            <tr className="border-t-2 border-line-strong align-top">
-              <th scope="row" className="px-3 py-2 text-left font-semibold text-ink-1">
-                Latest week
-              </th>
-              {cols.map((c, i) => {
-                const l = latest[i]
-                return (
-                  <td key={c.key} className="px-2 py-2 text-right sm:px-3">
-                    {l ? (
-                      <span className="inline-flex flex-col items-end gap-1">
-                        <span className="tabular font-semibold text-ink-1">
-                          {formatValue(l.value, c.series.unit)}
-                          {UNIT_SUFFIX[c.series.unit]}
-                        </span>
-                        <LevelBadge level={l.level} size="sm" />
-                      </span>
-                    ) : (
-                      <span className="text-ink-3">No data</span>
-                    )}
-                  </td>
-                )
-              })}
-            </tr>
-          )}
         </tbody>
       </table>
-      <p className="border-t border-line px-3 py-2 text-xs text-ink-3">
-        Each number is where that level starts. Source: {byNotes.join('; ')}.
-        {showLatest && latestDates.length > 0 && <> Latest week ending {latestDates.map((d) => formatDate(d, true)).join(' / ')}.</>}
-      </p>
+      {showLatest && latest.some(Boolean) && (
+        <div className="border-t border-line px-3 py-2.5">
+          <p className="text-xs font-semibold text-ink-1">
+            Minnesota now{latestDates.length > 0 && <> · week ending {latestDates.map((d) => formatDate(d, true)).join(' / ')}</>}
+          </p>
+          <ul className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1.5">
+            {cols.map((c, i) => {
+              const l = latest[i]
+              if (!l) return null
+              return (
+                <li key={c.key} className="flex items-center gap-1.5 text-sm text-ink-2">
+                  <span>{pathogenName(c.series.pathogen)}</span>
+                  <span className="tabular font-semibold text-ink-1">
+                    {formatValue(l.value, c.series.unit)}
+                    {UNIT_SUFFIX[c.series.unit]}
+                  </span>
+                  <LevelBadge level={l.level} size="sm" />
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+      <p className="border-t border-line px-3 py-2 text-xs text-ink-3">Source: {byNotes.join('; ')}.</p>
     </div>
   )
 }

@@ -11,14 +11,14 @@ const profile: PathogenProfile = {
   oneLiner:
     'A very contagious cause of diarrhea that spreads easily in child care and households. Some strains resist many antibiotics.',
   overview:
-    'Shigella bacteria cause diarrhea (sometimes bloody), fever, and stomach pain, an illness called shigellosis. It takes only a few germs to make someone sick, so it spreads easily from person to person, especially among young children, in child care, within households, and through sexual contact. Most people recover in 5 to 7 days without antibiotics. Drug-resistant strains, including extensively drug-resistant (XDR) Shigella, are a growing concern in the United States.',
+    'Shigella bacteria cause diarrhea (sometimes bloody), fever, and stomach pain, an illness called shigellosis. It takes only a few germs to make someone sick, so it spreads easily among young children, in child care, within households, and through sexual contact. Most people recover in 5 to 7 days without antibiotics. Drug-resistant strains, including extensively drug-resistant (XDR) Shigella, are a growing concern in the United States.',
   seasonality: {
     summary:
-      'Shigella can spread any time of year. Cases often rise in late summer and early fall, and outbreaks in child care centers, schools, or close-knit communities can cause spikes at any time.',
+      'In Minnesota, Shigella cases tend to follow outbreaks more than the calendar, so yearly counts can swing up and down. Nationally, cases tend to rise in late summer and early fall. But an outbreak in a child care center, school, or close-knit community can cause a spike in any month.',
     peakMonths: [7, 8, 9],
   },
   transmission:
-    'Shigella spreads when tiny amounts of poop from a sick person get into another person’s mouth. This can happen through unwashed hands (for example, after changing diapers or caring for someone who is sick), contaminated food or drinks, swallowing contaminated water while swimming, and sexual contact. Toddlers who are not fully toilet-trained spread it easily in child care. International travel is another source.',
+    'Shigella spreads when tiny amounts of poop from a sick person get into another person’s mouth. This can happen through unwashed hands, for example after changing diapers or caring for someone who is sick. It can also spread through contaminated food or drinks, swallowing contaminated water while swimming, and sexual contact. Toddlers who are not fully toilet-trained spread it easily in child care. International travel is another source.',
   incubation: 'Usually 1 to 2 days after exposure, but it can take up to about a week.',
   contagiousPeriod:
     'People can spread Shigella while they have diarrhea and for several weeks after it ends, even after they feel better. Some people never have symptoms but can still spread it. Effective antibiotics can shorten the time the germ stays in stool.',
@@ -125,7 +125,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Most people recover in 5 to 7 days with fluids and rest. Antibiotics can shorten illness and help prevent spread, but resistance is common, so clinicians use them mainly for severe illness, for people with weakened immune systems, or to help control outbreaks, and they pick the drug based on lab testing when possible. CDC has warned about rising extensively drug-resistant (XDR) Shigella, which commonly used antibiotics cannot treat.',
+      'Most people recover in 5 to 7 days with fluids and rest. Antibiotics can shorten illness and help prevent spread. But resistance is common, so clinicians use them mainly for severe illness, for people with weakened immune systems, or to help control outbreaks. When possible, a lab test guides which drug to use. CDC has warned about rising extensively drug-resistant (XDR) Shigella, which commonly used antibiotics cannot treat.',
     options: [
       {
         name: 'Fluids and oral rehydration',
@@ -173,24 +173,28 @@ const profile: PathogenProfile = {
     'If you think food or an event made you sick, also call the MDH Foodborne Illness Hotline at 1-877-FOOD-ILL (1-877-366-3455).',
   ],
   readingTheNumbers:
-    'The BioFire detection rate is the share of GI panel stool tests at participating hospitals and clinics that are positive for “Shigella/EIEC.” Most people tested are sick enough to see a clinician, so mild cases are missed. Because Shigella spreads from person to person, numbers can jump with an outbreak in a child care center or community rather than following a smooth seasonal curve. A rising number means more Shigella is showing up among people seeking care. For an average person, it’s a reminder to wash hands with soap and water, keep children with diarrhea home and out of pools, and see a clinician for bloody diarrhea or high fever. A positive panel result is not the same as a culture-confirmed case, and emergency department data for stomach illness include many causes, not just Shigella.',
+    'The BioFire detection rate is the share of GI panel stool tests that are positive for “Shigella/EIEC” (Shigella or its close relative, enteroinvasive E. coli). Most people tested are sick enough to see a clinician, so mild cases are missed. Shigella spreads from person to person. So numbers can jump with an outbreak in a child care center or community instead of following a smooth seasonal curve. A rising number means more Shigella is showing up among people seeking care. For an average person, it’s a reminder to wash hands with soap and water and keep children with diarrhea home and out of pools. See a clinician for bloody diarrhea or high fever. A positive panel result is not the same as a culture-confirmed case (one where the lab grew Shigella to confirm it). Emergency department data for stomach illness include many causes, not just Shigella.',
   watchNotes: [
-    'CDC issued a health advisory in 2023 about a rise in extensively drug-resistant (XDR) Shigella in the United States. It was seen most often among gay, bisexual, and other men who have sex with men, people experiencing homelessness, international travelers, and people living with HIV, but XDR strains can spread to anyone, including children.',
+    'In 2023, CDC issued a health advisory about a rise in extensively drug-resistant (XDR) Shigella in the United States. It was seen most often among gay, bisexual, and other men who have sex with men; people experiencing homelessness; international travelers; and people living with HIV. But XDR strains can spread to anyone, including children.',
     'If you are prescribed an antibiotic for Shigella and are not improving after a few days, contact your clinician; a culture can show whether the strain is resistant.',
-    'Child care outbreaks can last for weeks. Health departments may require negative stool tests before children or staff with Shigella return.',
+    'In Minnesota, child care outbreaks of Shigella can last for weeks. MDH or your local health department may require negative stool tests before children or staff with Shigella return.',
   ],
   sources: [
     { label: 'CDC: Food Poisoning Symptoms', url: 'https://www.cdc.gov/food-safety/signs-symptoms/index.html' },
+    {
+      label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
+      url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',
+    },
     {
       label: 'MDH: Foodborne and Enteric Diseases, Annual Summary',
       url: 'https://www.health.mn.gov/diseases/reportable/dcn/enteric.html',
     },
     {
-      label: 'CDC MMWR (via PMC): FoodNet incidence and culture-independent tests, 1996–2023',
+      label: 'CDC MMWR (via PMC): FoodNet report on foodborne infection trends and fast (culture-independent) tests',
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11221634/',
     },
     {
-      label: 'bioMérieux: BioFire FilmArray Gastrointestinal Panel',
+      label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',
       url: 'https://www.biomerieux.com/corp/en/our-offer/clinical-products/biofire-filmarray-gastrointestinal-panel.html',
     },
   ],

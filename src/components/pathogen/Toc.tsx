@@ -36,7 +36,7 @@ export function useActiveSection(ids: string[]): string | undefined {
         const first = ids.find((id) => visible.has(id))
         if (first) setActive(first)
       },
-      { rootMargin: '-90px 0px -55% 0px', threshold: 0 },
+      { rootMargin: '-110px 0px -55% 0px', threshold: 0 },
     )
     els.forEach((el) => io.observe(el))
     return () => io.disconnect()

@@ -10,14 +10,14 @@ const profile: PathogenProfile = {
   biofireTargets: ['Norovirus GI/GII'],
   oneLiner: 'A very contagious stomach virus that causes sudden vomiting and diarrhea. Most people feel better in 1 to 3 days.',
   overview:
-    'Norovirus is a very contagious virus that causes sudden vomiting and diarrhea. People often call it the “stomach flu,” but it is not related to influenza (flu). It is the leading cause of foodborne illness outbreaks in Minnesota and spreads easily in nursing homes, schools, child care and restaurants. Most healthy people recover in 1 to 3 days, but young children, older adults and people with weak immune systems can become dehydrated (lose too much body fluid).',
+    'Norovirus is a very contagious virus that causes sudden vomiting and diarrhea. People often call it the “stomach flu,” but it is not related to influenza (flu). It is the leading cause of foodborne illness outbreaks in Minnesota and spreads easily in nursing homes, schools, child care and restaurants. Most healthy people recover in 1 to 3 days. But young children, older adults and people with weak immune systems can become dehydrated (lose too much body fluid).',
   seasonality: {
     summary:
-      'Norovirus can spread any time of year. In Minnesota, the season usually starts in October and is busiest in winter, roughly December through March. Nationally, outbreaks are most common from November to April. Some seasons are much bigger than others: in January 2025 alone, the Minnesota Department of Health (MDH) tracked more than 130 outbreaks, compared with about 20 a month at the peak of an average year.',
+      'Norovirus can spread any time of year. In Minnesota, the season usually starts in October and is busiest in winter, roughly December through March. Nationally, outbreaks are most common from November to April. Some seasons are much bigger than others. In an average year, Minnesota sees about 20 outbreaks a month at the peak. In January 2025 alone, the Minnesota Department of Health (MDH) tracked more than 130.',
     peakMonths: [12, 1, 2, 3],
   },
   transmission:
-    'Norovirus is in the stool (poop) and vomit of sick people. You can get it by eating food or drinking liquids that were contaminated, often by a sick person who prepared it. You can also get it by touching a contaminated surface and then your mouth, or by close contact with a sick person, such as caring for them or sharing food or utensils. Swimming in or drinking contaminated water can spread it too. It takes only a very small amount of virus to make someone sick.',
+    'Norovirus is in the stool (poop) and vomit of sick people. You can get it by eating food or drinking liquids that were contaminated, often by a sick person who prepared it. You can also get it by touching a contaminated surface and then your mouth. Close contact with a sick person, such as caring for them or sharing food or utensils, can spread it too. So can swimming in or drinking contaminated water. It takes only a very small amount of virus to make someone sick.',
   incubation: 'Symptoms usually start 12 to 48 hours after exposure.',
   contagiousPeriod:
     'You are most contagious while you are sick and for the first few days after you feel better. The virus can stay in your stool for 2 weeks or more after you recover, so keep washing your hands well. MDH advises not preparing food for others until at least 3 days after your symptoms end.',
@@ -40,7 +40,7 @@ const profile: PathogenProfile = {
         'Babies can lose fluid quickly from vomiting and diarrhea and get dehydrated faster than older children and adults. Watch closely for signs of dehydration.',
       actions: [
         'Keep breastfeeding or formula feeding, offering small amounts often',
-        'Ask your baby’s clinician whether to use an oral rehydration solution (a store-bought drink with the right mix of salts and sugar)',
+        'Ask your baby’s clinician about an oral rehydration solution (a store-bought drink with the right mix of salts and sugar). Do not use plain water, juice, soda or sports drinks to replace a baby’s lost fluids',
         'Watch wet diapers, tears and alertness closely',
         'Wash your hands with soap and water after every diaper change',
         'Do not give anti-diarrhea or anti-nausea medicine unless a clinician tells you to',
@@ -84,7 +84,7 @@ const profile: PathogenProfile = {
     seniors: {
       risk: 'highest',
       summary:
-        'Older adults are more likely to become seriously dehydrated and need hospital care. Outbreaks are common in nursing homes and assisted living; in recent MDH data, about half of reported norovirus outbreaks in Minnesota were in long-term care facilities.',
+        'Older adults are more likely to become seriously dehydrated and need hospital care. Outbreaks are common in nursing homes and assisted living. In MDH’s 2025–26 norovirus toolkit for long-term care facilities, about half of reported Minnesota norovirus outbreaks were in these facilities.',
       actions: [
         'Start drinking fluids as soon as symptoms begin',
         'Have someone check on you if you live alone',
@@ -94,9 +94,9 @@ const profile: PathogenProfile = {
       ],
     },
     pregnant: {
-      risk: 'moderate',
+      risk: 'lower',
       summary:
-        'Norovirus usually passes in a few days. The main concern during pregnancy is dehydration, so keeping fluids down matters.',
+        'Norovirus usually passes in a few days and is not known to be more severe during pregnancy. The main concern is dehydration, so keeping fluids down matters.',
       actions: [
         'Sip fluids often, even in small amounts',
         'Call your prenatal care provider if you cannot keep fluids down, feel dizzy or are urinating much less',
@@ -124,7 +124,7 @@ const profile: PathogenProfile = {
         name: 'Oral rehydration solution',
         type: 'supportive',
         detail:
-          'Store-bought oral rehydration solutions have the right balance of water, salts and sugar and are the most helpful choice for mild dehydration. If vomiting, take small sips every few minutes. For adults with mild illness, sports drinks or other drinks without caffeine or alcohol can help, but they do not replace salts as well.',
+          'Store-bought oral rehydration solutions have the right balance of water, salts and sugar. They are the most helpful choice for mild dehydration. If vomiting, take small sips every few minutes. For adults with mild illness, sports drinks or other drinks without caffeine or alcohol can help, but they do not replace salts as well.',
         who: 'Anyone with vomiting or diarrhea, especially young children, older adults and people with chronic health conditions',
       },
       {
@@ -138,7 +138,7 @@ const profile: PathogenProfile = {
         name: 'Anti-nausea or anti-diarrhea medicine',
         type: 'other',
         detail:
-          'For adults, these medicines can sometimes help along with fluids. Ask a pharmacist or clinician first, especially if you have other health conditions or take other medicines. They are not routinely recommended for children.',
+          'For adults, these medicines can sometimes help along with fluids. Ask a pharmacist or clinician first, especially if you have other health conditions, take other medicines, or have a high fever or bloody stool. They are not routinely recommended for children. A clinician may sometimes prescribe an anti-nausea medicine for a child or teen who keeps vomiting, to help them keep fluids down. Do not give bismuth subsalicylate (Pepto-Bismol, Kaopectate) to children or teens, because it contains a salicylate (an aspirin-like ingredient). Adults who are pregnant, take blood thinners or are allergic to aspirin should ask before using it.',
         who: 'Some adults; children only if their clinician advises it',
       },
     ],
@@ -148,28 +148,28 @@ const profile: PathogenProfile = {
     vaccines: [],
     everyday: [
       'Wash hands with soap and water for at least 20 seconds, especially after using the toilet or changing diapers and before eating or preparing food. Alcohol hand sanitizer does not work well against norovirus, so use it only in addition to handwashing.',
-      'Clean up vomit and diarrhea right away while wearing disposable gloves. Disinfect hard surfaces with a bleach solution of 5 to 25 tablespoons of household bleach per gallon of water, or use a product registered by the EPA as effective against norovirus.',
-      'Wash soiled clothes and linens right away with detergent, using the longest wash cycle, then machine dry.',
+      'Clean up vomit and diarrhea right away while wearing disposable gloves. Disinfect hard surfaces with a bleach solution of 5 to 25 tablespoons of household bleach per gallon of water. Leave it on for at least 5 minutes. You can also use a product registered by the U.S. Environmental Protection Agency (EPA) as effective against norovirus.',
+      'Wash soiled clothes and linens right away with detergent and hot water on the longest wash cycle, then machine dry on the highest heat setting. Wear gloves and avoid shaking them.',
       'Stay home while you are sick. Do not prepare food for others until at least 3 days after symptoms end.',
       'Rinse fruits and vegetables, and cook oysters and other shellfish thoroughly.',
       'Do not swim in pools, lakes or splash pads while you have diarrhea, and do not visit nursing homes or hospitals while you are sick.',
     ],
   },
   testing:
-    'Most people with norovirus are not tested. A clinician usually diagnoses it from symptoms, especially when others nearby are sick with the same thing. When testing is needed, a lab tests a stool sample with a PCR test (a test that finds the virus’s genetic material), often as part of a multi-germ stomach panel such as BioFire. The MDH Public Health Laboratory tests samples from outbreaks to confirm the cause and track which strains are spreading. There is no common home test.',
+    'Most people with norovirus are not tested. A clinician usually diagnoses it from symptoms, especially when others nearby are sick with the same thing. When testing is needed, a lab checks a stool sample with a PCR test (a test that finds the virus’s genetic material). This is often part of a multi-germ stomach panel such as BioFire. The MDH Public Health Laboratory tests samples from outbreaks to confirm the cause and track which strains are spreading. There is no common home test.',
   whenToSeekCare: [
     'Call a health care provider if symptoms last longer than 3 days or keep getting worse.',
-    'Call if you or your child cannot keep fluids down or shows early signs of dehydration, such as urinating less, a dry mouth or feeling dizzy when standing.',
+    'Call if you or your child cannot keep fluids down. Also call for early signs of dehydration, such as urinating less, a dry mouth or feeling dizzy when standing.',
     'Call early for babies, older adults, pregnant people and anyone with a weakened immune system.',
     'Go to urgent care or an emergency department for signs of serious dehydration, blood in vomit or stool, severe belly pain, or confusion. Call 911 for fainting or trouble staying awake.',
     'If several people get sick after a shared meal or event, report it to MDH at 1-877-FOOD-ILL (1-877-366-3455).',
   ],
   readingTheNumbers:
-    'Norovirus numbers mostly come from lab testing of stool samples, such as the share of BioFire stomach (gastrointestinal) panel tests that find norovirus. These panels are ordered mainly for people sick enough to see a clinician or go to a hospital, so the number shows the share of tested people who had norovirus. It does not count how many Minnesotans are sick, because most people with norovirus are never tested. Detection is usually lowest in late summer and climbs in late fall and winter. Because norovirus spreads so fast, the number can rise sharply within a few weeks. A rising number means more stomach bugs are going around: wash hands with soap and water, stay home when sick, and keep an oral rehydration solution at home. A falling number means less spread, but norovirus never fully goes away.',
+    'MN Pulse shows norovirus mainly as a BioFire detection rate. This is the percent of BioFire GI (stomach and gut) panel tests at participating labs in the Midwest (not just Minnesota) that found norovirus. These panels are mostly ordered for people sick enough to see a clinician or go to a hospital. So the number shows trends, not how many people are sick. Most people with norovirus are never tested. A positive test means norovirus was found. But the virus can stay in stool for weeks, so it is not always the cause of the current illness. WastewaterSCAN also tests sewage from 4 Minnesota treatment plants (Rochester, Mankato, Red Wing and St. Cloud; none in the Twin Cities) for norovirus GII, the most common type. Wastewater gives a community-wide signal that includes people who were never tested, but only for the areas those plants serve. Norovirus levels are usually lowest in late summer and climb in late fall and winter. Because norovirus spreads so fast, they can rise sharply within a few weeks. A rise that lasts more than a week or two means more stomach bugs are going around. Wash hands with soap and water, stay home when sick, and keep an oral rehydration solution at home. A falling number means less spread, but norovirus never fully goes away. CDC’s NoroSTAT outbreak counts combine 14 states, including Minnesota, and are not broken out by state.',
   watchNotes: [
     'In the 2024–25 season, a newer strain called GII.17 caused about 3 in 4 U.S. norovirus outbreaks, overtaking the long-common GII.4 strain. That season started earlier than usual nationally and was unusually large in Minnesota, with more than 130 outbreaks and over 4,000 illnesses in January 2025 alone.',
-    'National outbreak reports for the 2025–26 season were back in the typical range, at about half the count of the year before (CDC NoroSTAT).',
-    'Early 2026–27 national outbreak reports (August to early September 2026) were within the usual range for that time of year.',
+    'CDC’s NoroSTAT outbreak tracking network (14 states, including Minnesota) counted 1,392 outbreaks in the 2025–26 season (August 2025 to July 2026). That is within the typical range and far fewer than in the very large 2024–25 season.',
+    'Early 2026–27 reports were also typical. NoroSTAT states reported 27 outbreaks from August 1 to September 4, 2026, within the usual range for that time of year.',
     'There is no approved norovirus vaccine. Candidate vaccines are still being tested in clinical trials.',
   ],
   sources: [
@@ -177,6 +177,7 @@ const profile: PathogenProfile = {
     { label: 'CDC: How to Prevent Norovirus', url: 'https://www.cdc.gov/norovirus/prevention/index.html' },
     { label: 'CDC: Norovirus Outbreaks', url: 'https://www.cdc.gov/norovirus/outbreaks/index.html' },
     { label: 'CDC: NoroSTAT Data', url: 'https://www.cdc.gov/norovirus/php/reporting/norostat-data.html' },
+    { label: 'CDC: NoroSTAT Data Table', url: 'https://www.cdc.gov/norovirus/php/reporting/norostat-data-table.html' },
     {
       label: 'CDC Yellow Book: Norovirus',
       url: 'https://www.cdc.gov/yellow-book/hcp/travel-associated-infections-diseases/norovirus.html',
@@ -202,6 +203,16 @@ const profile: PathogenProfile = {
       label: 'MDH: 2025–2026 Norovirus Toolkit for Long-Term Care Facilities (PDF)',
       url: 'https://www.health.state.mn.us/diseases/foodborne/outbreak/facility/ltcfnorotoolkit.pdf',
     },
+    {
+      label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
+      url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',
+    },
+    { label: 'WastewaterSCAN data dashboard', url: 'https://data.wastewaterscan.org/' },
+    {
+      label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',
+      url: 'https://www.biomerieux.com/corp/en/our-offer/clinical-products/biofire-filmarray-gastrointestinal-panel.html',
+    },
+    { label: 'BIOFIRE Syndromic Trends (bioMérieux)', url: 'https://syndromictrends.com/' },
   ],
   lastReviewed: '2026-10-07',
 }

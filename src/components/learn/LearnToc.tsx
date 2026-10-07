@@ -23,25 +23,38 @@ export function jumpToSection(id: string) {
   }
 }
 
-/** Tracks which section is currently near the top of the viewport. */
+/**
+ * Tracks which section is currently being read: the last section whose top has passed just below the
+ * sticky header, or the final section once the page is scrolled to the bottom.
+ */
 export function useActiveSection(ids: string[]): string | undefined {
   const [active, setActive] = useState<string | undefined>(ids[0])
   useEffect(() => {
-    if (typeof IntersectionObserver === 'undefined') return
-    const visible = new Map<string, boolean>()
-    const obs = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) visible.set(e.target.id, e.isIntersecting)
-        const first = ids.find((id) => visible.get(id))
-        if (first) setActive(first)
-      },
-      { rootMargin: '-110px 0px -55% 0px', threshold: 0 },
-    )
-    for (const id of ids) {
-      const el = document.getElementById(id)
-      if (el) obs.observe(el)
+    let frame = 0
+    const measure = () => {
+      frame = 0
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4
+      let current = ids[0]
+      if (atBottom) current = ids[ids.length - 1]
+      else {
+        for (const id of ids) {
+          const el = document.getElementById(id)
+          if (el && el.getBoundingClientRect().top <= 140) current = id
+        }
+      }
+      setActive(current)
     }
-    return () => obs.disconnect()
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure)
+    }
+    measure()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
   }, [ids])
   return active
 }

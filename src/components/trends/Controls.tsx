@@ -3,15 +3,14 @@ import { useRef, type KeyboardEvent, type ReactNode } from 'react'
 import type { MetricKind, PathogenId } from '../../../shared/types'
 import { METRIC_TAB, type PathogenGroup } from './model'
 
-const SELECT =
-  'w-full min-w-0 rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-sm text-ink-1 hover:border-line-strong sm:w-auto'
+const SELECT = 'max-w-full rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-sm text-ink-1 hover:border-line-strong'
 
 export function LabeledSelect({
   label,
   value,
   onChange,
   children,
-  minWidth = 'sm:min-w-44',
+  minWidth = 'min-w-44',
   id,
 }: {
   label: string
@@ -22,7 +21,7 @@ export function LabeledSelect({
   id?: string
 }) {
   return (
-    <label className="flex w-full flex-col gap-1 text-xs font-medium text-ink-2 sm:w-auto" htmlFor={id}>
+    <label className="flex max-w-full flex-col gap-1 text-xs font-medium text-ink-2" htmlFor={id}>
       {label}
       <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className={`${SELECT} ${minWidth}`}>
         {children}

@@ -6,7 +6,7 @@ import { MN_COUNTY_BY_FIPS } from '../../shared/geo/mnCounties'
 import { ActionsPanel } from '../components/pulse/ActionsPanel'
 import { DataFreshness } from '../components/pulse/DataFreshness'
 import { KeyTrends } from '../components/pulse/KeyTrends'
-import { MiniMap } from '../components/pulse/MiniMap'
+import { MiniMap, pickDefaultLayer } from '../components/pulse/MiniMap'
 import { OnTheRadar } from '../components/pulse/OnTheRadar'
 import { PulseHero } from '../components/pulse/PulseHero'
 import { WatchList } from '../components/pulse/WatchList'
@@ -21,6 +21,8 @@ export default function PulseView() {
   if (!data) return null
   const { pulse, manifest } = data
   const ranked = rankPathogens(pulse)
+  const top = ranked[0]?.pathogen
+  const hasMap = !!pickDefaultLayer(pulse, top)
 
   // Guidance follows the statewide level, or a selected county's level when it is higher (err toward caution).
   const statewide = pulse.statewide.level
@@ -51,14 +53,21 @@ export default function PulseView() {
 
       <OnTheRadar exclude={pulse.pathogens.map((p) => p.pathogen)} />
 
-      <div className="grid gap-5 lg:grid-cols-3 lg:items-stretch">
-        <div className="min-w-0">
-          <MiniMap pulse={pulse} top={ranked[0]?.pathogen} />
+      {hasMap ? (
+        <div className="grid gap-5 lg:grid-cols-3 lg:items-stretch">
+          <div className="min-w-0">
+            <MiniMap pulse={pulse} top={top} />
+          </div>
+          <div className="min-w-0 lg:col-span-2">
+            <KeyTrends data={data} />
+          </div>
         </div>
-        <div className="min-w-0 lg:col-span-2">
+      ) : (
+        <div className="space-y-5">
+          <MiniMap pulse={pulse} top={top} />
           <KeyTrends data={data} />
         </div>
-      </div>
+      )}
 
       <DataFreshness manifest={manifest} />
     </div>

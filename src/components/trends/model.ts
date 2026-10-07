@@ -240,10 +240,17 @@ export interface Selection {
   regional: Series[]
   /** Plain-language note about geography fallbacks. */
   geoNote?: string
+  /**
+   * Why places can't share an axis for this measure: weekly counts scale with population, and
+   * wastewater concentrations use lab-specific units. Comparisons are left out in those cases.
+   */
+  comparisonBlocked?: 'count' | 'ratio'
   /** A county/region was asked for but has no data for this measure. */
   localMissing: boolean
   /** Only county-level series exist for this measure. */
   countyOnly: boolean
+  /** Only per-plant (sewershed) series exist for this measure. */
+  siteOnly: boolean
 }
 
 export function resolveSelection(
@@ -254,12 +261,20 @@ export function resolveSelection(
     (s) => s.pathogen === opts.pathogen && s.metric === opts.metric && (opts.age ? s.age === opts.age : !s.age),
   )
   const at = (type: GeoType, code?: string) => pool.filter((s) => s.geo.type === type && (!code || s.geo.code === code))
-  const out: Selection = { alternatives: [], regional: [], localMissing: false, countyOnly: false }
+  const out: Selection = { alternatives: [], regional: [], localMissing: false, countyOnly: false, siteOnly: false }
 
   let group: Series[] = []
   const wantsLocal = opts.geo.type === 'county' || opts.geo.type === 'mdh-region'
   if (wantsLocal) {
     group = at(opts.geo.type, opts.geo.code)
+    if (!group.length && opts.geo.type === 'county') {
+      // Wastewater is measured per treatment plant: use the plants that serve this county.
+      const fips = opts.geo.code
+      group = at('sewershed').filter((s) => s.geo.counties?.includes(fips))
+      if (group.length) {
+        out.geoNote = `Wastewater is measured at treatment plants. ${group.length > 1 ? `${group.length} plants serve` : 'This plant serves'} part or all of ${geoLabel({ type: 'county', code: fips, name: fips })}.`
+      }
+    }
     if (!group.length) out.localMissing = true
   }
   if (!group.length) group = at('state', '27')
@@ -280,6 +295,7 @@ export function resolveSelection(
   }
   if (!group.length) {
     out.countyOnly = pool.some((s) => s.geo.type === 'county')
+    out.siteOnly = !out.countyOnly && pool.some((s) => s.geo.type === 'sewershed')
     return out
   }
 
@@ -287,6 +303,11 @@ export function resolveSelection(
   out.alternatives = group.length > 1 ? group : []
   const primary = out.primary!
   const sameUnit = (s: Series) => s.unit === primary.unit
+  if (primary.unit === 'count' || primary.unit === 'ratio') {
+    const others = pool.some((s) => s !== primary && s.geo.type !== primary.geo.type && s.geo.type !== 'county' && sameUnit(s))
+    if (others) out.comparisonBlocked = primary.unit
+    return out
+  }
 
   if (primary.geo.type !== 'state' && primary.geo.type !== 'national' && primary.geo.type !== 'hhs-region' && primary.geo.type !== 'census-region') {
     out.state = bestOf(at('state', '27').filter(sameUnit))

@@ -18,7 +18,7 @@ const profile: PathogenProfile = {
     peakMonths: [6, 7, 8, 9],
   },
   transmission:
-    'STEC lives in the guts of cattle and other animals such as sheep, goats, and deer. People get sick by swallowing tiny amounts of animal or human poop, often in undercooked ground beef, raw (unpasteurized) milk or juice, raw sprouts, leafy greens, or contaminated water (including lake or pool water swallowed while swimming). Touching animals or their surroundings at farms, petting zoos, and fairs is another common route. It also spreads easily from person to person, especially among young children and in child care.',
+    'STEC lives in the guts of cattle and other animals such as sheep, goats, and deer. People get sick by swallowing tiny amounts of animal or human poop. This often happens through undercooked ground beef, raw (unpasteurized) milk or juice, raw sprouts, or leafy greens. Swallowing contaminated water, including lake or pool water while swimming, can also spread it. Touching animals or their surroundings at farms, petting zoos, and fairs is another common route. It also spreads easily from person to person, especially among young children and in child care.',
   incubation: 'Usually 3 to 4 days after exposure, but it can range from 1 to 10 days.',
   contagiousPeriod:
     'People can spread STEC as long as it is in their stool (poop). This can last for weeks after symptoms end, especially in young children. Only a very small amount of the germ is needed to make someone sick, so careful handwashing matters.',
@@ -121,7 +121,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'There is no specific cure. Care focuses on fluids, rest, and watching closely for HUS. Antibiotics are generally not recommended for STEC because they don’t help and may raise the risk of HUS, and anti-diarrhea medicines should be avoided. People who develop HUS need hospital care.',
+      'There is no specific cure. Care focuses on fluids, rest, and watching closely for HUS. Antibiotics are generally not recommended for STEC because they have not been shown to help and may raise the risk of HUS. Anti-diarrhea medicines should also be avoided. People who develop HUS need hospital care.',
     options: [
       {
         name: 'Fluids and oral rehydration',
@@ -134,7 +134,7 @@ const profile: PathogenProfile = {
         name: 'Antibiotics',
         type: 'antibiotic',
         detail:
-          'Generally NOT recommended for STEC. They don’t help and may raise the risk of HUS. If you have bloody diarrhea, a stool test helps your clinician decide whether an antibiotic is safe.',
+          'Generally NOT recommended for STEC. They have not been shown to help and may raise the risk of HUS. If you have bloody diarrhea, a stool test helps your clinician decide whether an antibiotic is safe.',
         who: 'Not recommended for STEC infection; a clinician may consider them only in unusual situations.',
       },
       {
@@ -166,19 +166,19 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'A stool (poop) test is needed. Labs look for Shiga toxin or its genes, often with a fast multiplex PCR panel such as the BioFire GI Panel, and try to grow the bacteria (culture). Minnesota labs send positive samples to MDH, which identifies the strain and uses genetic fingerprinting (whole genome sequencing) to link cases and find outbreaks. Blood and urine tests check for HUS. There are no home tests.',
+    'A stool (poop) test is needed. Labs look for Shiga toxin or the genes that make it, often with a fast multiplex PCR panel such as the BioFire GI Panel. They also try to grow the bacteria (culture). Minnesota labs send positive samples to MDH, which identifies the strain and uses genetic fingerprinting (whole genome sequencing) to link cases and find outbreaks. Blood and urine tests check for HUS. There are no home tests.',
   whenToSeekCare: [
     'Call your clinician the same day for any bloody diarrhea, or diarrhea with severe stomach cramps.',
     'Call if diarrhea lasts more than 3 days or comes with a fever higher than 102°F.',
     'Ask for a stool test, and tell your clinician about recent ground beef, raw milk, sprouts, or animal contact.',
-    'If you or your child has STEC, watch for peeing less, paleness, or extreme tiredness for about 2 weeks after diarrhea starts, and get care right away if they appear.',
+    'If you or your child has STEC, watch for peeing less, paleness, or extreme tiredness for about 2 weeks after diarrhea starts. Get care right away if they appear.',
     'Go to urgent care (or call your clinic’s nurse line) the same day if you can’t keep fluids down for several hours.',
     'If you think food or an event made you sick, also call the MDH Foodborne Illness Hotline at 1-877-FOOD-ILL (1-877-366-3455).',
   ],
   readingTheNumbers:
-    'On the BioFire GI Panel, STEC appears as “Shiga-like toxin-producing E. coli (STEC) stx1/stx2,” and “E. coli O157” is reported as a subtype. The detection rate is the share of GI panel stool tests that find STEC genes. People who get tested are mostly those sick enough to see a clinician, often with bloody diarrhea, so the numbers reflect more serious illness and miss mild cases. Detections are usually higher in summer and early fall. A rising number can mean a seasonal rise or an outbreak; MDH investigates clusters and announces outbreaks when a source is found. For an average person, a rise is a reminder to cook ground beef to 160°F, avoid raw milk and raw sprouts, wash hands after animal contact, and see a clinician promptly for bloody diarrhea, especially in children. A PCR panel detects genetic material; labs follow up with culture to confirm and type the strain.',
+    'On the BioFire GI Panel, STEC appears as “Shiga-like toxin-producing E. coli (STEC) stx1/stx2.” Stx1 and stx2 are the genes that make Shiga toxin (the poison). The panel also reports “E. coli O157,” the best-known type of STEC; other types are called non-O157. The detection rate is the share of GI panel stool tests that find Shiga toxin genes. People who get tested are mostly those sick enough to see a clinician, often with bloody diarrhea. So the numbers reflect more serious illness and miss mild cases. Detections are usually higher in summer and early fall. A rising number can mean a seasonal rise or an outbreak; MDH investigates clusters and announces outbreaks when a source is found. For an average person, a rise is a reminder to cook ground beef to 160°F, avoid raw milk and raw sprouts, and wash hands after animal contact. See a clinician promptly for bloody diarrhea, especially in children. A PCR panel detects the germ’s genetic material. Labs then grow the germ (culture) to confirm it, and MDH identifies its exact type.',
   watchNotes: [
-    'Summer–fall 2026: Alfalfa sprouts from Minneapolis grower Everything Sprouts, sold under the Calco and Everything Sprouts brands, were linked to a multistate outbreak of STEC (several non-O157 types) and Salmonella. As of October 1, 2026, CDC counted 76 sick people in 16 states, 6 hospitalized and no deaths. Don’t eat recalled sprouts; throw them away.',
+    'Summer–fall 2026: Alfalfa sprouts from Minneapolis grower Everything Sprouts were linked to a multistate outbreak of STEC and Salmonella. The sprouts were sold under the Calco and Everything Sprouts brands, and several non-O157 types of STEC were involved. As of October 1, 2026, CDC counted 76 sick people in 16 states, 6 hospitalized and no deaths. Don’t eat recalled sprouts; throw them away.',
     'In its August 2026 announcement, MDH reported 23 Minnesotans became ill between July 8 and August 8 in the sprout outbreak. Seed suppliers have recalled the alfalfa seed lot linked to the illnesses.',
     'Fall farm visits, apple orchards, pumpkin patches, and petting zoos continue into October. Wash hands with soap and water after touching animals, especially young children.',
     'Fast PCR stool tests now find STEC types other than O157 more often than in the past. These non-O157 types can also cause serious illness and HUS.',
@@ -187,10 +187,6 @@ const profile: PathogenProfile = {
     {
       label: 'CDC: E. coli and Salmonella Outbreak Linked to Alfalfa Sprouts (2026)',
       url: 'https://www.cdc.gov/ecoli/outbreaks/alfalfa-sprouts-08-26/index.html',
-    },
-    {
-      label: 'CDC: Outbreak linked to alfalfa sprouts; people sickened with E. coli and Salmonella (2026)',
-      url: 'https://www.cdc.gov/media/releases/2026/outbreak-linked-to-alfalfa-sprouts-people-sickened-with-e-coli-and-salmonella.html',
     },
     {
       label: 'MDH: STEC and Salmonella cases linked to alfalfa sprouts (2026)',
@@ -206,10 +202,17 @@ const profile: PathogenProfile = {
       url: 'https://www.health.mn.gov/diseases/reportable/dcn/enteric.html',
     },
     {
-      label: 'CDC MMWR (via PMC): FoodNet incidence and culture-independent tests, 1996–2023',
+      label: 'CDC MMWR (via PMC): FoodNet report on foodborne infection trends and fast (culture-independent) tests',
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11221634/',
     },
-    { label: 'BioFire FilmArray GI Panel', url: 'https://www.biofiredx.com/products/the-FilmArray-panels/FilmArraygi/' },
+    {
+      label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
+      url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',
+    },
+    {
+      label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',
+      url: 'https://www.biomerieux.com/corp/en/our-offer/clinical-products/biofire-filmarray-gastrointestinal-panel.html',
+    },
   ],
   lastReviewed: '2026-10-07',
 }

@@ -10,18 +10,18 @@ const profile: PathogenProfile = {
   oneLiner:
     'A parasite spread by blacklegged (deer) ticks that infects red blood cells. Often mild, but it can be serious for some people.',
   overview:
-    'Babesiosis is caused by tiny parasites, mainly Babesia microti, that infect and destroy red blood cells. In Minnesota, it spreads mostly through the bite of an infected blacklegged (deer) tick, the same tick that spreads Lyme disease, and it can also spread through blood transfusions. Many people have no symptoms or a mild flu-like illness. It can be severe or even life-threatening for people without a spleen, people with weakened immune systems, and older adults.',
+    'Babesiosis is caused by tiny parasites, mainly Babesia microti, that infect and destroy red blood cells. In Minnesota, it spreads mostly through the bite of an infected blacklegged (deer) tick, and it can also spread through blood transfusions. Many people have no symptoms or a mild flu-like illness. It can be severe or even life-threatening for people without a spleen, people with weakened immune systems, and older adults.',
   seasonality: {
     summary:
       'Most Minnesota cases begin in summer, from about June through August, after bites from young blacklegged ticks (nymphs) in late spring and early summer. Because symptoms can take weeks to start, illnesses often show up a little later than the bites. Cases linked to blood transfusions can happen any time of year.',
     peakMonths: [6, 7, 8],
   },
   transmission:
-    'Babesiosis usually spreads through the bite of an infected blacklegged tick, most often a nymph about the size of a poppy seed. The tick generally needs to stay attached for more than a day to pass on the parasite, so removing ticks quickly helps. It can also spread through a blood transfusion from a donor who has the parasite but feels well. Rarely, it passes from a pregnant person to the baby. It does not spread through casual contact.',
+    'Babesiosis usually spreads through the bite of an infected blacklegged tick, the same tick that spreads Lyme disease. Most often it is a nymph about the size of a poppy seed. The tick generally needs to stay attached for more than a day to pass on the parasite, so removing ticks quickly helps. It can also spread through a blood transfusion from a donor who has the parasite but feels well. Rarely, it passes from a pregnant person to the baby. It does not spread through casual contact.',
   incubation:
     'When symptoms happen, they usually start about 1 to 4 weeks after a tick bite. After a blood transfusion, symptoms usually start within about 1 to 9 weeks, but it can take longer.',
   contagiousPeriod:
-    'Babesiosis does not spread from person to person through touching, coughing, or sharing a home. The parasite can stay in the blood for weeks to months, even in people who feel well, which is how it can spread through donated blood. Rarely, it passes from a pregnant person to the baby during pregnancy or delivery.',
+    'Babesiosis does not spread from person to person through touching, coughing, or sharing a home. The parasite can stay in the blood for weeks to months, even in people who feel well. That is how it can spread through donated blood. Rarely, it passes from a pregnant person to the baby during pregnancy or delivery.',
   symptoms: {
     common: [
       'Fever, which may come and go',
@@ -66,9 +66,9 @@ const profile: PathogenProfile = {
       summary:
         'Most children have mild illness or no symptoms. Children without a spleen, or with a weakened immune system, can become seriously ill.',
       actions: [
-        'Use an EPA-registered repellent and do tick checks after outdoor play.',
+        'Use a repellent registered with the U.S. Environmental Protection Agency (EPA), and do tick checks after outdoor play.',
         'Call your clinician for fever, tiredness, or pale or yellow skin after tick exposure.',
-        'If your child has no spleen or a spleen that does not work well (for example, from sickle cell disease), seek care right away for any fever.',
+        'Does your child have no spleen, or a spleen that does not work well (for example, from sickle cell disease)? Seek care right away for any fever.',
         'The usual Lyme antibiotics do not treat babesiosis. Call your clinician if fever continues during Lyme treatment.',
       ],
     },
@@ -119,7 +119,7 @@ const profile: PathogenProfile = {
     immunocompromised: {
       risk: 'highest',
       summary:
-        'People without a spleen and people with weakened immune systems (for example, from cancer treatment, an organ transplant, HIV, or medicines such as rituximab) have the highest risk of severe babesiosis. Illness can last a long time or come back, and treatment often lasts 6 weeks or longer.',
+        'People without a spleen and people with weakened immune systems have the highest risk of severe babesiosis. Immune systems can be weakened by cancer treatment, an organ transplant, HIV, or medicines such as rituximab. Illness can last a long time or come back, and treatment often lasts 6 weeks or longer.',
       actions: [
         'Seek care right away for any fever, especially if you do not have a spleen.',
         'Limit time in tick habitat in late spring and summer. When you go, use repellent and permethrin-treated clothing.',
@@ -131,7 +131,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'People with symptoms are treated with two medicines taken together: atovaquone (an antiparasitic) and azithromycin (an antibiotic), usually for 7 to 10 days. Severe illness is treated in the hospital, sometimes with medicine through a vein (IV) and, in some cases, an exchange transfusion. People with weakened immune systems often need 6 weeks or more of treatment. The antibiotics used for Lyme disease, such as doxycycline and amoxicillin, do not treat babesiosis. People with no symptoms usually do not need treatment.',
+      'People with symptoms are treated with two medicines taken together, usually for 7 to 10 days. These are atovaquone (an antiparasitic) and azithromycin (an antibiotic). Severe illness is treated in the hospital. This may include medicine through a vein (IV) and, in some cases, an exchange transfusion. People with weakened immune systems often need 6 weeks or more of treatment. The antibiotics used for Lyme disease, such as doxycycline and amoxicillin, do not treat babesiosis. People with no symptoms usually do not need treatment, unless tests show the parasite is still in the blood after about 3 months.',
     options: [
       {
         name: 'Atovaquone plus azithromycin',
@@ -151,7 +151,7 @@ const profile: PathogenProfile = {
         name: 'Exchange transfusion',
         type: 'other',
         detail:
-          'In very severe cases, some of the patient’s blood is removed and replaced with donor blood to quickly lower the number of infected red blood cells.',
+          'In very severe cases, some of the patient’s blood is removed and replaced with donor blood. This quickly lowers the number of infected red blood cells.',
         who: 'People with very high parasite levels, severe anemia, or organ problems.',
       },
       {
@@ -161,13 +161,13 @@ const profile: PathogenProfile = {
         who: 'People with severe illness.',
       },
     ],
-    antibioticsHelp: 'sometimes',
+    antibioticsHelp: 'yes',
   },
   prevention: {
     vaccines: [],
     everyday: [
-      'Use an EPA-registered repellent on skin, such as DEET, picaridin, IR3535, oil of lemon eucalyptus (OLE), PMD, or 2-undecanone. Follow the label.',
-      'Treat clothing, boots, and gear with 0.5% permethrin, or buy pre-treated items. Do not put permethrin on skin.',
+      'Use a repellent registered with the U.S. Environmental Protection Agency (EPA). Look for one of these active ingredients: DEET, picaridin, IR3535, oil of lemon eucalyptus (OLE), para-menthane-diol (PMD), or 2-undecanone. Follow the label.',
+      'Treat clothing, boots, and gear with 0.5% permethrin (an insect-killing treatment for clothing), or buy pre-treated items. Do not put permethrin on skin.',
       'Walk in the center of trails. Avoid brushy areas, tall grass, and leaf litter.',
       'Check your whole body for ticks every day after time outdoors, and remove them right away with fine-tipped tweezers.',
       'Shower within 2 hours of coming indoors. Tumble dry clothes on high heat for 10 minutes to kill ticks.',
@@ -176,7 +176,7 @@ const profile: PathogenProfile = {
     ],
   },
   testing:
-    'Babesiosis is diagnosed with blood tests. A lab can look for the parasite inside red blood cells under a microscope (a blood smear) or use a PCR test to find its genetic material. Antibody tests can show past or current infection but cannot confirm a current illness on their own. Routine blood tests may show anemia, low platelets, or signs that red blood cells are breaking down. Ask about babesiosis testing if you have fever after a tick bite, especially if you are not getting better on Lyme treatment. There is no home test.',
+    'Babesiosis is diagnosed with blood tests. A lab can look for the parasite inside red blood cells under a microscope (a blood smear). A PCR test can also find its genetic material. Antibody tests can show past or current infection, but they cannot confirm a current illness on their own. Routine blood tests may show anemia, low platelets, or signs that red blood cells are breaking down. Ask about babesiosis testing if you have fever after a tick bite, especially if Lyme treatment is not helping. There is no home test.',
   whenToSeekCare: [
     'Call your clinician for fever, chills, sweats, or unusual tiredness within a few weeks of possible tick exposure or after a blood transfusion.',
     'Call if you are being treated for Lyme disease and still have fever after a few days. This can be a sign of babesiosis or another tick-borne infection.',
@@ -184,10 +184,10 @@ const profile: PathogenProfile = {
     'Go to an emergency department for trouble breathing, confusion, fainting, very dark urine, or yellow skin with extreme weakness.',
   ],
   readingTheNumbers:
-    'Babesiosis is tracked through cases that clinicians and labs report to the Minnesota Department of Health (MDH). It is much less common in Minnesota than Lyme disease or anaplasmosis, so counts are small and can jump up or down from year to year by chance. Reports lag behind real time, and they miss people with mild or no symptoms who are never tested. Babesiosis is not on the respiratory or stool BioFire panels, so there is no BioFire detection rate for it, and there is no test positivity measure like the ones used for flu or COVID-19. Most cases appear in summer. For you, a rising count is a reminder that infected ticks are active. Most people are not at high risk, but people without a spleen, people with weakened immune systems, and older adults should take extra care to prevent tick bites and seek care quickly for fever.',
+    'Babesiosis is tracked through cases that clinicians and labs report to the Minnesota Department of Health (MDH). CDC’s weekly national tables do not currently list Minnesota babesiosis counts, so this page may not show a current number. MDH publishes yearly totals, which are more complete. Babesiosis is much less common in Minnesota than Lyme disease or anaplasmosis. Counts are small and can jump up or down from year to year by chance. Reports lag behind real time. They also miss people with mild or no symptoms who are never tested. Babesiosis is not on the respiratory or stool BioFire panels. It also has no test positivity measure like the ones used for flu or COVID-19. Most cases appear in summer. For you, a rise in cases is a reminder that infected ticks are active. Most people are not at high risk. People without a spleen, people with weakened immune systems, and older adults should take extra care. They should prevent tick bites and get care quickly for fever.',
   watchNotes: [
     'Minnesota is one of a small number of states where babesiosis is regularly found, along with Wisconsin and several states in the Northeast.',
-    'Donated blood in Minnesota and other higher-risk states is screened for Babesia, which lowers the chance of getting it from a transfusion.',
+    'Blood donations collected in Minnesota and other higher-risk states are tested for Babesia, or treated to kill germs, as the FDA recommends. This greatly lowers, but does not remove, the risk of getting it from a transfusion.',
     'The same tick spreads Lyme disease and anaplasmosis. Having more than one of these infections at once is possible and can make illness worse or last longer.',
     'October and November are adult tick season. Babesiosis is mostly spread by nymphs in summer, but fall tick bites are still worth preventing.',
   ],
@@ -206,6 +206,7 @@ const profile: PathogenProfile = {
       label: 'IDSA/ASTMH: 2020 Clinical Practice Guideline for the Diagnosis and Management of Babesiosis',
       url: 'https://www.idsociety.org/practice-guideline/babesiosis/',
     },
+    { label: 'U.S. EPA: Insect Repellents', url: 'https://www.epa.gov/insect-repellents' },
   ],
   lastReviewed: '2026-10-07',
 }

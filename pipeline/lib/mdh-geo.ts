@@ -52,6 +52,7 @@ export function regionToken(raw: string): RegionToken | null {
     return 'Greater Minnesota'
   if (/^(the )?(twin cities )?((7|seven) county )?metro(politan)?( area| region| district| twin cities)?$/.test(s)) return 'Metro'
   if (/^twin cities( metro| area)?$/.test(s)) return 'Metro'
+  if (/^(twin cities )?metro(politan)? (7|seven) county( area| region| metro)?$/.test(s)) return 'Metro'
   s = s
     .replace(/\b(region|regions|district|districts|hcc|health care coalition|healthcare coalition|area|zone|of minnesota|minnesota|mn)\b/g, ' ')
     .replace(/\bnorth west\b/g, 'northwest')

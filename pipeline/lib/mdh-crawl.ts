@@ -71,6 +71,9 @@ function stripExtTag(s: string) {
 export function parsePage(html: string, pageUrl: string): PageInfo {
   const $ = cheerio.load(html)
   $('script, style, noscript, template').remove()
+  // .text() concatenates adjacent blocks ("Updated 10/1/2026Data pending"); add separators so phrase
+  // and date patterns see word boundaries.
+  $('p, div, li, dt, dd, h1, h2, h3, h4, h5, h6, td, th, tr, table, section, article, figure, figcaption, caption, br').after(' ')
   const title = ws($('title').first().text() || $('h1').first().text())
   const mainSel = ['#block-bootstrap-mdh-content', 'main', '#body', 'body'].find((s) => $(s).length > 0) ?? 'body'
   const root = $(mainSel).first()
@@ -149,8 +152,17 @@ export function parsePage(html: string, pageUrl: string): PageInfo {
   // Key statistics: short snippets with a number next to a surveillance keyword.
   const keyStats: string[] = []
   const seen = new Set<string>()
-  root.find('li, p, dd, dt, td, strong, h3, h4, h5, .stat, .card-text, .key-stat').each((_, el) => {
-    const t = ws($(el).text())
+  root.find('tr, li, p, dd, dt, strong, h3, h4, h5, .stat, .card-text, .key-stat').each((_, el) => {
+    const node = $(el)
+    const t =
+      (el as { tagName?: string }).tagName?.toLowerCase() === 'tr'
+        ? node
+            .find('th, td')
+            .map((_i, c) => ws($(c).text()))
+            .get()
+            .filter(Boolean)
+            .join(' | ')
+        : ws(node.text())
     if (t.length < 6 || t.length > 220 || seen.has(t)) return
     if (!/\d/.test(t)) return
     if (!/(positive|positivity|hospitali[sz]|outbreak|death|strain|subtype|level|activity|cases|ili|wastewater|rate)/i.test(t)) return

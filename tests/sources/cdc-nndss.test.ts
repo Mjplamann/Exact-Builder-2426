@@ -1,9 +1,11 @@
 import { execFileSync } from 'node:child_process'
 import { describe, expect, it } from 'vitest'
 import {
-  buildSeries, checkSchema, groupByPathogen, liveQuery, matchLabel, mirrorRows, normalizeLabel, parseRows,
-  sumReported, xzFilterLines, ytdSummary,
+  BLANK_SERIES_WEEKS, buildSeries, checkSchema, combineMeasure, describeLiveError, groupByPathogen, liveQuery, matchLabel,
+  mirrorRows, normalizeLabel, parseRows, sumReported, xzFilterLines, ytdSummary,
 } from '../../pipeline/sources/cdc-nndss'
+import { HttpError } from '../../pipeline/lib/http'
+import { mmwrWeekEnding } from '../../shared/mmwr'
 
 // Real rows from the PopHIVE/Ingest mirror of data.cdc.gov x9gk-5huc (rows updated 2026-09-30).
 const HEADER =
@@ -80,6 +82,25 @@ describe('cdc-nndss label mapping', () => {
     expect(p('Legionellosis')).toBeNull()
     expect(p('Arboviral diseases, La Crosse  virus disease')).toBeNull()
   })
+  it('anchors every pattern so Confirmed/Probable rows never match beside a Total', () => {
+    const p = (l: string) => matchLabel(normalizeLabel(l))?.rule.pathogen ?? null
+    expect(p('Salmonellosis, Total')).toBe('salmonella')
+    expect(p('Salmonellosis, Confirmed')).toBeNull()
+    expect(p('Salmonellosis, Probable')).toBeNull()
+    expect(p('Shiga toxin-producing Escherichia coli (STEC), Total')).toBe('stec')
+    expect(p('Shiga toxin-producing Escherichia coli (STEC), Probable')).toBeNull()
+    expect(p('Anaplasma phagocytophilum infection, Probable')).toBeNull()
+    expect(p('Pertussis, Total')).toBe('pertussis')
+    expect(p('Pertussis, Confirmed')).toBeNull()
+    expect(p('Mpox, Probable')).toBeNull()
+    expect(p('Arboviral diseases, West Nile virus disease, Probable')).toBeNull()
+  })
+  it('treats the two invasive group A strep wordings as alternatives, not parts to add', () => {
+    const a = matchLabel(normalizeLabel('Invasive group A streptococcal disease'))!
+    const b = matchLabel(normalizeLabel('Group A streptococcal infection, invasive'))!
+    expect([a.rule.pathogen, a.alt, a.comp]).toEqual(['strep-a', 0, 0])
+    expect([b.rule.pathogen, b.alt, b.comp]).toEqual(['strep-a', 1, 0])
+  })
   it('separates neuroinvasive from non-neuroinvasive components', () => {
     const neuro = matchLabel(normalizeLabel('West Nile virus disease, Neuroinvasive'))!
     const non = matchLabel(normalizeLabel('West Nile virus disease, Non-neuroinvasive'))!
@@ -134,7 +155,7 @@ describe('cdc-nndss series', () => {
     expect(pert.official).toEqual({
       label: '119 cases so far in 2026 vs 1,125 by this week in 2025',
       asOf: '2026-09-26',
-      by: 'CDC NNDSS weekly tables',
+      by: 'MN Pulse summary of CDC NNDSS year-to-date counts',
     })
     expect(pert.official?.level).toBeUndefined()
   })
@@ -197,6 +218,110 @@ describe('cdc-nndss series', () => {
   })
 })
 
+// SODA-style row (null cells omitted); used for hypothetical label changes and flags.
+const soda = (year: number, week: number, label: string, m: Partial<Record<'m1' | 'm2' | 'm3' | 'm4' | 'm1_flag' | 'm3_flag' | 'm4_flag', string>>) => ({
+  states: 'Minnesota', year: String(year), week: String(week), label, ...m,
+})
+
+describe('cdc-nndss label changes', () => {
+  it('uses the Total row when CDC lists Total, Confirmed and Probable (no double counting)', () => {
+    const { rows } = parseRows([
+      soda(2026, 38, 'Salmonellosis, Total', { m1: '5', m3: '50', m4: '60' }),
+      soda(2026, 38, 'Salmonellosis, Confirmed', { m1: '3', m3: '30', m4: '40' }),
+      soda(2026, 38, 'Salmonellosis, Probable', { m1: '2', m3: '20', m4: '20' }),
+      soda(2026, 38, 'Shiga toxin-producing Escherichia coli (STEC)', { m1: '4', m3: '40', m4: '41' }),
+      soda(2026, 38, 'Shiga toxin-producing Escherichia coli (STEC), Total', { m1: '4', m3: '40', m4: '41' }),
+    ])
+    const g = groupByPathogen(rows)
+    expect(g.get('salmonella')![0]).toMatchObject({ m1: 5, m3: 50, m4: 60, labels: ['Salmonellosis, Total'] })
+    const stec = g.get('stec')![0]
+    expect(stec).toMatchObject({ m1: 4, m3: 40, labels: ['Shiga toxin-producing Escherichia coli (STEC), Total'] })
+    expect(stec.dropped).toEqual(['Shiga toxin-producing Escherichia coli (STEC)'])
+    const built = buildSeries(g, '2021-07-01', '2026-09-26')
+    expect(built.series.find((s) => s.pathogen === 'salmonella')!.points).toEqual([['2026-09-26', 5]])
+    expect(built.perPathogen.stec).toMatchObject({ droppedInFavorOfTotal: ['Shiga toxin-producing Escherichia coli (STEC)'] })
+  })
+  it('leaves overlapping labels without a Total blank and warns instead of adding them', () => {
+    const { rows } = parseRows([
+      soda(2026, 38, 'Salmonellosis', { m1: '5', m3: '50', m4: '60' }),
+      soda(2026, 38, 'Salmonellosis (excluding Salmonella Typhi infection and Salmonella Paratyphi infection)', { m1: '5', m3: '50', m4: '60' }),
+    ])
+    const g = groupByPathogen(rows)
+    expect(g.get('salmonella')![0]).toMatchObject({ m1: null, m3: null, m4: null })
+    expect(g.get('salmonella')![0].ambiguous).toHaveLength(2)
+    const built = buildSeries(g, '2021-07-01', '2026-09-26')
+    const s = built.series.find((x) => x.pathogen === 'salmonella')!
+    expect(s.points).toEqual([['2026-09-26', null]])
+    expect(s.official).toBeUndefined()
+    expect(s.attrs?.overlappingLabels).toMatch(/Salmonellosis \| Salmonellosis \(excluding/)
+    expect(built.warnings.join(' ')).toMatch(/Salmonellosis: 1 week\(s\) list overlapping labels/)
+  })
+  it('warns when a label seen in the past year is missing from the latest table', () => {
+    const { rows } = parseRows(rawRows().filter((r) => !(r.label === 'Mpox' && r.week === '38')))
+    const built = buildSeries(groupByPathogen(rows), '2021-07-01', '2026-09-26')
+    expect(built.warnings).toHaveLength(1)
+    expect(built.warnings[0]).toMatch(/^Mpox: no matching label in the latest table \(2026-09-26\); last seen 2026-09-19 as 'Mpox'/)
+    // Hepatitis A (last 2024) and anaplasmosis (2022) are older than a year: no warning.
+  })
+})
+
+describe('cdc-nndss flags', () => {
+  it("keeps 'U' / 'NP' cells out of totals and says so", () => {
+    expect(combineMeasure([{ value: 3, flag: '' }, { value: null, flag: 'U' }])).toEqual({ value: null, flag: 'U' })
+    expect(combineMeasure([{ value: 3, flag: '' }, { value: null, flag: '-' }])).toEqual({ value: 3 })
+    const { rows } = parseRows([
+      soda(2025, 38, 'Pertussis', { m1_flag: '-', m3_flag: 'U', m4: '900' }),
+      soda(2026, 38, 'Pertussis', { m1_flag: '-', m3_flag: 'U', m4: '1125' }),
+      soda(2026, 38, 'Measles, Indigenous', { m1: '3', m3: '18', m4: '13' }),
+      soda(2026, 38, 'Measles, Imported', { m1_flag: '-', m3_flag: 'NP', m4: '1' }),
+    ])
+    const built = buildSeries(groupByPathogen(rows), '2021-07-01', '2026-09-26')
+    const pert = built.series.find((s) => s.pathogen === 'pertussis')!
+    expect(pert.official?.label).toBe("2026 count is marked unavailable in CDC's weekly table; 1,125 by this week in 2025")
+    expect(pert.attrs).toMatchObject({ ytdFlag: 'U (unavailable)', ytdPrevYear: '1125' })
+    expect(pert.attrs?.currentYear).toBeUndefined() // 'U' is not the after-year-end blank pattern
+    const measles = built.series.find((s) => s.pathogen === 'measles')!
+    expect(measles.points).toEqual([['2026-09-26', 3]])
+    expect(measles.attrs?.ytd).toBeUndefined()
+    expect(measles.official?.label).toBe("2026 count is marked not published in CDC's weekly table; 14 by this week in 2025")
+  })
+})
+
+describe('cdc-nndss compact output', () => {
+  it(`lists only the latest ${BLANK_SERIES_WEEKS} weeks when every current-week cell is blank`, () => {
+    const raw = []
+    for (let w = 1; w <= 20; w++) {
+      raw.push(soda(2026, w, 'Pertussis', { m1_flag: '-', m3: String(w * 3), m4: String(w * 30) }))
+      raw.push(soda(2026, w, 'Mpox', w === 2 ? { m1: '1', m3: '1', m4: '0' } : { m1_flag: '-', m3: '1', m4: '0' }))
+    }
+    const { rows } = parseRows(raw)
+    const built = buildSeries(groupByPathogen(rows), '2021-07-01', mmwrWeekEnding(2026, 20))
+    const pert = built.series.find((s) => s.pathogen === 'pertussis')!
+    expect(pert.points).toHaveLength(BLANK_SERIES_WEEKS)
+    expect(pert.points.at(-1)).toEqual([mmwrWeekEnding(2026, 20), null])
+    expect(pert.note).toMatch(/Only the latest 13 weeks are listed because every current-week cell since 2026-01-10 is blank/)
+    expect(built.perPathogen.pertussis).toMatchObject({ points: 13, nonNullPoints: 0, blankSince: '2026-01-10' })
+    // A series with any published count keeps its full history.
+    expect(built.series.find((s) => s.pathogen === 'mpox')!.points).toHaveLength(20)
+  })
+})
+
+describe('cdc-nndss live errors', () => {
+  it('keeps the HTTP status and Socrata body instead of the long URL', () => {
+    const url = 'https://data.cdc.gov/resource/x9gk-5huc.json?' + 'x'.repeat(300)
+    const e = new HttpError(url, 400, '{\n  "code" : "query.soql.no-such-column",\n  "error" : true,\n  "message" : "No such column: states"\n}')
+    const d = describeLiveError(e)
+    expect(d.rejected).toBe(true)
+    expect(d.text).toBe('HTTP 400: { "code" : "query.soql.no-such-column", "error" : true, "message" : "No such column: states" }')
+    expect(describeLiveError(new HttpError(url, 503, '')).rejected).toBe(false)
+    const net = describeLiveError(new TypeError('fetch failed', { cause: { code: 'ENOTFOUND' } }))
+    expect(net).toEqual({ text: 'fetch failed: ENOTFOUND', rejected: false })
+    // What undici throws here when the proxy refuses data.cdc.gov (DOMException, numeric code 0).
+    const cancelled = describeLiveError(new TypeError('fetch failed', { cause: new DOMException('Request was cancelled.') }))
+    expect(cancelled.text).toBe('fetch failed: Request was cancelled.')
+  })
+})
+
 describe('cdc-nndss helpers', () => {
   it('sums only reported components', () => {
     expect(sumReported([3, null])).toBe(3)
@@ -207,6 +332,7 @@ describe('cdc-nndss helpers', () => {
     expect(ytdSummary(2026, 1, 3)).toBe('1 case so far in 2026 vs 3 by this week in 2025')
     expect(ytdSummary(2026, 18, null)).toBe('18 cases so far in 2026 (2025 count for this week is blank)')
     expect(ytdSummary(2026, null, null)).toMatch(/blank/)
+    expect(ytdSummary(2026, 18, null, undefined, 'NN')).toBe('18 cases so far in 2026 (2025 count for this week is marked not nationally notifiable)')
   })
   it('streams xz and keeps only Minnesota lines', async () => {
     const xz = execFileSync('xz', ['-c'], { input: [HEADER, ...LINES].join('\n') + '\n' })

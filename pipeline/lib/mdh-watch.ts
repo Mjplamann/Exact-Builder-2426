@@ -113,7 +113,8 @@ export function parseMeaslesPage(info: PageInfo, year: number): MeaslesParse {
   for (const s of info.keyStats) {
     const m =
       new RegExp(`\\b(?:total\\s+)?(?:confirmed\\s+)?(?:measles\\s+)?cases\\s+(?:in\\s+|for\\s+)?${y}(?:\\s+to date)?\\s*:\\s*(\\d{1,4})\\b`, 'i').exec(s) ??
-      new RegExp(`\\b${y}\\s+(?:total\\s+)?(?:confirmed\\s+)?cases\\s*:\\s*(\\d{1,4})\\b`, 'i').exec(s)
+      new RegExp(`\\b${y}\\s+(?:total\\s+)?(?:confirmed\\s+)?cases\\s*:\\s*(\\d{1,4})\\b`, 'i').exec(s) ??
+      new RegExp(`\\b${y}\\s*:\\s*(\\d{1,4})\\s+(?:confirmed\\s+)?(?:measles\\s+)?cases\\b`, 'i').exec(s)
     if (m) {
       out.cases = Number(m[1])
       out.basis = `text "${s.slice(0, 120)}"`

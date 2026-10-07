@@ -4,8 +4,8 @@ import type { AgeGroupId } from '../../../shared/types'
 import type { GuidanceGroup, PathogenProfile } from '../../content/types'
 import { formatDate, formatValue } from '../../lib/format'
 import { AUDIENCES, FilterBar } from '../layout/FilterBar'
-import { Callout, Disclaimer } from '../ui'
-import { GUIDANCE_GROUPS, inlineName, naturalFrequency, TREATMENT_TYPE_LABEL } from './meta'
+import { Callout } from '../ui'
+import { GUIDANCE_GROUPS, inlineName, naturalFrequency, seriesNoun, TREATMENT_TYPE_LABEL, wherePhrase } from './meta'
 import { MonthStrip, peakPhrase } from './MonthStrip'
 import { RiskMeter } from './RiskMeter'
 import { latestOf, type BuildResult, type Entry } from './signals'
@@ -41,10 +41,13 @@ function SubHeading({ children }: { children: ReactNode }) {
 
 interface Translation {
   key: string
-  lead: string
-  freq: string
-  rest: string
-  raw: string
+  /** Bold lead: "About 1 in 380" or "None"/"No". */
+  strong: string
+  /** Sentence body without the date, e.g. " emergency department visits in Minnesota were for flu". */
+  body: string
+  date: string
+  /** Raw percentage for reference, omitted when zero. */
+  raw?: string
 }
 
 function translate(e: Entry, profile: PathogenProfile): Translation | null {
@@ -52,36 +55,36 @@ function translate(e: Entry, profile: PathogenProfile): Translation | null {
   if (!l) return null
   const freq = naturalFrequency(l.value)
   if (!freq) return null
-  const name = inlineName(profile)
-  const where = e.series.geo.type === 'state' ? 'in Minnesota' : `in ${e.name}`
-  const when = `in the week ending ${formatDate(l.date, true)}`
-  const raw = formatValue(l.value, '%')
+  const name = seriesNoun(profile, e.series.pathogen)
+  const where = wherePhrase(e.series.geo, true)
   const none = freq === 'none'
+  const base = { key: e.series.id, date: l.date, raw: none ? undefined : formatValue(l.value, '%') }
   switch (e.series.metric) {
     case 'test_positivity':
       return none
-        ? { key: e.series.id, lead: 'None', freq: '', rest: ` of lab tests for ${name} ${where} came back positive ${when}.`, raw }
-        : { key: e.series.id, lead: '', freq: capital(freq), rest: ` lab tests for ${name} ${where} came back positive ${when} (${raw}).`, raw }
+        ? { ...base, strong: 'None', body: ` of lab tests for ${name} ${where} came back positive` }
+        : { ...base, strong: capital(freq), body: ` lab tests for ${name} ${where} came back positive` }
     case 'detection_rate':
       return none
-        ? { key: e.series.id, lead: 'None', freq: '', rest: ` of the multi-pathogen panel tests run on sick patients ${where} detected ${name} ${when}.`, raw }
-        : {
-            key: e.series.id,
-            lead: '',
-            freq: capital(freq),
-            rest: ` multi-pathogen panel tests run on sick patients ${where} detected ${name} ${when} (${raw}).`,
-            raw,
-          }
+        ? { ...base, strong: 'None', body: ` of the multi-pathogen panel tests run on sick patients ${where} detected ${name}` }
+        : { ...base, strong: capital(freq), body: ` multi-pathogen panel tests run on sick patients ${where} detected ${name}` }
     case 'ed_visit_pct':
       return none
-        ? { key: e.series.id, lead: 'No', freq: '', rest: ` emergency department visits ${where} were for ${name} ${when}.`, raw }
-        : { key: e.series.id, lead: '', freq: capital(freq), rest: ` emergency department visits ${where} were for ${name} ${when} (${raw}).`, raw }
+        ? { ...base, strong: 'No', body: ` emergency department visits ${where} were for ${name}` }
+        : { ...base, strong: capital(freq), body: ` emergency department visits ${where} were for ${name}` }
     default:
       return null
   }
 }
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+/** Split long guidance into a short lead (first two sentences) and the rest. */
+function splitLead(text: string, n = 2): [string, string] {
+  const parts = text.split(/(?<=[.!?])\s+(?=[A-Z(“"])/)
+  if (parts.length <= n + 1) return [text, '']
+  return [parts.slice(0, n).join(' '), parts.slice(n).join(' ')]
+}
 
 export function NumbersForYou({ profile, result }: { profile: PathogenProfile; result: BuildResult }) {
   const order = ['test_positivity', 'detection_rate', 'ed_visit_pct'] as const
@@ -90,19 +93,22 @@ export function NumbersForYou({ profile, result }: { profile: PathogenProfile; r
     .map((g) => (g ? (g.entries.find((e) => !e.muted) ?? null) : null))
     .map((e) => (e ? translate(e, profile) : null))
     .filter((t): t is Translation => !!t)
-  const hasTests = translations.length > 0
+  const sameDate = translations.every((t) => t.date === translations[0]?.date)
+  const [lead, rest] = splitLead(profile.readingTheNumbers)
   return (
     <div className="space-y-4">
-      <p className="max-w-prose text-sm leading-relaxed text-ink-2">{profile.readingTheNumbers}</p>
-      {hasTests ? (
+      {translations.length > 0 ? (
         <div className="rounded-xl border border-line bg-surface-2 p-4">
-          <p className="mb-2 text-xs font-semibold tracking-wide text-ink-3 uppercase">This week, in everyday terms</p>
+          <p className="mb-2 text-xs font-semibold tracking-wide text-ink-3 uppercase">
+            This week, in everyday terms{sameDate ? ` · week ending ${formatDate(translations[0].date, true)}` : ''}
+          </p>
           <ul className="space-y-2">
             {translations.map((t) => (
-              <li key={t.key} className="text-sm leading-relaxed text-ink-1">
-                {t.lead && <strong className="font-semibold">{t.lead}</strong>}
-                {t.freq && <strong className="font-semibold">{t.freq}</strong>}
-                {t.rest}
+              <li key={t.key} className="text-base leading-relaxed text-ink-1">
+                <strong className="font-semibold">{t.strong}</strong>
+                {t.body}
+                {sameDate ? '' : ` in the week ending ${formatDate(t.date, true)}`}
+                {t.raw ? <span className="text-ink-2"> ({t.raw})</span> : null}.
               </li>
             ))}
           </ul>
@@ -113,11 +119,22 @@ export function NumbersForYou({ profile, result }: { profile: PathogenProfile; r
           </p>
         </div>
       ) : (
-        <p className="text-sm text-ink-3">
-          There is no weekly test-positivity or emergency-visit figure for {inlineName(profile)} in the data right now, so we can’t
-          translate a current number. The guide above will help you read any reports you see.
+        <p className="rounded-xl border border-dashed border-line-strong p-3 text-sm text-ink-2">
+          There is no weekly test-positivity or emergency-visit figure for {inlineName(profile)} in the data right now, so there is no
+          current number to translate. The guide below explains how to read reports when you see them.
         </p>
       )}
+      <div className="max-w-prose text-sm leading-relaxed text-ink-2">
+        <p>{lead}</p>
+        {rest && (
+          <details className="mt-2">
+            <summary className="cursor-pointer text-sm font-medium text-accent select-none hover:underline">
+              More on reading {inlineName(profile)} numbers
+            </summary>
+            <p className="mt-2 border-l-2 border-line pl-3">{rest}</p>
+          </details>
+        )}
+      </div>
     </div>
   )
 }
@@ -203,22 +220,33 @@ export function RiskGroups({ profile, audience }: { profile: PathogenProfile; au
           return (
             <li
               key={g}
-              className={`grid gap-3 rounded-xl border p-4 md:grid-cols-[minmax(0,11rem)_minmax(0,1fr)_minmax(0,1fr)] md:gap-5 ${
+              className={`grid gap-3 rounded-xl border p-4 md:grid-cols-[minmax(0,12rem)_minmax(0,1fr)] md:gap-6 ${
                 mine ? 'border-accent bg-accent-soft' : 'border-line'
               }`}
               aria-current={mine ? 'true' : undefined}
             >
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 md:flex-col md:items-start">
+              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 md:flex-col md:items-start md:justify-start">
                 <h3 className="text-base font-semibold text-ink-1">
                   {groupLabel(g)}
                   {mine && <span className="ml-2 rounded-full bg-accent px-2 py-0.5 align-middle text-xs font-semibold text-accent-ink">Your group</span>}
                 </h3>
                 <RiskMeter risk={info.risk} />
               </div>
-              <p className="text-sm leading-relaxed text-ink-2">{info.summary}</p>
-              <div>
-                <p className="mb-1.5 text-xs font-semibold tracking-wide text-ink-3 uppercase md:sr-only">What to do</p>
-                <Bullets items={info.actions} />
+              <div className="min-w-0">
+                <p className="text-sm leading-relaxed text-ink-2">{info.summary}</p>
+                {mine ? (
+                  <div className="mt-3">
+                    <p className="mb-1.5 text-xs font-semibold tracking-wide text-ink-1 uppercase">What to do</p>
+                    <Bullets items={info.actions} className="[&_span]:text-ink-1" />
+                  </div>
+                ) : (
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-sm font-medium text-accent select-none hover:underline">
+                      What to do ({info.actions.length} {info.actions.length === 1 ? 'step' : 'steps'})
+                    </summary>
+                    <Bullets items={info.actions} className="mt-2" />
+                  </details>
+                )}
               </div>
             </li>
           )
@@ -416,7 +444,7 @@ export function Sources({ profile }: { profile: PathogenProfile }) {
           <li key={s.url} className="min-w-0 text-sm">
             <a href={s.url} target="_blank" rel="noopener noreferrer" className="break-words text-accent underline-offset-2 hover:underline">
               {s.label}
-              <span aria-hidden="true"> ↗</span>
+              <span aria-hidden="true">{'\u00a0'}↗</span>
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
             <span className="block truncate text-xs text-ink-3">{hostOf(s.url)}</span>
@@ -427,7 +455,10 @@ export function Sources({ profile }: { profile: PathogenProfile }) {
         This guide was last checked against these sources on {formatDate(profile.lastReviewed, true)}. Surveillance numbers on this page
         come from the public data sources listed on the Sources page.
       </p>
-      <Disclaimer />
+      <p className="text-xs text-ink-2">
+        This guide is general health education. It does not replace advice from your own clinician. If you are worried about symptoms,
+        call your clinician or a nurse line; in an emergency, call 911.
+      </p>
     </div>
   )
 }

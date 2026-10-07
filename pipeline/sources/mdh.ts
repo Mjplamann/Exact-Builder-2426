@@ -115,7 +115,9 @@ export const LINK_SPECS: LinkSpec[] = [
     match: /other molecular testing|mls other molecular/i,
     dataset: 'mdh-lab',
     program: 'MLS other molecular testing',
-    pathogens: MLS_PANEL,
+    // Flu and RSV have dedicated all-lab positivity files; panel-subset values for them would be a
+    // different measure under the same series id, so they are not taken from this file.
+    pathogens: MLS_PANEL.filter((p) => !['influenza', 'influenza-a', 'influenza-b', 'rsv'].includes(p)),
     metrics: ['test_positivity'],
     note: `Share of molecular (PCR panel) tests positive, from the subset of Minnesota Laboratory System labs that report multiplex panel results. ${PRELIM}`,
   },
@@ -424,10 +426,10 @@ class MdhFetcher {
   async get(url: string, timeoutMs: number): Promise<{ buf: ArrayBuffer; url: string }> {
     const u = new URL(url)
     const hosts = MDH_HOSTS.includes(u.hostname) ? [u.hostname, ...MDH_HOSTS.filter((h) => h !== u.hostname)] : [u.hostname]
-    let lastErr: unknown
+    const errs: string[] = []
     for (const host of hosts) {
-      if ((this.failures.get(host) ?? 0) >= 3) {
-        lastErr ??= new Error(`${host} skipped (unreachable earlier in this run)`)
+      if ((this.failures.get(host) ?? 0) >= 4) {
+        errs.push(`${host}: skipped (unreachable earlier in this run)`)
         continue
       }
       const target = new URL(url)
@@ -438,12 +440,12 @@ class MdhFetcher {
         this.attempts.push({ url: target.toString(), result: `ok ${buf.byteLength}B` })
         return { buf, url: target.toString() }
       } catch (e) {
-        lastErr = e
+        errs.push(`${host}: ${errMsg(e)}`)
         this.attempts.push({ url: target.toString(), result: errMsg(e) })
         if (!(e instanceof HttpError && e.status === 404)) this.failures.set(host, (this.failures.get(host) ?? 0) + 1)
       }
     }
-    throw lastErr instanceof Error ? lastErr : new Error(String(lastErr))
+    throw new Error(errs.join('; '))
   }
 }
 

@@ -14,15 +14,22 @@
 // Values: gene copies per gram of dry solids divided by PMMoV (pepper mild mottle virus, a marker
 // of how much human waste is in the sample), times 1,000,000. That is the "per million PMMoV" scale
 // the WastewaterSCAN dashboard uses. Each weekly point is the mean of that week's samples (usually
-// 3). These units cannot be compared with CDC NWSS values or across targets.
+// 3), rounded to 4 significant figures. These units cannot be compared with CDC NWSS values or
+// across targets.
+//
+// Robustness: a plant whose file fails to load, or whose schema drifted so that no usable values
+// remain, is reported as an error and its previously published series are kept unchanged. If no
+// plant loads, the module returns no data so the orchestrator keeps the previous files and marks
+// the source stale. All fetches share one time budget that stays under the module timeout.
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { geoCentroid } from 'd3-geo'
 import type { Feature, FeatureCollection } from 'geojson'
 import type { ActivityLevel, GeoRef, PathogenId, Point, Series, TrendDirection } from '../../shared/types.ts'
 import { addDays, weekEndingSaturday } from '../../shared/mmwr.ts'
-import { fetchJson } from '../lib/http.ts'
-import { latestDate, makeSeries, since, STATE_GEO, toWeekEnding, toWeeklyPoints } from '../lib/series.ts'
+import { median } from '../../shared/stats.ts'
+import { fetchJson, HttpError } from '../lib/http.ts'
+import { latestDate, makeSeries, since, STATE_GEO, toWeekEnding } from '../lib/series.ts'
 import type { SourceContext, SourceModule, SourceResult } from '../types.ts'
 
 const SOURCE = 'wastewaterscan'
@@ -36,6 +43,16 @@ const PMMOV_SCALE = 1e6
 const DISCONTINUED_DAYS = 365
 /** Trend window of WastewaterSCAN's own trend test (categories file). */
 const TREND_DAYS = 21
+/** Weeks before last week used to judge a plant's usual number of samples per week. */
+const USUAL_WEEKS = 8
+/** A plant whose newest numeric value is this much older than its newest sample is treated as broken. */
+const MAX_VALUE_LAG_DAYS = 14
+/** Module timeout, and the shared fetch budget kept safely below it. */
+const MODULE_TIMEOUT_MS = 8 * 60_000
+const FETCH_BUDGET_MS = 7 * 60_000
+/** Sample and target fields without which a plant file cannot produce data. */
+const REQUIRED_SAMPLE_FIELDS = ['collection_date', 'targets']
+const REQUIRED_TARGET_FIELDS = ['gc_g_dry_weight', 'gc_g_dry_weight_pmmov']
 
 export const ATTRIBUTION =
   'These data were collected as part of the WastewaterSCAN / SCAN project, a partnership between Stanford University, Emory University, and Verily, funded philanthropically through a gift to Stanford University. License: CC BY-NC 4.0.'
@@ -104,10 +121,15 @@ export interface TargetSpec {
   /** Display name used in the series label. */
   name: string
   variant?: string
-  /** Rare/emerging target: also counted in the statewide detections series. */
+  /** Rare/emerging target: also counted in the statewide detection tally. */
   rare?: boolean
   note?: string
+  /** Caveat about how WastewaterSCAN's per-sample category behaves for this target. */
+  categoryNote?: string
 }
+
+const SEASONAL_CATEGORY_NOTE =
+  'WastewaterSCAN labels this target Low out of season even when nothing was detected (see attrs.detectedLatestWeek).'
 
 const H5_NOTE =
   'The H5 assay detects the H5 influenza subtype (not only H5N1). Detections can come from animal sources such as milk or bird droppings, so they do not by themselves show human infection.'
@@ -115,10 +137,10 @@ const H5_NOTE =
 /** Keyed by targets.json `public` id, which merges assay versions. */
 export const PUBLIC_TARGETS: Record<string, TargetSpec> = {
   SC2_N: { pathogen: 'covid', name: 'COVID-19 (SARS-CoV-2 N gene)' },
-  Influenza_A: { pathogen: 'influenza-a', name: 'Influenza A' },
-  Influenza_B: { pathogen: 'influenza-b', name: 'Influenza B' },
-  RSV: { pathogen: 'rsv', name: 'RSV (A and B combined)' },
-  HMPV_4: { pathogen: 'hmpv', name: 'hMPV' },
+  Influenza_A: { pathogen: 'influenza-a', name: 'Influenza A', categoryNote: SEASONAL_CATEGORY_NOTE },
+  Influenza_B: { pathogen: 'influenza-b', name: 'Influenza B', categoryNote: SEASONAL_CATEGORY_NOTE },
+  RSV: { pathogen: 'rsv', name: 'RSV (A and B combined)', categoryNote: SEASONAL_CATEGORY_NOTE },
+  HMPV_4: { pathogen: 'hmpv', name: 'hMPV', categoryNote: SEASONAL_CATEGORY_NOTE },
   Noro_G2: { pathogen: 'norovirus', name: 'Norovirus GII' },
   Rotavirus: { pathogen: 'rotavirus', name: 'Rotavirus' },
   HAdV_F: { pathogen: 'adenovirus-gi', name: 'Adenovirus group F (enteric)' },
@@ -127,6 +149,7 @@ export const PUBLIC_TARGETS: Record<string, TargetSpec> = {
     name: 'EV-D68',
     variant: 'ev-d68',
     note: 'Enterovirus D68 only. It does not measure rhinovirus or other enteroviruses.',
+    categoryNote: 'WastewaterSCAN’s category for EV-D68 has two levels only (Low or Very high).',
   },
   HPIV: { pathogen: 'parainfluenza', name: 'Parainfluenza (HPIV)' },
   HAV: { pathogen: 'hepatitis-a', name: 'Hepatitis A', rare: true },
@@ -147,6 +170,14 @@ export const PUBLIC_TARGETS: Record<string, TargetSpec> = {
   InfA_H5: { pathogen: 'h5n1', name: 'Influenza A H5', rare: true, note: H5_NOTE },
   WNV: { pathogen: 'west-nile', name: 'West Nile virus', rare: true },
 }
+
+/**
+ * Rare targets that get a statewide "plants with a detection" series. Measles, mpox and H5 are left
+ * out: CDC NWSS (cdc-nwss) publishes the same statewide count across all Minnesota NWSS sites,
+ * including these 4 plants, and the analysis de-duplicates by pathogen|metric|geo, so a fresher
+ * 4-plant count would replace the fuller CDC count. Their weekly tallies stay in diagnostics.
+ */
+export const STATE_DETECTION_PATHOGENS: PathogenId[] = ['hepatitis-a', 'west-nile']
 
 /** Why known `public` targets are not published (shown in diagnostics). */
 const SKIP_REASONS: Record<string, string> = {
@@ -272,9 +303,15 @@ export interface PlantReduction {
   samplesKept: number
   firstDate?: string
   lastDate?: string
+  /** Newest sample date with a numeric normalized value for any target other than PMMoV. */
+  lastValueDate?: string
+  /** Week-ending Saturday → number of samples collected that week (whole file). */
+  weekCounts: Map<string, number>
   assaysSeen: string[]
   sampleKeys: string[]
   targetKeys: string[]
+  /** Required fields (REQUIRED_SAMPLE_FIELDS / REQUIRED_TARGET_FIELDS) absent from every record. */
+  missingRequired: string[]
   warnings: string[]
   unknownCategories: string[]
 }
@@ -309,6 +346,11 @@ export function reduceSamples(
   }
   if (badDates) warnings.push(`${badDates} sample(s) without a usable collection_date/targets`)
   valid.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+  const weekCounts = new Map<string, number>()
+  for (const s of valid) {
+    const wk = weekEndingSaturday(s.date)
+    weekCounts.set(wk, (weekCounts.get(wk) ?? 0) + 1)
+  }
 
   // Pass 1: date range per assay (over the whole file, to pick the current assay version).
   const assayRange = new Map<string, AssayRange>()
@@ -329,6 +371,7 @@ export function reduceSamples(
   let kept = 0
   let missingPmmov = 0
   let missingGc = 0
+  let lastValueDate: string | undefined
   for (const s of valid) {
     if (weekEndingSaturday(s.date) < historyStart) continue
     kept++
@@ -362,7 +405,9 @@ export function reduceSamples(
       }
       const pm = t.gc_g_dry_weight_pmmov
       if (pub !== 'PMMoV' && !finite(pm)) missingPmmov++
-      d.raw.push([s.date, finite(pm) && pm >= 0 ? pm * PMMOV_SCALE : null])
+      const value = finite(pm) && pm >= 0 ? pm * PMMOV_SCALE : null
+      if (value != null && pub !== 'PMMoV') lastValueDate = s.date
+      d.raw.push([s.date, value])
       const gc = t.gc_g_dry_weight
       if (!finite(gc)) missingGc++
       else {
@@ -376,11 +421,18 @@ export function reduceSamples(
   }
   if (missingPmmov) warnings.push(`${missingPmmov} target result(s) without a numeric gc_g_dry_weight_pmmov`)
   if (missingGc) warnings.push(`${missingGc} target result(s) without a numeric gc_g_dry_weight`)
-  for (const k of ['gc_g_dry_weight', 'gc_g_dry_weight_pmmov', 'activity_category']) {
-    if (kept > 0 && !targetKeys.has(k)) warnings.push(`schema drift: target field "${k}" not present`)
+  const missingRequired: string[] = []
+  for (const k of [...REQUIRED_TARGET_FIELDS, 'activity_category']) {
+    if (kept > 0 && !targetKeys.has(k)) {
+      warnings.push(`schema drift: target field "${k}" not present`)
+      if (REQUIRED_TARGET_FIELDS.includes(k)) missingRequired.push(k)
+    }
   }
-  for (const k of ['collection_date', 'targets']) {
-    if (samples.length > 0 && !sampleKeys.has(k)) warnings.push(`schema drift: sample field "${k}" not present`)
+  for (const k of REQUIRED_SAMPLE_FIELDS) {
+    if (samples.length > 0 && !sampleKeys.has(k)) {
+      warnings.push(`schema drift: sample field "${k}" not present`)
+      missingRequired.push(k)
+    }
   }
   return {
     targets,
@@ -388,12 +440,74 @@ export function reduceSamples(
     samplesKept: kept,
     firstDate: valid[0]?.date,
     lastDate: valid[valid.length - 1]?.date,
+    lastValueDate,
+    weekCounts,
     assaysSeen: [...assayRange.keys()].sort(),
     sampleKeys: [...sampleKeys].sort(),
     targetKeys: [...targetKeys].sort(),
+    missingRequired,
     warnings,
     unknownCategories: [...unknownCategories],
   }
+}
+
+/**
+ * Why a reduced plant file cannot be published (schema drift or no usable values), or null when
+ * it is usable. run() treats a non-null result as a failure for that plant.
+ */
+export function unusableReason(r: PlantReduction): string | null {
+  if (r.missingRequired.length) return `schema drift: required field(s) ${r.missingRequired.join(', ')} not present`
+  if (r.samples > 0 && r.samplesKept === 0 && !r.lastDate) return 'no sample has a usable collection_date and targets'
+  if (r.samplesKept > 0 && !r.lastValueDate) return 'no numeric gc_g_dry_weight_pmmov value in any sample (schema drift?)'
+  if (r.lastDate && r.lastValueDate && r.lastValueDate < addDays(r.lastDate, -MAX_VALUE_LAG_DAYS))
+    return `samples after ${r.lastValueDate} (through ${r.lastDate}) carry no numeric gc_g_dry_weight_pmmov (schema drift?)`
+  return null
+}
+
+/**
+ * Weeks that may still receive samples: the week in progress, and last week when it has fewer
+ * samples than this plant usually has (median of the USUAL_WEEKS calendar weeks before it, empty
+ * weeks counted as 0). Results usually post 2–5 days after collection, so on Sunday–Wednesday last
+ * week is often still missing its Friday sample.
+ */
+export function openWeeks(weekCounts: Map<string, number>, now: string): Set<string> {
+  const current = weekEndingSaturday(now.slice(0, 10))
+  const previous = addDays(current, -7)
+  const out = new Set<string>([current])
+  const prior: number[] = []
+  for (let i = 1; i <= USUAL_WEEKS; i++) prior.push(weekCounts.get(addDays(previous, -7 * i)) ?? 0)
+  const usual = median(prior)
+  if (usual > 0 && (weekCounts.get(previous) ?? 0) < usual) out.add(previous)
+  return out
+}
+
+/** provisionalFrom for a series whose newest week is `lastWeek`. */
+function provisionalFor(lastWeek: string | undefined, open: Set<string>): string | undefined {
+  if (!lastWeek) return undefined
+  return open.has(lastWeek) || lastWeek > [...open].sort().at(-1)! ? lastWeek : undefined
+}
+
+/** Round to `digits` significant figures (keeps tiny non-zero values non-zero). */
+export function sig(v: number, digits = 4): number {
+  return v === 0 ? 0 : Number(v.toPrecision(digits))
+}
+
+/**
+ * Weekly mean keyed by week-ending Saturday. A week whose samples all lack a value is kept as null
+ * (the target was run but produced no usable number); weeks with no sample are absent.
+ */
+export function weeklyMeans(raw: [string, number | null][]): Point[] {
+  const buckets = new Map<string, number[]>()
+  for (const [d, v] of raw) {
+    const wk = weekEndingSaturday(d)
+    const arr = buckets.get(wk) ?? []
+    if (v != null && Number.isFinite(v)) arr.push(v)
+    buckets.set(wk, arr)
+  }
+  return [...buckets.keys()].sort().map((wk): Point => {
+    const vals = buckets.get(wk)!
+    return [wk, vals.length ? sig(vals.reduce((a, b) => a + b, 0) / vals.length) : null]
+  })
 }
 
 /** "MeV_Roy_V2 (since 2026-02-27; earlier MeV_Roy)" or just "N Gene". */
@@ -465,6 +579,7 @@ export interface PlantInput {
   uid: string
   plant: RawPlant | undefined
   reduction: PlantReduction
+  /** This plant's entries in WastewaterSCAN's categories file (trend verdicts), when reachable. */
   categories?: Record<string, RawCategoryEntry>
 }
 
@@ -472,27 +587,40 @@ export interface BuildOptions {
   now: string
   historyStart: string
   countyFeatures?: CountyFeatures
+  /** targets.json suggested_label per assay id (extra lookup key for the categories file). */
+  assayLabels?: Map<string, string>
 }
 
 const CONC_NOTE =
-  'WastewaterSCAN measurement: gene copies per gram of dry solids divided by PMMoV (a marker of human fecal content), times one million. Each point is the mean of that week’s samples (usually 3). Compare trends within a plant and target only. These values cannot be compared with CDC NWSS values or with other targets.'
+  'WastewaterSCAN: gene copies per gram of dry solids ÷ PMMoV (a marker of human fecal content) × 1,000,000; weekly mean of that week’s samples (usually 3). Compare within one plant and target only, not with CDC NWSS or other targets. The official level is WastewaterSCAN’s category for the latest sample (available since Jan 2026), judged against this plant’s own history.'
 
-function provisionalFor(lastWeek: string | undefined, now: string): string | undefined {
-  if (!lastWeek) return undefined
-  // A week still in progress may get more samples (results arrive ~2 days after collection).
-  return lastWeek >= weekEndingSaturday(now.slice(0, 10)) ? lastWeek : undefined
+/**
+ * Keys to try in the categories file for one target: the assay id, then the targets.json public id,
+ * then suggested_label. The only known sample is keyed "N Gene"/"RSV", where all three agree.
+ */
+export function categoryKeys(assay: string, pub: string, labels?: Map<string, string>): string[] {
+  return [...new Set([assay, pub, labels?.get(assay)].filter((k): k is string => !!k))]
 }
 
-export function buildPlantSeries(
-  input: PlantInput,
-  opts: BuildOptions,
-): { series: Series[]; skipped: Record<string, string>; discontinued: string[] } {
+export interface PlantBuild {
+  series: Series[]
+  skipped: Record<string, string>
+  discontinued: string[]
+  /** Weeks of this plant that may still receive samples (see openWeeks). */
+  openWeeks: Set<string>
+  /** Categories-file lookups (only counted when the file was available). */
+  trendLookups: { hit: number; miss: number }
+}
+
+export function buildPlantSeries(input: PlantInput, opts: BuildOptions): PlantBuild {
   const { uid, plant, reduction, categories } = input
   const geo = plantGeo(uid, plant, opts.countyFeatures)
   const cutoff = addDays(opts.now.slice(0, 10), -DISCONTINUED_DAYS)
+  const open = openWeeks(reduction.weekCounts, opts.now)
   const series: Series[] = []
   const skipped: Record<string, string> = {}
   const discontinued: string[] = []
+  const trendLookups = { hit: 0, miss: 0 }
   // Stable order: follow PUBLIC_TARGETS order.
   const order = Object.keys(PUBLIC_TARGETS)
   const pubs = [...reduction.targets.keys()].sort((a, b) => {
@@ -511,12 +639,11 @@ export function buildPlantSeries(
       discontinued.push(`${pub} (last sample ${d.latest?.date ?? 'none'})`)
       continue
     }
-    const points = since(toWeeklyPoints(d.raw, 'wastewater_conc', 'mean'), opts.historyStart)
+    const points = since(weeklyMeans(d.raw), opts.historyStart)
     if (!points.length) continue
     const lastWeek = points[points.length - 1][0]
-    const assays = Object.keys(d.assays)
     const switchNote =
-      assays.length > 1
+      Object.keys(d.assays).length > 1
         ? ` Assay versions merged by WastewaterSCAN under "${pub}": ${Object.entries(d.assays)
             .sort(([, x], [, y]) => (x.first < y.first ? -1 : 1))
             .map(([a, r]) => `${a} ${r.first}–${r.last}`)
@@ -531,25 +658,29 @@ export function buildPlantSeries(
       label: `${spec.name} — wastewater (WastewaterSCAN), per million PMMoV (normalized)`,
       points,
       variant: spec.variant,
-      provisionalFrom: provisionalFor(lastWeek, opts.now),
-      note: `${CONC_NOTE}${spec.note ? ` ${spec.note}` : ''}${switchNote}`,
+      provisionalFrom: provisionalFor(lastWeek, open),
+      note: [CONC_NOTE, spec.categoryNote, spec.note].filter(Boolean).join(' ') + switchNote,
     })
+    const asOf = toWeekEnding(d.latest.date) ?? undefined
     const attrs: Record<string, string> = {
       plant: (plant?.site_name ?? plant?.name ?? geo.name).trim(),
       assay: describeAssays(d.assays, d.latest.assay),
     }
     if (NWSS_IDS[uid]) attrs.nwssId = NWSS_IDS[uid]
-    // Publisher's classification of the latest sample.
-    const asOf = toWeekEnding(d.latest.date) ?? undefined
-    let cat = mapActivityCategory(d.latest.category)
-    let by = 'WastewaterSCAN'
-    if (!cat && spec.rare && asOf && d.detectWeeks.get(asOf) === false) {
-      // WastewaterSCAN left the category "not calculated" (new assay or short history), but no
-      // sample that week had any gene copies. That is a plain non-detection, not a threshold.
-      cat = { level: 'minimal', label: 'Not detected this week' }
-      by = 'WastewaterSCAN sample results'
+    // Plain fact from the sample results (gene copies > 0), shown next to the publisher category,
+    // which can read "Low" out of season with nothing detected.
+    const detected = asOf ? d.detectWeeks.get(asOf) : undefined
+    if (detected !== undefined) attrs.detectedLatestWeek = detected ? 'yes' : 'no'
+    // Publisher's classification of the latest sample ('not calculated' → none).
+    const cat = mapActivityCategory(d.latest.category)
+    let verdict: ReturnType<typeof trendFromCategory> = null
+    if (categories) {
+      const key = categoryKeys(d.latest.assay, pub, opts.assayLabels).find((k) => categories[k])
+      if (key) {
+        trendLookups.hit++
+        verdict = trendFromCategory(categories[key])
+      } else trendLookups.miss++
     }
-    const verdict = trendFromCategory(categories?.[d.latest.assay])
     const verdictCurrent = verdict && (!verdict.lastSampleDate || toWeekEnding(verdict.lastSampleDate) === asOf)
     if (verdict && verdictCurrent) attrs.wwscanTrend = verdict.text
     const trend = verdictCurrent ? verdict?.trend : undefined
@@ -559,13 +690,13 @@ export function buildPlantSeries(
         ...(trend ? { trend } : {}),
         label: [cat?.label, trend ? verdict!.text : undefined].filter(Boolean).join('; '),
         asOf,
-        by,
+        by: 'WastewaterSCAN',
       }
     }
     s.attrs = attrs
     series.push(s)
   }
-  return { series, skipped, discontinued }
+  return { series, skipped, discontinued, openWeeks: open, trendLookups }
 }
 
 export interface DetectionAccumulator {
@@ -611,10 +742,28 @@ const DETECT_NAMES: Partial<Record<PathogenId, string>> = {
   'west-nile': 'West Nile virus',
 }
 
-export function buildDetectionSeries(acc: DetectionAccumulator, plantCount: number, opts: BuildOptions): Series[] {
+const DETECT_ORDER: PathogenId[] = ['measles', 'mpox', 'h5n1', 'hepatitis-a', 'west-nile']
+
+export interface DetectionOptions extends BuildOptions {
+  /** Names of the plants whose results are in the tally (for the note). */
+  plantNames: string[]
+  /** Union of the plants' open weeks (see openWeeks): such a week may still change. */
+  openWeeks: Set<string>
+  /** Pathogens to publish (default STATE_DETECTION_PATHOGENS). */
+  pathogens?: PathogenId[]
+}
+
+const listNames = (xs: string[]) =>
+  xs.length <= 1 ? (xs[0] ?? '') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`
+
+/** Statewide weekly count of plants with any sample that detected a rare target (gene copies > 0). */
+export function buildDetectionSeries(acc: DetectionAccumulator, opts: DetectionOptions): Series[] {
   const out: Series[] = []
-  const order: PathogenId[] = ['measles', 'mpox', 'h5n1', 'hepatitis-a', 'west-nile']
-  const pathogens = [...acc.weeks.keys()].sort((a, b) => order.indexOf(a) - order.indexOf(b))
+  const wanted = new Set(opts.pathogens ?? STATE_DETECTION_PATHOGENS)
+  const pathogens = [...acc.weeks.keys()]
+    .filter((p) => wanted.has(p))
+    .sort((a, b) => DETECT_ORDER.indexOf(a) - DETECT_ORDER.indexOf(b))
+  const plantCount = opts.plantNames.length
   for (const pathogen of pathogens) {
     const byWeek = acc.weeks.get(pathogen)!
     const weeks = [...byWeek.keys()].filter((w) => w >= opts.historyStart).sort()
@@ -624,6 +773,7 @@ export function buildDetectionSeries(acc: DetectionAccumulator, plantCount: numb
     const lastCell = byWeek.get(lastWeek)!
     const last = acc.lastDetection.get(pathogen)
     const name = DETECT_NAMES[pathogen] ?? pathogen
+    const assays = [...(acc.assays.get(pathogen) ?? [])].sort().join(', ')
     const s = makeSeries({
       source: SOURCE,
       dataset: DS_DETECT,
@@ -632,27 +782,40 @@ export function buildDetectionSeries(acc: DetectionAccumulator, plantCount: numb
       geo: STATE_GEO,
       label: `${name} — Minnesota WastewaterSCAN plants with a detection (of ${plantCount})`,
       points,
-      provisionalFrom: provisionalFor(lastWeek, opts.now),
+      provisionalFrom: provisionalFor(lastWeek, opts.openWeeks),
       note:
-        `Number of Minnesota WastewaterSCAN plants where at least one sample that week detected this target (gene copies > 0; assays: ${[...(acc.assays.get(pathogen) ?? [])].sort().join(', ')}). ` +
-        `Weeks are included only when at least one plant was tested. The plants are Rochester, Mankato, Red Wing and St. Cloud, and none are in the Twin Cities. ` +
+        `Number of Minnesota WastewaterSCAN plants where at least one sample that week detected this target (gene copies > 0; assays: ${assays}). ` +
+        `Weeks are included only when at least one plant was tested. Plants: ${listNames(opts.plantNames)}. ` +
         `This is not a case count: one infected person or a visitor can cause a detection.` +
         (pathogen === 'h5n1' ? ` ${H5_NOTE}` : ''),
     })
+    // No `official`: WastewaterSCAN publishes no statewide classification for this count.
     s.attrs = {
-      assays: [...(acc.assays.get(pathogen) ?? [])].sort().join(', '),
+      assays,
       plantsTestedLatestWeek: String(lastCell.tested.size),
       lastDetection: last ? `${last.date} (${last.plant})` : `none since ${weeks[0]}`,
     }
-    if (lastCell.detected.size === 0) {
-      s.official = {
-        level: 'minimal',
-        label: `Not detected (0 of ${lastCell.tested.size} plants tested)`,
-        asOf: lastWeek,
-        by: 'WastewaterSCAN sample results',
-      }
-    }
     out.push(s)
+  }
+  return out
+}
+
+/** Compact per-pathogen tally for diagnostics (all rare targets, published or not). */
+export function detectionSummary(acc: DetectionAccumulator, published: Set<PathogenId>): Record<string, unknown> {
+  const out: Record<string, unknown> = {}
+  for (const pathogen of [...acc.weeks.keys()].sort((a, b) => DETECT_ORDER.indexOf(a) - DETECT_ORDER.indexOf(b))) {
+    const byWeek = acc.weeks.get(pathogen)!
+    const weeks = [...byWeek.keys()].sort()
+    const lastWeek = weeks.at(-1)
+    const cell = lastWeek ? byWeek.get(lastWeek)! : undefined
+    const last = acc.lastDetection.get(pathogen)
+    out[pathogen] = {
+      published: published.has(pathogen),
+      latestWeek: lastWeek ?? null,
+      latestWeekDetected: cell ? `${cell.detected.size} of ${cell.tested.size}` : null,
+      weeksWithDetection: weeks.filter((w) => byWeek.get(w)!.detected.size > 0).length,
+      lastDetection: last ? `${last.date} (${last.plant})` : null,
+    }
   }
   return out
 }
@@ -673,14 +836,52 @@ const uidOf = (p: RawPlant): string | undefined =>
   (typeof p.uid === 'string' && p.uid) || (typeof p.id === 'string' ? p.id.split('-')[0] : undefined)
 
 const errMsg = (e: unknown) => (e instanceof Error ? e.message : String(e))
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+/** Smallest time worth starting a fetch attempt with. */
+const MIN_ATTEMPT_MS = 10_000
+
+/**
+ * fetchJson under a shared deadline: each attempt's timeout is capped by the time left, and no
+ * attempt starts with less than MIN_ATTEMPT_MS left. 4xx responses (other than 429) are not retried.
+ */
+export async function fetchJsonWithin<T>(
+  url: string,
+  opts: { timeoutMs: number; retries: number },
+  deadline: number,
+): Promise<T> {
+  let lastErr: unknown
+  for (let attempt = 0; attempt <= opts.retries; attempt++) {
+    const left = deadline - Date.now()
+    if (left < MIN_ATTEMPT_MS) {
+      throw new Error(`time budget exhausted${lastErr ? ` after: ${errMsg(lastErr)}` : ` before fetching ${url}`}`)
+    }
+    try {
+      return await fetchJson<T>(url, { timeoutMs: Math.min(opts.timeoutMs, left), retries: 0 })
+    } catch (e) {
+      if (e instanceof HttpError && e.status !== 429 && e.status < 500) throw e
+      lastErr = e
+    }
+    if (attempt < opts.retries) await sleep(Math.min(1000 * 2 ** attempt, Math.max(0, deadline - Date.now())))
+  }
+  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr))
+}
+
+interface PlantRef {
+  uid: string
+  meta?: RawPlant
+}
 
 async function discoverPlants(
   ctx: SourceContext,
   diag: Record<string, unknown>,
-  errors: string[],
-): Promise<{ uid: string; meta?: RawPlant }[]> {
+  notices: string[],
+  deadline: number,
+): Promise<PlantRef[]> {
   try {
-    const idx = await fetchJson<{ plants?: RawPlant[] }>(`${GCS}/plants.json`, { timeoutMs: 180_000, retries: 2 })
+    // 11.6 MB (mostly sewershed polygons), needed only to find the plants: short budget, and the
+    // built-in list plus each plant file's own `plant` metadata cover a failure.
+    const idx = await fetchJsonWithin<{ plants?: RawPlant[] }>(`${GCS}/plants.json`, { timeoutMs: 60_000, retries: 1 }, deadline)
     const all = Array.isArray(idx?.plants) ? idx.plants : []
     const keys = new Set<string>()
     for (const p of all.slice(0, 20)) for (const k of Object.keys(p ?? {})) keys.add(k)
@@ -689,41 +890,62 @@ async function discoverPlants(
     const mn = selectMnPlants(all)
       .map((p) => ({ uid: uidOf(p), meta: p }))
       .filter((p): p is { uid: string; meta: RawPlant } => !!p.uid)
+    const found = mn.map((p) => p.uid).sort()
+    const expected = [...FALLBACK_MN_PLANTS].sort()
+    const changed = found.join(',') !== expected.join(',')
+    if (mn.length && changed) {
+      ctx.log.warn(
+        `Minnesota plant list changed: found ${found.join(', ')}; expected ${expected.join(', ')}. Update FALLBACK_MN_PLANTS, NWSS_IDS and meta text.`,
+      )
+    }
     diag.plantsIndex = {
       via: 'live',
       totalPlants: all.length,
       mnPlants: mn.map((p) => `${p.uid} ${p.meta.name ?? ''}`.trim()),
+      changedFromBuiltIn: changed,
       fieldsSeen: [...keys].filter((k) => k !== 'polygon').sort(),
       missingFields: missing,
     }
     if (mn.length) return mn
     ctx.log.warn(`plants.json listed no Minnesota plants (of ${all.length}); using the built-in list`)
   } catch (e) {
-    errors.push(`plants.json: ${errMsg(e)}`)
-    diag.plantsIndex = { via: 'fallback', error: errMsg(e) }
+    // Not an error for the run: the built-in list and each plant file's own metadata suffice.
+    ctx.log.warn(`plants.json unavailable (${errMsg(e).slice(0, 160)}); using the built-in plant list`)
+    notices.push('plant index unavailable, used the built-in plant list')
+    diag.plantsIndex = { via: 'fallback', error: errMsg(e).slice(0, 300) }
   }
   return FALLBACK_MN_PLANTS.map((uid) => ({ uid }))
 }
 
-async function loadTargets(ctx: SourceContext, diag: Record<string, unknown>): Promise<Map<string, string>> {
+interface TargetDictionary {
+  assayToPublic: Map<string, string>
+  assayLabels: Map<string, string>
+}
+
+async function loadTargets(ctx: SourceContext, diag: Record<string, unknown>, deadline: number): Promise<TargetDictionary> {
   try {
-    const t = await fetchJson<{ targets?: RawTargetDef[] }>(`${GCS}/targets.json`, { timeoutMs: 60_000, retries: 2 })
+    const t = await fetchJsonWithin<{ targets?: RawTargetDef[] }>(`${GCS}/targets.json`, { timeoutMs: 45_000, retries: 1 }, deadline)
     const defs = Array.isArray(t?.targets) ? t.targets : []
     if (!defs.length || !defs.some((d) => typeof d?.public === 'string')) {
       ctx.log.warn('targets.json schema drift: no targets[].public; using the built-in assay map')
     }
     diag.targetsDictionary = { via: 'live', entries: defs.length }
-    return assayPublicMap(defs)
+    const assayLabels = new Map<string, string>()
+    for (const d of defs) {
+      if (d && typeof d.id === 'string' && typeof d.suggested_label === 'string' && d.suggested_label.trim())
+        assayLabels.set(d.id, d.suggested_label.trim())
+    }
+    return { assayToPublic: assayPublicMap(defs), assayLabels }
   } catch (e) {
     ctx.log.warn(`targets.json unavailable (${errMsg(e)}); using the built-in assay map`)
-    diag.targetsDictionary = { via: 'fallback', error: errMsg(e) }
-    return assayPublicMap(null)
+    diag.targetsDictionary = { via: 'fallback', error: errMsg(e).slice(0, 300) }
+    return { assayToPublic: assayPublicMap(null), assayLabels: new Map() }
   }
 }
 
-async function loadCategories(ctx: SourceContext, diag: Record<string, unknown>): Promise<RawCategories | null> {
+async function loadCategories(ctx: SourceContext, diag: Record<string, unknown>, deadline: number): Promise<RawCategories | null> {
   try {
-    const c = await fetchJson<RawCategories>(CATEGORIES_URL, { timeoutMs: 60_000, retries: 1 })
+    const c = await fetchJsonWithin<RawCategories>(CATEGORIES_URL, { timeoutMs: 30_000, retries: 0 }, deadline)
     if (!c || typeof c !== 'object' || Array.isArray(c)) throw new Error('not a JSON object keyed by plant uid')
     diag.categories = { via: 'live', plants: Object.keys(c).length }
     return c
@@ -735,6 +957,18 @@ async function loadCategories(ctx: SourceContext, diag: Record<string, unknown>)
   }
 }
 
+/** Series from the previously published file for this source and dataset (empty when none). */
+async function previousSeries(rootDir: string, dataset: string): Promise<Series[]> {
+  try {
+    const file = JSON.parse(await readFile(path.join(rootDir, 'public', 'data', 'series', `${SOURCE}__${dataset}.json`), 'utf8'))
+    return Array.isArray(file?.series)
+      ? (file.series as Series[]).filter((s) => s?.source === SOURCE && Array.isArray(s.points))
+      : []
+  } catch {
+    return []
+  }
+}
+
 export const wastewaterscan: SourceModule = {
   meta: {
     id: SOURCE,
@@ -742,18 +976,21 @@ export const wastewaterscan: SourceModule = {
     publisher: 'WastewaterSCAN (Stanford University, Emory University and Verily)',
     url: 'https://data.wastewaterscan.org/',
     description:
-      'Levels of virus genetic material in wastewater solids at the 4 Minnesota treatment plants in the WastewaterSCAN program: Rochester, Mankato, Red Wing and St. Cloud. ' +
+      'Levels of virus genetic material in wastewater solids at the Minnesota treatment plants in the WastewaterSCAN program (4 as of October 2026: Rochester, Mankato, Red Wing and St. Cloud). ' +
       'Targets are COVID-19, influenza A and B, RSV, hMPV, EV-D68, norovirus, rotavirus, enteric adenovirus, hepatitis A, measles, mpox, H5 influenza and West Nile virus. ' +
-      'Values are normalized to PMMoV, a marker of how much human waste a sample contains, and shown per million PMMoV copies. The statewide count shows how many plants detected each rare target in a week. ' +
-      'This does NOT count cases. It covers only the people served by these 4 plants, none of them in the Twin Cities, Duluth or northwest Minnesota. ' +
+      'Values are normalized to PMMoV, a marker of how much human waste a sample contains, and shown per million PMMoV copies. A statewide weekly count shows how many of these plants detected hepatitis A or West Nile virus. ' +
+      'This does NOT count cases. It covers only the people served by these plants, none of them in the Twin Cities, Duluth or northwest Minnesota. ' +
       'Values cannot be compared across targets or with CDC NWSS numbers. A single detection of a rare virus can come from one traveler, and H5 can come from animals.',
-    geography: '4 Minnesota sewersheds (Rochester, Mankato, Red Wing, St. Cloud); statewide detection counts',
-    cadence: 'About 3 samples per plant per week, posted about 2 days after collection',
+    geography: 'Minnesota WastewaterSCAN sewersheds (4 as of October 2026); statewide detection counts',
+    cadence: 'About 3 samples per plant per week (usually Mon/Wed/Fri); results usually post 2–5 days after collection',
     attribution: ATTRIBUTION,
   },
-  timeoutMs: 8 * 60_000,
+  timeoutMs: MODULE_TIMEOUT_MS,
   async run(ctx): Promise<SourceResult> {
+    const deadline = Date.now() + FETCH_BUDGET_MS
     const errors: string[] = []
+    /** Non-failures worth showing on the Sources page. */
+    const notices: string[] = []
     const diagnostics: Record<string, unknown> = { attribution: ATTRIBUTION }
     const opts: BuildOptions = { now: ctx.now, historyStart: ctx.historyStart }
     try {
@@ -762,41 +999,64 @@ export const wastewaterscan: SourceModule = {
       ctx.log.warn(`county geometry unavailable for centroid fallback: ${errMsg(e)}`)
     }
 
-    const plants = await discoverPlants(ctx, diagnostics, errors)
-    const assayToPublic = await loadTargets(ctx, diagnostics)
-    const categories = await loadCategories(ctx, diagnostics)
+    // Independent small files in parallel, so one stall cannot use up the whole budget.
+    const [plants, dict, categories] = await Promise.all([
+      discoverPlants(ctx, diagnostics, notices, deadline),
+      loadTargets(ctx, diagnostics, deadline),
+      loadCategories(ctx, diagnostics, deadline),
+    ])
+    opts.assayLabels = dict.assayLabels
+
+    // Plant files (~3.5 MB each) are fetched in parallel and processed in order.
+    const files = await Promise.allSettled(
+      plants.map((p) => fetchJsonWithin<RawPlantFile>(`${GCS}/${p.uid}.json`, { timeoutMs: 120_000, retries: 2 }, deadline)),
+    )
 
     const conc: Series[] = []
     const acc = newDetectionAccumulator()
     const plantDiag: Record<string, unknown>[] = []
     const skippedAll: Record<string, string> = {}
-    let ok = 0
-    // Sequential: each plant file is ~3.5 MB of JSON.
-    for (const p of plants) {
+    const loadedNames: string[] = []
+    const failed: PlantRef[] = []
+    const open = new Set<string>()
+    const lookups = { hit: 0, miss: 0 }
+    for (const [i, p] of plants.entries()) {
       try {
-        const file = await fetchJson<RawPlantFile>(`${GCS}/${p.uid}.json`, { timeoutMs: 180_000, retries: 2 })
+        const res = files[i]
+        if (res.status === 'rejected') throw res.reason
+        const file = res.value
         if (!file || !Array.isArray(file.samples)) throw new Error('response has no samples[] array (feed moved or changed shape?)')
-        const meta: RawPlant | undefined = { ...(p.meta ?? {}), ...(file.plant ?? {}) }
-        const reduction = reduceSamples(file.samples, assayToPublic, ctx.historyStart)
+        const meta: RawPlant = { ...(p.meta ?? {}), ...(file.plant ?? {}) }
+        const reduction = reduceSamples(file.samples, dict.assayToPublic, ctx.historyStart)
+        for (const w of reduction.warnings) ctx.log.warn(`${p.uid}: ${w}`)
+        const bad = unusableReason(reduction)
+        if (bad) throw new Error(bad)
         const built = buildPlantSeries({ uid: p.uid, plant: meta, reduction, categories: categories?.[p.uid] }, opts)
-        const geoName = built.series[0]?.geo.name ?? plantGeo(p.uid, meta).name
-        addDetections(acc, p.uid, geoName.replace(' (WastewaterSCAN)', ''), reduction, ctx.historyStart)
+        const name = (built.series[0]?.geo.name ?? plantGeo(p.uid, meta).name).replace(' (WastewaterSCAN)', '')
+        addDetections(acc, p.uid, name, reduction, ctx.historyStart)
+        loadedNames.push(name)
+        for (const w of built.openWeeks) open.add(w)
+        lookups.hit += built.trendLookups.hit
+        lookups.miss += built.trendLookups.miss
         conc.push(...built.series)
         Object.assign(skippedAll, built.skipped)
-        for (const w of reduction.warnings) ctx.log.warn(`${p.uid}: ${w}`)
+        if (!built.series.length) ctx.log.warn(`${p.uid}: no active targets (all discontinued or unmapped)`)
         if (reduction.unknownCategories.length)
           ctx.log.warn(`${p.uid}: unrecognized activity_category value(s): ${reduction.unknownCategories.join(', ')}`)
         const updated = typeof file.updated === 'string' ? file.updated : undefined
         if (updated && updated.slice(0, 10) < addDays(ctx.now.slice(0, 10), -14))
           ctx.log.warn(`${p.uid}: plant file last updated ${updated} (more than 14 days ago)`)
+        const lastWeek = reduction.lastDate ? weekEndingSaturday(reduction.lastDate) : undefined
         plantDiag.push({
           uid: p.uid,
-          name: meta?.name ?? null,
+          name: meta.name ?? null,
           updated: updated ?? null,
           samples: reduction.samples,
           samplesInWindow: reduction.samplesKept,
           firstSample: reduction.firstDate ?? null,
           lastSample: reduction.lastDate ?? null,
+          samplesLatestWeek: lastWeek ? `${reduction.weekCounts.get(lastWeek) ?? 0} (week ${lastWeek})` : null,
+          provisionalWeek: lastWeek && built.openWeeks.has(lastWeek) ? lastWeek : null,
           series: built.series.length,
           assaysSeen: reduction.assaysSeen,
           discontinued: built.discontinued,
@@ -805,31 +1065,89 @@ export const wastewaterscan: SourceModule = {
           warnings: reduction.warnings,
         })
         ctx.log.info(
-          `${p.uid} ${meta?.name ?? ''}: ${reduction.samples} samples (${reduction.firstDate}..${reduction.lastDate}), ${built.series.length} series`,
+          `${p.uid} ${meta.name ?? ''}: ${reduction.samples} samples (${reduction.firstDate}..${reduction.lastDate}), ${built.series.length} series`,
         )
-        ok++
       } catch (e) {
+        failed.push(p)
         errors.push(`plant ${p.uid}: ${errMsg(e)}`)
-        plantDiag.push({ uid: p.uid, error: errMsg(e) })
+        plantDiag.push({ uid: p.uid, error: errMsg(e).slice(0, 300) })
+      }
+    }
+    diagnostics.plants = plantDiag
+    diagnostics.skippedTargets = skippedAll
+    if (categories) (diagnostics.categories as Record<string, unknown>).lookups = lookups
+
+    const ok = loadedNames.length
+    if (ok === 0) {
+      // Nothing usable: return no series so the orchestrator keeps the previous files and marks
+      // the source stale with this message.
+      for (const err of errors) ctx.log.warn(err)
+      return {
+        datasets: [
+          { source: SOURCE, dataset: DS_CONC, series: [] },
+          { source: SOURCE, dataset: DS_DETECT, series: [] },
+        ],
+        message: `No Minnesota plant could be loaded (0 of ${plants.length}): ${errors.join('; ')}`,
+        diagnostics,
       }
     }
 
+    // A failed plant keeps its last published series unchanged, so one bad file does not remove
+    // the plant from the dashboard.
+    if (failed.length) {
+      const prevConc = await previousSeries(ctx.rootDir, DS_CONC)
+      const keptPrevious: Record<string, string | null> = {}
+      for (const p of failed) {
+        const kept = prevConc.filter((s) => s.geo?.code === `wwscan:${p.uid}`)
+        conc.push(...kept)
+        keptPrevious[p.uid] = kept.length ? `${kept.length} series through ${latestDate(kept) ?? 'n/a'}` : null
+        if (kept.length) errors.push(`kept ${kept.length} previously published series for ${p.uid} (through ${latestDate(kept) ?? 'n/a'})`)
+      }
+      diagnostics.keptPrevious = keptPrevious
+    }
+
+    // Statewide counts need every plant: with a plant missing, history would be rewritten without
+    // its detections, so the last published counts are kept instead when they exist.
     let detections: Series[] = []
     try {
-      detections = buildDetectionSeries(acc, ok, opts)
+      const fresh = buildDetectionSeries(acc, { ...opts, plantNames: loadedNames, openWeeks: open })
+      if (!failed.length) detections = fresh
+      else {
+        const prevDet = await previousSeries(ctx.rootDir, DS_DETECT)
+        const missing = failed.map((p) => p.uid).join(', ')
+        const kept: string[] = []
+        for (const pathogen of STATE_DETECTION_PATHOGENS) {
+          const prev = prevDet.find((x) => x.pathogen === pathogen && x.metric === 'ww_detections')
+          const s = fresh.find((x) => x.pathogen === pathogen)
+          if (prev) {
+            detections.push(prev)
+            kept.push(`${pathogen} through ${latestDate([prev]) ?? 'n/a'}`)
+          } else if (s) {
+            s.attrs = { ...s.attrs, plantsMissing: missing }
+            detections.push(s)
+          }
+        }
+        errors.push(
+          kept.length
+            ? `kept previously published statewide detection counts (${kept.join(', ')}) because plant(s) ${missing} are missing`
+            : `statewide detection counts cover ${ok} of ${plants.length} plants`,
+        )
+      }
     } catch (e) {
       errors.push(`detections: ${errMsg(e)}`)
     }
+    diagnostics.detections = detectionSummary(acc, new Set(detections.map((s) => s.pathogen)))
 
     const latest = latestDate(conc)
-    diagnostics.plants = plantDiag
-    diagnostics.skippedTargets = skippedAll
     diagnostics.seriesCount = { [DS_CONC]: conc.length, [DS_DETECT]: detections.length }
     diagnostics.latestWeek = latest ?? null
+    diagnostics.provisionalWeeks = [...open].sort()
     diagnostics.officialLevels = conc.filter((s) => s.official?.level).length
     diagnostics.officialTrends = conc.filter((s) => s.official?.trend).length
     for (const err of errors) ctx.log.warn(err)
-    const summary = `${ok} of ${plants.length} Minnesota plants${latest ? `; latest week ${latest}` : ''}`
+    const summary = [`${ok} of ${plants.length} Minnesota plants`, latest ? `latest week ${latest}` : '', ...notices]
+      .filter(Boolean)
+      .join('; ')
     return {
       datasets: [
         { source: SOURCE, dataset: DS_CONC, series: conc },

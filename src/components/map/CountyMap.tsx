@@ -62,6 +62,8 @@ export function meaningFor(layer: MapLayer, value: number | null | undefined): s
   return s.replace(/\bit\b/, pathogenName(layer.pathogen))
 }
 
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 function hsaName(series: Series | undefined): string | undefined {
   if (!series?.attrs) return undefined
   const key = Object.keys(series.attrs).find((k) => /hsa|service.?area/i.test(k))
@@ -161,7 +163,7 @@ export function CountyMap({
 
   // ── Fill + labels ──
   function fillFor(fips: string): string {
-    if (!countyLayer) return 'var(--surface-2)'
+    if (!countyLayer) return 'var(--surface-3)'
     const m = metrics.get(fips)
     if (!m || m.value == null) return hatchUrl
     if (mode === 'value') {
@@ -231,7 +233,7 @@ export function CountyMap({
   const siteHasData = !!siteLayer && dots.length > 0
   const showEmpty = !layer || (countyLayer && !layerHasData) || (layer.kind === 'site' && !siteHasData)
   const emptyText = !pulse.mapLayers.length
-    ? 'County-level data has not been published yet. You can still select a county to see who lives there.'
+    ? 'County-level illness data has not been published yet.'
     : !layer
       ? 'This map layer is not available in the latest data.'
       : `No ${layer.kind === 'site' ? 'treatment plant' : 'county'} data for ${layer.label} yet.`
@@ -254,8 +256,8 @@ export function CountyMap({
   const binCounts = bins.map((_, i) => reporting.filter((m) => binIndex(bins, m.value) === i).length)
   const siteLevelCounts: Partial<Record<string, number>> = {}
   let siteUnknown = 0
-  for (const d of dots) {
-    const l = metricLevel(d.metric)
+  for (const site of siteList) {
+    const l = metricLevel(siteLayer ? site.metrics[siteLayer.id] : undefined)
     siteLevelCounts[l] = (siteLevelCounts[l] ?? 0) + 1
     if (l === 'unknown') siteUnknown++
   }
@@ -368,7 +370,7 @@ export function CountyMap({
                       onFocus={onFocus('site', d.site.id, d.x, d.y)}
                       onBlur={onBlur(d.site.id)}
                     >
-                      <circle cx={d.x} cy={d.y} r={Math.max(d.r + 6, 12)} style={{ fill: 'transparent' }} />
+                      <circle cx={d.x} cy={d.y} r={Math.max(d.r + 4, 10)} style={{ fill: 'transparent' }} />
                       <circle
                         cx={d.x}
                         cy={d.y}
@@ -480,11 +482,14 @@ function CountyTip({
             <LevelBadge level={level} size="sm" />
             {metric.trend && <TrendPill trend={metric.trend} compact />}
           </div>
-          <p className="text-ink-1">
-            <span className="font-semibold">{formatValue(metric.value, layer.unit)}</span>
-            <span className="text-ink-2">{UNIT_SUFFIX[layer.unit]}</span>
-            {!compact && <span className="block text-ink-2">{meaningFor(layer, metric.value)}</span>}
-          </p>
+          {compact ? (
+            <p className="font-semibold text-ink-1">
+              {formatValue(metric.value, layer.unit)}
+              <span className="font-normal text-ink-2">{UNIT_SUFFIX[layer.unit]}</span>
+            </p>
+          ) : (
+            <p className="text-ink-1">{capitalize(meaningFor(layer, metric.value))}</p>
+          )}
           <p className="text-ink-3">
             Week ending {formatDate(metric.date, true)}
             {source && !compact ? ` · ${source}` : ''}
@@ -520,7 +525,7 @@ function SiteTip({ site, layer, source, compact }: { site?: SitePulse; layer: Ma
         <LevelBadge level={level} size="sm" />
         {m?.trend && <TrendPill trend={m.trend} compact />}
       </div>
-      {m && m.value != null && !compact && <p className="text-ink-2">{meaningFor(layer, m.value)}</p>}
+      {m && m.value != null && !compact && <p className="text-ink-1">{capitalize(meaningFor(layer, m.value))}</p>}
       {m && (
         <p className="text-ink-3">
           Week ending {formatDate(m.date, true)}

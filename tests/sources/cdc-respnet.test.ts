@@ -1,12 +1,14 @@
 import { execFileSync } from 'node:child_process'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
-  ageBandOf, ageKey, candidatesFrom, cdcRespnet, isAllLabel, isCrudeRate, isOverallAge, normalizeRow, pickFreshest,
-  provisionalFrom, selectWeekly, weeklyPoints, type RespRow,
+  ageBandOf, ageKey, ageSeries, candidatesFrom, cdcRespnet, CATCHMENT_CHANGE, filterLines, isAllLabel, isCrudeRate,
+  isOverallAge, isPer100k, normalizeRow, overallSeries, pickFreshest, provisionalFrom, selectWeekly, weeklyPoints,
+  type RespRow,
 } from '../../pipeline/sources/cdc-respnet'
 import type { Logger } from '../../pipeline/lib/log'
 
-// Fixtures are real rows observed in the data.cdc.gov exports (via the PopHIVE/Ingest mirror, 2026-09-25).
+// Fixtures are real rows observed in the data.cdc.gov exports (via the PopHIVE/Ingest mirror, 2026-09-25),
+// except where a comment marks a row as altered to exercise a guard.
 
 // kvib-3txy, API field names (as returned by SODA or renamed from the mirror CSV).
 const KVIB = (network: string, season: string, date: string, estimate: string, extra: Record<string, string> = {}) => ({
@@ -34,10 +36,12 @@ const KVIB_ROWS = [
   KVIB('Combined', '2025-26', '2026-09-19', '0.6'),
   KVIB('FluSurv-NET', '2025-26', '2026-09-12', '0.2'),
   KVIB('FluSurv-NET', '2025-26', '2026-09-19', '0.2'),
-  // Same week, cumulative rate — must be ignored.
-  KVIB('COVID-NET', '2025-26', '2026-09-19', '61.3', { data_type: 'Cumulative Rate' }),
-  // Multi-site row with an age-adjusted rate — must be ignored.
-  KVIB('COVID-NET', '2025-26', '2026-09-19', '0.9', { state: 'Overall', rate_type: 'Age-Adjusted' }),
+  // Same week, Minnesota cumulative rate — must be ignored.
+  KVIB('COVID-NET', '2025-26', '2026-09-19', '54.0', { data_type: 'Cumulative Rate' }),
+  // Multi-site ('Overall') weekly rows — observed, model-estimated and race-stratified age-adjusted — must be ignored.
+  KVIB('COVID-NET', '2025-26', '2026-09-19', '0.8', { state: 'Overall' }),
+  KVIB('COVID-NET', '2025-26', '2026-09-19', '3.2', { state: 'Overall', rate_type: 'Estimated' }),
+  KVIB('COVID-NET', '2025-26', '2026-09-19', '0.6', { state: 'Overall', race: 'Hispanic', rate_type: 'Age-Adjusted' }),
 ]
 
 // 6jg4-xsqq (COVID-NET) uses agecat_label / race_label / sex_label.
@@ -106,6 +110,10 @@ describe('cdc-respnet row normalization', () => {
     expect(isCrudeRate('Observed')).toBe(true)
     expect(isCrudeRate('Age-Adjusted')).toBe(false)
     expect(isCrudeRate('Estimated')).toBe(false)
+    expect(isPer100k('Rate per 100,000')).toBe(true)
+    expect(isPer100k('')).toBe(true) // column missing: tolerated, reported as schema drift
+    expect(isPer100k('Count')).toBe(false)
+    expect(isPer100k('Percent')).toBe(false)
   })
 })
 
@@ -123,6 +131,9 @@ describe('cdc-respnet age bands', () => {
     expect(ageBandOf('0-<1 yr')).toMatchObject({ slug: '0-1y' })
     expect(ageBandOf('1-4 years')).toMatchObject({ slug: '1-4y', group: 'children' })
     expect(ageBandOf('5-17 years')).toMatchObject({ slug: '5-17y', group: 'children' })
+    // 0-17 includes infants, so it is not labelled as the 'children' (1-17) audience group.
+    expect(ageBandOf('0-17 years (Children)')).toMatchObject({ slug: '0-17y' })
+    expect(ageBandOf('0-17 years (Children)')!.group).toBeUndefined()
     expect(ageBandOf('18-49 years')).toMatchObject({ slug: '18-49y', group: 'adults' })
     expect(ageBandOf('50-64 yr')).toMatchObject({ slug: '50-64y', group: 'older-adults' })
     expect(ageBandOf('≥65 years')).toMatchObject({ slug: '65plus', group: 'seniors' })
@@ -144,6 +155,23 @@ describe('cdc-respnet weekly series', () => {
     expect(sel.every((r) => r.dataType === 'Weekly Rate' && r.rateType === 'Observed' && r.state === 'Minnesota')).toBe(true)
     const covid = [COVID('2026-09-19', 'All', '0.4'), COVID('2026-09-19', 'All', '0.3', 'Male')].map((r) => normalizeRow(r, 'COVID-NET'))
     expect(selectWeekly(covid, ['MN'])).toHaveLength(1)
+    // Altered row: a weekly row with a non-rate estimate type must never be read as per-100k.
+    const counted = normalizeRow({ ...KVIB('COVID-NET', '2025-26', '2026-09-19', '12'), estimate_type: 'Count' })
+    expect(selectWeekly([counted], ['Minnesota'])).toHaveLength(0)
+  })
+
+  it('pre-filters mirror CSV lines but keeps the header', () => {
+    const text = [
+      '"Season","Date","State","Data Type","Estimate"',
+      '"2025-26","2026-09-19","MN","Weekly Rate","0.4"',
+      '"2025-26","2026-09-19","MN","Cumulative Rate","54.0"',
+      '"2025-26","2026-09-19","CA","Weekly Rate","0.6"',
+      '',
+    ].join('\n')
+    expect(filterLines(text, (l) => l.includes('"MN"') && l.includes('Weekly Rate')).split('\n')).toEqual([
+      '"Season","Date","State","Data Type","Estimate"',
+      '"2025-26","2026-09-19","MN","Weekly Rate","0.4"',
+    ])
   })
 
   it('builds sorted Saturday-keyed points from historyStart on', () => {
@@ -218,6 +246,23 @@ describe('cdc-respnet weekly series', () => {
     expect(provisionalFrom(pts, '2026-09-19')).toBe('2026-09-12')
     expect(provisionalFrom(pts, '2026-10-31')).toBeUndefined()
   })
+
+  it('documents the catchment break, rounding and combined-rate gaps', () => {
+    const pts: [string, number][] = [['2026-09-12', 0.7], ['2026-09-19', 0.6]]
+    const comb = overallSeries('Combined', pts, 'kvib-3txy', '2026-09-19')
+    expect(CATCHMENT_CHANGE).toBe('2024-10-05')
+    expect(comb.attrs).toEqual({ network: 'Combined', dataset: 'kvib-3txy', rate: 'Observed (crude)', catchmentChange: '2024-10-05' })
+    expect(comb.note).toMatch(/7-county Twin Cities metro through the 2023-24 season/)
+    expect(comb.note).toMatch(/statewide from the 2024-25 season \(week ending 2024-10-05\)/)
+    expect(comb.note).toMatch(/covers COVID-19 and RSV only/)
+    expect(comb.note).toMatch(/0\.0 means under 0\.05 per 100,000/)
+    expect(overallSeries('COVID-NET', pts, 'kvib-3txy').note).not.toMatch(/RSV only/)
+    const kids = ageSeries('RSV-NET', '0-17 years (Children)', ageBandOf('0-17 years (Children)')!, pts, '29hc-w46k', 'respnet-mn-age-rsv')
+    expect(kids.id).toBe('cdc-respnet:respnet-mn-age-rsv:rsv:hosp_rate:state:27:age-0-17y')
+    expect(kids.attrs).toEqual({ network: 'RSV-NET', dataset: '29hc-w46k', catchmentChange: '2024-10-05' })
+    const infants = ageSeries('RSV-NET', '0-<6 months', ageBandOf('0-<6 months')!, pts, '29hc-w46k', 'respnet-mn-age-rsv')
+    expect(infants.attrs?.ageGroup).toBe('infants')
+  })
 })
 
 // ───────── End-to-end run() with stubbed network: live data.cdc.gov path and PopHIVE-mirror fallback ─────────
@@ -268,6 +313,21 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+type MirrorFile = { meta: unknown; xz: Buffer }
+
+/** data.cdc.gov blocked; serve the given PopHIVE mirror files, 404 for the rest. */
+function blockedLive(files: Record<string, MirrorFile>) {
+  vi.stubGlobal('fetch', async (input: string | URL) => {
+    const url = String(input)
+    if (url.includes('data.cdc.gov')) return new Response('Forbidden', { status: 403 })
+    const m = /respnet\/raw\/([a-z0-9-]+)\.(json|csv\.xz)$/.exec(url)
+    if (m && files[m[1]]) return m[2] === 'json' ? json(files[m[1]].meta) : new Response(files[m[1]].xz)
+    return new Response('not found', { status: 404 })
+  })
+}
+
+const byName = (res: Awaited<ReturnType<typeof cdcRespnet.run>>) => Object.fromEntries(res.datasets.map((d) => [d.dataset, d]))
+
 describe('cdc-respnet run()', () => {
   it('uses data.cdc.gov when it answers', async () => {
     const urls: string[] = []
@@ -281,8 +341,9 @@ describe('cdc-respnet run()', () => {
       return new Response('not found', { status: 404 })
     })
     const res = await cdcRespnet.run(ctx)
-    const [overall, age] = res.datasets
-    expect(overall.dataset).toBe('respnet-mn')
+    expect(res.datasets.map((d) => d.dataset)).toEqual(['respnet-mn', 'respnet-mn-age-covid', 'respnet-mn-age-rsv'])
+    const ds = byName(res)
+    const overall = ds['respnet-mn']
     expect(overall.series.map((s) => s.id)).toEqual([
       'cdc-respnet:respnet-mn:covid:hosp_rate:state:27',
       'cdc-respnet:respnet-mn:influenza:hosp_rate:state:27',
@@ -293,61 +354,63 @@ describe('cdc-respnet run()', () => {
     expect(covid.points).toEqual([['2026-09-12', 0.5], ['2026-09-19', 0.4]])
     expect(covid.unit).toBe('per100k')
     expect(covid.provisionalFrom).toBe('2026-09-12')
-    expect(covid.attrs).toMatchObject({ network: 'COVID-NET', dataset: 'kvib-3txy' })
+    expect(covid.attrs).toMatchObject({ network: 'COVID-NET', dataset: 'kvib-3txy', catchmentChange: '2024-10-05' })
     expect(covid.official).toBeUndefined()
-    expect(age.series.map((s) => [s.id, s.age, s.points.at(-1)])).toEqual([
-      ['cdc-respnet:respnet-mn-age:covid:hosp_rate:state:27:age-75plus', '≥75 years', ['2026-09-19', 3.4]],
-      ['cdc-respnet:respnet-mn-age:rsv:hosp_rate:state:27:age-0-6mo', '0-<6 months', ['2026-09-19', 3.3]],
+    expect(ds['respnet-mn-age-covid'].series.map((s) => [s.id, s.age, s.points.at(-1), s.attrs?.ageGroup])).toEqual([
+      ['cdc-respnet:respnet-mn-age-covid:covid:hosp_rate:state:27:age-75plus', '≥75 years', ['2026-09-19', 3.4], 'seniors'],
+    ])
+    expect(ds['respnet-mn-age-rsv'].series.map((s) => [s.id, s.age, s.points.at(-1)])).toEqual([
+      ['cdc-respnet:respnet-mn-age-rsv:rsv:hosp_rate:state:27:age-0-6mo', '0-<6 months', ['2026-09-19', 3.3]],
     ])
     expect(res.message).toBeUndefined()
     const covidQuery = new URL(urls.find((u) => u.includes('6jg4-xsqq.json'))!).searchParams.get('$where')
     expect(covidQuery).toContain("state = 'MN'")
     expect(covidQuery).toContain("race_label IN ('All', 'All Race/Ethnicities')")
+    expect((res.diagnostics!['kvib-3txy'] as { estimateTypes: Record<string, number> }).estimateTypes).toEqual({ 'Rate per 100,000': 8 })
   })
 
-  it('falls back to the PopHIVE mirror when data.cdc.gov is blocked', async () => {
-    const files: Record<string, { meta: unknown; xz: Buffer }> = {
-      'kvib-3txy': mirror(KVIB_COLS, KVIB_ROWS),
-      '29hc-w46k': mirror(RSV_COLS, RSV_LIVE),
-    }
-    vi.stubGlobal('fetch', async (input: string | URL) => {
-      const url = String(input)
-      if (url.includes('data.cdc.gov')) return new Response('Forbidden', { status: 403 })
-      const m = /respnet\/raw\/([a-z0-9-]+)\.(json|csv\.xz)$/.exec(url)
-      if (m && files[m[1]]) return m[2] === 'json' ? json(files[m[1]].meta) : new Response(files[m[1]].xz)
-      return new Response('not found', { status: 404 }) // 6jg4-xsqq mirror missing → that sub-dataset fails alone
-    })
+  it('falls back to the PopHIVE mirror; a failed sub-dataset leaves only its own file empty', async () => {
+    blockedLive({ 'kvib-3txy': mirror(KVIB_COLS, KVIB_ROWS), '29hc-w46k': mirror(RSV_COLS, RSV_LIVE) }) // 6jg4-xsqq mirror missing
     const res = await cdcRespnet.run(ctx)
-    const [overall, age] = res.datasets
-    expect(overall.series).toHaveLength(4)
-    expect(overall.series.find((s) => s.pathogen === 'respiratory-combined')!.points.at(-1)).toEqual(['2026-09-19', 0.6])
-    expect(age.series.map((s) => s.id)).toEqual(['cdc-respnet:respnet-mn-age:rsv:hosp_rate:state:27:age-0-6mo'])
+    const ds = byName(res)
+    expect(ds['respnet-mn'].series).toHaveLength(4)
+    expect(ds['respnet-mn'].series.find((s) => s.pathogen === 'respiratory-combined')!.points.at(-1)).toEqual(['2026-09-19', 0.6])
+    // Empty → the orchestrator does not write it, so the previous COVID age file survives.
+    expect(ds['respnet-mn-age-covid'].series).toEqual([])
+    expect(ds['respnet-mn-age-rsv'].series.map((s) => s.id)).toEqual(['cdc-respnet:respnet-mn-age-rsv:rsv:hosp_rate:state:27:age-0-6mo'])
     expect(res.message).toMatch(/Partial refresh: 6jg4-xsqq/)
+    expect(res.message).toMatch(/previous respnet-mn-age-covid data kept/)
     expect(res.message).toMatch(/PopHIVE mirror/)
     expect((res.diagnostics!['kvib-3txy'] as { via: string }).via).toBe('pophive-mirror')
   })
-  it('builds overall COVID/RSV rates from the dedicated datasets when kvib-3txy is unavailable', async () => {
-    const files: Record<string, { meta: unknown; xz: Buffer }> = {
+
+  it('leaves respnet-mn empty (previous file kept) when kvib-3txy is unavailable', async () => {
+    blockedLive({ '6jg4-xsqq': mirror(COVID_COLS, COVID_LIVE), '29hc-w46k': mirror(RSV_COLS, RSV_LIVE) })
+    const res = await cdcRespnet.run(ctx)
+    const ds = byName(res)
+    // No COVID/RSV-only subset overwriting the four-network file.
+    expect(ds['respnet-mn'].series).toEqual([])
+    expect(ds['respnet-mn-age-covid'].series.map((s) => s.id)).toEqual(['cdc-respnet:respnet-mn-age-covid:covid:hosp_rate:state:27:age-75plus'])
+    expect(ds['respnet-mn-age-rsv'].series.map((s) => s.id)).toEqual(['cdc-respnet:respnet-mn-age-rsv:rsv:hosp_rate:state:27:age-0-6mo'])
+    expect(res.message).toMatch(/Partial refresh: kvib-3txy/)
+    expect(res.message).toMatch(/previous respnet-mn data kept/)
+  })
+
+  it('uses a dedicated dataset for the overall rate when it is fresher than kvib-3txy', async () => {
+    // kvib-3txy one week behind (its 2026-09-19 rows withheld); 6jg4-xsqq current.
+    blockedLive({
+      'kvib-3txy': mirror(KVIB_COLS, KVIB_ROWS.filter((r) => r.date !== '2026-09-19')),
       '6jg4-xsqq': mirror(COVID_COLS, COVID_LIVE),
       '29hc-w46k': mirror(RSV_COLS, RSV_LIVE),
-    }
-    vi.stubGlobal('fetch', async (input: string | URL) => {
-      const url = String(input)
-      if (url.includes('data.cdc.gov')) return new Response('Forbidden', { status: 403 })
-      const m = /respnet\/raw\/([a-z0-9-]+)\.(json|csv\.xz)$/.exec(url)
-      if (m && files[m[1]]) return m[2] === 'json' ? json(files[m[1]].meta) : new Response(files[m[1]].xz)
-      return new Response('not found', { status: 404 })
     })
     const res = await cdcRespnet.run(ctx)
-    const [overall, age] = res.datasets
+    const overall = byName(res)['respnet-mn']
     expect(overall.series.map((s) => [s.pathogen, s.attrs?.dataset, s.points.at(-1)])).toEqual([
       ['covid', '6jg4-xsqq', ['2026-09-19', 0.4]],
+      ['influenza', 'kvib-3txy', ['2026-09-12', 0.2]],
       ['rsv', '29hc-w46k', ['2026-09-19', 0]],
+      ['respiratory-combined', 'kvib-3txy', ['2026-09-12', 0.7]],
     ])
-    expect(age.series.map((s) => s.id)).toEqual([
-      'cdc-respnet:respnet-mn-age:covid:hosp_rate:state:27:age-75plus',
-      'cdc-respnet:respnet-mn-age:rsv:hosp_rate:state:27:age-0-6mo',
-    ])
-    expect(res.message).toMatch(/Partial refresh: kvib-3txy/)
+    expect(res.message).not.toMatch(/Partial refresh/)
   })
 })

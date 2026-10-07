@@ -7,7 +7,7 @@ const profile: PathogenProfile = {
   aka: ['Campylobacteriosis', 'Campy'],
   category: 'gastrointestinal',
   kind: 'bacterium',
-  biofireTargets: ['Campylobacter (C. jejuni/C. coli/C. upsaliensis)'],
+  biofireTargets: ['Campylobacter (jejuni, coli, and upsaliensis)'],
   oneLiner:
     'Minnesota’s most commonly reported bacterial cause of diarrhea, often from undercooked chicken or raw milk. Most recover in a week.',
   overview:
@@ -18,7 +18,7 @@ const profile: PathogenProfile = {
     peakMonths: [6, 7, 8],
   },
   transmission:
-    'Mostly by eating raw or undercooked poultry, or other foods that touched raw poultry or its juices (for example, on a shared cutting board). It also spreads through raw (unpasteurized) milk, untreated water from lakes or streams, and contact with animals and their poop, including poultry, farm animals, and puppies and kittens. It rarely spreads from person to person.',
+    'Mostly by eating raw or undercooked poultry, or other foods that touched raw poultry or its juices (for example, on a shared cutting board). It also spreads through raw (unpasteurized) milk and untreated water from lakes or streams. Touching animals and their poop can spread it too, including poultry, farm animals, and puppies and kittens. It rarely spreads from person to person.',
   incubation: 'Usually 2 to 5 days after exposure.',
   contagiousPeriod:
     'Campylobacter does not commonly spread from person to person, but the germ can stay in stool (poop) for a few weeks after symptoms end. Careful handwashing prevents spread, especially when caring for babies or handling food for others.',
@@ -29,7 +29,7 @@ const profile: PathogenProfile = {
       'Joint pain and swelling weeks later (reactive arthritis)',
       'Ongoing bowel problems after the infection (irritable bowel syndrome, or IBS)',
       'Bloodstream infection, mostly in people with weakened immune systems',
-      'Guillain-Barré syndrome: muscle weakness, tingling, or paralysis that starts days to weeks after the diarrhea (rare; fewer than 2 in every 1,000 cases)',
+      'Guillain-Barré syndrome: muscle weakness, tingling, or paralysis that starts days to weeks after the diarrhea (rare; about 1 in every 1,000 reported cases)',
     ],
     emergencyWarningSigns: [
       'Signs of serious dehydration (losing too much fluid): peeing very little or not at all, a very dry mouth and throat, or feeling dizzy when standing up',
@@ -62,7 +62,7 @@ const profile: PathogenProfile = {
         'Don’t give anti-diarrhea medicine unless your child’s clinician says to.',
         'Make sure kids wash hands after touching animals at farms, fairs, and petting zoos, and after playing with puppies and kittens.',
         'Serve only pasteurized milk.',
-        'Keep kids home from child care or school until diarrhea stops.',
+        'Keep kids home from child care or school until diarrhea stops, and follow the program’s and health department’s return rules.',
       ],
     },
     adults: {
@@ -157,7 +157,7 @@ const profile: PathogenProfile = {
       'Use separate cutting boards for raw meat and for produce, and wash hands, boards, and knives after touching raw poultry.',
       'Drink only pasteurized milk. Raw milk has caused Campylobacter outbreaks in Minnesota.',
       'Don’t drink untreated water from lakes, rivers, or streams; boil, filter, or treat it first.',
-      'Wash hands after touching animals, their food, or their poop, including puppies and kittens.',
+      'Wash hands after touching animals, their food, or their poop, including puppies and kittens. Puppies, including ones sold in pet stores, have been linked to Campylobacter outbreaks, some with drug-resistant strains.',
       'When traveling abroad, follow safe food and water practices.',
     ],
   },
@@ -172,9 +172,9 @@ const profile: PathogenProfile = {
     'If you think food, raw milk, or an event made you sick, also call the MDH Foodborne Illness Hotline at 1-877-FOOD-ILL (1-877-366-3455).',
   ],
   readingTheNumbers:
-    'The BioFire detection rate is the share of GI panel stool tests at participating hospitals and clinics that find Campylobacter. Only people sick enough to see a clinician get tested, so most mild cases are never counted. In Minnesota, Campylobacter reliably rises each summer and falls in the colder months, so a summer climb is expected. A rise that is earlier, steeper, or later in the year than usual can point to an outbreak, which MDH investigates. For an average person, a rising number is not a reason to worry; it’s a reminder to cook poultry thoroughly, keep raw chicken away from other foods, and skip raw milk. MDH case counts have risen in recent years partly because more clinics use fast PCR stool tests. Emergency department data for stomach illness include many causes, not just Campylobacter.',
+    'The BioFire detection rate is the share of GI panel stool tests at participating hospitals and clinics that find Campylobacter. Only people sick enough to see a clinician get tested, so most mild cases are never counted. In Minnesota, Campylobacter reliably rises each summer and falls in the colder months, so a summer climb is expected. A rise that is earlier, steeper, or later in the year than usual can point to an outbreak, which MDH investigates. For an average person, a rising number is not a reason to worry. It’s a reminder to cook poultry thoroughly, keep raw chicken away from other foods, and skip raw milk. MDH case counts have risen in recent years partly because more clinics use fast PCR stool tests. Emergency department data for stomach illness include many causes, not just Campylobacter.',
   watchNotes: [
-    'MDH received its highest-ever number of Campylobacter reports in 2023 (1,831 cases), with cases peaking in August. Part of the rise reflects wider use of fast PCR stool tests; about 63% of reports were confirmed by culture.',
+    'In 2023, MDH received 1,831 Campylobacter reports, the most of any year up to that time, with cases peaking in August. Part of that rise reflected wider use of fast PCR stool tests; about 63% of 2023 reports were confirmed by culture (growing the germ in a lab).',
     'Cases usually peak in late summer and decline through fall. Keep cooking poultry to 165°F at fall gatherings and tailgates.',
     'Minnesota health officials have linked Campylobacter illnesses to raw milk. Pasteurized milk is the safe choice, especially for children, pregnant people, and older adults.',
   ],
@@ -201,10 +201,17 @@ const profile: PathogenProfile = {
       url: 'https://www.health.mn.gov/diseases/reportable/dcn/enteric.html',
     },
     {
-      label: 'CDC MMWR (via PMC): FoodNet incidence and culture-independent tests, 1996–2023',
+      label: 'CDC MMWR (via PMC): FoodNet report on foodborne infection trends and fast (culture-independent) tests',
       url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11221634/',
     },
-    { label: 'BioFire FilmArray GI Panel', url: 'https://www.biofiredx.com/products/the-FilmArray-panels/FilmArraygi/' },
+    {
+      label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
+      url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',
+    },
+    {
+      label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',
+      url: 'https://www.biomerieux.com/corp/en/our-offer/clinical-products/biofire-filmarray-gastrointestinal-panel.html',
+    },
   ],
   lastReviewed: '2026-10-07',
 }

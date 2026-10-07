@@ -2,11 +2,13 @@
 import type { ActivityLevel, CountyMetric, Manifest, MapLayer, PulseFile } from '../../../shared/types'
 import { LEVELS } from '../../../shared/risk'
 import { MN_COUNTIES } from '../../../shared/geo/mnCounties'
-import { formatDate, formatValue, LEVEL_LABEL, LEVEL_VAR, UNIT_SUFFIX } from '../../lib/format'
+import { formatDate, formatValue, LEVEL_LABEL, LEVEL_VAR, metricMeaning, UNIT_SUFFIX } from '../../lib/format'
+import { pathogenName } from '../../content'
 import { LevelBadge, SourceTag, TrendPill } from '../ui'
 import { HatchSwatch } from './MapLegend'
-import { stateSignal } from './CountyPanel'
-import { countyMetricsFor, countyName, countyNames, layerPhrase, levelRank, metricLevel, sitesFor, sourceName, TREND_PHRASE } from './mapData'
+import {
+  countyMetricsFor, countyName, countyNames, layerPhrase, levelRank, metricLevel, sitesFor, sourceName, stateSignal, TREND_PHRASE,
+} from './mapData'
 
 interface Props {
   pulse: PulseFile
@@ -57,15 +59,54 @@ function LevelBar({ counts, noData, total, noun }: { counts: Record<ActivityLeve
   )
 }
 
+/** Statewide pathogen signals (real pulse data) — the fallback when no local data exists. */
+export function StatewideSignals({ pulse, manifest, limit = 5, title = 'Statewide right now' }: { pulse: PulseFile; manifest?: Manifest; limit?: number; title?: string }) {
+  const ps = [...pulse.pathogens].filter((p) => p.primary).sort((a, b) => b.score - a.score).slice(0, limit)
+  if (!ps.length) return null
+  return (
+    <section aria-labelledby="sw-signals">
+      <h3 id="sw-signals" className="mb-1.5 text-sm font-semibold text-ink-1">
+        {title}
+      </h3>
+      <ul className="flex flex-col divide-y divide-[var(--border)] rounded-xl border border-line">
+        {ps.map((p) => {
+          const s = p.primary!
+          return (
+            <li key={p.pathogen} className="flex flex-col gap-1 px-3 py-2">
+              <span className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-sm font-medium text-ink-1">{pathogenName(p.pathogen)}</span>
+                <span className="flex items-center gap-1.5">
+                  <LevelBadge level={p.level} size="sm" />
+                  <TrendPill trend={p.trend} compact />
+                </span>
+              </span>
+              <span className="text-xs text-ink-2">{capitalize(metricMeaning(s.metric, s.latestValue, s.unit).replace(/\bit\b/, pathogenName(p.pathogen)))}</span>
+              <span className="text-xs text-ink-3">
+                Minnesota, week ending {formatDate(s.latestDate, true)} · {sourceName(manifest, s.source)}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
+  )
+}
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 export function StatewidePanel({ pulse, manifest, layer, onSelectCounty }: Props) {
   if (!layer) {
     return (
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight text-ink-1">Across Minnesota</h2>
+      <div className="flex flex-col gap-4">
+        <div>
+          <p className="text-xs font-medium tracking-wide text-ink-3 uppercase">Across Minnesota</p>
+          <h2 className="text-lg font-semibold tracking-tight text-ink-1">No local layers yet</h2>
+        </div>
         <p className="text-sm text-ink-1">{pulse.statewide.headline}</p>
+        <StatewideSignals pulse={pulse} manifest={manifest} />
         <p className="text-sm text-ink-2">
-          County and wastewater-plant layers will appear on the map as soon as they are published by their sources. Until then, select any
-          county on the map (or from the “Where” menu) to see who lives there and which statewide signals apply.
+          County and wastewater-plant layers will appear on the map as soon as their sources publish them. Until then, select any county on the
+          map (or from the “Where” menu) to see who lives there.
         </p>
       </div>
     )

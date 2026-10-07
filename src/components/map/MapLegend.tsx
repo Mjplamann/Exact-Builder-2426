@@ -73,7 +73,7 @@ export function ValueLegend({ bins, unit, counts, noData, title }: { bins: Value
       {/* Contiguous ramp so the order reads at a glance; labels sit below each step. */}
       <ul className="flex flex-wrap items-start gap-y-1.5" aria-label={`${title} legend`}>
         {bins.map((b, i) => (
-          <li key={i} className="flex min-w-16 flex-col gap-1 pr-0.5 text-xs">
+          <li key={i} className="flex min-w-[4.75rem] flex-1 flex-col gap-1 pr-0.5 text-xs sm:max-w-28">
             <span aria-hidden="true" className="block h-3 w-full" style={{ background: b.color, borderRadius: i === 0 ? '3px 0 0 3px' : i === bins.length - 1 ? '0 3px 3px 0' : 0 }} />
             <span className="tabular text-ink-1">{binLabel(b, unit)}</span>
             {counts && <span className="tabular -mt-1 text-ink-3">{counts[i] ?? 0} {counts[i] === 1 ? 'county' : 'counties'}</span>}
@@ -83,7 +83,7 @@ export function ValueLegend({ bins, unit, counts, noData, title }: { bins: Value
           <li className="ml-3 flex flex-col gap-1 text-xs">
             <HatchSwatch size={12} />
             <span className="text-ink-1">No data</span>
-            <span className="tabular -mt-1 text-ink-3">{noData}</span>
+            <span className="tabular -mt-1 text-ink-3">{noData} {noData === 1 ? 'county' : 'counties'}</span>
           </li>
         )}
       </ul>

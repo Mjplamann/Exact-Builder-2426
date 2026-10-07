@@ -69,6 +69,7 @@ export default function PathogensView() {
   }, [items, state.category, deferred])
 
   const liveCount = items.filter((i) => i.live).length
+  const liveVisible = visible.some((v) => v.live)
   const asOf = data?.pulse.pathogens.map((p) => p.asOf).filter(Boolean).sort().at(-1)
   const categoryLabel = state.category === 'all' ? 'all types' : CATEGORY_LABEL[state.category]
 
@@ -116,7 +117,11 @@ export default function PathogensView() {
             />
           </div>
         </div>
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by type of illness">
+        <div
+          className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>button]:shrink-0 [&>button]:whitespace-nowrap"
+          role="group"
+          aria-label="Filter by type of illness"
+        >
           <Pill active={state.category === 'all'} onClick={() => update({ category: 'all' })}>
             All <span className="tabular opacity-75">{items.length}</span>
           </Pill>
@@ -128,27 +133,59 @@ export default function PathogensView() {
         </div>
       </div>
 
-      <p className="text-sm text-ink-2" aria-live="polite">
-        {visible.length === items.length
-          ? `Showing all ${items.length} illnesses`
-          : `Showing ${visible.length} of ${items.length} illnesses (${categoryLabel}${deferred ? `, matching “${deferred}”` : ''})`}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <p className="text-sm text-ink-2" aria-live="polite">
+          {visible.length === items.length
+            ? `Showing all ${items.length} illnesses`
+            : `Showing ${visible.length} of ${items.length} illnesses (${categoryLabel}${deferred ? `, matching “${deferred}”` : ''})`}
+        </p>
+        <p className="flex items-center gap-3 text-xs text-ink-3" aria-hidden="true">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-3 w-3 rounded-[3px] bg-accent" /> Usual peak month
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-3 w-3 rounded-[3px] bg-surface-2 ring-2 ring-ink-1 ring-offset-1 ring-offset-[var(--page)]" /> This month
+          </span>
+        </p>
+      </div>
 
       {visible.length ? (
-        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-label="Illnesses">
-          {visible.map(({ profile, pulse, live, match }) => (
-            <li key={profile.id} className="min-w-0">
-              <PathogenCard
-                profile={profile}
-                pulse={pulse}
-                live={live}
-                match={match || undefined}
-                href={toHash({ ...state, view: 'pathogen', pathogenId: profile.id })}
-                onOpen={() => go('pathogen', profile.id)}
-              />
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-8">
+          {[
+            { key: 'live', title: 'Tracked this week', note: 'Weekly Minnesota data, highest activity first.', list: visible.filter((v) => v.live) },
+            {
+              key: 'guide',
+              title: liveVisible ? 'More illnesses, A to Z' : 'Illnesses, A to Z',
+              note: 'Guides for illnesses without a weekly public Minnesota number.',
+              list: visible.filter((v) => !v.live),
+            },
+          ]
+            .filter((sec) => sec.list.length)
+            .map((sec) => (
+              <section key={sec.key} aria-labelledby={`lib-${sec.key}`}>
+                <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <h2 id={`lib-${sec.key}`} className="text-lg font-semibold tracking-tight text-ink-1">
+                    {sec.title} <span className="text-sm font-normal text-ink-3">{sec.list.length}</span>
+                  </h2>
+                  <p className="text-xs text-ink-3">{sec.note}</p>
+                </div>
+                <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {sec.list.map(({ profile, pulse, live, match }) => (
+                    <li key={profile.id} className="min-w-0">
+                      <PathogenCard
+                        profile={profile}
+                        pulse={pulse}
+                        live={live}
+                        match={match || undefined}
+                        href={toHash({ ...state, view: 'pathogen', pathogenId: profile.id })}
+                        onOpen={() => go('pathogen', profile.id)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+        </div>
       ) : (
         <EmptyState title={deferred ? `No illnesses match “${deferred}”` : 'No illnesses in this group'}>
           <p>Try a different word, such as a symptom (“cough”, “rash”) or another name for the illness.</p>

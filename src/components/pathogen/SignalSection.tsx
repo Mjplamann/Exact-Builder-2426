@@ -1,7 +1,7 @@
 // "Right now in Minnesota": one same-unit trend chart per measure, a "By age" chart when age-specific
 // data exist, and an honest empty state when an illness is not tracked weekly.
 import { useId } from 'react'
-import type { Forecast, Manifest, SignalSummary } from '../../../shared/types'
+import type { Forecast, Manifest, PathogenId, SignalSummary } from '../../../shared/types'
 import type { PathogenProfile } from '../../content/types'
 import { pathogenName } from '../../content'
 import { useAppState } from '../../lib/state'
@@ -10,8 +10,8 @@ import { FilterBar, AUDIENCES } from '../layout/FilterBar'
 import { TrendChart } from '../charts/TrendChart'
 import { Sparkline } from '../charts/Sparkline'
 import { Callout, LevelBadge, SourceTag, TrendPill } from '../ui'
-import { ageDisplay, inlineName, MEASURE_AXIS, MEASURE_EXPLAINER, sourceName } from './meta'
-import { peakPhrase } from './MonthStrip'
+import { ageDisplay, inlineName, MEASURE_AXIS, MEASURE_EXPLAINER, seriesNoun, sourceName, wherePhrase } from './meta'
+import { seasonSentence } from './MonthStrip'
 import { latestOf, type AgeGroupChart, type BuildResult, type Entry, type SignalGroup } from './signals'
 
 const FORECAST_SOURCE: Record<string, string> = {
@@ -23,9 +23,20 @@ const FORECAST_SOURCE: Record<string, string> = {
 
 const forecastName = (f: Forecast) => FORECAST_SOURCE[f.source] ?? f.model
 
+/** Lower-case the first letter unless it starts an acronym ("CDC …" stays). */
+const lowerFirst = (t: string) => (/^[A-Z][a-z]/.test(t) ? t.charAt(0).toLowerCase() + t.slice(1) : t)
+const isoToText = (t: string) => t.replace(/\b(\d{4}-\d{2}-\d{2})\b/g, (d) => formatDate(d, true))
+
 /** Sentence-case the metric meaning and name the illness instead of "it". */
 function meaningFor(e: Entry, profile: PathogenProfile, value: number) {
-  return metricMeaning(e.series.metric, value, e.series.unit).replace(/\bit\b/, inlineName(profile))
+  return metricMeaning(e.series.metric, value, e.series.unit).replace(/\bit\b/, seriesNoun(profile, e.series.pathogen))
+}
+
+/** Region context for non-state places ("HHS Region 5 covers Minnesota and five nearby states"). */
+function regionNote(e: Entry): string | null {
+  const t = e.series.geo.type
+  if (t !== 'hhs-region' && t !== 'census-region') return null
+  return `Regional data ${wherePhrase(e.series.geo).replace(/^in /, 'for ')}; MN Pulse has no Minnesota-only figure for this measure.`
 }
 
 function LevelLine({ e, manifest }: { e: Entry; manifest?: Manifest }) {
@@ -35,7 +46,7 @@ function LevelLine({ e, manifest }: { e: Entry; manifest?: Manifest }) {
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs text-ink-2">
       {l.level && l.level !== 'unknown' && <LevelBadge level={l.level} size="sm" />}
       {l.trend && l.trend !== 'unknown' && <TrendPill trend={l.trend} />}
-      {l.basis && <span>Level based on {l.basis.charAt(0).toLowerCase() + l.basis.slice(1)}.</span>}
+      {l.basis && <span>Level based on {lowerFirst(isoToText(l.basis))}.</span>}
       {l.officialLabel && (
         <span>
           Publisher’s assessment: “{l.officialLabel}”{e.series.official?.by ? ` (${e.series.official.by})` : ''}.
@@ -47,12 +58,21 @@ function LevelLine({ e, manifest }: { e: Entry; manifest?: Manifest }) {
   )
 }
 
-function MeasureDetails({ group, entries }: { group: { metric: SignalGroup['metric'] }; entries: Entry[] }) {
+function MeasureDetails({
+  group,
+  entries,
+  forecasts = [],
+}: {
+  group: { metric: SignalGroup['metric'] }
+  entries: Entry[]
+  forecasts?: Forecast[]
+}) {
   const notes = [...new Set(entries.map((e) => e.series.note).filter((n): n is string => !!n))]
   const provisional = entries.map((e) => e.series.provisionalFrom).filter(Boolean).sort()[0]
   const thresholds = entries.find((e) => !e.muted && e.series.thresholds)?.series.thresholds
+  const models = [...new Set(forecasts.map(forecastName))]
   return (
-    <details className="group mt-2 text-sm text-ink-2">
+    <details className="mt-2 text-sm text-ink-2">
       <summary className="cursor-pointer rounded text-sm font-medium text-accent select-none hover:underline">
         What is this measure?
       </summary>
@@ -63,10 +83,10 @@ function MeasureDetails({ group, entries }: { group: { metric: SignalGroup['metr
             {n}
           </p>
         ))}
-        {thresholds && (
+        {thresholds && <p className="text-ink-3">Activity levels use cut-points from {isoToText(thresholds.by)}.</p>}
+        {models.length > 0 && (
           <p className="text-ink-3">
-            Activity levels use cut-points set by {thresholds.by}: low from {thresholds.low.toFixed(2)}, moderate from{' '}
-            {thresholds.moderate.toFixed(2)}, high from {thresholds.high.toFixed(2)}, very high from {thresholds.veryHigh.toFixed(2)}.
+            Forecast: {models.join('; ')}. Forecasts look a few weeks ahead and are least reliable when a season is turning.
           </p>
         )}
         {provisional && <p className="text-ink-3">Weeks from {formatDate(provisional, true)} on are preliminary and may be revised.</p>}
@@ -119,6 +139,7 @@ function GroupCard({ group, profile, manifest }: { group: SignalGroup; profile: 
           })}
         </p>
       )}
+      {regionNote(lead) && <p className="mt-1 text-xs text-ink-3">{regionNote(lead)}</p>}
       <div className="mt-2">
         <LevelLine e={lead} manifest={manifest} />
       </div>
@@ -132,13 +153,6 @@ function GroupCard({ group, profile, manifest }: { group: SignalGroup; profile: 
           ariaLabel={`${METRIC_LABEL[group.metric]} for ${profile.shortName}, weekly: ${group.entries.map((e) => e.name).join(', ')}`}
         />
       </div>
-      {group.forecasts.length > 0 && (
-        <p className="mt-2 text-xs text-ink-3">
-          The shaded band after the last reported week is a forecast ({[...new Set(group.forecasts.map(forecastName))].join('; ')}): the
-          line is the most likely value and the band shows the range it will probably fall within. Forecasts are often wrong when a
-          season is turning.
-        </p>
-      )}
       {group.hidden > 0 && (
         <p className="mt-2 text-xs text-ink-3">
           {group.hidden} more related {group.hidden === 1 ? 'series is' : 'series are'} on the{' '}
@@ -148,7 +162,7 @@ function GroupCard({ group, profile, manifest }: { group: SignalGroup; profile: 
           .
         </p>
       )}
-      <MeasureDetails group={group} entries={group.entries} />
+      <MeasureDetails group={group} entries={group.entries} forecasts={group.forecasts} />
     </article>
   )
 }
@@ -213,14 +227,14 @@ function AgeCard({ chart, profile, manifest, multiple }: { chart: AgeGroupChart;
   )
 }
 
-function OrphanSignal({ s, profile }: { s: SignalSummary; profile: PathogenProfile }) {
+function OrphanSignal({ s, pathogen, profile }: { s: SignalSummary; pathogen: PathogenId; profile: PathogenProfile }) {
   return (
     <li className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line p-3">
       <div className="min-w-0">
         <p className="text-sm font-medium text-ink-1">{s.label}</p>
         <p className="text-sm text-ink-2">
           {s.geo.name}, week ending {formatDate(s.latestDate, true)}:{' '}
-          {metricMeaning(s.metric, s.latestValue, s.unit).replace(/\bit\b/, inlineName(profile))}.
+          {metricMeaning(s.metric, s.latestValue, s.unit).replace(/\bit\b/, seriesNoun(profile, pathogen))}.
         </p>
         <div className="mt-1 flex flex-wrap items-center gap-2">
           {s.level !== 'unknown' && <LevelBadge level={s.level} size="sm" />}
@@ -252,9 +266,7 @@ export function NoDataCallout({ profile }: { profile: PathogenProfile }) {
       </p>
       <p className="mt-2 font-medium text-ink-1">What to watch for instead</p>
       <ul className="mt-1 list-disc space-y-1 pl-5">
-        <li>
-          Its usual season in Minnesota (usually peaks: {peakPhrase(profile.seasonality.peakMonths)}). {profile.seasonality.summary}
-        </li>
+        <li>{seasonSentence(profile.seasonality.peakMonths)}</li>
         <li>{WATCH_BY_CATEGORY[profile.category]}</li>
         <li>The symptoms and emergency warning signs listed below.</li>
         {profile.watchNotes?.length ? <li>Current notes under “What’s new” on this page.</li> : null}
@@ -295,8 +307,8 @@ export function SignalSection({ profile, result, manifest }: { profile: Pathogen
           <h3 className="text-base font-semibold text-ink-1">Latest figures</h3>
           <p className="mb-2 text-xs text-ink-3">The full history for these measures did not load; showing the latest summary only.</p>
           <ul className="space-y-2">
-            {orphans.map((s) => (
-              <OrphanSignal key={s.seriesId} s={s} profile={profile} />
+            {orphans.map((o) => (
+              <OrphanSignal key={o.signal.seriesId} s={o.signal} pathogen={o.pathogen} profile={profile} />
             ))}
           </ul>
         </div>

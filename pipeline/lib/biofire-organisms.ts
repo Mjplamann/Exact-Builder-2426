@@ -199,10 +199,32 @@ export interface TextOrganismHit {
   def: OrganismDef
   index: number
   length: number
+  /**
+   * True for plain "adenovirus" when the panel is unknown: it could be respiratory adenovirus or GI
+   * Adenovirus F40/41, so callers must not use the value.
+   */
+  ambiguous?: boolean
 }
 
-/** Find organism mentions in free text, longest phrase first, without overlaps. */
-export function findOrganismsInText(text: string): TextOrganismHit[] {
+/** Panel named explicitly in a piece of text ("GI panels", "gastrointestinal", "respiratory panel", "RP2.1"). */
+export function panelInText(text: string): BiofirePanel | undefined {
+  const gi = /\b(?:GI|gastrointestinal)\s+(?:panels?|tests?|testing|pathogens?|results?|samples?|specimens?)\b|\bgastrointestinal\b|\bgastroenteritis\b|\bstool\b/i.test(text)
+  const rp = /\brespiratory\s+(?:panels?|tests?|testing|pathogens?|results?|samples?|specimens?|viruses?|season)\b|\bRP2(?:\.1)?\b/i.test(text)
+  return gi === rp ? undefined : gi ? 'GI' : 'RP'
+}
+
+/** Panel from a report file name ("...-Respiratory-Report-...", "...-GI-Report-..."). */
+export function panelFromName(name: string): BiofirePanel | undefined {
+  const gi = /gastro|(?:^|[^A-Za-z])GI(?:[^A-Za-z]|$)/i.test(name)
+  const rp = /respiratory|(?:^|[^A-Za-z])RP(?:2|[^A-Za-z]|$)/i.test(name)
+  return gi === rp ? undefined : gi ? 'GI' : 'RP'
+}
+
+/**
+ * Find organism mentions in free text, longest phrase first, without overlaps. Plain "adenovirus" is the
+ * respiratory target on the RP panel, Adenovirus F40/41 on the GI panel, and `ambiguous` when `panel` is unknown.
+ */
+export function findOrganismsInText(text: string, panel?: BiofirePanel): TextOrganismHit[] {
   const taken: boolean[] = new Array(text.length).fill(false)
   const hits: TextOrganismHit[] = []
   for (const p of TEXT_PATTERNS) {
@@ -215,7 +237,12 @@ export function findOrganismsInText(text: string): TextOrganismHit[] {
       for (let i = start; i < end; i++) if (taken[i]) { free = false; break }
       if (!free) continue
       for (let i = start; i < end; i++) taken[i] = true
-      hits.push({ def: p.def, index: start, length: m[0].length })
+      const hit: TextOrganismHit = { def: p.def, index: start, length: m[0].length }
+      if (p.def.code === 'ADV') {
+        if (panel === 'GI') hit.def = ORGANISM_BY_CODE.get('ADV_F4041')!
+        else if (!panel) hit.ambiguous = true
+      }
+      hits.push(hit)
     }
   }
   return hits.sort((a, b) => a.index - b.index)

@@ -11,7 +11,7 @@ const profile: PathogenProfile = {
   oneLiner:
     'A common cause of food poisoning from undercooked poultry, eggs, produce, and animal contact. Most people recover in 4–7 days.',
   overview:
-    'Salmonella is a group of bacteria that causes diarrhea, fever, and stomach cramps (an illness called salmonellosis). People usually get it from contaminated food or from touching animals such as chicks, ducklings, turtles, and other reptiles. Most people get better on their own in 4 to 7 days, but babies, older adults, and people with weakened immune systems can get very sick if the infection spreads beyond the gut. This page covers the common food-related types of Salmonella, not typhoid fever.',
+    'Salmonella is a group of bacteria that causes diarrhea, fever, and stomach cramps (an illness called salmonellosis). People usually get it from contaminated food or from touching animals such as chicks, ducklings, turtles, and other reptiles. Most people get better on their own in 4 to 7 days, but babies, older adults, and people with weakened immune systems can get very sick. This page covers the common food-related types of Salmonella, not typhoid fever.',
   seasonality: {
     summary:
       'Salmonella can strike any time of year, but Minnesota cases climb in summer and stay high into early fall. Warm weather helps bacteria grow on food left out too long, and cookouts, picnics, and fairs add risk. Spring and early summer also bring illnesses linked to backyard chicks and ducklings.',
@@ -46,7 +46,7 @@ const profile: PathogenProfile = {
     infants: {
       risk: 'highest',
       summary:
-        'Babies younger than 12 months are more likely to get seriously ill, and the infection can spread to the blood. They also get dehydrated quickly. CDC recommends antibiotic treatment for infants with Salmonella.',
+        'Babies get dehydrated quickly, and the infection is more likely to spread to the blood, especially before 3 months of age. CDC recommends antibiotics for babies younger than 12 months; the American Academy of Pediatrics recommends them mainly for babies younger than 3 months or with certain health problems. Your baby’s clinician will decide.',
       actions: [
         'Call your baby’s clinician right away for diarrhea with fever, blood in the stool, or fewer wet diapers.',
         'Get care right away for any fever of 100.4°F (38°C) or higher in a baby younger than 3 months.',
@@ -63,7 +63,7 @@ const profile: PathogenProfile = {
         'Offer small, frequent sips of fluids; use an oral rehydration solution if your child is losing a lot of fluid.',
         'Don’t give anti-diarrhea medicine unless your child’s clinician says it’s OK.',
         'Don’t let children under 5 handle chicks, ducklings, turtles, or other reptiles; older kids should wash hands right after.',
-        'Keep kids home from child care or school until diarrhea stops, or longer if the health department asks.',
+        'Keep kids home from child care or school until diarrhea stops, and follow the program’s and health department’s return rules.',
         'Supervise handwashing with soap and water after the bathroom and before eating.',
       ],
     },
@@ -73,7 +73,7 @@ const profile: PathogenProfile = {
         'Most healthy adults have a few days to a week of diarrhea, fever, and cramps and recover without treatment.',
       actions: [
         'Rest and drink plenty of fluids.',
-        'Call your clinician if symptoms last more than 2 days or include a high fever or blood.',
+        'Call your clinician if diarrhea lasts more than 3 days or comes with a high fever or blood.',
         'Stay home from work while you have diarrhea; food, child care, and health care workers should check with their employer or health department before going back.',
         'Cook poultry to 165°F and eggs until firm, and check with a food thermometer.',
       ],
@@ -114,7 +114,7 @@ const profile: PathogenProfile = {
     immunocompromised: {
       risk: 'highest',
       summary:
-        'People with weakened immune systems (for example, from HIV, chemotherapy, an organ transplant, or medicines that suppress the immune system) are more likely to develop serious bloodstream infections. CDC recommends antibiotic treatment for this group.',
+        'People with weakened immune systems are more likely to get a serious bloodstream infection. This includes people with HIV, an organ transplant, or chemotherapy or other medicines that weaken the immune system; people with sickle cell disease are also at higher risk. CDC recommends antibiotics for people with weakened immune systems.',
       actions: [
         'Call your care team at the first sign of diarrhea with fever.',
         'Ask whether you need a stool test and antibiotics.',
@@ -125,7 +125,7 @@ const profile: PathogenProfile = {
   },
   treatment: {
     summary:
-      'Most people get better in 4 to 7 days without treatment. The most important care is replacing lost fluids. Antibiotics are saved for severe illness and for people at higher risk of the infection spreading. Some Salmonella strains resist common antibiotics, so a lab test can show which medicines will work.',
+      'Most people get better in 4 to 7 days without treatment. The most important care is replacing lost fluids. Antibiotics are saved for severe illness and for people at higher risk of the infection spreading. For mild illness, they don’t speed recovery much and can make the germ stay in your stool longer. Some Salmonella strains resist common antibiotics, so a lab test can show which medicines will work.',
     options: [
       {
         name: 'Fluids and oral rehydration',
@@ -138,8 +138,8 @@ const profile: PathogenProfile = {
         name: 'Antibiotics',
         type: 'antibiotic',
         detail:
-          'Not needed for most people. CDC recommends antibiotics for severe illness and for groups at higher risk of serious infection. Because some strains are drug-resistant, labs may test which antibiotics will work.',
-        who: 'People with severe illness, infants younger than 12 months, adults 65 and older, adults over 50 with medical problems such as heart disease, and people with weakened immune systems.',
+          'Not needed for most people. For mild illness, antibiotics usually don’t help you get better faster, and they can make the germ stay in your stool longer. CDC recommends them for severe illness and for groups at higher risk of serious infection. Clinicians may also consider them for people with sickle cell disease or with artificial joints, heart valves, or blood-vessel grafts. Because some strains are drug-resistant, labs may test which antibiotics will work.',
+        who: 'People with severe illness, babies, adults 65 and older, adults over 50 with medical problems such as heart disease, and people with weakened immune systems. For babies, CDC says younger than 12 months; the American Academy of Pediatrics focuses on younger than 3 months.',
       },
       {
         name: 'Anti-diarrhea medicines (such as loperamide)',
@@ -173,21 +173,21 @@ const profile: PathogenProfile = {
   testing:
     'A stool (poop) test confirms Salmonella. Many clinics now use fast multiplex PCR panels, such as the BioFire GI Panel, that check one sample for many germs at once. The lab may also grow the bacteria (culture) to see which antibiotics work. Minnesota labs send positive samples to the MDH Public Health Laboratory, where genetic fingerprinting (whole genome sequencing) links cases and helps find outbreaks. Blood tests are used if a bloodstream infection is suspected. There are no home tests.',
   whenToSeekCare: [
-    'Call your clinician if diarrhea or vomiting lasts more than 2 days.',
-    'Call your clinician for bloody diarrhea (or blood in your urine) or a fever higher than 102°F.',
-    'Call early if the sick person is a baby, an adult 65 or older, pregnant, or has a weakened immune system.',
+    'Call your clinician if diarrhea lasts more than 3 days or isn’t getting better.',
+    'Call your clinician for bloody diarrhea or a fever higher than 102°F.',
+    'Call early if the sick person is a baby, 65 or older, or pregnant. Also call early for anyone with a weakened immune system, sickle cell disease, or an artificial joint, heart valve, or blood-vessel graft.',
     'Call if you notice early signs of dehydration, such as feeling very thirsty or peeing less than usual.',
     'Go to urgent care (or call your clinic’s nurse line) the same day if you can’t keep fluids down for several hours or symptoms are getting worse quickly.',
     'If you think food from a restaurant, store, or event made you sick, also call the MDH Foodborne Illness Hotline at 1-877-FOOD-ILL (1-877-366-3455).',
   ],
   readingTheNumbers:
-    'The BioFire detection rate is the share of GI panel stool tests at participating hospitals and clinics that find Salmonella. Only people sick enough to see a clinician get tested, often for fever, bloody diarrhea, or diarrhea lasting several days, so most mild cases are never counted. Salmonella detections usually rise in summer and early fall and are lower in winter. A rising number means more of the diarrhea being tested is caused by Salmonella, which can signal a normal seasonal increase or an outbreak. It does not mean your own risk is high; it’s a good reminder to cook food thoroughly, keep raw meat separate, refrigerate leftovers, and wash hands after touching animals. MDH case counts can rise partly because more clinics use fast PCR tests, not only because more people are sick. Emergency department data for stomach illness include many causes (mostly viruses like norovirus in winter), not just Salmonella.',
+    'The BioFire detection rate is the share of GI panel stool tests at participating hospitals and clinics that find Salmonella. Only people sick enough to see a clinician get tested, often for fever, bloody diarrhea, or diarrhea lasting several days, so most mild cases are never counted. Salmonella detections usually rise in summer and early fall and are lower in winter. A rising number means more of the diarrhea being tested is caused by Salmonella, which can signal a normal seasonal increase or an outbreak. It does not mean your own risk is high. It’s a good reminder to cook food thoroughly, keep raw meat separate, refrigerate leftovers, and wash hands after touching animals. MDH case counts can rise partly because more clinics use fast PCR tests, not only because more people are sick. Emergency department data for stomach illness include many causes (mostly viruses like norovirus in winter), not just Salmonella.',
   watchNotes: [
-    'A multistate Salmonella outbreak linked to fresh jalapeño peppers grown in Sinaloa, Mexico, sickened people in many states in summer 2026, with Minnesota among the hardest hit (more than 100 cases). The peppers were recalled, and CDC declared the outbreak over on October 2, 2026.',
+    'In summer 2026, a multistate Salmonella outbreak was linked to fresh jalapeño peppers grown in Sinaloa, Mexico. Minnesota was among the states affected. The peppers were recalled, and CDC declared the outbreak over on October 2, 2026.',
     'Alfalfa sprouts from Minneapolis grower Everything Sprouts (Calco and Everything Sprouts brands) were linked in August 2026 to a multistate outbreak of both Salmonella and Shiga toxin–producing E. coli. Don’t eat recalled sprouts; throw them away.',
     'CDC’s 2026 Salmonella outbreaks linked to backyard chicks and ducklings sickened more than 1,000 people nationwide, about 1 in 5 of them children younger than 5. Minnesota helped investigate. CDC declared the outbreaks over in September 2026, but backyard flocks can carry Salmonella at any time.',
-    'In 2026, MDH linked Minnesota Salmonella cases to powdered greens dietary supplements, including products made with moringa leaf powder. Small pet turtles also continue to cause Salmonella outbreaks, including one CDC reported in 2026.',
-    'If MDH calls you after a positive test, please take the call. MDH interviews people with Salmonella to find outbreak sources quickly; its long-running student interview team is nicknamed “Team Diarrhea.”',
+    'In 2026, MDH linked Minnesota Salmonella cases to powdered greens dietary supplements, including products made with moringa leaf powder. Small pet turtles have also caused Salmonella outbreaks again and again. CDC advises against pet turtles in homes with children under 5, adults 65 and older, or people with weakened immune systems.',
+    'If MDH calls you after a positive test, please take the call. Interviews help MDH find outbreak sources quickly.',
   ],
   sources: [
     { label: 'CDC: Symptoms of Salmonella Infection', url: 'https://www.cdc.gov/salmonella/signs-symptoms/index.html' },
@@ -209,7 +209,7 @@ const profile: PathogenProfile = {
       label: 'CDC: E. coli and Salmonella Outbreak Linked to Alfalfa Sprouts (2026)',
       url: 'https://www.cdc.gov/ecoli/outbreaks/alfalfa-sprouts-08-26/index.html',
     },
-    { label: 'CDC: Salmonella Outbreak Linked to Turtles (2026)', url: 'https://cdc.gov/salmonella/outbreaks/turtles-08-26/index.html' },
+    { label: 'CDC: Salmonella Outbreak Linked to Turtles (2026)', url: 'https://www.cdc.gov/salmonella/outbreaks/turtles-08-26/index.html' },
     {
       label: 'CDC MMWR: Enteric Disease Outbreaks Associated with Animal Contact',
       url: 'https://www.cdc.gov/mmwr/volumes/74/ss/ss7403a1.htm',
@@ -228,7 +228,14 @@ const profile: PathogenProfile = {
       label: 'MDH: STEC and Salmonella cases linked to alfalfa sprouts (2026)',
       url: 'https://www.health.state.mn.us/news/pressrel/2026/ecoli082026.html',
     },
-    { label: 'BioFire FilmArray GI Panel', url: 'https://www.biofiredx.com/products/the-FilmArray-panels/FilmArraygi/' },
+    {
+      label: 'MDH: Specific disease exclusion guidelines for child care and preschool',
+      url: 'https://www.health.state.mn.us/diseases/foodborne/exclusions.html',
+    },
+    {
+      label: 'bioMérieux: BioFire FilmArray Gastrointestinal (GI) Panel',
+      url: 'https://www.biomerieux.com/corp/en/our-offer/clinical-products/biofire-filmarray-gastrointestinal-panel.html',
+    },
   ],
   lastReviewed: '2026-10-07',
 }

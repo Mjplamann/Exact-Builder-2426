@@ -16,10 +16,19 @@ import type { ActivityLevel, GeoRef, MetricKind, PathogenId, Point, Series, Tren
 import { METRIC_UNITS } from '../../shared/types.ts'
 import { mmwrWeekEnding, weekEndingSaturday, weeksInMmwrYear } from '../../shared/mmwr.ts'
 import { num } from './csv.ts'
-import { roundValue, STATE_GEO } from './series.ts'
+import { roundValue as roundFixed, STATE_GEO } from './series.ts'
 import {
   countiesCentroid, countyGeo, countyList, detectRegionScheme, plantCounty, regionGeo, regionToken, type RegionScheme,
 } from './mdh-geo.ts'
+
+/**
+ * Round like series.ts, except wastewater concentrations: PMMoV-normalized ratios are often ~1e-3–1e-6,
+ * which fixed 3-decimal rounding would erase, so those keep 4 significant figures.
+ */
+export function roundValue(v: number, metric: MetricKind): number {
+  if (metric === 'wastewater_conc' && v !== 0 && Math.abs(v) < 100) return Number(v.toPrecision(4))
+  return roundFixed(v, metric)
+}
 
 // ───────────────────────── Text helpers ─────────────────────────
 
@@ -86,7 +95,7 @@ const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', '
 
 /** Parse a date cell (ISO, ISO datetime, M/D/YYYY, M/D/YY, "Oct 4, 2025") to ISO; null otherwise. */
 export function parseDateCell(raw: string): string | null {
-  const s = raw.trim()
+  const s = raw.trim().replace(/^(week\s+(ending|ended|of|beginning|starting)|w\/e|we)\s*:?\s*/i, '')
   let y: number
   let mo: number
   let d: number
@@ -161,7 +170,7 @@ export type Role =
   | 'bare'
   | 'unknown'
 
-const FILLER = /\b(weekly|week|wk|mn|minnesota|statewide|state|the|of|in|for|by|and|or|virus|viruses|data|total|all|type|subtype|season|series|value|values|region|district|county)\b/g
+const FILLER = /\b(weekly|week|wk|mn|minnesota|statewide|state|the|of|in|for|by|and|or|virus|viruses|data|total|all|overall|combined|type|subtype|season|series|value|values|region|district|county)\b/g
 
 /** True when a header names only a pathogen/place/season (no measure words). */
 function isBare(h: string): boolean {
@@ -360,9 +369,12 @@ interface Col {
   raw: string
   h: string
   nonEmpty: number
+  /** Cells that parse as numbers or are suppression/pending markers ("<5", "*", "NA", "Data pending"). */
   numeric: number
   distinct: string[]
 }
+
+const SUPPRESSED = /^(na|n\/a|nan|-+|—|–|\*+|<\s*\d+(\.\d+)?|suppressed|pending|data pending|not available|\.|x)$/i
 
 type DateStrategy =
   | { kind: 'date'; col: number }
@@ -389,11 +401,14 @@ function detectDates(cols: Col[], rows: string[][]): { strategy: DateStrategy | 
   const used = new Set<number>()
   const dateCols = cols.filter((c) => c.nonEmpty > 0 && share(c, rows, parseDateCell) >= 0.8)
   for (const c of dateCols) used.add(c.idx)
+  // Prefer week-ending columns ("week_end", "mmwr_enddate", "Week Ending"), then generic week/date
+  // columns, then week-start columns; report/update dates are bookkeeping.
+  const bookkeeping = /\b(report|reported|updated|update|as of|run|extract|load|publish|published)\b/
   const pick =
-    dateCols.find((c) => /\b(end|ending|ended)\b/.test(c.h)) ??
-    dateCols.find((c) => /\b(week|date|mmwr|period)\b/.test(c.h) && !/\b(start|begin|beginning|report|updated|as of)\b/.test(c.h)) ??
-    dateCols.find((c) => /\b(start|begin|beginning)\b/.test(c.h)) ??
-    dateCols.find((c) => !/\b(report|updated|as of|run|extract)\b/.test(c.h))
+    dateCols.find((c) => /end(ing|ed|date)?\b/.test(c.h) && !bookkeeping.test(c.h)) ??
+    dateCols.find((c) => /\b(week|date|mmwr|period)/.test(c.h) && !/start|begin/.test(c.h) && !bookkeeping.test(c.h)) ??
+    dateCols.find((c) => /start|begin/.test(c.h)) ??
+    dateCols.find((c) => !bookkeeping.test(c.h))
   const weekish = (c: Col) => /\b(week|wk|mmwr|epiweek|epi week|yrwk|yearweek|year week|period)\b/.test(c.h)
   const ywCols = cols.filter((c) => weekish(c) && share(c, rows, parseYearWeek) >= 0.8)
   for (const c of ywCols) used.add(c.idx)
@@ -446,7 +461,7 @@ function describeStrategy(s: DateStrategy, cols: Col[]): string {
   }
 }
 
-const isNumericCol = (c: Col) => c.nonEmpty > 0 && c.numeric / c.nonEmpty >= 0.6
+const isNumericCol = (c: Col) => c.nonEmpty > 0 && c.numeric / c.nonEmpty >= 0.6 && c.distinct.some((v) => num(v) != null)
 
 interface GeoPlan {
   level: 'state' | 'region' | 'county' | 'site'
@@ -578,7 +593,7 @@ function normalizeInner(
       const v = (r[idx] ?? '').trim()
       if (!v) continue
       nonEmpty++
-      if (num(v) != null) numeric++
+      if (num(v) != null || SUPPRESSED.test(v)) numeric++
       if (seen.size < 200) seen.add(v)
     }
     return { idx, raw, h: normHeader(raw), nonEmpty, numeric, distinct: [...seen] }
@@ -832,6 +847,7 @@ function normalizeInner(
     (pathogenCol?.distinct.some((v) => detectPathogens(v).includes('covid')) ?? false)
   interface VCol {
     col: Col
+    proportion?: boolean
     role: Role
     hits: PathogenHit[]
     variant?: string
@@ -855,7 +871,10 @@ function normalizeInner(
         continue
       }
     }
-    vcols.push({ col: c, role: season != null && isBare(label) ? 'bare' : headerRole(label), hits: detectPathogens(label), variant: variantOf(label), headerGeo, season })
+    // In a week × season matrix a column labelled only by its season (plus filler) is a bare value column.
+    const seasonOnly = season != null && normHeader(label).replace(FILLER, ' ').trim() === ''
+    const proportion = /\b(proportion|prop|fraction)\b/.test(normHeader(label)) && !/%|percent|pct/.test(normHeader(label))
+    vcols.push({ col: c, proportion, role: seasonOnly || (season != null && isBare(label)) ? 'bare' : headerRole(label), hits: detectPathogens(label), variant: variantOf(label), headerGeo, season })
   }
 
   // 6) Rows → raw observations.
@@ -935,8 +954,9 @@ function normalizeInner(
     let used = false
     for (const v of vcols) {
       const cell = r[v.col.idx] ?? ''
-      const value = num(cell)
-      if (value == null) continue
+      const raw = num(cell)
+      if (raw == null) continue
+      let value = raw
       let date = d0
       if (strategy.kind === 'seasonMatrix') {
         const w = weekNumber(r[strategy.weekCol] ?? '')!
@@ -974,6 +994,8 @@ function normalizeInner(
         setStatus(v, res.reason ?? 'no pathogen in header, row or link text', undefined, metric)
         continue
       }
+      // Only an explicit "proportion"/"fraction" header for a percentage measure is rescaled to percent.
+      if (v.proportion && METRIC_UNITS[metric] === '%') value = raw * 100
       if (metric === 'ili_pct' && pathogen !== 'ili') {
         setStatus(v, 'ILI percentage with a pathogen-specific label', pathogen, metric)
         continue

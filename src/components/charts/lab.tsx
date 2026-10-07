@@ -80,6 +80,19 @@ function Lab() {
         <Panel title="COVID — admissions, provisional flag (lab)" sub="6 mo, last 3 weeks flagged provisional">
           <TrendChart ariaLabel="COVID hospital admissions" series={covAdmProv.map((s) => ({ series: s, name: 'Minnesota' }))} range="6m" />
         </Panel>
+        <Panel title="Flu, COVID, RSV — ER visits (6 mo)" sub="3 series, 3 forecasts → grouped legend toggle">
+          <TrendChart
+            ariaLabel="Share of ER visits for flu, COVID-19 and RSV"
+            series={[
+              ...fluEdMn.map((s) => ({ series: s, name: 'Flu' })),
+              ...covEdMn.map((s) => ({ series: s, name: 'COVID-19' })),
+              ...pick('cdc-hubs:nssp-ed-state:rsv:ed_visit_pct:state:27').map((s) => ({ series: s, name: 'RSV' })),
+            ]}
+            forecasts={fc}
+            range="6m"
+            showThresholds={false}
+          />
+        </Panel>
         <Panel title="Table view" sub="defaultView = table">
           <TrendChart
             ariaLabel="COVID ER visits table"
@@ -107,9 +120,9 @@ function Lab() {
             </li>
           ))}
           <li className="flex items-center justify-between gap-3 rounded-lg border border-line p-2">
-            <span className="text-xs text-ink-2">Gaps (RSV, early weeks null)</span>
+            <span className="text-xs text-ink-2">Gaps (missing weeks)</span>
             <span className="shrink-0 text-ink-2">
-              <Sparkline points={rsvAdm[0]?.points.slice(60, 85) ?? []} label="RSV with gaps" />
+              <Sparkline points={gapSample(fluRate[0]?.points ?? [])} label="Flu hospitalization rate with missing weeks" />
             </span>
           </li>
           <li className="flex items-center justify-between gap-3 rounded-lg border border-line p-2">
@@ -130,6 +143,12 @@ function Lab() {
       </Card>
     </div>
   )
+}
+
+/** A real 20-week window that contains a missing (null) week, to check gap handling. */
+function gapSample(points: Series['points']): Series['points'] {
+  const i = points.findIndex((p, k) => p[1] == null && k > 0 && points[k - 1][1] != null)
+  return i < 0 ? [] : points.slice(Math.max(0, i - 10), i + 10)
 }
 
 function Panel({ title, sub, children }: { title: string; sub: string; children: ReactNode }) {

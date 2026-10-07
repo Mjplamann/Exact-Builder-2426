@@ -119,6 +119,39 @@ export interface RtEstimate {
 
 export const STATE_COLUMNS = ['as_of', 'disease', 'state', 'date', 'median', 'lower', 'upper', 'interval_width', 'p_growing', 'category']
 const STATE_REQUIRED = ['as_of', 'disease', 'date', 'median', 'category']
+/** Columns that are blank on 'Not Estimated' rows (and therefore absent from SODA JSON rows). */
+const STATE_VALUE_COLUMNS = new Set(['median', 'lower', 'upper', 'interval_width', 'p_growing'])
+
+export interface SchemaCheck {
+  /** Field names present in at least one row. */
+  seen: string[]
+  /** Expected columns neither present in any row nor declared in the dataset metadata. */
+  missing: string[]
+  missingRequired: string[]
+  /** Declared columns that no row carries a value for (informational). */
+  noValues: string[]
+}
+
+/**
+ * Check 5dqz-y4ea rows for schema drift. data.cdc.gov's JSON omits fields whose value is null, and
+ * Minnesota's 'Not Estimated' rows (blank median/lower/upper/p_growing) come first in the dataset's
+ * natural order, so every row is scanned and the dataset's declared columns (view metadata, when
+ * available) count as present. Without metadata, a blank value column is only treated as missing
+ * when some row has an estimated trend category — i.e. a value was expected but never appeared.
+ */
+export function checkStateSchema(rows: Record<string, string>[], declared?: string[]): SchemaCheck {
+  const seen = new Set<string>()
+  for (const r of rows) for (const k of Object.keys(r)) seen.add(k)
+  const known = new Set([...seen, ...(declared ?? [])])
+  const estimated = rows.some((r) => trendOf(r.category) != null)
+  const missing = STATE_COLUMNS.filter((c) => !known.has(c) && (declared?.length || estimated || !STATE_VALUE_COLUMNS.has(c)))
+  return {
+    seen: [...seen],
+    missing,
+    missingRequired: STATE_REQUIRED.filter((c) => missing.includes(c)),
+    noValues: (declared ?? []).filter((c) => STATE_COLUMNS.includes(c) && !seen.has(c)),
+  }
+}
 
 export interface ParseStats {
   rows: number
@@ -198,13 +231,24 @@ export function newestPerDate(estimates: RtEstimate[]): Map<string, RtEstimate[]
   return out
 }
 
-/** The newest model run per (location, pathogen) and its category — reported when it published no estimate. */
-export function newestRuns(estimates: RtEstimate[]): Map<string, { asOf: string; category: string }> {
-  const out = new Map<string, { asOf: string; category: string }>()
+export interface RunInfo {
+  asOf: string
+  category: string
+  /** First date in the run's estimation window (also when the run estimated nothing). */
+  start: string
+}
+
+/**
+ * The newest model run per (location, pathogen): its category (reported when it published no
+ * estimate) and the start of its window (which dates the next weekly run will revise).
+ */
+export function newestRuns(estimates: RtEstimate[]): Map<string, RunInfo> {
+  const out = new Map<string, RunInfo>()
   for (const e of estimates) {
     const key = `${e.loc}|${e.pathogen}`
     const prev = out.get(key)
-    if (!prev || e.asOf > prev.asOf) out.set(key, { asOf: e.asOf, category: e.category })
+    if (!prev || e.asOf > prev.asOf) out.set(key, { asOf: e.asOf, category: e.category, start: e.date })
+    else if (e.asOf === prev.asOf && e.date < prev.start) prev.start = e.date
   }
   return out
 }
@@ -235,13 +279,15 @@ export interface BuildOptions {
   /** Prefix for the provenance attribute, e.g. "data.cdc.gov 5dqz-y4ea". */
   provenance: string
   /** Newest model run for this location/pathogen (from `newestRuns`), to flag a newer blank run. */
-  newestRun?: { asOf: string; category: string }
+  newestRun?: RunInfo
 }
 
 /**
  * Build one weekly Rt series from newest-per-date daily estimates (sorted ascending). `official`
  * is CDC's epidemic-trend category from the model run behind the latest estimated day, so the
- * label always describes the newest value shown.
+ * label always describes the newest value shown. CDC publishes no activity level for Rt (it is a
+ * direction-of-spread measure), so `official.level` is always 'unknown' — this stops the analysis
+ * from ranking Rt against its own history and calling it "high activity".
  */
 export function buildRtSeries(daily: RtEstimate[], opts: BuildOptions): Series | null {
   const kept = daily.filter((e) => weekEndingSaturday(e.date) >= opts.historyStart)
@@ -253,7 +299,11 @@ export function buildRtSeries(daily: RtEstimate[], opts: BuildOptions): Series |
   const lastWeek = weekEndingSaturday(last.date)
   const finalWeek = points[points.length - 1][0]
   // Each weekly run re-estimates its whole window except the first week of the previous window.
-  const runStart = kept.filter((e) => e.asOf === last.asOf).reduce((m, e) => (e.date < m ? e.date : m), last.date)
+  // Use the newest run's window even when that run was blank: the next run revises from there.
+  const runStart =
+    opts.newestRun && opts.newestRun.asOf >= last.asOf
+      ? opts.newestRun.start
+      : kept.filter((e) => e.asOf === last.asOf).reduce((m, e) => (e.date < m ? e.date : m), last.date)
   const nextRevised = weekEndingSaturday(addDays(runStart, 7))
   const pathogen = last.pathogen
   const s = makeSeries({
@@ -264,12 +314,16 @@ export function buildRtSeries(daily: RtEstimate[], opts: BuildOptions): Series |
     geo: opts.geo,
     label: `${NAME_OF[pathogen] ?? pathogen} — estimated Rt (CDC CFA)`,
     points,
-    provisionalFrom: nextRevised <= finalWeek ? nextRevised : finalWeek,
+    provisionalFrom: nextRevised < points[0][0] ? points[0][0] : nextRevised <= finalWeek ? nextRevised : finalWeek,
     note: opts.note,
   })
-  if (last.category) {
-    const trend = trendOf(last.category)
-    s.official = { ...(trend ? { trend } : {}), label: officialLabel(last.category, last.pGrowing), asOf: lastWeek, by: BY }
+  const trend = trendOf(last.category)
+  s.official = {
+    level: 'unknown',
+    ...(trend ? { trend } : {}),
+    ...(last.category ? { label: officialLabel(last.category, last.pGrowing) } : {}),
+    asOf: lastWeek,
+    by: BY,
   }
   const attrs: Record<string, string> = { modelRun: last.asOf, estimateDate: last.date, data: opts.provenance }
   if (opts.newestRun && opts.newestRun.asOf > last.asOf) {
@@ -300,6 +354,8 @@ export interface AhfsSchema {
   origin: string
   target: string
   horizon?: string
+  /** Horizon is a numeric column, so `horizon <= 0` can be filtered server-side. */
+  horizonNumeric?: boolean
   disease: string
   fips?: string
   fipsNumeric?: boolean
@@ -319,7 +375,7 @@ export interface AhfsSchema {
   geoLevel?: string
 }
 
-const CANDIDATES: Record<Exclude<keyof AhfsSchema, 'format' | 'fipsNumeric'>, string[]> = {
+const CANDIDATES: Record<Exclude<keyof AhfsSchema, 'format' | 'fipsNumeric' | 'horizonNumeric'>, string[]> = {
   origin: ['origin_date', 'as_of', 'reference_date', 'release_date'],
   target: ['target_date', 'date', 'estimate_date'],
   horizon: ['horizon'],
@@ -374,6 +430,7 @@ export function detectAhfsSchema(columns: SocrataColumn[]): { schema: AhfsSchema
       origin: f('origin')!,
       target: f('target')!,
       horizon: f('horizon'),
+      horizonNumeric: found.horizon ? /number|integer|double/i.test(found.horizon.dataTypeName ?? '') : undefined,
       disease: f('disease')!,
       fips: f('fips'),
       fipsNumeric: found.fips ? /number|integer|double|money/i.test(found.fips.dataTypeName ?? '') : undefined,
@@ -400,6 +457,16 @@ export function ahfsMnWhere(s: AhfsSchema): string {
   if (s.fips) return s.fipsNumeric ? `${s.fips} between 27001 and 27199` : `${s.fips} like '27%'`
   return `${s.state} in ('Minnesota', 'MN')`
 }
+
+/** Filter for one release's rows: Minnesota, that origin date, and (when typed numeric) no forward horizons. */
+export function ahfsReleaseWhere(s: AhfsSchema, origin: string): string {
+  const parts = [ahfsMnWhere(s), `${s.origin} = ${soqlString(origin)}`]
+  if (s.horizon && s.horizonNumeric) parts.push(`${s.horizon} <= 0`)
+  return parts.join(' AND ')
+}
+
+/** Row cap for one ahfs-x44r release; reaching it means the release was truncated and is skipped. */
+export const AHFS_MAX_ROWS = 400_000
 
 export interface AhfsStats {
   rows: number
@@ -490,7 +557,11 @@ export function parseAhfsRows(rows: Record<string, unknown>[], s: AhfsSchema): {
       const g = groups.get(key) ?? { ...base, q: new Map<string, number>() }
       const qid = num(cell(r, s.outputTypeId))
       const v = num(cell(r, s.value))
-      if (qid != null && v != null) g.q!.set(String(qid), v)
+      if (qid != null && v != null) {
+        const prevV = g.q!.get(String(qid))
+        if (prevV != null && Math.abs(prevV - v) > 1e-9) stats.conflicts++
+        else g.q!.set(String(qid), v)
+      }
       if (!g.category && base.category) g.category = base.category
       if (g.pGrowing == null && base.pGrowing != null) g.pGrowing = base.pGrowing
       groups.set(key, g)
@@ -530,12 +601,13 @@ const STATE_NOTE =
   "CDC's estimate of the effective reproduction number (Rt) from daily emergency department visits (NSSP). " +
   'Rt above 1 means infections are likely growing; below 1, likely declining. It shows the direction of spread, not how much illness there is. ' +
   'Each week shows the estimate for its last day (the newest point is the latest model-run date), from the newest weekly model run that estimated that day; ' +
-  'recent weeks are nowcast-adjusted and revised weekly. CDC changed methods on 2026-06-01 (EpiNow2 → spatially pooled HGAM). ' +
+  'if a later run did not estimate a day, the earlier run\'s published estimate is kept. ' +
+  'Recent weeks are nowcast-adjusted and revised weekly. CDC changed methods on 2026-06-01 (EpiNow2 → spatially pooled HGAM). ' +
   'Blank weeks: no CDC run estimated Rt (e.g. too few visits off-season).'
 
 const COUNTY_NOTE =
-  'CDC estimates Rt for health service areas (HSAs, groups of neighboring counties); every county in an HSA shows the same value. ' +
-  'Based on daily emergency department visits (NSSP). Rt above 1 means infections are likely growing. Latest weekly release only; recent days are revised weekly.'
+  'CDC Rt for the health service area (HSA, a group of neighboring counties) — same value for every county in it. ' +
+  'From emergency department visits (NSSP); above 1 means likely growing. Latest weekly release; recent days are revised.'
 
 interface StateLoad {
   series: Series[]
@@ -545,15 +617,33 @@ interface StateLoad {
 
 async function loadState(historyStart: string, now: string, log: Logger): Promise<StateLoad> {
   const res = await loadCdcRows(STATE_ID, { where: "state = 'Minnesota'" }, (r) => r.state === 'Minnesota', log)
-  const seen = new Set<string>()
-  for (const r of res.rows.slice(0, 500)) for (const k of Object.keys(r)) seen.add(k)
-  const missing = STATE_COLUMNS.filter((c) => !seen.has(c))
-  if (missing.length) log.warn(`${STATE_ID} schema drift: missing column(s) ${missing.join(', ')} (saw ${[...seen].join(', ')})`)
-  const missingRequired = STATE_REQUIRED.filter((c) => !seen.has(c))
-  if (res.rows.length && missingRequired.length) throw new Error(`${STATE_ID} schema drift: required column(s) ${missingRequired.join(', ')} missing`)
+  // Mirror rows always carry every CSV column; live SODA rows omit null fields, so on the live path
+  // also read the declared column list (best effort — the full-row scan alone is still correct).
+  let declared: string[] | undefined
+  if (res.via === 'data.cdc.gov') {
+    try {
+      const meta = await fetchJson<{ columns?: SocrataColumn[] }>(`https://data.cdc.gov/api/views/${STATE_ID}.json`, { retries: 1, timeoutMs: 60_000 })
+      const cols = (meta.columns ?? []).map((c) => c.fieldName).filter((f) => f && !f.startsWith(':'))
+      if (cols.length) declared = cols
+    } catch (e) {
+      log.warn(`${STATE_ID}: column metadata unavailable (${errText(e).slice(0, 120)}); checking schema from rows only`)
+    }
+  }
+  const schema = checkStateSchema(res.rows, declared)
+  if (schema.missing.length) {
+    log.warn(`${STATE_ID} schema drift: missing column(s) ${schema.missing.join(', ')} (saw ${schema.seen.join(', ')}${declared ? `; declared ${declared.join(', ')}` : ''})`)
+  }
+  if (res.rows.length && schema.missingRequired.length) throw new Error(`${STATE_ID} schema drift: required column(s) ${schema.missingRequired.join(', ')} missing`)
   const { estimates, stats } = parseStateRows(res.rows)
   if (Object.keys(stats.unknownDisease).length) log.warn(`${STATE_ID}: ignoring unknown disease value(s) ${JSON.stringify(stats.unknownDisease)}`)
   if (stats.badDate) log.warn(`${STATE_ID}: ${stats.badDate} row(s) with unparseable dates`)
+  // A trend category with a blank median is a publisher quirk (one real 2024-12-17 flu row); only
+  // a widespread pattern suggests a renamed or emptied value column.
+  const categorized = estimates.filter((e) => trendOf(e.category)).length
+  const categoryWithoutValue = estimates.filter((e) => e.median == null && trendOf(e.category)).length
+  if (categoryWithoutValue > Math.max(5, categorized * 0.01)) {
+    log.warn(`${STATE_ID}: ${categoryWithoutValue} of ${categorized} row(s) have a trend category but no Rt median`)
+  }
   const runs = [...new Set(estimates.map((e) => e.asOf))].sort()
   const latestRun = runs[runs.length - 1]
   const series: Series[] = []
@@ -594,10 +684,13 @@ async function loadState(historyStart: string, now: string, log: Logger): Promis
     diagnostics: {
       via: res.via,
       updatedAt: res.updatedAt,
-      columnsSeen: [...seen],
-      missingColumns: missing,
+      columnsSeen: schema.seen,
+      ...(declared ? { columnsDeclared: declared } : {}),
+      missingColumns: schema.missing,
+      ...(schema.noValues.length ? { columnsWithoutValues: schema.noValues } : {}),
       ...stats,
       modelRuns: runs.length,
+      ...(categoryWithoutValue ? { categoryWithoutValue } : {}),
       firstRun: runs[0],
       latestRun,
       categories: countBy(estimates.filter((e) => e.asOf === latestRun).map((e) => `${e.pathogen}:${e.category}`)),
@@ -631,17 +724,27 @@ async function loadLocal(historyStart: string, log: Logger): Promise<LocalLoad> 
   const s = det.schema
   diagnostics.schema = s
   const where = ahfsMnWhere(s)
-  const head = await socrataQuery<Record<string, unknown>>(LOCAL_ID, { select: s.origin, where, order: `${s.origin} DESC`, pageSize: 1, maxRows: 1 })
+  const head = await socrataQuery<Record<string, unknown>>(LOCAL_ID, {
+    select: s.origin,
+    where: `${where} AND ${s.origin} IS NOT NULL`,
+    order: `${s.origin} DESC`,
+    pageSize: 1,
+    maxRows: 1,
+  })
   const latestRaw = head[0]?.[s.origin]
   if (latestRaw == null || latestRaw === '') {
     const skipped = `no rows match ${where}`
     log.warn(`${LOCAL_ID} skipped: ${skipped}`)
     return { series: [], skipped, diagnostics: { ...diagnostics, status: 'skipped', reason: skipped } }
   }
-  const rows = await socrataQuery<Record<string, unknown>>(LOCAL_ID, {
-    where: `${where} AND ${s.origin} = ${soqlString(String(latestRaw))}`,
-    maxRows: 400_000,
-  })
+  const releaseWhere = ahfsReleaseWhere(s, String(latestRaw))
+  diagnostics.where = releaseWhere
+  const rows = await socrataQuery<Record<string, unknown>>(LOCAL_ID, { where: releaseWhere, maxRows: AHFS_MAX_ROWS })
+  if (rows.length >= AHFS_MAX_ROWS) {
+    const skipped = `release ${String(latestRaw)} reached the ${AHFS_MAX_ROWS}-row cap; counties or diseases could be cut off`
+    log.warn(`${LOCAL_ID} skipped: ${skipped}`)
+    return { series: [], skipped, diagnostics: { ...diagnostics, rows: rows.length, status: 'skipped', reason: skipped } }
+  }
   const { estimates, stats } = parseAhfsRows(rows, s)
   Object.assign(diagnostics, stats)
   if (Object.keys(stats.unknownDisease).length) log.warn(`${LOCAL_ID}: ignoring unknown disease value(s) ${JSON.stringify(stats.unknownDisease)}`)

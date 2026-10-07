@@ -1,8 +1,9 @@
 // Pure parsing/mapping helpers for the CDC NREVSS source (pipeline/sources/cdc-nrevss.ts).
 //
 // Datasets (data.cdc.gov):
-//   rgnm-fkqb  NREVSS dashboard: weekly NAAT % positive for 7 respiratory viruses, National + HHS regions
-//              (+ "prior two years" of state rows for RSV and SARS-CoV-2, centered 3-week averages).
+//   rgnm-fkqb  NREVSS dashboard: weekly NAAT % positive for 7 respiratory viruses, National + HHS regions.
+//              A third-party catalog reports state rows for RSV and SARS-CoV-2 only, with a 3-week-average
+//              column (percent_pos_3wma); their exact encoding and time span are UNVERIFIED (no live access).
 //   3cxc-4k8q  RSV NAAT % positive by HHS region (regional values are centered 3-week moving averages).
 //   gvsb-yw6g  SARS-CoV-2 NAAT % positive by HHS region (same layout as 3cxc-4k8q).
 //   seuz-s2cv  National % of tests positive for COVID-19, influenza and RSV.
@@ -105,7 +106,7 @@ export function normalizePathogen(raw: unknown): PathogenId | null {
 export function subtypeRank(raw: unknown): 0 | 1 | 2 {
   const s = raw == null ? '' : String(raw).trim()
   if (s === '' || /^(null|na|n\/a)$/i.test(s)) return 2
-  if (/^(combined|all|total|overall)\b/i.test(s)) return 1
+  if (/\b(combined|total|overall|aggregate)\b|^all\b/i.test(s)) return 1
   return 0
 }
 
@@ -184,6 +185,13 @@ export interface ParseDiag {
   vintages: number
   latestPosted?: string
   latestWeek?: string
+  /** Places seen among usable rows (HHS5 / US / MN) with row counts. */
+  geos?: Record<string, number>
+  /**
+   * rgnm-fkqb pathogen labels that had only component-subtype rows for some place (no NULL or
+   * combined/total aggregate) → the subtype labels seen. Signals a renamed 'Combined Type'.
+   */
+  componentOnly?: Record<string, string[]>
 }
 
 function newDiag(rows: number): ParseDiag {
@@ -198,6 +206,8 @@ function finishDiag(diag: ParseDiag, obs: Obs[], unmapped: Set<string>): ParseDi
   diag.latestWeek = obs.map((o) => o.week).sort().pop()
   diag.unmappedPathogens = [...unmapped].sort()
   diag.used = obs.length
+  diag.geos = {}
+  for (const o of obs) bump(diag.geos, o.geo)
   return diag
 }
 
@@ -205,23 +215,23 @@ export const RGNM_REQUIRED = ['mmwrweek_end', 'level', 'pathogen', 'percent_pos'
 export const RGNM_OPTIONAL = ['state', 'tests', 'detections', 'subtype', 'posted', 'tests_3wma', 'detections_5wma', 'percent_pos_3wma']
 
 /**
- * rgnm-fkqb rows → observations. Regional/national rows use the weekly `percent_pos`; Minnesota state rows
- * (published only as centered 3-week averages) use `percent_pos_3wma`, falling back to `percent_pos`.
+ * rgnm-fkqb rows → observations. Regional/national rows use the weekly `percent_pos`. Minnesota state rows
+ * use ONE field per pathogen series: `percent_pos_3wma` when any Minnesota row of that pathogen carries it,
+ * otherwise `percent_pos` for every row — so a series never mixes 3-week averages with weekly values.
  */
 export function parseRgnm(rows: Record<string, string>[]): { obs: Obs[]; diag: ParseDiag } {
   const diag = newDiag(rows.length)
   const unmapped = new Set<string>()
   const obs: Obs[] = []
+  const mnHasMa = new Set<PathogenId>()
+  const aggregates = new Set<string>()
+  const components = new Map<string, Set<string>>()
+  const kept: { r: Record<string, string>; geo: GeoKey; pathogen: PathogenId; rank: number; week: string }[] = []
   for (const r of rows) {
     bump(diag.levels, `${r.level ?? ''}${r.state ? ` / ${r.state}` : ''}`)
     const geo = geoKeyOf(r.level, r.state)
     if (geo === 'other-state' || geo == null) {
       bump(diag.skipped, geo ?? 'other-level')
-      continue
-    }
-    const rank = subtypeRank(r.subtype)
-    if (rank === 0) {
-      bump(diag.skipped, 'component-subtype')
       continue
     }
     const pathogen = normalizePathogen(r.pathogen)
@@ -230,16 +240,38 @@ export function parseRgnm(rows: Record<string, string>[]): { obs: Obs[]; diag: P
       bump(diag.skipped, 'unmapped-pathogen')
       continue
     }
+    const rank = subtypeRank(r.subtype)
+    const placeKey = `${geo}|${String(r.pathogen)}`
+    if (rank === 0) {
+      bump(diag.skipped, 'component-subtype')
+      let set = components.get(placeKey)
+      if (!set) components.set(placeKey, (set = new Set()))
+      set.add(String(r.subtype))
+      continue
+    }
+    aggregates.add(placeKey)
     bump(diag.pathogens, String(r.pathogen))
     const week = weekOf(r.mmwrweek_end)
     if (!week) {
       bump(diag.skipped, 'bad-week')
       continue
     }
-    const { value, field } = pickNum(r, geo === 'MN' ? ['percent_pos_3wma', 'percent_pos'] : ['percent_pos'])
-    const tests = num(geo === 'MN' ? (r.tests_3wma ?? r.tests) : r.tests)
-    obs.push({ geo, pathogen, week, posted: parseSocrataTimestamp(r.posted) ?? '', rank, value, tests, field })
+    if (geo === 'MN' && num(r.percent_pos_3wma) != null) mnHasMa.add(pathogen)
+    kept.push({ r, geo, pathogen, rank, week })
   }
+  for (const { r, geo, pathogen, rank, week } of kept) {
+    const ma = geo === 'MN' && mnHasMa.has(pathogen)
+    const field = ma ? 'percent_pos_3wma' : 'percent_pos'
+    const tests = num(ma ? r.tests_3wma : r.tests)
+    obs.push({ geo, pathogen, week, posted: parseSocrataTimestamp(r.posted) ?? '', rank, value: num(r[field]), tests, field })
+  }
+  const componentOnly: Record<string, string[]> = {}
+  for (const [key, subs] of components) {
+    if (aggregates.has(key)) continue
+    const label = key.slice(key.indexOf('|') + 1)
+    componentOnly[label] = [...new Set([...(componentOnly[label] ?? []), ...subs])].sort()
+  }
+  if (Object.keys(componentOnly).length) diag.componentOnly = componentOnly
   return { obs, diag: finishDiag(diag, obs, unmapped) }
 }
 

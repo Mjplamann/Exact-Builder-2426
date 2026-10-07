@@ -25,11 +25,14 @@ export interface LearnSection {
   short: string
   /** One or two sentences: the takeaway. */
   summary: string
+  /** Paragraphs. A paragraph may start with "**Lead-in.**", which is shown in bold. */
   body: string[]
   /** "What it means for you" — practical meaning for an average person. */
   forYou?: string
   examples?: LearnExample[]
   details?: LearnDetail[]
+  /** Show details as always-visible cards instead of collapsed disclosures. */
+  detailsAsCards?: boolean
   sources: SourceLink[]
 }
 
@@ -220,9 +223,9 @@ export const LEARN_SECTIONS: LearnSection[] = [
     summary:
       'Hospital numbers count people admitted with a lab-confirmed infection. They are the clearest sign of severe illness, but they rise later than other signals.',
     body: [
-      'NHSN admissions: each week, hospitals report to CDC’s National Healthcare Safety Network (NHSN) how many patients were newly admitted with laboratory-confirmed flu, COVID-19 or RSV. Since November 2024, federal rules require most hospitals to report. MN Pulse shows the Minnesota count and the same count per 100,000 residents.',
-      'RESP-NET rates: CDC’s RESP-NET (FluSurv-NET, COVID-NET and RSV-NET), run in Minnesota by the Minnesota Department of Health’s Emerging Infections Program, actively finds residents of its catchment area who were hospitalized with a positive test. The catchment was historically the 7-county Twin Cities metro; MDH reports statewide RESP-NET coverage from the 2023–24 season. RESP-NET also reports rates by age group, which show who is hit hardest.',
-      '“Per 100,000” makes places of different sizes comparable. Minnesota has about 5.7 million people, so a rate of 1 per 100,000 in a week means about 57 Minnesotans were admitted that week.',
+      '**NHSN admissions.** Each week, hospitals report to CDC’s National Healthcare Safety Network (NHSN) how many patients were newly admitted with laboratory-confirmed flu, COVID-19 or RSV. Since November 2024, federal rules require most hospitals to report. MN Pulse shows the Minnesota count and the same count per 100,000 residents.',
+      '**RESP-NET rates.** CDC’s RESP-NET (FluSurv-NET, COVID-NET and RSV-NET), run in Minnesota by the Minnesota Department of Health’s Emerging Infections Program, actively finds residents of its catchment area who were hospitalized with a positive test. The catchment was historically the 7-county Twin Cities metro; MDH reports statewide RESP-NET coverage from the 2023–24 season. RESP-NET also reports rates by age group, which show who is hit hardest.',
+      '**Per 100,000.** This makes places of different sizes comparable. Minnesota has about 5.7 million people, so a rate of 1 per 100,000 in a week means about 57 Minnesotans were admitted that week.',
     ],
     forYou:
       'Hospital rates matter most for people at higher risk: babies, adults 65 and older, pregnant people, and people with chronic conditions or weakened immune systems. If rates are climbing, act early. Antiviral medicines for flu and COVID-19 work best when started soon after symptoms begin.',
@@ -247,11 +250,11 @@ export const LEARN_SECTIONS: LearnSection[] = [
     summary:
       'Wastewater testing measures virus genetic material in sewage from everyone connected to a treatment plant, including people who never get tested. It often rises before clinics and hospitals get busier.',
     body: [
-      'Wastewater Viral Activity Level (WVAL): CDC compares each plant’s current measurements with that plant’s own baseline and groups the result from Very Low to Very High. Because each plant is compared with itself, levels can be compared across places.',
-      'Normalized concentrations, such as WastewaterSCAN’s, are the amount of virus genetic material divided by a marker of human waste: PMMoV, a pepper virus people shed from their diet. This adjusts for dilution from rain and industrial water. The units differ between programs, labs and germs, so compare a plant only with its own past values.',
-      'People shed virus early, often before or without symptoms, so wastewater often rises several days to a couple of weeks before ED visits and hospital admissions. It does not always lead, and single weeks are noisy.',
-      'Only homes and businesses connected to a participating plant are represented. Homes on septic systems and towns without a participating plant are not covered, and one plant’s area (its “sewershed”) can span parts of several counties.',
-      'H5 bird flu caveat: H5 influenza in wastewater can come from animal sources, such as milk from infected dairy cattle or wild birds, not only from people. A detection does not mean people are infected. Likewise, a single detection of a rare virus such as measles or mpox can come from one traveler.',
+      '**Wastewater Viral Activity Level (WVAL).** CDC compares each plant’s current measurements with that plant’s own baseline and groups the result from Very Low to Very High. Because each plant is compared with itself, levels can be compared across places.',
+      '**Normalized concentrations.** Some programs, such as WastewaterSCAN, report the amount of virus genetic material divided by a marker of human waste: PMMoV, a pepper virus people shed from their diet. This adjusts for dilution from rain and industrial water. The units differ between programs, labs and germs, so compare a plant only with its own past values.',
+      '**An early signal.** People shed virus early, often before or without symptoms, so wastewater often rises several days to a couple of weeks before ED visits and hospital admissions. It does not always lead, and single weeks are noisy.',
+      '**Coverage.** Only homes and businesses connected to a participating plant are represented. Homes on septic systems and towns without a participating plant are not covered, and one plant’s area (its “sewershed”) can span parts of several counties.',
+      '**H5 bird flu caveat.** H5 influenza in wastewater can come from animal sources, such as milk from infected dairy cattle or wild birds, not only from people. A detection does not mean people are infected. Likewise, a single detection of a rare virus such as measles or mpox can come from one traveler.',
     ],
     forYou:
       'A rising wastewater level is an early heads-up. It is a good moment to check that vaccines are up to date, keep home tests on hand, and stay home when sick.',
@@ -321,9 +324,9 @@ export const LEARN_SECTIONS: LearnSection[] = [
     summary:
       'Each level says how much illness is going around compared with what is normal for that exact measure and place. MN Pulse uses the publisher’s official cut-points when they exist, and otherwise compares this week with the past ~3 years.',
     body: [
-      'Official thresholds first. For Minnesota’s ED visit percentages and hospital admissions per 100,000 for flu, COVID-19 and RSV, MN Pulse uses CDC’s respiratory activity-level cut-points for Minnesota, published in CDC’s open forecasting tools as “PRISM” thresholds. The exact numbers are in the tables below.',
-      'CDC wastewater categories. For wastewater, MN Pulse uses CDC’s own Wastewater Viral Activity Level category.',
-      'Otherwise, compare with recent history. For everything else, the latest week is ranked against the same measure’s weekly values over the past ~3 years (156 weeks). The pandemic-disrupted 2019–20 to 2021–22 seasons are skipped, and at least 52 weeks of history are required; with less, the level shows as “Not enough data”.',
+      '**1. Official thresholds first.** For Minnesota’s ED visit percentages and hospital admissions per 100,000 for flu, COVID-19 and RSV, MN Pulse uses CDC’s respiratory activity-level cut-points for Minnesota, published in CDC’s open forecasting tools as “PRISM” thresholds. The exact numbers are in the tables below.',
+      '**2. CDC wastewater categories.** For wastewater, MN Pulse uses CDC’s own Wastewater Viral Activity Level category.',
+      '**3. Otherwise, compare with recent history.** For everything else, the latest week is ranked against the same measure’s weekly values over the past ~3 years (156 weeks). The pandemic-disrupted 2019–20 to 2021–22 seasons are skipped, and at least 52 weeks of history are required; with less, the level shows as “Not enough data”.',
     ],
     forYou:
       'Levels are relative. “Very low” on a history-based measure means lower than most recent weeks, not zero risk. For a seasonal virus, about half of all weeks are off-season, so “Very low” is common in summer.',
@@ -352,9 +355,9 @@ export const LEARN_SECTIONS: LearnSection[] = [
     summary:
       'Projections are statistical estimates of where a measure may go over the next 1–4 weeks, shown with ranges. They describe what is likely if current patterns continue, not what will happen.',
     body: [
-      'CDC ensemble forecasts. Each week, research teams submit forecasts to CDC’s FluSight, COVID-19 and RSV Forecast Hubs. CDC combines them into an ensemble, which is usually more reliable than any single model, for hospital admissions and ED visit percentages up to 3 weeks ahead. When a CDC ensemble exists for a measure, MN Pulse shows it first.',
-      'MN Pulse projection. For each weekly series, MN Pulse also runs its own “analog–trend ensemble” of three simple methods: persistence (the next weeks look like this week), a damped trend (the last 4 weeks’ growth, fading over time), and a seasonal analog (how the same weeks moved in earlier seasons, skipping 2019–20 to 2021–22). Each method is weighted by how accurate it has been for that series.',
-      'Ranges come from real past errors. MN Pulse re-ran the method at every week of the past ~2 years (“backtesting”) and uses how far off it was to set the ranges. The darker 50% range should contain the actual value about half the time; the lighter 95% range about 19 times out of 20.',
+      '**CDC ensemble forecasts.** Each week, research teams submit forecasts to CDC’s FluSight, COVID-19 and RSV Forecast Hubs. CDC combines them into an ensemble, which is usually more reliable than any single model, for hospital admissions and ED visit percentages up to 3 weeks ahead. When a CDC ensemble exists for a measure, MN Pulse shows it first.',
+      '**MN Pulse projection.** For each weekly series, MN Pulse also runs its own “analog–trend ensemble” of three simple methods: persistence (the next weeks look like this week), a damped trend (the last 4 weeks’ growth, fading over time), and a seasonal analog (how the same weeks moved in earlier seasons, skipping 2019–20 to 2021–22). Each method is weighted by how accurate it has been for that series.',
+      '**Ranges come from real past errors.** MN Pulse re-ran the method at every week of the past ~2 years (“backtesting”) and uses how far off it was to set the ranges. The darker 50% range should contain the actual value about half the time; the lighter 95% range about 19 times out of 20.',
     ],
     forYou:
       'Use projections to plan, not to predict a date. If even the low end of the range is rising, it is a good time to prepare. Ranges get wider further ahead because the future is less certain.',
@@ -377,6 +380,7 @@ export const LEARN_SECTIONS: LearnSection[] = [
     short: 'Limitations & equity',
     summary: 'Surveillance data show some people and places better than others. Keep these blind spots in mind.',
     body: [],
+    detailsAsCards: true,
     details: [
       {
         title: 'Testing access',

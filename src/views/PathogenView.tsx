@@ -16,7 +16,7 @@ import { scrollToSection, TocDisclosure, TocSidebar, useActiveSection, type TocI
 
 function Section({ id, title, subtitle, children }: { id: string; title: string; subtitle?: ReactNode; children: ReactNode }) {
   return (
-    <Card id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20">
+    <Card id={id} aria-labelledby={`${id}-title`} className="scroll-mt-28 sm:scroll-mt-20">
       <SectionTitle id={`${id}-title`} title={title} subtitle={subtitle} />
       {children}
     </Card>
@@ -123,9 +123,7 @@ export default function PathogenView() {
                 </p>
               )}
               {pulse.primary?.levelBasis && (
-                <p className="mt-2 text-xs text-ink-3">
-                  The level compares this week with Minnesota’s usual range for this measure: {pulse.primary.levelBasis}.
-                </p>
+                <p className="mt-2 text-xs text-ink-3">How the level is set: {isoToText(pulse.primary.levelBasis)}.</p>
               )}
               <button type="button" onClick={() => scrollToSection('sec-now')} className="mt-2 text-sm font-medium text-accent hover:underline">
                 See the charts <span aria-hidden="true">↓</span>

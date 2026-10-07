@@ -20,6 +20,7 @@ const fmtPct = (v: number) => `${v > 0 && v < 1 ? v.toFixed(2) : v < 10 && v % 1
 /** "About 15 in 100 tests found it (roughly 1 in 7)." */
 export function naturalFrequency(pct: number): string {
   if (pct <= 0) return 'None of the tests found it.'
+  if (pct >= 100) return 'Every test found it.'
   if (pct < 1) {
     const per1000 = Math.round(pct * 10)
     return per1000 < 1 ? 'Fewer than 1 in 1,000 tests found it.' : `About ${per1000} in 1,000 tests found it.`

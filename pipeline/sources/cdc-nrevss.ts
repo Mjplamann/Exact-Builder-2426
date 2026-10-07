@@ -2,7 +2,7 @@
 //
 // The National Respiratory and Enteric Virus Surveillance System collects weekly counts of NAAT (PCR) tests
 // and positives from ~450 clinical, public-health and commercial laboratories. Minnesota is in HHS Region 5
-// with IL, IN, MI, OH and WI; CDC publishes the multi-virus data only for the nation and the 10 HHS regions.
+// with IL, IN, MI, OH and WI; CDC publishes the multi-virus data for the nation and the 10 HHS regions.
 // It is the closest public analogue to a multiplex respiratory-panel picture (BioFire), minus influenza.
 //
 //   rgnm-fkqb  weekly % positive for RSV, SARS-CoV-2, hMPV, adenovirus, PIV, RV/EV, HCoV (primary; CI-only)
@@ -11,20 +11,23 @@
 //   seuz-s2cv  national % positive for influenza (+ COVID-19/RSV as a last-resort fallback; CI-only)
 //
 // Regional values in 3cxc-4k8q/gvsb-yw6g are centered 3-week moving averages, whereas rgnm-fkqb carries the
-// raw weekly percent, so the fallbacks are only used when rgnm-fkqb has nothing for that virus and place.
+// weekly percent, so the fallbacks are only used when rgnm-fkqb has nothing (or is >= 2 weeks behind) for that
+// virus and place, and a 3-week-average series always gets its own id (variant ':3wma') so one id never
+// changes meaning between runs. Minnesota state rows in rgnm-fkqb (RSV/SARS-CoV-2 per a third-party catalog;
+// encoding and time span UNVERIFIED) are emitted only if present.
 // NREVSS publishes no activity categories or trend labels, so no `official` classification is attached.
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { GeoRef, PathogenId, Series } from '../../shared/types.ts'
-import { loadCdcRows, POPHIVE_MIRRORS } from '../lib/cdcData.ts'
-import { fetchJson, HttpError } from '../lib/http.ts'
-import { socrataQuery } from '../lib/socrata.ts'
+import { addDays } from '../../shared/mmwr.ts'
+import { HttpError } from '../lib/http.ts'
 import { latestDate, makeSeries, since, STATE_GEO } from '../lib/series.ts'
 import type { Logger } from '../lib/log.ts'
 import type { SourceContext, SourceModule, SourceResult } from '../types.ts'
+import { errText, liveOrMirror, loadMeta, sodaRows, type SocrataView } from '../lib/cdc-nrevss-fetch.ts'
 import {
-  checkColumns, describesMovingAverage, HHS5_GEO, latestObs, parseRegional, parseRgnm, parseSeuz, REGIONAL_LAYOUTS,
-  RGNM_OPTIONAL, RGNM_REQUIRED, SEUZ_REQUIRED, selectLatest, toPoints, US_GEO,
+  checkColumns, describesMovingAverage, geoKeyOf, HHS5_GEO, latestObs, parseRegional, parseRgnm, parseSeuz,
+  REGIONAL_LAYOUTS, RGNM_OPTIONAL, RGNM_REQUIRED, SEUZ_REQUIRED, selectLatest, toPoints, US_GEO,
   type GeoKey, type Obs, type ParseDiag, type RegionalId, type Selected,
 } from '../lib/cdc-nrevss-parse.ts'
 
@@ -33,9 +36,15 @@ const DS_REGION = 'nrevss-region5'
 const DS_STATE = 'nrevss-state'
 
 const GEOS: Record<GeoKey, GeoRef> = { HHS5: HHS5_GEO, US: US_GEO, MN: STATE_GEO }
+/** Id variant for series whose values are CDC's centered 3-week moving average. */
+const MA_VARIANT = '3wma'
+/** A later source in a fallback chain replaces an earlier one only when it is at least this much fresher. */
+const FRESHER_BY_DAYS = 14
+/** Previous-run series older than this are no longer carried forward. */
+const CARRY_MAX_AGE_DAYS = 365
 const WHERE: Record<GeoKey, string> = {
   HHS5: 'HHS Region 5 (MN, WI, IL, IN, MI, OH)',
-  US: 'the U.S.',
+  US: 'the United States',
   MN: 'Minnesota',
 }
 
@@ -70,29 +79,7 @@ interface Loaded {
   metaFields?: string[]
 }
 
-interface SocrataView {
-  rowsUpdatedAt?: number
-  columns?: { name: string; fieldName: string; description?: string }[]
-}
-
-async function loadMeta(id: string): Promise<SocrataView | null> {
-  try {
-    return await fetchJson<SocrataView>(`https://data.cdc.gov/api/views/${id}.json`, { retries: 1, timeoutMs: 30_000 })
-  } catch {
-    const mirror = POPHIVE_MIRRORS[id]
-    if (!mirror) return null
-    try {
-      return await fetchJson<SocrataView>(`https://raw.githubusercontent.com/PopHIVE/Ingest/main/data/${mirror}.json`, {
-        retries: 1,
-        timeoutMs: 30_000,
-      })
-    } catch {
-      return null
-    }
-  }
-}
-
-function withMeta(loaded: Loaded, meta: SocrataView | null): Loaded {
+function withMeta(loaded: Loaded, meta: SocrataView | null | undefined): Loaded {
   if (!meta) return loaded
   const descriptions: Record<string, string> = {}
   for (const c of meta.columns ?? []) if (c.description) descriptions[c.fieldName] = c.description
@@ -104,23 +91,28 @@ function withMeta(loaded: Loaded, meta: SocrataView | null): Loaded {
   }
 }
 
-/** rgnm-fkqb: National + Region 5 aggregates, plus Minnesota state rows if CDC publishes them. */
+/** SoQL for National + Region 5 rows (also tolerates 'HHS Region 5' / 'Region 05'; parsing re-filters). */
+const LEVEL_WHERE = "level in('National','Region 5') OR level like '%Region%5'"
+
+/**
+ * rgnm-fkqb: National + Region 5 rows of every subtype (component rows are dropped in code, so a renamed
+ * 'Combined Type' label cannot silently remove PIV/HCoV server-side), plus Minnesota state rows if present.
+ */
 async function loadRgnm(): Promise<Loaded> {
   const attempts: { query: string; where: string }[] = [
     {
-      query: 'region5+national+MN, aggregate subtypes',
-      where:
-        "(level in('National','Region 5') OR state in('Minnesota','MN')) AND (subtype IS NULL OR subtype='Combined Type')",
+      query: 'national+region5+MN, all subtypes',
+      where: `${LEVEL_WHERE} OR state in('Minnesota','MN','27') OR level in('Minnesota','MN')`,
     },
-    // If CDC renames/drops `state` or `subtype` the narrow query 400s; fall back and filter in code.
-    { query: 'region5+national (fallback query)', where: "level in('National','Region 5')" },
+    // If CDC renames/drops `state` the query 400s; fall back to levels only and filter in code.
+    { query: 'national+region5 (fallback query)', where: "level in('National','Region 5')" },
   ]
   let lastErr: unknown
   for (const a of attempts) {
     try {
-      const rows = await socrataQuery<Record<string, unknown>>('rgnm-fkqb', { where: a.where })
+      const rows = await sodaRows('rgnm-fkqb', a.where)
       if (!rows.length) throw new Error('no rows returned')
-      return { rows: rows.map(stringify), via: 'data.cdc.gov', query: a.query }
+      return { rows, via: 'data.cdc.gov', query: a.query }
     } catch (e) {
       lastErr = e
       if (!(e instanceof HttpError && e.status === 400)) break
@@ -130,30 +122,22 @@ async function loadRgnm(): Promise<Loaded> {
 }
 
 async function loadRegional(id: RegionalId, log: Logger): Promise<Loaded> {
-  const wanted = /^(national|region 5)$/i
-  const res = await loadCdcRows(id, { where: "level in('National','Region 5')" }, (r) => wanted.test((r.level ?? '').trim()), log)
-  return { rows: res.rows, via: res.via, updatedAt: res.updatedAt }
+  const wanted = (r: Record<string, string>) => {
+    const g = geoKeyOf(r.level)
+    return g === 'HHS5' || g === 'US'
+  }
+  const res = await liveOrMirror(id, LEVEL_WHERE, wanted, log)
+  return withMeta({ rows: res.rows, via: res.via }, res.meta ?? (await loadMeta(id)))
 }
 
 async function loadSeuz(): Promise<Loaded> {
-  const rows = await socrataQuery<Record<string, unknown>>('seuz-s2cv', {})
+  const rows = await sodaRows('seuz-s2cv')
   if (!rows.length) throw new Error('no rows returned')
-  return { rows: rows.map(stringify), via: 'data.cdc.gov' }
+  return { rows, via: 'data.cdc.gov' }
 }
 
-/** Error text including the network cause (undici reports only "fetch failed" at the top level). */
-function errText(e: unknown): string {
-  if (!(e instanceof Error)) return String(e)
-  const cause = (e as Error & { cause?: unknown }).cause
-  const c = cause instanceof Error ? cause.message : cause ? String(cause) : ''
-  return c && !e.message.includes(c) ? `${e.message} (${c})` : e.message
-}
-
-function stringify(r: Record<string, unknown>): Record<string, string> {
-  const out: Record<string, string> = {}
-  for (const [k, v] of Object.entries(r)) out[k] = v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v)
-  return out
-}
+const seriesId = (dataset: string, geo: GeoKey, pathogen: PathogenId, variant?: string) =>
+  [SOURCE, dataset, pathogen, 'test_positivity', GEOS[geo].type, GEOS[geo].code, variant].filter(Boolean).join(':')
 
 interface Built {
   series: Series
@@ -196,13 +180,16 @@ function buildSeries(
     geo: GEOS[geo],
     label: `${name} — % of lab tests positive (${geo === 'HHS5' ? 'HHS Region 5' : geo === 'US' ? 'U.S.' : 'Minnesota'}${movingAverage ? ', 3-wk avg' : ''})`,
     points,
-    // NREVSS: "Reporting is less complete for the past 1 week."
-    provisionalFrom: latest?.week,
+    // CDC (3cxc-4k8q metadata): "Reporting is less complete for the most recent weeks, but relatively complete
+    // (>90%) for the period up to 2 weeks earlier." The last two weeks are provisional; for centered 3-week
+    // averages the second-newest value also changes once the following week arrives.
+    provisionalFrom: latest ? addDays(latest.week, -7) : undefined,
     note: `Share of tests positive at ${lab}. ${method}${extra} ${NOT_PREVALENCE}`,
+    variant: movingAverage ? MA_VARIANT : undefined,
   })
   const attrs: Record<string, string> = { dataset: from, method: movingAverage ? 'centered 3-week moving average' : 'weekly % positive' }
   if (latest?.posted) attrs.posted = latest.posted.slice(0, 10)
-  if (geo === 'MN' && latest) attrs.field = latest.field
+  if (latest && geo === 'MN') attrs.field = latest.field
   if (latest?.tests != null) {
     const n = Math.round(latest.tests).toLocaleString('en-US')
     attrs.tests = movingAverage
@@ -240,7 +227,8 @@ export const cdcNrevss: SourceModule = {
     cadence: 'Weekly (week ending Saturday; CDC posts updates on Wednesday evenings)',
     attribution: 'CDC National Respiratory and Enteric Virus Surveillance System (NREVSS), data.cdc.gov',
   },
-  timeoutMs: 6 * 60_000,
+  // data.cdc.gov fetches are bounded (~3 min worst case each, in parallel) so the mirror is reached in time.
+  timeoutMs: 10 * 60_000,
   async run(ctx): Promise<SourceResult> {
     const log = ctx.log
     const errors: string[] = []
@@ -249,8 +237,8 @@ export const cdcNrevss: SourceModule = {
 
     const [rgnmR, rsvR, covR, seuzR] = await Promise.allSettled([
       loadRgnm().then(async (l) => withMeta(l, await loadMeta('rgnm-fkqb'))),
-      loadRegional('3cxc-4k8q', log).then(async (l) => withMeta(l, await loadMeta('3cxc-4k8q'))),
-      loadRegional('gvsb-yw6g', log).then(async (l) => withMeta(l, await loadMeta('gvsb-yw6g'))),
+      loadRegional('3cxc-4k8q', log),
+      loadRegional('gvsb-yw6g', log),
       loadSeuz().then(async (l) => withMeta(l, await loadMeta('seuz-s2cv'))),
     ])
 
@@ -291,6 +279,13 @@ export const cdcNrevss: SourceModule = {
           log.warn(`rgnm-fkqb: ${selected['rgnm-fkqb'].conflicts} duplicate week/posting rows with different values`)
         }
         if (!parsed.obs.length) throw new Error('no usable National/Region 5 rows')
+        if (!parsed.diag.geos?.HHS5) {
+          log.warn(`rgnm-fkqb: no Region 5 rows (levels seen: ${Object.keys(parsed.diag.levels).slice(0, 12).join(', ')})`)
+        }
+        if (parsed.diag.componentOnly) {
+          const list = Object.entries(parsed.diag.componentOnly).map(([p, subs]) => `${p} [${subs.join(', ')}]`)
+          log.warn(`rgnm-fkqb: only component-subtype rows (no NULL or combined aggregate) for ${list.join('; ')} — has CDC renamed 'Combined Type'?`)
+        }
       } catch (e) {
         failed.add('rgnm-fkqb')
         errors.push(`rgnm-fkqb: ${errText(e)}`)
@@ -341,31 +336,50 @@ export const cdcNrevss: SourceModule = {
       errors.push(`seuz-s2cv: ${errText(seuzR.reason)}`)
     }
 
-    // Assemble: rgnm-fkqb first; fallbacks only where rgnm-fkqb produced nothing.
+    // Assemble. Each chain lists sources best first; a later source replaces an earlier one only when the
+    // earlier has nothing for that virus/place or its latest week is >= 2 weeks behind (frozen or lagging).
     const region: Series[] = []
     const state: Series[] = []
     const used: Record<string, string> = {}
-    const pick = (geo: GeoKey, pathogen: PathogenId, chain: string[]): Built | null => {
+    const staleSwitches: string[] = []
+    const build = (geo: GeoKey, pathogen: PathogenId, from: string): Built | null => {
+      const sel = selected[from]
+      if (!sel) return null
+      const weeks = sel.byGeoPathogen.get(`${geo}|${pathogen}`)
+      // rgnm-fkqb: Minnesota series use one field throughout (see parseRgnm); 3cxc/gvsb: regional rows only.
+      const ma =
+        from === 'rgnm-fkqb'
+          ? latestObs(weeks)?.field === 'percent_pos_3wma'
+          : from !== 'seuz-s2cv' && geo === 'HHS5' && !!movingAvgRegional[from]
+      return buildSeries(geo === 'MN' ? DS_STATE : DS_REGION, geo, pathogen, weeks, ctx, from, ma)
+    }
+    const pick = (geo: GeoKey, pathogen: PathogenId, chain: string[]): Series[] => {
+      const cands: { from: string; built: Built }[] = []
       for (const from of chain) {
-        const sel = selected[from]
-        if (!sel) continue
-        const ma = from === 'rgnm-fkqb' ? geo === 'MN' : from === 'seuz-s2cv' ? false : geo === 'HHS5' && movingAvgRegional[from]
-        const built = buildSeries(
-          geo === 'MN' ? DS_STATE : DS_REGION,
-          geo,
-          pathogen,
-          sel.byGeoPathogen.get(`${geo}|${pathogen}`),
-          ctx,
-          from,
-          !!ma,
-        )
-        if (built) {
-          used[built.series.id] = from
-          if (from !== chain[0]) notes.push(`${NAME[pathogen]} (${GEOS[geo].code}) from ${from}`)
-          return built
+        const built = build(geo, pathogen, from)
+        if (built) cands.push({ from, built })
+      }
+      if (!cands.length) return []
+      let chosen = cands[0]
+      for (const c of cands.slice(1)) {
+        const a = chosen.built.latest?.week
+        const b = c.built.latest?.week
+        if (a && b && b >= addDays(a, FRESHER_BY_DAYS)) {
+          staleSwitches.push(`${NAME[pathogen]} (${GEOS[geo].code}): ${chosen.from} latest week ${a} is 2+ weeks behind ${c.from} (${b})`)
+          chosen = c
         }
       }
-      return null
+      const out = [chosen.built.series]
+      if (chosen.from !== chain[0]) {
+        const ma = chosen.built.series.id.endsWith(`:${MA_VARIANT}`)
+        notes.push(`${NAME[pathogen]} (${GEOS[geo].code}) from ${chosen.from}${ma ? ' as a separate 3-wk-avg series' : ''}`)
+      }
+      // A stale primary kept under a different id (the fallback is a 3-week-average variant) is still real
+      // data from this run, so publish it too; the analysis prefers the fresher of the two.
+      const primary = cands[0]
+      if (primary !== chosen && primary.built.series.id !== chosen.built.series.id) out.push(primary.built.series)
+      for (const s of out) used[s.id] = s.attrs?.dataset ?? ''
+      return out
     }
     for (const geo of ['HHS5', 'US'] as const) {
       for (const p of PATHOGENS) {
@@ -373,22 +387,36 @@ export const cdcNrevss: SourceModule = {
         if (p.id === 'rsv') chain.push('3cxc-4k8q')
         if (p.id === 'covid') chain.push('gvsb-yw6g')
         if (geo === 'US' && (p.id === 'rsv' || p.id === 'covid')) chain.push('seuz-s2cv')
-        const b = pick(geo, p.id, chain)
-        if (b) region.push(b.series)
+        region.push(...pick(geo, p.id, chain))
       }
     }
-    const flu = pick('US', 'influenza', ['seuz-s2cv'])
-    if (flu) region.push(flu.series)
-    // Minnesota state rows (RSV, SARS-CoV-2), published by CDC for the prior two years only.
-    for (const p of ['rsv', 'covid'] as const) {
-      const b = pick('MN', p, ['rgnm-fkqb'])
-      if (b) state.push(b.series)
-    }
+    region.push(...pick('US', 'influenza', ['seuz-s2cv']))
+    // Minnesota state rows (RSV, SARS-CoV-2 per a third-party catalog; unverified), only if rgnm-fkqb has them.
+    for (const p of ['rsv', 'covid'] as const) state.push(...pick('MN', p, ['rgnm-fkqb']))
+    for (const w of staleSwitches) log.warn(`stale source skipped — ${w}`)
+    if (staleSwitches.length) notes.push(...staleSwitches.map((w) => `stale source skipped: ${w}`))
     diagnostics.minnesotaStateRows = state.length
       ? state.map((s) => `${s.id} (${s.points.length} weeks)`)
       : selected['rgnm-fkqb']
         ? 'none — rgnm-fkqb returned no Minnesota state rows'
         : 'not checked (rgnm-fkqb unavailable)'
+
+    // Completeness: every expected weekly series must be built unless its primary dataset failed outright
+    // (that failure is already reported). A dataset that loads but lacks a virus/place is reported here.
+    const expected = new Map<string, { label: string; primary: string }>()
+    for (const geo of ['HHS5', 'US'] as const) {
+      for (const p of PATHOGENS) expected.set(seriesId(DS_REGION, geo, p.id), { label: `${p.name} (${GEOS[geo].code})`, primary: 'rgnm-fkqb' })
+    }
+    expected.set(seriesId(DS_REGION, 'US', 'influenza'), { label: 'Flu (US)', primary: 'seuz-s2cv' })
+    const built = new Set([...region, ...state].map((s) => s.id))
+    const missing = [...expected].filter(([id]) => !built.has(id))
+    const unexplained = new Map<string, string[]>()
+    for (const [, e] of missing) {
+      if (failed.has(e.primary)) continue
+      unexplained.set(e.primary, [...(unexplained.get(e.primary) ?? []), e.label])
+    }
+    for (const [ds, labels] of unexplained) errors.push(`${ds} loaded but had no current data for ${labels.join(', ')}`)
+    diagnostics.missingExpected = missing.map(([id]) => id)
 
     // Cross-check national values that two CDC datasets both publish (detects silent field/meaning changes).
     const crossChecks: Record<string, unknown>[] = []
@@ -407,23 +435,29 @@ export const cdcNrevss: SourceModule = {
     }
     diagnostics.crossChecks = crossChecks
 
-    // If a sub-dataset failed, keep the previous run's series that this run could not rebuild, so a
-    // data.cdc.gov outage (when only the RSV mirror works) does not wipe the other viruses from the file.
+    // Keep previous-run series this run could not rebuild, so an outage or a dataset that silently drops a
+    // virus/place does not wipe it: series from a dataset that failed, expected series that went missing, and
+    // rgnm-fkqb series (incl. Minnesota rows) no longer returned. Not carried: fallback variants whose weekly
+    // series is back, unrelated old ids, and anything whose last value is more than a year old.
     const carried: string[] = []
-    if (failed.size) {
-      for (const [dataset, list] of [[DS_REGION, region], [DS_STATE, state]] as const) {
-        const have = new Set(list.map((s) => s.id))
-        for (const prev of await loadPrevious(ctx, dataset)) {
-          // Only series that came from a dataset that failed this run (others were legitimately rebuilt or dropped).
-          if (have.has(prev.id) || !prev.points?.length || !failed.has(prev.attrs?.dataset ?? '')) continue
-          const kept: Series = { ...prev, points: since(prev.points, ctx.historyStart) }
-          kept.attrs = { ...(prev.attrs ?? {}), refresh: `kept from previous run (${[...failed].join(', ')} unavailable)` }
-          list.push(kept)
-          carried.push(prev.id)
-        }
+    const oldest = addDays(ctx.now.slice(0, 10), -CARRY_MAX_AGE_DAYS)
+    for (const [dataset, list] of [[DS_REGION, region], [DS_STATE, state]] as const) {
+      const have = new Set(list.map((s) => s.id))
+      for (const prev of await loadPrevious(ctx, dataset)) {
+        if (have.has(prev.id) || !prev.points?.length) continue
+        const src = prev.attrs?.dataset ?? ''
+        if (!failed.has(src) && !expected.has(prev.id) && src !== 'rgnm-fkqb') continue
+        if (prev.id.endsWith(`:${MA_VARIANT}`) && have.has(prev.id.slice(0, -MA_VARIANT.length - 1))) continue
+        const last = latestDate([prev])
+        if (!last || last < oldest) continue
+        const kept: Series = { ...prev, points: since(prev.points, ctx.historyStart) }
+        const why = failed.has(src) ? `${src} unavailable` : `${src || 'its source'} returned no data for it`
+        kept.attrs = { ...(prev.attrs ?? {}), refresh: `kept from previous run (${why})` }
+        list.push(kept)
+        carried.push(prev.id)
       }
-      if (carried.length) notes.push(`${carried.length} series kept from the previous run`)
     }
+    if (carried.length) notes.push(`${carried.length} series kept from the previous run`)
     diagnostics.carriedForward = carried
     diagnostics.seriesSource = used
     diagnostics.latest = Object.fromEntries([...region, ...state].map((s) => [s.id, latestDate([s]) ?? null]))

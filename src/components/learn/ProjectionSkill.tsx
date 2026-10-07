@@ -22,17 +22,29 @@ function fmtNum(v: number): string {
 }
 
 /** Mean absolute error in the measure's own units, in words. */
-function fmtMiss(mae: number, unit: Unit, metric: MetricKind): string {
-  if (unit === '%') return `± ${fmtNum(mae)} percentage points`
-  if (unit === 'per100k') return `± ${fmtNum(mae)} per 100k`
-  if (metric === 'hosp_admissions') return `± ${fmtNum(mae)} admissions`
+function fmtMiss(mae: number, unit: Unit): string {
+  if (unit === '%') return `± ${fmtNum(mae)} pts`
   return `± ${fmtNum(mae)}`
+}
+
+/** What the typical-miss numbers are measured in, for the notes. */
+function missUnit(unit: Unit, metric: MetricKind): string {
+  if (unit === '%') return 'percentage points (pts)'
+  if (unit === 'per100k') return 'admissions per 100,000 residents'
+  if (metric === 'hosp_admissions') return 'admissions per week'
+  return 'the measure’s own units'
+}
+
+const pctRange = (xs: number[]) => {
+  const lo = Math.round(Math.min(...xs) * 100)
+  const hi = Math.round(Math.max(...xs) * 100)
+  return lo === hi ? `${lo}%` : `${lo}–${hi}%`
 }
 
 function fmtRel(rel: number): { text: string; better: boolean } {
   const d = Math.round((1 - rel) * 100)
   if (Math.abs(d) < 2) return { text: 'About the same', better: false }
-  return d > 0 ? { text: `${d}% smaller error`, better: true } : { text: `${-d}% larger error`, better: false }
+  return d > 0 ? { text: `${d}% smaller`, better: true } : { text: `${-d}% larger`, better: false }
 }
 
 const measureLabel = (f: Forecast, series: Series[]) =>
@@ -82,7 +94,7 @@ export function ProjectionSkill({ forecasts, series }: { forecasts: Forecast[]; 
             <>
               {' '}
               One week ahead, it beat a simple “no change” guess for {better1} of {h1.length} Minnesota measures; its 95% ranges
-              contained {Math.round(Math.min(...cov) * 100)}–{Math.round(Math.max(...cov) * 100)}% of actual outcomes.
+              contained {pctRange(cov)} of actual outcomes.
             </>
           )}
         </p>
@@ -115,7 +127,7 @@ export function ProjectionSkill({ forecasts, series }: { forecasts: Forecast[]; 
               Typical miss
             </th>
             <th scope="col" className="px-2 py-1.5 text-right font-medium">
-              vs. “no change”
+              Error vs. “no change”
             </th>
             <th scope="col" className="px-3 py-1.5 text-right font-medium">
               Inside 95% range
@@ -130,11 +142,9 @@ export function ProjectionSkill({ forecasts, series }: { forecasts: Forecast[]; 
                 <th scope="row" className="tabular px-3 py-2 font-medium text-ink-1">
                   {s.horizon}
                 </th>
-                <td className="tabular px-2 py-2 text-right text-ink-1">{fmtMiss(s.mae, unit, f.metric)}</td>
-                <td className={`tabular px-2 py-2 text-right ${rel.better ? 'font-medium text-ink-1' : 'text-ink-2'}`}>{rel.text}</td>
-                <td className="tabular px-3 py-2 text-right text-ink-1">
-                  {Math.round(s.coverage95 * 100)} in 100
-                </td>
+                <td className="tabular px-2 py-2 text-right whitespace-nowrap text-ink-1">{fmtMiss(s.mae, unit)}</td>
+                <td className={`tabular px-2 py-2 text-right whitespace-nowrap ${rel.better ? 'font-medium text-ink-1' : 'text-ink-2'}`}>{rel.text}</td>
+                <td className="tabular px-3 py-2 text-right text-ink-1">{Math.round(s.coverage95 * 100)}%</td>
               </tr>
             )
           })}
@@ -143,14 +153,15 @@ export function ProjectionSkill({ forecasts, series }: { forecasts: Forecast[]; 
       <ul className="space-y-1 border-t border-line px-3 py-2 text-xs text-ink-3">
         <li>
           <span className="font-medium text-ink-2">Typical miss</span> is the average distance between the projection’s middle
-          value and what actually happened.
+          value and what actually happened, in {missUnit(unit, f.metric)}.
         </li>
         <li>
-          <span className="font-medium text-ink-2">vs. “no change”</span> compares that miss with simply assuming next weeks
-          equal this week. Smaller is better.
+          <span className="font-medium text-ink-2">Error vs. “no change”</span> compares that miss with simply assuming the
+          next weeks equal this week. Smaller is better.
         </li>
         <li>
-          <span className="font-medium text-ink-2">Inside 95% range</span> should be close to 95 in 100. Based on{' '}
+          <span className="font-medium text-ink-2">Inside 95% range</span> is how often the actual value landed inside the 95%
+          range; it should be close to 95%. Based on{' '}
           {Math.min(...f.skill!.map((s) => s.n))}–{Math.max(...f.skill!.map((s) => s.n))} past weeks; data through{' '}
           {formatDate(f.referenceDate, true)}.
         </li>

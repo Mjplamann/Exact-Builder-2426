@@ -2,11 +2,13 @@
 // Nothing here invents values: every number comes from pulse.json / series files.
 import { scaleLinear } from 'd3-scale'
 import type {
-  ActivityLevel, CountyMetric, Manifest, MapLayer, MetricKind, PathogenId, PulseFile, SitePulse, TrendDirection, Unit,
+  ActivityLevel, CountyMetric, Manifest, MapLayer, MetricKind, PathogenId, PulseFile, Series, SignalSummary, SitePulse, TrendDirection,
+  Unit,
 } from '../../../shared/types'
 import { LEVELS } from '../../../shared/risk'
 import { getProfile, pathogenName } from '../../content'
 import { formatValue, METRIC_LABEL } from '../../lib/format'
+import { findSeries, lastPoint } from '../../lib/series'
 import { MN_COUNTY_BY_FIPS } from '../../../shared/geo/mnCounties'
 
 export type MapMode = 'level' | 'value'
@@ -223,8 +225,11 @@ export function binIndex(bins: ValueBin[], v: number | null | undefined): number
 
 export function binLabel(bin: ValueBin, unit: Unit): string {
   if (bin.lo === bin.hi) return formatValue(bin.lo, unit)
-  const lo = formatValue(bin.lo, unit).replace('%', '')
-  return `${lo}–${formatValue(bin.hi, unit)}`
+  // Decimals follow the bin width so labels read evenly (0.5–1.0%, not 0.50–1.0%).
+  const step = Math.abs(bin.hi - bin.lo)
+  const dec = unit === 'count' ? 0 : step >= 5 ? 0 : step >= 0.5 ? 1 : step >= 0.05 ? 2 : 3
+  const f = (v: number) => (unit === 'count' ? Math.round(v).toLocaleString('en-US') : v.toFixed(dec))
+  return `${f(bin.lo)}–${f(bin.hi)}${unit === '%' ? '%' : ''}`
 }
 
 // ───────────────────────── Plain-language bits ─────────────────────────
@@ -265,3 +270,22 @@ export function countyNames(fips: string[] | undefined, max = 4): string {
   if (names.length <= max) return names.join(', ')
   return `${names.slice(0, max).join(', ')} +${names.length - max} more`
 }
+
+// ───────────────────────── Statewide comparison ─────────────────────────
+
+/** Minnesota-wide signal for the same pathogen + metric, if the pulse has one. */
+export function stateSignal(pulse: PulseFile, layer: MapLayer): SignalSummary | undefined {
+  const p = pulse.pathogens.find((x) => x.pathogen === layer.pathogen)
+  return p?.signals.find((s) => s.metric === layer.metric && s.geo.type === 'state')
+}
+
+/** Statewide series with the same pathogen, metric and unit (prefer the same source, then the freshest). */
+export function stateSeriesFor(series: Series[], layer: MapLayer): Series | undefined {
+  const cands = findSeries(series, { pathogen: layer.pathogen, metric: layer.metric, geoType: 'state', geoCode: '27' }).filter(
+    (s) => s.unit === layer.unit,
+  )
+  if (!cands.length) return undefined
+  const last = (s: Series) => lastPoint(s.points)?.[0] ?? ''
+  return [...cands].sort((a, b) => Number(b.source === layer.source) - Number(a.source === layer.source) || (last(b) > last(a) ? 1 : -1))[0]
+}
+
